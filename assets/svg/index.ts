@@ -1,2 +1,1 @@
-export { DashboardIcon } from './dashboard';
-export { ChevronDown } from './chevronDown';
+export { DashboardIcon, SetupIcon, ChevronDown, AdminIcon } from './icons';
