@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./MuiTheme";
-import { SideBar } from "@/components/Sidebar";
+import { SideBar } from "@/components/Sidebar/index";
 
 const inter = Inter({ subsets: ["latin"] });
 
