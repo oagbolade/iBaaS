@@ -3,9 +3,11 @@ import { PageTitle } from "@/components/Typography";
 
 export const MainSection = () => {
   return (
-    <Stack spacing={140} direction="row">
+    <Stack sx={{
+      padding: '25px',
+    }} spacing={140} direction="row">
       <PageTitle title="Manage Users" />
-      <PageTitle title="Manage Users" />
+      <PageTitle title="Add Button Here" />
     </Stack>
   );
 };

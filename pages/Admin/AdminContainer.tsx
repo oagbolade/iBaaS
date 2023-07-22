@@ -3,11 +3,7 @@ import { MainSection } from './MainSection';
 
 export const AdminContainer = () => {
   return (
-    <Box
-      sx={{
-        padding: '25px',
-      }}
-    >
+    <Box>
       <MainSection />
     </Box>
   );
