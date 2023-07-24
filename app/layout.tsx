@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <ThemeProvider theme={theme}>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={inter.className}  suppressHydrationWarning={true}>
           <SideBar />
           {children}
         </body>
