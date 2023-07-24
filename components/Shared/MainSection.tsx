@@ -5,13 +5,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 export const MainSection = () => {
   return (
-    <Stack
-      sx={{
-        padding: '25px',
-      }}
-      spacing={100}
-      direction="row"
-    >
+    <Stack direction="row" justifyContent="space-between">
       <PageTitle title="Manage Users" />
       <PrimaryIconButton buttonTitle="Add New User" icon={<PersonAddIcon />} />
     </Stack>

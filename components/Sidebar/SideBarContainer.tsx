@@ -13,7 +13,6 @@ export const SideBarContainer = () => {
         width: 278,
         height: "100vh",
         padding: "0 20px",
-        float: "left",
         backgroundColor: `${colors.lightGrey}`,
         "&:hover": {
           boxShadow: 2,

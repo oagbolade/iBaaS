@@ -1,7 +1,7 @@
 import Stack from '@mui/material/Stack';
 import { TableTitle } from '@/components/Typography';
-import { PrimaryIconButton } from '@/components/Buttons';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { TextInput } from '@/components/TextFields/TextInput';
+import SearchIcon from '@mui/icons-material/Search';
 
 type Props = {
   tableTitle: string;
@@ -12,13 +12,13 @@ export const SearchSection = ({ tableTitle, searchTitle }: Props) => {
   return (
     <Stack
       sx={{
-        padding: '25px',
+        margin: '50px 0',
       }}
-      spacing={100}
+      justifyContent="space-between"
       direction="row"
     >
-      <TableTitle title={ tableTitle } />
-      <PrimaryIconButton buttonTitle="Add New User" icon={<PersonAddIcon />} />
+      <TableTitle title={tableTitle} />
+      <TextInput placeholder="Search users" icon={<SearchIcon />} />
     </Stack>
   );
 };

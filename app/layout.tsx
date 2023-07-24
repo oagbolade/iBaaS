@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./MuiTheme";
 import { SideBar } from "@/components/Sidebar/index";
 
+import Stack from '@mui/material/Stack';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,8 +22,10 @@ export default function RootLayout({
     <ThemeProvider theme={theme}>
       <html lang="en">
         <body className={inter.className}  suppressHydrationWarning={true}>
-          <SideBar />
-          {children}
+          <Stack direction='row'>
+            <SideBar />
+            {children}
+          </Stack>
         </body>
       </html>
     </ThemeProvider>
