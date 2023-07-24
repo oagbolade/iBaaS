@@ -5,4 +5,7 @@ export const theme = createTheme({
   typography: {
     fontFamily: 'Averta Regular',
   },
+  button: {
+    fontFamily: 'Averta Regular',
+  },
 });

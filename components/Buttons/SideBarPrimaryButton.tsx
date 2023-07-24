@@ -17,7 +17,6 @@ export default function SideBarPrimaryButton({ buttonTitle, icon }: Props) {
           backgroundColor: `${colors.lightGrey}`,
           fontFamily: 'Averta Regular',
         }}
-        variant="subtitle1"
         ml={2}
       >
         {buttonTitle}
