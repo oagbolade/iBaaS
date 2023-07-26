@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./MuiTheme";
-import { SideBar } from "@/components/Sidebar";
+import { SideBar } from "@/components/Sidebar/index";
 
+import Stack from '@mui/material/Stack';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,9 +21,11 @@ export default function RootLayout({
   return (
     <ThemeProvider theme={theme}>
       <html lang="en">
-        <body className={inter.className}>
-          <SideBar />
-          {children}
+        <body className={inter.className}  suppressHydrationWarning={true}>
+          <Stack direction='row'>
+            <SideBar />
+            {children}
+          </Stack>
         </body>
       </html>
     </ThemeProvider>

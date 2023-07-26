@@ -1,6 +1,7 @@
-import React from "react";
-import Typography from "@mui/material/Typography";
-import colors from "@/assets/colors";
+import React from 'react';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import colors from '@/assets/colors';
 
 type Props = {
   buttonTitle: string;
@@ -10,15 +11,13 @@ type Props = {
 export default function SideBarPrimaryButton({ buttonTitle, icon }: Props) {
   return (
     <>
-      {icon}
+      <Box sx={{ marginTop: '3px' }}>{icon}</Box>
       <Typography
         sx={{
           backgroundColor: `${colors.lightGrey}`,
-          fontFamily: "Averta Regular",
+          fontFamily: 'Averta Regular',
         }}
-        variant="subtitle1"
         ml={2}
-        mt={0.2}
       >
         {buttonTitle}
       </Typography>

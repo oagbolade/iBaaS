@@ -1,0 +1,1 @@
+export { MuiTableContainer } from './Table';

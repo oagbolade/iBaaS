@@ -3,6 +3,9 @@ import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
   typography: {
-    fontFamily: 'Averta Regular',
+    allVariants: {
+      fontFamily: 'Averta Regular',
+      textTransform: 'none',
+    },
   },
 });
