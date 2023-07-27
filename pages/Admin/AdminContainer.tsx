@@ -2,7 +2,14 @@ import Box from '@mui/material/Box';
 import { MainSection, SearchSection } from '@/components/Shared';
 import { MuiTableContainer } from '@/components/Table';
 
-export const AdminContainer = () => {
+type Props = {
+  title: string;
+  buttonTitle: string;
+  tableTitle: string;
+  searchTitle: string;
+}
+
+export const AdminContainer = (props: Props) => {
   return (
     <Box
       sx={{
@@ -10,8 +17,8 @@ export const AdminContainer = () => {
         width: '100%',
       }}
     >
-      <MainSection />
-      <SearchSection tableTitle="View All Users" searchTitle="Search users" />
+      <MainSection title={props.title} buttonTitle={props.buttonTitle}/>
+      <SearchSection tableTitle={props.tableTitle} searchTitle={props.searchTitle} />
       <MuiTableContainer columns={[]} />
     </Box>
   );

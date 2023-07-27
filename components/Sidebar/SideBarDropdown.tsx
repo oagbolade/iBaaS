@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useRouter } from 'next/navigation'
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -10,6 +11,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import { ChevronDown } from "@/assets/svg";
 import { activeSideBar, mainMenu } from "./styles";
 import SideBarPrimaryButton from "@/components/Buttons/SideBarPrimaryButton";
+import { handleRedirect } from "@/services";
 import "./App.css";
 
 interface SubMenuItems {
@@ -28,8 +30,10 @@ interface SidebarMenuProps {
 }
 
 export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
+  const router = useRouter();
   const [activeMenu, setActiveMenu] = useState<string>("Manage Users");
-
+  // const activeMenu = useRef("Manage Users");
+  // console.log(activeMenu);
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
       return (
@@ -68,6 +72,10 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
                             : "",
                       }}
                       sx={activeSideBar}
+                      onClick={() => {
+                          setActiveMenu(subMenuItem.name);
+                          handleRedirect( router, subMenuItem.link);
+                      }}
                     >
                       {subMenuItem.name}
                     </Button>
