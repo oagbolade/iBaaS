@@ -10,6 +10,8 @@ export const SideBarContainer = () => {
   return (
     <Box
       sx={{
+        position: 'sticky',
+        top: 0,
         width: 278,
         height: "100vh",
         padding: "0 20px",

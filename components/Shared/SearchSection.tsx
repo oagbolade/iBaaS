@@ -18,7 +18,7 @@ export const SearchSection = ({ tableTitle, searchTitle }: Props) => {
       direction="row"
     >
       <TableTitle title={tableTitle} />
-      <TextInput placeholder="Search users" icon={<SearchIcon />} />
+      <TextInput placeholder={searchTitle} icon={<SearchIcon />} />
     </Stack>
   );
 };

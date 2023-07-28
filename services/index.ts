@@ -1,0 +1,1 @@
+export { handleRedirect } from './handleRedirect';

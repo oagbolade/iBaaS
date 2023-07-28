@@ -7,11 +7,11 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import colors from '@/assets/colors';
 import { Status } from '@/components/Labels';
+import { TablePagination } from '@/components/Pagination';
+import {ActionMenu} from './ActionMenu';
 
 type Props = {
   columns: Array<[]>;
@@ -41,8 +41,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even):hover': {
     backgroundColor: theme.palette.action.hover,
   },
+  '&:nth-of-type(odd):hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
+  minWidth: '50px',
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
@@ -64,7 +68,7 @@ function createData(
 const success = <Status label='Active' status='success' />;
 const warning = <Status label='Warning' status='warning' />;
 const danger = <Status label='Danger' status='danger' />;
-const action = <MoreVertIcon />;
+const action = <ActionMenu />;
 
 const rows = [
   createData('Frozen yoghurt', success, 6.0, 24, 4.0, action),
@@ -119,7 +123,7 @@ export const MuiTableContainer = ({ columns }: Props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination component='div' rowsPerPageOptions={[10, 50]} />
+      <TablePagination />
     </>
   );
 };

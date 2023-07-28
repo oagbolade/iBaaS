@@ -1,7 +1,5 @@
-import React from 'react'
+import { ModalContainer } from '@/components/Modal/index';
 
-export default function About(){
-  return (
-    <div>About</div>
-  )
+export default function About() {
+  return <ModalContainer title='Edit User' />;
 }
