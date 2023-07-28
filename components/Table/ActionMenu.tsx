@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,8 +7,10 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { TableMenuButton } from '@/components/Buttons';
 import { StyledMenu } from './StyledMenu';
+import { AdminContext } from '@/pages/Admin/AdminContext';
 
 export const ActionMenu = () => {
+  const { toggleModal } = useContext(AdminContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -16,6 +18,7 @@ export const ActionMenu = () => {
   };
 
   const handleClose = () => {
+    toggleModal();
     setAnchorEl(null);
   };
 
@@ -34,10 +37,13 @@ export const ActionMenu = () => {
       </Button>
       <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={handleClose}>
-          <TableMenuButton buttonTitle='View Profile' icon={<RemoveRedEyeOutlinedIcon />} /> 
+          <TableMenuButton
+            buttonTitle="View Profile"
+            icon={<RemoveRedEyeOutlinedIcon />}
+          />
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <TableMenuButton buttonTitle='Edit' icon={<EditOutlinedIcon />} /> 
+          <TableMenuButton buttonTitle="Edit" icon={<EditOutlinedIcon />} />
         </MenuItem>
       </StyledMenu>
     </Box>

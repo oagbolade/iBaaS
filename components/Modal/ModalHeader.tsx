@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { ModalTitle, ModalHeader as ModalHeaderStyle } from './styles';
 
 type Props = {
-  title: string;
+  title: string | undefined;
 };
 
 export const ModalHeader = (props: Props) => {
