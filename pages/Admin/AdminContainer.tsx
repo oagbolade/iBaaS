@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -101,8 +101,6 @@ const ModalForm = () => {
 };
 
 export const AdminContainer = (props: Props) => {
-  const [open, setOpen] = useState(false);
-
   return (
     <AdminContextProvider>
       <Box

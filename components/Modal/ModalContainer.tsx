@@ -2,12 +2,10 @@
 import { useContext } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import {styled} from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { ModalHeader } from './ModalHeader';
 import { ModalContainer as ModalContainerStyle } from './styles';
-import colors from '@/assets/colors';
 import { AdminContext } from '@/pages/Admin/AdminContext';
 
 type Props = {
@@ -17,7 +15,6 @@ type Props = {
 
 export const ModalContainer = ({ title, form }: Props) => {
   const { open, toggleModal } = useContext(AdminContext);
-
 
   return (
     <Box>
