@@ -3,20 +3,42 @@ import Button from '@mui/material/Button';
 import colors from '@/assets/colors';
 import { buttonTypography } from './styles';
 
-type Props = {
-  buttonTitle: string;
-  icon: any;
+interface ButtonStyles {
+  fontSize?: string;
+  fontWeight?: number;
+  lineHeight?: string;
+  height?: string | undefined;
+  width?: string | undefined;
+  color?: string | undefined;
+  backgroundColor?: string | undefined;
+  borderRadius?: string | undefined;
+  border?: string | undefined;
+  variant?: 'contained' | 'outlined' | undefined;
 };
 
-export const PrimaryIconButton = ({ buttonTitle, icon }: Props) => {
+type Props = {
+  buttonTitle: string;
+  icon?: any;
+  onClick?: () => void | undefined;
+  customStyle?: ButtonStyles | undefined;
+};
+
+export const PrimaryIconButton = ({ buttonTitle, icon, customStyle, onClick }: Props) => {
   return (
     <Button
-      sx={buttonTypography}
-      style={{ backgroundColor: `${colors.activeBlue400}` }}
-      variant="contained"
+      onClick = { () => onClick?.() }
+      sx={{ buttonTypography, ...customStyle }}
+      style={{ backgroundColor: customStyle?.backgroundColor || `${colors.activeBlue400}` }}
+      variant={customStyle?.variant}
       startIcon={icon}
     >
       {buttonTitle}
     </Button>
   );
 };
+
+PrimaryIconButton.defaultProps = {
+  customStyle: {
+    variant: 'contained'
+  }
+}

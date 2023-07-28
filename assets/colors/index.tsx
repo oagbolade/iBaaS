@@ -6,6 +6,7 @@ const colors = {
   neutral200: '#F3F5F6',
   neutral300: '#E1E6ED',
   neutral600: '#848F9F',
+  neutral700: '#5F738C',
   neutral900: '#353F50',
   primaryBlue: '#00425F',
   primaryRed400: '#DC4437',
