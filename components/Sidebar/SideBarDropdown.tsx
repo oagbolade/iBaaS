@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useRouter } from 'next/navigation'
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -32,8 +32,7 @@ interface SidebarMenuProps {
 export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
   const router = useRouter();
   const [activeMenu, setActiveMenu] = useState<string>("Manage Users");
-  // const activeMenu = useRef("Manage Users");
-  // console.log(activeMenu);
+
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
       return (
@@ -66,7 +65,8 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
                           activeMenu === subMenuItem.name
                             ? `${colors.activeBlue100}`
                             : "",
-                        color:
+                 
+                            color:
                           activeMenu === subMenuItem.name
                             ? `${colors.activeBlue400}`
                             : "",

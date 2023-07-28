@@ -1,4 +1,5 @@
 const colors = {
+  white: '#FFF',
   lightGrey: '#F9FBFC',
   activeBlue100: '#EBF8FE',
   activeBlue400: '#0275D8',
@@ -7,6 +8,7 @@ const colors = {
   neutral600: '#848F9F',
   neutral900: '#353F50',
   primaryBlue: '#00425F',
+  primaryRed400: '#DC4437',
 };
 
 export default colors;

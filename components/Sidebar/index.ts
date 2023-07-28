@@ -1,2 +1,2 @@
-export {SideBar} from './SideBar';
-export {SideBarContainer} from './SideBarContainer';
+export { SideBar } from './SideBar';
+export { SideBarContainer } from './SideBarContainer';
