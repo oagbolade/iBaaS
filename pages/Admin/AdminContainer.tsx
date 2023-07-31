@@ -12,7 +12,7 @@ import {
   ResetButton,
 } from '@/components/Modal/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { FormTextInput, CheckboxInput } from '@/components/TextFields';
+import { FormTextInput, CheckboxInput, FormSelectInput } from '@/components/TextFields';
 import { PageTitle } from '@/components/Typography';
 import { AdminContextProvider } from './AdminContext';
 
@@ -56,7 +56,7 @@ const ModalForm = () => {
           <FormTextInput placeholder="002789765" label="Staff Id" required />{' '}
         </Grid>
         <Grid item md={6}>
-          <FormTextInput placeholder="002789765" label="Staff Id" required />{' '}
+          <FormSelectInput placeholder="002789765" label="Staff Id" required />{' '}
         </Grid>
         {/* Checkboxes */}
         <Grid item md={6}>

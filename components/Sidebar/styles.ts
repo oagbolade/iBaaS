@@ -2,7 +2,7 @@ import colors from '@/assets/colors';
 
 export const sideBarItem = {
   fontFamily: 'Averta Regular',
-  fontSize: '16px',
+  fontSize: '20px',
   lineHeight: '24px',
   fontWeight: 400,
   width: '200px',

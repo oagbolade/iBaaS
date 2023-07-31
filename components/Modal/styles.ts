@@ -39,7 +39,7 @@ export const ModalHeader = {
 export const ModalBackButton = {
   height: '48px',                      
   width: '86px',
-  fontSize: '16px',
+  fontSize: '18px',
   fontWeight: 600,
   color: `${colors.neutral900}`,
   backgroundColor: `${colors.white}`,
@@ -50,7 +50,7 @@ export const ModalBackButton = {
 export const ModalSaveButton = {
   height: '48px',                      
   width: '155px',
-  fontSize: '16px',
+  fontSize: '19px',
   fontWeight: 600,
   color: `${colors.white}`,
   backgroundColor: `${colors.activeBlue400}`,
@@ -60,7 +60,7 @@ export const ModalSaveButton = {
 export const ResetButton = {
   height: '42px',                      
   width: '42px',
-  fontSize: '16px',
+  fontSize: '20px',
   fontWeight: 600,
   color: `${colors.neutral700}`,
   textAlign: 'center',
