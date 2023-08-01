@@ -4,7 +4,7 @@ const baseTypography = {
   fontSize: '16px',
   fontWeight: 400,
   lineHeight: '24px',
-}
+};
 
 export const textStyle = {
   borderRadius: '4px',
@@ -20,6 +20,30 @@ export const labelTypography = {
   ...baseTypography,
   color: `${colors.neutral900}`,
   fontWeight: 600,
+};
+
+export const chipTypography = {
+  ...baseTypography,
+  '& .MuiChip-deleteIcon': {
+    color: `${colors.white}`,
+  },
+  color: `${colors.white}`,
+  backgroundColor: `${colors.neutral900}`,
+  fontSize: '12px',
+  lineHeight: '16px',
+  marginRight: '10px'
+};
+
+export const multiSelect = {
+  ...textStyle,
+  paddingRight: '8px',
+  overflowY: 'auto',
+  '& .example::-webkit-scrollbar': {
+    display: 'none'
+  },
+  '& .example': {
+    scrollbarWidth: 'none'
+  }
 };
 
 export const asterix = {

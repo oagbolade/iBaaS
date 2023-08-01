@@ -18,14 +18,16 @@ interface ButtonStyles {
 
 type Props = {
   buttonTitle: string;
+  type: string;
   icon?: any;
   onClick?: () => void | undefined;
   customStyle?: ButtonStyles | undefined;
 };
 
-export const PrimaryIconButton = ({ buttonTitle, icon, customStyle, onClick }: Props) => {
+export const PrimaryIconButton = ({ buttonTitle, icon, customStyle, onClick, type }: Props) => {
   return (
     <Button
+      type={type}
       onClick = { () => onClick?.() }
       sx={{ buttonTypography, ...customStyle }}
       style={{ backgroundColor: customStyle?.backgroundColor || `${colors.activeBlue400}` }}
@@ -38,6 +40,7 @@ export const PrimaryIconButton = ({ buttonTitle, icon, customStyle, onClick }: P
 };
 
 PrimaryIconButton.defaultProps = {
+  type: 'button',
   customStyle: {
     variant: 'contained'
   }
