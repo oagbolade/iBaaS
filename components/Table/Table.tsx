@@ -11,10 +11,20 @@ import Paper from '@mui/material/Paper';
 import colors from '@/assets/colors';
 import { Status } from '@/components/Labels';
 import { TablePagination } from '@/components/Pagination';
-import {ActionMenu} from './ActionMenu';
+import { ActionMenu } from './ActionMenu';
+
+// Will change this once we start to make API calls
+interface DataI {
+  name: string;
+  status: boolean;
+  email: string;
+  role: string;
+  department: string;
+}
 
 type Props = {
-  columns: Array<[]>;
+  columns: string[];
+  data: DataI[];
 };
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -54,36 +64,12 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
   border: `1px solid ${colors.neutral300}`,
 }));
 
-function createData(
-  name: string,
-  status: any,
-  fat: number,
-  carbs: number,
-  protein: number,
-  action: any
-) {
-  return { name, status, fat, carbs, protein, action };
-}
-
-const success = <Status label='Active' status='success' />;
-const warning = <Status label='Warning' status='warning' />;
-const danger = <Status label='Danger' status='danger' />;
+const success = <Status label="Active" status="success" />;
+const warning = <Status label="Warning" status="warning" />;
+const danger = <Status label="Danger" status="danger" />;
 const action = <ActionMenu />;
 
-const rows = [
-  createData('Frozen yoghurt', success, 6.0, 24, 4.0, action),
-  createData('Ice cream sandwich', warning, 9.0, 37, 4.3, action),
-  createData('Eclair', danger, 16.0, 24, 6.0, action),
-  createData('Cupcake', success, 3.7, 67, 4.3, action),
-  createData('Gingerbread', warning, 16.0, 49, 3.9, action),
-  createData('Gingerbread', danger, 16.0, 49, 3.9, action),
-  createData('Gingerbread', success, 16.0, 49, 3.9, action),
-  createData('Gingerbread', warning, 16.0, 49, 3.9, action),
-  createData('Gingerbread', danger, 16.0, 49, 3.9, action),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, action),
-];
-
-export const MuiTableContainer = ({ columns }: Props) => {
+export const MuiTableContainer = ({ columns, data }: Props) => {
   return (
     <>
       <TableContainer
@@ -99,25 +85,29 @@ export const MuiTableContainer = ({ columns }: Props) => {
         <Table>
           <StyledTableHead>
             <TableRow>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Status</StyledTableCell>
-              <StyledTableCell>Email Address</StyledTableCell>
-              <StyledTableCell>Role</StyledTableCell>
-              <StyledTableCell>Department</StyledTableCell>
+              {columns.map((column: string) => (
+                <StyledTableCell key={column}>{column}</StyledTableCell>
+              ))}
               <StyledTableCell></StyledTableCell>
             </TableRow>
           </StyledTableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
+            {data.map((dataItem) => (
+              <StyledTableRow key={dataItem.name}>
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  {dataItem.name}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.status}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">{row.protein}</StyledTableCell>
-                <StyledTableCell align="right">{row.action}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {dataItem.status ? success : danger}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {dataItem.email}
+                </StyledTableCell>
+                <StyledTableCell align="right">{dataItem.role}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {dataItem.department}
+                </StyledTableCell>
+                <StyledTableCell align="right">{action}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
