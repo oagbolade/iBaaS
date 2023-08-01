@@ -1,9 +1,6 @@
 'use client';
 import React from 'react';
-import {
-  Formik,
-  Form,
-} from 'formik';
+import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -18,10 +15,16 @@ import {
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { FormTextInput, CheckboxInput, FormSelectField, FormMultiSelectField } from '@/components/TextFields';
+import {
+  FormTextInput,
+  CheckboxInput,
+  FormSelectField,
+} from '@/components/TextFields';
 import { PageTitle } from '@/components/Typography';
 import { EditUser } from '@/constants/AdminOptions';
 import { AdminContextProvider } from './AdminContext';
+import MOCK_DATA from '@/constants/MOCK_DATA.json';
+import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 
 type Props = {
   title: string;
@@ -32,50 +35,103 @@ type Props = {
 };
 
 const ModalForm = () => {
-    const onSubmit = (values: any, actions: { setSubmitting: (arg0: boolean) => void; }) =>{
+  const onSubmit = (
+    values: any,
+    actions: { setSubmitting: (arg0: boolean) => void }
+  ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
     actions.setSubmitting(false);
-}
+  };
 
   return (
     <Formik
-        initialValues={userInitialValues}
-        onSubmit={(values, actions) => onSubmit(values, actions)}
-        validationSchema={userSchema}
+      initialValues={userInitialValues}
+      onSubmit={(values, actions) => onSubmit(values, actions)}
+      validationSchema={userSchema}
     >
       <Form>
         <Box>
           <Grid container spacing={2}>
             <Grid item md={6}>
-              <FormTextInput name='staffId' placeholder="002789765" label="Staff Id" required />{' '}
+              <FormTextInput
+                name="staffId"
+                placeholder="002789765"
+                label="Staff Id"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-              <FormTextInput name='staffName' placeholder="002789765" label="Staff Name" required />{' '}
+              <FormTextInput
+                name="staffName"
+                placeholder="002789765"
+                label="Staff Name"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-              <FormTextInput name='address' placeholder="002789765" label="Email Address" required />{' '}
+              <FormTextInput
+                name="address"
+                placeholder="002789765"
+                label="Email Address"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-              <FormTextInput name='mobileNumber' placeholder="002789765" label="Mobile Number" required />{' '}
+              <FormTextInput
+                name="mobileNumber"
+                placeholder="002789765"
+                label="Mobile Number"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-              <FormSelectField name='branch' options={EditUser.branch} label="Branch" required />{' '}
+              <FormSelectField
+                name="branch"
+                options={EditUser.branch}
+                label="Branch"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-              <FormSelectField name='department' options={EditUser.branch} label="Department" required />{' '}
+              <FormSelectField
+                name="department"
+                options={EditUser.branch}
+                label="Department"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-              <FormSelectField name='role' options={EditUser.branch} label="Role" required />{' '}
+              <FormSelectField
+                name="role"
+                options={EditUser.branch}
+                label="Role"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-            <FormSelectField name='directReport' options={EditUser.branch} label="Direct Report" required />{' '}
+              <FormSelectField
+                name="directReport"
+                options={EditUser.branch}
+                label="Direct Report"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-            <FormSelectField name='staffStatus' options={EditUser.branch} label="Staff Status" required />{' '}
+              <FormSelectField
+                name="staffStatus"
+                options={EditUser.branch}
+                label="Staff Status"
+                required
+              />{' '}
             </Grid>
             <Grid item md={6}>
-            <FormSelectField name='sbuUnit' options={EditUser.branch} label="SBU Unit" required />{' '}
+              <FormSelectField
+                name="sbuUnit"
+                options={EditUser.branch}
+                label="SBU Unit"
+                required
+              />{' '}
             </Grid>
 
             {/* Checkboxes */}
@@ -109,7 +165,7 @@ const ModalForm = () => {
               </Grid>
               <Grid item md={3}>
                 <PrimaryIconButton
-                  type='submit'
+                  type="submit"
                   buttonTitle="Save Changes"
                   customStyle={ModalSaveButton}
                 />
@@ -137,7 +193,7 @@ export const AdminContainer = (props: Props) => {
           tableTitle={props.tableTitle}
           searchTitle={props.searchTitle}
         />
-        <MuiTableContainer columns={[]} />
+        <MuiTableContainer columns={MOCK_COLUMNS} data={MOCK_DATA} />
         <ModalContainer form={<ModalForm />} title={props.modalTitle} />
       </Box>
     </AdminContextProvider>
