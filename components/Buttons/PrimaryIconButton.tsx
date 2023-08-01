@@ -18,7 +18,7 @@ interface ButtonStyles {
 
 type Props = {
   buttonTitle: string;
-  type: string;
+  type?: 'button' | 'submit' | 'reset' | undefined;
   icon?: any;
   onClick?: () => void | undefined;
   customStyle?: ButtonStyles | undefined;
