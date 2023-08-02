@@ -1,25 +1,15 @@
 "use client";
 import React from "react";
 import Box from "@mui/material/Box";
-import colors from "@/assets/colors";
 import SideBarDropdown from "./SideBarDropdown";
 import {sideBarMenu} from "./sideBarMenu";
+import {sideBarContainer} from "./styles";
 import "./App.css";
 
 export const SideBarContainer = () => {
   return (
     <Box
-      sx={{
-        position: 'sticky',
-        top: 0,
-        width: 278,
-        height: "100vh",
-        padding: "0 20px",
-        backgroundColor: `${colors.lightGrey}`,
-        "&:hover": {
-          boxShadow: 2,
-        },
-      }}
+      sx={sideBarContainer}
     >
       <SideBarDropdown sideBarMenu={sideBarMenu} />
     </Box>

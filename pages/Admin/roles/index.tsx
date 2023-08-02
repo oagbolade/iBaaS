@@ -135,9 +135,6 @@ const ModalForm = () => {
 };
 
 export const Role = () => {
-  const { isEditing } = useContext(AdminContext);
-  // console.log('isEditing', isEditing);
-
   return (
     <AdminContainer
       form={<ModalForm />}

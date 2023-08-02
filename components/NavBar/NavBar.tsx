@@ -3,7 +3,7 @@ import { NavBarContainer } from './NavBarContainer';
 
 export const NavBar = () =>{
   return (  
-       <NavBarContainer/>
+       <NavBarContainer />
   )
 }
 

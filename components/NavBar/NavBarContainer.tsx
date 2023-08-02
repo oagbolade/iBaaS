@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { Box } from '@mui/material';
-import { NavBarTitle } from '../Typography';
+import { NavBarTitle } from '@/components/Typography';
 import InterSwitchImage from '@/assets/interswitch/image';
 import NavBarButton from './NavBarButton';
 import {

@@ -7,7 +7,7 @@ export const navbarStyle = {
   padding: '0px 40px',
   alignItems: 'center',
   justifyContent: 'space-between',
-  position: 'absolute',
+  position: 'fixed',
   top: 0,
   left: 0,
   zIndex: 2,

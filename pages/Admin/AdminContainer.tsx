@@ -24,6 +24,7 @@ export const AdminContainer = (props: Props) => {
         sx={{
           padding: '25px',
           width: '100%',
+          marginTop: '80px',
         }}
       >
         <MainSection title={props.title} buttonTitle={props.buttonTitle} />
