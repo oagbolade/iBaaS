@@ -1,3 +1,4 @@
+'use client';
 import React, { useContext }  from 'react';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
@@ -173,7 +174,7 @@ export const Users = () => {
     <AdminContainer
       form={<ModalForm />}
       title="Manage Users"
-      modalTitle={isEditing ? "Edit User": "Add New User"}
+      modalTitle="Edit User"
       buttonTitle="Add New User"
       tableTitle='View All Users'
       searchTitle='Search users'

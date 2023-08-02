@@ -13,10 +13,8 @@ export const ActionMenu = () => {
   const { toggleModal } = useContext(AdminContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const isEditing = true;
-    toggleModal(isEditing);
     setAnchorEl(event.currentTarget);
   };
 

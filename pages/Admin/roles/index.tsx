@@ -136,12 +136,13 @@ const ModalForm = () => {
 
 export const Role = () => {
   const { isEditing } = useContext(AdminContext);
+  // console.log('isEditing', isEditing);
 
   return (
     <AdminContainer
       form={<ModalForm />}
       title="Manage Role"
-      modalTitle={isEditing ? "Edit Role": "Add New Role"}
+      modalTitle="Edit Role"
       buttonTitle="Add New Role"
       tableTitle="View All Roles"
       searchTitle="Search by name or description"
