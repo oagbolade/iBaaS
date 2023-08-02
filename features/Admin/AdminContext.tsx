@@ -11,7 +11,7 @@ export const AdminContext = createContext<AdminContextType>(initialAdminContext)
 
 type AdminContextType = typeof initialAdminContext;
 
-export function AdminContextProvider({ children }: any) {
+export default function AdminContextProvider({ children }: any) {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 

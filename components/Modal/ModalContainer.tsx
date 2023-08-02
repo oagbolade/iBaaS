@@ -6,7 +6,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { ModalHeader } from './ModalHeader';
 import { ModalContainer as ModalContainerStyle } from './styles';
-import { AdminContext } from '@/pages/Admin/AdminContext';
+import { AdminContext } from '@/features/Admin/AdminContext';
 
 type Props = {
   title: string | undefined;
@@ -15,7 +15,7 @@ type Props = {
 
 export const ModalContainer = ({ title, form }: Props) => {
   const { open, toggleModal, isEditing } = useContext(AdminContext);
-  const newTitle= title?.replace("Edit", "Add New");
+  const newTitle = title?.replace('Edit', 'Add New');
 
   return (
     <Box>

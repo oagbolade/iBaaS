@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext }  from 'react';
+import React, { useContext } from 'react';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -19,8 +19,8 @@ import {
 } from '@/components/TextFields';
 import { PageTitle } from '@/components/Typography';
 import { EditUser } from '@/constants/AdminOptions';
-import { AdminContainer } from '@/pages/Admin';
-import { AdminContext } from '@/pages/Admin/AdminContext';
+import { AdminContainer } from '@/features/Admin';
+import { AdminContext } from '@/features/Admin/AdminContext';
 
 const ModalForm = () => {
   const onSubmit = (
@@ -176,8 +176,8 @@ export const Users = () => {
       title="Manage Users"
       modalTitle="Edit User"
       buttonTitle="Add New User"
-      tableTitle='View All Users'
-      searchTitle='Search users'
+      tableTitle="View All Users"
+      searchTitle="Search users"
     />
   );
 };

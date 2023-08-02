@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import { PageTitle } from '@/components/Typography';
 import { PrimaryIconButton } from '@/components/Buttons';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { AdminContext } from '@/pages/Admin/AdminContext';
+import { AdminContext } from '@/features/Admin/AdminContext';
 
 type Props = {
   title: string;
