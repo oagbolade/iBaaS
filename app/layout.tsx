@@ -5,8 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./MuiTheme";
 import { SideBar } from "@/components/Sidebar/index";
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import { NavBar } from "@/components/NavBar";
+import { NavBar } from "@/components/NavBar/index";
 
 const inter = Inter({ subsets: ["latin"] });
 
