@@ -6,6 +6,7 @@ export const theme = createTheme({
     allVariants: {
       fontFamily: 'Averta Regular',
       textTransform: 'none',
+      whiteSpace: 'nowrap',
       lineHeight: '24px',
     },
   },
