@@ -13,3 +13,11 @@ export const pageTitle = {
   width: '307px',
   height: '36px',
 };
+
+export const navBarTitle={
+  textAlign: "center",
+  fontSize: "16px",
+  fontStyle: "normal",
+  fontWeight: "400",
+  lineHeight: "24px"
+};

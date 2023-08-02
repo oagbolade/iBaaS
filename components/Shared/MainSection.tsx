@@ -12,12 +12,13 @@ type Props = {
 
 export const MainSection = (props: Props) => {
   const { toggleModal } = useContext(AdminContext);
+  const isEditing = false;
 
   return (
     <Stack direction="row" justifyContent="space-between">
       <PageTitle title={props.title} />
       <PrimaryIconButton
-        onClick={() => toggleModal()}
+        onClick={() => toggleModal(isEditing)}
         buttonTitle={props.buttonTitle}
         icon={<PersonAddIcon />}
       />

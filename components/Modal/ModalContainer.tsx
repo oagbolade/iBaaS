@@ -14,7 +14,8 @@ type Props = {
 };
 
 export const ModalContainer = ({ title, form }: Props) => {
-  const { open, toggleModal } = useContext(AdminContext);
+  const { open, toggleModal, isEditing } = useContext(AdminContext);
+  const newTitle= title?.replace("Edit", "Add New");
 
   return (
     <Box>
@@ -36,7 +37,7 @@ export const ModalContainer = ({ title, form }: Props) => {
       >
         <Fade in={open}>
           <Box sx={ModalContainerStyle}>
-            <ModalHeader title={title} />
+            <ModalHeader title={isEditing ? title : newTitle} />
             {form}
           </Box>
         </Fade>
