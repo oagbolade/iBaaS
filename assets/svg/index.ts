@@ -1,1 +1,1 @@
-export { DashboardIcon, SetupIcon, ChevronDown, AdminIcon, SettingsIcon, SignOutIcon } from './icons';
+export { DashboardIcon, InfoIcon, SetupIcon,PlusIcon, ChevronDown, AdminIcon,SettingsIcon, SignOutIcon } from './icons';

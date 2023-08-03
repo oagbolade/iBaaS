@@ -1,0 +1,56 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - plugin:react/recommended
+  - airbnb
+  - prettier
+  - plugin:css/recommended
+  - plugin:react-hooks/recommended
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 14
+  sourceType: module
+plugins:
+  - react
+  - css
+rules:
+  {
+    'jsx-a11y/anchor-is-valid':
+      [
+        'warn',
+        {
+          'components': ['Link'],
+          'specialLink': ['hrefLeft', 'hrefRight'],
+          'aspects': ['noHref', 'invalidHref', 'preferButton'],
+        },
+      ],
+    'react/forbid-prop-types': ['warn', { 'forbid': ['any'] }],
+    'jsx-a11y/label-has-associated-control':
+      [
+        0,
+        {
+          'labelComponents': ['FormLabel'],
+          'labelAttributes': ['label'],
+          'controlComponents': ['input'],
+          'depth': 1,
+        },
+      ],
+    'no-restricted-syntax':
+      ['warn', 'WithStatement', "BinaryExpression[operator='in']"],
+    'indent': ['warn', 'tab'],
+    'quotes': ['warn', 'single'],
+    'semi': ['error', 'always'],
+    'comma-dangle': ['warn', 'never'],
+    'react/prop-types':
+      [0, { ignore: [], customValidators: [], skipUndeclared: [] }],
+    'react/state-in-constructor': [warn, 'always'],
+    'import/order':
+      ['warn', { 'pathGroups': [{ 'pattern': '~/**', 'group': 'external' }] }],
+    'arrow-body-style': ['warn', 'always'],
+    'spaced-comment': ['warn', 'always', { 'exceptions': ['-', '+'] }],
+    'react/destructuring-assignment': [warn, 'always'],
+    'react-hooks/rules-of-hooks': 1,
+    'react-hooks/exhaustive-deps': 1,
+  }

@@ -65,7 +65,6 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
                           activeMenu === subMenuItem.name
                             ? `${colors.activeBlue100}`
                             : '',
-
                         color:
                           activeMenu === subMenuItem.name
                             ? `${colors.activeBlue400}`
