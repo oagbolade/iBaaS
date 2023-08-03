@@ -31,7 +31,7 @@ export const chipTypography = {
   backgroundColor: `${colors.neutral900}`,
   fontSize: '12px',
   lineHeight: '16px',
-  marginRight: '10px'
+  marginRight: '10px',
 };
 
 export const multiSelect = {
@@ -39,11 +39,11 @@ export const multiSelect = {
   paddingRight: '8px',
   overflowY: 'auto',
   '& .example::-webkit-scrollbar': {
-    display: 'none'
+    display: 'none',
   },
   '& .example': {
-    scrollbarWidth: 'none'
-  }
+    scrollbarWidth: 'none',
+  },
 };
 
 export const asterix = {
