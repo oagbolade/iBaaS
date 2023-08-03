@@ -1,18 +1,18 @@
-"use client";
-import React, { useState } from "react";
-import { useRouter } from 'next/navigation'
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import colors from "@/assets/colors";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import { ChevronDown } from "@/assets/svg";
-import { activeSideBar, mainMenu } from "./styles";
-import SideBarPrimaryButton from "@/components/Buttons/SideBarPrimaryButton";
-import { handleRedirect } from "@/services";
-import "./App.css";
+'use client';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import colors from '@/assets/colors';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import { ChevronDown } from '@/assets/svg';
+import { activeSideBar, mainMenu } from './styles';
+import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
+import { handleRedirect } from '@/services';
+import './App.css';
 
 interface SubMenuItems {
   name: string;
@@ -31,7 +31,7 @@ interface SidebarMenuProps {
 
 export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
   const router = useRouter();
-  const [activeMenu, setActiveMenu] = useState<string>("Manage Users");
+  const [activeMenu, setActiveMenu] = useState<string>('Manage Users');
 
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
@@ -45,7 +45,7 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
           <Accordion
             sx={{
               backgroundColor: `${colors.lightGrey}`,
-              padding: "3px 0",
+              padding: '3px 0',
             }}
           >
             <AccordionSummary sx={mainMenu} expandIcon={<ChevronDown />}>
@@ -64,17 +64,17 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
                         backgroundColor:
                           activeMenu === subMenuItem.name
                             ? `${colors.activeBlue100}`
-                            : "",
-                 
-                            color:
+                            : '',
+
+                        color:
                           activeMenu === subMenuItem.name
                             ? `${colors.activeBlue400}`
-                            : "",
+                            : '',
                       }}
                       sx={activeSideBar}
                       onClick={() => {
-                          setActiveMenu(subMenuItem.name);
-                          handleRedirect( router, subMenuItem.link);
+                        setActiveMenu(subMenuItem.name);
+                        handleRedirect(router, subMenuItem.link);
                       }}
                     >
                       {subMenuItem.name}
