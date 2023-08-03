@@ -7,7 +7,7 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { TableMenuButton } from '@/components/Buttons';
 import { StyledMenu } from './StyledMenu';
-import { AdminContext } from '@/pages/Admin/AdminContext';
+import { AdminContext } from '@/features/Admin/AdminContext';
 
 export const ActionMenu = () => {
   const { toggleModal } = useContext(AdminContext);
