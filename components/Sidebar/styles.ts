@@ -2,11 +2,11 @@ import colors from '@/assets/colors';
 
 export const sideBarContainer = {
   width: 278,
-  height: "100vh",
-  padding: "0 20px",
+  height: '100vh',
+  padding: '0 20px',
   backgroundColor: `${colors.lightGrey}`,
   marginTop: '80px',
-  "&:hover": {
+  '&:hover': {
     boxShadow: 2,
   },
   position: 'sticky',
@@ -15,7 +15,7 @@ export const sideBarContainer = {
 
 export const sideBarItem = {
   fontFamily: 'Averta Regular',
-  fontSize: '20px',
+  fontSize: '16px',
   lineHeight: '24px',
   fontWeight: 400,
   width: '200px',

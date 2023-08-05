@@ -6,6 +6,13 @@ const baseTypography = {
   lineHeight: '24px',
 };
 
+export const checkboxTypography = {
+  color:  `${colors.neutral900}`,
+  fontSize: '16px',
+  lineHeight: '24px',
+  fontWeight: 400
+};
+
 export const textStyle = {
   borderRadius: '4px',
   background: `${colors.neutral200}`,

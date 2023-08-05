@@ -16,7 +16,7 @@ export const MainSection = (props: Props) => {
 
   return (
     <Stack direction="row" justifyContent="space-between">
-      <PageTitle title={props.title} />
+      <PageTitle styles={{ fontSize: '28px' }} title={props.title} />
       <PrimaryIconButton
         onClick={() => toggleModal(isEditing)}
         buttonTitle={props.buttonTitle}

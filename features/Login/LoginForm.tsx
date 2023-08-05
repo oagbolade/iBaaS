@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import InterSwitchImage from '@/assets/interswitch/image';
 import { LoginHeader } from './LoginHeader';
@@ -10,8 +11,10 @@ import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { FormTextInput, CheckboxInput } from '@/components/TextFields';
+import { handleRedirect } from '@/utils';
 
 export const LoginForm = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -29,7 +32,7 @@ export const LoginForm = () => {
   return (
     <Box
       sx={{
-        padding: '40px 200px',
+        padding: '30px 200px 0 200px',
         width: '55vw',
       }}
     >
@@ -83,6 +86,7 @@ export const LoginForm = () => {
               <Grid container mt={7} ml={2}>
                 <Grid item md={12}>
                   <PrimaryIconButton
+                    onClick={() => handleRedirect(router, '/admin/users')}
                     type="submit"
                     buttonTitle="Login"
                     customStyle={loginButton}

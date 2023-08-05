@@ -16,5 +16,5 @@ type Props = {
 };
 
 export const PageTitle = ({ title, styles }: Props) => (
-  <Typography sx={{pageTitle}}>{title}</Typography>
+  <Typography sx={{ pageTitle, ...styles }}>{title}</Typography>
 );

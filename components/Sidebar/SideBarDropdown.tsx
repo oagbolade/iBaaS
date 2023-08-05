@@ -1,17 +1,18 @@
 'use client';
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import colors from '@/assets/colors';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { ChevronDown } from '@/assets/svg';
 import { activeSideBar, mainMenu } from './styles';
 import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
-import { handleRedirect } from '@/services';
+import { handleRedirect } from '@/utils';
+import colors from '@/assets/colors';
 import './App.css';
 
 interface SubMenuItems {
@@ -21,6 +22,7 @@ interface SubMenuItems {
 
 interface SidebarMenuItem {
   name: string;
+  groupPath: string;
   icon: any;
   subMenuItems: SubMenuItems[];
 }
@@ -31,8 +33,27 @@ interface SidebarMenuProps {
 
 export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
   const router = useRouter();
-  const [activeMenu, setActiveMenu] = useState<string>('Manage Users');
+  const pathname: string | null = usePathname();
+  const [expanded, setExpanded] = React.useState<string>('');
 
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : '');
+    };
+  const [activeMenu, setActiveMenu] = useState<string>('');
+
+  const renderAsActive = (groupPath: string) => {
+    if (pathname?.includes(groupPath)) {
+      return {
+        borderRadius: '8px',
+        background: `${colors.neutral200}`,
+        boxShadow:
+          '0px 1px 2px 0px rgba(0, 0, 0, 0.06), 0px 1px 3px 0px rgba(0, 0, 0, 0.10)',
+      };
+    }
+
+    return { ...mainMenu };
+  };
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
       return (
@@ -43,12 +64,17 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
           }}
         >
           <Accordion
+            expanded={expanded.includes(menuItem.groupPath)}
+            onChange={handleChange(menuItem.groupPath)}
             sx={{
               backgroundColor: `${colors.lightGrey}`,
               padding: '3px 0',
             }}
           >
-            <AccordionSummary sx={mainMenu} expandIcon={<ChevronDown />}>
+            <AccordionSummary
+              sx={renderAsActive(menuItem.groupPath)}
+              expandIcon={<ChevronDown />}
+            >
               <SideBarPrimaryButton
                 buttonTitle={menuItem.name}
                 icon={<menuItem.icon />}

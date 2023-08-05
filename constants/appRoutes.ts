@@ -14,3 +14,5 @@ export const appRoutes = {
     manage_gl_accounts: 'admin/manage_gl_accounts',
   },
 };
+
+export const excludeFromLayout = ['/login', '/'];

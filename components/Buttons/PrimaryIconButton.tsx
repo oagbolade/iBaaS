@@ -14,23 +14,32 @@ interface ButtonStyles {
   borderRadius?: string | undefined;
   border?: string | undefined;
   variant?: 'contained' | 'outlined' | undefined;
-};
+}
 
 type Props = {
   buttonTitle: string;
   type?: 'button' | 'submit' | 'reset' | undefined;
   icon?: any;
-  onClick?: () => void | undefined;
+  onClick?: () => void | undefined | number;
   customStyle?: ButtonStyles | undefined;
 };
 
-export const PrimaryIconButton = ({ buttonTitle, icon, customStyle, onClick, type }: Props) => {
+export const PrimaryIconButton = ({
+  buttonTitle,
+  icon,
+  customStyle,
+  onClick,
+  type,
+}: Props) => {
   return (
     <Button
       type={type}
-      onClick = { () => onClick?.() }
+      onClick={() => onClick?.()}
       sx={{ buttonTypography, ...customStyle }}
-      style={{ backgroundColor: customStyle?.backgroundColor || `${colors.activeBlue400}` }}
+      style={{
+        backgroundColor:
+          customStyle?.backgroundColor || `${colors.activeBlue400}`,
+      }}
       variant={customStyle?.variant}
       startIcon={icon}
     >
@@ -42,6 +51,6 @@ export const PrimaryIconButton = ({ buttonTitle, icon, customStyle, onClick, typ
 PrimaryIconButton.defaultProps = {
   type: 'button',
   customStyle: {
-    variant: 'contained'
-  }
-}
+    variant: 'contained',
+  },
+};

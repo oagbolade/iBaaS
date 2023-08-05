@@ -1,17 +1,15 @@
-'use client'
-import React from 'react'
-import { NavBarContainer } from './NavBarContainer';
+'use client';
+import React from 'react';
 import { usePathname } from 'next/navigation';
+import { NavBarContainer } from './NavBarContainer';
+import { excludeFromLayout } from '@/constants/appRoutes';
 
 export const NavBar = () => {
-  const pathname = usePathname();
+  const pathname: string | null = usePathname();
 
-  if (pathname === "/login") {
+  if (excludeFromLayout.includes(pathname || '')) {
     return;
   }
 
-  return (  
-       <NavBarContainer />
-  )
-}
-
+  return <NavBarContainer />;
+};
