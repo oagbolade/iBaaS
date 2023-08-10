@@ -49,12 +49,20 @@ export const loginButton = {
   color: `${colors.white}`,
 };
 
-export const forgotPassword ={
-  color: `${colors.activeBlue400}`,
-  fontSize: "14px",
-  fontStyle: "normal",
-  fontWeight: 600,
-  lineHeight: "20px",
-  fontFamily: "Averta Regular"
+export const stepperContainer = {
+  padding: '15px',
+  minWidth: '253px',
+  maxWidth: '833px',
+  minHeight: '440px',
+  borderRadius: '7px',
+  border: '1px solid #D7DEE7',
+  background: `${colors.white}`,
+};
 
-}
+export const stepTitle = {
+  width: '223px',
+  height: '20px',
+  fontSize: '14px',
+  fontWeight: 400,
+  color: `${colors.stepTitleBlue}`,
+};

@@ -1,10 +1,23 @@
 import Typography from '@mui/material/Typography';
 import { tableTitle } from './styles';
 
+interface StylesI {
+  fontSize?: string;
+  fontWeight?: number;
+  height?: string;
+  width?: string;
+  lineHeight?: string;
+  color?: string;
+  marginBottom?: string;
+}
+
 type Props = {
-  title: string;
+  title?: string | undefined;
+  styles?: StylesI | undefined;
 };
 
-export const TableTitle = ({ title }: Props) => (
-  <Typography sx={tableTitle}>{title}</Typography>
+export const TableTitle = ({ title, styles }: Props) => (
+  <Typography sx={tableTitle} style={styles}>
+    {title}
+  </Typography>
 );

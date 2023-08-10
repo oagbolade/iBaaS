@@ -23,6 +23,19 @@ interface PostingLimitValues{
   drLoadLimit: string;
 }
 
+interface ManageAccountValues{
+  currency: string;
+  gLType: string;
+  gLTypeNode: string;
+  gLTypeClass: string;
+  gLAccountNumber: string;
+  gLAccountDescription: string;
+  BookBalance:string;
+  pointing: string;
+  status: string;
+  pointingType: string;
+}
+
 interface PasswordChangeForm{
   oldPassword: string;
   newPassword: string;

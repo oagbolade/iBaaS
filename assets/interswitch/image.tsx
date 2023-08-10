@@ -15,4 +15,5 @@ const InterSwitchImage = () => {
     ></Image>
   );
 };
+
 export default InterSwitchImage;

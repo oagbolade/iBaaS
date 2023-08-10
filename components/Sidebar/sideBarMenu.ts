@@ -14,9 +14,13 @@ export const sideBarMenu = [
     name: 'Setup',
     groupPath: '/setup',
     icon: SetupIcon,
-    link: '',
-    isMultiLevel: true,
-    subMenuItems: [],
+    subMenuItems: [
+      { name: 'Demand Deposit', link: '/setup/demand' },
+      { name: 'Loan Product', link: '/setup/loan' },
+      { name: 'Treasury Product', link: '/setup/treasury' },
+      { name: 'Manage Branch', link: '/setup/branch' },
+      { name: 'Commercial Banks', link: '/setup/banks' },
+    ],
   },
   {
     name: 'Admin',

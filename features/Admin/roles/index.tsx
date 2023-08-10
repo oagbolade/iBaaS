@@ -1,26 +1,27 @@
-'use client';
-import React, { useContext } from 'react';
-import { Formik, Form } from 'formik';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+"use client";
+import React, { useContext } from "react";
+import { Formik, Form } from "formik";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import {
   ModalBackButton,
   ModalSaveButton,
   ResetButton,
-} from '@/components/Modal/styles';
-import { role as roleSchema } from '@/constants/schemas';
-import { roleInitialValues } from '@/constants/types';
-import { PrimaryIconButton } from '@/components/Buttons';
+} from "@/components/Modal/styles";
+import { role as roleSchema } from "@/constants/schemas";
+import { roleInitialValues } from "@/constants/types";
+import { PrimaryIconButton } from "@/components/Buttons";
 import {
   FormTextInput,
   CheckboxInput,
   FormSelectField,
-} from '@/components/TextFields';
-import { PageTitle } from '@/components/Typography';
-import { EditRole } from '@/constants/AdminOptions';
-import { AdminContainer } from '@/features/Admin';
-import { AdminContext } from '@/features/Admin/AdminContext';
+} from "@/components/TextFields";
+import { PageTitle } from "@/components/Typography";
+import { EditRole } from "@/constants/AdminOptions";
+import { AdminContainer } from "@/features/Admin";
+import { PlusIcon } from "@/assets/svg";
+import { roleForm, roleTitle } from "./style";
 
 const ModalForm = () => {
   const onSubmit = (
@@ -47,7 +48,7 @@ const ModalForm = () => {
                 placeholder="Business Development"
                 label="Role Name"
                 required
-              />{' '}
+              />{" "}
             </Grid>
             <Grid item md={6}>
               <FormTextInput
@@ -55,7 +56,7 @@ const ModalForm = () => {
                 placeholder="Business Development"
                 label="Role Description"
                 required
-              />{' '}
+              />{" "}
             </Grid>
             <Grid item md={6}>
               <FormSelectField
@@ -63,7 +64,7 @@ const ModalForm = () => {
                 options={EditRole.idleTimeOut}
                 label="Idle TimeOut"
                 required
-              />{' '}
+              />{" "}
             </Grid>
             <Grid item md={6}>
               <FormSelectField
@@ -71,7 +72,7 @@ const ModalForm = () => {
                 options={EditRole.accessDays}
                 label="Access Days"
                 required
-              />{' '}
+              />{" "}
             </Grid>
             <Grid item md={6}>
               <FormSelectField
@@ -79,7 +80,7 @@ const ModalForm = () => {
                 options={EditRole.roleLevel}
                 label="Role Level"
                 required
-              />{' '}
+              />{" "}
             </Grid>
             <Grid item md={6}>
               <FormSelectField
@@ -87,7 +88,7 @@ const ModalForm = () => {
                 options={EditRole.dataCapturePrivileges}
                 label="Application Data Capture Privileges"
                 required
-              />{' '}
+              />{" "}
             </Grid>
             {/* Checkboxes */}
             <Grid item md={6}>
@@ -134,10 +135,12 @@ const ModalForm = () => {
   );
 };
 
+
 export const Role = () => {
   return (
     <AdminContainer
       form={<ModalForm />}
+      role="Role"
       title="Manage Role"
       modalTitle="Edit Role"
       buttonTitle="Add New Role"

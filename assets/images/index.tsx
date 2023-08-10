@@ -43,5 +43,3 @@ LoginBanner.defaultProps = {
   width: '686px',
   height: '900px',
 };
-
-// export default LoginBanner;

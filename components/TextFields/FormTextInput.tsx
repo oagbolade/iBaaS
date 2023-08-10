@@ -5,24 +5,17 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { TextError } from '@/components/Forms';
 import { textStyle, labelTypography, asterix } from './styles';
 
 type Props = {
+  endAdornment?: React.JSX.Element | undefined;
   placeholder: string;
   name: string;
   label: string;
   required?: boolean;
-  showPassword?: boolean;
   customStyle?: object;
   icon?: any;
-  handleClickShowPassword?: () => void | undefined;
-  handleMouseDownPassword?: (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => void | undefined;
   type?: 'text' | 'password';
 };
 
@@ -34,9 +27,7 @@ export const FormTextInput = ({
   required,
   customStyle,
   type,
-  showPassword,
-  handleClickShowPassword,
-  handleMouseDownPassword,
+  endAdornment,
 }: Props) => {
   return (
     <Box sx={{ marginBottom: '10px' }}>
@@ -63,17 +54,8 @@ export const FormTextInput = ({
                 startAdornment: (
                   <InputAdornment position="start">{icon}</InputAdornment>
                 ),
-                endAdornment: showPassword !== undefined && (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
+                endAdornment: (
+                  <InputAdornment position="end">{endAdornment}</InputAdornment>
                 ),
               }}
             />

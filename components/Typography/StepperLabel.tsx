@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { pageTitle } from './styles';
+import { stepperLabel } from './styles';
 
 interface StylesI {
   fontSize?: string;
@@ -8,7 +8,6 @@ interface StylesI {
   width?: string;
   lineHeight?: string;
   color?: string;
-  marginBottom?: string;
 }
 
 type Props = {
@@ -16,6 +15,6 @@ type Props = {
   styles?: StylesI | undefined;
 };
 
-export const PageTitle = ({ title, styles }: Props) => (
-  <Typography sx={{ pageTitle, ...styles }}>{title}</Typography>
+export const StepperLabel = ({ title, styles }: Props) => (
+  <Typography sx={stepperLabel} style={styles}>{title}</Typography>
 );

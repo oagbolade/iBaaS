@@ -1,16 +1,22 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import InterSwitchImage from '@/assets/interswitch/image';
 import { LoginHeader } from './LoginHeader';
-import { Formik, Form } from 'formik';
 import Grid from '@mui/material/Grid';
-import { loginButton } from './styles';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { forgotPassword, loginButton } from './styles';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { FormTextInput, CheckboxInput } from '@/components/TextFields';
+import { PageTitle } from '@/components/Typography';
+import Button from '@mui/material/Button';
+
 import { handleRedirect } from '@/utils';
 
 export const LoginForm = () => {
@@ -69,19 +75,31 @@ export const LoginForm = () => {
               <Grid item md={12}>
                 <FormTextInput
                   type={showPassword ? 'text' : 'password'}
-                  showPassword={showPassword}
                   customStyle={{
                     width: '100%',
                   }}
                   name="password"
                   placeholder="Enter password"
                   label="Password"
-                  handleClickShowPassword={handleClickShowPassword}
-                  handleMouseDownPassword={handleMouseDownPassword}
+                  endAdornment={
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  }
                 />{' '}
               </Grid>
               <Grid item md={6}>
                 <CheckboxInput label="Remember me" />
+              </Grid>
+              <Grid item md={6}>
+                <Button variant="text">
+                  <PageTitle title="Forgot Password" styles={forgotPassword} />
+                </Button>
               </Grid>
               <Grid container mt={7} ml={2}>
                 <Grid item md={12}>

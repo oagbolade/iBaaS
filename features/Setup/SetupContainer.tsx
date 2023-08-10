@@ -4,12 +4,9 @@ import Box from '@mui/material/Box';
 import { MainSection, SearchSection } from '@/components/Shared';
 import { MuiTableContainer } from '@/components/Table';
 import { ModalContainer } from '@/components/Modal/index';
-import AdminContextProvider from './AdminContext';
+import AdminContextProvider from './SetupContext';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import { RoleTitle } from '@/components/Typography';
-import { InfoIcon} from '@/assets/svg';
-import colors from '@/assets/colors';
 
 type Props = {
   form: any;
@@ -18,10 +15,9 @@ type Props = {
   buttonTitle: string;
   tableTitle: string;
   searchTitle: string;
-  role?: any;
 };
 
-export const AdminContainer = (props: Props) => {
+export const SetupContainer = (props: Props) => {
   return (
     <AdminContextProvider>
       <Box
@@ -32,18 +28,10 @@ export const AdminContainer = (props: Props) => {
         }}
       >
         <MainSection title={props.title} buttonTitle={props.buttonTitle} />
-        {props.role === "Role" ?(
-          <Box>
-             <RoleTitle  roleTitle="Your Role:" title=" Global administrator "/>
-          </Box>
-        ):
-        <></>
-        }
         <SearchSection
           tableTitle={props.tableTitle}
           searchTitle={props.searchTitle}
         />
-       
         <MuiTableContainer columns={MOCK_COLUMNS} data={MOCK_DATA} />
         <ModalContainer form={props.form} title={props.modalTitle} />
       </Box>

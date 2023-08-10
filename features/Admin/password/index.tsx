@@ -1,7 +1,7 @@
 'use client';
 import Box from '@mui/material/Box';
 import { Formik, Form } from 'formik';
-import { PasswordBody, PasswordChangeBody, PasswordTitleHeader } from './style';
+import { PasswordBody, PasswordChangeBody, PasswordTitleHeader, ResetButtonPassword } from './style';
 import { PageTitle } from '@/components/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -44,6 +44,9 @@ export const PasswordChange = () => {
                   name="OldPassword"
                   label="Old Password"
                   required
+                  customStyle={{
+                    width: '100%',
+                  }}
                 />{' '}
               </Grid>
               <Grid item md={6}>
@@ -52,6 +55,9 @@ export const PasswordChange = () => {
                   name="Newpassword"
                   label="New Password"
                   required
+                  customStyle={{
+                    width: '100%',
+                  }}
                 />{' '}
               </Grid>
               <Grid item md={6}>
@@ -60,6 +66,9 @@ export const PasswordChange = () => {
                   name="confirmPassword"
                   label="Confirm New Password"
                   required
+                  customStyle={{
+                    width: '100%',
+                  }}
                 />{' '}
               </Grid>
               <Grid item md={6}>
@@ -68,6 +77,9 @@ export const PasswordChange = () => {
                   label="Access Key"
                   name="accessKey"
                   required
+                  customStyle={{
+                    width: '100%',
+                  }}
                 />{' '}
               </Grid>
               <Grid container mt={9} ml={2}>
@@ -85,11 +97,11 @@ export const PasswordChange = () => {
                   item
                   md={6}
                 >
-                  <Button variant="text">
-                    <PageTitle title="Reset" styles={ResetButton} />
+                  <Button variant="text" >
+                    <PageTitle title="Reset" styles={ResetButtonPassword} />
                   </Button>
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={3}>  
                   <PrimaryIconButton
                     buttonTitle="Save Changes"
                     customStyle={ModalSaveButton}

@@ -1,5 +1,2 @@
-export default function Setup() {
-  return (
-    <div />
-  )
-}
+export { StepperContainer } from "./StepperContainer";
+export { Stepper } from "./Stepper";

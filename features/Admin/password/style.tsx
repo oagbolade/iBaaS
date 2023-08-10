@@ -16,6 +16,7 @@ export const PasswordTitleHeader = {
   alignItems: 'center',
   gap: '581px',
   color: `${colors.neutral900}`,
+  marginTop: "65px"
 };
 
 export const PasswordChangeBody = {
@@ -25,3 +26,19 @@ export const PasswordChangeBody = {
   gap: '80px',
   color: `${colors.activeBlue400}`,
 };
+
+
+export const ResetButtonPassword ={
+  display: "flex",
+  height: "42px",
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: 'center',
+  marginRight: '70px',
+  color: `${colors.neutral700}`,
+  margin: '0 auto',
+  width: '42px',
+  fontSize: '20px',
+  fontWeight: 600,
+  background: `${colors.white}`
+}
