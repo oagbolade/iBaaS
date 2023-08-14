@@ -15,4 +15,5 @@ export const appRoutes = {
   },
 };
 
-export const excludeFromLayout = ['/login', '/'];
+export const excludeFromNavBarLayout = ['/login', '/'];
+export const excludeFromSideBarLayout = ['/login', '/', '/setup/business'];

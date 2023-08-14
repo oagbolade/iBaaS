@@ -2,12 +2,12 @@
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { NavBarContainer } from './NavBarContainer';
-import { excludeFromLayout } from '@/constants/appRoutes';
+import { excludeFromNavBarLayout } from '@/constants/appRoutes';
 
 export const NavBar = () => {
   const pathname: string | null = usePathname();
 
-  if (excludeFromLayout.includes(pathname || '')) {
+  if (excludeFromNavBarLayout.includes(pathname || '')) {
     return;
   }
 
