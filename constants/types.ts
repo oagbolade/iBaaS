@@ -43,6 +43,44 @@ interface PasswordChangeForm{
   accessKey: string
 }
 
+interface ManageBranch{
+ branchCode: string;
+ branchName: string;
+ branchType: string;
+ mainBranch: string;
+ branchAddress: string;
+ country: string;
+ state: string;
+ town: string;
+ emailAddress: string;
+ fax:string;
+ telePhoneNumber: string
+}
+
+interface CommercialBank{
+  bankName: string;
+  bankCode: string;
+  bankMnemonic: string;
+
+}
+export const bankValues: CommercialBank ={
+  bankName: '',
+  bankCode: '',
+  bankMnemonic: ''
+}
+export const branchValues: ManageBranch ={
+  branchCode: "",
+  branchName: '',
+  branchType: '',
+  mainBranch: '',
+  branchAddress: '',
+  country: '',
+  state: '',
+  town: '',
+  emailAddress: '',
+  fax: '',
+  telePhoneNumber: ''
+}
 export const userInitialValues: UserFormValues = {
   staffId: '',
   staffName: '',

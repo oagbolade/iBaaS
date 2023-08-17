@@ -1,32 +1,33 @@
 'use client';
 import { createContext, useState } from 'react';
 
-const initialAdminContext = {
-  open: false,
-  isEditing: false,
-  toggleModal: (isEditing: boolean) => {},
+const initialSetupContext = {
+  isSetupModalOpen: false,
+  isEditingSetup: false,
+  toggleSetupModal: (isEditingSetup: boolean) => {},
 };
 
-export const SetupContext = createContext<AdminContextType>(initialAdminContext);
+export const SetupContext =
+  createContext<SetupContextType>(initialSetupContext);
 
-type AdminContextType = typeof initialAdminContext;
+type SetupContextType = typeof initialSetupContext;
 
 export default function SetupContextProvider({ children }: any) {
-  const [open, setOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isSetupModalOpen, setOpen] = useState(false);
+  const [isEditingSetup, setIsEditing] = useState(false);
 
-  const toggleModal = (isEditing: boolean) => {
-    setIsEditing(isEditing);
-    setOpen(!open)
+  const toggleSetupModal = (isEditingSetup: boolean) => {
+    setIsEditing(isEditingSetup);
+    setOpen(!isSetupModalOpen);
   };
 
-  const value: AdminContextType = {
-    open,
-    toggleModal,
-    isEditing
+  const value: SetupContextType = {
+    isSetupModalOpen,
+    toggleSetupModal,
+    isEditingSetup,
   };
 
   return (
-    <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
+    <SetupContext.Provider value={value}>{children}</SetupContext.Provider>
   );
 }

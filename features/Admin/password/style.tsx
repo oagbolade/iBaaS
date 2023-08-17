@@ -18,6 +18,14 @@ export const PasswordTitleHeader = {
   color: `${colors.neutral900}`,
   marginTop: "65px"
 };
+export const PasswordTitle ={
+  fontSize: '28px', 
+  fontWeight: 700,
+   color:`${colors.neutral900}`,
+   lineHeight: '36px',
+   fontStyle: 'normal'
+}
+
 
 export const PasswordChangeBody = {
   display: 'flex',
@@ -29,16 +37,17 @@ export const PasswordChangeBody = {
 
 
 export const ResetButtonPassword ={
-  display: "flex",
-  height: "42px",
-  justifyContent: "center",
-  alignItems: "center",
-  textAlign: 'center',
-  marginRight: '70px',
-  color: `${colors.neutral700}`,
-  margin: '0 auto',
-  width: '42px',
-  fontSize: '20px',
+   color: `${colors.neutral700}`,
+   background: `${colors.white}`,
+  display: 'flex',
+  height: '48px',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '8px',
+  padding: "16px 24px",
+  borderRadius: '8px',
+  fontSize: '16px',
+  fontStyle: 'normal',
   fontWeight: 600,
-  background: `${colors.white}`
+  lineHeight: '24px',
 }

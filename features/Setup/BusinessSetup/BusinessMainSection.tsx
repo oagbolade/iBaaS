@@ -1,7 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import { primaryTitle, secondaryTitle } from './styles';
 
 export const BusinessMainSection = () => {

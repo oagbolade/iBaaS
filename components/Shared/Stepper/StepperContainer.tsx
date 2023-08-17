@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -9,38 +9,14 @@ import { TableTitle as FormTitle, StepperLabel } from '@/components/Typography';
 import { demandDepositSteps } from '@/constants/Steps';
 import colors from '@/assets/colors';
 import { stepperContainer, stepTitle } from './styles';
-import {
-  FormOne,
-  FormTwo,
-  FormThree,
-  FormFour,
-  FormFive,
-} from '@/features/Setup/Forms';
 
 type Props = {
   stepperTitle?: string;
-  steps?: Array<string>;
-  forms?: React.ReactNode;
+  step: number | 1;
+  stepMapper?: object;
 };
 
-export const StepperContainer = ({ stepperTitle, forms, steps }: Props) => {
-  const [step, setStep] = useState<number>(1);
-
-  const handleSetStep = (isNext: boolean) => {
-    if (!isNext && step === 1) return;
-    if (isNext && step === demandDepositSteps.length) return;
-    if (isNext) return setStep(step + 1);
-    setStep(step - 1);
-  };
-
-  const stepMapper = {
-    '1': <FormOne setStep={handleSetStep} />,
-    '2': <FormTwo setStep={handleSetStep} />,
-    '3': <FormThree setStep={handleSetStep} />,
-    '4': <FormFour setStep={handleSetStep} />,
-    '5': <FormFive setStep={handleSetStep} />,
-  };
-
+export const StepperContainer = ({ stepperTitle, stepMapper, step }: Props) => {
   return (
     <>
       <Stack

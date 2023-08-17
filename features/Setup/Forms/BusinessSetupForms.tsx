@@ -1,27 +1,26 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import {
   FormTextInput,
+  FormSelectField,
   CheckboxInput,
   CountrySelectField,
-  FormSelectField,
+  LargeFormMultiSelectField,
 } from '@/components/TextFields';
-import { EditUser } from '@/constants/AdminOptions';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
-  ModalBackButton,
   ModalSaveButton,
-  ResetButton,
 } from '@/components/Modal/styles';
-import { PageTitle, InputAdornmentText } from '@/components/Typography';
-import { nextButton } from './Business.Forms.styles';
+import { InputAdornmentText } from '@/components/Typography';
+import { handleRedirect } from '@/utils';
+import { currencies } from '@/constants/SetupOptions';
 
 type Props = {
   setStep: (isNext: boolean) => void;
@@ -35,12 +34,17 @@ const styles = {
 };
 
 export const ActionButtons = ({ setStep, isFormOne = false }: Props) => {
+  const router = useRouter();
+
   return (
     <Grid container mt={8}>
       <Grid item md={12}>
         <PrimaryIconButton
           // type="submit" todo: handle submit together with setStep
-          onClick={() => setStep(true)}
+          onClick={() => {
+            if (isFormOne) return setStep(true);
+            handleRedirect(router, '/admin/users');
+          }}
           buttonTitle="Next"
           customStyle={styles}
         />
@@ -70,6 +74,10 @@ export const FormOne = ({ setStep }: Props) => {
         <Box ml={5}>
           <Grid container spacing={2}>
             <Grid item md={12}>
+              {/* Uses Large Multiselect */}
+              <LargeFormMultiSelectField label="Product Charge" />
+            </Grid>
+            <Grid item md={12}>
               <FormTextInput
                 customStyle={{
                   width: '100%',
@@ -92,9 +100,20 @@ export const FormOne = ({ setStep }: Props) => {
                 customStyle={{
                   width: '100%',
                 }}
-                name="staffName"
-                placeholder="002789765"
-                label="Staff Name"
+                name="companyName"
+                placeholder="Enter your company name"
+                label="Company Name"
+                required
+              />{' '}
+            </Grid>
+            <Grid item md={12}>
+              <FormTextInput
+                customStyle={{
+                  width: '100%',
+                }}
+                name="cbnCode"
+                placeholder="Enter your company CBN code"
+                label="Central Bank of Nigeria (CBN) Code"
                 required
               />{' '}
             </Grid>
@@ -172,57 +191,48 @@ export const FormTwo = ({ setStep }: Props) => {
       <Form>
         <Box ml={5}>
           <Grid container spacing={2}>
+          <Grid item md={12}>
+              <FormSelectField
+                customStyle={{
+                  width: '100%',
+                }}
+                name="currency"
+                options={currencies}
+                label="Currency"
+              />{' '}
+            </Grid>
+            <Grid item md={3}>
+              <CountrySelectField name="countryCode" label="Phone Number" />{' '}
+            </Grid>
+            <Grid item md={9} mt={3}>
+              <FormTextInput
+                customStyle={{
+                  width: '100%',
+                }}
+                name="phone"
+                placeholder="908 7878 987"
+                label=""
+              />{' '}
+            </Grid>
+            
             <Grid item md={12}>
               <FormTextInput
                 customStyle={{
                   width: '100%',
                 }}
-                endAdornment={
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    edge="end"
-                  >
-                    <InputAdornmentText>Day(s)</InputAdornmentText>
-                  </IconButton>
-                }
-                name="calculationBasis"
-                placeholder="Enter a number"
-                label="Interest Calculation Basis"
+                name="email"
+                placeholder="Enter company's email address"
+                label="Email Address"
               />{' '}
             </Grid>
-            <Grid item md={12}>
-              <CountrySelectField
-                // customStyle={{
-                //   width: '100%',
-                // }}
-                name="staffName"
-                placeholder="002789765"
-                label="Staff Name"
-                required
-              />{' '}
-            </Grid>
-            <Grid item md={12}>
-              <CheckboxInput label="This a non-DBM Institution" />
-            </Grid>
-            <Grid item md={12}>
+            <Grid item md={6}>
               <FormTextInput
                 customStyle={{
-                  width: '100%',
+                  width: '225px',
                 }}
-                name="website"
-                placeholder="Enter company's website"
-                label="Website"
-                required
-              />{' '}
-            </Grid>
-            <Grid item md={12}>
-              <FormTextInput
-                customStyle={{
-                  width: '100%',
-                }}
-                name="address"
-                placeholder="Enter company's address"
-                label="Company Address"
+                name="serverName"
+                placeholder="Enter server name"
+                label="Server Name"
                 required
               />{' '}
             </Grid>
@@ -231,25 +241,46 @@ export const FormTwo = ({ setStep }: Props) => {
                 customStyle={{
                   width: '225px',
                 }}
-                name="address"
-                placeholder="Enter state"
-                label="State"
+                name="lendingRate"
+                placeholder="Enter prime lending rate"
+                label="Prime Lending Rate"
                 required
               />{' '}
             </Grid>
             <Grid item md={6}>
-              <FormTextInput
+            <FormSelectField
                 customStyle={{
-                  width: '225px',
+                  width: '100%',
                 }}
-                name="address"
-                placeholder="LGA"
-                label="Local Government Area"
-                required
+                name="lastFinancialYear"
+                options={currencies}
+                label="Last Financial Year"
               />{' '}
+            </Grid>
+            <Grid item md={6}>
+            <FormSelectField
+                customStyle={{
+                  width: '100%',
+                }}
+                name="nextFinancialYear"
+                options={currencies}
+                label="Next Financial Year"
+              />{' '}
+            </Grid>
+            <Grid item md={12}>
+              <CheckboxInput label="Treat sub-branch as branch" />
+            </Grid>
+            <Grid item md={12}>
+              <CheckboxInput label="Allow multiple account on the same product" />
+            </Grid>
+            <Grid item md={12}>
+              <CheckboxInput label="Allow system inventory" />
+            </Grid>
+            <Grid item md={12}>
+              <CheckboxInput label="Require alert" />
             </Grid>
           </Grid>
-          <ActionButtons isFormOne setStep={setStep} />
+          <ActionButtons setStep={setStep} />
         </Box>
       </Form>
     </Formik>

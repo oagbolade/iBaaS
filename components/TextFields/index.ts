@@ -4,3 +4,4 @@ export { FormSelectField } from './FormSelectField';
 export { FormMultiSelectField } from './FormMultiSelectField';
 export { CheckboxInput } from './CheckboxInput';
 export { CountrySelectField } from './CountrySelectField';
+export { LargeFormMultiSelectField } from './LargeFormMultiSelectField';

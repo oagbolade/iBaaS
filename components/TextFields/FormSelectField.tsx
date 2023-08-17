@@ -20,6 +20,7 @@ type Props = {
   options: OptionsI[];
   required?: boolean;
   icon?: any;
+  customStyle?: object;
 };
 
 export const FormSelectField = ({
@@ -28,6 +29,7 @@ export const FormSelectField = ({
   name,
   label,
   required,
+  customStyle
 }: Props) => {
   const [age, setAge] = React.useState('');
 
@@ -54,6 +56,7 @@ export const FormSelectField = ({
               onChange={handleChange}
               displayEmpty
               sx={{ ...textStyle, paddingRight: '8px' }}
+              style={{ ...customStyle }}
               inputProps={{
                 name,
               }}
@@ -61,7 +64,7 @@ export const FormSelectField = ({
                 icon || <KeyboardArrowDownIcon fontSize="large" />
               }
             >
-              <MenuItem value="">Select Option</MenuItem>
+              <MenuItem value="">Select an Option</MenuItem>
               {options.map((option) => (
                 <MenuItem key={option.name} value={option.value}>
                   {option.name}

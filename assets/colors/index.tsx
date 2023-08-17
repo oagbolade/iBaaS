@@ -13,6 +13,7 @@ const colors = {
   neutral600: '#848F9F',
   primaryBlue: '#00425F',
   primaryBlue400: '#479FC8',
+  primaryBlue700: '#072F40',
   white: '#FFFFFF',
   navBarTitleColor: '#18425D',
   neutral700: '#5F738C',

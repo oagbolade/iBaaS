@@ -104,7 +104,7 @@ export const LoginForm = () => {
               <Grid container mt={7} ml={2}>
                 <Grid item md={12}>
                   <PrimaryIconButton
-                    onClick={() => handleRedirect(router, '/admin/users')}
+                    onClick={() => handleRedirect(router, '/setup/business')}
                     type="submit"
                     buttonTitle="Login"
                     customStyle={loginButton}

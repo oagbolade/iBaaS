@@ -13,6 +13,24 @@ export const password = Yup.object({
     accessKey: Yup.string().required('Required'),
 })
 
+export const bank = Yup.object({
+    bankName:Yup.string().required('Required'),
+    bankCode: Yup.string().required('Required'),
+    bankMnemonic: Yup.string().required('Required'),
+})
+export const branch = Yup.object({
+    branchCode: Yup.string().required('Required'),
+    branchName: Yup.string().required('Required'),
+    branchType: Yup.string().required('Required'),
+    mainBranch: Yup.string().required('Required'),
+    branchAddress: Yup.string().required('Required'),
+    country: Yup.string().required('Required'),
+    state: Yup.string().required('Required'),
+    town: Yup.string().required('Required'),
+    emailAddress: Yup.string().required('Required'),
+    fax: Yup.string().required('Required'),
+    telePhoneNumber: Yup.string().required('Required'),
+})
 
 export const role = Yup.object({
     roleName: Yup.string().required('Required'),

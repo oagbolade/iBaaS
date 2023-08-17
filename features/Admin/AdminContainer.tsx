@@ -8,8 +8,6 @@ import AdminContextProvider from './AdminContext';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import { RoleTitle } from '@/components/Typography';
-import { InfoIcon} from '@/assets/svg';
-import colors from '@/assets/colors';
 
 type Props = {
   form: any;
@@ -32,18 +30,18 @@ export const AdminContainer = (props: Props) => {
         }}
       >
         <MainSection title={props.title} buttonTitle={props.buttonTitle} />
-        {props.role === "Role" ?(
+        {props.role === 'Role' ? (
           <Box>
-             <RoleTitle  roleTitle="Your Role:" title=" Global administrator "/>
+            <RoleTitle roleTitle="Your Role:" title=" Global administrator " />
           </Box>
-        ):
-        <></>
-        }
+        ) : (
+          <></>
+        )}
         <SearchSection
           tableTitle={props.tableTitle}
           searchTitle={props.searchTitle}
         />
-       
+
         <MuiTableContainer columns={MOCK_COLUMNS} data={MOCK_DATA} />
         <ModalContainer form={props.form} title={props.modalTitle} />
       </Box>

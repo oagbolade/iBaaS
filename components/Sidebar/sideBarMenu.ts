@@ -1,4 +1,10 @@
-import { DashboardIcon, SetupIcon, AdminIcon } from '@/assets/svg';
+import {
+  DashboardIcon,
+  SetupIcon,
+  AdminIcon,
+  OperationsIcons,
+  ServiceIcon,
+} from '@/assets/svg';
 
 export const sideBarMenu = [
   {
@@ -34,5 +40,31 @@ export const sideBarMenu = [
       { name: 'Manage GL Accounts', link: '/admin/accounts' },
     ],
   },
-  { name: 'Customer Service', icon: AdminIcon, subMenuItems: [] },
+  {
+    name: 'Customer Service',
+    groupPath: '/service',
+    icon: ServiceIcon,
+    subMenuItems: [
+      { name: 'Customer Creation', link: '/service/customercreation' },
+      { name: 'Account Reactivation', link: '/service/reactivation' },
+      { name: 'Customer Balance', link: '/service/balance' },
+      { name: 'Close Account', link: '/service/closeaccount' },
+      { name: 'Manage Lien', link: '/service/lien' },
+      { name: 'Standing Instruction', link: '/service/instruction' },
+      { name: 'Customer Account Record', link: '/service/accountrecord' },
+      { name: 'Office Transfer', link: '/service/officetransfer' },
+    ],
+  },
+  {
+    name: 'Operations',
+    groupPath: '/operation',
+    icon: OperationsIcons,
+    subMenuItems: [
+      { name: 'Batch Posting', link: '/operation/posting' },
+      { name: 'Bulk Upload', link: '/operation/upload' },
+      { name: 'Cash Deposit', link: '/operation/deposit' },
+      { name: 'Cash Withdrawal', link: '/operation/withdrawal' },
+      { name: 'Charge Concession', link: '/operation/concession' },
+    ],
+  },
 ];

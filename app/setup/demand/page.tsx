@@ -1,5 +1,5 @@
-import { Stepper } from '@/features/Setup/Stepper';
+import { Demand } from '@/features/Setup/demand';
 
 export default function Admin() {
-  return <Stepper />;
+  return <Demand />;
 }

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { ProgressBar } from '@/components/ProgressBar';
 import { stepTitle, formContainer } from './styles';
 import { BusinessMainSection } from './BusinessMainSection';
-import { FormOne, FormTwo } from '@/features/Setup/BusinessSetup/Forms';
+import { FormOne, FormTwo } from '@/features/Setup/Forms/BusinessSetupForms';
 
 export const BusinessSetup = () => {
   const [step, setStep] = useState<number>(1);

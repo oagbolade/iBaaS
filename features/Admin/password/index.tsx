@@ -1,7 +1,7 @@
 'use client';
 import Box from '@mui/material/Box';
 import { Formik, Form } from 'formik';
-import { PasswordBody, PasswordChangeBody, PasswordTitleHeader, ResetButtonPassword } from './style';
+import { PasswordBody, PasswordChangeBody, PasswordTitle, PasswordTitleHeader, ResetButtonPassword } from './style';
 import { PageTitle } from '@/components/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -34,7 +34,7 @@ export const PasswordChange = () => {
       <Form>
         <Box sx={PasswordBody}>
           <Box sx={PasswordTitleHeader}>
-            <PageTitle title="Password Change" />
+            <PageTitle title="Password Change" styles={PasswordTitle} />
           </Box>
           <Box sx={PasswordChangeBody}>
             <Grid container spacing={2}>
@@ -98,7 +98,7 @@ export const PasswordChange = () => {
                   md={6}
                 >
                   <Button variant="text" >
-                    <PageTitle title="Reset" styles={ResetButtonPassword} />
+                    <PageTitle title="Reset" styles={ResetButton} />
                   </Button>
                 </Grid>
                 <Grid item md={3}>  
