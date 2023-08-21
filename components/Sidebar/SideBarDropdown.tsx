@@ -8,10 +8,10 @@ import Button from '@mui/material/Button';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Link from 'next/link';
 import { ChevronDown } from '@/assets/svg';
 import { activeSideBar, mainMenu } from './styles';
 import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
-import { handleRedirect } from '@/utils';
 import colors from '@/assets/colors';
 import './App.css';
 
@@ -85,6 +85,8 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
                 {menuItem.subMenuItems.map((subMenuItem) => {
                   return (
                     <Button
+                      component={Link}
+                      href={subMenuItem.link}
                       key={subMenuItem.name}
                       style={{
                         backgroundColor:
@@ -99,7 +101,6 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
                       sx={activeSideBar}
                       onClick={() => {
                         setActiveMenu(subMenuItem.name);
-                        handleRedirect(router, subMenuItem.link);
                       }}
                     >
                       {subMenuItem.name}
