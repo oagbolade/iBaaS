@@ -19,6 +19,10 @@ const colors = {
   neutral700: '#5F738C',
   primaryRed400: '#DC4437',
   neutral800: '#4E5A6C',
+  batchColor: "#D9D9D98A",
+  black: "#000000",
+  gray500: "#6B7280",
+  primaryBlue200: "#AEDDF1"
 };
 
 export default colors;

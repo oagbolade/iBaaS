@@ -3,19 +3,21 @@ import colors from "@/assets/colors";
 
 
 export const branchContainer = {
-    width: "1440px",
+    width: "10px",
     height: "1064px",
     background: `${colors.white}`,
     alignItems: "center",
     justifyContent: "center",
     padding: "200px 70px",
      margin: "15px",
-    display: "flex"
-
+    display: "flex",
+    textAlign: "center"
 }
 
 
-
+export const StackContainer ={
+    textAlign: "center"
+}
 
 
 export const branchTitle = {

@@ -13,6 +13,19 @@ export const checkboxTypography = {
   fontWeight: 400,
 };
 
+
+export const textArea = {
+  gap: '8px',
+  borderRadius: '4px',
+  padding: '16px 12px',
+  background: `${colors.neutral200}`,
+  color: `${colors.neutral600}`,
+  width: "327px",
+  height: "128px",
+  '& fieldset': { border: 'none' },
+
+};
+
 export const textStyle = {
   borderRadius: '4px',
   background: `${colors.neutral200}`,

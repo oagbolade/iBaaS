@@ -36,3 +36,14 @@ export const ModalSaveButton = {
     borderRadius: '8px',
     border: `1px solid ${colors.neutral300}`
   }
+
+  export const InputStyle = {
+    gap: "8px",
+    width: "500px",
+    height: "56px",
+    color: `${colors.neutral600}`,
+    borderRadius: "4px",
+    background: `${colors.neutral200}`
+
+  }
+ 

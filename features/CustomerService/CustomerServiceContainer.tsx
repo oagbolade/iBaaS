@@ -10,6 +10,7 @@ import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 
 type Props = {
   form: any;
+  searchFilters?: any;
   title: string;
   modalTitle?: string;
   buttonTitle: string;
@@ -28,13 +29,14 @@ export const CustomerServiceContainer = (props: Props) => {
         }}
       >
         <MainSection
-          isSetup
+          isCustomerService
           title={props.title}
           buttonTitle={props.buttonTitle}
         />
         <SearchSection
           tableTitle={props.tableTitle}
           searchTitle={props.searchTitle}
+          searchFilters={props.searchFilters}
         />
         <MuiTableContainer columns={MOCK_COLUMNS} data={MOCK_DATA} />
         <ModalContainer form={props.form} title={props.modalTitle} />

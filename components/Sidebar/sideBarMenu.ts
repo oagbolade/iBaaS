@@ -60,11 +60,18 @@ export const sideBarMenu = [
     groupPath: '/operation',
     icon: OperationsIcons,
     subMenuItems: [
-      { name: 'Batch Posting', link: '/operation/posting' },
-      { name: 'Bulk Upload', link: '/operation/upload' },
-      { name: 'Cash Deposit', link: '/operation/deposit' },
-      { name: 'Cash Withdrawal', link: '/operation/withdrawal' },
-      { name: 'Charge Concession', link: '/operation/concession' },
-    ],
-  },
+      {name: 'Batch Posting', link: '/operation/posting'},
+      {name: 'Bulk Upload', link: '/operation/upload'},
+      {name: 'Cash Deposit', link: '/operation/deposit'},
+      {name: 'Cash Withdrawal', link: '/operation/withdrawal'},
+      {name: 'Charge Concession', link: '/operation/concession'},
+      {name: "Group Loan Posting", link: '/operation/loan'},
+      {name: "Vault Management", link: '/operation/management'},
+      {name: 'Clearing', link: '/operation/clear'},
+      {name: 'View Clearing Cheque', link: '/operation/cheque'},
+      {name: 'Withdraw Towards Uncleared', link: '/operation/unclear'},
+      {name: 'Cheques Deposit', link: '/operation/chequesDeposit'},
+      {name: 'Return Cheques Reversal', link: '/operation/reversal'}
+    ]
+  }
 ];

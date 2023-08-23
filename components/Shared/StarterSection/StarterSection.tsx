@@ -9,6 +9,7 @@ import {
   branchContainer,
   branchButton,
   branchTitle,
+  StackContainer,
 } from './style';
 
 import { PrimaryIconButton } from '@/components/Buttons';
@@ -29,7 +30,7 @@ export const StarterSection = (props: Props) => {
 
   return (
     <Box sx={branchContainer}>
-      <Stack direction="column">
+      <Stack direction="column" sx={StackContainer}>
         <Box>
           <PageTitle title={props.title} styles={branchTitle} />
         </Box>

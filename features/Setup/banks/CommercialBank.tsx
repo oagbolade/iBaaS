@@ -10,7 +10,12 @@ import { bank as bankSchema } from '@/constants/schemas';
 import { bankValues } from '@/constants/types';
 import { PageTitle } from '@/components/Typography';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { ModalBackButton, ModalSaveButton, ResetButton } from './style';
+import {
+  InputStyle,
+  ModalBackButton,
+  ModalSaveButton,
+  ResetButton,
+} from './style';
 
 export const ModalForm = () => {
   const onSubmit = (
@@ -30,12 +35,17 @@ export const ModalForm = () => {
     >
       <Form>
         <Box>
-          <FormTextInput
-            name="bankName"
-            placeholder="Enter Bank Name"
-            label="Bank Name"
-            required
-          />
+          <Grid container columns={16} spacing={1}>
+            <Grid item xs={12}>
+              <FormTextInput
+                name="bankName"
+                placeholder="Enter Bank Name"
+                label="Bank Name"
+                required
+                customStyle={{ ...InputStyle }}
+              />
+            </Grid>
+          </Grid>
           <Grid container spacing={2}>
             <Grid item md={6}>
               <FormTextInput

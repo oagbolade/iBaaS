@@ -49,7 +49,7 @@ export const FormTextInput = ({
               id={name}
               placeholder={placeholder}
               sx={textStyle}
-              style={{ ...customStyle }}
+              style={{ ...customStyle}}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">{icon}</InputAdornment>

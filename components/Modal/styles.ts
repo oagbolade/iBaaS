@@ -13,7 +13,7 @@ export const ModalContainer = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '724px',
-  minHeight: '508px',
+  minHeight: '292px',
   boxShadow: 24,
   p: 4,
   borderRadius: '8px',
