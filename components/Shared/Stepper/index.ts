@@ -1,1 +1,1 @@
-export {StepperContainer} from './StepperContainer';
+export { StepperContainer } from './StepperContainer';

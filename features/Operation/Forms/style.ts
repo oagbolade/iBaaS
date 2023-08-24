@@ -21,6 +21,7 @@ export const BatchContainer = {
   marginLeft: '40px',
   marginTop: '30px',
   marginRight: '10px',
+  
 };
 
 export const PostingContainer = {

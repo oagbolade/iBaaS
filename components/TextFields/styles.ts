@@ -13,17 +13,28 @@ export const checkboxTypography = {
   fontWeight: 400,
 };
 
-
 export const textArea = {
   gap: '8px',
   borderRadius: '4px',
   padding: '16px 12px',
+  marginTop: '4px',
   background: `${colors.neutral200}`,
   color: `${colors.neutral600}`,
-  width: "327px",
-  height: "128px",
+  width: '327px',
+  height: '128px',
   '& fieldset': { border: 'none' },
+};
 
+export const textAreaIcon = {
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'flex-end',
+  gap: '10px',
+  flex: '1 0 0',
+  width: '20px',
+  height: '20px',
+  marginTop: "50px",
+  marginLeft: "10px"
 };
 
 export const textStyle = {

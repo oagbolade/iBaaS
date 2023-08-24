@@ -8,9 +8,11 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { TableMenuButton } from '@/components/Buttons';
 import { StyledMenu } from './StyledMenu';
 import { AdminContext } from '@/features/Admin/AdminContext';
+import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 
 export const ActionMenu = () => {
   const { toggleModal } = useContext(AdminContext);
+  const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -21,6 +23,7 @@ export const ActionMenu = () => {
   const handleClose = () => {
     const isEditing = true;
     toggleModal(isEditing);
+    toggleCustomerServiceModal(isEditing);
     setAnchorEl(null);
   };
 

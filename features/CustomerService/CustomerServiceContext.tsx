@@ -16,7 +16,9 @@ export default function CustomerServiceContextProvider({ children }: any) {
   const [isCustomerServiceModalOpen, setOpen] = useState(false);
   const [isEditingCustomerService, setIsEditing] = useState(false);
 
-  const toggleCustomerServiceModal = (isEditingCustomerService: boolean) => {
+  const toggleCustomerServiceModal = (
+    isEditingCustomerService: boolean
+  ) => {
     setIsEditing(isEditingCustomerService);
     setOpen(!isCustomerServiceModalOpen);
   };

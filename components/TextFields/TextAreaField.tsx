@@ -4,16 +4,22 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
-import { labelTypography, textArea } from './styles';
+import { labelTypography, textArea, textAreaIcon } from './styles';
 import { TextAreaIcon } from '@/assets/svg';
 
 type Props = {
   label: string;
   title: string;
   placeholder: string;
+  endAdornment?: React.JSX.Element | undefined;
 };
 
-export const TextFieldArea = ({ label, title, placeholder }: Props) => {
+export const TextFieldArea = ({
+  label,
+  title,
+  placeholder,
+  endAdornment,
+}: Props) => {
   return (
     <Box sx={{ marginBottom: '10px' }}>
       <Stack
@@ -28,6 +34,13 @@ export const TextFieldArea = ({ label, title, placeholder }: Props) => {
           rows={4}
           title={title}
           sx={textArea}
+          InputProps={{
+            endAdornment: (
+              <Box sx={textAreaIcon}>
+                <TextAreaIcon />
+              </Box>
+            ),
+          }}
         />
       </Stack>
     </Box>

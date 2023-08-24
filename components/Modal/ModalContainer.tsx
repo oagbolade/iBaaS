@@ -1,4 +1,5 @@
 'use client';
+
 import { useContext } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
@@ -13,9 +14,10 @@ import { CustomerServiceContext } from '@/features/CustomerService/CustomerServi
 type Props = {
   title: string | undefined;
   form: any;
+  isCustomerCreation?: boolean;
 };
 
-export const ModalContainer = ({ title, form }: Props) => {
+export const ModalContainer = ({ title, form, isCustomerCreation }: Props) => {
   const { open, toggleModal, isEditing } = useContext(AdminContext);
   const { isSetupModalOpen, toggleSetupModal, isEditingSetup } =
     useContext(SetupContext);
@@ -24,7 +26,11 @@ export const ModalContainer = ({ title, form }: Props) => {
     toggleCustomerServiceModal,
     isEditingCustomerService,
   } = useContext(CustomerServiceContext);
-  const newTitle = title?.replace('Edit', 'Add New');
+  let newTitle = title?.replace('Edit', 'Add New');
+
+  if (isCustomerCreation && isEditingCustomerService) {
+    newTitle = 'Edit Customer';
+  }
 
   const handleClose = () => {
     if (isSetupModalOpen) return toggleSetupModal(isEditingSetup);
@@ -54,7 +60,10 @@ export const ModalContainer = ({ title, form }: Props) => {
         <Fade in={open || isSetupModalOpen || isCustomerServiceModalOpen}>
           <Box sx={ModalContainerStyle}>
             <ModalHeader title={isEditing ? title : newTitle} />
-            {form}
+            {!isCustomerCreation && form}
+            {isCustomerCreation && isEditingCustomerService
+              ? form.edit
+              : form.customerType}
           </Box>
         </Fade>
       </Modal>

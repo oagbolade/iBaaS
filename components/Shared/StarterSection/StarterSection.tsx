@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 import { PageTitle } from '@/components/Typography';
 import {
   branchButtonAdd,
-  branchContainer,
-  branchButton,
   branchTitle,
   StackContainer,
 } from './style';
@@ -20,7 +18,7 @@ type Props = {
   title: string;
   buttonTitle: string;
   isSetup?: boolean | undefined;
-  redirectLink?: string | undefined;
+  redirectLink: string;
 };
 
 export const StarterSection = (props: Props) => {
@@ -29,8 +27,8 @@ export const StarterSection = (props: Props) => {
   const isEditing = false;
 
   return (
-    <Box sx={branchContainer}>
-      <Stack direction="column" sx={StackContainer}>
+    <Box >
+      <Stack spacing={2} direction="column" sx={StackContainer}>
         <Box>
           <PageTitle title={props.title} styles={branchTitle} />
         </Box>

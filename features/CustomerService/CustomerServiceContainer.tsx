@@ -13,9 +13,12 @@ type Props = {
   searchFilters?: any;
   title: string;
   modalTitle?: string;
-  buttonTitle: string;
+  buttonTitle?: string;
   tableTitle: string;
   searchTitle: string;
+  isLien?: boolean;
+  isCustomerCreation?: boolean;
+  isOfficerTransfer?: boolean;
 };
 
 export const CustomerServiceContainer = (props: Props) => {
@@ -29,6 +32,8 @@ export const CustomerServiceContainer = (props: Props) => {
         }}
       >
         <MainSection
+          isOfficerTransfer={props.isOfficerTransfer}
+          isLien={props.isLien}
           isCustomerService
           title={props.title}
           buttonTitle={props.buttonTitle}
@@ -39,7 +44,11 @@ export const CustomerServiceContainer = (props: Props) => {
           searchFilters={props.searchFilters}
         />
         <MuiTableContainer columns={MOCK_COLUMNS} data={MOCK_DATA} />
-        <ModalContainer form={props.form} title={props.modalTitle} />
+        <ModalContainer
+          isCustomerCreation={props.isCustomerCreation}
+          form={props.form}
+          title={props.modalTitle}
+        />
       </Box>
     </CustomerServiceProvider>
   );

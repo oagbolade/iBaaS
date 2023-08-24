@@ -1,5 +1,6 @@
 'use client';
 import { MouseEvent, useState } from 'react';
+import Link from 'next/link';
 import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -30,7 +31,9 @@ export const NavBarContainer = () => {
 
   return (
     <Box sx={navbarStyle}>
-      <InterSwitchImage />
+      <Link href="/login">
+        <InterSwitchImage />
+      </Link>
       <Box sx={navbarCont}>
         <Box sx={navbarTitle}>
           <NavBarTitle title="AA" />

@@ -9,9 +9,11 @@ import { CustomerServiceContext } from '@/features/CustomerService/CustomerServi
 
 type Props = {
   title: string;
-  buttonTitle: string;
+  buttonTitle?: string;
   isSetup?: boolean;
+  isLien?: boolean;
   isCustomerService?: boolean;
+  isOfficerTransfer?: boolean;
 };
 
 export const MainSection = (props: Props) => {
@@ -26,14 +28,15 @@ export const MainSection = (props: Props) => {
     toggleModal(isEditing);
   };
 
+
   return (
     <Stack direction="row" justifyContent="space-between">
       <PageTitle styles={{ fontSize: '28px' }} title={props.title} />
-      <PrimaryIconButton
+      {!props.isLien && !props.isOfficerTransfer && (<PrimaryIconButton
         onClick={() => handleClick(isEditing)}
         buttonTitle={props.buttonTitle}
         icon={<PersonAddIcon />}
-      />
+      />)}
     </Stack>
   );
 };

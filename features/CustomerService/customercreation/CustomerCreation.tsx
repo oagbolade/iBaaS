@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -10,6 +11,12 @@ import { FormTextInput, FormSelectInput } from '@/components/TextFields';
 import { EditUser } from '@/constants/AdminOptions';
 import { CustomerServiceContainer } from '@/features/CustomerService';
 import { ModalActions } from '@/components/Modal';
+import { CustomerAccountType } from './CustomerAccountType';
+import {
+  IndividualCustomerIcon,
+  CorporateCustomerIcon,
+} from '@/assets/svg/icons';
+import { PrimaryIconButton } from '@/components/Buttons';
 
 const EditFormModal = () => {
   const onSubmit = (
@@ -56,13 +63,34 @@ const EditFormModal = () => {
 
 const CustomerTypeModal = () => {
   return (
-    <Box
-      sx={{
-        borderRadius: '8px',
-        border: '1px solid var(--neutrals-text-neutral-400, #C8D2DF)',
-      }}
-    >
-      <Stack direction="row" spacing={2}></Stack>
+    <Box>
+      <CustomerAccountType
+        title="Individual Customer"
+        description="Retail banking is the part of a bank that deals directly with individual, non-business customers."
+        icon={<IndividualCustomerIcon />}
+        value="individual"
+      />
+      <CustomerAccountType
+        title="Corporate Customer"
+        description="Corporate Customer means any body corporate, sole proprietorship, partnership or other legal entity."
+        icon={<CorporateCustomerIcon />}
+        value="corporate"
+      />
+      <Stack justifyContent="center" direction="row">
+        <Link href="/customer-service/customer-creation/steps">
+          <PrimaryIconButton
+            buttonTitle="Create Account"
+            customStyle={{
+              width: '274px',
+              height: '56px',
+              color: 'white',
+              fontSize: '16px',
+              fontWeight: 600,
+              lineHeight: '24px',
+            }}
+          />
+        </Link>
+      </Stack>
     </Box>
   );
 };
@@ -85,10 +113,16 @@ const SearchFilters = () => {
   );
 };
 
+const modals = {
+  edit: <EditFormModal />,
+  customerType: <CustomerTypeModal />,
+};
+
 export const CustomerCreation = () => {
   return (
     <CustomerServiceContainer
-      form={<CustomerTypeModal />}
+      isCustomerCreation
+      form={modals}
       searchFilters={<SearchFilters />}
       title="Customer Creation"
       modalTitle="Choose Customer Type"
