@@ -9,7 +9,6 @@ export const CommeracialBank = () => {
   return (
     <SetupContextProvider>
       <StarterSection
-        redirectLink="/setup/banks/commercial"
         isSetup
         title="There are no listed <b>“Branch”</b>.Add new branch to get started"
         buttonTitle="Add new branch"

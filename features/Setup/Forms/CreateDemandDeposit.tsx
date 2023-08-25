@@ -208,24 +208,24 @@ export const FormTwo = ({ setStep }: Props) => {
             <Grid item md={6}>
               <FormTextInput
                 name="staffId"
-                placeholder="002789765"
-                label="Form Two Staff Id"
+                placeholder="enter actual rate"
+                label="Actual Rate"
                 required
               />{' '}
             </Grid>
             <Grid item md={6}>
               <FormTextInput
                 name="staffName"
-                placeholder="002789765"
-                label="Staff Name"
+                placeholder="Enter penalty rate"
+                label="Penalty Rate"
                 required
               />{' '}
             </Grid>
             <Grid item md={6}>
               <FormTextInput
                 name="address"
-                placeholder="002789765"
-                label="Email Address"
+                placeholder="Enter Maximum Term"
+                label="Maximum Term"
                 required
               />{' '}
             </Grid>
@@ -241,7 +241,7 @@ export const FormTwo = ({ setStep }: Props) => {
               <FormSelectField
                 name="branch"
                 options={EditUser.branch}
-                label="Branch"
+                label="Interest Type"
                 required
               />{' '}
             </Grid>
@@ -249,7 +249,7 @@ export const FormTwo = ({ setStep }: Props) => {
               <FormSelectField
                 name="department"
                 options={EditUser.branch}
-                label="Department"
+                label="Minimum Term"
                 required
               />{' '}
             </Grid>
@@ -257,7 +257,7 @@ export const FormTwo = ({ setStep }: Props) => {
               <FormSelectField
                 name="role"
                 options={EditUser.branch}
-                label="Role"
+                label="Loan Type"
                 required
               />{' '}
             </Grid>
@@ -325,32 +325,32 @@ export const FormThree = ({ setStep }: Props) => {
             <Grid item md={6}>
               <FormTextInput
                 name="staffId"
-                placeholder="002789765"
-                label="Form Three Staff Id"
+                placeholder="Enter Asset Balance"
+                label="Asset Balance"
                 required
               />{' '}
             </Grid>
             <Grid item md={6}>
               <FormTextInput
                 name="staffName"
-                placeholder="002789765"
-                label="Staff Name"
+                placeholder="Enter Suspended asset"
+                label="Suspended Asset"
                 required
               />{' '}
             </Grid>
             <Grid item md={6}>
               <FormTextInput
                 name="address"
-                placeholder="002789765"
-                label="Email Address"
+                placeholder="Enter Int. Receivable"
+                label="Int. Receivable"
                 required
               />{' '}
             </Grid>
             <Grid item md={6}>
               <FormTextInput
                 name="mobileNumber"
-                placeholder="002789765"
-                label="Mobile Number"
+                placeholder="Enter Int Income"
+                label="Int Income"
                 required
               />{' '}
             </Grid>
@@ -592,7 +592,7 @@ export const FormFive = ({ setStep }: Props) => {
               <FormSelectField
                 name="branch"
                 options={EditUser.branch}
-                label="Branch"
+                label="Precedence Conditions"
                 required
               />{' '}
             </Grid>
@@ -608,7 +608,7 @@ export const FormFive = ({ setStep }: Props) => {
               <FormSelectField
                 name="role"
                 options={EditUser.branch}
-                label="Role"
+                label="Subsequence Conditions"
                 required
               />{' '}
             </Grid>
@@ -639,10 +639,10 @@ export const FormFive = ({ setStep }: Props) => {
 
             {/* Checkboxes */}
             <Grid item md={6}>
-              <CheckboxInput label="Does this staff supervise others?" />
+              <CheckboxInput label="Manage Collection Date?" />
             </Grid>
             <Grid item md={6}>
-              <CheckboxInput label="Can this staff print statements?" />
+              <CheckboxInput label="Health Insurance?" />
             </Grid>
             {/* Checkboxes */}
 

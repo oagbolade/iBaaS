@@ -1,18 +1,18 @@
 import colors from '@/assets/colors';
 
-
-
 export const StackContainer = {
   textAlign: 'center',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  marginTop: '150px',
   background: `${colors.white}`,
-  width: "100%",
-  padding: "70px 0",
-  marginLeft: '300px',
-  verticalAlign: "middle"
+  padding: '70px 0',
+  marginLeft: '8%',
+  width: '303px',
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
 };
 
 export const branchTitle = {
@@ -27,7 +27,7 @@ export const branchTitle = {
   width: '290px',
   height: '40px',
   top: '20px',
-  "b": {
+  b: {
     color: `${colors.neutral800}`,
     fontFamily: 'Averta Regular',
     fontSize: '14px',
@@ -36,14 +36,10 @@ export const branchTitle = {
   },
 };
 
-
-
 export const branchButtonAdd = {
   width: '201px',
   padding: '16px 78px',
   borderRadius: '8px',
-  gap: '8px',
   background: `${colors.activeBlue400}`,
   color: `${colors.white}`,
-  margin: '10px',
 };

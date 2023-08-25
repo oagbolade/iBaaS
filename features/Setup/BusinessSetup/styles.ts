@@ -23,6 +23,8 @@ export const stepTitle = {
   color: `${colors.stepTitleBlue}`,
   padding: '40px',
   float: 'right',
+  position: 'sticky',
+  top: 50,
 };
 
 export const formContainer = {

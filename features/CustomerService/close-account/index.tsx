@@ -138,7 +138,7 @@ export const CloseAccountContainer = () => {
     <CustomerServiceContainer
       isLien
       form={<ModalForm />}
-      title=" Manage Lien"
+      title="Close Account"
       modalTitle="Close Account"
       buttonTitle="Lien"
       tableTitle=""

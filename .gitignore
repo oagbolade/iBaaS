@@ -5,7 +5,6 @@
 /.pnp
 .pnp.js
 .eslintrc.yml
-.eslintrc.json
 # testing
 /coverage
 

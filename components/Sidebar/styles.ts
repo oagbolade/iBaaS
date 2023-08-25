@@ -11,6 +11,13 @@ export const sideBarContainer = {
   },
   position: 'sticky',
   top: 80,
+  overflow: "scroll",
+  overflowX:"hidden",
+  scrollbarWidth: "none",
+
+  '&::-webkit-scrollbar':{
+    display: "none"
+  }
 };
 
 export const sideBarItem = {

@@ -19,7 +19,7 @@ import {
 } from '@/components/TextFields';
 import { PageTitle } from '@/components/Typography';
 import { EditRole } from '@/constants/AdminOptions';
-import {CustomerServiceContainer} from '@/features/CustomerService';
+import { CustomerServiceContainer } from '@/features/CustomerService';
 
 const ModalForm = () => {
   const onSubmit = (
@@ -137,6 +137,7 @@ export const AccountRecordContainer = () => {
   return (
     <CustomerServiceContainer
       form={<ModalForm />}
+      isAccountRecord
       title="Customer Account Record"
       modalTitle="Edit Account Record"
       buttonTitle="Create New Account"

@@ -15,9 +15,15 @@ type Props = {
   title: string | undefined;
   form: any;
   isCustomerCreation?: boolean;
+  isAccountRecord?: boolean;
 };
 
-export const ModalContainer = ({ title, form, isCustomerCreation }: Props) => {
+export const ModalContainer = ({
+  title,
+  form,
+  isCustomerCreation,
+  isAccountRecord,
+}: Props) => {
   const { open, toggleModal, isEditing } = useContext(AdminContext);
   const { isSetupModalOpen, toggleSetupModal, isEditingSetup } =
     useContext(SetupContext);
@@ -30,6 +36,10 @@ export const ModalContainer = ({ title, form, isCustomerCreation }: Props) => {
 
   if (isCustomerCreation && isEditingCustomerService) {
     newTitle = 'Edit Customer';
+  }
+
+  if (isAccountRecord && isEditingCustomerService) {
+    newTitle = 'Edit Account Record';
   }
 
   const handleClose = () => {

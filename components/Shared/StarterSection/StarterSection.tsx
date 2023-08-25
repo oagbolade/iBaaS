@@ -4,11 +4,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { useRouter } from 'next/navigation';
 import { PageTitle } from '@/components/Typography';
-import {
-  branchButtonAdd,
-  branchTitle,
-  StackContainer,
-} from './style';
+import { branchButtonAdd, branchTitle, StackContainer } from './style';
 
 import { PrimaryIconButton } from '@/components/Buttons';
 import { handleRedirect } from '@/utils';
@@ -18,7 +14,7 @@ type Props = {
   title: string;
   buttonTitle: string;
   isSetup?: boolean | undefined;
-  redirectLink: string;
+  redirectLink?: string;
 };
 
 export const StarterSection = (props: Props) => {
@@ -27,14 +23,14 @@ export const StarterSection = (props: Props) => {
   const isEditing = false;
 
   return (
-    <Box >
-      <Stack spacing={2} direction="column" sx={StackContainer}>
+    <Box>
+      <Stack spacing={1} direction="column" sx={StackContainer}>
         <Box>
           <PageTitle title={props.title} styles={branchTitle} />
         </Box>
         <Box>
           <PrimaryIconButton
-             onClick={() => {
+            onClick={() => {
               if (props.isSetup) return toggleSetupModal(isEditing);
               handleRedirect(router, props.redirectLink);
             }}

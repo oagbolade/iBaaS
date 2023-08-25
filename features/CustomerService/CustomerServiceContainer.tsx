@@ -19,6 +19,7 @@ type Props = {
   isLien?: boolean;
   isCustomerCreation?: boolean;
   isOfficerTransfer?: boolean;
+  isAccountRecord?: boolean;
 };
 
 export const CustomerServiceContainer = (props: Props) => {
@@ -46,6 +47,7 @@ export const CustomerServiceContainer = (props: Props) => {
         <MuiTableContainer columns={MOCK_COLUMNS} data={MOCK_DATA} />
         <ModalContainer
           isCustomerCreation={props.isCustomerCreation}
+          isAccountRecord={props.isAccountRecord}
           form={props.form}
           title={props.modalTitle}
         />

@@ -32,7 +32,7 @@ export const Stepper = () => {
     <StepperContainer
       stepMapper={stepMapper}
       step={step}
-      stepperTitle="Create Loan Product"
+      stepperTitle="Create Demand Deposit Product"
     />
   );
 };
