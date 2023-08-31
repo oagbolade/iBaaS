@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -32,7 +31,6 @@ interface SidebarMenuProps {
 }
 
 export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
-  const router = useRouter();
   const pathname: string | null = usePathname();
   const [expanded, setExpanded] = React.useState<string>('');
 

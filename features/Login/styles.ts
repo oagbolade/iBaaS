@@ -49,12 +49,14 @@ export const loginButton = {
   color: `${colors.white}`,
 };
 
-export const forgotPassword ={
+export const forgotPassword = {
   color: `${colors.activeBlue400}`,
-  fontSize: "14px",
-  fontStyle: "normal",
+  fontSize: '14px',
   fontWeight: 600,
-  lineHeight: "20px",
-  fontFamily: "Averta Regular"
-
-}
+  lineHeight: '20px',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignSelf: 'center',
+  width: '127px',
+  marginTop: '18px',
+};

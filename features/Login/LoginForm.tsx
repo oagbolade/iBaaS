@@ -15,7 +15,6 @@ import { userInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { FormTextInput, CheckboxInput } from '@/components/TextFields';
 import { PageTitle } from '@/components/Typography';
-import Button from '@mui/material/Button';
 
 import { handleRedirect } from '@/utils';
 
@@ -38,8 +37,8 @@ export const LoginForm = () => {
   return (
     <Box
       sx={{
-        padding: '30px 200px 0 200px',
-        width: '55vw',
+        padding: { tablet: '30px 200px 0 200px', mobile: '50px 50px 0 50px' },
+        width: { tablet: '55vw', mobile: '100vw' },
       }}
     >
       <InterSwitchImage />
@@ -52,7 +51,7 @@ export const LoginForm = () => {
         <Form>
           <Box>
             <Grid container spacing={2}>
-              <Grid item md={12}>
+              <Grid item mobile={12}>
                 <FormTextInput
                   customStyle={{
                     width: '100%',
@@ -62,7 +61,7 @@ export const LoginForm = () => {
                   label="Company Code"
                 />{' '}
               </Grid>
-              <Grid item md={12}>
+              <Grid item mobile={12}>
                 <FormTextInput
                   customStyle={{
                     width: '100%',
@@ -72,7 +71,7 @@ export const LoginForm = () => {
                   label="Username"
                 />{' '}
               </Grid>
-              <Grid item md={12}>
+              <Grid item mobile={12}>
                 <FormTextInput
                   type={showPassword ? 'text' : 'password'}
                   customStyle={{
@@ -93,16 +92,12 @@ export const LoginForm = () => {
                   }
                 />{' '}
               </Grid>
-              <Grid item md={6}>
+              <Grid item desktop={6}>
                 <CheckboxInput label="Remember me" />
               </Grid>
-              <Grid item md={6}>
-                <Button variant="text">
-                  <PageTitle title="Forgot Password" styles={forgotPassword} />
-                </Button>
-              </Grid>
-              <Grid container mt={7} ml={2}>
-                <Grid item md={12}>
+              <PageTitle title="Forgot Password?" styles={forgotPassword} />
+              <Grid container mt={7} ml={2} mobile={12}>
+                <Grid item mobile={12}>
                   <PrimaryIconButton
                     onClick={() => handleRedirect(router, '/setup/business')}
                     type="submit"

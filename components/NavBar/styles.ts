@@ -4,7 +4,7 @@ export const navbarStyle = {
   display: 'flex',
   width: '100%',
   height: '80px',
-  padding: '0px 40px',
+  padding: { desktop: '0px 40px', mobile: '0 25px' },
   alignItems: 'center',
   justifyContent: 'space-between',
   position: 'fixed',
@@ -14,23 +14,23 @@ export const navbarStyle = {
   backgroundColor: `${colors.navBarColor}`,
 };
 
-export const NavTitleStyle={
-    color: `${colors.neutral900}`,
-    textAlign: "right",
-    fontFeatureSettings: "'clig' off, 'liga' off",
-    fontFamily: "Averta Regular",
-    fontSize: "16px",
-    fontStyle: "normal",
-    fontWeight: 400,
-    lineHeight: "24px"
-  }
+export const NavTitleStyle = {
+  color: `${colors.neutral900}`,
+  textAlign: 'right',
+  fontFeatureSettings: "'clig' off, 'liga' off",
+  fontFamily: 'Averta Regular',
+  fontSize: '16px',
+  fontStyle: 'normal',
+  fontWeight: 400,
+  lineHeight: '24px',
+};
 
 export const navbarCont = {
-    display: 'flex',
-    padding: '8px',
-    alignItems: 'center',
-    gap: '8px',
-    marginRight: '-30px',
+  display: 'flex',
+  padding: '8px',
+  alignItems: 'center',
+  gap: '8px',
+  marginRight: '-30px',
 };
 
 export const navbarTitle = {

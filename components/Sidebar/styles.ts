@@ -9,15 +9,15 @@ export const sideBarContainer = {
   '&:hover': {
     boxShadow: 2,
   },
-  position: 'sticky',
-  top: 80,
-  overflow: "scroll",
-  overflowX:"hidden",
-  scrollbarWidth: "none",
-
-  '&::-webkit-scrollbar':{
-    display: "none"
-  }
+  overflow: 'scroll',
+  overflowX: 'hidden',
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+  top: { mobile: 0, desktop: 80 },
+  position: { mobile: 'absolute', desktop: 'sticky' },
+  zIndex: 9,
 };
 
 export const sideBarItem = {

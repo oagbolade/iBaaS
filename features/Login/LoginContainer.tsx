@@ -11,7 +11,14 @@ export const LoginContainer = () => {
       <Box>
         <LoginForm />
       </Box>
-      <Box>
+      <Box
+        sx={{
+          display: {
+            tablet: 'block',
+            mobile: 'none',
+          },
+        }}
+      >
         <LoginBanner width="45vw" height="100vh" />
         <LoginBannerText />
       </Box>

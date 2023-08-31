@@ -4,12 +4,16 @@ import { usePathname } from 'next/navigation';
 import { NavBarContainer } from './NavBarContainer';
 import { excludeFromNavBarLayout } from '@/constants/appRoutes';
 
-export const NavBar = () => {
+type Props = {
+  toggleMenu: ()=>void;
+}
+
+export const NavBar = ({toggleMenu}: Props) => {
   const pathname: string | null = usePathname();
 
   if (excludeFromNavBarLayout.includes(pathname || '')) {
     return;
   }
 
-  return <NavBarContainer />;
+  return <NavBarContainer toggleMenu={toggleMenu} />;
 };

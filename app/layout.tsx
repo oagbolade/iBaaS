@@ -1,4 +1,6 @@
+'use client';
 import './globals.css';
+import { useState } from 'react';
 import type { Metadata } from 'next';
 import NextTopLoader from 'nextjs-toploader';
 import { Inter } from 'next/font/google';
@@ -20,14 +22,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
+
+  const toggleMenu = () => {
+    setOpenMenu(!openMenu);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <html lang="en">
         <body className={inter.className} suppressHydrationWarning={true}>
-            <NextTopLoader />{' '}
+          <NextTopLoader />{' '}
           <Stack direction="row">
-            <NavBar />
-            <SideBar />
+            <NavBar toggleMenu={toggleMenu} />
+            <SideBar openMenu={openMenu} />
             {children}
           </Stack>
         </body>
