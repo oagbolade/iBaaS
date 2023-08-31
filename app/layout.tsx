@@ -12,7 +12,7 @@ import { NavBar } from '@/components/NavBar/index';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'iBaaS',
   description: 'Core Banking Application',
 };
