@@ -33,6 +33,8 @@ export const PasswordChangeBody = {
   alignItems: 'flex-start',
   gap: '80px',
   color: `${colors.activeBlue400}`,
+
+
 };
 
 

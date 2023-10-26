@@ -1,8 +1,10 @@
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { TableTitle } from '@/components/Typography';
-import { TextInput } from '@/components/TextFields/TextInput';
 import SearchIcon from '@mui/icons-material/Search';
+import { Grid } from '@mui/material';
+import { TableTitle } from '@/components/Typography';
+import { TextInput } from '@/components/FormikFields/TextInput';
+import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
 
 type Props = {
   tableTitle: string;
@@ -15,6 +17,13 @@ export const SearchSection = ({
   searchTitle,
   searchFilters,
 }: Props) => {
+  const { isMobile } = useCurrentBreakpoint();
+
+  const setDirection = () => {
+    if (isMobile) return 'column';
+    return 'row';
+  };
+
   return (
     <Box>
       <Stack
@@ -22,10 +31,12 @@ export const SearchSection = ({
           margin: '50px 0',
         }}
         justifyContent="space-between"
-        direction="row"
+        direction={setDirection()}
       >
         <TableTitle title={tableTitle} />
-        <TextInput placeholder={searchTitle} icon={<SearchIcon />} />
+        <Grid item mt={{ mobile: 3, tablet: 0 }} mobile={8} desktop={12}>
+          <TextInput placeholder={searchTitle} icon={<SearchIcon />} />
+        </Grid>
       </Stack>
       {searchFilters}
     </Box>

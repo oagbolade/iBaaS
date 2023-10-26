@@ -1,4 +1,4 @@
-import { PostingContainer } from "@/features/Operation/posting";
+import { PostingContainer } from '@/features/Operation/posting';
 
 
 

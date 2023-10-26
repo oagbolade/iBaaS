@@ -1,4 +1,4 @@
-import { ChequeDepositContainer } from "@/features/Operation/chequesDeposit";
+import { ChequeDepositContainer } from '@/features/Operation/chequesDeposit';
 
 
 

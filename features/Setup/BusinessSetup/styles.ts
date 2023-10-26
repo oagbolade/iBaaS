@@ -2,15 +2,15 @@ import colors from '@/assets/colors';
 
 export const primaryTitle = {
   color: '#354052',
-  fontSize: '24px',
+  fontSize: { mobile: '16px', desktop: '24px' },
   fontWeight: 400,
   textAlign: 'center',
-  margin: '25px',
+  margin: { mobile: '0', desktop: '25px' },
 };
 
 export const secondaryTitle = {
   color: '#354052',
-  fontSize: '34px',
+  fontSize: { mobile: '20px', desktop: '34px' },
   fontWeight: 800,
   textAlign: 'center',
 };
@@ -18,12 +18,12 @@ export const secondaryTitle = {
 export const stepTitle = {
   width: '223px',
   height: '20px',
-  fontSize: '24px',
+  fontSize: { mobile: '16px', desktop: '24px' },
   fontWeight: 600,
   color: `${colors.stepTitleBlue}`,
   padding: '40px',
   float: 'right',
-  position: 'sticky',
+  position: { desktop: 'sticky' },
   top: 50,
 };
 

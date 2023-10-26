@@ -1,4 +1,4 @@
-import { ChequeContainer } from "@/features/Operation/cheque";
+import { ChequeContainer } from '@/features/Operation/cheque';
 
 
 export default function Operations() {

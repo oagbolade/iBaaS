@@ -1,11 +1,17 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
-import { NavTitleStyle } from './styles';
+import { Box, Typography } from '@mui/material';
+import { NavNameStyle, greetingStyle } from './styles';
 
 type Props = {
-  buttonTitle: string;
+  name: string;
+  greeting: string;
 };
 
-export default function NavBarButton({ buttonTitle }: Props) {
-  return <Typography sx={NavTitleStyle}>{buttonTitle}</Typography>;
+export default function NavBarButton({ greeting, name }: Props) {
+  return (
+    <Box>
+      <Typography sx={greetingStyle}>{greeting}</Typography>
+      <Typography sx={NavNameStyle}>{name}</Typography>
+    </Box>
+  );
 }

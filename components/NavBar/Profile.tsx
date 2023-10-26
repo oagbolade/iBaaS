@@ -1,26 +1,15 @@
 'use client';
 import { MouseEvent, useState } from 'react';
-import Link from 'next/link';
 import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
-import MenuIcon from '@mui/icons-material/Menu';
 import { Box } from '@mui/material';
-import { NavBarTitle } from '@/components/Typography';
-import InterSwitchImage from '@/assets/interswitch/image';
-import NavBarButton from './NavBarButton';
-import {
-  NavTypography,
-  navSettings,
-  navbarCont,
-  navbarStyle,
-  navbarTitle,
-} from './styles';
 import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { SettingsIcon, SignOutIcon } from '@/assets/svg';
+import NavBarButton from './NavBarButton';
+import { NavTypography, navSettings, navbarCont, navbarTitle } from './styles';
+import { NavBarTitle } from '@/components/Typography';
+import { ChevronDown, DownIcon, SettingsIcon, SignOutIcon } from '@/assets/svg';
 import { StyledMenu } from '@/components/Table/StyledMenu';
 
 export const Profile = () => {
@@ -35,44 +24,42 @@ export const Profile = () => {
   };
 
   return (
-      <Box sx={navbarCont}>
-        <Box sx={navbarTitle}>
-          <NavBarTitle title="AA" />
-        </Box>
-        <Button onClick={handleClick}>
-          <NavBarButton buttonTitle="Admin Admin" />
-          <KeyboardArrowDownIcon
-            sx={{ margin: '5px', width: '30px', height: '20px' }}
-          />
-        </Button>
-
-        <StyledMenu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-        >
-          <MenuItem sx={navSettings} onClick={handleClose}>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText sx={NavTypography}>Settings</ListItemText>
-          </MenuItem>
-
-          <MenuItem sx={navSettings} onClick={handleClose}>
-            <ListItemIcon>
-              <SignOutIcon />
-            </ListItemIcon>
-            <ListItemText sx={NavTypography}>Sign Out</ListItemText>
-          </MenuItem>
-        </StyledMenu>
+    <Box ml={5} sx={navbarCont}>
+      <NavBarButton greeting="Hi, Omodayo" name="Omodayo.Oluwa..." />
+      <Box ml={3} sx={navbarTitle}>
+        <NavBarTitle title="AA" />
       </Box>
+      <Button sx={{ padding: '0' }} onClick={handleClick}>
+        <DownIcon />
+      </Button>
+
+      <StyledMenu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <MenuItem sx={navSettings} onClick={handleClose}>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText sx={NavTypography}>Settings</ListItemText>
+        </MenuItem>
+
+        <MenuItem sx={navSettings} onClick={handleClose}>
+          <ListItemIcon>
+            <SignOutIcon />
+          </ListItemIcon>
+          <ListItemText sx={NavTypography}>Sign Out</ListItemText>
+        </MenuItem>
+      </StyledMenu>
+    </Box>
   );
 };

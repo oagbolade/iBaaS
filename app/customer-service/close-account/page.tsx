@@ -1,4 +1,4 @@
-import { CloseAccountContainer } from "@/features/CustomerService/close-account";
+import { CloseAccountContainer } from '@/features/CustomerService/close-account';
 
 
 

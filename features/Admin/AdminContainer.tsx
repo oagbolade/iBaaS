@@ -31,11 +31,11 @@ export const AdminContainer = (props: Props) => {
       >
         <MainSection title={props.title} buttonTitle={props.buttonTitle} />
         {props.role === 'Role' ? (
-          <Box>
+          <Box sx={{ marginTop: { mobile: 4, tablet: 2 } }}>
             <RoleTitle roleTitle="Your Role:" title=" Global administrator " />
           </Box>
         ) : (
-          <></>
+          <div />
         )}
         <SearchSection
           tableTitle={props.tableTitle}

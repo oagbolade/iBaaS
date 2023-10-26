@@ -7,18 +7,22 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
-import { FormTextInput, FormSelectInput } from '@/components/TextFields';
+import { FormTextInput, FormSelectInput } from '@/components/FormikFields';
 import { EditUser } from '@/constants/AdminOptions';
 import { CustomerServiceContainer } from '@/features/CustomerService';
-import { ModalActions } from '@/components/Modal';
 import { CustomerAccountType } from './CustomerAccountType';
 import {
   IndividualCustomerIcon,
   CorporateCustomerIcon,
 } from '@/assets/svg/icons';
 import { PrimaryIconButton } from '@/components/Buttons';
+import { useCurrentBreakpoint } from '@/utils';
+import { ModalActions } from '@/components/Shared/ActionButtons';
+import { ModalBackButton } from '@/components/Modal/styles';
 
 const EditFormModal = () => {
+  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+
   const onSubmit = (
     values: any,
     actions: { setSubmitting: (arg0: boolean) => void }
@@ -35,25 +39,49 @@ const EditFormModal = () => {
       validationSchema={userSchema}
     >
       <Form>
-        <Box>
+        <Box ml={{ desktop: 4 }}>
           <Grid container spacing={2}>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 4, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="customerName"
                 placeholder="002789765"
                 label="Customer Name"
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 4, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="customerID"
                 placeholder="002789765"
                 label="Customer ID"
                 required
               />{' '}
             </Grid>
-            <ModalActions />
+            <ModalActions
+              BackButtonTitle="Back"
+              SaveButtonTitle="Save Changes"
+              StyleBack={ModalBackButton}
+            />
           </Grid>
         </Box>
       </Form>
@@ -63,7 +91,7 @@ const EditFormModal = () => {
 
 const CustomerTypeModal = () => {
   return (
-    <Box>
+    <Box ml={{ desktop: 2, mobile: 3 }}>
       <CustomerAccountType
         title="Individual Customer"
         description="Retail banking is the part of a bank that deals directly with individual, non-business customers."
@@ -104,6 +132,7 @@ const SearchFilters = () => {
     >
       <FormSelectInput
         name="filterCustomers"
+        placeholder="filterCustomers"
         options={EditUser.branch}
         customStyle={{
           width: '13%',

@@ -14,7 +14,8 @@ export const LoginContainer = () => {
       <Box
         sx={{
           display: {
-            tablet: 'block',
+            desktop: 'block',
+            tablet: 'none',
             mobile: 'none',
           },
         }}

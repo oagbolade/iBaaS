@@ -6,7 +6,7 @@ export const stepperContainer = {
   maxWidth: '833px',
   minHeight: '440px',
   borderRadius: '7px',
-  border: '1px solid #D7DEE7', //todo: get color name
+  border: '1px solid #D7DEE7', // todo: get color name
   background: `${colors.white}`,
 };
 

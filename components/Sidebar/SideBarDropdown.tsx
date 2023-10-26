@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import _ from 'lodash';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -8,11 +9,11 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Link from 'next/link';
+import { sideBarItem } from './styles';
+import styles from './App.module.css';
 import { ChevronDown } from '@/assets/svg';
-import { activeSideBar, mainMenu } from './styles';
 import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
 import colors from '@/assets/colors';
-import './App.css';
 
 interface SubMenuItems {
   name: string;
@@ -31,72 +32,81 @@ interface SidebarMenuProps {
 }
 
 export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
-  const pathname: string | null = usePathname();
-  const [expanded, setExpanded] = React.useState<string>('');
+  const mapped = _.map(sideBarMenu, _.partialRight(_.pick, ['subMenuItems']));
 
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+  const pathname: string | null = usePathname();
+  const defaultExpanded = pathname;
+  const defaultActive = process.env.DEFAULT_ACTIVE_MENU || '';
+  const [expanded, setExpanded] = React.useState<string>(defaultExpanded);
+  const [activeMenu, setActiveMenu] = useState<string>(defaultActive);
+
+  useEffect(() => {
+    mapped.forEach(({ subMenuItems }: any): void => {
+      const items = subMenuItems.filter((item: { link: string }) => {
+        return item.link === pathname;
+      });
+      if (items.length > 0) {
+        setActiveMenu(items[0].name);
+      }
+    });
+  }, [pathname]);
+
+  const handleChange = (panel: string, activeModule: string) => {
+    return (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : '');
     };
-  const [activeMenu, setActiveMenu] = useState<string>('');
+  };
 
-  const renderAsActive = (groupPath: string) => {
-    if (pathname?.includes(groupPath)) {
+  const renderAsActive = (isActive: boolean) => {
+    if (isActive) {
       return {
+        display: 'flex',
+        padding: '8px 12px',
+        alignItems: 'center',
+        gap: '8px',
+        flex: '1 0 0',
+        alignSelf: 'stretch',
         borderRadius: '8px',
-        background: `${colors.neutral200}`,
-        boxShadow:
-          '0px 1px 2px 0px rgba(0, 0, 0, 0.06), 0px 1px 3px 0px rgba(0, 0, 0, 0.10)',
+        border: '1px solid #0275D8',
+        background: 'var(--colour-primaryblue-primary-blue-100, #EBF8FE)',
+        color: '#0275D8',
       };
     }
-
-    return { ...mainMenu };
   };
+
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
       return (
         <Box
           key={menuItem.name}
           sx={{
-            backgroundColor: `${colors.lightGrey}`,
+            backgroundColor: `${colors.white}`,
           }}
         >
           <Accordion
             expanded={expanded.includes(menuItem.groupPath)}
-            onChange={handleChange(menuItem.groupPath)}
+            onChange={handleChange(menuItem.groupPath, menuItem.name)}
+            className={styles.MuiPaperElevation}
             sx={{
-              backgroundColor: `${colors.lightGrey}`,
-              padding: '3px 0',
+              backgroundColor: `${colors.white}`,
             }}
           >
-            <AccordionSummary
-              sx={renderAsActive(menuItem.groupPath)}
-              expandIcon={<ChevronDown />}
-            >
+            <AccordionSummary expandIcon={<ChevronDown />}>
               <SideBarPrimaryButton
                 buttonTitle={menuItem.name}
                 icon={<menuItem.icon />}
               />
             </AccordionSummary>
             <AccordionDetails>
-              <Stack spacing={2} direction="column">
+              <Stack ml={3} spacing={2} direction="column">
                 {menuItem.subMenuItems.map((subMenuItem) => {
                   return (
                     <Button
                       component={Link}
                       href={subMenuItem.link}
                       key={subMenuItem.name}
-                      style={{
-                        backgroundColor:
-                          activeMenu === subMenuItem.name
-                            ? `${colors.activeBlue100}`
-                            : '',
-                        color:
-                          activeMenu === subMenuItem.name
-                            ? `${colors.activeBlue400}`
-                            : '',
-                      }}
-                      sx={activeSideBar}
+                      style={renderAsActive(activeMenu === subMenuItem.name)}
+                      sx={sideBarItem}
                       onClick={() => {
                         setActiveMenu(subMenuItem.name);
                       }}
@@ -112,6 +122,7 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
       );
     });
 
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <>{items}</>;
   };
 

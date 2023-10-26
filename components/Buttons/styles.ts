@@ -1,6 +1,6 @@
 export const buttonTypography = {
   display: 'flex',
-  width: '201px',
+  width: {desktop: '201px'},
   height: '48px',
   padding: '16px 78px',
   textTransform: 'none',

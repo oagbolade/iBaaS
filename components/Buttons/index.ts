@@ -1,2 +1,2 @@
-export { PrimaryIconButton } from "./PrimaryIconButton"
-export { TableMenuButton } from "./TableMenuButton"
+export { PrimaryIconButton } from './PrimaryIconButton';
+export { TableMenuButton } from './TableMenuButton';

@@ -1,4 +1,4 @@
-import { AccountRecordContainer } from "@/features/CustomerService/account-record";
+import { AccountRecordContainer } from '@/features/CustomerService/account-record';
 
 
 export default function CustomerService() {

@@ -55,7 +55,7 @@ export const ModalContainer = ({
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open || isSetupModalOpen || isCustomerServiceModalOpen}
-        onClose={() => handleClose()}
+        onClose={() => {return handleClose();}}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{

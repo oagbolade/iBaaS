@@ -1,4 +1,4 @@
-import { ManageBranch } from "@/features/Setup/branch";
+import { ManageBranch } from '@/features/Setup/branch';
 
 
 

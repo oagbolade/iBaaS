@@ -4,19 +4,18 @@ export const sideBarContainer = {
   width: 278,
   height: '100vh',
   padding: '0 20px',
-  backgroundColor: `${colors.lightGrey}`,
-  marginTop: '80px',
-  '&:hover': {
-    boxShadow: 2,
-  },
+  backgroundColor: `${colors.white}`,
+  border: `1px solid ${colors.neutral300}`,
+  borderTop: 'none',
+  marginTop: '60px',
   overflow: 'scroll',
   overflowX: 'hidden',
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
     display: 'none',
   },
-  top: { mobile: 0, desktop: 80 },
-  position: { mobile: 'absolute', desktop: 'sticky' },
+  top: { mobile: 0, desktop: 50 },
+  position: 'sticky',
   zIndex: 9,
 };
 
@@ -29,18 +28,13 @@ export const sideBarItem = {
   height: '40px',
   padding: '8px',
   borderRadius: '8px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral700}`,
   textTransform: 'none',
   justifyContent: 'left',
 };
 
-export const activeSideBar = {
-  ...sideBarItem,
-  fontWeight: 600,
-};
-
 export const mainMenu = {
-  backgroundColor: `${colors.lightGrey}`,
+  backgroundColor: `${colors.white}`,
   padding: '8px',
   width: '238px',
   height: '40px',

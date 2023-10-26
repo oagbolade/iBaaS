@@ -1,4 +1,5 @@
 import colors from '@/assets/colors';
+import { modalScrollbar } from '@/utils/scrollBars';
 
 export const ModalTitle = {
   color: `${colors.neutral900}`,
@@ -13,7 +14,9 @@ export const ModalContainer = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '724px',
+  maxWidth: '90vw',
   minHeight: '292px',
+  maxHeight: '90vh',
   boxShadow: 24,
   p: 4,
   borderRadius: '8px',
@@ -23,12 +26,15 @@ export const ModalContainer = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '40px',
+  ...modalScrollbar,
 };
 
 export const ModalHeader = {
   backgroundColor: `${colors.neutral200}`,
   display: 'flex',
   width: '724px',
+  maxWidth: '90vw',
+  height: '80px',
   padding: '24px',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -37,9 +43,9 @@ export const ModalHeader = {
 };
 
 export const ModalBackButton = {
-  height: '48px',
-  width: '86px',
-  fontSize: '18px',
+  height: { desktop: '48px', mobile: '28px' },
+  width: { desktop: '86px', mobile: '76px' },
+  fontSize: { desktop: '18px', mobile: '12px' },
   fontWeight: 600,
   color: `${colors.neutral900}`,
   backgroundColor: `${colors.white}`,
@@ -48,25 +54,28 @@ export const ModalBackButton = {
 };
 
 export const ModalSaveButton = {
-  height: '48px',
-  width: '155px',
-  fontSize: '16px',
+  height: { desktop: '48px', mobile: '40px', tablet: '40px' },
+  width: { desktop: '185px', mobile: '85px', tablet: '85px' },
+  fontSize: { desktop: '12px', mobile: '10px', tablet: '10px' },
   fontWeight: 600,
   color: `${colors.white}`,
   backgroundColor: `${colors.activeBlue400}`,
   borderRadius: '8px',
+  marginRight: { desktop: '45px', },
+  alignItems: 'center',
+  textAlign:  'center',
 };
 
 export const ResetButton = {
-  height: '42px',
-  width: '42px',
-  fontSize: '20px',
+  height: { desktop: '42px', mobile: '28px' },
+  width: { desktop: '42px', mobile: '28px' },
+  fontSize: { desktop: '20px', mobile: '12px' },
   fontWeight: 600,
   color: `${colors.neutral700}`,
   textAlign: 'center',
   display: 'flex',
-  alignItems: 'center',
   justifyContent: 'center',
+  alignSelf: 'center',
   margin: '0 auto',
-  marginRight: '20px',
+  marginRight: { desktop: '45px' },
 };

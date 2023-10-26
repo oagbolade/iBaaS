@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
 import { Typography } from '@mui/material';
+import { useCurrentBreakpoint } from '@/utils';
+import Grid from '@mui/material/Grid';
 
 type Props = {
   title: string;
@@ -18,6 +20,12 @@ export const CustomerAccountType = (props: Props) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
   };
+  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+
+  const setDirction = () => {
+    if (isMobile) return 'column';
+    return 'row';
+  };
 
   return (
     <Box
@@ -30,7 +38,7 @@ export const CustomerAccountType = (props: Props) => {
         marginBottom: '10px',
       }}
     >
-      <Stack direction="row" spacing={3}>
+      <Stack direction={setDirction()} spacing={3}>
         {props.icon}
         <Box>
           <Typography
@@ -61,14 +69,29 @@ export const CustomerAccountType = (props: Props) => {
           sx={{
             position: 'relative',
             bottom: 8,
+            
           }}
         >
-          <Radio
-            checked={selectedValue === props.value}
-            onChange={handleChange}
-            value={selectedValue || props.value}
-            name="customerType"
-          />
+          <Grid
+            item={isTablet}
+            mobile={12}
+            container={isMobile}
+            tablet={6}
+            height={{ mobile: 20, tablet: 0 }}
+            width={{ mobile: 25, tablet: 0 }}
+            ml={{ mobile: 25, tablet: 0 }}
+            position={{mobile: "relative", desktop: "relative", tablet: "relative"}}
+            top={{mobile: -87, tablet: -1}}
+            mr={{mobile: 5, tablet: 9}}
+
+          >
+            <Radio
+              checked={selectedValue === props.value}
+              onChange={handleChange}
+              value={selectedValue || props.value}
+              name="customerType"
+            />
+          </Grid>
         </Box>
       </Stack>
     </Box>

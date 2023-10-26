@@ -25,7 +25,7 @@ export const BusinessSetup = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', marginTop: '80px' }}>
+    <Box sx={{ width: { desktop: '100%' }, marginTop: '80px' }}>
       <ProgressBar progress={progress} />
       <Typography sx={stepTitle}>Step {step}/2</Typography>
       <BusinessMainSection />

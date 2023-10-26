@@ -7,10 +7,27 @@ export const useCurrentBreakpoint = () => {
   const matchesTablet = useMediaQuery(theme.breakpoints.up('tablet'));
   const matchesDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
 
+  const setWidth = (width: number | string = 0) => {
+    if (matchesTablet) return width || '100%';
+  };
+
+  const setDirection = (direction: {
+    mobileDirection: string;
+    tabletDirection: string;
+    desktopDirection: string;
+  }) => {
+    if (matchesDesktop) return direction.desktopDirection;
+    if (matchesTablet) return direction.tabletDirection;
+    if (matchesMobile) return direction.mobileDirection;
+    return 'row';
+  };
+
   return {
     theme,
     isMobile: matchesMobile,
     isTablet: matchesTablet,
     isDesktop: matchesDesktop,
+    setWidth: setWidth,
+    setDirection: setDirection,
   };
 };

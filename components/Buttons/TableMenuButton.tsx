@@ -11,7 +11,7 @@ export const TableMenuButton = ({ buttonTitle, icon }: Props) => {
     <Box
       sx={{
         padding: '10px',
-        borderBottom: `1px solid #DCE0E6`,
+        borderBottom: '1px solid #DCE0E6',
         minWidth: '146px',
       }}
     >

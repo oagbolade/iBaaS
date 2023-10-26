@@ -20,7 +20,7 @@ import {
   ButtonApproveTitle,
 } from './style';
 import Grid from '@mui/material/Grid';
-import { FormTextInput, FormSelectField } from '@/components/TextFields';
+import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { PrimaryIconButton } from '@/components/Buttons';
 import Button from '@mui/material/Button';
 import {
@@ -37,8 +37,24 @@ import {
   ResetButton,
 } from '@/components/Modal/styles';
 import { ButtonForms } from './ButtonForm';
+import { ModalActions } from '@/components/Shared/ActionButtons';
+import { useCurrentBreakpoint } from '@/utils';
+import colors from '@/assets/colors';
+
+export const ModalBackStyle = {
+  height: { desktop: '40px', mobile: '38px' },
+  width: { desktop: '170px', mobile: '150px' },
+  fontSize: { desktop: '14px', mobile: '12px' },
+  fontWeight: 600,
+  color: `${colors.neutral900}`,
+  backgroundColor: `${colors.white}`,
+  borderRadius: '8px',
+  border: `1px solid ${colors.neutral300}`,
+};
 
 export const CashDeposit = () => {
+  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+
   const onSubmit = (
     values: any,
     actions: { setSubmitting: (arg0: boolean) => void }
@@ -54,14 +70,22 @@ export const CashDeposit = () => {
       validationSchema={userSchema}
     >
       <Form>
-        <Box>
+        <Box ml={{ desktop: 2, mobile: 2 }}>
           <PageTitle title="Cash Deposit" styles={BatchTitle} />
         </Box>
         <Grid container spacing={2}>
-          <Box sx={BatchContainer}>
-            <Grid container item direction="column">
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+          <Box
+            sx={BatchContainer}
+            ml={{ desktop: 2, mobile: 2, tablet: 40 }}
+            mr={{ tablet: 70, desktop: 10 }}
+            mb={{ mobile: 8, tablet: 0 }}
+          >
+            <Grid container item direction="column" mt={5}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormSelectField
                     name="branch"
                     options={EditOperations.branch}
@@ -69,8 +93,11 @@ export const CashDeposit = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormSelectField
                     name="department"
                     options={EditOperations.department}
@@ -78,8 +105,11 @@ export const CashDeposit = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormSelectField
                     name="user"
                     options={EditOperations.user}
@@ -87,8 +117,11 @@ export const CashDeposit = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormTextInput
                     name="name"
                     placeholder="Enter name"
@@ -96,38 +129,46 @@ export const CashDeposit = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormTextInput
                     name="name"
-                    placeholder="Enter name"
+                    placeholder="Enter user"
                     label="Name"
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormTextInput
                     name="name"
-                    placeholder="Enter name"
+                    placeholder="Enter value"
                     label="Name"
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormTextInput
                     name="name"
-                    placeholder="Enter name"
+                    placeholder="Enter current"
                     label="Name"
                   />
                 </Box>
               </Grid>
-              
             </Grid>
           </Box>
-          <Box sx={PostingContainer}>
-            <Box sx={PostingTitleContainer}>
+          <Box sx={PostingContainer} ml={{ desktop: 0, tablet: 15 }}>
+            <Box sx={PostingTitleContainer} ml={{ desktop: 2, mobile: 7 }}>
               <PageTitle title="Account Info" styles={PostingTitle} />
               <Box sx={{ marginLeft: '4px' }}>
                 <AccountInfoIcons />
@@ -138,7 +179,7 @@ export const CashDeposit = () => {
             </Box>
             <Box sx={{ padding: '20px 25px' }}>
               <Grid container item spacing={2}>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Account Name" styles={AccountTitle} />
                     <PageTitle
@@ -147,7 +188,7 @@ export const CashDeposit = () => {
                     />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Product name" styles={AccountTitle} />
                     <PageTitle
@@ -156,19 +197,19 @@ export const CashDeposit = () => {
                     />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Branch" styles={AccountTitle} />
                     <PageTitle title="Idimu Branch" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Book Balance" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle
                       title="Effective Balance"
@@ -177,25 +218,25 @@ export const CashDeposit = () => {
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Usable Balance" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Source type" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Source" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item tablet={4}>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Account Status" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
@@ -203,7 +244,7 @@ export const CashDeposit = () => {
                 </Grid>
               </Grid>
             </Box>
-            <Box sx={PostingTitleContainer}>
+            <Box sx={PostingTitleContainer} ml={{ desktop: 2, mobile: 7 }}>
               <PageTitle title="Payment Info" styles={PostingTitle} />
               <Box sx={{ marginLeft: '7px' }}>
                 <AccountInfoIcons />
@@ -212,58 +253,97 @@ export const CashDeposit = () => {
             <Box sx={PersonalIcon}>
               <PersonalInfoLine />
             </Box>
-            <Box sx={{ padding: '15px 17px' }}>
-              <Grid container item spacing={1}>
-                <Box sx={{ display: 'flex' }}>
-                  <Grid item ml={2}>
+            <Box sx={{ padding: '15px 17px' }} ml={{ desktop: 2, mobile: 5 }}>
+              <Grid container item spacing={2}>
+                <Box sx={{ display: { desktop: 'flex', tablet: 'flex' } }}>
+                  <Grid
+                    item={isTablet}
+                    container={isMobile}
+                    mobile={12}
+                    desktop={12}
+                    tablet={12}
+                  >
                     <Box
                       sx={{
                         display: 'flex',
-                        width: '250px',
+                        width: {
+                          desktop: '250px',
+                          mobile: '40px',
+                          tablet: '250px',
+                        },
                         flexDirection: 'column',
                         alignItems: 'flex-start',
-                        // marginRight: '4px',
-                        // marginLeft: '8px',
                       }}
+                      ml={{ mobile: 7, tablet: 0 }}
+                      justifyContent="center"
+                      mr={{ mobile: 3, tablet: 0 }}
                     >
                       <FormSelectField
                         name="currency"
                         options={CurrencyOperation.currency}
                         label="Currency"
-                        customStyle={{ ...CustomStyle }}
+                        customStyle={{
+                          width: setWidth(),
+                        }}
                       />
                     </Box>
                   </Grid>
-                  <Grid item ml={2}>
+                  <Grid
+                    item={isTablet}
+                    container={isMobile}
+                    mobile={12}
+                    desktop={12}
+                    tablet={12}
+                  >
                     <Box
                       sx={{
                         display: 'flex',
-                        width: '250px',
+                        width: {
+                          desktop: '400px',
+                          mobile: '40px',
+                          tablet: '200px',
+                        },
                         flexDirection: 'column',
                         alignItems: 'flex-start',
                       }}
+                      ml={{ mobile: 7, tablet: 0 }}
+                      justifyContent="center"
+                      mr={{ tablet: 10, desktop: 7, mobile: 4 }}
                     >
                       <FormTextInput
                         name="rate"
                         placeholder="Enter rate"
                         label="Rate"
-                        customStyle={{ ...CustomStyleInput }}
+                        customStyle={{
+                          width: setWidth(),
+                        }}
                       />
                     </Box>
                   </Grid>
                 </Box>
-                <Grid item md={6}>
+                <Grid
+                  item={isTablet}
+                  container={isMobile}
+                  mobile={12}
+                  desktop={12}
+                  tablet={12}
+                >
                   <Box
                     sx={{
-                      marginLeft: '8px',
-                      marginRight: '4px',
+                      marginRight: '20px',
+                      width: { tablet: '350px' },
                     }}
+                    ml={{ mobile: 7, tablet: 0 }}
+                    justifyContent="center"
+                    mr={{ tablet: 3, desktop: 2 }}
                   >
                     <FormTextInput
                       name="transactionAmount"
                       placeholder="Enter Transaction"
                       label="Transaction Amount"
-                      customStyle={{ ...CustomStyleText }}
+                      customStyle={{
+                        width: setWidth(),
+                      }}
                     />
                   </Box>
                 </Grid>
@@ -271,11 +351,23 @@ export const CashDeposit = () => {
             </Box>
           </Box>
         </Grid>
-        <ButtonForms
-          title="Forward to approving officers"
-          bttonTitles="Reset"
-          buttonTitle="Deposit"
-        />
+        <Grid
+          item={isTablet}
+          marginRight={{ mobile: '300px', desktop: '100px', tablet: '450px' }}
+          container={isMobile}
+          mobile={10}
+          tablet={2}
+          desktop={12}
+          justifyContent="center"
+          marginLeft={{ mobile: '50px', desktop: '90px' }}
+          marginBottom={{ mobile: '45px', tablet: '30px' }}
+        >
+          <ModalActions
+            StyleBack={{ ...ModalBackStyle }}
+            BackButtonTitle="Approving officers"
+            SaveButtonTitle="Deposit"
+          />
+        </Grid>
       </Form>
     </Formik>
   );

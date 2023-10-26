@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { SetupContainer } from '@/features/Setup';
 import { Formik, Form } from 'formik';
-import { FormTextInput } from '@/components/TextFields';
+import { FormTextInput } from '@/components/FormikFields';
 import { bank as bankSchema } from '@/constants/schemas';
 import { bankValues } from '@/constants/types';
 import { PageTitle } from '@/components/Typography';
@@ -16,8 +16,20 @@ import {
   ModalSaveButton,
   ResetButton,
 } from './style';
+import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
+import { ModalActions } from '@/components/Shared/ActionButtons';
 
 export const ModalForm = () => {
+  const { isMobile, isTablet } = useCurrentBreakpoint();
+
+  const setWidth = (width: number | string = 0) => {
+    if (isTablet) return width || '100%';
+  };
+  const setDirction = () => {
+    if (isMobile) return 'column';
+    return 'row';
+  };
+
   const onSubmit = (
     values: any,
     actions: { setSubmitting: (arg0: boolean) => void }
@@ -34,64 +46,66 @@ export const ModalForm = () => {
       validationSchema={bankSchema}
     >
       <Form>
-        <Box>
-          <Grid container columns={16} spacing={1}>
-            <Grid item xs={12}>
+        <Box ml={{ desktop: 2, mobile: 5 }}>
+          <Grid container spacing={2}>
+            <Grid
+              item={isTablet}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="bankName"
                 placeholder="Enter Bank Name"
-                label="Bank Name"
+                label=" Bank Name"
                 required
-                customStyle={{ ...InputStyle }}
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
-            <Grid item md={6}>
+          <Grid container spacing={2} mt={3}>
+            <Grid
+              item={isTablet}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="bankCode"
                 placeholder="Enter Bank Code "
                 label="Bank Code"
                 required
               />
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="bankMnemonic"
                 placeholder=" Enter bank Mnemonic"
-                label="bank Mnemonic"
+                label="Bank Mnemonic"
                 required
               />
             </Grid>
-            <Grid container mt={9} ml={2}>
-              {/* Button */}
-              <Grid item md={3}>
-                <PrimaryIconButton
-                  buttonTitle="Cancel"
-                  customStyle={ModalBackButton}
-                />
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                item
-                md={6}
-              >
-                <Button variant="text">
-                  <PageTitle title="Reset" styles={ResetButton} />
-                </Button>
-              </Grid>
-              <Grid item md={3}>
-                <PrimaryIconButton
-                  type="submit"
-                  buttonTitle="Create Branch"
-                  customStyle={ModalSaveButton}
-                />
-              </Grid>
-              {/* Button */}
-            </Grid>
+            <ModalActions
+              BackButtonTitle="Cancel"
+              SaveButtonTitle="Create Bank"
+              StyleBack={ModalBackButton}
+            />
           </Grid>
         </Box>
       </Form>

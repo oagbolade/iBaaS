@@ -11,15 +11,13 @@ import {
   CheckboxInput,
   CountrySelectField,
   LargeFormMultiSelectField,
-} from '@/components/TextFields';
+} from '@/components/FormikFields';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
-import {
-  ModalSaveButton,
-} from '@/components/Modal/styles';
+import { ModalSaveButton } from '@/components/Modal/styles';
 import { InputAdornmentText } from '@/components/Typography';
-import { handleRedirect } from '@/utils';
+import { handleRedirect, useCurrentBreakpoint } from '@/utils';
 import { currencies } from '@/constants/SetupOptions';
 
 type Props = {
@@ -29,31 +27,42 @@ type Props = {
 
 const styles = {
   ...ModalSaveButton,
-  width: '100%',
+  width: { tablet: '100%', mobile: '60%' },
   borderRadius: '40px',
 };
 
 export const ActionButtons = ({ setStep, isFormOne = false }: Props) => {
+  const { isMobile, isTablet } = useCurrentBreakpoint();
   const router = useRouter();
 
   return (
-    <Grid container mt={8}>
-      <Grid item md={12}>
-        <PrimaryIconButton
-          // type="submit" todo: handle submit together with setStep
-          onClick={() => {
-            if (isFormOne) return setStep(true);
-            handleRedirect(router, '/admin/users');
-          }}
-          buttonTitle="Next"
-          customStyle={styles}
-        />
-      </Grid>
+    <Grid
+      mt={8}
+      container={isMobile}
+      item={isTablet}
+      justifyContent="center"
+      mobile={12}
+    >
+      <PrimaryIconButton
+        // type="submit" todo: handle submit together with setStep
+        onClick={() => {
+          if (isFormOne) return setStep(true);
+          handleRedirect(router, '/admin/users');
+        }}
+        buttonTitle="Next"
+        customStyle={styles}
+      />
     </Grid>
   );
 };
 
 export const FormOne = ({ setStep }: Props) => {
+  const { isMobile, isTablet } = useCurrentBreakpoint();
+
+  const setWidth = (width: number | string = 0) => {
+    if (isTablet) return width || '100%';
+  };
+
   const onSubmit = (
     values: any,
     actions: { setSubmitting: (arg0: boolean) => void }
@@ -71,16 +80,20 @@ export const FormOne = ({ setStep }: Props) => {
       validationSchema={userSchema}
     >
       <Form>
-        <Box ml={5}>
-          <Grid container spacing={2}>
-            <Grid item md={12}>
-              {/* Uses Large Multiselect */}
+        <Box ml={{ desktop: 5 }}>
+          <Grid container>
+            {/* <Grid item mobile={12}>
               <LargeFormMultiSelectField label="Product Charge" />
-            </Grid>
-            <Grid item md={12}>
+            </Grid> */}
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 endAdornment={
                   <IconButton
@@ -95,10 +108,15 @@ export const FormOne = ({ setStep }: Props) => {
                 label="Interest Calculation Basis"
               />{' '}
             </Grid>
-            <Grid item md={12}>
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="companyName"
                 placeholder="Enter your company name"
@@ -106,10 +124,15 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={12}>
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="cbnCode"
                 placeholder="Enter your company CBN code"
@@ -117,13 +140,23 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={12}>
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <CheckboxInput label="This a non-DBM Institution" />
             </Grid>
-            <Grid item md={12}>
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="website"
                 placeholder="Enter company's website"
@@ -131,10 +164,15 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={12}>
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="address"
                 placeholder="Enter company's address"
@@ -142,10 +180,16 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              tablet={6}
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '225px',
+                  width: setWidth(isMobile ? '100%' : '225px'),
                 }}
                 name="address"
                 placeholder="Enter state"
@@ -153,10 +197,16 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              tablet={6}
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '225px',
+                  width: setWidth(isMobile ? '100%' : '225px'),
                 }}
                 name="address"
                 placeholder="LGA"
@@ -173,6 +223,17 @@ export const FormOne = ({ setStep }: Props) => {
 };
 
 export const FormTwo = ({ setStep }: Props) => {
+  const { isMobile, isTablet } = useCurrentBreakpoint();
+
+  const setWidth = (width: number | string = 0) => {
+    if (isTablet) return width || '100%';
+  };
+
+  const setPhoneWidth = (width: number | string = 0) => {
+    if (isMobile) return width;
+    return '100%';
+  };
+
   const onSubmit = (
     values: any,
     actions: { setSubmitting: (arg0: boolean) => void }
@@ -189,96 +250,170 @@ export const FormTwo = ({ setStep }: Props) => {
       validationSchema={userSchema}
     >
       <Form>
-        <Box ml={5}>
-          <Grid container spacing={2}>
-          <Grid item md={12}>
+        <Box ml={{ desktop: 5 }}>
+          <Grid
+            container={isMobile}
+            item={isTablet}
+            justifyContent="center"
+            spacing={2}
+          >
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <FormSelectField
                 customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="currency"
                 options={currencies}
                 label="Currency"
               />{' '}
             </Grid>
-            <Grid item md={3}>
-              <CountrySelectField name="countryCode" label="Phone Number" />{' '}
-            </Grid>
-            <Grid item md={9} mt={3}>
+            {isTablet && (
+              <Grid container spacing={2}>
+                <Grid item tablet={3}>
+                  <CountrySelectField name="countryCode" label="Phone Number" />{' '}
+                </Grid>
+                <Grid item tablet={9} mt={3}>
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(),
+                    }}
+                    name="phone"
+                    placeholder="908 7878 987"
+                    label=""
+                  />{' '}
+                </Grid>
+              </Grid>
+            )}
+            {isMobile && (
+              <Grid
+                mr={{ mobile: 10.5, desktop: 0 }}
+                container
+                justifyContent="center"
+                spacing={1}
+              >
+                <Box>
+                  <CountrySelectField
+                    width={isMobile && '90px'}
+                    name="countryCode"
+                    label="Phone Number"
+                  />{' '}
+                </Box>
+                <Box sx={{ width: '100px' }} mt={3}>
+                  <FormTextInput
+                    customStyle={{
+                      width: setPhoneWidth('190px'),
+                    }}
+                    name="phone"
+                    placeholder="908 7878 987"
+                    label=""
+                  />{' '}
+                </Box>
+              </Grid>
+            )}
+
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+            >
               <FormTextInput
                 customStyle={{
-                  width: '100%',
-                }}
-                name="phone"
-                placeholder="908 7878 987"
-                label=""
-              />{' '}
-            </Grid>
-            
-            <Grid item md={12}>
-              <FormTextInput
-                customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="email"
                 placeholder="Enter company's email address"
                 label="Email Address"
               />{' '}
             </Grid>
-            <Grid item md={6}>
-              <FormTextInput
-                customStyle={{
-                  width: '225px',
-                }}
-                name="serverName"
-                placeholder="Enter server name"
-                label="Server Name"
-                required
-              />{' '}
+            <Grid container>
+              <Grid
+                container={isMobile}
+                item={isTablet}
+                justifyContent="center"
+                mobile={12}
+                tablet={6}
+              >
+                <FormTextInput
+                  customStyle={{
+                    width: setWidth(isMobile ? '100%' : '225px'),
+                  }}
+                  name="serverName"
+                  placeholder="Enter server name"
+                  label="Server Name"
+                  required
+                />{' '}
+              </Grid>
+              <Grid
+                container={isMobile}
+                item={isTablet}
+                justifyContent="center"
+                mobile={12}
+                tablet={6}
+              >
+                <FormTextInput
+                  customStyle={{
+                    width: setWidth(isMobile ? '100%' : '225px'),
+                  }}
+                  name="lendingRate"
+                  placeholder="Enter prime lending rate"
+                  label="Prime Lending Rate"
+                  required
+                />{' '}
+              </Grid>
             </Grid>
-            <Grid item md={6}>
-              <FormTextInput
+
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+              desktop={6}
+            >
+              <FormSelectField
                 customStyle={{
-                  width: '225px',
-                }}
-                name="lendingRate"
-                placeholder="Enter prime lending rate"
-                label="Prime Lending Rate"
-                required
-              />{' '}
-            </Grid>
-            <Grid item md={6}>
-            <FormSelectField
-                customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="lastFinancialYear"
                 options={currencies}
                 label="Last Financial Year"
               />{' '}
             </Grid>
-            <Grid item md={6}>
-            <FormSelectField
+            <Grid
+              container={isMobile}
+              item={isTablet}
+              justifyContent="center"
+              mobile={12}
+              desktop={6}
+            >
+              <FormSelectField
                 customStyle={{
-                  width: '100%',
+                  width: setWidth(),
                 }}
                 name="nextFinancialYear"
                 options={currencies}
                 label="Next Financial Year"
               />{' '}
             </Grid>
-            <Grid item md={12}>
-              <CheckboxInput label="Treat sub-branch as branch" />
-            </Grid>
-            <Grid item md={12}>
-              <CheckboxInput label="Allow multiple account on the same product" />
-            </Grid>
-            <Grid item md={12}>
-              <CheckboxInput label="Allow system inventory" />
-            </Grid>
-            <Grid item md={12}>
-              <CheckboxInput label="Require alert" />
-            </Grid>
+            <Box ml={{ mobile: 9, desktop: 0 }}>
+              <Grid container={isMobile} item={isTablet} mobile={8}>
+                <CheckboxInput label="Treat sub-branch as branch" />
+              </Grid>
+              <Grid container={isMobile} item={isTablet} mobile={6}>
+                <CheckboxInput label="Allow multiple account on the same product" />
+              </Grid>
+              <Grid container={isMobile} item={isTablet} mobile={8}>
+                <CheckboxInput label="Allow system inventory" />
+              </Grid>
+              <Grid container={isMobile} item={isTablet} mobile={12}>
+                <CheckboxInput label="Require alert" />
+              </Grid>
+            </Box>
           </Grid>
           <ActionButtons setStep={setStep} />
         </Box>

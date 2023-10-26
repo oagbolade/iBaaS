@@ -7,7 +7,7 @@ export const LoginHeader = () => {
   return (
     <Box
       sx={{
-        margin: { mobile: '80px 0 30px 0', tablet: '120px 0 30px 0' },
+        margin: { mobile: '80px 0 30px 0', desktop: '120px 0 30px 0' },
         width: '208px',
         height: '72px',
       }}

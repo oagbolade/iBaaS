@@ -9,7 +9,7 @@ import {
   FormTextInput,
   CheckboxInput,
   FormSelectField,
-} from '@/components/TextFields';
+} from '@/components/FormikFields';
 import { EditUser } from '@/constants/AdminOptions';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';

@@ -3,34 +3,38 @@ import colors from '@/assets/colors';
 export const navbarStyle = {
   display: 'flex',
   width: '100%',
-  height: '80px',
+  height: '60px',
   padding: { desktop: '0px 40px', mobile: '0 25px' },
   alignItems: 'center',
-  justifyContent: 'space-between',
+  // justifyContent: 'space-between',
   position: 'fixed',
   top: 0,
   left: 0,
   zIndex: 2,
-  backgroundColor: `${colors.navBarColor}`,
+  backgroundColor: `${colors.white}`,
+  borderBottom: `1px solid ${colors.neutral300}`,
 };
 
-export const NavTitleStyle = {
+export const greetingStyle = {
   color: `${colors.neutral900}`,
-  textAlign: 'right',
-  fontFeatureSettings: "'clig' off, 'liga' off",
   fontFamily: 'Averta Regular',
   fontSize: '16px',
-  fontStyle: 'normal',
   fontWeight: 400,
   lineHeight: '24px',
 };
 
+export const NavNameStyle = {
+  ...greetingStyle,
+  color: `${colors.neutral700}`,
+  fontSize: '12px',
+  lineHeight: '16px',
+};
+
 export const navbarCont = {
   display: 'flex',
-  padding: '8px',
   alignItems: 'center',
-  gap: '8px',
-  marginRight: '-30px',
+  gap: '-10px',
+  marginRight: '-38px',
 };
 
 export const navbarTitle = {

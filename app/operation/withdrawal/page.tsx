@@ -1,4 +1,4 @@
-import { CashWithDrawalContainer } from "@/features/Operation/withdrawal";
+import { CashWithDrawalContainer } from '@/features/Operation/withdrawal';
 
 
 

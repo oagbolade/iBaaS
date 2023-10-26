@@ -16,12 +16,16 @@ import {
   FormTextInput,
   CheckboxInput,
   FormSelectField,
-} from '@/components/TextFields';
+} from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
 import { EditRole } from '@/constants/AdminOptions';
-import {CustomerServiceContainer} from '@/features/CustomerService';
+import { CustomerServiceContainer } from '@/features/CustomerService';
+import { useCurrentBreakpoint } from '@/utils';
+import { ModalActions } from '@/components/Shared/ActionButtons';
 
 const ModalForm = () => {
+  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+
   const onSubmit = (
     values: any,
     actions: { setSubmitting: (arg0: boolean) => void }
@@ -29,6 +33,10 @@ const ModalForm = () => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
     actions.setSubmitting(false);
+  };
+  const setDirction = () => {
+    if (isMobile) return 'column';
+    return 'row';
   };
 
   return (
@@ -38,50 +46,110 @@ const ModalForm = () => {
       validationSchema={roleSchema}
     >
       <Form>
-        <Box>
+        <Box ml={{ desktop: 2 }}>
           <Grid container spacing={2}>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 3, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="roleName"
                 placeholder="Business Development"
                 label="Role Name"
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 3, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="roleDescription"
                 placeholder="Business Development"
                 label="Role Description"
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 3, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="branch"
                 options={EditRole.idleTimeOut}
                 label="Idle TimeOut"
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 3, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="accessDays"
                 options={EditRole.accessDays}
                 label="Access Days"
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 3, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="roleLevel"
                 options={EditRole.roleLevel}
                 label="Role Level"
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              ml={{ mobile: 3, tablet: 0 }}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                }}
                 name="directReport"
                 options={EditRole.dataCapturePrivileges}
                 label="Application Data Capture Privileges"
@@ -89,42 +157,39 @@ const ModalForm = () => {
               />{' '}
             </Grid>
             {/* Checkboxes */}
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              container={isMobile}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <CheckboxInput label="Does this staff authorise roles?" />
             </Grid>
-            <Grid item md={6}>
+            <Grid
+              item={isTablet}
+              container={isMobile}
+              ml={{ mobile: 4, tablet: 0 }}
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
               <CheckboxInput label="Can this staff post operation transaction?" />
             </Grid>
             {/* Checkboxes */}
 
-            <Grid container mt={9} ml={2}>
-              {/* Button */}
-              <Grid item md={3}>
-                <PrimaryIconButton
-                  buttonTitle="Back"
-                  customStyle={ModalBackButton}
-                />
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                item
-                md={6}
-              >
-                <Button variant="text">
-                  <PageTitle title="Reset" styles={ResetButton} />
-                </Button>
-              </Grid>
-              <Grid item md={3}>
-                <PrimaryIconButton
-                  type="submit"
-                  buttonTitle="Save Changes"
-                  customStyle={ModalSaveButton}
-                />
-              </Grid>
-              {/* Button */}
+            <Grid
+              item={isTablet}
+              marginRight={{ mobile: '50px', desktop: '25px' }}
+              container={isMobile}
+              mobile={12}
+              tablet={12}
+            >
+              <ModalActions
+                StyleBack={ModalBackButton}
+                BackButtonTitle="Back"
+                SaveButtonTitle="Save Changes"
+              />
             </Grid>
           </Grid>
         </Box>

@@ -24,7 +24,13 @@ export const SideBar = ({ openMenu }: Props) => {
   };
 
   return (
-    <Box sx={{ display: shouldShowSideBar() }}>
+    <Box
+      sx={{
+        display: shouldShowSideBar(),
+        position: 'sticky',
+        top: '0',
+      }}
+    >
       <SideBarContainer />
     </Box>
   );

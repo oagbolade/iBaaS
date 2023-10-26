@@ -6,18 +6,27 @@ import colors from '@/assets/colors';
 type Props = {
   buttonTitle: string;
   icon: any;
+  isActive?: boolean;
 };
 
-export default function SideBarPrimaryButton({ buttonTitle, icon }: Props) {
+export default function SideBarPrimaryButton({
+  isActive,
+  buttonTitle,
+  icon,
+}: Props) {
   return (
     <>
       <Box sx={{ marginTop: '3px' }}>{icon}</Box>
       <Typography
         sx={{
-          backgroundColor: `${colors.lightGrey}`,
+          backgroundColor: `${isActive ? colors.neutral200 : colors.white}`,
           fontFamily: 'Averta Regular',
+          fontSize: '15px',
+          fontWeight: 400,
+          color: `${colors.neutral700}`,
         }}
         ml={2}
+        mt={0.3}
       >
         {buttonTitle}
       </Typography>

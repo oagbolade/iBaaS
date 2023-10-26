@@ -23,10 +23,7 @@ import {
   TitleStyle,
 } from './style';
 import Grid from '@mui/material/Grid';
-import {
-  FormTextInput,
-  FormSelectField,
-} from '@/components/TextFields';
+import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { PrimaryIconButton } from '@/components/Buttons';
 import Button from '@mui/material/Button';
 import {
@@ -42,7 +39,13 @@ import {
   ModalSaveButton,
   ResetButton,
 } from '@/components/Modal/styles';
+import { useCurrentBreakpoint } from '@/utils';
+import { ModalActions } from '@/components/Shared/ActionButtons';
+import colors from '@/assets/colors';
+
 export const BatchPosting = () => {
+  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+
   const onSubmit = (
     values: any,
     actions: { setSubmitting: (arg0: boolean) => void }
@@ -51,6 +54,10 @@ export const BatchPosting = () => {
     alert(JSON.stringify(values, null, 2));
     actions.setSubmitting(false);
   };
+  const setDirction = () => {
+    if (isMobile) return 'column';
+    return 'row';
+  };
   return (
     <Formik
       initialValues={userInitialValues}
@@ -58,14 +65,29 @@ export const BatchPosting = () => {
       validationSchema={userSchema}
     >
       <Form>
-        <Box>
+        <Box mt={{ mobile: 4, tablet: 0 }}>
           <PageTitle title="Batch Posting" styles={BatchTitle} />
         </Box>
         <Grid container spacing={2}>
-          <Box sx={BatchContainer}>
-            <Grid container item direction="column">
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+          <Box
+            sx={BatchContainer}
+            ml={{ desktop: 2, mobile: 2 }}
+            mr={{ tablet: 18, desktop: 10 }}
+            mb={{ mobile: 8, tablet: 0 }}
+          >
+            <Grid
+              container
+              item
+              direction="column"
+              mt={5}
+              justifyContent="center"
+              ml={{ mobile: 4, tablet: 0 }}
+            >
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormSelectField
                     name="branch"
                     options={EditOperations.branch}
@@ -73,8 +95,11 @@ export const BatchPosting = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormSelectField
                     name="department"
                     options={EditOperations.department}
@@ -82,8 +107,11 @@ export const BatchPosting = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormSelectField
                     name="user"
                     options={EditOperations.user}
@@ -91,8 +119,35 @@ export const BatchPosting = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
+                  <FormTextInput
+                    name="name"
+                    placeholder="Enter user"
+                    label="Name"
+                  />
+                </Box>
+              </Grid>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
+                  <FormTextInput
+                    name="name"
+                    placeholder="Enter currency"
+                    label="Name"
+                  />
+                </Box>
+              </Grid>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{ justifyContent: 'center' }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormTextInput
                     name="name"
                     placeholder="Enter name"
@@ -100,38 +155,25 @@ export const BatchPosting = () => {
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
+              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
+                <Box
+                  sx={{
+                    justifyContent: 'center',
+                    marginBottom: { mobile: '4px' },
+                  }}
+                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
+                >
                   <FormTextInput
                     name="name"
-                    placeholder="Enter name"
+                    placeholder="Enter value"
                     label="Name"
                   />
                 </Box>
               </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter name"
-                    label="Name"
-                  />
-                </Box>
-              </Grid>
-              <Grid item md={6}>
-                <Box sx={{ marginLeft: '40px', marginTop: '20px' }}>
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter name"
-                    label="Name"
-                  />
-                </Box>
-              </Grid>
-              
             </Grid>
           </Box>
           <Box sx={PostingContainer}>
-            <Box sx={PostingTitleContainer}>
+            <Box sx={PostingTitleContainer} ml={{ desktop: 2, mobile: 8 }}>
               <PageTitle title="Account Info" styles={PostingTitle} />
               <Box sx={{ marginLeft: '4px' }}>
                 <AccountInfoIcons />
@@ -140,9 +182,9 @@ export const BatchPosting = () => {
             <Box sx={PersonalIcon}>
               <PersonalInfoLine />
             </Box>
-            <Box sx={{ padding: '20px 25px'}}>
+            <Box sx={{ padding: '20px 25px' }} ml={{ mobile: 2, tablet: 0 }}>
               <Grid container item spacing={2}>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Account Name" styles={AccountTitle} />
                     <PageTitle
@@ -151,7 +193,7 @@ export const BatchPosting = () => {
                     />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Product name" styles={AccountTitle} />
                     <PageTitle
@@ -160,19 +202,19 @@ export const BatchPosting = () => {
                     />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Branch" styles={AccountTitle} />
                     <PageTitle title="Idimu Branch" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Book Balance" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle
                       title="Effective Balance"
@@ -181,25 +223,25 @@ export const BatchPosting = () => {
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Usable Balance" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Source type" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Source" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
                   </Box>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item>
                   <Box sx={AccountContainer}>
                     <PageTitle title="Account Status" styles={AccountTitle} />
                     <PageTitle title="₦ 445,900.98" styles={AccountPageTitle} />
@@ -208,7 +250,7 @@ export const BatchPosting = () => {
               </Grid>
             </Box>
 
-            <Box sx={PostingTitleContainer}>
+            <Box sx={PostingTitleContainer} ml={{ desktop: 2, mobile: 7 }}>
               <PageTitle title="Payment Info" styles={PostingTitle} />
               <Box sx={{ marginLeft: '7px' }}>
                 <AccountInfoIcons />
@@ -217,58 +259,98 @@ export const BatchPosting = () => {
             <Box sx={PersonalIcon}>
               <PersonalInfoLine />
             </Box>
-            <Box sx={{ padding: '15px 17px' }}>
-              <Grid container item spacing={1}>
-                <Box sx={{ display: 'flex' }}>
-                  <Grid item ml={2}>
+            <Box sx={{ padding: '15px 17px' }} ml={{ desktop: 2, mobile: 5 }}>
+              <Grid container spacing={2}>
+                <Box sx={{ display: { desktop: 'flex', tablet: 'flex' } }}>
+                  <Grid
+                    item={isTablet}
+                    container={isMobile}
+                    mobile={12}
+                    desktop={12}
+                    tablet={12}
+                  >
                     <Box
                       sx={{
                         display: 'flex',
-                        width: '250px',
+                        width: {
+                          desktop: '250px',
+                          mobile: '40px',
+                          tablet: '250px',
+                        },
                         flexDirection: 'column',
                         alignItems: 'flex-start',
-                        // marginRight: '4px',
-                        // marginLeft: '8px',
                       }}
+                      ml={{ mobile: 7, tablet: 0 }}
+                      justifyContent="center"
+                      mr={{ mobile: 3, tablet: 0 }}
                     >
                       <FormSelectField
                         name="currency"
                         options={CurrencyOperation.currency}
                         label="Currency"
-                        customStyle={{ ...CustomStyle }}
+                        customStyle={{
+                          width: setWidth(),
+                        }}
                       />
                     </Box>
                   </Grid>
-                  <Grid item ml={2}>
+                  <Grid
+                    item={isTablet}
+                    container={isMobile}
+                    mobile={12}
+                    desktop={12}
+                    tablet={12}
+                  >
                     <Box
                       sx={{
                         display: 'flex',
-                        width: '250px',
+                        width: {
+                          desktop: '400px',
+                          mobile: '40px',
+                          tablet: '200px',
+                        },
                         flexDirection: 'column',
                         alignItems: 'flex-start',
                       }}
+                      ml={{ mobile: 7, tablet: 0 }}
+                      justifyContent="center"
+                      mr={{ tablet: 10, desktop: 7, mobile: 4 }}
                     >
                       <FormTextInput
                         name="rate"
                         placeholder="Enter rate"
                         label="Rate"
-                        customStyle={{ ...CustomStyleInput }}
+                        customStyle={{
+                          width: setWidth(),
+                        }}
                       />
                     </Box>
                   </Grid>
                 </Box>
-                <Grid item md={6}>
+                <Grid
+                  item={isTablet}
+                  container={isMobile}
+                  desktop={12}
+                  tablet={12}
+                  mobile={12}
+                  mr={{ mobile: 2, tablet: 2 }}
+                >
                   <Box
                     sx={{
-                      marginLeft: '8px',
-                      marginRight: '4px',
+                      marginRight: '20px',
+                      width: { tablet: '350px' },
                     }}
+                    ml={{ mobile: 7, tablet: 0 }}
+                    justifyContent="center"
+                    mr={{ tablet: 3, desktop: 2 }}
                   >
                     <FormTextInput
                       name="transactionAmount"
                       placeholder="Enter Transaction"
                       label="Transaction Amount"
-                      customStyle={{ ...CustomStyleText }}
+                      customStyle={{
+                        width: setWidth(),
+                      }}
                     />
                   </Box>
                 </Grid>
@@ -276,47 +358,23 @@ export const BatchPosting = () => {
             </Box>
           </Box>
         </Grid>
-        <Grid container mt={9} ml={2}>
-          {/* Button */}
-          <Box sx={ButtonContainer}>
-            <Box>
-              <Grid item md={3}>
-                <PrimaryIconButton
-                  buttonTitle="Back"
-                  customStyle={{ ...ModalBackButton, ...ButtonBack }}
-                />
-              </Grid>
-            </Box>
-            <Box sx={{ marginLeft: '50px' }}>
-              <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                item
-                md={6}
-              >
-                <Button variant="text">
-                  <PageTitle
-                    title="Reset"
-                    styles={{ ...ResetButton, ...ButtonResetTitle }}
-                  />
-                </Button>
-              </Grid>
-            </Box>
-            <Box sx={{ marginRight: '100px' }}>
-              <Grid item md={3}>
-                <PrimaryIconButton
-                  type="submit"
-                  buttonTitle="Post"
-                  customStyle={{ ...ModalSaveButton, ...ButtonPost }}
-                />
-              </Grid>
-            </Box>
-          </Box>
-
-          {/* Button */}
-        </Grid>
+        <Grid
+          item={isTablet}
+          container={isMobile}
+          mobile={10}
+          tablet={8}
+          justifyContent="center"
+          ml={{ desktop: 5, mobile: 5 }}
+          mr={{ mobile: 6, tablet: 18, desktop: 0 }}
+          top={{ mobile: '50px', tablet: 0 }}
+          marginBottom={{ mobile: '45px', tablet: '30px' }}
+        >
+          <ModalActions
+            BackButtonTitle="Back"
+            SaveButtonTitle="Save Changes"
+            StyleBack={ModalBackButton}
+          />
+        </Grid>{' '}
       </Form>
     </Formik>
   );

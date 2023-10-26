@@ -1,5 +1,4 @@
 import colors from '@/assets/colors';
-import { color } from '@mui/system';
 
 export const BatchTitle = {
   color: `${colors.neutral900}`,
@@ -8,20 +7,22 @@ export const BatchTitle = {
   fontWeight: 700,
   lineHeight: '36px',
   marginTop: '90px',
-  marginLeft: '60px',
+  marginLeft: { mobile: '32px', tablet: '68px', desktop: '53px' },
 };
 
 export const BatchContainer = {
-  width: '421px',
-  height: '789px',
+  width: { desktop: '421px', mobile: '421px', tablet: '421px' },
+  height: { desktop: '789px' },
   flexShrink: 0,
   borderRadius: '6px',
-  border: '1px solid rgba(217, 217, 217, 0.54)',
+  border: `2px solid ${colors.batchColor}`,
   background: `${colors.white}`,
-  marginLeft: '40px',
-  marginTop: '30px',
+  marginLeft: { desktop: '70px', tablet: '100px', mobile: '40px' },
+  marginTop: { desktop: '30px', mobile: '40px' },
   marginRight: '10px',
-  
+  justifyContent: 'center',
+  color: `${colors.batchColor}`,
+  margingBottom: { mobile: '30px', tablet: '0' },
 };
 
 export const PostingContainer = {
@@ -29,11 +30,14 @@ export const PostingContainer = {
   height: '789px',
   flexShrink: 0,
   borderRadius: '6px',
-  border: '1px solid rgba(217, 217, 217, 0.54)',
+  border: `2px solid ${colors.batchColor}`,
   background: `${colors.white}`,
   marginRight: '9px',
   marginTop: '30px',
-  padding: '9px 10px'
+  padding: '9px 10px',
+  marginLeft: { tablet: '100px', mobile: '20px', desktop: '0' },
+  color: `${colors.batchColor}`,
+  margingBottom: { mobile: '3px', tablet: '0' },
 };
 
 export const PostingTitle = {
@@ -42,9 +46,9 @@ export const PostingTitle = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '24px',
-  width: "96px",
-  height: "24px",
-  marginRigh: "120px"
+  width: '96px',
+  height: '24px',
+  marginRigh: '120px',
 };
 
 export const TitleStyle = {
@@ -68,7 +72,7 @@ export const AccountContainer = {
   gap: '15px',
   color: `${colors.gray500}`,
   width: '128px',
-  height: '61px'
+  height: '61px',
 };
 
 export const AccountTitle = {
@@ -135,7 +139,7 @@ export const CustomStyleInput = {
   borderRadius: '4px',
   background: `${colors.neutral200}`,
   color: `${colors.neutral600}`,
-  width: '210px',
+  width: { desktop: '250px', mobile: '320px' },
   height: '40px',
   marginRight: '50px',
 };
@@ -150,7 +154,7 @@ export const CustomStyleText = {
   background: `${colors.neutral200}`,
   color: `${colors.neutral600}`,
   height: '50px',
-  width: '467px',
+  width: '357px',
 };
 
 export const ButtonContainer = {
@@ -177,7 +181,7 @@ export const ButtonApprove = {
   justifyContent: 'center',
   alignItems: 'center',
   gap: '8px',
-  marginLeft: "20px"
+  marginLeft: '20px',
 };
 
 export const ButtonApproveTitle = {

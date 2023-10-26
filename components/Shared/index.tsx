@@ -1,2 +1,2 @@
-export { MainSection } from "./MainSection";
-export { SearchSection } from "./SearchSection";
+export { MainSection } from './MainSection';
+export { SearchSection } from './SearchSection';

@@ -2,10 +2,10 @@
 import React from 'react';
 import { StarterSection } from '@/components/Shared/StarterSection';
 import SetupContextProvider from '@/features/Setup/SetupContext';
-import { modalTitle, ModalForm } from '@/features/Setup/banks/CommercialBank';
+import { modalTitle, ModalForm } from '@/features/Setup/banks/commercialBank';
 import { ModalContainer } from '@/components/Modal/index';
 
-export const CommeracialBank = () => {
+export const CommercialBank = () => {
   return (
     <SetupContextProvider>
       <StarterSection

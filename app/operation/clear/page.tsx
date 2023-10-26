@@ -1,4 +1,4 @@
-import { ClearContainer } from "@/features/Operation/clear";
+import { ClearContainer } from '@/features/Operation/clear';
 
 
 export default function Operations() {

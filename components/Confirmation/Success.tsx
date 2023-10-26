@@ -18,7 +18,7 @@ export const Success = ({ open }: Props) => {
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       open={open}
-      onClose={() => handleClose()}
+      onClose={() => {return handleClose();}}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{

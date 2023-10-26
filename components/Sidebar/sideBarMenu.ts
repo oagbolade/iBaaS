@@ -4,6 +4,7 @@ import {
   AdminIcon,
   OperationsIcons,
   ServiceIcon,
+  LoanIcon,
 } from '@/assets/svg';
 
 export const sideBarMenu = [
@@ -59,6 +60,20 @@ export const sideBarMenu = [
         name: 'Customer Account Record',
         link: '/customer-service/account-record',
       },
+    ],
+  },
+  {
+    name: 'Credit Facility',
+    groupPath: '/loan',
+    icon: LoanIcon,
+    subMenuItems: [
+      {
+        name: 'Loan Directory',
+        link: '/loan/loan-directory',
+      },
+      { name: 'My Requests (8)', link: '/loan/requests' },
+      { name: 'Pending Applications', link: '/loan/pending-applications' },
+      { name: 'Overdrafts', link: '/loan/overdrafts' },
     ],
   },
   {

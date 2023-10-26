@@ -1,5 +1,5 @@
 
-import { LoanContainer } from "@/features/Operation/load";
+import { LoanContainer } from '@/features/Operation/load';
 
 
 export default function Operations() {

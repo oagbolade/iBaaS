@@ -1,1 +1,1 @@
-export { TextError } from './TextError'
+export { TextError } from './TextError';

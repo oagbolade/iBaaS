@@ -3,26 +3,29 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
-import InterSwitchImage from '@/assets/interswitch/image';
-import { LoginHeader } from './LoginHeader';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { LoginHeader } from './LoginHeader';
 import { forgotPassword, loginButton } from './styles';
+import InterSwitchImage from '@/assets/interswitch/image';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { FormTextInput, CheckboxInput } from '@/components/TextFields';
+import { FormTextInput, CheckboxInput } from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
-
 import { handleRedirect } from '@/utils';
 
-export const LoginForm = () => {
+export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => {
+    return setShowPassword((show) => {
+      return !show;
+    });
+  };
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -37,15 +40,17 @@ export const LoginForm = () => {
   return (
     <Box
       sx={{
-        padding: { tablet: '30px 200px 0 200px', mobile: '50px 50px 0 50px' },
-        width: { tablet: '55vw', mobile: '100vw' },
+        padding: { desktop: '30px 200px 0 200px', mobile: '50px 50px 0 50px' },
+        width: { desktop: '55vw', mobile: '100vw' },
       }}
     >
       <InterSwitchImage />
       <LoginHeader />
       <Formik
         initialValues={userInitialValues}
-        onSubmit={(values, actions) => onSubmit(values, actions)}
+        onSubmit={(values, actions) => {
+          return onSubmit(values, actions);
+        }}
         validationSchema={userSchema}
       >
         <Form>
@@ -92,14 +97,16 @@ export const LoginForm = () => {
                   }
                 />{' '}
               </Grid>
-              <Grid item desktop={6}>
+              <Grid item mobile={12} tablet={12} desktop={6}>
                 <CheckboxInput label="Remember me" />
               </Grid>
               <PageTitle title="Forgot Password?" styles={forgotPassword} />
               <Grid container mt={7} ml={2} mobile={12}>
                 <Grid item mobile={12}>
                   <PrimaryIconButton
-                    onClick={() => handleRedirect(router, '/setup/business')}
+                    onClick={() => {
+                      return handleRedirect(router, '/setup/business');
+                    }}
                     type="submit"
                     buttonTitle="Login"
                     customStyle={loginButton}
@@ -112,4 +119,4 @@ export const LoginForm = () => {
       </Formik>
     </Box>
   );
-};
+}

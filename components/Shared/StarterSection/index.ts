@@ -1,1 +1,1 @@
-export {StarterSection} from "./StarterSection";
+export {StarterSection} from './StarterSection';
