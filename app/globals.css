@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Averta Regular";
-  src: url("./../assets/fonts/AvertaDemo-Regular.otf");
+  font-family: 'Averta Regular';
+  src: url('./../assets/fonts/AvertaDemo-Regular.otf');
   font-style: normal;
 }
 

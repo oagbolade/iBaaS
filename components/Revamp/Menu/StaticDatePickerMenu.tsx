@@ -3,10 +3,8 @@ import dayjs from 'dayjs';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { NestedMenuItem } from 'mui-nested-menu';
 import { Button, Menu } from '@mui/material';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { SearchLoanFilters } from './SearchLoanFilters';
 import { TextInput } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 
@@ -14,7 +12,7 @@ type Props = {
   open: boolean;
   anchorEl: any;
   handleClose: () => void;
-  handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  handleClick: Function;
 };
 
 export const StaticDatePickerMenu = ({
@@ -23,14 +21,19 @@ export const StaticDatePickerMenu = ({
   handleClick,
   anchorEl,
 }: Props) => {
-  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { setWidth } = useCurrentBreakpoint();
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Button sx={{ padding: '0' }} onClick={(e) => {return handleClick(e);}}>
+      <Button
+        sx={{ padding: '0', width: { mobile: '560px', tablet: '560px' } }}
+        onClick={(e) => {
+          return handleClick(e);
+        }}
+      >
         <TextInput
           customStyle={{
-            width: setWidth('560px'),
+            width: setWidth(),
           }}
           icon={<CalendarTodayOutlinedIcon />}
           iconPosition="end"
@@ -47,6 +50,7 @@ export const StaticDatePickerMenu = ({
             '& .MuiPickersToolbar-root': {
               display: 'none',
             },
+            width: { mobile: '560px', tablet: '560px' },
           }}
           defaultValue={dayjs('2022-04-17')}
         />

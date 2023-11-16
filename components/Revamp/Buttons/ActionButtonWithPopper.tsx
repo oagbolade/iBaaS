@@ -1,6 +1,5 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import { Button, ButtonGroup } from '@mui/material';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
@@ -8,17 +7,39 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import { actionButtonTypography } from './styles';
+import { DateRangePicker } from '@/components/Revamp/FormFields/DateRangePicker';
+import {
+  BasicSearchGroup,
+  CheckBoxSearchGroup,
+  ExportData,
+} from '@/components/Revamp/Menu/SearchGroupVariants';
 import { CustomStyleI } from '@/constants/types';
 import colors from '@/assets/colors';
 
 type Props = {
   buttonTitle?: string;
+  controlOpening?: boolean | null;
   type?: 'button' | 'submit' | 'reset' | undefined;
   icon?: any;
   iconPosition?: 'end' | 'start';
   onClick?: () => void | undefined | number;
   customStyle?: CustomStyleI;
-  options: Array<string>;
+  options?: Array<string>;
+  searchGroupVariant?:
+    | 'Default'
+    | 'BasicSearchGroup'
+    | 'CheckBoxSearchGroup'
+    | 'ExportReport'
+    | 'DateRangePicker'
+    | undefined;
+};
+
+type SearchGroupMapperType = {
+  BasicSearchGroup: React.ReactNode;
+  CheckBoxSearchGroup: React.ReactNode;
+  ExportReport: React.ReactNode;
+  DateRangePicker: React.ReactNode;
+  Default: React.ReactNode;
 };
 
 export const ActionButtonWithPopper = ({
@@ -26,7 +47,7 @@ export const ActionButtonWithPopper = ({
   icon,
   iconPosition,
   customStyle,
-  onClick,
+  searchGroupVariant = 'Default',
   type,
   options,
 }: Props) => {
@@ -35,26 +56,63 @@ export const ActionButtonWithPopper = ({
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
   const handleMenuItemClick = (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number
+    event:
+      | React.MouseEvent<HTMLLIElement, MouseEvent>
+      | React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number,
   ) => {
     setSelectedIndex(index);
     setOpen(false);
   };
 
   const handleToggle = () => {
-    setOpen((prevOpen) => {return !prevOpen;});
+    setOpen((prevOpen) => {
+      return !prevOpen;
+    });
   };
 
-  const handleClose = (event: Event) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
-    }
-
+  const handleClose = () => {
     setOpen(false);
+  };
+
+  const RenderMenuVariant = ({
+    variant,
+  }: {
+    variant: keyof SearchGroupMapperType;
+  }): React.ReactNode => {
+    const SearchGroupMapper: SearchGroupMapperType = {
+      BasicSearchGroup: (
+        <BasicSearchGroup
+          handleClose={handleClose}
+          options={options}
+          handleMenuItemClick={handleMenuItemClick}
+        />
+      ),
+      CheckBoxSearchGroup: (
+        <CheckBoxSearchGroup handleClose={handleClose} options={options} />
+      ),
+      ExportReport: <ExportData handleClose={handleClose} />,
+      DateRangePicker: <DateRangePicker handleClose={handleClose} />,
+      Default: (
+        <MenuList id="split-button-menu" autoFocusItem>
+          {options?.map((option, index) => {
+            return (
+              <MenuItem
+                key={option}
+                selected={index === selectedIndex}
+                onClick={(event) => {
+                  return handleMenuItemClick(event, index);
+                }}
+              >
+                {option}
+              </MenuItem>
+            );
+          })}
+        </MenuList>
+      ),
+    };
+
+    return SearchGroupMapper[variant];
   };
 
   return (
@@ -63,6 +121,7 @@ export const ActionButtonWithPopper = ({
         variant="contained"
         ref={anchorRef}
         aria-label="split button"
+        sx={{ boxShadow: 'none' }}
       >
         <Button
           id="action-button"
@@ -88,7 +147,7 @@ export const ActionButtonWithPopper = ({
       </ButtonGroup>
       <Popper
         sx={{
-          marginRight: '20px',
+          marginTop: '10px !important',
           zIndex: 1,
           boxShadow:
             '0px 5px 15px 0px rgba(0, 0, 0, 0.08), 0px 15px 35px -5px rgba(17, 24, 38, 0.15), 0px 0px 0px 1px rgba(152, 161, 178, 0.10)',
@@ -100,31 +159,23 @@ export const ActionButtonWithPopper = ({
         transition
         disablePortal
       >
-        {({ TransitionProps, placement }) => {return (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu" autoFocusItem>
-                  {options.map((option, index) => {return (
-                    <MenuItem
-                      key={option}
-                      selected={index === selectedIndex}
-                      onClick={(event) => {return handleMenuItemClick(event, index);}} // todo: use onClick={() => onClick?.()}
-                    >
-                      {option}
-                    </MenuItem>
-                  );})}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        );}}
+        {({ TransitionProps, placement }) => {
+          return (
+            <Grow
+              {...TransitionProps}
+              style={{
+                transformOrigin:
+                  placement === 'bottom' ? 'center top' : 'center bottom',
+              }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <RenderMenuVariant variant={searchGroupVariant} />
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          );
+        }}
       </Popper>
     </>
   );

@@ -15,40 +15,31 @@ import { CancelLoanForm } from '@/features/Loan/Forms';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
 import { useLoansModalToggle } from '@/utils/useLoansModalToggle';
 
-
 const PreviewContent: React.FC = () => {
   return (
-    <Box>
+    <Box mt={{ mobile: 3 }} sx={{padding: {mobile: 6, tablet: 0}, alignItems: {mobile: "center", tablet: "normal"}}}>
       <MainTitle title="Loan Account Details" />
-
       <SubTitle title="Settlement Account" />
       <Details title="39483593939" />
-
       <SubTitle title="Settlement Account Name" />
       <Details title="Omodayo Oluwafunke" />
-
       <SubTitle title="Loan Amount" />
       <Details title="N1,800,320.54" />
-
       <SubTitle title="Loan Purpose" />
       <Details title="To buy equipments" />
-
       <SubTitle title="Repayment Mode" />
       <Details title="Equal principal & intrest" />
-
       <SubTitle title="First Repayment Date" />
       <Details title="02 January, 2023  11:03pm" />
-
       <SubTitle title="Total No. of Installment" />
       <Details title="4" />
-
-      <SubTitle title="Loan Status" />
-      <Status label="Active" status="success" />
+      <Box mb={{mobile: 5, tablet: 0}}>
+        <SubTitle title="Loan Status" />
+        <Status label="Active" status="success" />
+      </Box>
     </Box>
   );
 };
-
-
 
 const FormFields: React.FC = () => {
   return <CancelLoanForm />;
@@ -56,7 +47,7 @@ const FormFields: React.FC = () => {
 
 const CancelAction = () => {
   return (
-    <Box sx={{display: 'flex'}} ml={{mobile: 96, tablet: 0, desktop: 0}}>
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
       <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
       <PrimaryIconButton
         buttonTitle="Cancel Loan"
@@ -65,29 +56,26 @@ const CancelAction = () => {
     </Box>
   );
 };
-const actionButtons: any = [
-  <CancelAction/>
-];
+const actionButtons: any = [<CancelAction />];
 
-const MobilePreviewContent: React.FC =()=>{
-  return(
-    <MobileModalContainer
-     ShowPreview={<PreviewContent/>}
-    />
-  )
-}
+const MobilePreviewContent: React.FC = () => {
+  return <MobileModalContainer ShowPreview={<PreviewContent />} />;
+};
 
 export const CancelLoan = () => {
   const { openToastMessage, openPasswordModal, handleClose, toggleModal } =
     useLoansModalToggle();
 
   const actionButtons: any = [
-    <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
-    <PrimaryIconButton
-      onClick={() => toggleModal('password')}
-      buttonTitle="Cancel Loan"
-      customStyle={{ ...submitButton }}
-    />,
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 60, tablet: 0, desktop: 0 }}>
+      <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
+      <PrimaryIconButton
+        onClick={() => toggleModal('password')}
+        buttonTitle="Cancel Loan"
+        customStyle={{ ...submitButton }}
+      />
+      ,
+    </Box>,
   ];
 
   return (

@@ -16,10 +16,10 @@ const useRouter = jest.spyOn(require('next/navigation'), 'useRouter');
 
 describe('Group Loan Posting Form', () => {
    it('renders the form title', () => {
-        render(<Loan />);
-        const mainTitle = screen.getByText(/Group Loan Posting/);
-        const accoutTitle = screen.getByText(/Account Info/);
-        const personTitle = screen.getByText(/Payment Info/);
+       const {getByText} =  render(<Loan />);
+        const mainTitle = getByText(/Group Loan Posting/);
+        const accoutTitle = getByText(/Account Info/);
+        const personTitle = getByText(/Payment Info/);
         expect(mainTitle).toBeInTheDocument();
         expect(accoutTitle).toBeInTheDocument();
         expect(personTitle).toBeInTheDocument();
@@ -29,9 +29,7 @@ describe('Group Loan Posting Form', () => {
     const router = { push: jest.fn() };
     useRouter.mockReturnValue(router);
 
-    const { getByPlaceholderText, getAllByRole } = render(
-      <Loan />
-    );
+    const { getByPlaceholderText, getAllByRole } = render(<Loan />);
 
 
     const saveButton = getAllByRole('button')[1];
@@ -40,20 +38,19 @@ describe('Group Loan Posting Form', () => {
     fireEvent.click(saveButton);
     fireEvent.click(backButton);
     fireEvent.click(ResetButton);
-    const NarrationText: any = getByPlaceholderText('Short text...');
-    expect(NarrationText.value).toMatch('myNarration');
-
-    const nameInput: any = getByPlaceholderText('Enter name');
-    const rateInput: any = getByPlaceholderText('Enter rate');
-    const transactionAmount: any = getByPlaceholderText('Enter Transaction');
+    const NarrationText:any = getByPlaceholderText('Short text...');
+    const nameInput:any = getByPlaceholderText('Enter name');
+    const rateInput:any = getByPlaceholderText('Enter rate');
+    const transactionAmount:any = getByPlaceholderText('Enter Transaction');
     fireEvent.change(rateInput, {target: {value: 'myRate'}});
     fireEvent.change(nameInput, {target: {value: 'myName'}})
     fireEvent.change(transactionAmount, {target: {value: 'myTransaction'}})
+    fireEvent.select(NarrationText, {target: { value: 'myNarration'}})
 
     expect(nameInput.value).toMatch('myName');
     expect(rateInput.value).toMatch('myRate');
     expect(transactionAmount.value).toMatch('myTransaction');
-    fireEvent.change(NarrationText, {target: { value: 'myNarration'}})
+    expect(NarrationText.value).toMatch('myNarration');
    
   });
 });

@@ -18,7 +18,7 @@ import { useLoansModalToggle } from '@/utils/useLoansModalToggle';
 
 const PreviewContentOne: React.FC = () => {
   return (
-    <Box>
+    <Box  mb={{mobile: 30, tablet: 0}} sx={{padding: {mobile: 6, tablet: 0}, alignItems: {mobile: "center", tablet: "normal"}}}>
       <MainTitle title="Loan Account Details" />
 
       <SubTitle title="Settlement Account" />
@@ -41,9 +41,10 @@ const PreviewContentOne: React.FC = () => {
 
       <SubTitle title="Total No. of Installment" />
       <Details title="4" />
-
-      <SubTitle title="Loan Status" />
-      <Status label="Active" status="success" />
+      <Box mb={{mobile: 15, tablet: 0}}>
+        <SubTitle title="Loan Status" />
+        <Status label="Active" status="success" />
+      </Box>
     </Box>
   );
 };
@@ -51,7 +52,7 @@ const PreviewContentOne: React.FC = () => {
 const PreviewContentTwo: React.FC = () => {
 
   return (
-    <Box>
+    <Box mb={{mobile: 30, tablet: 0}} sx={{padding: {mobile: 6, tablet: 0}, alignItems: {mobile: "center", tablet: "normal"}}}>
       <SubTitle title="Product Name" />
       <Details title="Compassianate Loan" />
 
@@ -72,10 +73,10 @@ const PreviewContentTwo: React.FC = () => {
 
       <SubTitle title="Total No. of Installment" />
       <Details title="4" />
-
-      <SubTitle title="Loan Status" />
-      <Status label="Active" status="success" />
-          
+      <Box mb={{mobile: 5, tablet: 0}}>
+        <SubTitle title="Loan Status" />
+        <Status label="Active" status="success" />
+      </Box>    
     </Box>
   );
 };
@@ -105,7 +106,7 @@ const FormFields: React.FC = () => {
 };
 
 const actionButtons: any = [
-  <Box sx={{ display: 'flex' }} ml={{ mobile: 96, tablet: 0, desktop: 0 }}>
+  <Box sx={{ display: 'flex' }} ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
     <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
     <PrimaryIconButton
       buttonTitle="Restructure Loan"
@@ -119,12 +120,13 @@ export const RestructureLoan = () => {
   const { openToastMessage, toggleModal } = useLoansModalToggle();
 
   const actionButtons: any = [
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
     <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
     <PrimaryIconButton
-      onClick={() => toggleModal('toast')}
       buttonTitle="Restructure Loan"
       customStyle={{ ...submitButton }}
-    />,
+    />
+  </Box>,
   ];
 
   return (

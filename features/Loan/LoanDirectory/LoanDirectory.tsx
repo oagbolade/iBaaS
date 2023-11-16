@@ -41,13 +41,17 @@ export const LoanDirectory = () => {
         marginTop: '80px',
       }}
     >
-      <Box mb={5} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Box
+        mb={5}
+        mr={{ mobile: 20, tablet: 0 }}
+        sx={{ display: 'flex', justifyContent: 'flex-end' }}
+      >
         <Link href="/loan/loan-directory/loan-underwriting">
           <PrimaryIconButton buttonTitle="Create Loan Underwriting" />
         </Link>
       </Box>
       <FilterSection />
-      <Box mt={5}>
+      <Box mt={5} sx={{ width: { mobile: 900, tablet: '100%' } }}>
         <MuiTableContainer
           columns={MOCK_COLUMNS}
           data={MOCK_DATA}

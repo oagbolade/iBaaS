@@ -13,7 +13,7 @@ export const CheckboxInput = ({ required, label }: Props) => {
   return (
     <FormGroup>
       <FormControlLabel
-        sx={checkboxTypography}
+        sx={{ ...checkboxTypography }}
         required={required}
         control={<Checkbox />}
         label={label}

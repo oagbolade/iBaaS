@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -16,8 +16,6 @@ import { PageTitle } from '../Typography';
 import { emptyTableMainTitle, emptyTableSecondaryTitle } from './StyledMenu';
 import { ActionMenu } from './ActionMenu';
 import {
-  PaginationContainer,
-  TableContainerStyle,
   TableFooter,
   TablePaginationStyle,
   TablePaginationTitle,
@@ -199,8 +197,7 @@ export const MuiTableContainer = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={TableContainerStyle}>
-        <Box sx={TableFooter}>
+      <Box sx={TableFooter}>
           <PageTitle title="276 results found" styles={{ ...TableTitle }} />
           <Box sx={TablePaginationStyle}>
             <PageTitle
@@ -209,7 +206,6 @@ export const MuiTableContainer = ({
             />
           </Box>
           <TablePagination />
-        </Box>
       </Box>
     </>
   );

@@ -1,10 +1,12 @@
 const colors = {
+  Heading: '#0C111D',
   lightGrey: '#F9FBFC', // or neutal100
   stepTitleBlue: '#0172CB',
   backButtonGrey: '#595959',
   activeBlue100: '#EBF8FE',
   activeBlue200: '#A8D6EF',
   activeBlue400: '#0275D8',
+  activeBlue600: '#10345E',
   neutral900: '#353F50',
   neutral1000: '#1F2126',
   navBarColor: '#EFF2F5',
@@ -24,17 +26,24 @@ const colors = {
   white: '#FFFFFF',
   navBarTitleColor: '#18425D',
   primaryRed400: '#DC4437',
+  primaryRed500: '#A4251A',
   batchColor: '#D9D9D98A',
   black: '#000000',
+  bodyText: '#475467',
   loanTitleColor: '#E8E8E8',
   activeGreen100: '#F1FEF1',
   activeGreen200: '#BEF2B9',
   activeGreen400: '#519E47',
   activeGreen600: '#163C29',
+  activeYellow400: '#EC9B40',
   gray50: '#F9FAFB',
   gray200: '#E5E7EB',
+  gray300: '#D0D5DD',
   gray500: '#6B7280',
   gray800: '#1F2937',
+  darkGrayishBlue: '#475467',
+  greenLine: '#76DEE4',
+  blueLine: '#4D80E4',
 };
 
 export default colors;

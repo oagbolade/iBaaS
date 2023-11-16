@@ -7,22 +7,26 @@ type Props = {
   buttonTitle?: string;
   type?: 'button' | 'submit' | 'reset' | undefined;
   icon?: any;
-  onClick?: () => void | undefined | number;
+  onClick?: (event?: any) => void | undefined | number;
   customStyle?: any | undefined;
 };
 
 export const PrimaryIconButton = ({
   buttonTitle,
   icon,
-  customStyle,
+  customStyle = {
+    variant: 'contained',
+  },
   onClick,
-  type,
+  type = 'button',
 }: Props) => {
   return (
     <Button
       id="button"
       type={type}
-      onClick={() => {return onClick?.();}}
+      onClick={() => {
+        return onClick?.();
+      }}
       sx={{ buttonTypography, ...customStyle }}
       style={{
         backgroundColor:
@@ -34,11 +38,4 @@ export const PrimaryIconButton = ({
       {buttonTitle}
     </Button>
   );
-};
-
-PrimaryIconButton.defaultProps = {
-  type: 'button',
-  customStyle: {
-    variant: 'contained',
-  },
 };

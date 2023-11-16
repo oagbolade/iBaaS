@@ -32,7 +32,11 @@ const ActionButton = () => (
   />
 );
 
-const actionButtons: any = [<ActionButton />];
+const actionButtons: any = [
+  <Box  ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
+    <ActionButton />
+  </Box>,
+];
 
 export const ViewLoan = () => {
   return (

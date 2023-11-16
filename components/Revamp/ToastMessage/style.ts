@@ -4,7 +4,7 @@ export const Toasts = {
   display: 'flex',
   width: '600px',
   height: '93px',
-  alignItems: 'flex-start',
+  alignItems: {mobile: 'center', tablet: 'flex-start'},
   gap: '8px',
   justifyContent: 'center',
   alignSelf: 'stretch',

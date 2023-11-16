@@ -5,6 +5,8 @@ import {
   OperationsIcons,
   ServiceIcon,
   LoanIcon,
+  ReportIcon,
+  RequestsIcon,
 } from '@/assets/svg';
 
 export const sideBarMenu = [
@@ -40,6 +42,12 @@ export const sideBarMenu = [
       { name: 'Manage Posting Limit', link: '/admin/limit' },
       { name: 'Manage GL Accounts', link: '/admin/accounts' },
     ],
+  },
+  {
+    name: 'Requests',
+    groupPath: '/requests',
+    icon: RequestsIcon,
+    subMenuItems: [],
   },
   {
     name: 'Customer Service',
@@ -93,6 +101,16 @@ export const sideBarMenu = [
       { name: 'Withdraw Towards Uncleared', link: '/operation/unclear' },
       { name: 'Cheques Deposit', link: '/operation/chequesDeposit' },
       { name: 'Return Cheques Reversal', link: '/operation/reversal' },
+    ],
+  },
+  {
+    name: 'Reports',
+    groupPath: '/report',
+    icon: ReportIcon,
+    subMenuItems: [
+      { name: 'Overview', link: '/report/overview' },
+      { name: 'Custom Report', link: '/report/custom-report' },
+      { name: 'Audit Trail', link: '/report/audit-trail' },
     ],
   },
 ];

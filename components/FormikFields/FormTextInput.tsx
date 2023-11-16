@@ -24,7 +24,7 @@ export const FormTextInput = ({
   name,
   icon,
   label,
-  required,
+  required=false,
   customStyle,
   type,
   endAdornment,
@@ -32,41 +32,41 @@ export const FormTextInput = ({
   return (
     <Box sx={{ marginBottom: '15px' }}>
       <Field name={name}>
-        {({ field, form }: FieldProps) => {return (
-          <>
-            <Stack
-              sx={{
-                marginBottom: '3px',
-              }}
-              direction="row"
-            >
-              <Typography sx={labelTypography}>{label} </Typography>
-              {required && <Typography sx={asterix}>*</Typography>}
-            </Stack>
-            <TextField
-              type={type}
-              name={name}
-              id={name}
-              placeholder={placeholder}
-              sx={textStyle}
-              style={{ ...customStyle }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">{icon}</InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">{endAdornment}</InputAdornment>
-                ),
-              }}
-            />
-            <ErrorMessage component={TextError} name={name} />
-          </>
-        );}}
+        {({ field, form }: FieldProps) => {
+          return (
+            <>
+              <Stack
+                sx={{
+                  marginBottom: '3px',
+                }}
+                direction="row"
+              >
+                <Typography sx={labelTypography}>{label} </Typography>
+                {required && <Typography sx={asterix}>*</Typography>}
+              </Stack>
+              <TextField
+                type={type}
+                name={name}
+                id={name}
+                placeholder={placeholder}
+                sx={textStyle}
+                style={{ ...customStyle }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">{icon}</InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {endAdornment}
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <ErrorMessage component={TextError} name={name} />
+            </>
+          );
+        }}
       </Field>
     </Box>
   );
-};
-
-FormTextInput.defaultProps = {
-  required: false,
 };

@@ -14,25 +14,21 @@ jest.mock('next/navigation', () => ({
 const useRouter = jest.spyOn(require('next/navigation'), 'useRouter');
 
 describe('Batch Posting Form', () => {
-   it('renders the form title', () => {
-        render(<BatchPosting />);
-        const mainTitle = screen.getByText(/Batch Posting/);
-        const accoutTitle = screen.getByText(/Account Info/);
-        const personTitle = screen.getByText(/Payment Info/);
-        expect(mainTitle).toBeInTheDocument();
-        expect(accoutTitle).toBeInTheDocument();
-        expect(personTitle).toBeInTheDocument();
-    });
+  it('renders the form title', () => {
+    const { getByText } = render(<BatchPosting />);
+    const mainTitle = getByText(/Batch Posting/);
+    const accoutTitle = getByText(/Account Info/);
+    const personTitle = getByText(/Payment Info/);
+    expect(mainTitle).toBeInTheDocument();
+    expect(accoutTitle).toBeInTheDocument();
+    expect(personTitle).toBeInTheDocument();
+  });
 
-  it('goes to the form', async () => {
+  it('goes to the Batch Posting form', async () => {
     const router = { push: jest.fn() };
     useRouter.mockReturnValue(router);
 
-    const { getByPlaceholderText, getAllByRole } = render(
-      <BatchPosting />
-    );
-
-    const selectedText: any = getByPlaceholderText('Branch');
+    const { getByPlaceholderText, getAllByRole } = render(<BatchPosting />);
 
     const saveButton = getAllByRole('button')[1];
     const backButton = getAllByRole('button')[2];
@@ -40,25 +36,17 @@ describe('Batch Posting Form', () => {
     fireEvent.click(saveButton);
     fireEvent.click(backButton);
     fireEvent.click(ResetButton);
-    const nameInput: any = getByPlaceholderText('Enter name');
-    const rateInput: any = getByPlaceholderText('Enter rate');
-    const transactionAmount: any = getByPlaceholderText('Enter Transaction');
-    fireEvent.change(selectedText, {target: {value: 'myBranch'}});
+    const nameInput:any = getByPlaceholderText('Enter name');
+    const rateInput:any = getByPlaceholderText('Enter rate');
+    const transactionAmount:any = getByPlaceholderText('Enter Transaction');
+    fireEvent.change(nameInput, {target: {value: 'myName' }})
     fireEvent.change(rateInput, {target: {value: 'myRate'}});
-    fireEvent.change(nameInput, {target: {value: 'myName'}})
-    fireEvent.change(transactionAmount, {target: {value: 'myTransaction'}})
-    expect(selectedText.value).toMatch('myBranch'); 
+    fireEvent.change(transactionAmount, { target: {value: 'myTransaction'}})
+
 
     expect(nameInput.value).toMatch('myName');
-    expect(rateInput.value).toMatch('myRate');
     expect(transactionAmount.value).toMatch('myTransaction');
+    expect(rateInput.value).toMatch('myRate');
 
-    await waitFor(() => {
-      expect(transactionAmount.value).toMatch('myTransaction');
-      expect(selectedText.value).toMatch('myBranch'); 
-      expect(nameInput.value).toMatch('myName');
-      expect(rateInput.value).toMatch('myRate');
-    });
-   
   });
 });

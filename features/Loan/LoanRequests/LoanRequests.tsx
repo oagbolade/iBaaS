@@ -55,13 +55,13 @@ const TabContent: React.FC = () => {
           secondaryTitle:
             'See a directory of all rejected requests on this platform.',
         }}
-        ActionItemHeader={RejectedRequestsActions}
+        TableActionItems={RejectedRequestsActions}
       />
     </Box>
   );
 
   const PendingRequests = () => (
-    <Box mt={1}>
+    <Box mt={1} sx={{ width: { mobile: 900, tablet: '100%' } }}>
       <MuiTableContainer
         showHeader={{
           mainTitle: 'Pending Requests',
@@ -78,24 +78,22 @@ const TabContent: React.FC = () => {
   const tabTitle = ['Pending Requests (54)', 'Rejected Requests'];
   const pageMenu = [<PendingRequests />, <RejectedRequests />];
   return (
-    <Box>
-      <Link href="/loan/loan-directory/loan-underwriting">
-        <Box
-          sx={{
-            display: 'flex',
-            marginLeft: '500px',
-            justifyContent: 'flex-end',
-          }}
-          mb={5}
-        >
-          <Link href="/loan/loan-directory/loan-underwriting">
-            <PrimaryIconButton buttonTitle="Create Loan Underwriting" />
-          </Link>{' '}
-        </Box>
-      </Link>
-
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '40px',
+        }}
+        mb={5}
+        mr={{ mobile: 8, tablet: 0 }}
+      >
+        <Link href="/loan/loan-directory/loan-underwriting">
+          <PrimaryIconButton buttonTitle="Create Loan Underwriting" />
+        </Link>{' '}
+      </Box>
       <Tabs tabTitle={tabTitle} pageMenu={pageMenu} />
-    </Box>
+    </>
   );
 };
 
@@ -105,7 +103,7 @@ export const LoanRequests = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '80px',
+        marginTop: '40px',
       }}
     >
       <Box>

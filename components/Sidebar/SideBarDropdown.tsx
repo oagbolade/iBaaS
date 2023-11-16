@@ -51,7 +51,7 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
     });
   }, [pathname]);
 
-  const handleChange = (panel: string, activeModule: string) => {
+  const handleChange = (panel: string) => {
     return (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : '');
     };
@@ -76,6 +76,7 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
 
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
+      const hasSubItems = menuItem.subMenuItems.length > 0;
       return (
         <Box
           key={menuItem.name}
@@ -85,15 +86,17 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
         >
           <Accordion
             expanded={expanded.includes(menuItem.groupPath)}
-            onChange={handleChange(menuItem.groupPath, menuItem.name)}
+            onChange={handleChange(menuItem.groupPath)}
             className={styles.MuiPaperElevation}
             sx={{
               backgroundColor: `${colors.white}`,
             }}
           >
-            <AccordionSummary expandIcon={<ChevronDown />}>
+            <AccordionSummary expandIcon={hasSubItems && <ChevronDown />}>
               <SideBarPrimaryButton
+                hasSubItems={hasSubItems}
                 buttonTitle={menuItem.name}
+                link={menuItem.groupPath}
                 icon={<menuItem.icon />}
               />
             </AccordionSummary>

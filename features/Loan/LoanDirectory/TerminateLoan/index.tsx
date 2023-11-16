@@ -17,7 +17,7 @@ import { useLoansModalToggle } from '@/utils/useLoansModalToggle';
 
 const PreviewContent: React.FC = () => {
   return (
-    <Box>
+    <Box mt={{ mobile: 3 }} sx={{padding: {mobile: 6, tablet: 0}, alignItems: {mobile: "center", tablet: "normal"}}}>
       <MainTitle title="Loan Account Details" />
 
       <SubTitle title="Settlement Account" />
@@ -40,19 +40,16 @@ const PreviewContent: React.FC = () => {
 
       <SubTitle title="Total No. of Installment" />
       <Details title="4" />
-
-      <SubTitle title="Loan Status" />
-      <Status label="Active" status="success" />
+      <Box mb={{mobile: 5, tablet: 0}}>
+        <SubTitle title="Loan Status" />
+        <Status label="Active" status="success" />
+      </Box>
     </Box>
   );
 };
-const MobilePreviewContent: React.FC =()=>{
-  return(
-    <MobileModalContainer
-     ShowPreview={<PreviewContent/>}
-    />
-  )
-}
+const MobilePreviewContent: React.FC = () => {
+  return <MobileModalContainer ShowPreview={<PreviewContent />} />;
+};
 
 const FormFields: React.FC = () => {
   return <TerminateLoanForm />;
@@ -73,16 +70,19 @@ export const TerminateLoan = () => {
   const { openToastMessage, toggleModal } = useLoansModalToggle();
 
   const actionButtons: any = [
-    <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
-    <PrimaryIconButton
-      onClick={() => toggleModal('toast')}
-      buttonTitle="Liquidate Loan"
-      customStyle={{ ...submitButton }}
-    />,
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 75, tablet: 0, desktop: 0 }}>
+      <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
+      <PrimaryIconButton
+        onClick={() => toggleModal('toast')}
+        buttonTitle="Liquidate Loan"
+        customStyle={{ ...submitButton }}
+      />
+      ,
+    </Box>,
   ];
   return (
     <LoanFormContainer
-    ShowMobilePeview={MobilePreviewContent}
+      ShowMobilePeview={MobilePreviewContent}
       toastMessage={{
         body: 'You have successfully Liquidated the Loan for [Account-name]  and it has been sent for approval.',
         title: 'Loan Liquidated',

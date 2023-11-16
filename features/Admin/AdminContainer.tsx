@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
 import Box from '@mui/material/Box';
+import AdminContextProvider from './AdminContext';
 import { MainSection, SearchSection } from '@/components/Shared';
 import { MuiTableContainer } from '@/components/Table';
 import { ModalContainer } from '@/components/Modal/index';
-import AdminContextProvider from './AdminContext';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import { RoleTitle } from '@/components/Typography';

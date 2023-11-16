@@ -234,7 +234,7 @@ export const TerminateLoanForm = () => {
                   mobile={8}
                   mr={{ mobile: 120, tablet: 0 }}
                 >
-                  <Box mr={{ mobile: 50, tablet: 0 }}>
+                  <Box mr={{ mobile: 47, tablet: 0 }}>
                     <Details title="Balance After" />
                     <Balance amount="N132,432,543.43" />
                   </Box>

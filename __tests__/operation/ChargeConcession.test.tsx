@@ -15,10 +15,10 @@ const useRouter = jest.spyOn(require('next/navigation'), 'useRouter');
 
 describe('Charge Concession Form', () => {
    it('renders the form title', () => {
-        render(<ChargeConcession />);
-        const mainTitle = screen.getByText(/Charge Concession/);
-        const accoutTitle = screen.getByText(/Account Info/);
-        const personTitle = screen.getByText(/Payment Info/);
+        const {getByText} =  render(<ChargeConcession />);
+        const mainTitle = getByText(/Charge Concession/);
+        const accoutTitle = getByText(/Account Info/);
+        const personTitle = getByText(/Payment Info/);
         expect(mainTitle).toBeInTheDocument();
         expect(accoutTitle).toBeInTheDocument();
         expect(personTitle).toBeInTheDocument();
@@ -28,13 +28,11 @@ describe('Charge Concession Form', () => {
     const router = { push: jest.fn() };
     useRouter.mockReturnValue(router);
 
-    const { getByPlaceholderText, getAllByRole, getByLabelText, getAllByText, getByRole } = render(
-      <ChargeConcession />
-    );
+    const { getByPlaceholderText, getAllByRole } = render(<ChargeConcession />);
 
     const selectedText: any = getByPlaceholderText('Charge');
-    fireEvent.change(selectedText, {target: { value: 'myBranch' }});
-    expect(selectedText.value).toMatch('myBranch'); 
+    fireEvent.select(selectedText, {target: { value: 'myCharge' }});
+    expect(selectedText.value).toMatch('myCharge'); 
     const saveButton = getAllByRole('button')[1];
     const backButton = getAllByRole('button')[2];
     const ResetButton = getAllByRole('button')[3];
@@ -47,7 +45,6 @@ describe('Charge Concession Form', () => {
     fireEvent.change(rateInput, {target: {value: 'myRate'}});
     fireEvent.change(nameInput, {target: {value: 'myName'}})
     fireEvent.change(transactionAmount, {target: {value: 'myTransaction'}})
-
     expect(nameInput.value).toMatch('myName');
     expect(rateInput.value).toMatch('myRate');
     expect(transactionAmount.value).toMatch('myTransaction');

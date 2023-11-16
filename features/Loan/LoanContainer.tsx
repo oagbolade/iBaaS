@@ -52,7 +52,7 @@ export const LoanContainer = ({
     <Box
       sx={{
         padding: '25px',
-        width: '100%',
+        width: {mobile: 900, tablet: '100%'}
       }}
     >
       <MuiTableContainer

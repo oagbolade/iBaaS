@@ -14,23 +14,21 @@ jest.mock('next/navigation', () => ({
 const useRouter = jest.spyOn(require('next/navigation'), 'useRouter');
 
 describe('Cash Withdrawal Form', () => {
-   it('renders the form title', () => {
-        render(<CashWithDrawal />);
-        const mainTitle = screen.getByText(/Cash Withdrawal/);
-        const accoutTitle = screen.getByText(/Account Info/);
-        const personTitle = screen.getByText(/Payment Info/);
-        expect(mainTitle).toBeInTheDocument();
-        expect(accoutTitle).toBeInTheDocument();
-        expect(personTitle).toBeInTheDocument();
-    });
+  it('renders the cash withdrawal form title', () => {
+    const { getByText } = render(<CashWithDrawal />);
+    const mainTitle = getByText(/Cash Withdrawal/);
+    const accoutTitle = getByText(/Account Info/);
+    const personTitle = getByText(/Payment Info/);
+    expect(mainTitle).toBeInTheDocument();
+    expect(accoutTitle).toBeInTheDocument();
+    expect(personTitle).toBeInTheDocument();
+  });
 
-  it('goes to the form', async () => {
+  it('goes to the cash withdrawal form', async () => {
     const router = { push: jest.fn() };
     useRouter.mockReturnValue(router);
 
-    const { getByPlaceholderText, getAllByRole, getByLabelText, getAllByText, getByRole } = render(
-      <CashWithDrawal />
-    );
+    const { getByPlaceholderText, getAllByRole } = render(<CashWithDrawal />);
 
     const departmentText: any = getByPlaceholderText('Department');
 
@@ -40,18 +38,18 @@ describe('Cash Withdrawal Form', () => {
     fireEvent.click(saveButton);
     fireEvent.click(backButton);
     fireEvent.click(ResetButton);
-    const nameInput: any = getByPlaceholderText('Enter name');
-    const rateInput: any = getByPlaceholderText('Enter rate');
-    const transactionAmount: any = getByPlaceholderText('Enter Transaction');
-    fireEvent.change(departmentText, {target: {value: 'myDepartment'}});
-    fireEvent.change(rateInput, {target: {value: 'myRate'}});
-    fireEvent.change(nameInput, {target: {value: 'myName'}})
-    fireEvent.change(transactionAmount, {target: {value: 'myTransaction'}})
-    expect(departmentText.value).toMatch('myDepartment');
+    const nameInput:any = getByPlaceholderText('Enter name');
+    const rateInput:any = getByPlaceholderText('Enter rate');
+    const transactionAmount:any = getByPlaceholderText('Enter Transaction');
+    fireEvent.select(departmentText, {target: {value: 'myDepartment'}});
+    fireEvent.change(rateInput, {target: {value: 'myRate' }});
+    fireEvent.change(nameInput, {target: {value: 'myName' }});
+    fireEvent.change(transactionAmount, {target: {value: 'myTransaction'}});
 
+    
+    expect(departmentText.value).toMatch('myDepartment');
     expect(nameInput.value).toMatch('myName');
     expect(rateInput.value).toMatch('myRate');
     expect(transactionAmount.value).toMatch('myTransaction');
-   
   });
 });
