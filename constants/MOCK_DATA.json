@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Herschel Gillyatt",
+    "status": false,
+    "email": "hgillyatt0@zdnet.com",
+    "role": "Construction Foreman",
+    "department": "Research and Development"
+  },
+  {
+    "name": "Rana Jacobowicz",
+    "status": false,
+    "email": "rjacobowicz1@aol.com",
+    "role": "Architect",
+    "department": "Product Management"
+  },
+  {
+    "name": "Heddie Warricker",
+    "status": false,
+    "email": "hwarricker2@yahoo.co.jp",
+    "role": "Estimator",
+    "department": "Accounting"
+  },
+  {
+    "name": "Devin Cotton",
+    "status": true,
+    "email": "dcotton3@php.net",
+    "role": "Engineer",
+    "department": "Product Management"
+  },
+  {
+    "name": "Tamarra Watting",
+    "status": false,
+    "email": "twatting4@tinypic.com",
+    "role": "Construction Foreman",
+    "department": "Research and Development"
+  },
+  {
+    "name": "Lynnell Kalewe",
+    "status": true,
+    "email": "lkalewe5@tinyurl.com",
+    "role": "Engineer",
+    "department": "Engineering"
+  },
+  {
+    "name": "Dunc Spat",
+    "status": false,
+    "email": "dspat6@berkeley.edu",
+    "role": "Electrician",
+    "department": "Product Management"
+  },
+  {
+    "name": "Diego McNally",
+    "status": true,
+    "email": "dmcnally7@wiley.com",
+    "role": "Subcontractor",
+    "department": "Legal"
+  },
+  {
+    "name": "Hillary Greenroyd",
+    "status": false,
+    "email": "hgreenroyd8@posterous.com",
+    "role": "Supervisor",
+    "department": "Human Resources"
+  },
+  {
+    "name": "Emmet Geaney",
+    "status": true,
+    "email": "egeaney9@hp.com",
+    "role": "Architect",
+    "department": "Marketing"
+  }
+]
