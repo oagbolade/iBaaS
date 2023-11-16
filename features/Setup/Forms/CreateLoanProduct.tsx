@@ -29,7 +29,7 @@ type Props = {
 export const ActionButtons = ({ setStep, isFormOne = false }: Props) => {
   return (
     <Grid container mt={9} ml={2}>
-      <Grid item md={3}>
+      <Grid item mobile={3}>
         {!isFormOne && (
           <PrimaryIconButton
             onClick={() => setStep(false)}
@@ -44,13 +44,13 @@ export const ActionButtons = ({ setStep, isFormOne = false }: Props) => {
         justifyContent="center"
         alignItems="center"
         item
-        md={6}
+        mobile={6}
       >
         <Button variant="text">
           <PageTitle title="Reset" styles={ResetButton} />
         </Button>
       </Grid>
-      <Grid item md={3}>
+      <Grid item mobile={3}>
         <PrimaryIconButton
           // type="submit" to do handle submit together with setStep
           onClick={() => setStep(true)}
@@ -65,7 +65,7 @@ export const ActionButtons = ({ setStep, isFormOne = false }: Props) => {
 export const FormOne = ({ setStep }: Props) => {
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     setStep(true);
     console.log({ values, actions });
@@ -82,7 +82,7 @@ export const FormOne = ({ setStep }: Props) => {
       <Form>
         <Box ml={5}>
           <Grid container spacing={2}>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 endAdornment={
                   <IconButton
@@ -97,7 +97,7 @@ export const FormOne = ({ setStep }: Props) => {
                 label="Interest Calculation Basis"
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffName"
                 placeholder="002789765"
@@ -105,7 +105,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="address"
                 placeholder="002789765"
@@ -113,7 +113,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="mobileNumber"
                 placeholder="002789765"
@@ -121,7 +121,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="branch"
                 options={EditUser.branch}
@@ -129,7 +129,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="department"
                 options={EditUser.branch}
@@ -137,7 +137,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="role"
                 options={EditUser.branch}
@@ -145,7 +145,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="directReport"
                 options={EditUser.branch}
@@ -153,7 +153,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="staffStatus"
                 options={EditUser.branch}
@@ -161,7 +161,7 @@ export const FormOne = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="sbuUnit"
                 options={EditUser.branch}
@@ -171,10 +171,10 @@ export const FormOne = ({ setStep }: Props) => {
             </Grid>
 
             {/* Checkboxes */}
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Does this staff supervise others?" />
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Can this staff print statements?" />
             </Grid>
             {/* Checkboxes */}
@@ -189,7 +189,7 @@ export const FormOne = ({ setStep }: Props) => {
 export const FormTwo = ({ setStep }: Props) => {
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -205,7 +205,7 @@ export const FormTwo = ({ setStep }: Props) => {
       <Form>
         <Box ml={5}>
           <Grid container spacing={2}>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffId"
                 placeholder="002789765"
@@ -213,7 +213,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffName"
                 placeholder="002789765"
@@ -221,7 +221,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="address"
                 placeholder="002789765"
@@ -229,7 +229,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="mobileNumber"
                 placeholder="002789765"
@@ -237,7 +237,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="branch"
                 options={EditUser.branch}
@@ -245,7 +245,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="department"
                 options={EditUser.branch}
@@ -253,7 +253,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="role"
                 options={EditUser.branch}
@@ -261,7 +261,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="directReport"
                 options={EditUser.branch}
@@ -269,7 +269,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="staffStatus"
                 options={EditUser.branch}
@@ -277,7 +277,7 @@ export const FormTwo = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="sbuUnit"
                 options={EditUser.branch}
@@ -287,10 +287,10 @@ export const FormTwo = ({ setStep }: Props) => {
             </Grid>
 
             {/* Checkboxes */}
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Does this staff supervise others?" />
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Can this staff print statements?" />
             </Grid>
             {/* Checkboxes */}
@@ -306,7 +306,7 @@ export const FormTwo = ({ setStep }: Props) => {
 export const FormThree = ({ setStep }: Props) => {
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -322,7 +322,7 @@ export const FormThree = ({ setStep }: Props) => {
       <Form>
         <Box ml={5}>
           <Grid container spacing={2}>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffId"
                 placeholder="002789765"
@@ -330,7 +330,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffName"
                 placeholder="002789765"
@@ -338,7 +338,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="address"
                 placeholder="002789765"
@@ -346,7 +346,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="mobileNumber"
                 placeholder="002789765"
@@ -354,7 +354,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="branch"
                 options={EditUser.branch}
@@ -362,7 +362,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="department"
                 options={EditUser.branch}
@@ -370,7 +370,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="role"
                 options={EditUser.branch}
@@ -378,7 +378,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="directReport"
                 options={EditUser.branch}
@@ -386,7 +386,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="staffStatus"
                 options={EditUser.branch}
@@ -394,7 +394,7 @@ export const FormThree = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="sbuUnit"
                 options={EditUser.branch}
@@ -404,10 +404,10 @@ export const FormThree = ({ setStep }: Props) => {
             </Grid>
 
             {/* Checkboxes */}
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Does this staff supervise others?" />
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Can this staff print statements?" />
             </Grid>
             {/* Checkboxes */}
@@ -423,7 +423,7 @@ export const FormThree = ({ setStep }: Props) => {
 export const FormFour = ({ setStep }: Props) => {
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -439,7 +439,7 @@ export const FormFour = ({ setStep }: Props) => {
       <Form>
         <Box ml={5}>
           <Grid container spacing={2}>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffId"
                 placeholder="002789765"
@@ -447,7 +447,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffName"
                 placeholder="002789765"
@@ -455,7 +455,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="address"
                 placeholder="002789765"
@@ -463,7 +463,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="mobileNumber"
                 placeholder="002789765"
@@ -471,7 +471,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="branch"
                 options={EditUser.branch}
@@ -479,7 +479,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="department"
                 options={EditUser.branch}
@@ -487,7 +487,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="role"
                 options={EditUser.branch}
@@ -495,7 +495,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="directReport"
                 options={EditUser.branch}
@@ -503,7 +503,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="staffStatus"
                 options={EditUser.branch}
@@ -511,7 +511,7 @@ export const FormFour = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="sbuUnit"
                 options={EditUser.branch}
@@ -521,10 +521,10 @@ export const FormFour = ({ setStep }: Props) => {
             </Grid>
 
             {/* Checkboxes */}
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Does this staff supervise others?" />
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Can this staff print statements?" />
             </Grid>
             {/* Checkboxes */}
@@ -540,7 +540,7 @@ export const FormFour = ({ setStep }: Props) => {
 export const FormFive = ({ setStep }: Props) => {
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -556,7 +556,7 @@ export const FormFive = ({ setStep }: Props) => {
       <Form>
         <Box ml={5}>
           <Grid container spacing={2}>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffId"
                 placeholder="002789765"
@@ -564,7 +564,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="staffName"
                 placeholder="002789765"
@@ -572,7 +572,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="address"
                 placeholder="002789765"
@@ -580,7 +580,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormTextInput
                 name="mobileNumber"
                 placeholder="002789765"
@@ -588,7 +588,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="branch"
                 options={EditUser.branch}
@@ -596,7 +596,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="department"
                 options={EditUser.branch}
@@ -604,7 +604,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="role"
                 options={EditUser.branch}
@@ -612,7 +612,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="directReport"
                 options={EditUser.branch}
@@ -620,7 +620,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="staffStatus"
                 options={EditUser.branch}
@@ -628,7 +628,7 @@ export const FormFive = ({ setStep }: Props) => {
                 required
               />{' '}
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <FormSelectField
                 name="sbuUnit"
                 options={EditUser.branch}
@@ -638,10 +638,10 @@ export const FormFive = ({ setStep }: Props) => {
             </Grid>
 
             {/* Checkboxes */}
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Does this staff supervise others?" />
             </Grid>
-            <Grid item md={6}>
+            <Grid item mobile={6}>
               <CheckboxInput label="Can this staff print statements?" />
             </Grid>
             {/* Checkboxes */}

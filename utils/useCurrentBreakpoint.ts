@@ -27,7 +27,7 @@ export const useCurrentBreakpoint = () => {
     isMobile: matchesMobile,
     isTablet: matchesTablet,
     isDesktop: matchesDesktop,
-    setWidth: setWidth,
-    setDirection: setDirection,
+    setWidth,
+    setDirection,
   };
 };

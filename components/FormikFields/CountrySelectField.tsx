@@ -10,7 +10,7 @@ import { countries } from '@/constants/countries';
 type Props = {
   name: string;
   label: string;
-  width?: string | boolean;
+  width?: string;
 };
 
 export const CountrySelectField = ({ name, label, width }: Props) => {
@@ -30,7 +30,9 @@ export const CountrySelectField = ({ name, label, width }: Props) => {
         inputProps={{
           name,
         }}
-        IconComponent={() => {return <KeyboardArrowDownIcon fontSize="large" />;}}
+        IconComponent={() => {
+          return <KeyboardArrowDownIcon fontSize="large" />;
+        }}
         value={selectedCountry}
         sx={{
           ...textStyle,

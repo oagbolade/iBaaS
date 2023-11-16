@@ -34,7 +34,7 @@ export const RestructureLoanForm = () => {
 
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     alert(JSON.stringify(values, null, 2));
     actions.setSubmitting(false);
@@ -190,11 +190,11 @@ export const RestructureLoanForm = () => {
                   justifyContent="center"
                   mobile={12}
                   mb={2}
-                  width={{mobile: '560px'}}
+                  width={{ mobile: '560px' }}
                 >
-                  <Box sx={{width: {mobile: '760px', tablet: '560px'}}}>
+                  <Box sx={{ width: { mobile: '760px', tablet: '560px' } }}>
                     <DemoContainer components={['DatePicker']}>
-                      <DateTimePicker name="datePicker" label="Posting Date" />
+                      <DateTimePicker label="Posting Date" />
                     </DemoContainer>
                   </Box>
                 </Grid>

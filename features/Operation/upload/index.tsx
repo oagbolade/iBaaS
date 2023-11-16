@@ -1,11 +1,7 @@
-
-
 import React from 'react';
-import { ReturnChequesReversal } from '@/features/Operation/Forms/ReturnChequesReversal';
+import { ReturnCheque } from '@/features/Operation/Forms/ReturnCheques';
 
-//No screens for Bulk upload yet
+// No screens for Bulk upload yet
 export const ChequesReversalContainer = () => {
-    return(
-     <ReturnChequesReversal/>
-    )
-}
+  return <ReturnCheque />;
+};
