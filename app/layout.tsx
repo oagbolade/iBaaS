@@ -4,9 +4,10 @@ import type { Metadata } from 'next';
 import NextTopLoader from 'nextjs-toploader';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
-import {Stack, Box} from '@mui/material';
+import { Stack } from '@mui/material';
 import { theme } from './MuiTheme';
 import NavBarContextProvider from './NavBarContext';
+import { RenderChildren } from './RenderChildren';
 import { NavBarSideBarWrapper } from '@/components/Shared/NavBarSideBarWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -29,9 +30,7 @@ export default function RootLayout({
             <NextTopLoader />{' '}
             <Stack direction="row">
               <NavBarSideBarWrapper />
-              <Box sx={{marginLeft: '278px'}} >
-              {children}
-              </Box>
+              <RenderChildren>{children}</RenderChildren>
             </Stack>
           </body>
         </html>

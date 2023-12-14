@@ -9,7 +9,7 @@ type Props = {
 
 export const ProgressBar = ({ progress }: Props) => {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', position: 'sticky', top: 60 }}>
       <LinearProgress variant="determinate" value={progress} />
     </Box>
   );
