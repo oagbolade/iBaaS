@@ -12,7 +12,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import {
-  TableFooter,
   TablePaginationStyle,
   TablePaginationTitle,
   TableTitle,
@@ -209,12 +208,7 @@ export const AssetsTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        spacing={3}
-        sx={TableFooter}
-      >
+      <Stack direction="row" justifyContent="space-between" spacing={3}>
         <PageTitle title="276 results found" styles={{ ...TableTitle }} />
         <Box sx={TablePaginationStyle}>
           <PageTitle
