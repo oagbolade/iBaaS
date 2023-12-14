@@ -16,7 +16,35 @@ export const Loan = {
   ],
 };
 
+export const Audit = {
+  module: [
+    { name: 'All', value: 'all' },
+    { name: 'User Login', value: 'userLogin' },
+    { name: 'Loan Creation', value: 'loanCreation' },
+    { name: 'Loan Approval', value: 'loanApproval' },
+    { name: 'Another Action', value: 'anotherAction' },
+    { name: 'Another Action', value: 'anotherAction' },
+  ],
+  action: [
+    { name: 'All', value: 'all' },
+    { name: 'Dashboard', value: 'dashboard' },
+    { name: 'User Management', value: 'UserManagement' },
+    { name: 'Module 3', value: 'Module 3' },
+    { name: 'Module 4', value: 'Module 4' },
+    { name: 'Module 5', value: 'Module 5' },
+  ],
+};
 
+export const Account = {
+  account: [
+    { name: 'All', value: 'all' },
+    { name: 'User Login', value: 'userLogin' },
+    { name: 'Loan Creation', value: 'loanCreation' },
+    { name: 'Loan Approval', value: 'loanApproval' },
+    { name: 'Another Action', value: 'anotherAction' },
+    { name: 'Another Action', value: 'anotherAction' },
+  ],
+};
 export const options = [
   { name: 'Adeola Group', Id: 'ID - 00009', value: 'didiid' },
   { name: 'Ikechi Group', Id: 'ID - 00192', value: 'nbnnb' },

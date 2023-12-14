@@ -9,6 +9,7 @@ import { AccountPassword } from '@/components/Revamp/Modal/LoanForms/AccountPass
 import { RejectLoan } from '@/components/Revamp/Modal/LoanForms/RejectedLoan';
 import { DeleteLoan } from '@/components/Revamp/Modal/LoanForms/DeleteLoan';
 import { ToastMessage } from '@/components/Revamp/ToastMessage';
+import { CustomStyleI } from '@/constants/types';
 
 interface HeaderI {
   mainTitle: string;
@@ -35,6 +36,7 @@ type Props = {
   checkBox?: any;
   actionModal?: IActionModal;
   toastMessage?: IToastMessage;
+  customStyle?: CustomStyleI;
 };
 
 export const LoanContainer = ({
@@ -43,6 +45,7 @@ export const LoanContainer = ({
   TableActionItems,
   checkBox,
   toastMessage,
+  customStyle,
 }: Props) => {
   const showRejection = () => {
     return actionModal?.toggleModal?.('reject');
@@ -52,7 +55,8 @@ export const LoanContainer = ({
     <Box
       sx={{
         padding: '25px',
-        width: {mobile: 900, tablet: '100%'}
+        width: { mobile: 900, tablet: '100%' },
+        ...customStyle,
       }}
     >
       <MuiTableContainer
@@ -70,7 +74,12 @@ export const LoanContainer = ({
       {actionModal?.openRejectModal && (
         <ModalContainerV2
           handleClose={actionModal.handleClose}
-          form={<RejectLoan showToast={() => actionModal.toggleModal?.('toast')} handleClose={actionModal.handleClose} />}
+          form={
+            <RejectLoan
+              showToast={() => actionModal.toggleModal?.('toast')}
+              handleClose={actionModal.handleClose}
+            />
+          }
         />
       )}
 

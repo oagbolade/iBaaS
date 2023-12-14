@@ -61,14 +61,6 @@ const MobilePreviewContent: React.FC = () => {
   return <MobileModalContainer ShowPreview={<PreviewContent />} />;
 };
 
-const actionButtons: any = [
-  <Box sx={{ display: 'flex' }} ml={{ mobile: 96, tablet: 0, desktop: 0 }}>
-    <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
-    <PrimaryIconButton buttonTitle="Submit" customStyle={{ ...submitButton }} />
-    ,
-  </Box>,
-];
-
 export const LoanUnderwriting = () => {
   const { openToastMessage, toggleModal } = useLoansModalToggle();
 

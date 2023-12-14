@@ -40,7 +40,7 @@ const TabContent: React.FC = () => {
   };
 
   const PendingRequests = () => (
-    <Box mt={1}>
+    <Box sx={{ padding: '0px', margin: '0px' }}>
       <LoanContainer
         actionModal={{
           openPasswordModal,
@@ -50,17 +50,18 @@ const TabContent: React.FC = () => {
         }}
         checkBox
         showHeader={{
-          mainTitle: 'Rejected Requests',
+          mainTitle: 'Pending Requests',
           secondaryTitle:
             'See a directory of all rejected requests on this platform.',
         }}
         TableActionItems={PendingRequestsActions}
+        customStyle={{ padding: '0px' }}
       />
     </Box>
   );
 
   const RejectedRequests = () => (
-    <Box mt={1}>
+    <Box>
       <LoanContainer
         actionModal={{
           openPasswordModal,
@@ -74,6 +75,7 @@ const TabContent: React.FC = () => {
             'See a directory of all rejected requests on this platform.',
         }}
         TableActionItems={RejectedRequestsActions}
+        customStyle={{ padding: '0px' }}
       />
     </Box>
   );
@@ -92,7 +94,7 @@ export const PendingApplications = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '80px',
+        marginTop: '40px',
       }}
     >
       <Box mt={5}>

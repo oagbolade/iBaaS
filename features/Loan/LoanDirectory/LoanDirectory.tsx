@@ -2,8 +2,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Box } from '@mui/material';
-import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
 import { FilterSection } from './FilterSection';
+import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
 import { ActionMenu, MuiTableContainer } from '@/components/Table';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
@@ -42,16 +42,23 @@ export const LoanDirectory = () => {
       }}
     >
       <Box
-        mb={5}
+        mb={3}
         mr={{ mobile: 20, tablet: 0 }}
         sx={{ display: 'flex', justifyContent: 'flex-end' }}
       >
         <Link href="/loan/loan-directory/loan-underwriting">
-          <PrimaryIconButton buttonTitle="Create Loan Underwriting" />
+          <PrimaryIconButton
+            customStyle={{
+              width: '245px',
+              height: '48px',
+              variant: 'contained',
+            }}
+            buttonTitle="Create Loan Underwriting"
+          />
         </Link>
       </Box>
       <FilterSection />
-      <Box mt={5} sx={{ width: { mobile: 900, tablet: '100%' } }}>
+      <Box sx={{ width: { mobile: 900, tablet: '100%' } }}>
         <MuiTableContainer
           columns={MOCK_COLUMNS}
           data={MOCK_DATA}

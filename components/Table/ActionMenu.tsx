@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,6 +11,13 @@ import { StyledMenu } from './StyledMenu';
 import { TableMenuButton } from '@/components/Buttons';
 import { AdminContext } from '@/features/Admin/AdminContext';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
+
+const MenuWrapper = styled.section`
+  .MuiBox-root {
+    padding: 0 10px;
+    border: none;
+  }
+`;
 
 type ActionMenuProps = {
   useDefault?: boolean;
@@ -37,12 +45,17 @@ export const ActionMenu: React.ComponentType<ActionMenuProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (link: string | null | object = null) => {
-    if (link) router.push(link as string);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClose = (link: string | null = null) => {
+    if (link) router.push(link || '');
     const isEditing = true;
     toggleModal(isEditing);
     toggleCustomerServiceModal(isEditing);
     setAnchorEl(null);
+    handleMenuClose();
   };
 
   return (
@@ -58,30 +71,44 @@ export const ActionMenu: React.ComponentType<ActionMenuProps> = ({
           }}
         />
       </Button>
-      <StyledMenu anchorEl={anchorEl} open={open} onClose={() => {return handleClose(null);}}>
+      <StyledMenu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
         {useDefault ? (
-          <div>
-            <MenuItem onClick={() => {return handleClose(null);}}>
+          <MenuWrapper>
+            <MenuItem
+              onClick={() => {
+                return handleClose(null);
+              }}
+            >
               <TableMenuButton
                 buttonTitle="View Profile"
                 icon={<RemoveRedEyeOutlinedIcon />}
               />
             </MenuItem>
-            <MenuItem onClick={() => {return handleClose(null);}}>
+            <MenuItem
+              onClick={() => {
+                return handleClose(null);
+              }}
+            >
               <TableMenuButton buttonTitle="Edit" icon={<EditOutlinedIcon />} />
             </MenuItem>
-          </div>
+          </MenuWrapper>
         ) : (
-          options?.map((option) => {return (
-            <MenuItem
-              onClick={() => {return option.onClick?.() || handleClose(option.link);}}
-            >
-              <TableMenuButton
-                buttonTitle={option.buttonTitle}
-                icon={option.icon}
-              />
-            </MenuItem>
-          );})
+          options?.map((option) => {
+            return (
+              <MenuWrapper>
+                <MenuItem
+                  onClick={() => {
+                    return option.onClick?.() || handleClose(option.link);
+                  }}
+                >
+                  <TableMenuButton
+                    buttonTitle={option.buttonTitle}
+                    icon={option.icon}
+                  />
+                </MenuItem>
+              </MenuWrapper>
+            );
+          })
         )}
       </StyledMenu>
     </Box>

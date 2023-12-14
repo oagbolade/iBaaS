@@ -9,6 +9,7 @@ import { ReportLink } from '@/features/Report/Overview/ReportLink';
 type Props = {
   children: React.ReactNode;
   title: string;
+  link?: string;
   filter: Ifilter['filter'];
   customStyle?: CustomStyleI;
 };
@@ -17,6 +18,7 @@ export const ReportSummary = ({
   children,
   title,
   filter,
+  link = '',
   customStyle,
 }: Props): React.ReactElement => {
   return (
@@ -24,7 +26,7 @@ export const ReportSummary = ({
       <Typography sx={{ ...primaryTitle }}>{title}</Typography>
       <ChartFilters filter={filter} />
       {children}
-      <ReportLink link="" />
+      <ReportLink link={link} />
     </Box>
   );
 };

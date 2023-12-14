@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';

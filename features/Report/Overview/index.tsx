@@ -23,11 +23,12 @@ export const OverView = () => {
       }}
     >
       <TopOverViewSection />
-      <Grid container spacing={3}>
+      <Grid container spacing={2.5}>
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
             title="Check Book Status"
+            link="/report/custom-report/cheque-book"
           >
             <Chart
               chartType="PieChart"
@@ -40,6 +41,7 @@ export const OverView = () => {
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
             title="Statement of Account"
+            link="/report/custom-report/statement-account"
           >
             <Chart
               chartType="ColumnChart"
@@ -53,6 +55,7 @@ export const OverView = () => {
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
             title="Posting Journal"
+            link="/report/custom-report/posting-journal"
           >
             <Chart
               chartType="PieChart"
@@ -65,6 +68,7 @@ export const OverView = () => {
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
             title="Transaction in Clearing"
+            link="/report/custom-report/transaction-clearing"
           >
             <Chart
               chartType="ColumnChart"
@@ -77,7 +81,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Posting Journal"
+            title="Dormant Account"
+            link="/report/custom-report/dormant-account"
           >
             <Chart
               chartType="PieChart"
@@ -89,7 +94,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Transaction in Clearing"
+            title="Holding Transaction"
+            link="/report/custom-report/holding-transactions"
           >
             <Chart
               chartType="ColumnChart"
@@ -101,9 +107,10 @@ export const OverView = () => {
 
         <Grid item desktop={12}>
           <ReportSummary
-            customStyle={{ width: '1277px' }}
+            customStyle={{ width: '100%' }}
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
             title="Trial Balance"
+            link="/report/custom-report/cheque-book"
           >
             <Chart
               chartType="AreaChart"
@@ -116,7 +123,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Check Book Status"
+            title="Profit or Loss"
+            link="/report/custom-report/cheque-book"
           >
             <Chart
               chartType="PieChart"
@@ -128,7 +136,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Statement of Account"
+            title="Loan Overdue"
+            link="/report/custom-report/cheque-book"
           >
             <Chart
               chartType="ColumnChart"
@@ -141,7 +150,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Posting Journal"
+            title="Maturity Loan"
+            link="/report/custom-report/maturity-loan"
           >
             <Chart
               chartType="PieChart"
@@ -153,7 +163,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Transaction in Clearing"
+            title="Disbursed Loan"
+            link="/report/custom-report/disbursed-loan"
           >
             <Chart
               chartType="ColumnChart"
@@ -166,7 +177,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Posting Journal"
+            title="Inflow/Outflow"
+            link="/report/custom-report/cheque-book"
           >
             <Chart
               chartType="PieChart"
@@ -178,7 +190,8 @@ export const OverView = () => {
         <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
-            title="Transaction in Clearing"
+            title="Overdraft"
+            link="/report/custom-report/cheque-book"
           >
             <Chart
               chartType="ColumnChart"

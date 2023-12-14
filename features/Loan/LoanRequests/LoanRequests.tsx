@@ -40,22 +40,16 @@ const TabContent: React.FC = () => {
   };
 
   const RejectedRequests = () => (
-    <Box mt={1}>
-      <LoanContainer
-        actionModal={{
-          openPasswordModal,
-          openRejectModal,
-          openDeleteModal,
-          handleClose,
-          toggleModal,
-        }}
-        checkBox
+    <Box mt={1} sx={{ width: { mobile: 900, tablet: '100%' } }}>
+      <MuiTableContainer
         showHeader={{
           mainTitle: 'Rejected Requests',
           secondaryTitle:
             'See a directory of all rejected requests on this platform.',
         }}
-        TableActionItems={RejectedRequestsActions}
+        columns={MOCK_COLUMNS}
+        data={MOCK_DATA}
+        ActionMenuProps={PendingRequestsActions}
       />
     </Box>
   );

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, ButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, Paper } from '@mui/material';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
@@ -94,21 +93,25 @@ export const ActionButtonWithPopper = ({
       ExportReport: <ExportData handleClose={handleClose} />,
       DateRangePicker: <DateRangePicker handleClose={handleClose} />,
       Default: (
-        <MenuList id="split-button-menu" autoFocusItem>
-          {options?.map((option, index) => {
-            return (
-              <MenuItem
-                key={option}
-                selected={index === selectedIndex}
-                onClick={(event) => {
-                  return handleMenuItemClick(event, index);
-                }}
-              >
-                {option}
-              </MenuItem>
-            );
-          })}
-        </MenuList>
+        <ClickAwayListener onClickAway={handleClose}>
+          <Paper sx={{ width: 240, maxWidth: '100%' }}>
+            <MenuList id="split-button-menu" autoFocusItem>
+              {options?.map((option, index) => {
+                return (
+                  <MenuItem
+                    key={option}
+                    selected={index === selectedIndex}
+                    onClick={(event) => {
+                      return handleMenuItemClick(event, index);
+                    }}
+                  >
+                    {option}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Paper>
+        </ClickAwayListener>
       ),
     };
 

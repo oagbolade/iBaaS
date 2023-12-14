@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { ProgressBar } from '@/components/ProgressBar';
 import { stepTitle, formContainer } from './styles';
 import { BusinessMainSection } from './BusinessMainSection';
+import { ProgressBar } from '@/components/ProgressBar';
 import { FormOne, FormTwo } from '@/features/Setup/Forms/BusinessSetupForms';
 
 export const BusinessSetup = () => {
@@ -25,7 +25,7 @@ export const BusinessSetup = () => {
   };
 
   return (
-    <Box sx={{ width: { desktop: '100%' }, marginTop: '80px' }}>
+    <Box sx={{ width: { desktop: '100%' }, marginTop: '60px' }}>
       <ProgressBar progress={progress} />
       <Typography sx={stepTitle}>Step {step}/2</Typography>
       <BusinessMainSection />

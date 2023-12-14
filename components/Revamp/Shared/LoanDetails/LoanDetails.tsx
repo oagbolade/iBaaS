@@ -7,11 +7,12 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import { Box, Stack } from '@mui/material';
+import { Box, IconButton, Stack } from '@mui/material';
 import AnimateHeight, { Height } from 'react-animate-height';
 // eslint-disable-next-line import/no-cycle
 import { TopBorderSection } from './TopBorderSection';
 import { avatarStyle } from './styles';
+import { ViewAccount } from './ViewAccount';
 import { ChevronDown, ExternalLinkIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { Status } from '@/components/Labels';
@@ -30,6 +31,7 @@ const Accordion = styled((props: AccordionProps) => {
     width: '1037px',
     borderRadius: '12px',
     border: `1px solid ${colors.neutral300}`,
+    boxShadow: 'none',
   };
 });
 
@@ -126,6 +128,11 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const [height, setHeight] = React.useState<Height>(350);
+  const [open, setOpen] = React.useState(false);
+
+  const toggleModal = () => {
+    setOpen(!open);
+  };
 
   const handleChange = () => {
     setExpanded(!expanded);
@@ -264,7 +271,9 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                       width: '100%',
                     }}
                   >
-                    <ExternalLinkIcon />
+                    <IconButton onClick={toggleModal}>
+                      <ExternalLinkIcon />
+                    </IconButton>
                   </Box>
                 </Stack>
               </Box>
@@ -446,6 +455,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
           </Box>
         </Stack>
       </Box>
+      <ViewAccount open={open} toggleModal={toggleModal} />
     </Box>
   );
 };

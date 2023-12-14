@@ -20,7 +20,7 @@ export const OverDrafts = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '100px',
+        marginTop: '60px',
       }}
     >
       <LoanContainer

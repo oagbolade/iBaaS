@@ -35,7 +35,7 @@ export const FilterSection = () => {
             label="Loan Status"
           />{' '}
         </Grid>
-        <Grid mb={6} item mobile={12} tablet={4} justifyContent="center">
+        <Grid mb={6} item mobile={12} tablet={7} justifyContent="center">
           <TextInput
             customStyle={{
               width: setWidth(),

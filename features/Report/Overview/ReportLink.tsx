@@ -8,7 +8,7 @@ type Props = {
   link: string;
 };
 
-export const ReportLink = ({ link }: Props) => {
+export const ReportLink = ({ link = '' }: Props) => {
   return (
     <Link href={link}>
       <Typography

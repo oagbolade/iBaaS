@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { SideBarContainer } from './SideBarContainer';
 import { excludeFromSideBarLayout } from '@/constants/appRoutes';
 import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
+import { hideScrollbar } from '@/utils/scrollBars';
 
 type Props = {
   openMenu: boolean;
@@ -27,8 +28,11 @@ export const SideBar = ({ openMenu }: Props) => {
     <Box
       sx={{
         display: shouldShowSideBar(),
-        position: 'sticky',
-        top: '0',
+        position: 'fixed',
+        top: '100',
+        zIndex: 3,
+        height: '100%',
+        ...hideScrollbar,
       }}
     >
       <SideBarContainer />

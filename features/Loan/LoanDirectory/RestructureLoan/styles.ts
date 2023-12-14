@@ -16,4 +16,5 @@ export const submitButton = {
 export const cancelButton = {
   ...common,
   width: '106px',
+  marginRight: '10px',
 };

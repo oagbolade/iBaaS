@@ -12,20 +12,23 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
+import SearchIcon from '@mui/icons-material/Search';
 import { PageTitle } from '../Typography';
 import { emptyTableMainTitle, emptyTableSecondaryTitle } from './StyledMenu';
 import { ActionMenu } from './ActionMenu';
 import {
-  TableFooter,
   TablePaginationStyle,
   TablePaginationTitle,
   TableTitle,
+  inputFields,
 } from './style';
 import colors from '@/assets/colors';
 import { Status } from '@/components/Labels';
 import { TablePagination } from '@/components/Pagination';
 import { EmptyTableIcon } from '@/assets/svg';
 import { CustomTableHeader } from '@/components/Revamp/Shared/Table/CustomTableHeader';
+import { ITableConfig, TableProps } from '@/components/Revamp/TableV2/TableV2';
+import { TextInput } from '@/components/FormikFields';
 
 // Will change this once we start to make API calls
 interface DataI {
@@ -36,42 +39,26 @@ interface DataI {
   department: string;
 }
 
-const StyledTableCell = styled(TableCell)(({ theme }) => {return {
-  color: `${colors.neutral900}`,
-  fontFamily: 'Averta Regular',
-  fontSize: '14px',
-  lineHeight: '20px',
-  fontWeight: 400,
+const StyledTableRow = styled(TableRow)(({ theme }) => {
+  return {
+    '&:nth-of-type(even):hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:nth-of-type(odd):hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    borderRadius: '8px',
+    border: `1px solid ${colors.neutral300}`,
+    minWidth: '50px',
+  };
+});
 
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: `${colors.neutral200}`,
-    color: `${colors.neutral900}`,
-    fontWeight: 600,
-    textAlign: 'left',
-  },
-
-  [`&.${tableCellClasses.body}`]: {
-    fontWeight: 400,
-    textAlign: 'left',
-  },
-};});
-
-const StyledTableRow = styled(TableRow)(({ theme }) => {return {
-  '&:nth-of-type(even):hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:nth-of-type(odd):hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  borderRadius: '8px',
-  border: `1px solid ${colors.neutral300}`,
-  minWidth: '50px',
-};});
-
-const StyledTableHead = styled(TableHead)(({ theme }) => {return {
-  borderRadius: '8px',
-  border: `1px solid ${colors.neutral300}`,
-};});
+const StyledTableHead = styled(TableHead)(({ theme }) => {
+  return {
+    borderRadius: '8px',
+    border: `1px solid ${colors.neutral300}`,
+  };
+});
 
 const success = <Status label="Active" status="success" />;
 const warning = <Status label="Warning" status="warning" />;
@@ -100,9 +87,11 @@ const renderEmptyTableBody = () => {
   );
 };
 
-interface HeaderI {
+export interface HeaderI {
   mainTitle: string;
   secondaryTitle: string;
+  filterSection?: React.ReactNode;
+  hideFilterSection?: boolean;
 }
 
 type Props = {
@@ -111,6 +100,9 @@ type Props = {
   showHeader?: HeaderI;
   ActionMenuProps?: any;
   checkboxHeader?: any;
+  hideFilterSection?: boolean;
+  tableConfig?: ITableConfig;
+  showSearch?: boolean;
 };
 
 export const MuiTableContainer = ({
@@ -118,9 +110,48 @@ export const MuiTableContainer = ({
   data,
   ActionMenuProps,
   showHeader,
+  tableConfig = {
+    hasActions: true,
+  },
   checkboxHeader,
+  hideFilterSection,
+  showSearch = false,
 }: Props) => {
-  const actionsColumn = 1;
+  const actionsColumn = tableConfig?.hasActions ? 1 : 0;
+
+  const StyledTableCell = styled(TableCell, {
+    shouldForwardProp: (prop) => prop !== 'isHeader',
+  })(({ isHeader }: TableProps) => {
+    return {
+      color: `${colors.neutral900}`,
+      fontFamily: 'Averta Regular',
+      fontSize: '14px',
+      lineHeight: '20px',
+      fontWeight: 400,
+      padding: '20px 20px',
+
+      [`&.${tableCellClasses.head}`]: {
+        backgroundColor: `${colors.neutral200}`,
+        color: `${colors.neutral900}`,
+        fontWeight: 600,
+        textAlign: 'left',
+      },
+
+      [`&.${tableCellClasses.body}`]: {
+        fontWeight: 400,
+        textAlign: 'left',
+      },
+
+      ...(actionsColumn && {
+        padding: '10px 20px',
+      }),
+
+      ...(isHeader && {
+        padding: '10px 20px',
+      }),
+    };
+  });
+
   return (
     <>
       <TableContainer
@@ -137,21 +168,36 @@ export const MuiTableContainer = ({
           <CustomTableHeader
             mainTitle={showHeader?.mainTitle}
             secondaryTitle={showHeader?.secondaryTitle}
+            hideFilterSection={showHeader?.hideFilterSection}
+          />
+        )}
+        {showSearch && (
+          <TextInput
+            customStyle={{
+              ...inputFields,
+            }}
+            icon={<SearchIcon />}
+            name="Search"
+            placeholder="Search"
           />
         )}
         <Table>
           <StyledTableHead>
             <TableRow>
               {checkboxHeader && (
-                <StyledTableCell>
+                <StyledTableCell isHeader>
                   <Checkbox />
                 </StyledTableCell>
               )}
-              {columns.map((column: string) => {return (
-                <StyledTableCell key={column}>{column}</StyledTableCell>
-              );})}
+              {columns.map((column: string) => {
+                return (
+                  <StyledTableCell isHeader key={column}>
+                    {column}
+                  </StyledTableCell>
+                );
+              })}
 
-              <StyledTableCell />
+              {actionsColumn === 1 && <StyledTableCell />}
             </TableRow>
           </StyledTableHead>
           <TableBody>
@@ -166,47 +212,51 @@ export const MuiTableContainer = ({
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              data.map((dataItem) => {return (
-                <StyledTableRow key={dataItem.name}>
-                  {checkboxHeader && (
+              data.map((dataItem) => {
+                return (
+                  <StyledTableRow key={dataItem.name}>
+                    {checkboxHeader && (
+                      <StyledTableCell component="th" scope="row">
+                        <Checkbox />
+                      </StyledTableCell>
+                    )}
                     <StyledTableCell component="th" scope="row">
-                      <Checkbox />
+                      {dataItem.name}
                     </StyledTableCell>
-                  )}
-                  <StyledTableCell component="th" scope="row">
-                    {dataItem.name}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {dataItem.status ? success : danger}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {dataItem.email}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {dataItem.role}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {dataItem.department}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {ActionMenuProps ? <ActionMenuProps /> : <ActionMenu />}
-                  </StyledTableCell>
-                </StyledTableRow>
-              );})
+                    <StyledTableCell align="right">
+                      {dataItem.status ? success : danger}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.email}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.role}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.department}
+                    </StyledTableCell>
+                    {tableConfig?.hasActions && (
+                      <StyledTableCell align="right">
+                        {ActionMenuProps ? <ActionMenuProps /> : <ActionMenu />}
+                      </StyledTableCell>
+                    )}
+                  </StyledTableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={TableFooter}>
-          <PageTitle title="276 results found" styles={{ ...TableTitle }} />
-          <Box sx={TablePaginationStyle}>
-            <PageTitle
-              title="Rows per page: 10"
-              styles={{ ...TablePaginationTitle }}
-            />
-          </Box>
+      <Stack direction="row" justifyContent="space-between" spacing={3}>
+        <PageTitle title="276 results found" styles={{ ...TableTitle }} />
+        <Box sx={TablePaginationStyle}>
+          <PageTitle
+            title="Rows per page: 10"
+            styles={{ ...TablePaginationTitle }}
+          />
           <TablePagination />
-      </Box>
+        </Box>
+      </Stack>
     </>
   );
 };

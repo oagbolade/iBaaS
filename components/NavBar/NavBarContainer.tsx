@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
-import Link from 'next/link';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Typography } from '@mui/material';
 import { Profile } from './Profile';
 import { navbarStyle } from './styles';
-import InterSwitchImage from '@/assets/interswitch/image';
 import { NavBarContext } from '@/app/NavBarContext';
 import colors from '@/assets/colors';
 
@@ -24,9 +22,6 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
           <IconButton onClick={toggleMenu}>
             <MenuIcon sx={{ display: { desktop: 'none' }, marginTop: '6px' }} />
           </IconButton>
-          <Link href="/login">
-            <InterSwitchImage />
-          </Link>
         </Stack>
       </Box>
 
@@ -36,7 +31,6 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
         justifyContent="space-between"
         spacing={3}
         sx={{
-          borderLeft: `1px solid ${colors.neutral300}`,
           padding: '12px 25px',
           width: '85%',
         }}
@@ -54,7 +48,11 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
           </Typography>
         </Box>
         <Box
-          sx={{ display: { mobile: 'none', desktop: 'block', align: 'right' } }}
+          sx={{
+            position: 'relative',
+            left: '65px',
+            display: { mobile: 'none', desktop: 'block', align: 'right' },
+          }}
         >
           <Profile />
         </Box>

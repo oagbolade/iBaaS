@@ -9,11 +9,34 @@ const baseTypography = {
 export const checkboxTypography = {
   color: `${colors.neutral900}`,
   fontSize: '16px',
-  lineHeight: {desktop: '24px', mobile: '12px'},
+  lineHeight: { desktop: '24px', mobile: '12px' },
   fontWeight: 400,
   width: '100%',
 };
 
+export const buttonStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  alignSelf: 'stretch',
+  width: '230px',
+  height: '30px',
+  padding: '16px 78px',
+  gap: '8px',
+  borderRadius: '6px',
+  backgroundColor: `${colors.activeBlue400}`,
+  color: `${colors.white}`,
+};
+
+export const scrollbarStyle = {
+  overflow: 'scroll',
+  overflowX: 'hidden',
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+};
 export const textArea = {
   gap: '8px',
   borderRadius: '4px',
@@ -44,7 +67,7 @@ export const textStyle = {
   gap: '8px',
   color: `${colors.neutral600}`,
   width: { tablet: '327px', mobile: '560px' },
-  height: '56px',
+  height: 'auto',
   '& fieldset': { border: 'none' },
 };
 
@@ -53,8 +76,8 @@ export const largeMultiSelectField = {
   background: `${colors.neutral200}`,
   gap: '8px',
   padding: '16px 12px',
-  width: '100%',
-  minHeight: '128px',
+  width: '682px',
+  height: '56px',
   '& fieldset': { border: 'none' },
   '& .MuiOutlinedInput-root': {
     borderRadius: '0',
@@ -104,12 +127,13 @@ export const largeChipTypography = {
 export const multiSelect = {
   ...textStyle,
   paddingRight: '8px',
-  overflowY: 'auto',
-  '& .example::-webkit-scrollbar': {
+  width: '200px',
+  height: '279px',
+  overflow: 'scroll',
+  overflowX: 'hidden',
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
     display: 'none',
-  },
-  '& .example': {
-    scrollbarWidth: 'none',
   },
 };
 

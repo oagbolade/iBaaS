@@ -1,22 +1,20 @@
 import colors from '@/assets/colors';
 
+export const verticalScroll = {
+  overflowY: 'scroll',
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+};
+
 export const sideBarContainer = {
-  width: 278,
+  width: '278px',
   height: '100vh',
   padding: '0 20px',
   backgroundColor: `${colors.white}`,
   border: `1px solid ${colors.neutral300}`,
   borderTop: 'none',
-  marginTop: '60px',
-  overflow: 'scroll',
-  overflowX: 'hidden',
-  scrollbarWidth: 'none',
-  '&::-webkit-scrollbar': {
-    display: 'none',
-  },
-  top: { mobile: 0, desktop: 50 },
-  position: 'sticky',
-  zIndex: 9,
 };
 
 export const sideBarItem = {

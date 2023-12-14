@@ -14,31 +14,35 @@ interface StyledTabsProps {
   onChange: (event: React.SyntheticEvent, newValue: number) => void;
 }
 
-const StyledTabs = styled((props: StyledTabsProps) => {return (
-  <TabComponent
-    {...props}
-    TabIndicatorProps={{
-      children: <span className="MuiTabs-indicatorSpan" />,
-    }}
-  />
-);})({
+const StyledTabs = styled((props: StyledTabsProps) => {
+  return (
+    <TabComponent
+      {...props}
+      TabIndicatorProps={{
+        children: <span className="MuiTabs-indicatorSpan" />,
+      }}
+    />
+  );
+})({
   color: `${colors.neutral600}`,
   '& .Mui-selected': {
     color: `${colors.gray800}`,
   },
 });
 
-const StyledTab = styled((props: StyledTabProps) => {return (
-  <Tab disableRipple {...props} />
-);})(({ theme }) => {return {
-  fontWeight: 600,
-  fontSize: '16px',
-  lineHeight: '24px',
-  color: `${colors.neutral600}`,
-  '& .Mui-selected': {
-    color: `${colors.gray800}`,
-  },
-};});
+const StyledTab = styled((props: StyledTabProps) => {
+  return <Tab disableRipple {...props} />;
+})(() => {
+  return {
+    fontWeight: 600,
+    fontSize: '16px',
+    lineHeight: '24px',
+    color: `${colors.neutral600}`,
+    '& .Mui-selected': {
+      color: `${colors.gray800}`,
+    },
+  };
+});
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -57,7 +61,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box mt={2}>{children}</Box>}
     </div>
   );
 }
@@ -76,11 +80,11 @@ export const Tabs = ({ tabTitle, pageMenu }: Props) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ width: '360px', borderBottom: 1, borderColor: 'divider' }}>
         <StyledTabs value={value} onChange={handleChange}>
-          {tabTitle.map((title: string, index: number) => {return (
-            <StyledTab label={title} value={index} />
-          );})}
+          {tabTitle.map((title: string, index: number) => {
+            return <StyledTab label={title} value={index} />;
+          })}
         </StyledTabs>
       </Box>
       {pageMenu.map((page, index) => {

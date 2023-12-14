@@ -7,21 +7,27 @@ import colors from '@/assets/colors';
 type Props = {
   mainTitle?: string;
   secondaryTitle?: string;
+  hideFilterSection?: boolean;
 };
 
-export const CustomTableHeader = ({ mainTitle, secondaryTitle }: Props) => {
+export const CustomTableHeader = ({
+  mainTitle,
+  secondaryTitle,
+  hideFilterSection = false,
+}: Props) => {
   return (
     <Box
       sx={{
         display: 'flex',
         padding: '20px 24px 19px 16px',
-        alignItems: 'flex-start',
-        gap: '16px',
-        alignSelf: 'stretch',
       }}
     >
-      <Stack direction="row" justifyContent="space-between">
-        <Box>
+      <Stack
+        sx={{ width: '100%' }}
+        direction="row"
+        justifyContent="space-between"
+      >
+        <Box sx={{ width: '100%' }}>
           <Typography
             sx={{ fontSize: '20px', lineHeight: '32px', fontWeight: 700 }}
           >
@@ -36,11 +42,13 @@ export const CustomTableHeader = ({ mainTitle, secondaryTitle }: Props) => {
             {secondaryTitle}
           </Typography>
         </Box>
-        <Box
-          sx={{ width: '600px', display: 'flex', justifyContent: 'flex-end' }}
-        >
-          <FilterSection />
-        </Box>
+        {!hideFilterSection && (
+          <Box
+            sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <FilterSection />
+          </Box>
+        )}
       </Stack>
     </Box>
   );

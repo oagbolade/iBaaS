@@ -14,20 +14,23 @@ import styles from './App.module.css';
 import { ChevronDown } from '@/assets/svg';
 import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
 import colors from '@/assets/colors';
+import { renderAsActive } from '@/utils/renderActiveSideMenu';
 
 interface SubMenuItems {
   name: string;
   link: string;
+  hideSubMenuItem: boolean;
 }
 
-interface SidebarMenuItem {
+export interface SidebarMenuItem {
   name: string;
   groupPath: string;
   icon: any;
   subMenuItems: SubMenuItems[];
+  hideMenuItem: boolean;
 }
 
-interface SidebarMenuProps {
+export interface SidebarMenuProps {
   sideBarMenu: SidebarMenuItem[];
 }
 
@@ -57,26 +60,28 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
     };
   };
 
-  const renderAsActive = (isActive: boolean) => {
-    if (isActive) {
-      return {
-        display: 'flex',
-        padding: '8px 12px',
-        alignItems: 'center',
-        gap: '8px',
-        flex: '1 0 0',
-        alignSelf: 'stretch',
-        borderRadius: '8px',
-        border: '1px solid #0275D8',
-        background: 'var(--colour-primaryblue-primary-blue-100, #EBF8FE)',
-        color: '#0275D8',
-      };
-    }
-  };
-
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
       const hasSubItems = menuItem.subMenuItems.length > 0;
+      if (menuItem.hideMenuItem) return;
+      if (!hasSubItems) {
+        return (
+          <Button
+            sx={{
+              padding: '0',
+            }}
+            onClick={() => setActiveMenu(menuItem.name)}
+          >
+            <SideBarPrimaryButton
+              isActive={activeMenu === menuItem.name}
+              hasSubItems={hasSubItems}
+              buttonTitle={menuItem.name}
+              link={menuItem.groupPath}
+              icon={<menuItem.icon />}
+            />
+          </Button>
+        );
+      }
       return (
         <Box
           key={menuItem.name}

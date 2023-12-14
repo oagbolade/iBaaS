@@ -26,14 +26,14 @@ export const StaticDatePickerMenu = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Button
-        sx={{ padding: '0', width: { mobile: '560px', tablet: '560px' } }}
+        sx={{ padding: '0', width: { mobile: '560px', tablet: '100%' } }}
         onClick={(e) => {
           return handleClick(e);
         }}
       >
         <TextInput
           customStyle={{
-            width: setWidth(),
+            width: setWidth('560px'), // reconsider the responsiveness
           }}
           icon={<CalendarTodayOutlinedIcon />}
           iconPosition="end"
@@ -50,9 +50,10 @@ export const StaticDatePickerMenu = ({
             '& .MuiPickersToolbar-root': {
               display: 'none',
             },
-            width: { mobile: '560px', tablet: '560px' },
+            width: { mobile: '560px', tablet: '100%' },
           }}
           defaultValue={dayjs('2022-04-17')}
+          onChange={handleClose}
         />
       </Menu>
     </LocalizationProvider>

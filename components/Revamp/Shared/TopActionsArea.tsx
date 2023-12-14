@@ -12,8 +12,8 @@ export const TopActionsArea = ({ actionButtons }: Props) => {
       sx={{
         borderBottom: '1px solid #E8E8E8',
         padding: '12px 20px',
-        width: '86vw',
-        marginTop: '80px',
+        width: '84.2vw', // causing a horizontal overflow, may remove later
+        marginTop: '60px',
       }}
       direction="row"
       justifyContent="space-between"
@@ -22,9 +22,13 @@ export const TopActionsArea = ({ actionButtons }: Props) => {
     >
       <BackButton />
       <Stack direction="row">
-        {actionButtons?.map((buttons, index) => {return (
-          <Box key={index} mr={1}>{buttons}</Box>
-        );})}
+        {actionButtons?.map((buttons, index) => {
+          return (
+            <Box key={index} mr={1}>
+              {buttons}
+            </Box>
+          );
+        })}
       </Stack>
     </Stack>
   );

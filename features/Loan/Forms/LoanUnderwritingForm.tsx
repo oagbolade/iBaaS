@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
+import { Formik, Form } from 'formik';
+import { InterestSection } from './InterestSection';
 import {
   LargeTitle,
   Details,
 } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { Formik, Form } from 'formik';
 import { FormTextInput } from '@/components/FormikFields';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import colors from '@/assets/colors';
-import { InterestSection } from './InterestSection';
-import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { FormSelect } from '@/components/Revamp/Modal/SearchGroup';
 import { StaticDatePickerMenu } from '@/components/Revamp/Menu/StaticDatePickerMenu';
 import { options } from '@/constants/Loan/selectOptions';
@@ -35,11 +33,7 @@ export const Balance = ({ amount }: { amount: string }) => (
 export const LoanUnderwritingForm = () => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
-  const onSubmit = (
-    values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
-  ) => {
-    alert(JSON.stringify(values, null, 2));
+  const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
     actions.setSubmitting(false);
   };
 

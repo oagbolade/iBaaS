@@ -109,6 +109,10 @@ export interface CustomStyleI {
   border?: string;
   padding?: string;
   margin?: string;
+  marginTop?: string;
+  marginBottom?: string;
+  marginLeft?: string;
+  marginRight?: string;
   display?: string;
   borderRadius?: string;
   justifyContent?: string;

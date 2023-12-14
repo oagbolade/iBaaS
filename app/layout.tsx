@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import NextTopLoader from 'nextjs-toploader';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
+import {Stack, Box} from '@mui/material';
 import { theme } from './MuiTheme';
 import NavBarContextProvider from './NavBarContext';
 import { NavBarSideBarWrapper } from '@/components/Shared/NavBarSideBarWrapper';
@@ -29,7 +29,9 @@ export default function RootLayout({
             <NextTopLoader />{' '}
             <Stack direction="row">
               <NavBarSideBarWrapper />
+              <Box sx={{marginLeft: '278px'}} >
               {children}
+              </Box>
             </Stack>
           </body>
         </html>

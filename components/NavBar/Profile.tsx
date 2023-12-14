@@ -5,11 +5,10 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { Box } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NavBarButton from './NavBarButton';
 import { NavTypography, navSettings, navbarCont, navbarTitle } from './styles';
 import { NavBarTitle } from '@/components/Typography';
-import { ChevronDown, DownIcon, SettingsIcon, SignOutIcon } from '@/assets/svg';
+import { DownIcon, SettingsIcon, SignOutIcon } from '@/assets/svg';
 import { StyledMenu } from '@/components/Table/StyledMenu';
 
 export const Profile = () => {

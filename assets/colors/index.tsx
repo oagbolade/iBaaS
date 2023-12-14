@@ -3,6 +3,7 @@ const colors = {
   lightGrey: '#F9FBFC', // or neutal100
   stepTitleBlue: '#0172CB',
   backButtonGrey: '#595959',
+  activeGreen300: '#74C965',
   activeBlue100: '#EBF8FE',
   activeBlue200: '#A8D6EF',
   activeBlue400: '#0275D8',
@@ -27,6 +28,7 @@ const colors = {
   navBarTitleColor: '#18425D',
   primaryRed400: '#DC4437',
   primaryRed500: '#A4251A',
+  primaryRedBase: '#EE312A',
   batchColor: '#D9D9D98A',
   black: '#000000',
   bodyText: '#475467',
@@ -41,6 +43,7 @@ const colors = {
   gray300: '#D0D5DD',
   gray500: '#6B7280',
   gray800: '#1F2937',
+  gray900: '#E3E8EE',
   darkGrayishBlue: '#475467',
   greenLine: '#76DEE4',
   blueLine: '#4D80E4',

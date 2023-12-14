@@ -29,7 +29,6 @@ export const doughnutOptions = {
   tooltip: { trigger: 'none' },
   chartArea: { left: 50, top: 30 },
   height: 330,
-  width: 525,
   slices: {
     0: { color: `${colors.activeBlue400}` },
     1: { color: `${colors.primaryBlue200}` },
@@ -52,7 +51,6 @@ export const baroptions = {
   fontSize: 12,
   fontName: 'Averta Regular',
   height: 330,
-  width: 525,
   chartArea: { left: 40, top: 30 },
   bar: {
     groupWidth: 60,
@@ -94,6 +92,21 @@ export const linedata = [
   ['Others', 630, 540],
 ];
 
+export const linedatav2 = [
+  ['Place', 'Sales'],
+  ['Ajah', 1000],
+  ['Surulere', 1170],
+  ['VI', 660],
+  ['Yaba', 1030],
+  ['Somolu', 1030],
+  ['Staff Current', 1030],
+  ['Gbagada', 1030],
+  ['Igando', 130],
+  ['Orile', 230],
+  ['Lekki', 430],
+  ['Others', 630],
+];
+
 export const lineOptions = {
   isStacked: true,
   chartArea: { left: 40, top: 30 },
@@ -102,7 +115,6 @@ export const lineOptions = {
   fontName: 'Averta Regular',
   colors: [`${colors.blueLine}`, `${colors.greenLine}`],
   height: 300,
-  width: 1250,
   vAxis: {
     minValue: 0,
     gridlines: {

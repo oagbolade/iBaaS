@@ -6,13 +6,12 @@ export const navbarStyle = {
   height: '60px',
   padding: { desktop: '0px 40px', mobile: '0 25px' },
   alignItems: 'center',
-  // justifyContent: 'space-between',
   position: 'fixed',
   top: 0,
   left: 0,
-  zIndex: 2,
   backgroundColor: `${colors.white}`,
   borderBottom: `1px solid ${colors.neutral300}`,
+  zIndex: 2,
 };
 
 export const greetingStyle = {

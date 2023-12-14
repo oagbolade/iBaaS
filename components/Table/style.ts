@@ -10,16 +10,6 @@ export const TableContainerStyle = {
   height: '48px',
 };
 
-export const TableFooter = {
-  display: 'flex',
-  padding: '16px 24px',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
-  alignSelf: 'stretch',
-  width: '1117px',
-  height: '48px',
-};
-
 export const TableTitle = {
   color: `${colors.primaryBlue700}`,
   fontSize: '12px',
@@ -27,17 +17,12 @@ export const TableTitle = {
   fontWeight: 600,
   lineHeight: '16px' /* 133.333% */,
   letterSpacing: '0.4px',
-  marginTop: '20px'
+  marginTop: '20px',
 };
 
 export const TablePaginationStyle = {
   display: 'flex',
-  alignItems: 'flex-start',
-  gap: '23px',
-  width: '113px',
-  height: '16px',
-  marginLeft: '460px',
-  marginTop: '25px',
+  alignItems: 'center',
 };
 
 export const TablePaginationTitle = {
@@ -55,4 +40,16 @@ export const PaginationContainer = {
   width: '40px',
   height: '16px',
   color: `${colors.primaryBlue700}`,
+};
+
+export const inputFields = {
+  padding: '16px 12px',
+  height: '46px',
+  display: 'flex',
+  justifyContent: 'center',
+  width: '400px',
+  marginTop: '15px',
+  marginLeft: '30px',
+  gap: '16px',
+  marginBottom: '15px',
 };
