@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext } from 'react';
+import React from 'react';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -21,7 +21,7 @@ const ModalForm = () => {
 
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -48,6 +48,7 @@ const ModalForm = () => {
               <FormTextInput
                 customStyle={{
                   width: setWidth(),
+                  height: { mobile: '20px' },
                 }}
                 name="staffId"
                 placeholder="002789765"

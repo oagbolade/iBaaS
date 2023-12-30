@@ -4,7 +4,10 @@ import { Box } from '@mui/material';
 import { LoanFormContainer } from '@/components/Revamp/Shared/LoanFormContainer';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { submitButton, cancelButton } from './styles';
+import {
+  submitButton,
+  cancelButton,
+} from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import {
   Details,
   MainTitle,
@@ -14,10 +17,15 @@ import { Status } from '@/components/Labels';
 import { LoanPartialPayOff } from '@/features/Loan/Forms';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
 
-
 const PreviewContent: React.FC = () => {
   return (
-    <Box mt={{ mobile: 3 }} sx={{padding: {mobile: 6, tablet: 0}, alignItems: {mobile: "center", tablet: "normal"}}}>
+    <Box
+      mt={{ mobile: 3 }}
+      sx={{
+        padding: { mobile: 6, tablet: 0 },
+        alignItems: { mobile: 'center', tablet: 'normal' },
+      }}
+    >
       <MainTitle title="Loan Account Details" />
 
       <SubTitle title="Settlement Account" />
@@ -40,7 +48,7 @@ const PreviewContent: React.FC = () => {
 
       <SubTitle title="Total No. of Installment" />
       <Details title="4" />
-      <Box mb={{mobile: 5, tablet: 0}}>
+      <Box mb={{ mobile: 5, tablet: 0 }}>
         <SubTitle title="Loan Status" />
         <Status label="Active" status="success" />
       </Box>
@@ -52,13 +60,9 @@ const FormFields: React.FC = () => {
   return <LoanPartialPayOff />;
 };
 
-const MobilePreviewContent: React.FC =()=>{
-  return(
-    <MobileModalContainer
-     ShowPreview={<PreviewContent/>}
-    />
-  )
-}
+const MobilePreviewContent: React.FC = () => {
+  return <MobileModalContainer ShowPreview={<PreviewContent />} />;
+};
 
 export const PartialPay = () => {
   const [open, setOpen] = useState(false);
@@ -76,7 +80,7 @@ export const PartialPay = () => {
   }, [open]);
 
   const actionButtons: any = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 70, tablet: 0, desktop: 0 }}>
+    <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
       <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
       <PrimaryIconButton
         onClick={showToastPlaceholder}
@@ -88,7 +92,7 @@ export const PartialPay = () => {
   ];
   return (
     <LoanFormContainer
-    ShowMobilePeview={MobilePreviewContent}
+      ShowMobilePeview={MobilePreviewContent}
       toastMessage={{
         title: 'Partial Payoff Successful',
         body: 'You have successfully done a partial payoff of [value] for [Account-name] and it has been sent for approval.',

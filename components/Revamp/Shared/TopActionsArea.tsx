@@ -12,13 +12,13 @@ export const TopActionsArea = ({ actionButtons }: Props) => {
       sx={{
         borderBottom: '1px solid #E8E8E8',
         padding: '12px 20px',
-        width: '84.2vw', // causing a horizontal overflow, may remove later
+        width: { mobile: '100%', tablet: '84.2vw' }, // causing a horizontal overflow, may remove later
         marginTop: '60px',
       }}
       direction="row"
-      justifyContent="space-between"
+      justifyContent={{ mobile: 'flex-start', tablet: 'space-between' }}
       alignItems="center"
-      spacing={2}
+      spacing={{ tablet: 2 }}
     >
       <BackButton />
       <Stack direction="row">

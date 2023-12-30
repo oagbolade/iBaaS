@@ -39,10 +39,10 @@ export const TerminateLoanForm = () => {
 
   return (
     <Box>
-      <Box ml={{ mobile: 25, tablet: 0, desktop: 0 }}>
+      <Box>
         <LargeTitle title="Terminate Loan" />
       </Box>
-      <Box ml={{ mobile: 50, tablet: 0, desktop: 0 }}>
+      <Box>
         <Formik
           initialValues={userInitialValues}
           onSubmit={(values, actions) => onSubmit(values, actions)}
@@ -52,14 +52,12 @@ export const TerminateLoanForm = () => {
             <Box mt={4}>
               <Grid container>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newRate"
                     placeholder="3.2"
@@ -68,14 +66,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newTerm"
                     placeholder="5"
@@ -84,14 +80,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="startDate"
                     placeholder="04 August, 2023"
@@ -100,14 +94,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="maturityDate"
                     placeholder="04 August, 2023"
@@ -116,14 +108,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="totalDays"
                     placeholder="365"
@@ -132,14 +122,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalOutstanding"
                     placeholder="33,432,432"
@@ -148,14 +136,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestOutstanding"
                     placeholder="32,432"
@@ -164,14 +150,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="penalInterestOutstanding"
                     placeholder="32,432"
@@ -180,14 +164,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalPayout"
                     placeholder="1,432,532.53"
@@ -196,14 +178,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestPayout"
                     placeholder="2,532.53"
@@ -212,14 +192,12 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="penalInterestPayout"
                     placeholder="2,532.53"
@@ -228,13 +206,10 @@ export const TerminateLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
-                  mobile={8}
-                  mr={{ mobile: 120, tablet: 0 }}
+                  mobile={12}
                 >
-                  <Box mr={{ mobile: 47, tablet: 0 }}>
+                  <Box>
                     <Details title="Balance After" />
                     <Balance amount="N132,432,543.43" />
                   </Box>

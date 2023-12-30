@@ -1,18 +1,18 @@
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
+import { Formik, Form } from 'formik';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { InterestSection } from './InterestSection';
 import {
   LargeTitle,
   Details,
 } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { Formik, Form } from 'formik';
 import { FormTextInput } from '@/components/FormikFields';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import colors from '@/assets/colors';
-import { InterestSection } from './InterestSection';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 
 export const Balance = ({ amount }: { amount: string }) => (
   <Typography
@@ -42,11 +42,10 @@ export const RestructureLoanForm = () => {
 
   return (
     <Box>
-      <Box ml={{ mobile: 30, tablet: 0 }}>
+      <Box>
         <LargeTitle title="Restructure Loan" />
       </Box>
       <Box
-        ml={{ mobile: 60, tablet: 0 }}
         sx={{
           justifyContent: { mobile: 'center' },
           alignItems: { mobile: 'center' },
@@ -60,15 +59,10 @@ export const RestructureLoanForm = () => {
           <Form>
             <Box mt={4}>
               <Grid container>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newRate"
                     placeholder="3.2"
@@ -76,15 +70,10 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newTerm"
                     placeholder="5"
@@ -92,15 +81,10 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="startDate"
                     placeholder="04 August, 2023"
@@ -109,10 +93,7 @@ export const RestructureLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
                 >
                   <InterestSection title="Outstanding Principal" />
                   <InterestSection title="Accrued Interest" />
@@ -120,15 +101,10 @@ export const RestructureLoanForm = () => {
                   <InterestSection title="Accrued Estimated Interest" />
                 </Grid>
 
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="maturityDate"
                     placeholder="04 August, 2023"
@@ -136,15 +112,10 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="totalDays"
                     placeholder="365"
@@ -152,15 +123,10 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalOutstanding"
                     placeholder="33,432,432"
@@ -168,15 +134,10 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestOutstanding"
                     placeholder="32,432"
@@ -185,28 +146,21 @@ export const RestructureLoanForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                   mb={2}
                   width={{ mobile: '560px' }}
                 >
-                  <Box sx={{ width: { mobile: '760px', tablet: '560px' } }}>
+                  <Box sx={{ width: { mobile: '230px', tablet: '560px' } }}>
                     <DemoContainer components={['DatePicker']}>
                       <DateTimePicker label="Posting Date" />
                     </DemoContainer>
                   </Box>
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalPayout"
                     placeholder="1,432,532.53"
@@ -214,15 +168,10 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestPayout"
                     placeholder="2,532.53"
@@ -230,15 +179,10 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="penalInterestPayout"
                     placeholder="2,532.53"
@@ -246,12 +190,7 @@ export const RestructureLoanForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <Box mr={{ mobile: 50, tablet: 0 }}>
                     <Details title="Balance After" />
                     <Balance amount="N132,432,543.43" />

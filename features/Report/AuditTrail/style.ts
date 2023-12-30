@@ -8,9 +8,9 @@ export const modalContainer = {
   borderRadius: '12px',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '492px',
+  width: { mobile: '300px', desktop: '492px' },
   height: 'auto',
-  position: 'absolute' as 'absolute',
+  position: 'absolute',
   top: '50%',
   background: `${colors.white}`,
   boxShadow:
@@ -18,7 +18,7 @@ export const modalContainer = {
 };
 
 export const modalTitleContainer = {
-  width: '492px',
+  width: { mobile: '300px', desktop: '492px' },
   height: 'auto',
   display: 'flex',
   flexDirection: 'column',
@@ -35,7 +35,7 @@ export const modalTitle = {
   alignSelf: 'stretch',
   borderBottom: `1px solid ${colors.neutral300}`,
   color: `${colors.neutral900}`,
-  width: '492px',
+  width: { mobile: '300px', desktop: '492px' },
   height: '60px',
 };
 
@@ -44,7 +44,7 @@ export const modalTitleStyle = {
   alignItems: 'center',
   gap: '16px',
   alignSelf: 'stretch',
-  width: '444px',
+  width: { mobile: '280px', desktop: '444px' },
   height: '32px',
   color: `${colors.neutral900}`,
 };

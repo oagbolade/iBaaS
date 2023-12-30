@@ -8,20 +8,34 @@ import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { NestedMenu } from '@/components/Revamp/Menu/NestedMenu';
 
 export const FilterSection = () => {
-  const { setWidth } = useCurrentBreakpoint();
+  const { setWidth, isTablet } = useCurrentBreakpoint();
   const [anchorEl, setAnchorEl] = useState<
     (EventTarget & HTMLButtonElement) | null
   >(null);
   const open = Boolean(anchorEl);
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-    {return setAnchorEl(e.currentTarget);};
-  const handleClose = () => {return setAnchorEl(null);};
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    return setAnchorEl(e.currentTarget);
+  };
+  const handleClose = () => {
+    return setAnchorEl(null);
+  };
 
   return (
     <Box>
       <Grid container spacing={2}>
-        <Grid item mobile={12} tablet={4} justifyContent="center">
-          <Button onClick={(e) => {return handleClick(e);}}>
+        <Grid
+          ml={{ mobile: 1, desktop: 0 }}
+          mt={{ mobile: 3, desktop: 0 }}
+          item={isTablet}
+          mobile={12}
+          tablet={4}
+          justifyContent="center"
+        >
+          <Button
+            onClick={(e) => {
+              return handleClick(e);
+            }}
+          >
             <TextInput
               customStyle={{
                 width: setWidth(),
@@ -39,7 +53,13 @@ export const FilterSection = () => {
             handleClose={handleClose}
           />
         </Grid>
-        <Grid mt={0.7} item mobile={12} tablet={8} justifyContent="center">
+        <Grid
+          mt={{ desktop: 0.7 }}
+          item
+          mobile={12}
+          tablet={8}
+          justifyContent="center"
+        >
           <TextInput
             customStyle={{
               width: setWidth(),

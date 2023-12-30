@@ -1,45 +1,44 @@
 'use client';
 import React from 'react';
-import { AdminContainer } from '@/features/Admin';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import {
-  ModalBackButton,
-  ModalSaveButton,
-  ResetButton,
-} from '@/components/Modal/styles';
+import { AdminContainer } from '@/features/Admin';
 import { role as roleSchema } from '@/constants/schemas';
 import { roleInitialValues } from '@/constants/types';
-import { PrimaryIconButton } from '@/components/Buttons';
 import {
   FormTextInput,
   CheckboxInput,
   FormSelectField,
 } from '@/components/FormikFields';
-import { PageTitle } from '@/components/Typography';
 import { EditRole } from '@/constants/AdminOptions';
 import { useCurrentBreakpoint } from '@/utils';
 import { ModalActions } from '@/components/Shared/ActionButtons';
 import colors from '@/assets/colors';
+
+export const ModalBackStyle = {
+  height: { desktop: '40px', mobile: '38px' },
+  width: { desktop: '86px', mobile: '76px' },
+  fontSize: { desktop: '18px', mobile: '12px' },
+  fontWeight: 600,
+  color: `${colors.neutral900}`,
+  backgroundColor: `${colors.white}`,
+  borderRadius: '8px',
+  border: `1px solid ${colors.neutral300}`,
+};
 
 const ModalForm = () => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
     actions.setSubmitting(false);
   };
 
-  const setDirction = () => {
-    if (isMobile) return 'column';
-    return 'row';
-  };
   return (
     <Formik
       initialValues={roleInitialValues}
@@ -203,17 +202,6 @@ const ModalForm = () => {
       </Form>
     </Formik>
   );
-};
-
-export const ModalBackStyle = {
-  height: { desktop: '40px', mobile: '38px' },
-  width: { desktop: '86px', mobile: '76px' },
-  fontSize: { desktop: '18px', mobile: '12px' },
-  fontWeight: 600,
-  color: `${colors.neutral900}`,
-  backgroundColor: `${colors.white}`,
-  borderRadius: '8px',
-  border: `1px solid ${colors.neutral300}`,
 };
 
 export const PostingLimit = () => {

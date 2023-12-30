@@ -28,7 +28,7 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
       <Stack
         alignItems="center"
         direction="row"
-        justifyContent="space-between"
+        justifyContent={{ mobile: 'flex-end', desktop: 'space-between' }}
         spacing={3}
         sx={{
           padding: '12px 25px',
@@ -51,7 +51,7 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
           sx={{
             position: 'relative',
             left: '65px',
-            display: { mobile: 'none', desktop: 'block', align: 'right' },
+            display: { mobile: 'none', desktop: 'block' },
           }}
         >
           <Profile />

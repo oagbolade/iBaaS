@@ -11,10 +11,10 @@ import { PageTitle } from '@/components/Typography';
 import { useCurrentBreakpoint } from '@/utils';
 
 export const ModalActions = () => {
-  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { isMobile } = useCurrentBreakpoint();
 
   const setDirction = () => {
-    if(isMobile) return 'column'; 
+    if (isMobile) return 'column';
     return 'row';
   };
   return (
@@ -30,11 +30,10 @@ export const ModalActions = () => {
         tablet={6}
       >
         <Grid item mobile={12} desktop={6}>
-        <Button variant="text">
-          <PageTitle title="Reset" styles={ResetButton} />
-        </Button>
+          <Button variant="text">
+            <PageTitle title="Reset" styles={ResetButton} />
+          </Button>
         </Grid>
-       
       </Grid>
       <Grid item tablet={3}>
         <PrimaryIconButton

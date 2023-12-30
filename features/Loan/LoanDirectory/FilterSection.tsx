@@ -24,7 +24,13 @@ export const FilterSection = () => {
             label="Branch ID"
           />{' '}
         </Grid>
-        <Grid mb={6} item mobile={12} tablet={2} justifyContent="center">
+        <Grid
+          mb={{ tablet: 6 }}
+          item
+          mobile={12}
+          tablet={2}
+          justifyContent="center"
+        >
           <FormSelectInput
             customStyle={{
               width: setWidth(),
@@ -35,7 +41,13 @@ export const FilterSection = () => {
             label="Loan Status"
           />{' '}
         </Grid>
-        <Grid mb={6} item mobile={12} tablet={7} justifyContent="center">
+        <Grid
+          mb={{ tablet: 6 }}
+          item
+          mobile={12}
+          tablet={7}
+          justifyContent="center"
+        >
           <TextInput
             customStyle={{
               width: setWidth(),
@@ -53,8 +65,9 @@ export const FilterSection = () => {
           tablet={1}
           sx={{ display: 'flex' }}
           justifyContent="flex-end"
-          mt={3.2}
+          mt={{ tablet: 3.2 }}
           mr={{ mobile: 30, tablet: 0 }}
+          mb={{ mobile: 6, tablet: 0 }}
         >
           <ActionButton buttonTitle="Search" />
         </Grid>

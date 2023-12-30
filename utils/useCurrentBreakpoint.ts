@@ -8,6 +8,7 @@ export const useCurrentBreakpoint = () => {
   const matchesDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
 
   const setWidth = (width: number | string = 0) => {
+    if (width) return width;
     if (matchesTablet) return width || '100%';
   };
 

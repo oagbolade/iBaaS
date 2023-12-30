@@ -55,7 +55,7 @@ export const LoanContainer = ({
     <Box
       sx={{
         padding: '25px',
-        width: { mobile: 900, tablet: '100%' },
+        width: '100%',
         ...customStyle,
       }}
     >

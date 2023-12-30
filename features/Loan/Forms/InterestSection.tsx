@@ -1,17 +1,16 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
-import colors from '@/assets/colors';
+import { ContainerStyle } from './styles';
 import { FormTextInput } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import { ContainerStyle } from './styles';
 
 type Props = {
   title: React.ReactNode;
 };
 
 export const InterestSection = ({ title }: Props) => {
-  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
 
   return (
     <Box
@@ -20,15 +19,10 @@ export const InterestSection = ({ title }: Props) => {
       }}
     >
       <Grid container>
-        <Grid
-          container={isMobile}
-          item={isTablet}
-          justifyContent="center"
-          mobile={12}
-        >
+        <Grid item={isTablet} mobile={12}>
           <FormTextInput
             customStyle={{
-              width: setWidth(),
+              width: setWidth(isMobile ? '230px' : '100%'),
             }}
             name="penalInterestPayout"
             placeholder="2,532.53"
@@ -36,13 +30,7 @@ export const InterestSection = ({ title }: Props) => {
             required
           />{' '}
         </Grid>
-        <Grid
-          my={2}
-          container={isMobile}
-          item={isTablet}
-          justifyContent="center"
-          mobile={12}
-        >
+        <Grid my={2} item={isTablet} mobile={12}>
           <RadioButtons
             options={[
               { label: 'Add', value: 'add' },
@@ -54,15 +42,10 @@ export const InterestSection = ({ title }: Props) => {
             value="mianAction"
           />
         </Grid>
-        <Grid
-          container={isMobile}
-          item={isTablet}
-          justifyContent="center"
-          mobile={12}
-        >
+        <Grid item={isTablet} mobile={12}>
           <FormTextInput
             customStyle={{
-              width: setWidth(),
+              width: setWidth(isMobile ? '230px' : '100%'),
             }}
             name="penalInterestPayout"
             placeholder="2,532.53"

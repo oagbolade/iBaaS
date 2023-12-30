@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
+import { Formik, Form } from 'formik';
 import {
   LargeTitle,
   Details,
 } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { Formik, Form } from 'formik';
 import { FormTextInput } from '@/components/FormikFields';
 import { user as userSchema } from '@/constants/schemas';
 import { userInitialValues } from '@/constants/types';
@@ -31,7 +31,7 @@ export const LoanPartialPayOff = () => {
 
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void }
+    actions: { setSubmitting: (arg0: boolean) => void },
   ) => {
     alert(JSON.stringify(values, null, 2));
     actions.setSubmitting(false);
@@ -39,10 +39,10 @@ export const LoanPartialPayOff = () => {
 
   return (
     <Box>
-      <Box ml={{ mobile: 24, tablet: 0, desktop: 0 }}>
+      <Box>
         <LargeTitle title="Loan Partial Payoff" />
       </Box>
-      <Box ml={{ mobile: 50, tablet: 0, desktop: 0 }}>
+      <Box>
         <Formik
           initialValues={userInitialValues}
           onSubmit={(values, actions) => onSubmit(values, actions)}
@@ -52,14 +52,13 @@ export const LoanPartialPayOff = () => {
             <Box mt={4}>
               <Grid container>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newRate"
                     placeholder="3.2"
@@ -68,14 +67,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newTerm"
                     placeholder="5"
@@ -84,14 +82,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="startDate"
                     placeholder="04 August, 2023"
@@ -100,14 +97,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="maturityDate"
                     placeholder="04 August, 2023"
@@ -116,14 +112,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="totalDays"
                     placeholder="365"
@@ -132,14 +127,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalOutstanding"
                     placeholder="33,432,432"
@@ -148,14 +142,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestOutstanding"
                     placeholder="32,432"
@@ -164,14 +157,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="penalInterestOutstanding"
                     placeholder="32,432"
@@ -180,14 +172,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalPayout"
                     placeholder="1,432,532.53"
@@ -196,14 +187,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestPayout"
                     placeholder="2,532.53"
@@ -212,14 +202,13 @@ export const LoanPartialPayOff = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="penalInterestPayout"
                     placeholder="2,532.53"
@@ -227,14 +216,8 @@ export const LoanPartialPayOff = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={8}
-                  mr={{ mobile: 120, tablet: 0 }}
-                >
-                  <Box mr={{ mobile: 47, tablet: 0 }}>
+                <Grid item={isTablet} mobile={12}>
+                  <Box>
                     <Details title="Balance After" />
                     <Balance amount="N132,432,543.43" />
                   </Box>

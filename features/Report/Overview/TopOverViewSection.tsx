@@ -9,19 +9,22 @@ import {
 import { ChevronDown, ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { allCategoryOptions } from '@/constants/Reports/selectOptions';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 type Props = {
   useBackButton?: boolean;
 };
 
 export const TopOverViewSection = ({ useBackButton }: Props) => {
+  const { setDirection } = useSetDirection();
+
   return (
     <Stack
       sx={{
         borderBottom: `${useBackButton ? '1px solid #E8E8E8' : 'none'}`,
         padding: '12px 20px',
       }}
-      direction="row"
+      direction={setDirection()}
       justifyContent="space-between"
     >
       <Box>
@@ -45,7 +48,12 @@ export const TopOverViewSection = ({ useBackButton }: Props) => {
           />
         )}
       </Box>
-      <Stack mt={1} direction="row" spacing={2} justifyContent="space-between">
+      <Stack
+        mt={1}
+        direction={setDirection()}
+        spacing={2}
+        justifyContent="space-between"
+      >
         <Box>
           <ActionButtonWithPopper
             searchGroupVariant="ExportReport"

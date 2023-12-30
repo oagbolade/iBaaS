@@ -29,6 +29,7 @@ import { EmptyTableIcon } from '@/assets/svg';
 import { CustomTableHeader } from '@/components/Revamp/Shared/Table/CustomTableHeader';
 import { ITableConfig, TableProps } from '@/components/Revamp/TableV2/TableV2';
 import { TextInput } from '@/components/FormikFields';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 // Will change this once we start to make API calls
 interface DataI {
@@ -114,10 +115,10 @@ export const MuiTableContainer = ({
     hasActions: true,
   },
   checkboxHeader,
-  hideFilterSection,
   showSearch = false,
 }: Props) => {
   const actionsColumn = tableConfig?.hasActions ? 1 : 0;
+  const { setDirection } = useSetDirection();
 
   const StyledTableCell = styled(TableCell, {
     shouldForwardProp: (prop) => prop !== 'isHeader',
@@ -247,7 +248,11 @@ export const MuiTableContainer = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack direction="row" justifyContent="space-between" spacing={3}>
+      <Stack
+        direction={setDirection()}
+        justifyContent="space-between"
+        spacing={3}
+      >
         <PageTitle title="276 results found" styles={{ ...TableTitle }} />
         <Box sx={TablePaginationStyle}>
           <PageTitle

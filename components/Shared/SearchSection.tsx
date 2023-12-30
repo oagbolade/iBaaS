@@ -5,6 +5,7 @@ import { Grid } from '@mui/material';
 import { TableTitle } from '@/components/Typography';
 import { TextInput } from '@/components/FormikFields/TextInput';
 import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 type Props = {
   tableTitle: string;
@@ -17,12 +18,8 @@ export const SearchSection = ({
   searchTitle,
   searchFilters,
 }: Props) => {
-  const { isMobile } = useCurrentBreakpoint();
-
-  const setDirection = () => {
-    if (isMobile) return 'column';
-    return 'row';
-  };
+  const { setDirection } = useSetDirection();
+  const { setWidth } = useCurrentBreakpoint();
 
   return (
     <Box>
@@ -35,7 +32,13 @@ export const SearchSection = ({
       >
         <TableTitle title={tableTitle} />
         <Grid item mt={{ mobile: 3, tablet: 0 }} mobile={8} desktop={12}>
-          <TextInput placeholder={searchTitle} icon={<SearchIcon />} />
+          <TextInput
+            customStyle={{
+              width: setWidth(),
+            }}
+            placeholder={searchTitle}
+            icon={<SearchIcon />}
+          />
         </Grid>
       </Stack>
       {searchFilters}

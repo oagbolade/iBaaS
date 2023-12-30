@@ -7,10 +7,10 @@ type Props = {
   title: string | undefined;
 };
 
-export const ModalHeader = (props: Props) => {
+export const ModalHeader = ({ title }: Props) => {
   return (
     <Box sx={ModalHeaderStyle}>
-      <Typography sx={ModalTitle}>{props.title}</Typography>
+      <Typography sx={ModalTitle}>{title}</Typography>
     </Box>
   );
 };

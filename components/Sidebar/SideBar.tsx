@@ -19,19 +19,16 @@ export const SideBar = ({ openMenu }: Props) => {
     return;
   }
 
-  const shouldShowSideBar = () => {
-    if (openMenu || isDesktop) return 'block';
-    return 'none';
-  };
-
   return (
     <Box
       sx={{
-        display: shouldShowSideBar(),
         position: 'fixed',
-        top: '100',
+        top: { mobile: 62, desktop: 0 },
         zIndex: 3,
         height: '100%',
+        opacity: openMenu || isDesktop ? '1' : '0',
+        transition: 'all 1s ease',
+        visibility: openMenu || isDesktop ? 'visible' : 'hidden',
         ...hideScrollbar,
       }}
     >

@@ -26,6 +26,7 @@ export const SideBarContainer = () => {
         ml={5}
         sx={{
           borderRight: `1px solid ${colors.neutral300}`,
+          display: { mobile: 'none', desktop: 'block' },
         }}
       >
         <Link href="/login">

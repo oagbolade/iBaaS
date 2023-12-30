@@ -3,6 +3,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import { FilterSection } from './FilterSection';
 import colors from '@/assets/colors';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 type Props = {
   mainTitle?: string;
@@ -15,6 +16,8 @@ export const CustomTableHeader = ({
   secondaryTitle,
   hideFilterSection = false,
 }: Props) => {
+  const { setDirection } = useSetDirection();
+
   return (
     <Box
       sx={{
@@ -24,8 +27,8 @@ export const CustomTableHeader = ({
     >
       <Stack
         sx={{ width: '100%' }}
-        direction="row"
-        justifyContent="space-between"
+        direction={setDirection()}
+        justifyContent={{ mobile: 'flex-start', desktop: 'space-between' }}
       >
         <Box sx={{ width: '100%' }}>
           <Typography
@@ -37,7 +40,11 @@ export const CustomTableHeader = ({
             />
           </Typography>
           <Typography
-            sx={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}
+            sx={{
+              fontSize: { mobile: '12px', desktop: '16px' },
+              lineHeight: '24px',
+              fontWeight: 400,
+            }}
           >
             {secondaryTitle}
           </Typography>

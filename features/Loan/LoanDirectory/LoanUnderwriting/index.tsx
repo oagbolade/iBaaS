@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { Box, Button } from '@mui/material';
+import React from 'react';
+import { Box } from '@mui/material';
 import { LoanFormContainer } from '@/components/Revamp/Shared/LoanFormContainer';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
@@ -15,13 +15,10 @@ import {
 } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { Status } from '@/components/Labels';
 import { LoanUnderwritingForm } from '@/features/Loan/Forms/LoanUnderwritingForm';
-import { useCurrentBreakpoint } from '@/utils';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
 import { useLoansModalToggle } from '@/utils/useLoansModalToggle';
 
 const PreviewContent: React.FC = () => {
-  const { isMobile, isTablet } = useCurrentBreakpoint();
-
   return (
     <Box
       mt={{ mobile: 3 }}
@@ -65,7 +62,7 @@ export const LoanUnderwriting = () => {
   const { openToastMessage, toggleModal } = useLoansModalToggle();
 
   const actionButtons: any = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
+    <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
       <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
       <PrimaryIconButton
         buttonTitle="Submit"

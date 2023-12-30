@@ -2,9 +2,9 @@ import colors from '@/assets/colors';
 
 export const Toasts = {
   display: 'flex',
-  width: '600px',
+  width: { mobile: '100%', desktop: '600px' },
   height: '93px',
-  alignItems: {mobile: 'center', tablet: 'flex-start'},
+  alignItems: { mobile: 'center', tablet: 'flex-start' },
   gap: '8px',
   justifyContent: 'center',
   alignSelf: 'stretch',
@@ -16,7 +16,7 @@ export const Toasts = {
   position: 'absolute',
   zIndex: 2,
   top: '50px',
-  left: '30%',
+  left: {mobile:'5%', desktop: '30%'},
 };
 
 export const ToastContainers = {
@@ -34,7 +34,7 @@ export const ToastTitleContainer = {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '4px',
-  width: '586px',
+  width: { mobile: '100%', desktop: '586px' },
   height: 'auto',
 };
 
@@ -43,7 +43,7 @@ export const ToastStyle = {
   alignItems: 'flex-start',
   gap: '16px',
   alignSelf: 'stretch',
-  width: '538px',
+  width: { mobile: '100%', desktop: '586px' },
   height: '24px',
 };
 
@@ -52,7 +52,7 @@ export const ToastText = {
   fontSize: '14px',
   fontWeight: 400,
   lineHeight: '20px',
-  width: '538px',
+  width: { mobile: '100%', desktop: '586px' },
   whiteSpace: 'wrap',
 };
 

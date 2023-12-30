@@ -28,13 +28,15 @@ export const RadioButtons = ({ title, value, name, options }: Props) => {
       <FormLabel sx={{ ...RadioButtonTitle }}>{title}</FormLabel>
       <RadioGroup value={value} name={name}>
         <Box sx={RadioButtonStyle}>
-          {options.map((option) => {return (
-            <FormControlLabel
-              value={option.value}
-              control={<BpRadio />}
-              label={option.label}
-            />
-          );})}
+          {options.map((option) => {
+            return (
+              <FormControlLabel
+                value={option.value}
+                control={<BpRadio />}
+                label={option.label}
+              />
+            );
+          })}
         </Box>
       </RadioGroup>
     </FormControl>

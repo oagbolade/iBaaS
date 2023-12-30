@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
 import { Box } from '@mui/material';
-import { submitButton, cancelButton } from './styles';
-import { LoanFormContainer } from '@/components/Revamp/Shared/LoanFormContainer';
+import {
+  submitButton,
+  cancelButton,
+} from '@/features/Loan/LoanDirectory/RestructureLoan/styles';import { LoanFormContainer } from '@/components/Revamp/Shared/LoanFormContainer';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
@@ -55,22 +57,11 @@ const FormFields: React.FC = () => {
   return <TerminateLoanForm />;
 };
 
-const actionButtons: any = [
-  <Box sx={{ display: 'flex' }} ml={{ mobile: 96, tablet: 0, desktop: 0 }}>
-    <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
-    <PrimaryIconButton
-      buttonTitle="Terminate Loan"
-      customStyle={{ ...submitButton }}
-    />
-    ,
-  </Box>,
-];
-
 export const TerminateLoan = () => {
   const { openToastMessage, toggleModal } = useLoansModalToggle();
 
   const actionButtons: any = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 75, tablet: 0, desktop: 0 }}>
+    <Box ml={{ mobile: 2, desktop: 0 }}  sx={{ display: 'flex' }}>
       <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
       <PrimaryIconButton
         onClick={() => toggleModal('toast')}

@@ -100,24 +100,24 @@ export const roleInitialValues: RoleFormValues = {
 };
 
 export interface CustomStyleI {
-  width?: string | number;
-  height?: string;
-  fontWeight?: number;
-  fontSize?: string;
+  width?: string | number | object;
+  height?: string | object;
+  fontWeight?: number | object;
+  fontSize?: string | object;
   variant?: 'contained' | 'outlined' | undefined;
   backgroundColor?: string;
   border?: string;
-  padding?: string;
-  margin?: string;
-  marginTop?: string;
-  marginBottom?: string;
-  marginLeft?: string;
+  padding?: string | object;
+  margin?: string | object;
+  marginTop?: string | object;
+  marginBottom?: string | object;
+  marginLeft?: string | object;
   marginRight?: string;
   display?: string;
   borderRadius?: string;
-  justifyContent?: string;
+  justifyContent?: string | object;
   alignItems?: string;
   gap?: string;
-  color?: string;
-  position?: string;
+  color?: string | object;
+  position?: string | object;
 }

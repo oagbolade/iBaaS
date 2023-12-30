@@ -5,7 +5,8 @@ export const TablePagination = () => {
   return (
     <Stack
       sx={{
-        margin: '20px',
+        margin: { desktop: '20px' },
+        marginTop: { mobile: '10px', desktop: '20px' },
         display: 'flex',
         alignItems: 'center',
       }}

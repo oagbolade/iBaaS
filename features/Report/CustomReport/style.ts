@@ -6,18 +6,20 @@ export const customReportContainer = {
   alignItems: 'flex-start',
   gap: '24px',
   borderRadius: '8px',
-  height: '2704px',
+  height: 'auto',
+  marginBottom: '50px',
 };
 
 export const cardsDetailsContainer = {
   display: 'flex',
+  flex: '1 1 0',
+  flexWrap: 'wrap',
   marginBottom: '16px',
   alignItems: 'flex-start',
-  gap: '24px',
-  alignSelf: 'stretch',
   width: '100%',
   height: '320px',
   borderRadius: '8px',
+  rowGap: '30px',
 };
 
 export const inputFields = {

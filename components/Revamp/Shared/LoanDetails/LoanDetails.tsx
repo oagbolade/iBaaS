@@ -16,6 +16,7 @@ import { ViewAccount } from './ViewAccount';
 import { ChevronDown, ExternalLinkIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { Status } from '@/components/Labels';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 const Accordion = styled((props: AccordionProps) => {
   return (
@@ -28,7 +29,6 @@ const Accordion = styled((props: AccordionProps) => {
   );
 })(() => {
   return {
-    width: '1037px',
     borderRadius: '12px',
     border: `1px solid ${colors.neutral300}`,
     boxShadow: 'none',
@@ -109,9 +109,10 @@ export const LargeTitle = ({ title }: { title: string }) => {
   return (
     <Typography
       sx={{
-        fontSize: '20px',
+        fontSize: { mobile: '14px', desktop: '20px' },
         fontWeight: 700,
-        lineHeight: '32px',
+        lineHeight: { mobile: '20px', desktop: '32px' },
+        textWrap: 'wrap',
       }}
     >
       {title}
@@ -129,6 +130,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const [height, setHeight] = React.useState<Height>(350);
   const [open, setOpen] = React.useState(false);
+  const { setDirection } = useSetDirection();
 
   const toggleModal = () => {
     setOpen(!open);
@@ -158,11 +160,12 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
   return (
     <Box
       sx={{
-        marginTop: '20px',
+        margin: '20px 0',
       }}
     >
       {showTopBorder && <TopBorderSection />}
       <Accordion
+        sx={{ width: { mobile: '100%', desktop: '1037px' } }}
         expanded={expanded}
         onChange={() => {
           return handleChange();
@@ -171,9 +174,9 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
         <AccordionDetails>
           <AnimateHeight id="example-panel" duration={350} height={height}>
             <Stack
-              direction="row"
+              direction={setDirection()}
               sx={{
-                padding: '30px 40px',
+                padding: { mobile: '15px 20px', desktop: '30px 40px' },
                 background: `${colors.primaryBlue100}`,
               }}
               spacing={2}
@@ -191,7 +194,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                   <LargeTitle title="Mariam Omodayo Oluwafunke" />
                   <Typography
                     sx={{
-                      fontSize: '14px',
+                      fontSize: { mobile: '10px', desktop: '14px' },
                       fontWeight: 400,
                       lineHeight: '20px',
                     }}
@@ -215,11 +218,11 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                 <Status label="Active" status="success" />
               </Box>
             </Stack>
-            <Stack direction="row">
+            <Stack direction={setDirection()}>
               <Box
                 sx={{
                   width: '372px',
-                  padding: '20px 32px',
+                  padding: { mobile: '10px 17px', desktop: '20px 32px' },
                   borderRight:
                     '1px solid var(--colour-neutral-neutral-300, #E1E6ED)',
                 }}
@@ -279,7 +282,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
               </Box>
               <Box
                 sx={{
-                  width: '372px',
+                  width: { mobile: '100%', desktop: '372px' },
                   padding: '20px 32px',
                   borderRight:
                     '1px solid var(--colour-neutral-neutral-300, #E1E6ED)',
@@ -367,7 +370,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
       <Box
         mt={4}
         sx={{
-          width: '1037px',
+          width: { mobile: '100%', desktop: '1037px' },
           display: 'flex',
           flexDirection: 'column',
           padding: '32px 40px',
@@ -380,13 +383,13 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
       >
         <Box
           sx={{
-            width: '967px',
+            width: { mobile: '100%', desktop: '967px' },
             borderBottom: `1px solid ${colors.neutral300}`,
           }}
         >
           <LargeTitle title="Loan Account Details" />
         </Box>
-        <Stack direction="row">
+        <Stack direction={setDirection()}>
           <Box mt={2} sx={{ width: '303px' }}>
             <SubTitle title="Settlement Account number" />
             <Details title="39483593939" />

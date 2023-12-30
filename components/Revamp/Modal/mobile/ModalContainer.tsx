@@ -23,17 +23,15 @@ export const MobileModalContainer = ({ ShowPreview }: Props) => {
     <Box>
       {isMobile && (
         <>
-          <Box mr={{ mobile: 90 }} ml={{ mobile: 9 }}>
+          <Box ml={4}>
             <Button
               sx={{
-                marginBottom: '3700px',
                 borderRadius: '6px',
                 width: '136px',
                 border: '1px solid rgb(48, 115, 153)',
                 height: '40px',
                 marginTop: '40px',
                 alignItems: 'center',
-                marginRight: '40px',
               }}
               onClick={handleClick}
             >

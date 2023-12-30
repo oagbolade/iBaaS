@@ -66,7 +66,7 @@ export const textStyle = {
   background: `${colors.neutral200}`,
   gap: '8px',
   color: `${colors.neutral600}`,
-  width: { tablet: '327px', mobile: '560px' },
+  width: { tablet: '327px', mobile: '100%' },
   height: 'auto',
   '& fieldset': { border: 'none' },
 };

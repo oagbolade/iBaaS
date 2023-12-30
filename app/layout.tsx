@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { Stack } from '@mui/material';
 import { theme } from './MuiTheme';
 import NavBarContextProvider from './NavBarContext';
+import SideBarContextProvider from './SideBarContext';
 import { RenderChildren } from './RenderChildren';
 import { NavBarSideBarWrapper } from '@/components/Shared/NavBarSideBarWrapper';
 
@@ -23,18 +24,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <NavBarContextProvider>
-      <ThemeProvider theme={theme}>
-        <html lang="en">
-          <body className={inter.className} suppressHydrationWarning>
-            <NextTopLoader />{' '}
-            <Stack direction="row">
-              <NavBarSideBarWrapper />
-              <RenderChildren>{children}</RenderChildren>
-            </Stack>
-          </body>
-        </html>
-      </ThemeProvider>
-    </NavBarContextProvider>
+    <SideBarContextProvider>
+      <NavBarContextProvider>
+        <ThemeProvider theme={theme}>
+          <html lang="en">
+            <body className={inter.className} suppressHydrationWarning>
+              <NextTopLoader />{' '}
+              <Stack direction="row">
+                <NavBarSideBarWrapper />
+                <RenderChildren>{children}</RenderChildren>
+              </Stack>
+            </body>
+          </html>
+        </ThemeProvider>
+      </NavBarContextProvider>
+    </SideBarContextProvider>
   );
 }

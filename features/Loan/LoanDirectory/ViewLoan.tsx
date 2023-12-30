@@ -33,7 +33,7 @@ const ActionButton = () => (
 );
 
 const actionButtons: any = [
-  <Box  ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
+  <Box ml={{ mobile: 14, desktop: 0 }}>
     <ActionButton />
   </Box>,
 ];
@@ -44,11 +44,11 @@ export const ViewLoan = () => {
       <TopActionsArea actionButtons={actionButtons} />
       <Box
         sx={{
-          padding: '0 25px',
+          padding: { mobile: '0 5px', desktop: '0 25px' },
           width: '100%',
         }}
       >
-        <Box>
+        <Box pl={{ mobile: 2, dektop: 0 }}>
           <LoanDetails />
         </Box>
       </Box>

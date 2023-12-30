@@ -1,14 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useContext } from 'react';
 import { SideBar } from '@/components/Sidebar/index';
 import { NavBar } from '@/components/NavBar/index';
+import { SideBarContext } from '@/app/SideBarContext';
 
 export function NavBarSideBarWrapper() {
-  const [openMenu, setOpenMenu] = useState<boolean>(false);
-
-  const toggleMenu = () => {
-    setOpenMenu(!openMenu);
-  };
+  const { openMenu, toggleMenu } = useContext(SideBarContext);
 
   return (
     <>

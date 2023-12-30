@@ -2,8 +2,8 @@ import colors from '@/assets/colors';
 
 export const RadioButtonStyle = {
   display: 'flex',
+  flexDirection: { mobile: 'column', desktop: 'row' },
   alignItems: 'flex-start',
-  gap: '44px',
 };
 
 export const RadioButtonTitle = {

@@ -3,7 +3,7 @@ import { modalScrollbar } from '@/utils/scrollBars';
 
 export const ModalTitle = {
   color: `${colors.neutral900}`,
-  fontSize: '28px',
+  fontSize: { mobile: '18px', tablet: '28px' },
   fontWeight: 700,
   lineHeight: '32px',
 };
@@ -13,26 +13,23 @@ export const ModalContainer = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '724px',
+  width: { mobile: '100%', tablet: '724px' },
   maxWidth: '90vw',
   minHeight: '292px',
   maxHeight: '90vh',
   boxShadow: 24,
-  p: 4,
   borderRadius: '8px',
   background: `${colors.white}`,
   display: 'inline-flex',
   paddingTop: '0px',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: '40px',
   ...modalScrollbar,
 };
 
 export const ModalHeader = {
-  backgroundColor: `${colors.neutral200}`,
   display: 'flex',
-  width: '724px',
+  width: { mobile: '100%', tablet: '724px' },
   maxWidth: '90vw',
   height: '80px',
   padding: '24px',
@@ -61,9 +58,9 @@ export const ModalSaveButton = {
   color: `${colors.white}`,
   backgroundColor: `${colors.activeBlue400}`,
   borderRadius: '8px',
-  marginRight: { desktop: '45px', },
+  marginRight: { desktop: '45px' },
   alignItems: 'center',
-  textAlign:  'center',
+  textAlign: 'center',
 };
 
 export const ResetButton = {

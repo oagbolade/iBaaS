@@ -23,7 +23,6 @@ export const detailsTitleContainer = {
   flexDirection: 'column',
   width: '100%',
   height: 'auto',
-  marginBottom: '200px',
 };
 
 export const detailsTitle = {

@@ -17,12 +17,15 @@ export const TableTitle = {
   fontWeight: 600,
   lineHeight: '16px' /* 133.333% */,
   letterSpacing: '0.4px',
-  marginTop: '20px',
+  marginTop: '5px',
 };
 
 export const TablePaginationStyle = {
-  display: 'flex',
+  display: { mobile: 'block', desktop: 'flex' },
   alignItems: 'center',
+  position: 'relative',
+  bottom: 10,
+  right: { desktop: -15 },
 };
 
 export const TablePaginationTitle = {

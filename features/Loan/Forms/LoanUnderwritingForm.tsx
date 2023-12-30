@@ -47,11 +47,10 @@ export const LoanUnderwritingForm = () => {
 
   return (
     <Box>
-      <Box ml={{ mobile: 35, tablet: 0 }}>
+      <Box>
         <LargeTitle title="Loan Underwriting" />
       </Box>
       <Box
-        ml={{ mobile: 69, tablet: 0, desktop: 0 }}
         sx={{
           justifyContent: { mobile: 'center' },
           alignItems: { mobile: 'center' },
@@ -66,16 +65,14 @@ export const LoanUnderwritingForm = () => {
             <Box mt={4}>
               <Grid container>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                   mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '560px', tablet: 0 }}
+                  width={{ mobile: '100%', tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '560px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newRate"
                     placeholder="3.2"
@@ -84,12 +81,10 @@ export const LoanUnderwritingForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                   mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '560px', tablet: 0 }}
+                  width={{ mobile: '300px', tablet: 0 }}
                   sx={{ marginBottom: '10px' }}
                 >
                   <FormSelect
@@ -97,18 +92,19 @@ export const LoanUnderwritingForm = () => {
                     placeholder="search"
                     options={options}
                     label="Search Group"
+                    customStyle={{
+                      width: setWidth(isMobile ? '300px' : '100%'),
+                    }}
                   />
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                   mr={{ mobile: 35, tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '560px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="newTerm"
                     placeholder="5"
@@ -117,15 +113,13 @@ export const LoanUnderwritingForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                   mr={{ mobile: 35, tablet: 0 }}
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '560px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="startDate"
                     placeholder="04 August, 2023"
@@ -133,27 +127,17 @@ export const LoanUnderwritingForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet}>
                   <InterestSection title="Outstanding Principal" />
                   <InterestSection title="Accrued Interest" />
                   <InterestSection title="Accrued Penal Interest" />
                   <InterestSection title="Accrued Estimated Interest" />
                 </Grid>
 
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="maturityDate"
                     placeholder="04 August, 2023"
@@ -161,15 +145,10 @@ export const LoanUnderwritingForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="totalDays"
                     placeholder="365"
@@ -177,15 +156,10 @@ export const LoanUnderwritingForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalOutstanding"
                     placeholder="33,432,432"
@@ -193,13 +167,7 @@ export const LoanUnderwritingForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                  mb={2}
-                >
+                <Grid item={isTablet} mobile={12} mb={2}>
                   <StaticDatePickerMenu
                     handleClick={handleClick}
                     anchorEl={anchorEl}
@@ -207,15 +175,10 @@ export const LoanUnderwritingForm = () => {
                     handleClose={handleClose}
                   />
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestOutstanding"
                     placeholder="32,432"
@@ -224,9 +187,7 @@ export const LoanUnderwritingForm = () => {
                   />{' '}
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                   mb={2}
                   mr={{ mobile: 40, tablet: 0 }}
@@ -239,9 +200,7 @@ export const LoanUnderwritingForm = () => {
                   />
                 </Grid>
                 <Grid
-                  container={isMobile}
                   item={isTablet}
-                  justifyContent="center"
                   mobile={12}
                   mb={2}
                   mr={{ mobile: 40, tablet: 0 }}
@@ -253,15 +212,10 @@ export const LoanUnderwritingForm = () => {
                     handleClose={handleClose}
                   />
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="principalPayout"
                     placeholder="1,432,532.53"
@@ -269,15 +223,10 @@ export const LoanUnderwritingForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="interestPayout"
                     placeholder="2,532.53"
@@ -285,15 +234,10 @@ export const LoanUnderwritingForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={12}
-                >
+                <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '300px' : '100%'),
                     }}
                     name="penalInterestPayout"
                     placeholder="2,532.53"
@@ -301,14 +245,8 @@ export const LoanUnderwritingForm = () => {
                     required
                   />{' '}
                 </Grid>
-                <Grid
-                  container={isMobile}
-                  item={isTablet}
-                  justifyContent="center"
-                  mobile={8}
-                  mr={{ mobile: 120, tablet: 0 }}
-                >
-                  <Box mr={{ mobile: 50, tablet: 0 }}>
+                <Grid item={isTablet} mobile={12}>
+                  <Box>
                     <Details title="Balance After" />
                     <Balance amount="N132,432,543.43" />
                   </Box>

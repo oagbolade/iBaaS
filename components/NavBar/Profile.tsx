@@ -23,7 +23,11 @@ export const Profile = () => {
   };
 
   return (
-    <Box ml={5} sx={navbarCont}>
+    <Box
+      pt={{ mobile: 2, desktop: 0 }}
+      ml={{ mobile: 3, desktop: 5 }}
+      sx={navbarCont}
+    >
       <NavBarButton greeting="Hi, Omodayo" name="Omodayo.Oluwa..." />
       <Box ml={3} sx={navbarTitle}>
         <NavBarTitle title="AA" />

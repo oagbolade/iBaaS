@@ -18,7 +18,13 @@ import { useLoansModalToggle } from '@/utils/useLoansModalToggle';
 
 const PreviewContentOne: React.FC = () => {
   return (
-    <Box  mb={{mobile: 30, tablet: 0}} sx={{padding: {mobile: 6, tablet: 0}, alignItems: {mobile: "center", tablet: "normal"}}}>
+    <Box
+      mb={{ mobile: 30, tablet: 0 }}
+      sx={{
+        padding: { mobile: 6, tablet: 0 },
+        alignItems: { mobile: 'center', tablet: 'normal' },
+      }}
+    >
       <MainTitle title="Loan Account Details" />
 
       <SubTitle title="Settlement Account" />
@@ -41,7 +47,7 @@ const PreviewContentOne: React.FC = () => {
 
       <SubTitle title="Total No. of Installment" />
       <Details title="4" />
-      <Box mb={{mobile: 15, tablet: 0}}>
+      <Box mb={{ mobile: 15, tablet: 0 }}>
         <SubTitle title="Loan Status" />
         <Status label="Active" status="success" />
       </Box>
@@ -50,9 +56,14 @@ const PreviewContentOne: React.FC = () => {
 };
 
 const PreviewContentTwo: React.FC = () => {
-
   return (
-    <Box mb={{mobile: 30, tablet: 0}} sx={{padding: {mobile: 6, tablet: 0}, alignItems: {mobile: "center", tablet: "normal"}}}>
+    <Box
+      mb={{ mobile: 30, tablet: 0 }}
+      sx={{
+        padding: { mobile: 6, tablet: 0 },
+        alignItems: { mobile: 'center', tablet: 'normal' },
+      }}
+    >
       <SubTitle title="Product Name" />
       <Details title="Compassianate Loan" />
 
@@ -73,10 +84,10 @@ const PreviewContentTwo: React.FC = () => {
 
       <SubTitle title="Total No. of Installment" />
       <Details title="4" />
-      <Box mb={{mobile: 5, tablet: 0}}>
+      <Box mb={{ mobile: 5, tablet: 0 }}>
         <SubTitle title="Loan Status" />
         <Status label="Active" status="success" />
-      </Box>    
+      </Box>
     </Box>
   );
 };
@@ -85,7 +96,6 @@ const tabTitle = ['Account Information', 'Product Information'];
 const pageMenu = [<PreviewContentOne />, <PreviewContentTwo />];
 
 const PreviewContent: React.FC = () => {
-
   return (
     <Box>
       <Tabs tabTitle={tabTitle} pageMenu={pageMenu} />
@@ -93,45 +103,30 @@ const PreviewContent: React.FC = () => {
   );
 };
 
-const MobilePreviewContent: React.FC =()=>{
-  return(
-    <MobileModalContainer
-     ShowPreview={<PreviewContent/>}
-    />
-  )
-}
+const MobilePreviewContent: React.FC = () => {
+  return <MobileModalContainer ShowPreview={<PreviewContent />} />;
+};
 
 const FormFields: React.FC = () => {
   return <RestructureLoanForm />;
 };
 
-const actionButtons: any = [
-  <Box sx={{ display: 'flex' }} ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
-    <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
-    <PrimaryIconButton
-      buttonTitle="Restructure Loan"
-      customStyle={{ ...submitButton }}
-    />
-    ,
-  </Box>,
-];
-
 export const RestructureLoan = () => {
   const { openToastMessage, toggleModal } = useLoansModalToggle();
 
   const actionButtons: any = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 98, tablet: 0, desktop: 0 }}>
-    <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
-    <PrimaryIconButton
-      buttonTitle="Restructure Loan"
-      customStyle={{ ...submitButton }}
-    />
-  </Box>,
+    <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
+      <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
+      <PrimaryIconButton
+        buttonTitle="Restructure Loan"
+        customStyle={{ ...submitButton }}
+      />
+    </Box>,
   ];
 
   return (
     <LoanFormContainer
-     ShowMobilePeview ={MobilePreviewContent}
+      ShowMobilePeview={MobilePreviewContent}
       toastMessage={{
         body: 'You have successfully restructured the Loan for [Account-name]  and it has been sent for approval.',
         title: 'Loan Restructured',
