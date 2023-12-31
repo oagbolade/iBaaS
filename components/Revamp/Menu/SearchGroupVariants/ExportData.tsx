@@ -39,7 +39,7 @@ export const ExportData = ({ handleClose }: Props) => {
       <Box
         sx={{
           ...checkboxSearchgroupContainer,
-          width: '400px',
+          width: { mobile: '100%', desktop: '400px' },
           height: '390px',
           borderRadius: '12px',
           padding: '16px 24px',
@@ -107,7 +107,7 @@ export const ExportData = ({ handleClose }: Props) => {
           onClick={handleClose}
           customStyle={{
             ...applyFilterButton,
-            width: '352px',
+            width: {mobile:'260px', desktop:'352px'},
             height: '52px',
             marginTop: '40px',
           }}

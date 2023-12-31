@@ -51,7 +51,7 @@ export const FilterSection = () => {
           />
         </Wrapper>
         <Wrapper>
-          <Box mt={1}>
+          <Box mt={{ mobile: 1, desktop: 0 }}>
             <Typography sx={labelTypography}>Action</Typography>
             <ActionButtonWithPopper
               searchGroupVariant="BasicSearchGroup"

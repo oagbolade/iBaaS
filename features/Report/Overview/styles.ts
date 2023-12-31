@@ -31,7 +31,7 @@ export const topFilterStyle = {
 
 export const exportData = {
   ...transactionVolumeStyle,
-  width: '171px',
+  width: { mobile: '290px', desktop: '171px' },
   height: '48px',
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
@@ -42,5 +42,5 @@ export const exportData = {
 
 export const dateFilter = {
   ...exportData,
-  width: '197px',
+  width: { mobile: '290px', desktop: '197px' },
 };

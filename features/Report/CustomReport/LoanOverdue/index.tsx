@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
+import { Box } from '@mui/material';
+import Link from 'next/link';
+import { FilterSection } from './FilterSection';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
-import { Box } from '@mui/material';
-import { FilterSection } from './FilterSection';
-import Link from 'next/link';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 export const LoanOverdue = () => {
@@ -18,9 +18,7 @@ export const LoanOverdue = () => {
   };
   return (
     <Box sx={{ marginTop: '60px', width: '100%' }}>
-      <Box sx={{ width: '1300px' }}>
         <TopOverViewSection useBackButton />
-      </Box>{' '}
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
         <FilterSection />
       </Box>

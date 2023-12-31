@@ -1,7 +1,10 @@
 'use client';
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
-import { submitButton, cancelButton } from './styles';
+import {
+  submitButton,
+  cancelButton,
+} from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { LoanFormContainer } from '@/components/Revamp/Shared/LoanFormContainer';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
@@ -60,7 +63,7 @@ export const CancelLoan = () => {
     useLoansModalToggle();
 
   const actionButtons: any = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 60, tablet: 0, desktop: 0 }}>
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
       <PrimaryIconButton
         onClick={() => toggleModal('password')}

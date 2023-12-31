@@ -1,11 +1,7 @@
 import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import styled from 'styled-components';
-import {
-  transactionVolumeStyle,
-  allBranchesStyle,
-} from '../../Overview/styles';
+import { allBranchesStyle } from '../../Overview/styles';
 import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
@@ -13,7 +9,6 @@ import {
   ActionButton,
 } from '@/components/Revamp/Buttons';
 import { ChevronDown } from '@/assets/svg';
-import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
 import { labelTypography } from '@/components/FormikFields/styles';
 import {
   Wrapper,
@@ -21,11 +16,16 @@ import {
   selectButton,
 } from '@/features/Report/CustomReport/ChartAccount/FilterSection';
 import { inputFields } from '@/features/Report/CustomReport/ChequeBook/style';
+import { useSetDirection } from '@/utils/useSetDirection';
+import { useCurrentBreakpoint } from '@/utils';
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
+  const { isMobile, setWidth } = useCurrentBreakpoint();
+
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()}>
         <Wrapper>
           <Typography sx={labelTypography}>Branch Name</Typography>
           <ActionButtonWithPopper
@@ -51,27 +51,32 @@ export const FilterSection = () => {
           />
         </Wrapper>
         <Wrapper>
-          <Typography sx={labelTypography}>Product</Typography>
-          <ActionButtonWithPopper
-            searchGroupVariant="BasicSearchGroup"
-            options={branchOptions}
-            customStyle={{ ...allBranchesStyle, ...selectButton }}
-            icon={
-              <ChevronDown
-                color={`${colors.Heading}`}
-                props={{ width: '12px', height: '12px' }}
-              />
-            }
-            iconPosition="end"
-            buttonTitle="Select"
-          />
+          <Box mt={{ mobile: 1, desktop: 0 }}>
+            <Typography sx={labelTypography}>Product</Typography>
+            <ActionButtonWithPopper
+              searchGroupVariant="BasicSearchGroup"
+              options={branchOptions}
+              customStyle={{ ...allBranchesStyle, ...selectButton }}
+              icon={
+                <ChevronDown
+                  color={`${colors.Heading}`}
+                  props={{ width: '12px', height: '12px' }}
+                />
+              }
+              iconPosition="end"
+              buttonTitle="Select"
+            />
+          </Box>
         </Wrapper>
         <Box mt={4.5} mr={4}>
           <TextInput
             name="Search"
             placeholder="Search"
             icon={<SearchIcon />}
-            customStyle={{ ...inputFields }}
+            customStyle={{
+              ...inputFields,
+              width: setWidth(isMobile ? '240px' : '100%'),
+            }}
           />
         </Box>
         <Box mt={4.5}>
