@@ -10,14 +10,13 @@ import { FilterSection } from './FilterSection';
 export const IndividualLoan = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>{' '}
+      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
         <FilterSection />
       </Box>
-      <Box sx={{ marginTop: '70px', padding: '25px', width: '100%' }}>
+      <Box sx={{ padding: '25px', width: '100%' }}>
         <MuiTableContainer
+          tableConfig={{ hasActions: false }}
           columns={MOCK_COLUMNS}
           data={MOCK_DATA}
           showHeader={{

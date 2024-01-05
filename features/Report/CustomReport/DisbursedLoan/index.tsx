@@ -18,9 +18,7 @@ export const DisbursedLoan = () => {
   };
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>
+      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
         <FilterSection />
       </Box>

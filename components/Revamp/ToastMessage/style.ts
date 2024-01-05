@@ -16,7 +16,7 @@ export const Toasts = {
   position: 'absolute',
   zIndex: 2,
   top: '50px',
-  left: {mobile:'5%', desktop: '30%'},
+  left: { mobile: '2%', desktop: '30%' },
 };
 
 export const ToastContainers = {

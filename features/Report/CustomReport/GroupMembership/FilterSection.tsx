@@ -17,11 +17,14 @@ import {
   branchOptions,
   selectButton,
 } from '../ChartAccount/FilterSection';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
+
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
         <Wrapper>
           <Typography sx={labelTypography}>Branch Name</Typography>
           <ActionButtonWithPopper

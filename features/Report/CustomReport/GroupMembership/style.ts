@@ -33,7 +33,7 @@ export const backTitle = {
 };
 
 export const inputFields = {
-  width: '766px',
+  width: { mobile: '250px', tablet: '766px' },
 };
 export const buttonStyle = {
   display: 'flex',

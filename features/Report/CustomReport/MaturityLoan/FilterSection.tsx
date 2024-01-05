@@ -1,11 +1,7 @@
 import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import styled from 'styled-components';
-import {
-  transactionVolumeStyle,
-  allBranchesStyle,
-} from '../../Overview/styles';
+import { allBranchesStyle } from '../../Overview/styles';
 import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
@@ -18,12 +14,15 @@ import {
   Wrapper,
   branchOptions,
   selectButton,
-} from '../ChartAccount/FilterSection';
+} from '@/features/Report/CustomReport/ChartAccount/FilterSection';
+import { inputFields } from '@/features/Report/CustomReport/TransactionsClearing/style';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
         <Wrapper>
           <Typography sx={labelTypography}>Branch Name</Typography>
           <ActionButtonWithPopper
@@ -65,7 +64,12 @@ export const FilterSection = () => {
           />
         </Wrapper>
         <Box mt={4.5} mr={4}>
-          <TextInput name="Search" placeholder="Search" icon={<SearchIcon />} />
+          <TextInput
+            name="Search"
+            placeholder="Search"
+            icon={<SearchIcon />}
+            customStyle={{ ...inputFields }}
+          />
         </Box>
         <Box mt={4.5}>
           <ActionButton

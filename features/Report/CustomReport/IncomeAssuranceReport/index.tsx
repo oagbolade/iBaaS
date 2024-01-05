@@ -33,10 +33,10 @@ export const IncomeAssuranceReport = () => {
             mainTitle: 'Income Assurance Report',
             secondaryTitle:
               'See a directory of all Income Assurance Report in this system.',
+            hideFilterSection: true,
           }}
           columns={MOCK_COLUMNS}
           data={MOCK_DATA}
-          hideFilterSection
         />
       </Box>
     </Box>

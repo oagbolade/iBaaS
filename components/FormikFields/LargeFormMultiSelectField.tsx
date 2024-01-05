@@ -30,6 +30,7 @@ type Props = {
   options: OptionsI[];
   icon?: any;
   placeholder: string;
+  customStyle?: object;
 };
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
@@ -46,6 +47,7 @@ export const LargeFormMultiSelectField = ({
   options,
   icon,
   placeholder,
+  customStyle,
 }: Props) => {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
@@ -80,6 +82,7 @@ export const LargeFormMultiSelectField = ({
           onChange={handleChange}
           MenuProps={MenuProps}
           sx={largeMultiSelectField}
+          style={{ ...customStyle }}
           IconComponent={() => {
             return icon || <KeyboardArrowDownIcon fontSize="large" />;
           }}

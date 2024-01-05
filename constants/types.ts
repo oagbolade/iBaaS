@@ -10,6 +10,12 @@ interface UserFormValues {
   branch: string;
 }
 
+interface UserLogin {
+  companyCode: string;
+  username: string;
+  password: string;
+}
+
 interface PostingLimitValues {
   role: string;
   branch: string;
@@ -62,11 +68,13 @@ interface CommercialBank {
   bankCode: string;
   bankMnemonic: string;
 }
+
 export const bankValues: CommercialBank = {
   bankName: '',
   bankCode: '',
   bankMnemonic: '',
 };
+
 export const branchValues: ManageBranch = {
   branchCode: '',
   branchName: '',
@@ -80,6 +88,13 @@ export const branchValues: ManageBranch = {
   fax: '',
   telePhoneNumber: '',
 };
+
+export const loginInitialValues: UserLogin = {
+  companyCode: '',
+  username: '',
+  password: '',
+};
+
 export const userInitialValues: UserFormValues = {
   staffId: '',
   staffName: '',

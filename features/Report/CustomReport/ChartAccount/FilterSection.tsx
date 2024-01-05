@@ -16,6 +16,7 @@ import { ChevronDown } from '@/assets/svg';
 import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
 import { labelTypography } from '@/components/FormikFields/styles';
 import { inputFields } from '@/features/Report/CustomReport/style';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const selectButton = {
   width: '270%',
@@ -44,9 +45,10 @@ export const Wrapper = styled.section`
 `;
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()} ml={{ mobile: 9, tablet: 0 }}>
         <Wrapper>
           <Typography sx={labelTypography}>Branch Name</Typography>
           <ActionButtonWithPopper

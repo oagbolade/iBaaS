@@ -7,19 +7,29 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Link from 'next/link';
 import { LoginHeader } from './LoginHeader';
 import { forgotPassword, loginButton } from './styles';
 import InterSwitchImage from '@/assets/interswitch/image';
-import { user as userSchema } from '@/constants/schemas';
-import { userInitialValues } from '@/constants/types';
+import { login as userLoginSchema } from '@/constants/schemas';
+import { loginInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { FormTextInput, CheckboxInput } from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
 import { handleRedirect } from '@/utils';
+import { useAuth } from '@/api/auth/useAuth';
+import { useUser } from '@/api/auth/useUser';
+import { MuiSnackbar } from '@/components/Snackbar';
 
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
+  const { isLoading, login } = useAuth();
+  const { user } = useUser();
+
+  if (user) {
+    return handleRedirect(router, '/setup/business');
+  }
 
   const handleClickShowPassword = () => {
     return setShowPassword((show) => {
@@ -28,13 +38,13 @@ export function LoginForm() {
   };
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
 
   const onSubmit = (values: any, actions: any) => {
-    console.log('values', values);
+    login(values.companyCode, values.username, values.password);
   };
 
   return (
@@ -47,11 +57,11 @@ export function LoginForm() {
       <InterSwitchImage />
       <LoginHeader />
       <Formik
-        initialValues={userInitialValues}
+        initialValues={loginInitialValues}
         onSubmit={(values, actions) => {
           return onSubmit(values, actions);
         }}
-        validationSchema={userSchema}
+        validationSchema={userLoginSchema}
       >
         <Form>
           <Box>
@@ -104,11 +114,11 @@ export function LoginForm() {
               <Grid container mt={7} ml={2} mobile={12}>
                 <Grid item mobile={12}>
                   <PrimaryIconButton
-                    onClick={() => {
-                      return handleRedirect(router, '/setup/business');
-                    }}
+                    // onClick={() => {
+                    //   return handleRedirect(router, '/setup/business');
+                    // }}
                     type="submit"
-                    buttonTitle="Login"
+                    buttonTitle={isLoading ? 'Loading...' : 'Login'}
                     customStyle={loginButton}
                   />
                 </Grid>
@@ -117,6 +127,7 @@ export function LoginForm() {
           </Box>
         </Form>
       </Formik>
+      <MuiSnackbar />
     </Box>
   );
 }

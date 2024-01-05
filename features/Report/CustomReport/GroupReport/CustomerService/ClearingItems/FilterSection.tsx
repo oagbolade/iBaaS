@@ -15,11 +15,17 @@ import {
   selectButton,
 } from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
 import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
+import { useCurrentBreakpoint } from '@/utils';
 
 export const FilterSection = () => {
+  const { isMobile } = useCurrentBreakpoint();
+  const setDirection = () => {
+    if (isMobile) return 'column';
+    return 'row';
+  };
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()}>
         <Box sx={{ width: '350%' }} mt={4.5} mr={4}>
           <Typography sx={{ ...labelTypography, marginBottom: '10px' }}>
             Select Branch

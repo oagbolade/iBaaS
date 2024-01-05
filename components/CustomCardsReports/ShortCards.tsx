@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import Link from 'next/link';
 import {
@@ -39,7 +39,7 @@ export const ShortCards = ({ title, numberOfAccounts, link = '' }: Props) => {
               </Box>
               <Link
                 href={link}
-                style={{ marginLeft: '30px', marginTop: '9px' }}
+                style={{ marginLeft: '470px', marginTop: '9px' }}
               >
                 <TableSingleAction actionName="View" />
               </Link>{' '}

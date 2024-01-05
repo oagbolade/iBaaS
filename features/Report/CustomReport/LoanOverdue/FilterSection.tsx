@@ -25,7 +25,7 @@ export const FilterSection = () => {
 
   return (
     <Box>
-      <Stack direction={setDirection()}>
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
         <Wrapper>
           <Typography sx={labelTypography}>Branch Name</Typography>
           <ActionButtonWithPopper

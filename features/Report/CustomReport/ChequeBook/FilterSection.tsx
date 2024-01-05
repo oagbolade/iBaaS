@@ -21,11 +21,13 @@ import {
   selectButton,
 } from '@/features/Report/CustomReport/ChartAccount/FilterSection';
 import { inputFields } from './style';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()} ml={{ mobile: 9, tablet: 0 }}>
         <Wrapper>
           <Typography sx={labelTypography}>Branch Name</Typography>
           <ActionButtonWithPopper

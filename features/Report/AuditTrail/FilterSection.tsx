@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import styled from 'styled-components';
 import { inputFields } from './style';
 import { allBranchesStyle } from '@/features/Report/Overview/styles';
 import { TextInput } from '@/components/FormikFields';
@@ -25,7 +26,7 @@ export const FilterSection = () => {
 
   return (
     <Box>
-      <Stack direction={setDirection()}>
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
         <Wrapper>
           <Typography sx={labelTypography}>Module</Typography>
           <ActionButtonWithPopper
@@ -79,7 +80,7 @@ export const FilterSection = () => {
             }}
           />
         </Box>
-        <Box mt={4.5}>
+        <Box mt={{ mobile: 3, tablet: 4.5 }}>
           <ActionButton
             customStyle={{
               backgroundColor: `${colors.activeBlue400}`,

@@ -10,7 +10,7 @@ type NavBarContextType = typeof initialNavBarContext;
 export const NavBarContext =
   createContext<NavBarContextType>(initialNavBarContext);
 
-export default function AdminContextProvider({ children }: any) {
+export default function NavBarContextProvider({ children }: any) {
   const { pageTitle } = usePageTitle();
 
   const value: NavBarContextType = useMemo(() => {

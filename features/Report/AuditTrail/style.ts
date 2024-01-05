@@ -8,9 +8,9 @@ export const modalContainer = {
   borderRadius: '12px',
   left: '50%',
   transform: 'translate(-50%, -50%)',
+  position: 'absolute' as 'absolute',
   width: { mobile: '300px', desktop: '492px' },
   height: 'auto',
-  position: 'absolute',
   top: '50%',
   background: `${colors.white}`,
   boxShadow:
@@ -66,7 +66,7 @@ export const modalBodyContainer = {
   gap: '46px',
   alignSelf: 'stretch',
   width: '492px',
-  height: 'auto',
+  height: '720px',
   color: `${colors.neutral900}`,
   top: '40px',
 };
@@ -78,7 +78,7 @@ export const modalBody = {
   gap: '24px',
   color: `${colors.neutral1000}`,
   width: '444px',
-  height: 'auto',
+  height: '624px',
   '& fieldset': { border: 'none' },
   padding: '0 0 24px',
 };
@@ -120,5 +120,5 @@ export const textSuccess = {
 };
 
 export const inputFields = {
-  width: '566px',
+  width: { mobile: '250px', tablet: '566px' },
 };

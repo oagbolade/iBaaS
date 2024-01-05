@@ -18,7 +18,7 @@ export const LoanOverdue = () => {
   };
   return (
     <Box sx={{ marginTop: '60px', width: '100%' }}>
-        <TopOverViewSection useBackButton />
+      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
         <FilterSection />
       </Box>

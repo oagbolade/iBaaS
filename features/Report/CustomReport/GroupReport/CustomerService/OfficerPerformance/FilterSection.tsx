@@ -5,11 +5,17 @@ import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { labelTypography } from '@/components/FormikFields/styles';
+import { useCurrentBreakpoint } from '@/utils';
 
 export const FilterSection = () => {
+  const { isMobile } = useCurrentBreakpoint();
+  const setDirection = () => {
+    if (isMobile) return 'column';
+    return 'row';
+  };
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()}>
         <Box sx={{ width: '350%' }} mt={4.5} mr={4}>
           <Typography sx={{ ...labelTypography, marginBottom: '10px' }}>
             Select Branch

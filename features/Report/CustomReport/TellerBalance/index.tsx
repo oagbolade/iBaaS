@@ -10,9 +10,7 @@ import { FilterSection } from './FilterSection';
 export const TellerBalance = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>
+      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
         <FilterSection />
       </Box>
@@ -25,6 +23,9 @@ export const TellerBalance = () => {
             secondaryTitle:
               'See a directory of all Teller Balance at risk on this system',
             hideFilterSection: true,
+          }}
+          tableConfig={{
+            hasActions: false,
           }}
         />
       </Box>

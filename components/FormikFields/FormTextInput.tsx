@@ -24,7 +24,7 @@ export const FormTextInput = ({
   name,
   icon,
   label,
-  required=false,
+  required = false,
   customStyle,
   type,
   endAdornment,
@@ -32,7 +32,7 @@ export const FormTextInput = ({
   return (
     <Box sx={{ marginBottom: '15px' }}>
       <Field name={name}>
-        {({ field, form }: FieldProps) => {
+        {({ field }: FieldProps) => {
           return (
             <>
               <Stack
@@ -46,7 +46,7 @@ export const FormTextInput = ({
               </Stack>
               <TextField
                 type={type}
-                name={name}
+                {...field}
                 id={name}
                 placeholder={placeholder}
                 sx={textStyle}

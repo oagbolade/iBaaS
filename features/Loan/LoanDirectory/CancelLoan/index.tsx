@@ -21,9 +21,9 @@ import { useLoansModalToggle } from '@/utils/useLoansModalToggle';
 const PreviewContent: React.FC = () => {
   return (
     <Box
-      mt={{ mobile: 3 }}
+      mt={{ mobile: 0, desktop: 3 }}
       sx={{
-        padding: { mobile: 6, tablet: 0 },
+        padding: { mobile: '0 30px', tablet: 0 },
         alignItems: { mobile: 'center', tablet: 'normal' },
       }}
     >

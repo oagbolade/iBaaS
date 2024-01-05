@@ -18,15 +18,14 @@ export const ViewAccountEnquiry = () => {
 
   return (
     <Box>
-      <Box sx={{ width: '1300px', marginTop: '50px' }}>
+      <Box sx={{ width: '100%', marginTop: '50px' }}>
         <TopOverViewSection useBackButton />
       </Box>
-
       <Stack direction="row">
         <ViewReports accountIfo={accountInfos} />
       </Stack>
       {showReportTable && (
-        <Box sx={{ marginTop: '25px', padding: '25px' }}>
+        <Box sx={{ padding: '25px', width: '100%' }}>
           <MuiTableContainer
             tableConfig={{ hasActions: false }}
             columns={MOCK_COLUMNS}

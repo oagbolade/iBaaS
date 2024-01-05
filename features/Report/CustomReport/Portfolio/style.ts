@@ -34,7 +34,7 @@ export const PortfolioTableCards = {
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
   background: `${colors.white}`,
-  width: '100%',
+  width: '1237px',
   height: 'auto',
 };
 export const PortfolioCardStyle = {

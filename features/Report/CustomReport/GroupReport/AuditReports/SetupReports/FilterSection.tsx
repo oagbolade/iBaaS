@@ -5,11 +5,14 @@ import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { labelTypography } from '@/components/FormikFields/styles';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
+
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
         <Box sx={{ width: '1200%' }} mt={4.5} mr={4}>
           <Typography sx={{ ...labelTypography, marginBottom: '10px' }}>
             Search

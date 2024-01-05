@@ -87,7 +87,7 @@ export const CustomReports = () => {
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
               link="/report/custom-report/profit-loss"
-              title="PROFIT OR LOSS"
+              title="PROFIT and LOSS"
               description="Net profit or loss report to analyze the financial performance of the institution over a period"
             />
           </Box>

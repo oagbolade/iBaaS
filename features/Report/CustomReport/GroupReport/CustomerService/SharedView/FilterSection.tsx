@@ -15,11 +15,14 @@ import {
   selectButton,
 } from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
 import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
+
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
         <Box sx={{ width: '250%' }} mt={4.5} mr={4}>
           <Typography sx={{ ...labelTypography, marginBottom: '10px' }}>
             Select Branch

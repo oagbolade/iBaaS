@@ -23,5 +23,5 @@ export const cardsDetailsContainer = {
 };
 
 export const inputFields = {
-  width: '820px',
+  width: { mobile: '250px', tablet: '820px' },
 };

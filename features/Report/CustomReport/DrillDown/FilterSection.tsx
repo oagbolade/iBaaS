@@ -17,6 +17,7 @@ import {
 } from '@/features/Report/CustomReport/ChartAccount/FilterSection';
 import { inputFields } from './style';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const RadioOption = [
   { value: 'mainGroup', label: 'GL Main Group' },
@@ -24,9 +25,10 @@ export const RadioOption = [
 ];
 
 export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
   return (
     <Box>
-      <Stack direction="row">
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
         <Box>
           <RadioButtons
             options={RadioOption}

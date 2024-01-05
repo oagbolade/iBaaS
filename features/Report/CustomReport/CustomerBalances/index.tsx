@@ -16,9 +16,7 @@ export const CustomerBalances = () => {
         marginTop: '50px',
       }}
     >
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>{' '}
+      <TopOverViewSection useBackButton />
       <Box
         sx={{
           padding: '25px',

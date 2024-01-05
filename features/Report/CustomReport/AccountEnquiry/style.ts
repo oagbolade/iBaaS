@@ -13,6 +13,10 @@ export const backButtonContainer = {
   marginTop: '10px',
 };
 
+export const inputFields = {
+  width: { mobile: '400px', tablet: '680px' },
+};
+
 export const backStyle = {
   display: 'flex',
   padding: '0px',
@@ -32,12 +36,6 @@ export const backTitle = {
   lineHeight: '32px' /* 160% */,
 };
 
-export const inputFields = {
-  padding: '16px 12px',
-  height: '52px',
-  display: 'flex',
-  justifyContent: 'center',
-};
 export const buttonStyle = {
   display: 'flex',
   width: '126px',

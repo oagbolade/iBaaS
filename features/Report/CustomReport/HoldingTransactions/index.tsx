@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
-import { Box, Typography } from '@mui/material';
-import Link from 'next/link';
+import { Box } from '@mui/material';
 import { FilterSection } from '@/features/Report/CustomReport/OutFlowReport/FilterSection';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { TableV2 } from '@/components/Revamp/TableV2';
@@ -16,9 +15,7 @@ export const HoldingTransactions = () => {
         marginTop: '50px',
       }}
     >
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>{' '}
+      <TopOverViewSection useBackButton />
       <Box
         sx={{
           padding: '25px',

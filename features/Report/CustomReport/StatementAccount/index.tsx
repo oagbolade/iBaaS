@@ -1,18 +1,11 @@
 'use client';
-import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
-import { TableSingleAction } from '@/components/Table';
-import { Box, Grid } from '@mui/material';
-import Link from 'next/link';
+import { Box } from '@mui/material';
 import React from 'react';
-import { shortcards } from './style';
-import { TextInput } from '@/components/FormikFields';
 import SearchIcon from '@mui/icons-material/Search';
+import { TextInput } from '@/components/FormikFields';
+import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
-import {
-  totalContainer,
-  totalTitle,
-} from '@/components/CustomCardsReports/style';
-import { PageTitle } from '@/components/Typography';
+import { shortCardsTitle } from './style';
 
 export const StatementAccount = () => {
   return (
@@ -21,7 +14,12 @@ export const StatementAccount = () => {
         <TopOverViewSection useBackButton />
       </Box>
       <Box sx={{ marginTop: '40px', marginBottom: '30px', marginLeft: '50px' }}>
-        <TextInput name="Search" placeholder="Search" icon={<SearchIcon />} />
+        <TextInput
+          name="Search"
+          placeholder="Search"
+          icon={<SearchIcon />}
+          customStyle={{ ...shortCardsTitle }}
+        />
       </Box>
       <Box>
         <Box>

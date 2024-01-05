@@ -1,3 +1,3 @@
 export const inputFields = {
-  width: '560px',
+  width: { mobile: '250px', tablet: '560px' },
 };

@@ -35,7 +35,6 @@ const StyledTab = styled((props: StyledTabProps) => {
 })(() => {
   return {
     fontWeight: 600,
-    fontSize: '16px',
     lineHeight: '24px',
     color: `${colors.neutral600}`,
     '& .Mui-selected': {
@@ -61,7 +60,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box mt={2}>{children}</Box>}
+      {value === index && <Box mt={{ mobile: 0, desktop: 2 }}>{children}</Box>}
     </div>
   );
 }
@@ -81,7 +80,11 @@ export const Tabs = ({ tabTitle, pageMenu }: Props) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ width: '360px', borderBottom: 1, borderColor: 'divider' }}>
-        <StyledTabs value={value} onChange={handleChange}>
+        <StyledTabs
+          sx={{ fontSize: { mobile: '10px', desktop: '16px' } }}
+          value={value}
+          onChange={handleChange}
+        >
           {tabTitle.map((title: string, index: number) => {
             return <StyledTab label={title} value={index} />;
           })}
