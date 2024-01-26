@@ -1,13 +1,5 @@
-
-
-
-
-import { ReturnCheque } from "@/features/Operation/Forms/ReturnCheques"
-
-
+import { ReturnCheque } from '@/features/Operation-old/Forms/ReturnCheques';
 
 export const ReturnChequesContainer = () => {
-    return(
-     <ReturnCheque/>
-    )
-}
+  return <ReturnCheque />;
+};

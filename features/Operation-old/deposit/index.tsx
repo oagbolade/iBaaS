@@ -1,10 +1,6 @@
-
 import React from 'react';
-import { CashDeposit } from '@/features/Operation/Forms/CashDeposit';
-
+import { CashDeposit } from '@/features/Operation-old/Forms/CashDeposit';
 
 export const CashDepositContainer = () => {
-    return(
-     <CashDeposit/>
-    )
-}
+  return <CashDeposit />;
+};

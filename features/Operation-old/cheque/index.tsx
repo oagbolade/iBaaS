@@ -1,15 +1,5 @@
-
-
-
-
-
-
-import { ViewCheque } from "@/features/Operation/Forms/ViewCheque"
-
-
+import { ViewCheque } from '@/features/Operation-old/Forms/ViewCheque';
 
 export const ChequeContainer = () => {
-    return(
-     <ViewCheque/>
-    )
-}
+  return <ViewCheque />;
+};
