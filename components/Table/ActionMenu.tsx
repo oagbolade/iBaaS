@@ -9,7 +9,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useRouter } from 'next/navigation';
 import { StyledMenu } from './StyledMenu';
 import { TableMenuButton } from '@/components/Buttons';
-// import { AdminContext } from '@/features/Admin/AdminContext';
+import { AdminContext } from '@/features/Admin-old/AdminContext';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 
 const MenuWrapper = styled.section`
@@ -36,7 +36,7 @@ export const ActionMenu: React.ComponentType<ActionMenuProps> = ({
   useDefault = true,
 }: ActionMenuProps) => {
   const router = useRouter();
-  // const { toggleModal } = useContext(AdminContext);
+  const { toggleModal } = useContext(AdminContext);
   const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -52,7 +52,7 @@ export const ActionMenu: React.ComponentType<ActionMenuProps> = ({
   const handleClose = (link: string | null = null) => {
     if (link) router.push(link || '');
     const isEditing = true;
-    // toggleModal(isEditing);
+    toggleModal(isEditing);
     toggleCustomerServiceModal(isEditing);
     setAnchorEl(null);
     handleMenuClose();

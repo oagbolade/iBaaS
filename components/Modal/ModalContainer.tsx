@@ -7,7 +7,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { ModalHeader } from './ModalHeader';
 import { ModalContainer as ModalContainerStyle } from './styles';
-import { AdminContext } from '@/features/Admin/AdminContext';
+import { AdminContext } from '@/features/Admin-old/AdminContext';
 import { SetupContext } from '@/features/Setup/SetupContext';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 
@@ -55,7 +55,9 @@ export const ModalContainer = ({
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open || isSetupModalOpen || isCustomerServiceModalOpen}
-        onClose={() => {return handleClose();}}
+        onClose={() => {
+          return handleClose();
+        }}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
