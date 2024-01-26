@@ -19,7 +19,7 @@ import {
 } from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
 import { EditRole } from '@/constants/AdminOptions';
-import { AdminContainer } from '@/features/Administrator';
+import { AdminContainer } from '@/features/Admin-old';
 import { PlusIcon } from '@/assets/svg';
 import { roleForm, roleTitle } from './style';
 import { useCurrentBreakpoint } from '@/utils';

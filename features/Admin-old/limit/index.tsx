@@ -3,7 +3,7 @@ import React from 'react';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { AdminContainer } from '@/features/Administrator';
+import { AdminContainer } from '@/features/Admin-old';
 import { role as roleSchema } from '@/constants/schemas';
 import { roleInitialValues } from '@/constants/types';
 import {
