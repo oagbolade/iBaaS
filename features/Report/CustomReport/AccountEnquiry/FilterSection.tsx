@@ -6,12 +6,12 @@ import {
   LargeFormMultiSelectField,
   TextInput,
 } from '@/components/FormikFields';
-import { useCurrentBreakpoint } from '@/utils';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { Account } from '@/constants/Loan/selectOptions';
+import { useSetDirection } from '@/utils/useSetDirection';
 
 export const FilterSection = () => {
-  const { setDirection } = useCurrentBreakpoint();
+  const { setDirection } = useSetDirection();
   return (
     <Box sx={{ display: 'flex', marginTop: '30px', padding: '25px' }}>
       <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
