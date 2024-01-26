@@ -20,7 +20,7 @@ type Props = {
   amount: string;
   isPositiveTrend?: boolean;
   percentage?: string;
-  customStyle: CustomStyleI;
+  customStyle?: CustomStyleI;
 };
 
 export const TrendCard = ({
@@ -28,10 +28,10 @@ export const TrendCard = ({
   amount,
   isPositiveTrend,
   percentage,
-  customStyle
+  customStyle,
 }: Props) => {
   return (
-    <Stack direction="row" sx={{...OfficerTrendSection, ...customStyle}}>
+    <Stack direction="row" sx={{ ...OfficerTrendSection, ...customStyle }}>
       <Box>
         <Box>
           <Typography sx={description}>{title}</Typography>
