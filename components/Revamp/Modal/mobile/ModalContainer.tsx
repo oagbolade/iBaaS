@@ -6,9 +6,10 @@ import { useCurrentBreakpoint } from '@/utils';
 
 type Props = {
   ShowPreview?: any;
+  customStyle?: object;
 };
 
-export const MobileModalContainer = ({ ShowPreview }: Props) => {
+export const MobileModalContainer = ({ ShowPreview, customStyle }: Props) => {
   const { isMobile } = useCurrentBreakpoint();
 
   const [open, setOpen] = useState(false);
@@ -32,6 +33,7 @@ export const MobileModalContainer = ({ ShowPreview }: Props) => {
                 height: '40px',
                 marginTop: '40px',
                 alignItems: 'center',
+                ...customStyle,
               }}
               onClick={handleClick}
             >

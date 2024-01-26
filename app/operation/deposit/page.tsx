@@ -1,6 +1,5 @@
 import { CashDepositContainer } from '@/features/Operation/deposit';
 
-
-export default function Operations() {
-    return <CashDepositContainer/>;
-  }
+export default function CashDeposit() {
+  return <CashDepositContainer />;
+}

@@ -10,6 +10,7 @@ export const RadioButtonTitle = {
   color: `${colors.neutral900}`,
   fontSize: '14px',
   fontWeight: 600,
-  lineWeight: '20px',
+  lineHeight: '20px',
   marginBottom: '10px',
+  fontFamily: 'Averta Regular',
 };

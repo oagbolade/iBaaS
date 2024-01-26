@@ -1,7 +1,5 @@
 import { ChargeConcessionContainer } from '@/features/Operation/concession';
 
-
-
-export default function Operations() {
-    return <ChargeConcessionContainer/>;
-  }
+export default function Concession() {
+  return <ChargeConcessionContainer />;
+}

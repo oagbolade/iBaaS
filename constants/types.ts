@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface RoleFormValues {
   roleName: string;
   roleDescription: string;
@@ -68,6 +70,10 @@ interface CommercialBank {
   bankCode: string;
   bankMnemonic: string;
 }
+
+export type ChildrenProps = {
+  children: React.ReactNode;
+};
 
 export const bankValues: CommercialBank = {
   bankName: '',

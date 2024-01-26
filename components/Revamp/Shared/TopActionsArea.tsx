@@ -1,12 +1,14 @@
 import React, { ReactNode } from 'react';
 import { Box, Stack } from '@mui/material';
 import { BackButton } from '@/components/Revamp/Buttons';
+import { CustomStyleI } from '@/constants/types';
 
 type Props = {
   actionButtons?: Array<ReactNode>;
+  customStyle?: CustomStyleI;
 };
 
-export const TopActionsArea = ({ actionButtons }: Props) => {
+export const TopActionsArea = ({ actionButtons, customStyle }: Props) => {
   return (
     <Stack
       sx={{
@@ -14,6 +16,7 @@ export const TopActionsArea = ({ actionButtons }: Props) => {
         padding: '12px 20px',
         width: { mobile: '100%', tablet: '84.2vw' }, // causing a horizontal overflow, may remove later
         marginTop: '60px',
+        ...customStyle,
       }}
       direction="row"
       justifyContent={{ mobile: 'flex-start', tablet: 'space-between' }}

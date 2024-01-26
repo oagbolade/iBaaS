@@ -1,10 +1,6 @@
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import SearchIcon from '@mui/icons-material/Search';
 import CircleIcon from '@mui/icons-material/Circle';
 import { labelTypography } from './styles';
-import { TextInput } from '@/components/FormikFields/TextInput';
-import { TableTitle } from '@/components/Typography';
 
 interface StatusMap {
   [status: string]: {

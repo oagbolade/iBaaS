@@ -68,9 +68,10 @@ function CustomTabPanel(props: TabPanelProps) {
 type Props = {
   tabTitle: Array<string>;
   pageMenu: Array<React.JSX.Element>;
+  customStyle?: object;
 };
 
-export const Tabs = ({ tabTitle, pageMenu }: Props) => {
+export const Tabs = ({ tabTitle, pageMenu, customStyle }: Props) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -79,7 +80,14 @@ export const Tabs = ({ tabTitle, pageMenu }: Props) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ width: '360px', borderBottom: 1, borderColor: 'divider' }}>
+      <Box
+        sx={{
+          width: '360px',
+          borderBottom: 1,
+          borderColor: 'divider',
+          ...customStyle,
+        }}
+      >
         <StyledTabs
           sx={{ fontSize: { mobile: '10px', desktop: '16px' } }}
           value={value}

@@ -1,5 +1,5 @@
-import { Role } from '@/features/Admin/roles';
+import { Roles } from '@/features/Administrator';
 
 export default function Admin() {
-  return <Role />;
+  return <Roles />;
 }

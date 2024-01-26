@@ -7,7 +7,6 @@ export const ModalStyleContainer = {
   transform: 'translate(-50%, -50%)',
   width: '486px',
   maxWidth: '90vw',
-  minHeight: '356px',
   maxHeight: '90vh',
   boxShadow: 24,
   borderRadius: '12px',
@@ -82,7 +81,6 @@ export const modalText = {
   color: `${colors.neutral900}`,
 };
 
-
 export const pageText = {
   display: 'flex',
   flexDirection: 'column',
@@ -92,7 +90,7 @@ export const pageText = {
   height: '20px',
   width: '40px',
   color: `${colors.neutral700}`,
-  marginRight: '170px'
+  marginRight: '170px',
 };
 
 export const TypographyText = {
@@ -302,7 +300,6 @@ export const DeleteTypographTitle = {
 
 export const AccountPasswordContainer = {
   display: 'flex',
-  height: '356px',
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '36px',
@@ -334,7 +331,6 @@ export const AccountTitle = {
 
 export const AccountPasswordBodyContainer = {
   display: 'flex',
-  height: '260px',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '46px',
@@ -344,16 +340,13 @@ export const AccountPasswordBodyContainer = {
 
 export const AccountBody = {
   display: 'flex',
-  height: '132px',
+  mineight: '132px',
   flexDirection: 'column',
   alignItems: 'center',
   gap: '24px',
   flexShrink: 0,
   alignSelf: 'stretch',
 };
-
-
-
 
 export const AccountBodyPage = {
   alignSelf: 'stretch',
@@ -362,7 +355,7 @@ export const AccountBodyPage = {
   fontWeight: 400,
   lineHeight: '20px',
   whiteSpace: 'pre-line',
-  marginLeft: '20px'
+  marginLeft: '20px',
 };
 export const AccountInputContainer = {
   display: 'flex',
@@ -379,9 +372,6 @@ export const AccountInputContainer = {
 export const AccountInputText = {
   width: '444px',
 };
-
-
-
 
 export const ButtonFramContainer = {
   display: 'inline-flex',

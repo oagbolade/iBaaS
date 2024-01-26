@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Link from 'next/link';
+import { AlertColor } from '@mui/material';
 import { LoginHeader } from './LoginHeader';
 import { forgotPassword, loginButton } from './styles';
 import InterSwitchImage from '@/assets/interswitch/image';
@@ -16,20 +16,32 @@ import { loginInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { FormTextInput, CheckboxInput } from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
-import { handleRedirect } from '@/utils';
 import { useAuth } from '@/api/auth/useAuth';
 import { useUser } from '@/api/auth/useUser';
 import { MuiSnackbar } from '@/components/Snackbar';
+import { MuiSnackbarContext } from '@/context/MuiSnackbarContext';
 
 export function LoginForm() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const { isLoading, login } = useAuth();
   const { user } = useUser();
+  const { toggleSnackbar, setMessage, setSeverity } =
+    useContext(MuiSnackbarContext);
+  const toast = (message: string, severity: AlertColor) => {
+    toggleSnackbar();
+    setMessage(message);
+    setSeverity(severity);
+  };
 
-  if (user) {
-    return handleRedirect(router, '/setup/business');
-  }
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        window.location.href = '/setup/business';
+      }, 3000);
+      // TODO: verify token validity before redirecting
+      toast('Login successfull, redirecting please wait...', 'success');
+    }
+  }, []);
 
   const handleClickShowPassword = () => {
     return setShowPassword((show) => {
@@ -114,9 +126,6 @@ export function LoginForm() {
               <Grid container mt={7} ml={2} mobile={12}>
                 <Grid item mobile={12}>
                   <PrimaryIconButton
-                    // onClick={() => {
-                    //   return handleRedirect(router, '/setup/business');
-                    // }}
                     type="submit"
                     buttonTitle={isLoading ? 'Loading...' : 'Login'}
                     customStyle={loginButton}

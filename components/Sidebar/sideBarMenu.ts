@@ -8,6 +8,7 @@ import {
   LoanIcon,
   ReportIcon,
   RequestsIcon,
+  FinanceIcon,
 } from '@/assets/svg';
 
 export const sideBarMenu: SidebarMenuItem[] = [
@@ -16,10 +17,7 @@ export const sideBarMenu: SidebarMenuItem[] = [
     groupPath: '/dashboard',
     icon: DashboardIcon,
     hideMenuItem: false,
-    subMenuItems: [
-      { name: 'Demand Deposit', link: '', hideSubMenuItem: false },
-      { name: 'Loan Product', link: '', hideSubMenuItem: false },
-    ],
+    subMenuItems: [],
   },
   {
     name: 'Setup',
@@ -48,21 +46,21 @@ export const sideBarMenu: SidebarMenuItem[] = [
     icon: AdminIcon,
     hideMenuItem: false,
     subMenuItems: [
-      { name: 'Manage Users', link: '/admin/users', hideSubMenuItem: false },
-      { name: 'Manage Roles', link: '/admin/roles', hideSubMenuItem: false },
+      { name: 'Users', link: '/admin/users', hideSubMenuItem: false },
+      { name: 'Roles', link: '/admin/roles', hideSubMenuItem: false },
       {
-        name: 'Password Change',
-        link: '/admin/password',
+        name: 'Account Officers',
+        link: '/admin/account-officers',
         hideSubMenuItem: false,
       },
       {
-        name: 'Manage Posting Limit',
-        link: '/admin/limit',
+        name: 'Posting Limits',
+        link: '/admin/posting-limit',
         hideSubMenuItem: false,
       },
       {
-        name: 'Manage GL Accounts',
-        link: '/admin/accounts',
+        name: 'GL Accounts',
+        link: '/admin/gl-account',
         hideSubMenuItem: false,
       },
     ],
@@ -142,65 +140,52 @@ export const sideBarMenu: SidebarMenuItem[] = [
     ],
   },
   {
+    name: 'Finance Mgt',
+    groupPath: '/finance',
+    icon: FinanceIcon,
+    hideMenuItem: false,
+    subMenuItems: [
+      {
+        name: 'Accounts',
+        link: '/finance/account',
+        hideSubMenuItem: false,
+      },
+      {
+        name: 'General Ledgers',
+        link: '/finance/general-ledger',
+        hideSubMenuItem: false,
+      },
+    ],
+  },
+  {
     name: 'Operations',
     groupPath: '/operation',
     icon: OperationsIcons,
     hideMenuItem: false,
     subMenuItems: [
       {
-        name: 'Batch Posting',
-        link: '/operation/posting',
+        name: 'Cash',
+        link: '/operation/cash',
         hideSubMenuItem: false,
       },
       {
-        name: 'Bulk Upload',
-        link: '/operation/upload',
+        name: 'Transfer',
+        link: '/operation/transfer',
         hideSubMenuItem: false,
       },
       {
-        name: 'Cash Deposit',
-        link: '/operation/deposit',
+        name: 'Cheque',
+        link: '/operation/cheque',
         hideSubMenuItem: false,
       },
       {
-        name: 'Cash Withdrawal',
-        link: '/operation/withdrawal',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Charge Concession',
-        link: '/operation/concession',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Group Loan Posting',
+        name: 'Group Posting',
         link: '/operation/loan',
         hideSubMenuItem: false,
       },
       {
         name: 'Vault Management',
         link: '/operation/management',
-        hideSubMenuItem: false,
-      },
-      { name: 'Clearing', link: '/operation/clear', hideSubMenuItem: false },
-      {
-        name: 'View Clearing Cheque',
-        link: '/operation/cheque',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Withdraw Towards Uncleared',
-        link: '/operation/unclear',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Cheques Deposit',
-        link: '/operation/chequesDeposit',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Return Cheques Reversal',
-        link: '/operation/reversal',
         hideSubMenuItem: false,
       },
     ],
@@ -232,6 +217,12 @@ export const sideBarMenu: SidebarMenuItem[] = [
     hideMenuItem: true,
     subMenuItems: [
       {
+        name: 'Dashboard',
+        link: '/dashboard',
+        hideSubMenuItem: true,
+      },
+      // Report
+      {
         name: 'Account Enquiry',
         link: '/report/custom-report/account-enquiry',
         hideSubMenuItem: true,
@@ -254,6 +245,53 @@ export const sideBarMenu: SidebarMenuItem[] = [
       {
         name: 'Cabal',
         link: '/report/custom-report/group-report/customer-service/cabal',
+        hideSubMenuItem: true,
+      },
+      // Administrator
+      {
+        name: 'Create User',
+        link: '/admin/users/create',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Reset User',
+        link: '/admin/users/reset',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'View Role',
+        link: '/admin/roles/view',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Create Role',
+        link: '/admin/roles/create',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Create Account Officer',
+        link: '/admin/account-officers/create',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Create Posting Limit',
+        link: '/admin/posting-limit/create',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Create GL Account',
+        link: '/admin/gl-account/create',
+        hideSubMenuItem: true,
+      },
+      // Finance Management
+      {
+        name: 'Create General Ledger',
+        link: '/finance/general-ledger/create',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Classify Account',
+        link: '/finance/account/classify',
         hideSubMenuItem: true,
       },
     ],

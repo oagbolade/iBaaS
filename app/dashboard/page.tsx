@@ -1,5 +1,5 @@
-import { ModalContainer } from '@/components/Modal/index';
+import { Dashboard } from '@/features/Dashboard';
 
-export default function About() {
-  return <div />;
+export default function DashboardPage() {
+  return <Dashboard />;
 }

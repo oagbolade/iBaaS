@@ -21,7 +21,7 @@ type Props = {
   options: OptionsI[];
   required?: boolean;
   customStyle?: object;
-  placeholder?: string
+  placeholder?: string;
 };
 
 export const FormSelectInput = ({
@@ -31,7 +31,7 @@ export const FormSelectInput = ({
   name,
   options,
   customStyle,
-  placeholder
+  placeholder,
 }: Props) => {
   const [age, setAge] = React.useState('');
 
@@ -53,27 +53,33 @@ export const FormSelectInput = ({
       <Select
         value={age}
         onChange={handleChange}
-        placeholder={placeholder}
         sx={{ ...textStyle, paddingRight: '8px' }}
         style={{ ...customStyle }}
         inputProps={{
           name,
         }}
-        IconComponent={() =>
-          {return icon || (
-            <KeyboardArrowDownIcon
-              sx={{ color: `${colors.neutral700}` }}
-              fontSize="large"
-            />
-          );}
-        }
+        displayEmpty
+        IconComponent={() => {
+          return (
+            icon || (
+              <KeyboardArrowDownIcon
+                sx={{ color: `${colors.neutral700}` }}
+                fontSize="large"
+              />
+            )
+          );
+        }}
       >
-        <MenuItem value="">Select an Option</MenuItem>
-        {options.map((option) => {return (
-          <MenuItem key={option.name} value={option.value}>
-            {option.name}
-          </MenuItem>
-        );})}
+        <MenuItem disabled value="">
+          {placeholder || 'Select an Option'}
+        </MenuItem>
+        {options.map((option) => {
+          return (
+            <MenuItem key={option.name} value={option.value}>
+              {option.name}
+            </MenuItem>
+          );
+        })}
       </Select>
     </Box>
   );

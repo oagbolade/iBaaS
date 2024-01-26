@@ -14,6 +14,7 @@ type Props = {
   name: string;
   label: string;
   required?: boolean;
+  disabled?: boolean;
   customStyle?: object;
   icon?: any;
   type?: 'text' | 'password';
@@ -28,6 +29,7 @@ export const FormTextInput = ({
   customStyle,
   type,
   endAdornment,
+  disabled,
 }: Props) => {
   return (
     <Box sx={{ marginBottom: '15px' }}>
@@ -45,6 +47,7 @@ export const FormTextInput = ({
                 {required && <Typography sx={asterix}>*</Typography>}
               </Stack>
               <TextField
+                disabled={disabled}
                 type={type}
                 {...field}
                 id={name}

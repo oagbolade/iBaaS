@@ -4,10 +4,10 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Grid } from '@mui/material';
 import { PageTitle } from '@/components/Typography';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { AdminContext } from '@/features/Admin/AdminContext';
 import { SetupContext } from '@/features/Setup/SetupContext';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
+import { AdminContext } from '@/features/Admin-old/AdminContext';
 
 type Props = {
   title: string;

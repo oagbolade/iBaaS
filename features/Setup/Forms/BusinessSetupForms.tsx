@@ -47,7 +47,7 @@ export const ActionButtons = ({ setStep, isFormOne = false }: Props) => {
         // type="submit" todo: handle submit together with setStep
         onClick={() => {
           if (isFormOne) return setStep(true);
-          handleRedirect(router, '/admin/users');
+          handleRedirect(router, '/dashboard');
         }}
         buttonTitle="Next"
         customStyle={styles}

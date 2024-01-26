@@ -7,6 +7,7 @@ import { SideBarContext } from '@/app/SideBarContext';
 type Props = {
   children: React.ReactNode;
 };
+
 export const RenderChildren = ({ children }: Props) => {
   const { isBusinessSetupPage } = useBusinessSetup();
   const { marginLeft, width } = useRemoveSideBar();

@@ -12,7 +12,7 @@ interface OptionsI {
   label: string;
 }
 type Props = {
-  title: string;
+  title?: string;
   value: string;
   options: OptionsI[];
   name: string;
@@ -23,10 +23,20 @@ function BpRadio(props: RadioProps) {
 }
 
 export const RadioButtons = ({ title, value, name, options }: Props) => {
+  const [selectedValue, setValue] = React.useState('active');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue((event.target as HTMLInputElement).value);
+  };
+
   return (
     <FormControl>
-      <FormLabel sx={{ ...RadioButtonTitle }}>{title}</FormLabel>
-      <RadioGroup value={value} name={name}>
+      {title && <FormLabel sx={{ ...RadioButtonTitle }}>{title}</FormLabel>}
+      <RadioGroup
+        defaultValue={value || selectedValue}
+        onChange={handleChange}
+        name={name}
+      >
         <Box sx={RadioButtonStyle}>
           {options.map((option) => {
             return (

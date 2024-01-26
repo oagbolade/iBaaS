@@ -1,7 +1,5 @@
 import { ReturnChequesContainer } from '@/features/Operation/reversal';
 
-
-
-export default function Operations() {
-    return <ReturnChequesContainer/>;
-  }
+export default function ReturnCheque() {
+  return <ReturnChequesContainer />;
+}

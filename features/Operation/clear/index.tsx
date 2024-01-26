@@ -1,13 +1,5 @@
-
-
-
-
-import { Clear } from "@/features/Operation/Forms/Clearing"
-
-
+import { InWard } from '@/features/Operation/Forms/Clearing';
 
 export const ClearContainer = () => {
-    return(
-     <Clear/>
-    )
-}
+  return <InWard />;
+};

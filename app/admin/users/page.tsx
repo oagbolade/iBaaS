@@ -1,5 +1,5 @@
-import { Users } from '@/features/Admin/users';
+import { Users } from '@/features/Administrator';
 
-export default function Admin() {
+export default function UsersPage() {
   return <Users />;
 }
