@@ -12,7 +12,7 @@ import {
   FormSelectField,
 } from '@/components/FormikFields';
 import { EditUser } from '@/constants/AdminOptions';
-import { AdminContainer } from '@/features/Administrator';
+import { AdminContainer } from '@/features/Admin-old';
 import { useCurrentBreakpoint } from '@/utils';
 import { ModalActions } from '@/components/Shared/ActionButtons';
 
