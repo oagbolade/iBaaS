@@ -1,16 +1,5 @@
-
-
-
-
-
-
-
-import { WithDrawTowards } from "@/features/Operation/Forms/Uclear"
-
-
+import { WithDrawTowards } from '@/features/Operation-old/Forms/Uclear';
 
 export const UnclearContainer = () => {
-    return(
-     <WithDrawTowards/>
-    )
-}
+  return <WithDrawTowards />;
+};

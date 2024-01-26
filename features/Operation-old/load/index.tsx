@@ -1,10 +1,5 @@
-import { Loan } from "@/features/Operation/Forms/Loan"
-
-
-
+import { Loan } from '@/features/Operation-old/Forms/Loan';
 
 export const LoanContainer = () => {
-    return(
-     <Loan/>
-    )
-}
+  return <Loan />;
+};
