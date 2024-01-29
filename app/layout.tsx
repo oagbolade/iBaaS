@@ -35,13 +35,13 @@ export default function RootLayout({
         <SideBarContextProvider>
           <NavBarContextProvider>
             <ThemeProvider theme={theme}>
-              <Head>
-                <meta
-                  http-equiv="Content-Security-Policy"
-                  content="upgrade-insecure-requests"
-                >
-              </Head>
               <html lang="en">
+                <Head>
+                  <meta
+                    http-equiv="Content-Security-Policy"
+                    content="upgrade-insecure-requests"
+                  />
+                </Head>
                 <body className={inter.className} suppressHydrationWarning>
                   <NextTopLoader />{' '}
                   <Stack direction="row">
