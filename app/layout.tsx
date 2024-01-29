@@ -15,6 +15,7 @@ import { queryClient } from '@/react-query/queryClient';
 import { NavBarSideBarWrapper } from '@/components/Shared/NavBarSideBarWrapper';
 import { MuiSnackbar } from '@/components/Snackbar';
 import MuiSnackbarContextProvider from '@/context/MuiSnackbarContext';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,10 +35,13 @@ export default function RootLayout({
         <SideBarContextProvider>
           <NavBarContextProvider>
             <ThemeProvider theme={theme}>
+              <Head>
+                <meta
+                  http-equiv="Content-Security-Policy"
+                  content="upgrade-insecure-requests"
+                >
+              </Head>
               <html lang="en">
-                <head>
-              <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-                </head>
                 <body className={inter.className} suppressHydrationWarning>
                   <NextTopLoader />{' '}
                   <Stack direction="row">
