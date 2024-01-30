@@ -22,8 +22,6 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'iBaaS',
   description: 'Core Banking Application',
-  httpEquiv: 'Content-Security-Policy',
-  content: 'upgrade-insecure-requests',
 };
 
 export default function RootLayout({
