@@ -36,12 +36,6 @@ export default function RootLayout({
           <NavBarContextProvider>
             <ThemeProvider theme={theme}>
               <html lang="en">
-                <Head>
-                  <meta
-                    httpEquiv="Content-Security-Policy"
-                    content="upgrade-insecure-requests"
-                  />
-                </Head>
                 <body className={inter.className} suppressHydrationWarning>
                   <NextTopLoader />{' '}
                   <Stack direction="row">
