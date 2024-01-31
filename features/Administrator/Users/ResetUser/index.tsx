@@ -8,13 +8,13 @@ export const ResetUserDetails = () => {
   return (
     <>
       <TopActionsArea customStyle={{ width: '100%' }} />
-      <Box sx={{ padding: '0 25px' }}>
+      <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
         <Stack direction="row">
           <Box
             mr={3}
             sx={{
               width: '50%',
-              padding: { mobile: 6, tablet: '30px 0' },
+              padding: { mobile: 0, tablet: '30px 0' },
             }}
           >
             <ResetUserDetailsForm />

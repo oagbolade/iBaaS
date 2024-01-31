@@ -1,1 +1,1 @@
-export { OfficerTransfer } from './OfficerTransfer';
+export { OfficeTransferTable } from './OfficerTransfer';

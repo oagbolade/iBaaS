@@ -58,7 +58,7 @@ export const ResetUserDetailsForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffId"
                     placeholder="202210107481"
@@ -74,7 +74,7 @@ export const ResetUserDetailsForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffName"
                     placeholder="Omodayo Oluwafunke"
@@ -85,7 +85,7 @@ export const ResetUserDetailsForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="department"
@@ -97,7 +97,7 @@ export const ResetUserDetailsForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="department"
@@ -110,7 +110,7 @@ export const ResetUserDetailsForm = () => {
                   <FormTextInput
                     type={showPassword ? 'text' : 'password'}
                     customStyle={{
-                      width: '100%',
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="password"
                     placeholder="Enter password"
@@ -131,7 +131,7 @@ export const ResetUserDetailsForm = () => {
                   <FormTextInput
                     type={showPassword ? 'text' : 'password'}
                     customStyle={{
-                      width: '100%',
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="password"
                     placeholder="Enter password"
@@ -155,7 +155,7 @@ export const ResetUserDetailsForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="accessKey"
                     placeholder="38944849"

@@ -20,7 +20,7 @@ export const CreateRole = () => {
   return (
     <Box>
       <Box>
-        <LargeTitle title="Create New User" />
+        <LargeTitle title="Create New Role" />
       </Box>
       <Box
         sx={{
@@ -44,7 +44,7 @@ export const CreateRole = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="roleName"
                     placeholder="Enter Role Name"
@@ -52,24 +52,25 @@ export const CreateRole = () => {
                   />{' '}
                 </Grid>
 
-                <Grid spacing={2} container>
-                  <Grid item={isTablet} mobile={12} tablet={9}>
+                <Grid p={{ mobile: 2, desktop: 0 }} spacing={2} container>
+                  <Grid item={isTablet} mobile={9} tablet={9}>
                     <FormTextInput
                       customStyle={{
-                        width: setWidth(),
+                        width: setWidth(isMobile ? '140px' : '100%'),
                       }}
                       name="idleTimeOut"
                       placeholder="Enter Idle Time Out"
                       label="Idle Time Out"
                     />{' '}
                   </Grid>
-                  <Grid mt={3} item={isTablet} tablet={3} mobile={12}>
+                  <Grid mt={3} item={isTablet} tablet={3} mobile={3}>
                     <FormSelectInput
                       customStyle={{
-                        width: setWidth(),
+                        width: setWidth(isMobile ? '113px' : '100%'),
                         fontSize: '14px',
                         ...inputFields,
                         height: '56px',
+                        marginLeft: `${isMobile ? '80px' : '0'}`,
                       }}
                       name="customerType"
                       options={Loan.status}
@@ -78,24 +79,25 @@ export const CreateRole = () => {
                   </Grid>
                 </Grid>
 
-                <Grid spacing={2} container>
-                  <Grid item={isTablet} mobile={12} tablet={9}>
+                <Grid p={{ mobile: 2, desktop: 0 }} spacing={2} container>
+                  <Grid item={isTablet} mobile={9} tablet={9}>
                     <FormTextInput
                       customStyle={{
-                        width: setWidth(),
+                        width: setWidth(isMobile ? '140px' : '100%'),
                       }}
                       name="accessDays"
                       placeholder="EnterAccess Days"
                       label="Access Days"
                     />{' '}
                   </Grid>
-                  <Grid mt={3} item={isTablet} tablet={3} mobile={12}>
+                  <Grid mt={3} item={isTablet} tablet={3} mobile={3}>
                     <FormSelectInput
                       customStyle={{
-                        width: setWidth(),
+                        width: setWidth(isMobile ? '113px' : '100%'),
                         fontSize: '14px',
                         ...inputFields,
                         height: '56px',
+                        marginLeft: `${isMobile ? '80px' : '0'}`,
                       }}
                       name="customerType"
                       options={Loan.status}
@@ -111,7 +113,7 @@ export const CreateRole = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="email"
                     placeholder="Enter Role Level"
@@ -125,7 +127,7 @@ export const CreateRole = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="roleDescription"
                     placeholder="Role Description"

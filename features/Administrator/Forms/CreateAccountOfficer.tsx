@@ -42,7 +42,7 @@ export const CreateAccountOfficer = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffId"
                     placeholder="202210107481"
@@ -54,7 +54,7 @@ export const CreateAccountOfficer = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="loanStatus"
@@ -70,7 +70,7 @@ export const CreateAccountOfficer = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffName"
                     placeholder="Omodayo Oluwafunke"
@@ -81,7 +81,7 @@ export const CreateAccountOfficer = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="department"
@@ -97,7 +97,7 @@ export const CreateAccountOfficer = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="email"
                     placeholder="Omodayo_Oluwafunke@testcompany.com"
@@ -108,7 +108,7 @@ export const CreateAccountOfficer = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="phoneNumber"
@@ -120,7 +120,7 @@ export const CreateAccountOfficer = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="staffStatus"

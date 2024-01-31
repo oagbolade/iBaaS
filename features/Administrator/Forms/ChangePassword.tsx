@@ -10,7 +10,6 @@ import { Loan } from '@/constants/Loan/selectOptions';
 
 export const ChangePasswordForm = () => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-  const [showPassword, setShowPassword] = React.useState(false);
 
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
     actions.setSubmitting(false);
@@ -43,7 +42,7 @@ export const ChangePasswordForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffId"
                     placeholder="202210107481"
@@ -59,7 +58,7 @@ export const ChangePasswordForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffName"
                     placeholder="Omodayo Oluwafunke"
@@ -70,7 +69,7 @@ export const ChangePasswordForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="department"

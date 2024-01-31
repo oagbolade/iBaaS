@@ -15,7 +15,6 @@ import { queryClient } from '@/react-query/queryClient';
 import { NavBarSideBarWrapper } from '@/components/Shared/NavBarSideBarWrapper';
 import { MuiSnackbar } from '@/components/Snackbar';
 import MuiSnackbarContextProvider from '@/context/MuiSnackbarContext';
-import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 

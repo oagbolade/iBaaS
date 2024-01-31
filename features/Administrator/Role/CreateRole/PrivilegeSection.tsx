@@ -16,10 +16,10 @@ import { Role } from '@/constants/Administrator/selectOptions';
 import { SearchIcon } from '@/assets/svg';
 
 type Props = {
-    title: string;
-}
+  title: string;
+};
 
-export const PrivilegeSection = ({title}: Props) => {
+export const PrivilegeSection = ({ title }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
 
   const Divider: React.FC = () => {
@@ -77,6 +77,7 @@ export const PrivilegeSection = ({title}: Props) => {
       <Grid container>
         <Grid
           tablet={4}
+          mobile={12}
           sx={{
             width: '20%',
           }}
@@ -89,9 +90,10 @@ export const PrivilegeSection = ({title}: Props) => {
         </Grid>
         <Grid
           tablet={4}
+          mobile={12}
           sx={{
             width: '20%',
-            padding: { mobile: '10px 17px', desktop: '20px 32px' },
+            padding: { mobile: 0, desktop: '20px 32px' },
           }}
         >
           <CheckboxInput label="Setup BHIS" />
@@ -102,9 +104,10 @@ export const PrivilegeSection = ({title}: Props) => {
         </Grid>
         <Grid
           tablet={4}
+          mobile={12}
           sx={{
             width: '20%',
-            padding: { mobile: '10px 17px', desktop: '20px 32px' },
+            padding: { mobile: 0, desktop: '20px 32px' },
           }}
         >
           <CheckboxInput label="Setup BHIS" />

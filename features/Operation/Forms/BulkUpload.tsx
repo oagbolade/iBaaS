@@ -32,7 +32,7 @@ import { TopActionsArea } from '@/components/Revamp/Shared';
 import { MobilePreviewContent, actionButtons } from './BatchPosting';
 import colors from '@/assets/colors';
 
-const VisuallyHiddenInput = styled('input')({
+export const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
   height: 2,

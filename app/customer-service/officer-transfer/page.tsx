@@ -1,5 +1,5 @@
-import { OfficerTransfer } from '@/features/CustomerService/officertransfer';
+import { OfficeTransferTable } from '@/features/CustomerService/officertransfer/OfficerTransfer';
 
 export default function OfficerTransferPage() {
-  return <OfficerTransfer />;
+  return <OfficeTransferTable />;
 }

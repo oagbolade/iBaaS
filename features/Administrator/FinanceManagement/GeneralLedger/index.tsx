@@ -15,12 +15,15 @@ import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
+  <Box ml={{ mobile: 12, desktop: 0 }}>
+
   <Link href="/finance/general-ledger/create">
     <PrimaryIconButton
       buttonTitle="Create General Ledger"
-      customStyle={{ ...submitButton, width: '236px', height: '40px' }}
+      customStyle={{ ...submitButton, width: { mobile: '120px', desktop: '236px' }, height: '40px' }}
     />
-  </Link>,
+  </Link>
+  </Box>,
 ];
 
 export const GeneralLedger = () => {

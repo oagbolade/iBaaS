@@ -58,7 +58,7 @@ export const CreateUserForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffId"
                     placeholder="202210107481"
@@ -74,7 +74,7 @@ export const CreateUserForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="staffName"
                     placeholder="Omodayo Oluwafunke"
@@ -89,7 +89,7 @@ export const CreateUserForm = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="email"
                     placeholder="Omodayo_Oluwafunke@testcompany.com"
@@ -100,7 +100,7 @@ export const CreateUserForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="loanStatus"
@@ -112,7 +112,7 @@ export const CreateUserForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="department"
@@ -124,7 +124,7 @@ export const CreateUserForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="phoneNumber"
@@ -136,7 +136,7 @@ export const CreateUserForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="reportingTo"
@@ -148,7 +148,7 @@ export const CreateUserForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="sbuUnit"
@@ -160,7 +160,7 @@ export const CreateUserForm = () => {
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectInput
                     customStyle={{
-                      width: setWidth(),
+                      width: setWidth(isMobile ? '285px' : '100%'),
                       fontSize: '14px',
                     }}
                     name="staffStatus"
@@ -173,7 +173,7 @@ export const CreateUserForm = () => {
                   <FormTextInput
                     type={showPassword ? 'text' : 'password'}
                     customStyle={{
-                      width: '100%',
+                      width: setWidth(isMobile ? '285px' : '100%'),
                     }}
                     name="password"
                     placeholder="Enter password"

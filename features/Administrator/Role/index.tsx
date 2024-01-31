@@ -16,12 +16,14 @@ import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
+  <Box ml={{ mobile: 12, desktop: 0 }}>
   <Link href="/admin/roles/create">
     <PrimaryIconButton
       buttonTitle="Add New Role"
       customStyle={{ ...submitButton }}
     />
-  </Link>,
+  </Link>
+  </Box>,
 ];
 
 export const Roles = () => {

@@ -16,16 +16,19 @@ import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
-  <Link href="/admin/users/create">
-    <PrimaryIconButton
-      buttonTitle="Create User"
-      customStyle={{ ...submitButton }}
-    />
-  </Link>,
+  <Box ml={{ mobile: 12, desktop: 0 }}>
+    <Link href="/admin/users/create">
+      <PrimaryIconButton
+        buttonTitle="Create User"
+        customStyle={{ ...submitButton }}
+      />
+    </Link>
+  </Box>,
 ];
 
 export const Users = () => {
-  const [deleteStep, setDeleteStep] = useState<null | 'isConfirmation' | 'showToast' | 'password'
+  const [deleteStep, setDeleteStep] = useState<
+    null | 'isConfirmation' | 'showToast' | 'password'
   >(null);
 
   const toastMessageMapper = {

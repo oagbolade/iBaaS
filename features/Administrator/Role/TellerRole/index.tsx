@@ -60,7 +60,10 @@ const AccordionDetails = styled(MuiAccordionDetails)(() => {
   };
 });
 
-export const SubTitle = ({ title }: { title: string }) => {
+type Props = {
+  title?: string;
+};
+export const SubTitle = ({ title }: Props) => {
   return (
     <Typography
       sx={{
@@ -76,12 +79,12 @@ export const SubTitle = ({ title }: { title: string }) => {
   );
 };
 
-export const Details = ({ title }: { title: string }) => {
+export const Details = ({ title }: Props) => {
   return (
     <Typography
       sx={{
         color: `${colors.neutral900}`,
-        fontSize: '16px',
+        fontSize: { mobile: '12px', desktop: '16px' },
         fontWeight: 600,
         lineHeight: '24px',
         marginBottom: '24px',
@@ -240,10 +243,10 @@ export const ViewRole = () => {
                 </Box>
                 <Box
                   sx={{
-                    width: { mobile: '100%', desktop: '60%' },
-                    padding: '20px 32px',
-                    display: 'grid',
-                    justifyContent: 'center',
+                    width: { mobile: '20%', desktop: '60%' },
+                    padding: { mobile: '10px 17px', desktop: '20px 32px' },
+                    display: { desktop: 'grid' },
+                    justifyContent: { desktop: 'center' },
                   }}
                 >
                   <SubTitle title="Idle time out" />
@@ -255,7 +258,7 @@ export const ViewRole = () => {
                 <Box
                   sx={{
                     width: '20%',
-                    padding: '20px 32px',
+                    padding: { mobile: '10px 17px', desktop: '20px 32px' },
                   }}
                 >
                   <SubTitle title="Access Days" />
@@ -276,6 +279,7 @@ export const ViewRole = () => {
               <Grid container>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -289,6 +293,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -302,6 +307,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -315,6 +321,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -328,6 +335,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -356,6 +364,7 @@ export const ViewRole = () => {
               <Grid container>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -369,6 +378,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -382,6 +392,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -395,6 +406,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },
@@ -408,6 +420,7 @@ export const ViewRole = () => {
                 </Grid>
                 <Grid
                   tablet={2}
+                  mobile={12}
                   sx={{
                     width: '20%',
                     padding: { mobile: '10px 17px', desktop: '20px 32px' },

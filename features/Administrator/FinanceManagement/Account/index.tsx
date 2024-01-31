@@ -16,12 +16,18 @@ import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
+  <Box ml={{ mobile: 12, desktop: 0 }}>
   <Link href="/finance/account/create">
     <PrimaryIconButton
       buttonTitle="Create Account"
-      customStyle={{ ...submitButton, width: '236px', height: '40px' }}
+      customStyle={{
+        ...submitButton,
+        width: { mobile: '116px', desktop: '236px' },
+        height: '40px',
+      }}
     />
-  </Link>,
+  </Link>
+  </Box>,
 ];
 
 export const Account = () => {
@@ -56,7 +62,7 @@ export const Account = () => {
   const ActionMenuProps: React.FC = () => {
     return <TableActionMenu handleDelete={handleDelete} />;
   };
-  
+
   return (
     <>
       <TopActionsArea

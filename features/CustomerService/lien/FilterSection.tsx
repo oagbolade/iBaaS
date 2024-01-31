@@ -1,0 +1,51 @@
+import React from 'react';
+import { Box, Typography, Stack } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { allBranchesStyle } from '@/features/Report/Overview/styles';
+import { TextInput } from '@/components/FormikFields';
+import colors from '@/assets/colors';
+import {
+  ActionButtonWithPopper,
+  ActionButton,
+} from '@/components/Revamp/Buttons';
+import { ChevronDown } from '@/assets/svg';
+import { labelTypography } from '@/components/FormikFields/styles';
+import {
+  Wrapper,
+  branchOptions,
+  selectButton,
+} from '@/features/Report/CustomReport/ChartAccount/FilterSection';
+import { useSetDirection } from '@/utils/useSetDirection';
+import { useCurrentBreakpoint } from '@/utils';
+
+export const FilterSection = () => {
+  const { setDirection } = useSetDirection();
+  const { isMobile, setWidth } = useCurrentBreakpoint();
+
+  return (
+    <Box>
+      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
+        <Box mt={4.5} mr={4}>
+          <TextInput
+            name="Search"
+            placeholder="Search"
+            icon={<SearchIcon />}
+            customStyle={{
+              width: setWidth(isMobile ? '240px' : '1200px'),
+            }}
+          />
+        </Box>
+        <Box mt={{ mobile: 3, tablet: 4.5 }}>
+          <ActionButton
+            customStyle={{
+              backgroundColor: `${colors.primaryBlue100}`,
+              border: `1px solid ${colors.primaryBlue500}`,
+              color: `${colors.primaryBlue500}`,
+            }}
+            buttonTitle="Search"
+          />
+        </Box>
+      </Stack>
+    </Box>
+  );
+};

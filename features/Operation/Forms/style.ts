@@ -35,6 +35,7 @@ export const documentUpload = {
   border: `1px solid ${colors.neutral300}`,
   background: `${colors.white}`,
   width: { tablet: '560px', mobile: '400px' },
+  margin: '4px',
 };
 export const BatchContainer = {
   display: 'flex',

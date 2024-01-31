@@ -79,43 +79,23 @@ export const sideBarMenu: SidebarMenuItem[] = [
     hideMenuItem: false,
     subMenuItems: [
       {
-        name: 'Customer Creation',
-        link: '/customer-service/customer-creation',
+        name: 'Customer',
+        link: '/customer-service/customer',
         hideSubMenuItem: false,
       },
       {
-        name: 'Account Reactivation',
-        link: '/customer-service/reactivation',
+        name: 'Groups',
+        link: '/customer-service/group',
         hideSubMenuItem: false,
       },
       {
-        name: 'Customer Balance',
-        link: '/customer-service/balance',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Close Account',
-        link: '/customer-service/close-account',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Manage Lien',
-        link: '/customer-service/lien',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Standing Instruction',
-        link: '/customer-service/instruction',
-        hideSubMenuItem: false,
-      },
-      {
-        name: 'Officer Transfer',
+        name: 'Officers',
         link: '/customer-service/officer-transfer',
         hideSubMenuItem: false,
       },
       {
-        name: 'Customer Account Record',
-        link: '/customer-service/account-record',
+        name: 'Directors',
+        link: '/customer-service/director',
         hideSubMenuItem: false,
       },
     ],

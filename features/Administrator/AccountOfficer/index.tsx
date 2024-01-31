@@ -16,12 +16,18 @@ import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
-  <Link href="/admin/account-officers/create">
-    <PrimaryIconButton
-      buttonTitle="Add Account Officer"
-      customStyle={{ ...submitButton, width: '218px', height: '40px' }}
-    />
-  </Link>,
+  <Box ml={{ mobile: 12, desktop: 0 }}>
+    <Link href="/admin/account-officers/create">
+      <PrimaryIconButton
+        buttonTitle="Add Account Officer"
+        customStyle={{
+          ...submitButton,
+          width: { mobile: '119px', desktop: '218px' },
+          height: { mobile: '30px', desktop: '40px' },
+        }}
+      />
+    </Link>
+  </Box>,
 ];
 
 export const AccountOfficers = () => {
