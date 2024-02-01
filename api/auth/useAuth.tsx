@@ -58,7 +58,9 @@ export function useAuth(): UseAuth {
 
       if (data.responseCode === statusCodes.SUCCESS) {
         setLoading(false);
-
+        setTimeout(() => {
+          window.location.href = '/setup/business';
+        }, 3000);
         toast('Login successfull, redirecting please wait...', 'success');
 
         // update stored user data
