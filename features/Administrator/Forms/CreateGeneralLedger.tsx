@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
@@ -10,6 +11,8 @@ import { Loan } from '@/constants/Loan/selectOptions';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 
 export const CreateGeneralLedger = () => {
+  const searchParams = useSearchParams();
+  const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
@@ -19,7 +22,7 @@ export const CreateGeneralLedger = () => {
   return (
     <Box>
       <Box>
-        <LargeTitle title="Create General Ledger" />
+        <LargeTitle title={`${isEditing ? 'Edit' : 'Create'} General Ledger`} />
       </Box>
       <Box
         sx={{

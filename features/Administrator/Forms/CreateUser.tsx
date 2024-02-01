@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +13,8 @@ import { useCurrentBreakpoint } from '@/utils';
 import { Loan } from '@/constants/Loan/selectOptions';
 
 export const CreateUserForm = () => {
+  const searchParams = useSearchParams();
+  const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -34,7 +37,7 @@ export const CreateUserForm = () => {
   return (
     <Box>
       <Box>
-        <LargeTitle title="Create New User" />
+        <LargeTitle title={`${isEditing ? 'Edit' : 'Create'} New User`} />
       </Box>
       <Box
         sx={{

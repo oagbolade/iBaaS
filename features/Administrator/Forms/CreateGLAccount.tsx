@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Box, Grid, FormLabel, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { InfoSection } from '@/features/Administrator/GLAccount/CreateGLAccount/InfoSection';
@@ -16,6 +17,8 @@ import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
 
 export const CreateGLAccount = () => {
+  const searchParams = useSearchParams();
+  const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
@@ -25,7 +28,7 @@ export const CreateGLAccount = () => {
   return (
     <Box>
       <Box>
-        <LargeTitle title="Create General Ledger" />
+        <LargeTitle title={`${isEditing ? 'Edit' : 'Create'} General Ledger`} />
       </Box>
       <InfoSection />
       <Box

@@ -2,16 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { DeleteConfirmationModal } from '../Forms/DeleteConfirmationModal';
 import { FilterSection } from './FilterSection';
 import { TableActionMenu } from './TableActionMenu';
+import MOCK_DATA from './MOCK_DATA.json';
+import { DeleteConfirmationModal } from '@/features/Administrator/Forms/DeleteConfirmationModal';
 import { AdminContainer } from '@/features/Administrator/AdminContainer';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { MuiTableContainer } from '@/components/Table';
+import {
+  MuiTableContainer,
+  StyledTableRow,
+  renderEmptyTableBody,
+} from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
@@ -30,6 +35,7 @@ export const Users = () => {
   const [deleteStep, setDeleteStep] = useState<
     null | 'isConfirmation' | 'showToast' | 'password'
   >(null);
+  const [search, setSearch] = useState<boolean>(false);
 
   const toastMessageMapper = {
     userDelete: {
@@ -55,6 +61,10 @@ export const Users = () => {
     setDeleteStep(currentStep);
   };
 
+  const handleSearch = () => {
+    setSearch(true);
+  };
+
   const ActionMenuProps: React.FC = () => {
     return <TableActionMenu handleDelete={handleDelete} />;
   };
@@ -65,16 +75,52 @@ export const Users = () => {
         actionButtons={actionButtons}
       />
       <AdminContainer>
-        <FilterSection />
+        <FilterSection onSearch={handleSearch} />
         <Box sx={{ width: '100%' }}>
           <MuiTableContainer
             columns={MOCK_COLUMNS}
-            data={MOCK_DATA}
             tableConfig={{
               hasActions: true,
             }}
             ActionMenuProps={ActionMenuProps}
-          />
+          >
+            {search ? (
+              MOCK_DATA.map((dataItem) => {
+                return (
+                  <StyledTableRow key={dataItem.name}>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem.staffId}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.name}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.department}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.role}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.date}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <ActionMenuProps />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={MOCK_COLUMNS.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody()}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
         </Box>
         <Box />
         {deleteStep === 'showToast' && (

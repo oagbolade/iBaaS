@@ -1,4 +1,31 @@
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { styled } from '@mui/material/styles';
 import colors from '@/assets/colors';
+
+export const StyledTableCell = styled(TableCell, {
+  shouldForwardProp: (prop) => prop !== 'isHeader',
+})(() => {
+  return {
+    color: `${colors.neutral900}`,
+    fontFamily: 'Averta Regular',
+    fontSize: '14px',
+    lineHeight: '20px',
+    fontWeight: 400,
+    padding: '20px 20px',
+
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: `${colors.neutral200}`,
+      color: `${colors.neutral900}`,
+      fontWeight: 600,
+      textAlign: 'left',
+    },
+
+    [`&.${tableCellClasses.body}`]: {
+      fontWeight: 400,
+      textAlign: 'left',
+    },
+  };
+});
 
 export const TableContainerStyle = {
   display: 'flex',

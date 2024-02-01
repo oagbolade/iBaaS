@@ -14,6 +14,7 @@ export const pageTitle = {
   lineHeight: '36px',
   width: '307px',
   height: '36px',
+  textWrap: 'wrap',
 };
 
 export const navBarTitle = {

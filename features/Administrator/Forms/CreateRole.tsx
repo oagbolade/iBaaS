@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { PrivilegeSection } from '../Role/CreateRole/PrivilegeSection';
@@ -11,6 +12,8 @@ import { Loan } from '@/constants/Loan/selectOptions';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 
 export const CreateRole = () => {
+  const searchParams = useSearchParams();
+  const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
@@ -20,7 +23,7 @@ export const CreateRole = () => {
   return (
     <Box>
       <Box>
-        <LargeTitle title="Create New Role" />
+        <LargeTitle title={`${isEditing ? 'Edit Role' : 'Create New Role'}`} />
       </Box>
       <Box
         sx={{

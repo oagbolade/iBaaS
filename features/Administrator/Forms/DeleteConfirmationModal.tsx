@@ -27,6 +27,7 @@ import { userInitialValues } from '@/constants/types';
 import { FormTextInput } from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
+import { useCurrentBreakpoint } from '@/utils';
 
 type Props = {
   modalTitle: string;
@@ -44,6 +45,7 @@ export const DeleteConfirmationModal = ({
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
     actions.setSubmitting(false);
   };
+  const { isMobile, setWidth } = useCurrentBreakpoint();
 
   const confirmations = [
     'isConfirmation',
@@ -62,6 +64,7 @@ export const DeleteConfirmationModal = ({
 
   const conditonalRenderConfirmationMapper: ConfirmationMapper = {
     isConfirmation: 'isPassword',
+    isPassword: 'showToast',
     isDeactivateConfirmation: 'isDeactivatePassword',
     isDisengageConfirmation: 'isDisengagePassword',
     isDeactivatePassword: 'showToast',
@@ -103,13 +106,17 @@ export const DeleteConfirmationModal = ({
                     <Box>
                       <PageTitle
                         title="To confirm this is really you , please enter your account password to continue."
-                        styles={{ ...AccountBodyPage }}
+                        styles={AccountBodyPage}
                       />
                     </Box>
                   </Box>
                   <Box sx={AccountInputContainer}>
                     <FormTextInput
-                      customStyle={{ ...AccountInputText }}
+                      type="password"
+                      customStyle={{
+                        ...AccountInputText,
+                        width: setWidth(isMobile ? '240px' : '440px'),
+                      }}
                       name="name"
                       placeholder="Enter Password"
                       label="Enter Password"
@@ -119,36 +126,39 @@ export const DeleteConfirmationModal = ({
               )}
             </Box>
             <Box sx={ButtonContainer}>
-              <Box>
-                <Box sx={ButtonColorStyle}>
-                  <Box sx={ButtonText}>
-                    <Box sx={CancelButton}>
-                      <PrimaryIconButton
-                        onClick={() => handleClose(null)}
-                        buttonTitle="Cancel"
-                        customStyle={{ ...TypographyButton }}
-                      />
-                    </Box>
-                    <Box sx={ConfirmButton}>
-                      <PrimaryIconButton
-                        onClick={() => {
-                          handleClose(
-                            conditonalRenderConfirmationMapper[
-                              deleteStep || ''
-                            ],
-                          );
-                        }}
-                        buttonTitle="Proceed"
-                        customStyle={{
-                          ...TypographyConfirm,
-                          backgroundColor: `${colors.primaryRedBase}`,
-                          width: '131px',
-                          height: '40px',
-                          borderRadius: '6px',
-                          padding: '16px 78px',
-                        }}
-                      />
-                    </Box>
+              <Box sx={ButtonColorStyle}>
+                <Box sx={ButtonText}>
+                  <Box sx={{ ...CancelButton, background: 'none' }}>
+                    <PrimaryIconButton
+                      onClick={() => handleClose(null)}
+                      buttonTitle="Cancel"
+                      customStyle={{
+                        ...TypographyButton,
+                        width: `${isMobile ? '80px' : '131px'}`,
+                        height: '40px',
+                        padding: { mobile: '0 50px' },
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ ...ConfirmButton, background: 'none' }}>
+                    <PrimaryIconButton
+                      onClick={() => {
+                        console.log('deleteStep', deleteStep);
+                        handleClose(
+                          conditonalRenderConfirmationMapper[deleteStep || ''],
+                        );
+                      }}
+                      buttonTitle="Proceed"
+                      customStyle={{
+                        ...TypographyConfirm,
+                        backgroundColor: `${colors.primaryRedBase}`,
+                        width: `${isMobile ? '80px' : '131px'}`,
+                        height: '40px',
+                        borderRadius: '6px',
+                        padding: { mobile: '8px 50px', desktop: '16px 78px' },
+                        marginRight: { mobile: '70px', desktop: 0 },
+                      }}
+                    />
                   </Box>
                 </Box>
               </Box>

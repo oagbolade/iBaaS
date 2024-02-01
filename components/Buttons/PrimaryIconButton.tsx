@@ -27,7 +27,7 @@ export const PrimaryIconButton = ({
       onClick={() => {
         return onClick?.();
       }}
-      sx={{ buttonTypography, ...customStyle }}
+      sx={{ ...buttonTypography, ...customStyle }}
       style={{
         backgroundColor:
           customStyle?.backgroundColor || `${colors.activeBlue400}`,

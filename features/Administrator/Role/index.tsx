@@ -17,12 +17,12 @@ import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
-  <Link href="/admin/roles/create">
-    <PrimaryIconButton
-      buttonTitle="Add New Role"
-      customStyle={{ ...submitButton }}
-    />
-  </Link>
+    <Link href="/admin/roles/create">
+      <PrimaryIconButton
+        buttonTitle="Add New Role"
+        customStyle={{ ...submitButton }}
+      />
+    </Link>
   </Box>,
 ];
 
@@ -33,7 +33,7 @@ export const Roles = () => {
 
   const toastMessageMapper = {
     userDelete: {
-      title: 'User Deleted',
+      title: 'Role Deleted',
       body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.',
     },
     userCreated: { title: '', body: '' },
@@ -88,8 +88,8 @@ export const Roles = () => {
             handleClose={handleDelete}
             form={
               <DeleteConfirmationModal
-                modalTitle=""
-                modalDescription=""
+                modalTitle="Delete Role"
+                modalDescription="Are you sure you want to delete?"
                 deleteStep={deleteStep}
                 handleClose={handleDelete}
               />

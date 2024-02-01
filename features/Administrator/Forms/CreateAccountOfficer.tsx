@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
+import { useSearchParams } from 'next/navigation';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { FormSelectInput, FormTextInput } from '@/components/FormikFields';
 import { user as userSchema } from '@/constants/schemas';
@@ -9,6 +10,8 @@ import { useCurrentBreakpoint } from '@/utils';
 import { Loan } from '@/constants/Loan/selectOptions';
 
 export const CreateAccountOfficer = () => {
+  const searchParams = useSearchParams();
+  const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
@@ -18,7 +21,9 @@ export const CreateAccountOfficer = () => {
   return (
     <Box>
       <Box>
-        <LargeTitle title="Create Account Officer" />
+        <LargeTitle
+          title={`${isEditing ? 'Edit' : 'Create'} Account Officer`}
+        />
       </Box>
       <Box
         sx={{

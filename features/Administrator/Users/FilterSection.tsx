@@ -8,7 +8,11 @@ import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 
-export const FilterSection = () => {
+type Props = {
+  onSearch: () => void | undefined | number;
+};
+
+export const FilterSection = ({ onSearch }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
 
   return (
@@ -73,7 +77,7 @@ export const FilterSection = () => {
           mr={{ mobile: 30, tablet: 0 }}
           mb={{ mobile: 6, tablet: 0 }}
         >
-          <ActionButton buttonTitle="Search" />
+          <ActionButton onClick={onSearch} buttonTitle="Search" />
         </Grid>
       </Grid>
     </Box>

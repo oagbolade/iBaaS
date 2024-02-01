@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
@@ -9,6 +10,8 @@ import { useCurrentBreakpoint } from '@/utils';
 import { Loan } from '@/constants/Loan/selectOptions';
 
 export const CreatePostingLimit = () => {
+  const searchParams = useSearchParams();
+  const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
@@ -18,7 +21,9 @@ export const CreatePostingLimit = () => {
   return (
     <Box>
       <Box>
-        <LargeTitle title="Create New Limit" />
+        <LargeTitle
+          title={`${isEditing ? 'Edit Limit' : 'Create New Limit'}`}
+        />
       </Box>
       <Box
         sx={{

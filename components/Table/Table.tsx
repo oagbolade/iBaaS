@@ -40,7 +40,7 @@ interface DataI {
   department: string;
 }
 
-const StyledTableRow = styled(TableRow)(({ theme }) => {
+export const StyledTableRow = styled(TableRow)(({ theme }) => {
   return {
     '&:nth-of-type(even):hover': {
       backgroundColor: theme.palette.action.hover,
@@ -65,7 +65,7 @@ const success = <Status label="Active" status="success" />;
 const warning = <Status label="Warning" status="warning" />;
 const danger = <Status label="Danger" status="danger" />;
 
-const renderEmptyTableBody = () => {
+export const renderEmptyTableBody = () => {
   return (
     <Stack
       direction="row"
@@ -97,13 +97,14 @@ export interface HeaderI {
 
 type Props = {
   columns: string[];
-  data: DataI[];
+  data?: DataI[] | undefined;
   showHeader?: HeaderI;
   ActionMenuProps?: any;
   checkboxHeader?: any;
   hideFilterSection?: boolean;
   tableConfig?: ITableConfig;
   showSearch?: boolean;
+  children?: React.ReactNode;
 };
 
 export const MuiTableContainer = ({
@@ -116,6 +117,7 @@ export const MuiTableContainer = ({
   },
   checkboxHeader,
   showSearch = false,
+  children,
 }: Props) => {
   const actionsColumn = tableConfig?.hasActions ? 1 : 0;
   const { setDirection } = useSetDirection();
@@ -202,7 +204,7 @@ export const MuiTableContainer = ({
             </TableRow>
           </StyledTableHead>
           <TableBody>
-            {data.length === 0 ? (
+            {data?.length === 0 ? (
               <StyledTableRow>
                 <StyledTableCell
                   colSpan={columns.length + actionsColumn}
@@ -213,7 +215,8 @@ export const MuiTableContainer = ({
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              data.map((dataItem) => {
+              children ||
+              data?.map((dataItem) => {
                 return (
                   <StyledTableRow key={dataItem.name}>
                     {checkboxHeader && (

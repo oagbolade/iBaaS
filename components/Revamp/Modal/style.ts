@@ -151,14 +151,14 @@ export const TextArea = {
 };
 
 export const ButtonContainer = {
-  width: '486px',
+  width: { mobile: '289px', desktop: '486px' },
   height: '82px',
   flexShrink: 0,
   color: `${colors.neutral300}`,
 };
 
 export const ButtonColorStyle = {
-  width: '486px',
+  width: { mobile: '288px', desktop: '486px' },
   flex: '1 0 0',
   borderRadius: '0px 0px 12px 12px',
   border: `1px solid ${colors.neutral300} `,
@@ -174,9 +174,9 @@ export const ButtonText = {
   alignItems: 'center',
   gap: '12px',
   flexShrink: 0,
-  width: '273px',
+  width: { desktop: '273px' },
   color: `${colors.neutral900}`,
-  marginLeft: '200px',
+  marginLeft: { desktop: '200px' },
 };
 
 export const CancelButton = {
@@ -202,7 +202,7 @@ export const TypographyButton = {
 
 export const ConfirmButton = {
   display: 'flex',
-  width: '131px',
+  width: { mobile: '80px', desktop: '131px' },
   height: '40px',
   padding: '16px 78px',
   justifyContent: 'center',

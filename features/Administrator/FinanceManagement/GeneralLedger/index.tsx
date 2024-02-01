@@ -16,13 +16,16 @@ import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
-
-  <Link href="/finance/general-ledger/create">
-    <PrimaryIconButton
-      buttonTitle="Create General Ledger"
-      customStyle={{ ...submitButton, width: { mobile: '120px', desktop: '236px' }, height: '40px' }}
-    />
-  </Link>
+    <Link href="/finance/general-ledger/create">
+      <PrimaryIconButton
+        buttonTitle="Create General Ledger"
+        customStyle={{
+          ...submitButton,
+          width: { mobile: '125px', desktop: '236px' },
+          height: '40px',
+        }}
+      />
+    </Link>
   </Box>,
 ];
 
