@@ -32,7 +32,7 @@ export const TrendCard = ({
 }: Props) => {
   return (
     <Stack direction="row" sx={{ ...OfficerTrendSection, ...customStyle }}>
-      <Box>
+      <Box sx={{ width: '100%' }}>
         <Box>
           <Typography sx={description}>{title}</Typography>
         </Box>

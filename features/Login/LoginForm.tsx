@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useContext } from 'react';
-import { useRouter } from 'next/navigation';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -76,7 +75,7 @@ export function LoginForm() {
         validationSchema={userLoginSchema}
       >
         <Form>
-          <Box>
+          <Box sx={{ width: '100%' }}>
             <Grid container spacing={2}>
               <Grid item mobile={12}>
                 <FormTextInput
@@ -122,7 +121,15 @@ export function LoginForm() {
               <Grid item mobile={12} tablet={12} desktop={6}>
                 <CheckboxInput label="Remember me" />
               </Grid>
-              <PageTitle title="Forgot Password?" styles={forgotPassword} />
+              <Grid
+                sx={{ display: 'flex', justifyContent: {mobile: 'flex-start', desktop: 'flex-end'} }}
+                item
+                mobile={12}
+                tablet={12}
+                desktop={6}
+              >
+                <PageTitle title="Forgot Password?" styles={forgotPassword} />
+              </Grid>
               <Grid container mt={7} ml={2} mobile={12}>
                 <Grid item mobile={12}>
                   <PrimaryIconButton

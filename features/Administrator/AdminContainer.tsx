@@ -7,7 +7,7 @@ export const AdminContainer = ({ children }: ChildrenProps) => {
     <Box
       sx={{
         padding: '25px',
-        marginTop: '30px',
+        marginTop: '5px',
       }}
     >
       {children}

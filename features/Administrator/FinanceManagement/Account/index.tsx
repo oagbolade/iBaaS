@@ -17,16 +17,16 @@ import { ModalContainerV2 } from '@/components/Revamp/Modal';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
-  <Link href="/finance/account/create">
-    <PrimaryIconButton
-      buttonTitle="Create Account"
-      customStyle={{
-        ...submitButton,
-        width: { mobile: '116px', desktop: '236px' },
-        height: '40px',
-      }}
-    />
-  </Link>
+    <Link href="/finance/account/create">
+      <PrimaryIconButton
+        buttonTitle="Create Account"
+        customStyle={{
+          ...submitButton,
+          width: { mobile: '116px', desktop: '236px' },
+          height: '40px',
+        }}
+      />
+    </Link>
   </Box>,
 ];
 
@@ -71,7 +71,13 @@ export const Account = () => {
       />
       <AdminContainer>
         <FilterSection />
-        <Box sx={{ width: '100%' }}>
+        <Box
+          sx={{
+            position: { mobile: 'relative' },
+            bottom: '25px',
+            width: '100%',
+          }}
+        >
           <MuiTableContainer
             columns={MOCK_COLUMNS}
             data={MOCK_DATA}

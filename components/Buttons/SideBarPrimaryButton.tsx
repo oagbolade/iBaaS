@@ -42,8 +42,14 @@ export default function SideBarPrimaryButton({
       )}
 
       {!hasSubItems && (
-        <Stack sx={{ width: '100%' }} ml={2} mt={2} mb={2} direction="row">
-          <Box sx={{ marginTop: `${isActive ? '10px' : '3px'}` }}>{icon}</Box>
+        <Stack
+          sx={{ width: '100%', ...renderAsActive(isActive) }}
+          ml={2}
+          mt={2}
+          mb={2}
+          direction="row"
+        >
+          <Box sx={{ marginTop: `${isActive ? '0' : '3px'}` }}>{icon}</Box>
           <Typography
             component={Link}
             href={link || ''}
@@ -52,8 +58,6 @@ export default function SideBarPrimaryButton({
               fontSize: '15px',
               fontWeight: 400,
               color: `${colors.neutral700}`,
-              ...renderAsActive(isActive),
-              width: `${isActive ? '170px' : '100%'}`,
             }}
             ml={2}
             mt={0.3}

@@ -35,7 +35,7 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
           width: '85%',
         }}
       >
-        <Box ml={2.5}>
+        <Box ml={{mobile: 2.5, desktop: 0}}>
           <Typography
             sx={{
               color: `${colors.neutral900}`,

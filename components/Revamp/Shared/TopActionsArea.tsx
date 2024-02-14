@@ -6,9 +6,14 @@ import { CustomStyleI } from '@/constants/types';
 type Props = {
   actionButtons?: Array<ReactNode>;
   customStyle?: CustomStyleI;
+  showBackButon?: boolean;
 };
 
-export const TopActionsArea = ({ actionButtons, customStyle }: Props) => {
+export const TopActionsArea = ({
+  actionButtons,
+  customStyle,
+  showBackButon = true,
+}: Props) => {
   return (
     <Stack
       sx={{
@@ -23,7 +28,7 @@ export const TopActionsArea = ({ actionButtons, customStyle }: Props) => {
       alignItems="center"
       spacing={{ tablet: 2 }}
     >
-      <BackButton />
+      {showBackButon ? <BackButton /> : <Box />}
       <Stack direction="row">
         {actionButtons?.map((buttons, index) => {
           return (

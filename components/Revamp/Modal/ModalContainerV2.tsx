@@ -29,7 +29,7 @@ export const ModalContainerV2 = ({ form, handleClose }: Props) => {
           },
         }}
         sx={{
-          backgroundColor: 'rgba(0, 66, 95, 0.5)',
+          backgroundColor: 'rgb(34, 40, 52, 0.4)',
         }}
       >
         <Fade in={open}>

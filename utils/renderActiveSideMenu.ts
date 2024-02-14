@@ -11,6 +11,8 @@ export const renderAsActive = (isActive?: boolean) => {
       border: '1px solid #0275D8',
       background: 'var(--colour-primaryblue-primary-blue-100, #EBF8FE)',
       color: '#0275D8',
+      width: '200px',
+      height: '40px',
     };
   }
 };

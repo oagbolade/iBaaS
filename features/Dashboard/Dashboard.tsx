@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { PendingTasks } from './PendingTasks';
@@ -20,7 +21,9 @@ export const Dashboard = () => {
           <Typography sx={mainTitle}>Welcome back, [ User-Name ]</Typography>
         </Box>
         <Box>
-          <Typography sx={description}>Get an overview of all your system activities</Typography>
+          <Typography sx={description}>
+            Get an overview of all your system activities
+          </Typography>
         </Box>
       </Box>
       <Stack direction="row" justifyContent="space-between">
@@ -29,15 +32,15 @@ export const Dashboard = () => {
             width: '100%',
           }}
         >
-          <TrendCard
-            customStyle={{
-              width: '98%',
-            }}
-            isPositiveTrend={false}
-            percentage="-2.3%"
-            title="Till Balance"
-            amount="₦1,132,432.32"
-          />
+            <TrendCard
+              customStyle={{
+                width: '98%',
+              }}
+              isPositiveTrend={false}
+              percentage="-2.3%"
+              title="Till Balance"
+              amount="₦1,132,432.32"
+            />
           <TrendCard
             customStyle={{
               width: '98%',

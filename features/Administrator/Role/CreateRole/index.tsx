@@ -10,7 +10,7 @@ import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styl
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
-    <PrimaryIconButton buttonTitle="Submit" customStyle={{ ...submitButton }} />
+    <PrimaryIconButton buttonTitle="Create New Role" customStyle={{ ...submitButton }} />
   </Box>,
 ];
 

@@ -63,12 +63,19 @@ export const GLAccount = () => {
   return (
     <>
       <TopActionsArea
+        showBackButon={false}
         customStyle={{ width: '100%' }}
         actionButtons={actionButtons}
       />
       <AdminContainer>
         <FilterSection />
-        <Box sx={{ width: '100%' }}>
+        <Box
+          sx={{
+            position: { mobile: 'relative' },
+            bottom: '25px',
+            width: '100%',
+          }}
+        >
           <MuiTableContainer
             columns={MOCK_COLUMNS}
             data={MOCK_DATA}

@@ -16,6 +16,7 @@ export const ModalStyleContainer = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '40px',
+  zIndex: '2',
 };
 
 export const RejectedModal = {

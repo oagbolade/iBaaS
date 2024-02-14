@@ -229,49 +229,74 @@ export const sideBarMenu: SidebarMenuItem[] = [
       },
       // Administrator
       {
-        name: 'Create User',
+        name: 'Users',
         link: '/admin/users/create',
         hideSubMenuItem: true,
       },
       {
-        name: 'Reset User',
+        name: 'Users',
         link: '/admin/users/reset',
         hideSubMenuItem: true,
       },
       {
-        name: 'View Role',
+        name: 'Roles',
         link: '/admin/roles/view',
         hideSubMenuItem: true,
       },
       {
-        name: 'Create Role',
+        name: 'Roles',
         link: '/admin/roles/create',
         hideSubMenuItem: true,
       },
       {
-        name: 'Create Account Officer',
+        name: 'Account Officers',
         link: '/admin/account-officers/create',
         hideSubMenuItem: true,
       },
       {
-        name: 'Create Posting Limit',
+        name: 'Account Officers',
+        link: '/admin/account-officers',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Posting Limit',
+        link: '/admin/posting-limit',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Posting Limit',
         link: '/admin/posting-limit/create',
         hideSubMenuItem: true,
       },
       {
-        name: 'Create GL Account',
+        name: 'GL Account',
         link: '/admin/gl-account/create',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'GL Account',
+        link: '/admin/gl-account',
         hideSubMenuItem: true,
       },
       // Finance Management
       {
-        name: 'Create General Ledger',
+        name: 'General Ledger',
+        link: '/finance/general-ledger',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'General Ledger',
         link: '/finance/general-ledger/create',
         hideSubMenuItem: true,
       },
       {
-        name: 'Classify Account',
+        name: 'Account',
         link: '/finance/account/classify',
+        hideSubMenuItem: true,
+      },
+      {
+        name: 'Account',
+        link: '/finance/account',
         hideSubMenuItem: true,
       },
     ],
