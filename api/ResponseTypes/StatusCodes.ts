@@ -1,0 +1,7 @@
+export const statusCodes = {
+  UNAUTHORIZED: '-40',
+  AXIOS_UNAUTHORIZED: 401,
+  AXIOS_BAD_REQUEST: 400,
+  LOGIN_SUCCESS: '0',
+  FIRST_TIME_LOGIN_RESET: '20'
+};

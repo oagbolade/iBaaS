@@ -1,11 +1,18 @@
 import React, { useContext } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { AlertColor } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { useUser } from './useUser';
-import { UserLoginResponse } from '@/constants/Responses';
-import { axiosInstance } from '@/axiosInstance';
+import { UserLoginResponse } from '@/api/ResponseTypes/login';
+import { axiosInstance, environment } from '@/axiosInstance';
 import { MuiSnackbarContext } from '@/context/MuiSnackbarContext';
-import { statusCodes } from '@/constants/Responses/StatusCodes';
+import { statusCodes } from '@/api/ResponseTypes/StatusCodes';
+import {
+  clearStoredUser,
+  getLastPage,
+  getStoredUser
+} from '@/utils/user-storage';
+import { useGetParams } from '@/utils/hooks/useGetParams';
 
 interface UseAuth {
   isLoading: boolean;
@@ -13,21 +20,30 @@ interface UseAuth {
     companyCode: string,
     username: string,
     password: string,
+    onFirstTimeUser?: () => void
   ) => Promise<void>;
   signup: (
     companyCode: string,
     username: string,
-    password: string,
+    password: string
   ) => Promise<void>;
   signout: () => void;
 }
 
+interface ErrorResponseData {
+  responseDescription?: string;
+  message?: string;
+  responseCode?: string;
+}
+
 export function useAuth(): UseAuth {
+  const router = useRouter();
+  const auth = useGetParams('auth');
   const [isLoading, setLoading] = React.useState<boolean>(false);
   const { toggleSnackbar, setMessage, setSeverity } =
     useContext(MuiSnackbarContext);
   const SERVER_ERROR = 'There was an error contacting the server.';
-  const { clearUser, updateUser } = useUser();
+  const { updateUser } = useUser();
   const toast = (message: string, severity: AlertColor) => {
     toggleSnackbar();
     setMessage(message);
@@ -36,17 +52,18 @@ export function useAuth(): UseAuth {
 
   async function authServerCall(
     urlEndpoint: string,
-    companyCode: string,
-    username: string,
+    tenantid: string,
+    userid: string,
     password: string,
+    onFirstTimeUser?: () => void
   ): Promise<void> {
     try {
       setLoading(true);
       const { data }: AxiosResponse<UserLoginResponse> = await axiosInstance({
         url: urlEndpoint,
         method: 'POST',
-        data: { companyCode, username, password },
-        headers: { 'Content-Type': 'application/json' },
+        data: { tenantid, userid, password },
+        headers: { 'Content-Type': 'application/json' }
       });
 
       if (data.responseCode === statusCodes.UNAUTHORIZED) {
@@ -55,23 +72,59 @@ export function useAuth(): UseAuth {
         toast(message, 'error');
         return;
       }
-
-      if (data.responseCode === statusCodes.SUCCESS) {
+      if (data.responseCode === statusCodes.LOGIN_SUCCESS) {
         setLoading(false);
-        setTimeout(() => {
-          window.location.href = '/setup/business';
-        }, 3000);
-        toast('Login successfull, redirecting please wait...', 'success');
+        if (auth) {
+          setTimeout(() => {
+            window.location.href = `${getLastPage()}`;
+          }, 3500);
+          toast(
+            'Login successful, redirecting to last visited page...',
+            'success'
+          );
+        } else {
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 3000);
+
+          toast('Login successful, redirecting please wait...', 'success');
+        }
 
         // update stored user data
-        updateUser(data);
+        updateUser(data, tenantid);
       }
     } catch (errorResponse) {
+      const axiosError = errorResponse as AxiosError;
+
+      if (
+        typeof onFirstTimeUser === 'function' &&
+        (axiosError?.response?.data as ErrorResponseData)?.responseCode ===
+          statusCodes.FIRST_TIME_LOGIN_RESET &&
+        (axiosError?.response?.data as ErrorResponseData)
+          ?.responseDescription ===
+          'You must Change your Password at First Login or On Reset'
+      ) {
+        onFirstTimeUser();
+      }
+
+      setLoading(false);
       const message =
         axios.isAxiosError(errorResponse) &&
         errorResponse?.response?.data?.message
           ? errorResponse?.response?.data?.message
           : SERVER_ERROR;
+
+      if (
+        (axiosError?.response?.data as ErrorResponseData)?.responseDescription
+      ) {
+        toast(
+          (axiosError?.response?.data as ErrorResponseData)
+            ?.responseDescription as string,
+          'error'
+        );
+        return;
+      }
+
       toast(message, 'error');
     }
   }
@@ -80,27 +133,53 @@ export function useAuth(): UseAuth {
     companyCode: string,
     username: string,
     password: string,
+    onFirstTimeUser?: () => void
   ): Promise<void> {
     authServerCall(
-      `/login/login?tenantid=${companyCode}&userid=${username}&password=${password}`,
+      '/login/login',
       companyCode,
       username,
       password,
+      onFirstTimeUser
     );
   }
 
   async function signup(
     companyCode: string,
     username: string,
-    password: string,
+    password: string
   ): Promise<void> {
     authServerCall('/user', companyCode, username, password);
   }
 
-  function signout(): void {
-    // clear user from stored user data
-    clearUser();
-    toast('Logged out successfully', 'success');
+  async function signout(): Promise<void> {
+    try {
+      const urlEndpoint = '/Login/Logout/Logout';
+
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+
+      clearStoredUser();
+
+      toast('Logout successful, redirecting please wait...', 'success');
+
+      setTimeout(() => {
+        if (environment === 'production') {
+          window.location.href = '/login';
+          return;
+        }
+
+        window.location.href = '/ibaas-ui/login';
+      }, 1500);
+    } catch (errorResponse) {
+      toast((errorResponse as { message: string })?.message, 'error');
+    }
   }
 
   // Return the user object and auth methods
@@ -108,6 +187,6 @@ export function useAuth(): UseAuth {
     isLoading,
     login,
     signup,
-    signout,
+    signout
   };
 }

@@ -5,7 +5,7 @@ import { getStoredUser, setStoredUser } from '@/utils/user-storage';
 
 interface IUseUser {
   user: UserLoginResponse | null;
-  updateUser: (user: UserLoginResponse, companyCode: string) => void;
+  updateUser: (user: UserLoginResponse) => void;
   clearUser: () => void;
 }
 
@@ -13,9 +13,9 @@ export function useUser(): IUseUser {
   const queryClient = useQueryClient();
   const user = getStoredUser();
   // meant to be called from useAuth
-  function updateUser(newUser: UserLoginResponse, companyCode: string): void {
+  function updateUser(newUser: UserLoginResponse): void {
     // TODO: update the user in the query cache
-    setStoredUser({ ...newUser, companyCode });
+    setStoredUser(newUser);
     queryClient.setQueryData([queryKeys.user], newUser);
   }
 

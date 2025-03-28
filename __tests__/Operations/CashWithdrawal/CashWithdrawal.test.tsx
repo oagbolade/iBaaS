@@ -1,0 +1,144 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { Formik } from 'formik';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ToastMessageContext } from '@/context/ToastMessageContext';
+import { mockToastActions } from '@/mocks';
+import { useCreateCashWithdrawal } from '@/api/operation/useCreateCashWithdrawal';
+import { CashWithDrawal } from '@/features/Operation/Forms/CashWithdrawal';
+
+const mockMutate = jest.fn();
+
+jest.mock('../../../api/operation/useCreateCashWithdrawal', () => ({
+  useCreateCashWithdrawal: jest.fn(() => ({
+    mutate: jest.fn()
+  }))
+}));
+
+const currencies = [
+  {
+    name: 'Nigeria',
+    value: 'NGN'
+  },
+  {
+    name: 'America',
+    value: 'USD'
+  }
+];
+
+jest.mock('next/navigation', () => ({
+  useSearchParams: jest.fn(() => ({ get: jest.fn() }))
+}));
+
+const mockRouterReplace = jest.fn();
+const mockRouterRefresh = jest.fn();
+const mockRouterPush = jest.fn();
+
+jest.mock('next/navigation', () => {
+  const originalModule = jest.requireActual('next/navigation');
+  return {
+    __esModule: true,
+    ...originalModule,
+    useRouter: jest.fn().mockImplementation(() => {
+      return {
+        push: mockRouterPush,
+        replace: mockRouterReplace,
+        refresh: mockRouterRefresh
+      };
+    }),
+    useSearchParams: jest.fn().mockImplementation(() => {
+      return new URLSearchParams(window.location.search);
+    }),
+    usePathname: jest.fn().mockImplementation((pathArg) => {
+      return pathArg;
+    })
+  };
+});
+
+describe('CashWithdrawal Form', () => {
+  beforeEach(() => {
+    (useCreateCashWithdrawal as jest.Mock).mockReturnValue({
+      mutate: mockMutate
+    });
+  });
+
+  const queryClient = new QueryClient();
+
+  const renderComponent = () =>
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ToastMessageContext.Provider value={mockToastActions}>
+          <Formik initialValues={{}} onSubmit={mockMutate}>
+            <CashWithDrawal currencies={currencies} />
+          </Formik>
+        </ToastMessageContext.Provider>
+      </QueryClientProvider>
+    );
+
+  it('Should render all form fields correctly', () => {
+    renderComponent();
+
+    expect(screen.getByText('Account Number')).toBeInTheDocument();
+    expect(screen.getByLabelText('Currency')).toBeInTheDocument();
+    expect(screen.getByLabelText('Rate')).toBeInTheDocument();
+  });
+
+  it('Should call mutate function with correct data on form submission', async () => {
+    renderComponent();
+
+    const debitAccountNumber = screen.getByRole('button', {
+      name: 'Search by Account Name'
+    });
+
+    fireEvent.change(debitAccountNumber, { target: { value: '12345678999' } });
+
+    const narration = screen.getByRole('textbox', { name: /narration/i });
+
+    fireEvent.change(narration, { target: { value: 'test narration' } });
+
+    const valueDate = screen.getByPlaceholderText('MM/DD/YYYY');
+
+    fireEvent.change(valueDate, { target: { value: '01/01/2023' } });
+
+    fireEvent.change(screen.getByLabelText(/pay amount/i), {
+      target: { value: '100' }
+    });
+
+    const rate = screen.getByLabelText(/rate/i);
+
+    fireEvent.change(rate, { target: { value: '1' } });
+
+    const transAmount = screen.getByLabelText(/transaction amount/i);
+
+    fireEvent.change(transAmount, { target: { value: 100 } });
+
+    const voucherNumber = screen.getByLabelText(/voucher number/i);
+
+    fireEvent.change(voucherNumber, { target: { value: '1' } });
+
+    expect(debitAccountNumber).toHaveValue('12345678999');
+    expect(narration).toHaveValue('test narration');
+    expect(valueDate).toHaveValue('01/01/2023');
+    expect(rate).toHaveValue('1');
+    expect(transAmount).toHaveValue('100');
+    expect(voucherNumber).toHaveValue('1');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(mockMutate).toHaveBeenCalledTimes(1));
+  });
+
+  it('Should validate required fields and show errors for missing values', async () => {
+    renderComponent();
+
+    fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Narration is required/i)).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Currency Code is Required/i)
+      ).toBeInTheDocument();
+    });
+  });
+});
