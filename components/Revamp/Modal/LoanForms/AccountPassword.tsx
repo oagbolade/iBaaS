@@ -19,10 +19,10 @@ import {
   AccountBody,
   AccountBodyPage,
   AccountInputContainer,
-  AccountInputText,
+  AccountInputText
 } from '../style';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import { FormTextInput } from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
@@ -36,7 +36,7 @@ type Props = {
 export const AccountPassword = ({
   handleClose,
   showRejection,
-  showToast,
+  showToast
 }: Props): React.ReactElement => {
   const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
     actions.setSubmitting(false);

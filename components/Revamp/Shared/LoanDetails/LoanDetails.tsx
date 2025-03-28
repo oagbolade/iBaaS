@@ -1,22 +1,28 @@
 import * as React from 'react';
+import moment from 'moment';
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import Avatar from '@mui/material/Avatar';
 import MuiAccordionSummary, {
-  AccordionSummaryProps,
+  AccordionSummaryProps
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import { Box, IconButton, Stack } from '@mui/material';
 import AnimateHeight, { Height } from 'react-animate-height';
-// eslint-disable-next-line import/no-cycle
-import { TopBorderSection } from './TopBorderSection';
 import { avatarStyle } from './styles';
 import { ViewAccount } from './ViewAccount';
 import { ChevronDown, ExternalLinkIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { Status } from '@/components/Labels';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { ILoanAccountDetails } from '@/api/ResponseTypes/loans';
+
+import {
+  ICustomerDetails,
+  IProductDetails
+} from '@/schemas/schema-values/loan';
 
 const Accordion = styled((props: AccordionProps) => {
   return (
@@ -31,7 +37,7 @@ const Accordion = styled((props: AccordionProps) => {
   return {
     borderRadius: '12px',
     border: `1px solid ${colors.neutral300}`,
-    boxShadow: 'none',
+    boxShadow: 'none'
   };
 });
 
@@ -45,14 +51,14 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => {
     '& .MuiAccordionSummary-content': {
       marginLeft: theme.spacing(1),
       display: 'flex',
-      justifyContent: 'center',
-    },
+      justifyContent: 'center'
+    }
   };
 });
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => {
+const AccordionDetails = styled(MuiAccordionDetails)(() => {
   return {
-    padding: 0,
+    padding: 0
   };
 });
 
@@ -64,7 +70,7 @@ export const SubTitle = ({ title }: { title: string }) => {
         fontSize: '12px',
         fontWeight: 400,
         lineHeight: '16px',
-        textTransform: 'uppercase',
+        textTransform: 'uppercase'
       }}
     >
       {title}
@@ -81,6 +87,7 @@ export const Details = ({ title }: { title: string }) => {
         fontWeight: 600,
         lineHeight: '24px',
         marginBottom: '24px',
+        textWrap: 'wrap'
       }}
     >
       {title}
@@ -97,7 +104,7 @@ export const MainTitle = ({ title }: { title: string }) => {
         fontWeight: 600,
         lineHeight: '20px',
         textTransform: 'uppercase',
-        marginBottom: '24px',
+        marginBottom: '24px'
       }}
     >
       <u>{title}</u>
@@ -112,7 +119,7 @@ export const LargeTitle = ({ title }: { title: string }) => {
         fontSize: { mobile: '14px', desktop: '20px' },
         fontWeight: 700,
         lineHeight: { mobile: '20px', desktop: '32px' },
-        textWrap: 'wrap',
+        textWrap: 'wrap'
       }}
     >
       {title}
@@ -121,13 +128,21 @@ export const LargeTitle = ({ title }: { title: string }) => {
 };
 
 type Props = {
-  showTopBorder?: boolean;
+  loanAccDetails?: ILoanAccountDetails;
+  customerDetails?: ICustomerDetails;
+  loanAccountNumber?: string;
+  loanProducts: IProductDetails;
 };
 
-export const LoanDetails = ({ showTopBorder }: Props) => {
+export const LoanDetails = ({
+  loanAccDetails,
+  customerDetails,
+  loanAccountNumber,
+  loanProducts
+}: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [isOpen, setIsOpen] = React.useState<boolean>(true);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [height, setHeight] = React.useState<Height>(350);
   const [open, setOpen] = React.useState(false);
   const { setDirection } = useSetDirection();
@@ -160,12 +175,11 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
   return (
     <Box
       sx={{
-        margin: '20px 0',
+        margin: '20px 0'
       }}
     >
-      {showTopBorder && <TopBorderSection />}
       <Accordion
-        sx={{ width: { mobile: '100%', desktop: '1037px' } }}
+        sx={{ width: { mobile: '100%', desktop: '100%' } }}
         expanded={expanded}
         onChange={() => {
           return handleChange();
@@ -177,7 +191,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
               direction={setDirection()}
               sx={{
                 padding: { mobile: '15px 20px', desktop: '30px 40px' },
-                background: `${colors.primaryBlue100}`,
+                background: `${colors.primaryBlue100}`
               }}
               spacing={2}
               justifyContent="space-between"
@@ -185,21 +199,21 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
               <Stack direction="row" spacing={2}>
                 <Avatar
                   sx={{
-                    ...avatarStyle,
+                    ...avatarStyle
                   }}
                 >
                   AA
                 </Avatar>
                 <Box mt={1.2}>
-                  <LargeTitle title="Mariam Omodayo Oluwafunke" />
+                  <LargeTitle title={customerDetails?.accounttitle || 'N/A'} />
                   <Typography
                     sx={{
                       fontSize: { mobile: '10px', desktop: '14px' },
                       fontWeight: 400,
-                      lineHeight: '20px',
+                      lineHeight: '20px'
                     }}
                   >
-                    ID:495498348{' '}
+                    {customerDetails?.customerid || 'N/A'}
                   </Typography>
                 </Box>
               </Stack>
@@ -210,12 +224,23 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                     fontStyle: 'italic',
                     fontSize: '16px',
                     fontWeight: 400,
-                    lineHeight: '24px',
+                    lineHeight: '24px'
                   }}
                 >
                   Status
                 </Typography>
-                <Status label="Active" status="success" />
+                <Status
+                  label={
+                    Number(customerDetails?.acctstatus) === 1
+                      ? 'Active'
+                      : 'Inactive'
+                  }
+                  status={
+                    Number(customerDetails?.acctstatus) === 1
+                      ? 'success'
+                      : 'warning'
+                  }
+                />
               </Box>
             </Stack>
             <Stack direction={setDirection()}>
@@ -224,13 +249,15 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                   width: '372px',
                   padding: { mobile: '10px 17px', desktop: '20px 32px' },
                   borderRight:
-                    '1px solid var(--colour-neutral-neutral-300, #E1E6ED)',
+                    '1px solid var(--colour-neutral-neutral-300, #E1E6ED)'
                 }}
               >
                 <MainTitle title="Account Details" />
                 <SubTitle title="Account Name" />
-                <Details title="Mariam Omodayo Oluwafunke" />
+                <Details title={customerDetails?.accounttitle || 'N/A'} />
                 <SubTitle title="Account Number" />
+                <Details title={customerDetails?.accountnumber || 'N/A'} />
+
                 <Stack
                   direction="row"
                   sx={{
@@ -240,7 +267,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                     alignItems: 'center',
                     gap: '8px',
                     borderRadius: '8px',
-                    background: `${colors.neutral200}`,
+                    background: `${colors.neutral200}`
                   }}
                 >
                   <Stack direction="column">
@@ -249,29 +276,102 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                         color: `${colors.neutral900}`,
                         fontSize: '14px',
                         fontWeight: 600,
-                        lineHeight: '20px',
+                        lineHeight: '20px'
                       }}
                     >
-                      Loan Account{' '}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: `${colors.neutral700}`,
-                        fontSize: '12px',
-                        fontWeight: 700,
-                        lineHeight: '16px',
-                      }}
-                    >
-                      N43,954,321.34{' '}
+                      Loan Account {loanAccountNumber || 'N/A'}
                     </Typography>
                   </Stack>
+
                   <Box
                     sx={{
                       display: 'flex',
                       justifyContent: 'flex-end',
                       textAlign: 'right',
                       float: 'right',
-                      width: '100%',
+                      width: '100%'
+                    }}
+                  >
+                    <IconButton onClick={toggleModal}>
+                      <ExternalLinkIcon />
+                    </IconButton>
+                  </Box>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  sx={{
+                    display: 'flex',
+                    width: '260px',
+                    padding: '12px 16px',
+                    marginTop: '10px',
+                    marginBottom: '10px',
+                    alignItems: 'center',
+                    gap: '8px',
+                    borderRadius: '8px',
+                    background: `${colors.neutral200}`
+                  }}
+                >
+                  <Stack direction="column">
+                    <Typography
+                      sx={{
+                        color: `${colors.neutral900}`,
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        lineHeight: '20px'
+                      }}
+                    >
+                      CASA Account {customerDetails?.accountnumber}
+                    </Typography>
+                  </Stack>
+
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      textAlign: 'right',
+                      float: 'right',
+                      width: '100%'
+                    }}
+                  >
+                    <IconButton onClick={toggleModal}>
+                      <ExternalLinkIcon />
+                    </IconButton>
+                  </Box>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  sx={{
+                    display: 'flex',
+                    width: '260px',
+                    padding: '12px 16px',
+                    alignItems: 'center',
+                    gap: '8px',
+                    borderRadius: '8px',
+                    background: `${colors.neutral200}`
+                  }}
+                >
+                  <Stack direction="column">
+                    <Typography
+                      sx={{
+                        color: `${colors.neutral900}`,
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        lineHeight: '20px'
+                      }}
+                    >
+                      TD Account{' '}
+                    </Typography>
+                  </Stack>
+
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      textAlign: 'right',
+                      float: 'right',
+                      width: '100%'
                     }}
                   >
                     <IconButton onClick={toggleModal}>
@@ -285,69 +385,91 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
                   width: { mobile: '100%', desktop: '372px' },
                   padding: '20px 32px',
                   borderRight:
-                    '1px solid var(--colour-neutral-neutral-300, #E1E6ED)',
+                    '1px solid var(--colour-neutral-neutral-300, #E1E6ED)'
                 }}
               >
                 <MainTitle title="Product Details" />
+
                 <SubTitle title="Product Name" />
-                <Details title="Managed Services Savings" />
+                <Details title={loanProducts?.productName || 'N/A'} />
+
                 <SubTitle title="Product Currency" />
                 <Details title="NGN" />
 
                 <SubTitle title="Product Start date" />
-                <Details title="02 January, 2023. 11:54pm" />
+                <Details
+                  title={
+                    loanProducts?.productstart
+                      ? moment(loanProducts.productstart).format(
+                          'MMMM Do YYYY, h:mm:ss a'
+                        )
+                      : 'N/A'
+                  }
+                />
 
                 <Details title="Product expiry date" />
-                <SubTitle title="02 January, 2023. 11:54pm" />
+                <Details
+                  title={
+                    loanProducts?.productExpire
+                      ? moment(loanProducts.productExpire).format(
+                          'MMMM Do YYYY, h:mm:ss a'
+                        )
+                      : 'N/A'
+                  }
+                />
 
                 <SubTitle title="Minimum Loan Amount" />
-                <Details title="N35,000" />
+                <Details title={loanProducts?.productName || 'N/A'} />
 
                 <SubTitle title="Maximum loan amount" />
-                <Details title="N1,472,050,900" />
+                <Details title={String(loanProducts?.maxloan) || 'N/A'} />
 
                 <SubTitle title="Maximum interest Rate (%)" />
-                <Details title="3.2" />
+                <Details title={loanProducts?.maxintrate || 'N/A'} />
 
                 <SubTitle title="Calculation Method" />
-                <Details title="Flat" />
+                <Details
+                  title={String(loanProducts?.penalrateCalcMethod) || 'N/A'}
+                />
 
                 <SubTitle title="Default Repayment Type" />
-                <Details title="---" />
+                <Details title={loanProducts?.repayoption || 'N/A'} />
 
                 <SubTitle title="Collateral Value" />
-                <Details title="Collateral Value" />
+                <Details title={loanProducts?.collval || 'N/A'} />
               </Box>
+
               <Box
                 sx={{
                   width: '372px',
                   padding: '20px 32px',
                   borderRight:
-                    '1px solid var(--colour-neutral-neutral-300, #E1E6ED)',
+                    '1px solid var(--colour-neutral-neutral-300, #E1E6ED)'
                 }}
               >
                 <MainTitle title="Account Info" />
                 <SubTitle title="Account Name" />
-                <Details title="Mariam Omodayo Oluwafunke" />
+                <Details title={customerDetails?.accounttitle || 'N/A'} />
                 <SubTitle title="Account Number" />
-                <Details title="409859439393" />
+                <Details title={customerDetails?.accountnumber || 'N/A'} />
 
                 <SubTitle title="Branch" />
-                <Details title="Sabo Branch" />
+                <Details title={customerDetails?.branch || 'N/A'} />
 
                 <SubTitle title="Book Balance" />
-                <Details title="N12,565,321.54" />
+                <Details title={customerDetails?.bkbal || 'N/A'} />
 
                 <SubTitle title="Effective balance" />
-                <Details title="N11,000,870.54" />
+                <Details title={customerDetails?.effbal || 'N/A'} />
 
                 <SubTitle title="Usable Balance" />
-                <Details title="N11,000,870.54" />
+                <Details title={customerDetails?.usebal || 'N/A'} />
 
                 <SubTitle title="Source Type" />
                 <Details title="---" />
+
                 <SubTitle title="Source" />
-                <Details title="---" />
+                <Details title={customerDetails?.source || 'N/A'} />
               </Box>
             </Stack>
           </AnimateHeight>
@@ -358,7 +480,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
               justifyContent="space-between"
             >
               <Typography mr={1} sx={{ textAlign: 'center' }}>
-                Click to view more details {isOpen}
+                Click to view more details
               </Typography>
               <Box mt={0.6}>
                 <ChevronDown />
@@ -367,6 +489,7 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
           </AccordionSummary>
         </AccordionDetails>
       </Accordion>
+
       <Box
         mt={4}
         sx={{
@@ -378,13 +501,13 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
           gap: '32px',
           borderRadius: '5px',
           background: `${colors.white}`,
-          border: `1px solid ${colors.neutral300}`,
+          border: `1px solid ${colors.neutral300}`
         }}
       >
         <Box
           sx={{
             width: { mobile: '100%', desktop: '967px' },
-            borderBottom: `1px solid ${colors.neutral300}`,
+            borderBottom: `1px solid ${colors.neutral300}`
           }}
         >
           <LargeTitle title="Loan Account Details" />
@@ -392,72 +515,92 @@ export const LoanDetails = ({ showTopBorder }: Props) => {
         <Stack direction={setDirection()}>
           <Box mt={2} sx={{ width: '303px' }}>
             <SubTitle title="Settlement Account number" />
-            <Details title="39483593939" />
+            <Details title={loanAccDetails?.settlementAcct || 'N/A'} />
 
             <SubTitle title="Product Name" />
-            <Details title="Educational Loan" />
+            <Details title={loanAccDetails?.productName || 'N/A'} />
 
             <SubTitle title="Loan Term (Months)" />
-            <Details title="34" />
+            <Details title={loanAccDetails?.loanTerm || 'N/A'} />
 
             <SubTitle title="Repayment Type" />
-            <Details title="1" />
+            <Details title={loanAccDetails?.repaymentType || 'N/A'} />
 
             <SubTitle title="Calculation Method" />
-            <Details title="3" />
+            <Details title={loanAccDetails?.calculationName || 'N/A'} />
 
             <SubTitle title="Start Date" />
-            <Details title="02 March, 2023  11:03pm" />
+            <Details
+              title={
+                loanAccDetails?.startdate
+                  ? moment(loanAccDetails.startdate).format(
+                      'MMMM Do YYYY, h:mm:ss a'
+                    )
+                  : 'N/A'
+              }
+            />
 
             <SubTitle title="Principal Due" />
-            <Details title="N1,324,907.32" />
+            <Details title="N/A" />
           </Box>
           <Box mt={2} sx={{ width: '303px' }}>
             <SubTitle title="Branch" />
-            <Details title="Marina Branch" />
+            <Details title={loanAccDetails?.branchName || 'N/A'} />
 
             <SubTitle title="Currency" />
             <Details title="NGN" />
 
             <SubTitle title="Loan Rate (%)" />
-            <Details title="3.2" />
+            <Details title={loanAccDetails?.intRate || 'N/A'} />
 
             <SubTitle title="Term Remaining" />
-            <Details title="3" />
+            <Details title={loanAccDetails?.totaldays || 'N/A'} />
 
             <SubTitle title="Loan Schedule Description" />
-            <Details title="Flat Rate" />
+            <Details title="N/A" />
 
             <SubTitle title="Maturity Date" />
-            <Details title="02 January, 2025  11:03pm" />
+            <Details
+              title={
+                loanAccDetails?.matdate
+                  ? moment(loanAccDetails.matdate).format(
+                      'MMMM Do YYYY, h:mm:ss a'
+                    )
+                  : 'N/A'
+              }
+            />
 
             <SubTitle title="Interest Due" />
-            <Details title="N440,320.54" />
+            <Details title="N/A" />
           </Box>
           <Box mt={2} sx={{ width: '303px' }}>
             <SubTitle title="Product Code" />
-            <Details title="301" />
+            <Details title={loanAccDetails?.productCode || 'N/A'} />
 
             <SubTitle title="Loan Amount" />
-            <Details title="N1,800,320.54" />
+            <Details
+              title={`NGN ${formatCurrency(loanAccDetails?.loanAmount || 0) || 'N/A'}`}
+            />
 
+            {/*  TODO: remove empty titles once API returns the responses */}
             <SubTitle title="Loan Purpose" />
-            <Details title="To buy equipments" />
+            <Details title="N/A" />
 
             <SubTitle title="Repayment Mode" />
-            <Details title="Equal principal & intrest" />
+            <Details title={loanAccDetails?.repaymentType || 'N/A'} />
 
             <SubTitle title="First Repayment Date" />
-            <Details title="02 January, 2023  11:03pm" />
+            <Details title="N/A" />
 
             <SubTitle title="Total No. of Installment" />
-            <Details title="4" />
+            <Details title="N/A" />
 
             <SubTitle title="Account Status" />
             <Status label="Active" status="success" />
           </Box>
         </Stack>
       </Box>
+
       <ViewAccount open={open} toggleModal={toggleModal} />
     </Box>
   );

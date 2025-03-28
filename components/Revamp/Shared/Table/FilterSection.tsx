@@ -39,7 +39,7 @@ export const FilterSection = () => {
             <TextInput
               customStyle={{
                 width: setWidth(),
-                ...inputFields,
+                ...inputFields
               }}
               icon={<FilterListIcon />}
               name="filter"
@@ -63,7 +63,7 @@ export const FilterSection = () => {
           <TextInput
             customStyle={{
               width: setWidth(),
-              ...inputFields,
+              ...inputFields
             }}
             icon={<SearchIcon />}
             name="search"

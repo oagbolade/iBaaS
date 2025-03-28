@@ -6,5 +6,5 @@ export const reportSummary = {
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
   marginTop: '20px',
-  padding: '20px',
+  padding: '20px'
 };

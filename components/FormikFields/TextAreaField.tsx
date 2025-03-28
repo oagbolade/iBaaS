@@ -13,7 +13,6 @@ type Props = {
   placeholder: string;
   endAdornment?: React.JSX.Element | undefined;
   customStyle?: object;
-
 };
 
 export const TextFieldArea = ({
@@ -27,7 +26,7 @@ export const TextFieldArea = ({
     <Box sx={{ marginBottom: '10px' }}>
       <Stack
         sx={{
-          marginBottom: '10px',
+          marginBottom: '10px'
         }}
       >
         <Typography sx={labelTypography}>{label}</Typography>
@@ -37,13 +36,13 @@ export const TextFieldArea = ({
           rows={4}
           title={title}
           sx={textArea}
-          style={{...  customStyle}}
+          style={{ ...customStyle }}
           InputProps={{
             endAdornment: (
               <Box sx={textAreaIcon}>
                 <TextAreaIcon />
               </Box>
-            ),
+            )
           }}
         />
       </Stack>

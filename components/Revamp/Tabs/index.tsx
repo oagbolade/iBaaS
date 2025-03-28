@@ -19,15 +19,15 @@ const StyledTabs = styled((props: StyledTabsProps) => {
     <TabComponent
       {...props}
       TabIndicatorProps={{
-        children: <span className="MuiTabs-indicatorSpan" />,
+        children: <span className="MuiTabs-indicatorSpan" />
       }}
     />
   );
 })({
   color: `${colors.neutral600}`,
   '& .Mui-selected': {
-    color: `${colors.gray800}`,
-  },
+    color: `${colors.gray800}`
+  }
 });
 
 const StyledTab = styled((props: StyledTabProps) => {
@@ -38,8 +38,8 @@ const StyledTab = styled((props: StyledTabProps) => {
     lineHeight: '24px',
     color: `${colors.neutral600}`,
     '& .Mui-selected': {
-      color: `${colors.gray800}`,
-    },
+      color: `${colors.gray800}`
+    }
   };
 });
 
@@ -85,7 +85,7 @@ export const Tabs = ({ tabTitle, pageMenu, customStyle }: Props) => {
           width: '360px',
           borderBottom: 1,
           borderColor: 'divider',
-          ...customStyle,
+          ...customStyle
         }}
       >
         <StyledTabs

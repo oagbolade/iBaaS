@@ -16,71 +16,60 @@ import { emptyTableMainTitle, emptyTableSecondaryTitle } from './StyledMenu';
 import { ActionMenu } from './ActionMenu';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
-import { Status } from '@/components/Labels';
 import { TablePagination } from '@/components/Pagination';
 import { EmptyTableIcon } from '@/assets/svg';
 import { CustomTableHeader } from '@/components/Revamp/Shared/Table/CustomTableHeader';
 import {
   TableTitle,
   TablePaginationStyle,
-  TablePaginationTitle,
+  TablePaginationTitle
 } from '@/components/Table/style';
-
-// Will change this once we start to make API calls
-interface DataI {
-  productCode: string;
-  productName: string;
-  numberOfAccounts: number;
-  cRProductBalance: string;
-  dRProductBalance: string;
-  totalBalance: string;
-}
+import { calculatePages } from '@/utils/calculatePages';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => {
   return {
     '&:nth-of-type(even):hover': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     '&:nth-of-type(odd):hover': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     borderRadius: '8px',
     border: `1px solid ${colors.neutral300}`,
-    minWidth: '50px',
+    minWidth: '50px'
   };
 });
 
 const StyledTableHead = styled(TableHead)(({ theme }) => {
   return {
     borderRadius: '8px',
-    border: `1px solid ${colors.neutral300}`,
+    border: `1px solid ${colors.neutral300}`
   };
 });
 
-const success = <Status label="Active" status="success" />;
-const warning = <Status label="Warning" status="warning" />;
-const danger = <Status label="Danger" status="danger" />;
-
-export const renderEmptyTableBody = () => {
+export const renderEmptyTableBody = (message: string | null = null) => {
   return (
-    <Stack
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-      spacing={2}
-    >
-      <Box>
-        <Box ml={8}>
-          <EmptyTableIcon />
+    <TableRow>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >
+        <Box>
+          <Box ml={8}>
+            <EmptyTableIcon />
+          </Box>
+          <Typography sx={{ ...emptyTableMainTitle }}>
+            {message || 'No Search Criteria Created'}
+          </Typography>
+          <Typography sx={{ ...emptyTableSecondaryTitle }}>
+            {!message &&
+              'Please create a search criteria above and you can see the results here'}
+          </Typography>
         </Box>
-        <Typography sx={{ ...emptyTableMainTitle }}>
-          No Search Criteria Created
-        </Typography>
-        <Typography sx={{ ...emptyTableSecondaryTitle }}>
-          Please create a search criteria above and you can see the results here
-        </Typography>
-      </Box>
-    </Stack>
+      </Stack>
+    </TableRow>
   );
 };
 
@@ -102,37 +91,49 @@ export interface ITableConfig {
   hasActions?: boolean;
 }
 
-type Props = {
+type Props<T> = {
   columns: string[];
-  data: DataI[];
+  keys?: (keyof T)[]; // TODO: Make keys a comuplsory field once we integrate all reports that depends on Tablev2
+  data: T[];
   showHeader?: HeaderI;
   ActionMenuProps?: any;
+  page?: number;
+  setPage?: Function;
+  totalPages?: number;
   checkboxHeader?: any;
   tableConfig?: ITableConfig;
   hideFilterSection?: boolean;
+  totalElements?: number;
+  isSearched?: boolean;
 };
 
-export const TableV2 = ({
+export const TableV2 = <T,>({
   columns,
+  keys,
   data,
   ActionMenuProps,
   showHeader,
+  page = 1,
+  setPage,
+  totalPages,
+  totalElements,
   checkboxHeader,
   tableConfig,
   hideFilterSection,
-}: Props) => {
+  isSearched
+}: Props<T>) => {
   const actionsColumn = tableConfig?.hasActions ? 1 : 0;
 
   const StyledTableCell = styled(TableCell, {
     shouldForwardProp: (prop) =>
-      prop !== 'isHeader' && prop !== 'isPainted' && prop !== 'rowType',
+      prop !== 'isHeader' && prop !== 'isPainted' && prop !== 'rowType'
   })(({ rowType, isPainted, isHeader }: TableProps) => {
     const baseStyle = {
       fontWeight: 600,
       textAlign: 'left',
       fontSize: '16px',
       lineHeight: '24px',
-      padding: '20px 20px',
+      padding: '20px 20px'
     };
 
     return {
@@ -147,39 +148,48 @@ export const TableV2 = ({
         backgroundColor: `${colors.neutral200}`,
         color: `${colors.neutral900}`,
         fontWeight: 600,
-        textAlign: 'left',
+        textAlign: 'left'
       },
 
       [`&.${tableCellClasses.body}`]: {
         fontWeight: 400,
-        textAlign: 'left',
+        textAlign: 'left'
       },
 
       ...(actionsColumn && {
-        padding: '20px',
+        padding: '10px 20px'
       }),
 
       ...(isHeader && {
-        padding: '10px 20px',
+        padding: '10px 20px'
       }),
 
       ...(isPainted && {
-        backgroundColor: '#F4FBFE',
+        backgroundColor: '#F4FBFE'
       }),
 
       ...(rowType === 'total' && {
         ...baseStyle,
         backgroundColor: '#EBF8FE',
-        color: `${colors.activeBlue400}`,
+        color: `${colors.activeBlue400}`
       }),
 
       ...(rowType === 'grandTotal' && {
         ...baseStyle,
         backgroundColor: `${colors.primaryBlue500}`,
-        color: `${colors.white}`,
-      }),
+        color: `${colors.white}`
+      })
     };
   });
+
+  const paginationCount = totalPages || calculatePages(data?.length as number);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage?.(value);
+  };
 
   return (
     <>
@@ -189,7 +199,7 @@ export const TableV2 = ({
           display: 'inline-block',
           width: '100%',
           borderRadius: '8px',
-          border: `1px solid ${colors.neutral300}`,
+          border: `1px solid ${colors.neutral300}`
         }}
         component={Paper}
       >
@@ -210,7 +220,11 @@ export const TableV2 = ({
               )}
               {columns.map((column: string) => {
                 return (
-                  <StyledTableCell isHeader key={column}>
+                  <StyledTableCell
+                    colSpan={columns.length + actionsColumn}
+                    isHeader
+                    key={column}
+                  >
                     {column}
                   </StyledTableCell>
                 );
@@ -218,8 +232,41 @@ export const TableV2 = ({
               {actionsColumn === 1 && <StyledTableCell />}
             </TableRow>
           </StyledTableHead>
+
           <TableBody>
-            {data.length === 0 ? (
+            {isSearched ? (
+              data?.map((dataItem, index) => {
+                return (
+                  <StyledTableRow key={index}>
+                    {checkboxHeader && (
+                      <StyledTableCell component="th" scope="row">
+                        <Checkbox />
+                      </StyledTableCell>
+                    )}
+                    {keys?.map((key) => (
+                      <StyledTableCell
+                        isPainted={tableConfig?.paintedColumns?.includes(
+                          key as string
+                        )}
+                        colSpan={columns.length + actionsColumn}
+                        align="right"
+                        key={String(key)}
+                      >
+                        {String(dataItem[key])}
+                      </StyledTableCell>
+                    ))}
+                    {tableConfig?.hasActions && (
+                      <StyledTableCell
+                        colSpan={columns.length + actionsColumn}
+                        align="right"
+                      >
+                        {ActionMenuProps ? <ActionMenuProps /> : <ActionMenu />}
+                      </StyledTableCell>
+                    )}
+                  </StyledTableRow>
+                );
+              })
+            ) : (
               <StyledTableRow>
                 <StyledTableCell
                   colSpan={columns.length + actionsColumn}
@@ -229,66 +276,28 @@ export const TableV2 = ({
                   {renderEmptyTableBody()}
                 </StyledTableCell>
               </StyledTableRow>
-            ) : (
-              data.map((dataItem, index) => {
-                return (
-                  <StyledTableRow key={index}>
-                    {checkboxHeader && (
-                      <StyledTableCell component="th" scope="row">
-                        <Checkbox />
-                      </StyledTableCell>
-                    )}
-                    <StyledTableCell align="right">
-                      {dataItem.productCode}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem.productName ? success : danger}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem.numberOfAccounts}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      isPainted={tableConfig?.paintedColumns?.includes(
-                        'CR Product Balalnce',
-                      )}
-                      align="right"
-                    >
-                      {dataItem.cRProductBalance}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      isPainted={tableConfig?.paintedColumns?.includes(
-                        'CR Product Balalnce',
-                      )}
-                      align="right"
-                    >
-                      {dataItem.dRProductBalance}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem.totalBalance}
-                    </StyledTableCell>
-                    {tableConfig?.hasActions && (
-                      <StyledTableCell align="right">
-                        {ActionMenuProps ? <ActionMenuProps /> : <ActionMenu />}
-                      </StyledTableCell>
-                    )}
-                  </StyledTableRow>
-                );
-              })
             )}
             <StyledTableRow>
-              {tableConfig?.totalRow?.map((rowItem, index) => {
-                return (
-                  <StyledTableCell rowType="total" key={index} align="right">
-                    {rowItem}{' '}
-                  </StyledTableCell>
-                );
-              })}
+              {isSearched &&
+                tableConfig?.totalRow?.map((rowItem, index) => {
+                  return (
+                    <StyledTableCell
+                      colSpan={columns.length + actionsColumn}
+                      rowType="total"
+                      key={index}
+                      align="right"
+                    >
+                      {rowItem}{' '}
+                    </StyledTableCell>
+                  );
+                })}
             </StyledTableRow>
-            {tableConfig?.grandTotalRow && (
+            {isSearched && tableConfig?.grandTotalRow && (
               <StyledTableRow>
                 {tableConfig?.grandTotalRow.map((rowItem, index) => {
                   return (
                     <StyledTableCell
+                      colSpan={columns.length + actionsColumn}
                       rowType="grandTotal"
                       key={index}
                       align="right"
@@ -302,13 +311,25 @@ export const TableV2 = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack direction="row" justifyContent="space-between" spacing={3}>
-        <PageTitle title="276 results found" styles={TableTitle} />
-        <Box sx={TablePaginationStyle}>
-          <PageTitle title="Rows per page: 10" styles={TablePaginationTitle} />
-          <TablePagination />
-        </Box>
-      </Stack>
+      {isSearched && (
+        <Stack direction="row" justifyContent="space-between" spacing={3}>
+          <PageTitle
+            title={`${totalElements || data?.length} result(s) found`}
+            styles={TableTitle}
+          />
+          <Box sx={TablePaginationStyle}>
+            <PageTitle
+              title="Rows per page: 10"
+              styles={TablePaginationTitle}
+            />
+            <TablePagination
+              handlePageChange={handlePageChange}
+              page={page}
+              count={paginationCount}
+            />
+          </Box>
+        </Stack>
+      )}
     </>
   );
 };

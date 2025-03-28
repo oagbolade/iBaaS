@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { usePathname } from 'next/navigation';
 import { SideBarContainer } from './SideBarContainer';
 import { excludeFromSideBarLayout } from '@/constants/appRoutes';
-import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
+import { useCurrentBreakpoint } from '@/utils/hooks/useCurrentBreakpoint';
 import { hideScrollbar } from '@/utils/scrollBars';
 
 type Props = {
@@ -29,7 +29,7 @@ export const SideBar = ({ openMenu }: Props) => {
         opacity: openMenu || isDesktop ? '1' : '0',
         transition: 'all 1s ease',
         visibility: openMenu || isDesktop ? 'visible' : 'hidden',
-        ...hideScrollbar,
+        ...hideScrollbar
       }}
     >
       <SideBarContainer />

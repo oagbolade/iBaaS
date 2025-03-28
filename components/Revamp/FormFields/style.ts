@@ -5,7 +5,7 @@ export const textTitle = {
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 600,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 export const SelectedContainer = {
@@ -17,7 +17,7 @@ export const SelectedContainer = {
   alignSelf: 'stretch',
   width: '560px',
   height: '340px',
-  borderBottom: `1px solid ${colors.neutral300}`,
+  borderBottom: `1px solid ${colors.neutral300}`
 };
 
 export const SelectedText = {
@@ -33,7 +33,7 @@ export const SelectedText = {
   width: '560px',
   height: '72px',
   '& fieldset': { border: 'none' },
-  textDecoration: 'none',
+  textDecoration: 'none'
 };
 
 export const OptionsStyleContainer = {
@@ -49,7 +49,7 @@ export const OptionsStyleContainer = {
   borderBottom: `1px solid ${colors.neutral300}`,
   '& fieldset': { border: 'none' },
   textDecoration: 'none',
-  border: 'none',
+  border: 'none'
 };
 
 export const menuItemContainer = {
@@ -61,7 +61,7 @@ export const menuItemContainer = {
   alignSelf: 'stretch',
   width: '560px',
   height: '340px',
-  borderBottom: `1px solid ${colors.neutral300}`,
+  borderBottom: `1px solid ${colors.neutral300}`
 };
 
 export const searchContainer = {
@@ -75,14 +75,14 @@ export const searchContainer = {
   background: `${colors.white}`,
   color: `${colors.neutral900}`,
   boxShadow:
-    '0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)',
+    '0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)'
 };
 
 export const OptionsItemStyle = {
   width: '560px',
   height: '40px',
   gap: '6px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const modalTitleContainer = {
@@ -91,7 +91,7 @@ export const modalTitleContainer = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '36px',
+  gap: '36px'
 };
 
 export const modalContainer = {
@@ -108,7 +108,7 @@ export const modalContainer = {
   top: '50%',
   background: `${colors.white}`,
   boxShadow:
-    '0px 10px 30px 0px rgba(0, 0, 0, 0.20), 0px 30px 70px 0px rgba(26, 34, 64, 0.15), 0px 0px 0px 1px rgba(136, 143, 170, 0.10)',
+    '0px 10px 30px 0px rgba(0, 0, 0, 0.20), 0px 30px 70px 0px rgba(26, 34, 64, 0.15), 0px 0px 0px 1px rgba(136, 143, 170, 0.10)'
 };
 
 export const modalTitle = {
@@ -121,7 +121,7 @@ export const modalTitle = {
   borderBottom: `1px solid ${colors.neutral300}`,
   color: `${colors.neutral900}`,
   width: '492px',
-  height: '60px',
+  height: '60px'
 };
 export const modalTitleStyle = {
   display: 'flex',
@@ -130,7 +130,7 @@ export const modalTitleStyle = {
   alignSelf: 'stretch',
   width: '444px',
   height: '32px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 export const modalTyopgraphy = {
   flex: '1 0 0',
@@ -138,7 +138,7 @@ export const modalTyopgraphy = {
   fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 700,
-  lineHeight: '32px' /* 160% */,
+  lineHeight: '32px' /* 160% */
 };
 export const modalBodyContainer = {
   display: 'flex',
@@ -149,7 +149,7 @@ export const modalBodyContainer = {
   alignSelf: 'stretch',
   width: '560px',
   height: 'px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const modalBody = {
@@ -160,7 +160,7 @@ export const modalBody = {
   color: `${colors.neutral1000}`,
   width: '444px',
   height: '552px',
-  '& fieldset': { border: 'none' },
+  '& fieldset': { border: 'none' }
 };
 export const textTypography = {
   display: 'flex',
@@ -170,7 +170,7 @@ export const textTypography = {
   gap: '4px',
   height: '48px',
   '& fieldset': { border: 'none' },
-  textDecoration: 'none',
+  textDecoration: 'none'
 };
 
 export const text = {
@@ -179,7 +179,7 @@ export const text = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px' /* 142.857% */,
+  lineHeight: '20px' /* 142.857% */
 };
 export const textField = {
   alignSelf: 'stretch',
@@ -187,7 +187,7 @@ export const textField = {
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 600,
-  lineHeight: '24px',
+  lineHeight: '24px'
 };
 
 export const optionsTextStyle = {
@@ -195,7 +195,7 @@ export const optionsTextStyle = {
   fontStyle: 'normal',
   fontWeight: 400,
   lineHeight: '16px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const optionsText = {
@@ -204,5 +204,5 @@ export const optionsText = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: '400',
-  lineHeight: '20px',
+  lineHeight: '20px'
 };

@@ -10,19 +10,19 @@ export const ConfirmationContainer = {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '10px',
+  gap: '10px'
 };
 
 export const primaryTitle = {
   color: `${colors.neutral900}`,
   fontSize: '20px',
   fontWeight: 700,
-  lineHeight: '32px',
+  lineHeight: '32px'
 };
 
 export const description = {
   color: `${colors.neutral700}`,
   fontSize: '16px',
   fontWeight: 400,
-  lineHeight: '24px',
+  lineHeight: '24px'
 };

@@ -30,7 +30,7 @@ export const StepperContainer = ({ stepperTitle, stepMapper, step }: Props) => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '80px',
+        marginTop: '80px'
       }}
       direction={setDirection()}
       justifyContent="center"
@@ -43,7 +43,7 @@ export const StepperContainer = ({ stepperTitle, stepMapper, step }: Props) => {
             fontWeight: 400,
             lineHeight: '20px',
             marginBottom: '30px',
-            color: `${colors.backButtonGrey}`,
+            color: `${colors.backButtonGrey}`
           }}
         >
           <WestIcon /> Back

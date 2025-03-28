@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import colors from '@/assets/colors';
 
 export const StyledTableCell = styled(TableCell, {
-  shouldForwardProp: (prop) => prop !== 'isHeader',
+  shouldForwardProp: (prop) => prop !== 'isHeader'
 })(() => {
   return {
     color: `${colors.neutral900}`,
@@ -17,13 +17,13 @@ export const StyledTableCell = styled(TableCell, {
       backgroundColor: `${colors.neutral200}`,
       color: `${colors.neutral900}`,
       fontWeight: 600,
-      textAlign: 'left',
+      textAlign: 'left'
     },
 
     [`&.${tableCellClasses.body}`]: {
       fontWeight: 400,
-      textAlign: 'left',
-    },
+      textAlign: 'left'
+    }
   };
 });
 
@@ -34,7 +34,7 @@ export const TableContainerStyle = {
   alignSelf: 'stretch',
   borderBottom: `1px solid ${colors.gray200}`,
   width: '1117px',
-  height: '48px',
+  height: '48px'
 };
 
 export const TableTitle = {
@@ -44,7 +44,7 @@ export const TableTitle = {
   fontWeight: 600,
   lineHeight: '16px' /* 133.333% */,
   letterSpacing: '0.4px',
-  marginTop: '5px',
+  marginTop: '5px'
 };
 
 export const TablePaginationStyle = {
@@ -52,7 +52,7 @@ export const TablePaginationStyle = {
   alignItems: 'center',
   position: 'relative',
   bottom: 10,
-  right: { desktop: -15 },
+  right: { desktop: -15 }
 };
 
 export const TablePaginationTitle = {
@@ -60,7 +60,7 @@ export const TablePaginationTitle = {
   fontSize: '12px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '16px',
+  lineHeight: '16px'
 };
 
 export const PaginationContainer = {
@@ -69,7 +69,7 @@ export const PaginationContainer = {
   gap: '16px',
   width: '40px',
   height: '16px',
-  color: `${colors.primaryBlue700}`,
+  color: `${colors.primaryBlue700}`
 };
 
 export const inputFields = {
@@ -81,5 +81,5 @@ export const inputFields = {
   marginTop: '15px',
   marginLeft: '30px',
   gap: '16px',
-  marginBottom: '15px',
+  marginBottom: '15px'
 };

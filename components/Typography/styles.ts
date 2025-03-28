@@ -1,11 +1,19 @@
 import colors from '@/assets/colors';
 
+export const currencyStyle = {
+  textAlign: 'center',
+  fontSize: '16px',
+  fontStyle: 'normal',
+  fontWeight: '400',
+  lineHeight: '24px'
+};
+
 export const tableTitle = {
   fontSize: '20px',
   fontWeight: 700,
   lineHeight: '32px',
   minWidth: '132px',
-  height: '32px',
+  height: '32px'
 };
 
 export const pageTitle = {
@@ -14,7 +22,7 @@ export const pageTitle = {
   lineHeight: '36px',
   width: '307px',
   height: '36px',
-  textWrap: 'wrap',
+  textWrap: 'wrap'
 };
 
 export const navBarTitle = {
@@ -22,7 +30,7 @@ export const navBarTitle = {
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: '400',
-  lineHeight: '24px',
+  lineHeight: '24px'
 };
 
 export const stepperLabel = {
@@ -34,11 +42,11 @@ export const stepperLabel = {
   width: '165px',
   height: 'auto',
   whiteSpace: 'break-spaces',
-  marginLeft: '24px',
+  marginLeft: '24px'
 };
 
 export const roleContain = {
-  display: 'flex',
+  display: 'flex'
 };
 
 export const roleTitles = {
@@ -47,7 +55,7 @@ export const roleTitles = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '24px',
-  marginLeft: '8px',
+  marginLeft: '8px'
 };
 
 export const roleTableTitle = {
@@ -56,11 +64,11 @@ export const roleTableTitle = {
   fontWeight: 400,
   lineHeight: '24px',
   color: `${colors.neutral700}`,
-  marginLeft: '7px',
+  marginLeft: '7px'
 };
 
 export const inputAdornment = {
   fontSize: '16px',
   fontWeight: 600,
-  color: `${colors.primaryBlue400}`,
+  color: `${colors.primaryBlue400}`
 };

@@ -15,9 +15,9 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 200,
-    },
-  },
+      width: 200
+    }
+  }
 };
 
 interface OptionsI {
@@ -38,7 +38,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
     fontWeight:
       personName.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+        : theme.typography.fontWeightMedium
   };
 }
 
@@ -47,14 +47,14 @@ export const LargeFormMultiSelectField = ({
   options,
   icon,
   placeholder,
-  customStyle,
+  customStyle
 }: Props) => {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
 
   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
     const {
-      target: { value },
+      target: { value }
     } = event;
     setPersonName(typeof value === 'string' ? value.split(',') : value);
   };
@@ -64,7 +64,7 @@ export const LargeFormMultiSelectField = ({
       <Stack
         sx={{
           marginBottom: '3px',
-          marginLeft: '40px',
+          marginLeft: '40px'
         }}
         direction="row"
       >

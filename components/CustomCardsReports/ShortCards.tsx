@@ -10,7 +10,7 @@ import {
   shortCardtitle,
   shortCardText,
   shortTitle,
-  shortCardTitle,
+  shortCardTitle
 } from './style';
 import { PageTitle } from '@/components/Typography';
 import { TableSingleAction } from '@/components/Table';

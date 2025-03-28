@@ -5,14 +5,14 @@ import {
   Divider,
   FormControlLabel,
   Grid,
-  Stack,
+  Stack
 } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
 import {
   applyFilterButton,
   checkboxSearchgroupContainer,
-  menuTypography,
+  menuTypography
 } from '../styles';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { TextInput } from '@/components/FormikFields';
@@ -33,7 +33,7 @@ const CustomizedCheckbox = styled(FormControlLabel)(
     font-size: 12px;
     width: 151px;
   }
-`,
+`
 );
 
 export const CheckBoxSearchGroup = ({ handleClose, options }: Props) => {
@@ -43,7 +43,7 @@ export const CheckBoxSearchGroup = ({ handleClose, options }: Props) => {
     <ClickAwayListener onClickAway={handleClose}>
       <Box
         sx={{
-          ...checkboxSearchgroupContainer,
+          ...checkboxSearchgroupContainer
         }}
       >
         <Grid mb={1.8} item mobile={12} tablet={12} justifyContent="center">
@@ -52,7 +52,7 @@ export const CheckBoxSearchGroup = ({ handleClose, options }: Props) => {
               width: setWidth(),
               ...inputFields,
               fontSize: '12px',
-              height: '28px',
+              height: '28px'
             }}
             icon={<SearchIcon />}
             name="customerID"
@@ -73,7 +73,7 @@ export const CheckBoxSearchGroup = ({ handleClose, options }: Props) => {
               >
                 <CustomizedCheckbox
                   sx={{
-                    ...menuTypography,
+                    ...menuTypography
                   }}
                   key={index}
                   control={<Checkbox />}

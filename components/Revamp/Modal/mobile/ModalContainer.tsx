@@ -33,7 +33,7 @@ export const MobileModalContainer = ({ ShowPreview, customStyle }: Props) => {
                 height: '40px',
                 marginTop: '40px',
                 alignItems: 'center',
-                ...customStyle,
+                ...customStyle
               }}
               onClick={handleClick}
             >

@@ -1,32 +1,64 @@
-import * as React from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import React from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
-import { DateRange } from '@mui/x-date-pickers-pro';
+import styled from 'styled-components';
+import { DateCalendar } from '@mui/x-date-pickers';
+import { Box } from '@mui/material';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { PrimaryIconButton } from '@/components/Buttons';
 
 type Props = {
-  handleClose: Function;
+  handleClose?: any;
+  CustomDateRangePicker: any;
 };
 
-export function DateRangePicker({ handleClose }: Props) {
-  const [value, setValue] = React.useState<DateRange<Dayjs>>([
-    dayjs('2023-11-17'),
-    dayjs('2023-12-21'),
-  ]);
+// Remove liscence key water mark
+const StyledDateRangeCalendar = styled.section`
+  .MuiDateRangeCalendar-root > div:first-child {
+    display: none;
+  }
+`;
+
+export function DateRangePicker({ handleClose, CustomDateRangePicker }: Props) {
+  const { dateValue, setDateValue, setIsDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
+
+  const confirmAndClose = () => {
+    setIsDateFilterApplied(true);
+    handleClose();
+  };
+
+  type Key = 'startDate' | 'endDate';
+
+  const handleDateChange = (newValue: any, key: Key) => {
+    if (key === 'startDate') {
+      setDateValue([newValue, dateValue[1]]);
+    } else {
+      setDateValue([dateValue[0], newValue]);
+    }
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateRangeCalendar']}>
-        <DateRangeCalendar
-          value={value}
-          onChange={(newValue: any) => {
-            setValue(newValue);
-            handleClose();
+      <StyledDateRangeCalendar>
+        {CustomDateRangePicker ||
+          <Box sx={{ display: 'flex' }}>
+            <DateCalendar value={dateValue[0]} onChange={(newValue) => handleDateChange(newValue, 'startDate')} />
+            <DateCalendar value={dateValue[1]} onChange={(newValue) => handleDateChange(newValue, 'endDate')} />
+          </Box>}
+
+        <PrimaryIconButton
+          customStyle={{
+            margin: '0 0 12px 25px',
+            width: '20px',
+            height: '25px',
+            color: 'white'
           }}
+          buttonTitle="Apply"
+          onClick={confirmAndClose}
         />
-      </DemoContainer>
+      </StyledDateRangeCalendar>
     </LocalizationProvider>
   );
 }

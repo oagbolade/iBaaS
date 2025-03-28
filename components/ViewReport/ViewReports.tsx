@@ -2,192 +2,55 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import {
-  AccountContainer,
-  ViewAccount,
   ViewAccountContainer,
-  ViewContainer,
   ViewStyle,
   ViewAccountTitle,
-  ViewTitle,
-  ViewAccountStyle,
-  AccountView,
+  ViewTitle
 } from './style';
 import { PageTitle } from '@/components/Typography';
 
-interface accountInfo {
-  title: string;
-  figure: string;
-  name: string;
-}
-
-type Props = {
-  accountIfo: accountInfo[];
+// this is just a test data. You can check the ViewAccountEnquiryReport in the account enquiry page for more details on how you can implement yours
+const accountInfo = {
+  accountnumber: 'string',
+  accounttitle: 'string',
+  customerid: 1270,
+  accountOfficer: 'string',
+  bkBalance: 7653,
+  branchName: 'string',
+  Dany: 'string',
+  Test: 7653,
+  brSamanchName: 'string'
 };
 
-export const ViewReports = ({ accountIfo }: Props) => {
+export const ViewReports = () => {
   return (
     <Box>
       <Box sx={ViewAccountContainer}>
-        {accountIfo.map((option) => (
-          <Box sx={AccountContainer}>
-            <Box sx={ViewAccount}>
-              <Box sx={ViewContainer}>
-                <Box sx={ViewStyle}>
-                  <Box>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            rowGap: '40px'
+          }}
+        >
+          {Object.entries(accountInfo).map(([key, value]) => (
+            <Box key={key}>
+              <Box>
+                <Box>
+                  <Box sx={ViewStyle}>
+                    {/* Display the key as the title */}
+                    <PageTitle title={key} styles={{ ...ViewAccountTitle }} />
+                    {/* Display the value */}
                     <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                  </Box>
-                  <Box>
-                    <PageTitle title={option.name} styles={{ ...ViewTitle }} />
-                  </Box>
-                </Box>
-                <Box sx={ViewAccountStyle}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
-                      styles={{ ...ViewTitle }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={AccountView}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
+                      title={String(value)}
                       styles={{ ...ViewTitle }}
                     />
                   </Box>
                 </Box>
               </Box>
             </Box>
-            <Box sx={ViewAccount}>
-              <Box sx={ViewContainer}>
-                <Box sx={ViewStyle}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                  </Box>
-                  <Box>
-                    <PageTitle title={option.name} styles={{ ...ViewTitle }} />
-                  </Box>
-                </Box>
-                <Box sx={ViewAccountStyle}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
-                      styles={{ ...ViewTitle }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={AccountView}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
-                      styles={{ ...ViewTitle }}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-            <Box sx={ViewAccount}>
-              <Box sx={ViewContainer}>
-                <Box sx={ViewStyle}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                  </Box>
-                  <Box>
-                    <PageTitle title={option.name} styles={{ ...ViewTitle }} />
-                  </Box>
-                </Box>
-                <Box sx={ViewAccountStyle}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
-                      styles={{ ...ViewTitle }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={AccountView}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
-                      styles={{ ...ViewTitle }}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-            <Box sx={ViewAccount}>
-              <Box sx={ViewContainer}>
-                <Box sx={ViewStyle}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                  </Box>
-                  <Box>
-                    <PageTitle title={option.name} styles={{ ...ViewTitle }} />
-                  </Box>
-                </Box>
-                <Box sx={ViewAccountStyle}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
-                      styles={{ ...ViewTitle }}
-                    />
-                  </Box>
-                </Box>
-                <Box sx={AccountView}>
-                  <Box>
-                    <PageTitle
-                      title={option.title}
-                      styles={{ ...ViewAccountTitle }}
-                    />
-                    <PageTitle
-                      title={option.figure}
-                      styles={{ ...ViewTitle }}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        ))}
+          ))}
+        </Box>
       </Box>
     </Box>
   );

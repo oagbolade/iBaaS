@@ -18,7 +18,7 @@ export default function SideBarPrimaryButton({
   buttonTitle,
   icon,
   link,
-  hasSubItems,
+  hasSubItems
 }: Props) {
   return (
     <>
@@ -31,7 +31,7 @@ export default function SideBarPrimaryButton({
               fontFamily: 'Averta Regular',
               fontSize: '15px',
               fontWeight: 400,
-              color: `${colors.neutral700}`,
+              color: `${colors.neutral700}`
             }}
             ml={2}
             mt={0.3}
@@ -57,7 +57,7 @@ export default function SideBarPrimaryButton({
               fontFamily: 'Averta Regular',
               fontSize: '15px',
               fontWeight: 400,
-              color: `${colors.neutral700}`,
+              color: `${colors.neutral700}`
             }}
             ml={2}
             mt={0.3}

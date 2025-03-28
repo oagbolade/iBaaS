@@ -20,16 +20,16 @@ export const ModalContainerV2 = ({ form, handleClose }: Props) => {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
-        onClose={handleClose}
+        onClose={() => handleClose?.()}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
           backdrop: {
-            timeout: 500,
-          },
+            timeout: 500
+          }
         }}
         sx={{
-          backgroundColor: 'rgb(34, 40, 52, 0.4)',
+          backgroundColor: 'rgb(34, 40, 52, 0.4)'
         }}
       >
         <Fade in={open}>

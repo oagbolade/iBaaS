@@ -21,7 +21,7 @@ export const SearchLoanFilters = ({ labels }: Props) => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: '1px',
+        gap: '1px'
       }}
     >
       <Grid container spacing={2}>
@@ -31,7 +31,7 @@ export const SearchLoanFilters = ({ labels }: Props) => {
               ...inputFields,
               width: setWidth(),
               height: '38px',
-              padding: '10px 12px',
+              padding: '10px 12px'
             }}
             icon={<SearchIcon />}
             name="search"
@@ -39,9 +39,9 @@ export const SearchLoanFilters = ({ labels }: Props) => {
           />{' '}
         </Grid>
         <Grid ml={2} item mobile={12} tablet={12} justifyContent="center">
-          {labels.map((label) => {return (
-            <CheckboxInput label={label} />
-          );})}
+          {labels.map((label) => {
+            return <CheckboxInput label={label} />;
+          })}
         </Grid>
       </Grid>
     </Box>

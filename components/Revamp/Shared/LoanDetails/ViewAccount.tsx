@@ -12,7 +12,7 @@ import {
   modalTitleStyle,
   modalTyopgraphy,
   text,
-  textField,
+  textField
 } from '@/features/Report/AuditTrail/style';
 
 type Props = {

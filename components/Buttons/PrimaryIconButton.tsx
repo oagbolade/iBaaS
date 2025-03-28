@@ -1,41 +1,56 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import { Button, Stack } from '@mui/material';
 import { buttonTypography } from './styles';
 import colors from '@/assets/colors';
+import { ButtonLoader } from '@/assets/images';
 
 type Props = {
   buttonTitle?: string;
   type?: 'button' | 'submit' | 'reset' | undefined;
   icon?: any;
-  onClick?: (event?: any) => void | undefined | number;
+  onClick?: (event?: any) => void | undefined | number | Promise<void>;
   customStyle?: any | undefined;
+  isLoading?: boolean;
+  disabled?: boolean;
+};
+
+export const disabledButtonStyle = {
+  backgroundColor: `${colors.disabledColor}`,
+  color: 'white',
+  cursor: 'not-allowed'
 };
 
 export const PrimaryIconButton = ({
   buttonTitle,
   icon,
   customStyle = {
-    variant: 'contained',
+    variant: 'contained'
   },
   onClick,
   type = 'button',
+  isLoading = false,
+  disabled = false
 }: Props) => {
   return (
-    <Button
-      id="button"
-      type={type}
-      onClick={() => {
-        return onClick?.();
-      }}
-      sx={{ ...buttonTypography, ...customStyle }}
-      style={{
-        backgroundColor:
-          customStyle?.backgroundColor || `${colors.activeBlue400}`,
-      }}
-      variant={customStyle?.variant}
-      startIcon={icon}
-    >
-      {buttonTitle}
-    </Button>
+    <Stack direction="row" justifyContent="space-between">
+      <Button
+        datatest-id={buttonTitle} 
+        id="button"
+        type={type}
+        onClick={() => onClick?.()}
+        sx={{ ...buttonTypography, ...customStyle }}
+        style={{
+          backgroundColor:
+            customStyle?.backgroundColor || `${colors.activeBlue400}`,
+          ...(disabled && disabledButtonStyle)
+        }}
+        variant={customStyle?.variant}
+        startIcon={icon}
+        disabled={disabled}
+      >
+        {buttonTitle}
+      </Button>
+      {isLoading && <ButtonLoader />}
+    </Stack>
   );
 };

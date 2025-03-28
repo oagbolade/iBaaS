@@ -6,7 +6,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   ModalBackButton,
   ModalSaveButton,
-  ResetButton,
+  ResetButton
 } from '@/components/Modal/styles';
 import { PageTitle } from '@/components/Typography';
 
@@ -23,7 +23,7 @@ export const ModalActions = ({
   BackButtonTitle,
   SaveButtonTitle,
   StyleBack,
-  isFormOne = false,
+  isFormOne = false
 }: Props) => {
   return (
     <Grid justifyContent="center" container mt={9} ml={2}>
@@ -59,7 +59,9 @@ export const ModalActions = ({
       >
         <PrimaryIconButton
           // type="submit" to do handle submit together with setStep
-          onClick={() => {return setStep?.(true);}}
+          onClick={() => {
+            return setStep?.(true);
+          }}
           buttonTitle={SaveButtonTitle}
           customStyle={ModalSaveButton}
         />

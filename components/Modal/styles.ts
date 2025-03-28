@@ -5,7 +5,7 @@ export const ModalTitle = {
   color: `${colors.neutral900}`,
   fontSize: { mobile: '18px', tablet: '28px' },
   fontWeight: 700,
-  lineHeight: '32px',
+  lineHeight: '32px'
 };
 
 export const ModalContainer = {
@@ -24,7 +24,7 @@ export const ModalContainer = {
   paddingTop: '0px',
   flexDirection: 'column',
   alignItems: 'center',
-  ...modalScrollbar,
+  ...modalScrollbar
 };
 
 export const ModalHeader = {
@@ -36,7 +36,7 @@ export const ModalHeader = {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '10px',
-  borderRadius: '8px',
+  borderRadius: '8px'
 };
 
 export const ModalBackButton = {
@@ -47,7 +47,7 @@ export const ModalBackButton = {
   color: `${colors.neutral900}`,
   backgroundColor: `${colors.white}`,
   borderRadius: '8px',
-  border: `1px solid ${colors.neutral300}`,
+  border: `1px solid ${colors.neutral300}`
 };
 
 export const ModalSaveButton = {
@@ -60,7 +60,7 @@ export const ModalSaveButton = {
   borderRadius: '8px',
   marginRight: { desktop: '45px' },
   alignItems: 'center',
-  textAlign: 'center',
+  textAlign: 'center'
 };
 
 export const ResetButton = {
@@ -74,5 +74,5 @@ export const ResetButton = {
   justifyContent: 'center',
   alignSelf: 'center',
   margin: '0 auto',
-  marginRight: { desktop: '45px' },
+  marginRight: { desktop: '45px' }
 };

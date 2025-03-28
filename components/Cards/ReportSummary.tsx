@@ -19,7 +19,7 @@ export const ReportSummary = ({
   title,
   filter,
   link = '',
-  customStyle,
+  customStyle
 }: Props): React.ReactElement => {
   return (
     <Box sx={{ ...reportSummary, ...customStyle }}>

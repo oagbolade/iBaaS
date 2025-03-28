@@ -16,7 +16,7 @@ export const Toasts = {
   position: 'absolute',
   zIndex: 2,
   top: '50px',
-  left: { mobile: '2%', desktop: '30%' },
+  left: { mobile: '2%', desktop: '30%' }
 };
 
 export const ToastContainers = {
@@ -24,7 +24,7 @@ export const ToastContainers = {
   flexShrink: 0,
   alignSelf: 'stretch',
   backgroundColor: `${colors.activeGreen400}`,
-  borderRadius: '7px',
+  borderRadius: '7px'
 };
 
 export const ToastTitleContainer = {
@@ -35,7 +35,7 @@ export const ToastTitleContainer = {
   alignItems: 'flex-start',
   gap: '4px',
   width: { mobile: '100%', desktop: '586px' },
-  height: 'auto',
+  height: 'auto'
 };
 
 export const ToastStyle = {
@@ -44,7 +44,7 @@ export const ToastStyle = {
   gap: '16px',
   alignSelf: 'stretch',
   width: { mobile: '100%', desktop: '586px' },
-  height: '24px',
+  height: '24px'
 };
 
 export const ToastText = {
@@ -53,12 +53,12 @@ export const ToastText = {
   fontWeight: 400,
   lineHeight: '20px',
   width: { mobile: '100%', desktop: '586px' },
-  whiteSpace: 'wrap',
+  whiteSpace: 'wrap'
 };
 
 export const textFieldStyle = {
   color: `${colors.activeGreen600}`,
   fontSize: '16px',
   fontWeight: 600,
-  lineHeight: '24px',
+  lineHeight: '24px'
 };

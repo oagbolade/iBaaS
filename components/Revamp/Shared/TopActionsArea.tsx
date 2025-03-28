@@ -12,19 +12,18 @@ type Props = {
 export const TopActionsArea = ({
   actionButtons,
   customStyle,
-  showBackButon = true,
+  showBackButon = true
 }: Props) => {
   return (
     <Stack
       sx={{
         borderBottom: '1px solid #E8E8E8',
-        padding: '12px 20px',
-        width: { mobile: '100%', tablet: '84.2vw' }, // causing a horizontal overflow, may remove later
+        padding: '8px 12px',
         marginTop: '60px',
-        ...customStyle,
+        ...customStyle
       }}
       direction="row"
-      justifyContent={{ mobile: 'flex-start', tablet: 'space-between' }}
+      justifyContent={{ mobile: 'space-between', tablet: 'space-between' }}
       alignItems="center"
       spacing={{ tablet: 2 }}
     >

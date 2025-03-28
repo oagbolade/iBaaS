@@ -32,16 +32,16 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
         spacing={3}
         sx={{
           padding: '12px 25px',
-          width: '85%',
+          width: '85%'
         }}
       >
-        <Box ml={{mobile: 2.5, desktop: 0}}>
+        <Box ml={{ mobile: 2.5, desktop: 0 }}>
           <Typography
             sx={{
               color: `${colors.neutral900}`,
               fontSize: '20px',
               fontWeight: 700,
-              lineHeight: '32px',
+              lineHeight: '32px'
             }}
           >
             {pageTitle}
@@ -51,7 +51,7 @@ export const NavBarContainer = ({ toggleMenu }: Props) => {
           sx={{
             position: 'relative',
             left: '65px',
-            display: { mobile: 'none', desktop: 'block' },
+            display: { mobile: 'none', desktop: 'block' }
           }}
         >
           <Profile />

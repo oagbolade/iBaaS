@@ -18,22 +18,24 @@ export const Error = ({ open }: Props) => {
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       open={open}
-      onClose={() => {return handleClose();}}
+      onClose={() => {
+        return handleClose();
+      }}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{
         backdrop: {
-          timeout: 500,
-        },
+          timeout: 500
+        }
       }}
       sx={{
-        backgroundColor: 'rgba(0, 66, 95, 0.5)',
+        backgroundColor: 'rgba(0, 66, 95, 0.5)'
       }}
     >
       <Fade in={open}>
         <Box sx={ConfirmationContainer}>
           <ErrorIcon />
-          <Typography sx={primaryTitle}>Confirmation Successfull</Typography>
+          <Typography sx={primaryTitle}>Confirmation Successful</Typography>
           <Typography sx={description}>
             You will access the dashboard shortly.
           </Typography>

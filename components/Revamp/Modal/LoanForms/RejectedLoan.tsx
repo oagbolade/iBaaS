@@ -19,10 +19,10 @@ import {
   RejectedLoadButtonContainer,
   RejectedLoanStyle,
   RejectedButton,
-  TextArea,
+  TextArea
 } from '../style';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import { TextFieldArea } from '@/components/FormikFields';
 import { PageTitle } from '@/components/Typography';
@@ -35,7 +35,7 @@ type Props = {
 export const RejectLoan = ({ handleClose, showToast }: Props) => {
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
+    actions: { setSubmitting: (arg0: boolean) => void }
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));

@@ -15,6 +15,7 @@ import { ChevronDown } from '@/assets/svg';
 import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
 import colors from '@/assets/colors';
 import { renderAsActive } from '@/utils/renderActiveSideMenu';
+import { shouldDisableMenuItem } from '@/utils/checkUserRoleAccess';
 
 interface SubMenuItems {
   name: string;
@@ -36,7 +37,6 @@ export interface SidebarMenuProps {
 
 export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
   const mapped = _.map(sideBarMenu, _.partialRight(_.pick, ['subMenuItems']));
-
   const pathname: string | null = usePathname();
   const defaultExpanded = pathname;
   const defaultActive = process.env.DEFAULT_ACTIVE_MENU || '';
@@ -64,13 +64,16 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
     const items = sideBarMenu.map((menuItem) => {
       const hasSubItems = menuItem.subMenuItems.length > 0;
       if (menuItem.hideMenuItem) return;
+
       if (!hasSubItems) {
         return (
           <Button
+            key={menuItem.name}
             sx={{
-              padding: '0',
+              padding: '0'
             }}
             onClick={() => setActiveMenu(menuItem.name)}
+            disabled={shouldDisableMenuItem(menuItem.name)}
           >
             <SideBarPrimaryButton
               isActive={activeMenu === menuItem.name}
@@ -86,7 +89,7 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
         <Box
           key={menuItem.name}
           sx={{
-            backgroundColor: `${colors.white}`,
+            backgroundColor: `${colors.white}`
           }}
         >
           <Accordion
@@ -94,7 +97,7 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
             onChange={handleChange(menuItem.groupPath)}
             className={styles.MuiPaperElevation}
             sx={{
-              backgroundColor: `${colors.white}`,
+              backgroundColor: `${colors.white}`
             }}
           >
             <AccordionSummary expandIcon={hasSubItems && <ChevronDown />}>
@@ -118,6 +121,7 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
                       onClick={() => {
                         setActiveMenu(subMenuItem.name);
                       }}
+                      disabled={shouldDisableMenuItem(subMenuItem.name)}
                     >
                       {subMenuItem.name}
                     </Button>

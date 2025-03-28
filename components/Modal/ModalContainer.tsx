@@ -7,8 +7,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { ModalHeader } from './ModalHeader';
 import { ModalContainer as ModalContainerStyle } from './styles';
-import { AdminContext } from '@/features/Admin-old/AdminContext';
-import { SetupContext } from '@/features/Setup/SetupContext';
+import { SetupContext } from '@/features/Setup-old/SetupContext';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 
 type Props = {
@@ -22,15 +21,14 @@ export const ModalContainer = ({
   title,
   form,
   isCustomerCreation,
-  isAccountRecord,
+  isAccountRecord
 }: Props) => {
-  const { open, toggleModal, isEditing } = useContext(AdminContext);
   const { isSetupModalOpen, toggleSetupModal, isEditingSetup } =
     useContext(SetupContext);
   const {
     isCustomerServiceModalOpen,
     toggleCustomerServiceModal,
-    isEditingCustomerService,
+    isEditingCustomerService
   } = useContext(CustomerServiceContext);
   let newTitle = title?.replace('Edit', 'Add New');
 
@@ -46,7 +44,7 @@ export const ModalContainer = ({
     if (isSetupModalOpen) return toggleSetupModal(isEditingSetup);
     if (isCustomerServiceModalOpen)
       return toggleCustomerServiceModal(isEditingCustomerService);
-    toggleModal(isEditing);
+    // toggleModal(isEditing);
   };
 
   return (
@@ -54,7 +52,7 @@ export const ModalContainer = ({
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open || isSetupModalOpen || isCustomerServiceModalOpen}
+        open={isSetupModalOpen || isCustomerServiceModalOpen}
         onClose={() => {
           return handleClose();
         }}
@@ -62,16 +60,16 @@ export const ModalContainer = ({
         slots={{ backdrop: Backdrop }}
         slotProps={{
           backdrop: {
-            timeout: 500,
-          },
+            timeout: 500
+          }
         }}
         sx={{
-          backgroundColor: 'rgb(34, 40, 52, 0.4)',
+          backgroundColor: 'rgb(34, 40, 52, 0.4)'
         }}
       >
-        <Fade in={open || isSetupModalOpen || isCustomerServiceModalOpen}>
+        <Fade in={isSetupModalOpen || isCustomerServiceModalOpen}>
           <Box sx={ModalContainerStyle}>
-            <ModalHeader title={isEditing ? title : newTitle} />
+            <ModalHeader title="" />
             {!isCustomerCreation && form}
             {isCustomerCreation && isEditingCustomerService
               ? form.edit

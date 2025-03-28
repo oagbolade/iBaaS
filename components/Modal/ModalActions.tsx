@@ -5,7 +5,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   ModalBackButton,
   ModalSaveButton,
-  ResetButton,
+  ResetButton
 } from '@/components/Modal/styles';
 import { PageTitle } from '@/components/Typography';
 import { useCurrentBreakpoint } from '@/utils';

@@ -7,7 +7,7 @@ export const topBorderSection = {
   display: 'flex',
   padding: '19px 9px 34px 29px',
   borderRadius: '5px',
-  border: '1px solid #E3E8EE',
+  border: '1px solid #E3E8EE'
 };
 
 export const avatarStyle = {
@@ -18,5 +18,5 @@ export const avatarStyle = {
   lineHeight: '36px',
   padding: '15px 13px',
   width: '60px',
-  height: '60px',
+  height: '60px'
 };

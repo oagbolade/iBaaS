@@ -4,8 +4,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Grid } from '@mui/material';
 import { TableTitle } from '@/components/Typography';
 import { TextInput } from '@/components/FormikFields/TextInput';
-import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { useCurrentBreakpoint } from '@/utils/hooks/useCurrentBreakpoint';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
 
 type Props = {
   tableTitle: string;
@@ -16,7 +16,7 @@ type Props = {
 export const SearchSection = ({
   tableTitle,
   searchTitle,
-  searchFilters,
+  searchFilters
 }: Props) => {
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
@@ -25,7 +25,7 @@ export const SearchSection = ({
     <Box>
       <Stack
         sx={{
-          margin: '50px 0',
+          margin: '50px 0'
         }}
         justifyContent="space-between"
         direction={setDirection()}
@@ -34,7 +34,7 @@ export const SearchSection = ({
         <Grid item mt={{ mobile: 3, tablet: 0 }} mobile={8} desktop={12}>
           <TextInput
             customStyle={{
-              width: setWidth(),
+              width: setWidth()
             }}
             placeholder={searchTitle}
             icon={<SearchIcon />}

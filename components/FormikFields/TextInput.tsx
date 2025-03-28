@@ -8,7 +8,9 @@ import { labelTypography, asterix, textStyle } from './styles';
 import { CustomStyleI } from '@/constants/types';
 
 type Props = {
-  placeholder: string;
+  type?: 'password' | 'text';
+  onChange?: Function;
+  placeholder?: string;
   label?: string;
   name?: string;
   required?: boolean;
@@ -16,9 +18,13 @@ type Props = {
   icon?: any;
   customStyle?: CustomStyleI;
   iconPosition?: 'start' | 'end';
+  value?: string;
+  autoFocus?: boolean;
 };
 
 export const TextInput = ({
+  type = 'text',
+  onChange,
   placeholder,
   icon,
   label,
@@ -27,13 +33,15 @@ export const TextInput = ({
   name,
   disabled,
   iconPosition,
+  value,
+  autoFocus
 }: Props) => {
   return (
     <Stack>
       {label && (
         <Stack
           sx={{
-            marginBottom: '3px',
+            marginBottom: '3px'
           }}
           direction="row"
         >
@@ -42,8 +50,11 @@ export const TextInput = ({
         </Stack>
       )}
       <TextField
+        type={type}
         name={name}
+        value={value}
         placeholder={placeholder}
+        autoFocus={autoFocus}
         sx={{ ...textStyle, ...customStyle }}
         InputProps={{
           startAdornment: iconPosition !== 'end' && (
@@ -51,9 +62,12 @@ export const TextInput = ({
           ),
           endAdornment: iconPosition === 'end' && (
             <InputAdornment position="start">{icon}</InputAdornment>
-          ),
+          )
         }}
         disabled={disabled}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          onChange?.(event)
+        }
       />
     </Stack>
   );

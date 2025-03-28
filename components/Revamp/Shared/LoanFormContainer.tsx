@@ -2,104 +2,92 @@
   Still under observation
 */
 'use client';
-import React, { ReactNode } from 'react';
-import { Box, Stack } from '@mui/material';
-import { LargeTitle } from './LoanDetails/LoanDetails';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { Box } from '@mui/material';
 import { TopActionsArea } from '@/components/Revamp/Shared';
-import colors from '@/assets/colors';
-import { useSetDirection } from '@/utils/useSetDirection';
-import { ToastMessage } from '@/components/Revamp/ToastMessage';
-import { AccountPassword } from '@/components/Revamp/Modal/LoanForms/AccountPassword';
-import { ModalContainerV2 } from '@/components/Revamp/Modal';
-import { useCurrentBreakpoint } from '@/utils';
+import { CreateLoanUnderwritingForm } from '@/features/Loan/Forms/LoanUnderwritingForm';
+import { ActionButton } from '@/components/Revamp/Buttons';
+import {
+  useGetAllLoansProduct,
+  useGetAllLoansPurpose,
+  useGetAllLoanRepaymentTypes,
+  useGetAllLoanSources,
+  useGetAllLoanCollaterals
+} from '@/api/loans/useCreditFacility';
+import { useGetBranches } from '@/api/general/useBranches';
+import {
+  submitButton,
+  cancelButton
+} from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
+import { PrimaryIconButton } from '@/components/Buttons';
+import { handleRedirect } from '@/utils';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
-interface IToastMessage {
-  title: string;
-  body: string;
-  open: boolean;
-}
+export const LoanFormContainer = () => {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+  const { isLoading } = useGlobalLoadingState();
+  const router = useRouter();
+  const { loans } = useGetAllLoansProduct();
+  const { loanPurpose } = useGetAllLoansPurpose();
+  const { repaymentTypes } = useGetAllLoanRepaymentTypes();
+  const { branches } = useGetBranches();
+  const { loansources } = useGetAllLoanSources();
+  const { collaterals } = useGetAllLoanCollaterals();
 
-interface IActionModal {
-  handleClose: () => void;
-  toggleModal?: Function;
-  openPasswordModal: boolean;
-}
+  const triggerSubmission = () => {
+    setIsSubmitting(true);
+  };
 
-type Props = {
-  FormFields: React.ComponentType;
-  PreviewContent: React.ComponentType;
-  actionButtons: Array<ReactNode>;
-  ShowMobilePeview: React.ComponentType;
-  toastMessage?: IToastMessage;
-  actionModal?: IActionModal;
-};
+  const cancelLoan = () => {
+    handleRedirect(router, '/loan/loan-directory/');
+  };
 
-export const LoanFormContainer = ({
-  FormFields,
-  PreviewContent,
-  actionButtons,
-  toastMessage,
-  actionModal,
-  ShowMobilePeview,
-}: Props) => {
-  const { setDirection } = useSetDirection();
-  const { isTablet } = useCurrentBreakpoint();
+  const actionButtons: any = [
+    <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
+      <ActionButton
+        onClick={cancelLoan}
+        customStyle={{ ...cancelButton }}
+        buttonTitle="Cancel"
+      />
+
+      <PrimaryIconButton
+        isLoading={isLoading}
+        type="submit"
+        buttonTitle="Submit"
+        customStyle={{ ...submitButton }}
+        onClick={triggerSubmission}
+      />
+    </Box>
+  ];
 
   return (
     <Box>
-      {toastMessage?.open && (
-        <ToastMessage title={toastMessage?.title} body={toastMessage?.body} />
-      )}
-
       <TopActionsArea actionButtons={actionButtons} />
       <Box
         sx={{
           padding: { mobile: '0 5px', desktop: '0 25px' },
-          width: '100%',
+          width: '100%'
         }}
       >
-        <ShowMobilePeview />
-        <Stack direction={setDirection()}>
-          <Box
-            sx={{
-              width: { mobile: '100%', desktop: '624px' },
-              padding: '32px',
-            }}
-          >
-            <FormFields />
-          </Box>
-          {isTablet && (
-            <Box
-              sx={{
-                width: '477px',
-                padding: '32px',
-                gap: '24px',
-                borderLeft: `1px solid ${colors.neutral300}`,
-                background: `${colors.neutral100}`,
-                display: {
-                  tablet: 'block',
-                  mobile: 'none',
-                },
-              }}
-            >
-              <LargeTitle title="Preview" />
-              <Box mt={3} />
-              <PreviewContent />
-            </Box>
-          )}
-        </Stack>
-      </Box>
-      {actionModal?.openPasswordModal && (
-        <ModalContainerV2
-          handleClose={actionModal.handleClose}
-          form={
-            <AccountPassword
-              showToast={() => actionModal.toggleModal?.('toast')}
-              handleClose={actionModal.handleClose}
+        {loans !== undefined &&
+          branches !== undefined &&
+          repaymentTypes !== undefined &&
+          loanPurpose !== undefined &&
+          loansources !== undefined &&
+          collaterals !== undefined && (
+            <CreateLoanUnderwritingForm
+              loans={loans}
+              branches={branches}
+              loansPurpose={loanPurpose}
+              repaymentTypes={repaymentTypes}
+              collaterals={collaterals}
+              loansources={loansources}
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
             />
-          }
-        />
-      )}
+          )}
+      </Box>
     </Box>
   );
 };

@@ -7,7 +7,7 @@ export const stepperContainer = {
   minHeight: '440px',
   borderRadius: '7px',
   border: '1px solid #D7DEE7', // todo: get color name
-  background: `${colors.white}`,
+  background: `${colors.white}`
 };
 
 export const stepTitle = {
@@ -15,5 +15,5 @@ export const stepTitle = {
   height: '20px',
   fontSize: '14px',
   fontWeight: 400,
-  color: `${colors.stepTitleBlue}`,
+  color: `${colors.stepTitleBlue}`
 };

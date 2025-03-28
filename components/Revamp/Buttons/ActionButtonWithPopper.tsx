@@ -1,21 +1,33 @@
 import React from 'react';
-import { Button, ButtonGroup, Paper } from '@mui/material';
+import {
+  Button,
+  ButtonGroup,
+  Paper,
+  Stack,
+  Typography,
+  Box
+} from '@mui/material';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import { actionButtonTypography } from './styles';
-import { DateRangePicker } from '@/components/Revamp/FormFields/DateRangePicker';
+import { DateRangePicker as DateRangePickerComponent } from '@/components/Revamp/FormFields/DateRangePicker';
 import {
   BasicSearchGroup,
   CheckBoxSearchGroup,
   ExportData,
+  LoanCustomerSearch
 } from '@/components/Revamp/Menu/SearchGroupVariants';
+
 import { CustomStyleI } from '@/constants/types';
 import colors from '@/assets/colors';
+import { asterix, labelTypography } from '@/components/FormikFields/styles';
+import { OptionsI } from '@/components/FormikFields/FormSelectField';
 
 type Props = {
+  CustomDateRangePicker?: React.ReactNode;
   buttonTitle?: string;
   controlOpening?: boolean | null;
   type?: 'button' | 'submit' | 'reset' | undefined;
@@ -23,17 +35,31 @@ type Props = {
   iconPosition?: 'end' | 'start';
   onClick?: () => void | undefined | number;
   customStyle?: CustomStyleI;
-  options?: Array<string>;
+  dropDownOptions?: OptionsI[];
+  loanDropDownOptions?: any;
+  options?: string[];
   searchGroupVariant?:
     | 'Default'
+    | 'LoanCustomerSearch'
     | 'BasicSearchGroup'
     | 'CheckBoxSearchGroup'
     | 'ExportReport'
     | 'DateRangePicker'
     | undefined;
+  required?: boolean;
+  loading?: boolean;
+  disabled?: boolean;
+  label?: string;
+  onChange?: Function;
+  handleSelectedValue?: Function;
+  searchValue?: string;
+  name?: string;
+  dateRangeValue?: any;
+  setDateRangeValue?: any;
 };
 
 type SearchGroupMapperType = {
+  LoanCustomerSearch: React.ReactNode;
   BasicSearchGroup: React.ReactNode;
   CheckBoxSearchGroup: React.ReactNode;
   ExportReport: React.ReactNode;
@@ -49,6 +75,17 @@ export const ActionButtonWithPopper = ({
   searchGroupVariant = 'Default',
   type,
   options,
+  dropDownOptions,
+  loanDropDownOptions,
+  label,
+  required,
+  onChange,
+  searchValue,
+  name = '',
+  handleSelectedValue,
+  loading,
+  disabled,
+  CustomDateRangePicker
 }: Props) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
@@ -59,8 +96,10 @@ export const ActionButtonWithPopper = ({
       | React.MouseEvent<HTMLLIElement, MouseEvent>
       | React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
+    value?: string
   ) => {
     setSelectedIndex(index);
+    handleSelectedValue?.(value);
     setOpen(false);
   };
 
@@ -75,23 +114,46 @@ export const ActionButtonWithPopper = ({
   };
 
   const RenderMenuVariant = ({
-    variant,
+    variant
   }: {
     variant: keyof SearchGroupMapperType;
   }): React.ReactNode => {
     const SearchGroupMapper: SearchGroupMapperType = {
+      LoanCustomerSearch: (
+        <LoanCustomerSearch
+          handleClose={handleClose}
+          options={loanDropDownOptions}
+          handleMenuItemClick={handleMenuItemClick}
+          onChange={onChange}
+          searchValue={searchValue}
+          name={name}
+          autoFocus
+          loading={loading}
+        />
+      ),
+
       BasicSearchGroup: (
         <BasicSearchGroup
           handleClose={handleClose}
-          options={options}
+          options={dropDownOptions}
           handleMenuItemClick={handleMenuItemClick}
+          onChange={onChange}
+          searchValue={searchValue}
+          name={name}
+          autoFocus
+          loading={loading}
         />
       ),
       CheckBoxSearchGroup: (
         <CheckBoxSearchGroup handleClose={handleClose} options={options} />
       ),
       ExportReport: <ExportData handleClose={handleClose} />,
-      DateRangePicker: <DateRangePicker handleClose={handleClose} />,
+      DateRangePicker: (
+        <DateRangePickerComponent
+          CustomDateRangePicker={CustomDateRangePicker}
+          handleClose={handleClose}
+        />
+      ),
       Default: (
         <ClickAwayListener onClickAway={handleClose}>
           <Paper sx={{ width: 240, maxWidth: '100%' }}>
@@ -112,7 +174,7 @@ export const ActionButtonWithPopper = ({
             </MenuList>
           </Paper>
         </ClickAwayListener>
-      ),
+      )
     };
 
     return SearchGroupMapper[variant];
@@ -120,6 +182,17 @@ export const ActionButtonWithPopper = ({
 
   return (
     <>
+      {label && (
+        <Stack
+          sx={{
+            marginBottom: '3px'
+          }}
+          direction="row"
+        >
+          <Typography sx={labelTypography}>{label} </Typography>
+          {required && <Typography sx={asterix}>*</Typography>}
+        </Stack>
+      )}
       <ButtonGroup
         variant="contained"
         ref={anchorRef}
@@ -127,19 +200,17 @@ export const ActionButtonWithPopper = ({
         sx={{ boxShadow: 'none' }}
       >
         <Button
-          id="action-button"
           type={type}
           size="small"
-          aria-controls={open ? 'split-button-menu' : undefined}
-          aria-expanded={open ? 'true' : undefined}
-          aria-label="select merge strategy"
-          aria-haspopup="menu"
           onClick={handleToggle}
           sx={{ ...actionButtonTypography, ...customStyle }}
           style={{
-            backgroundColor:
-              customStyle?.backgroundColor || `${colors.primaryBlue100}`,
-            border: customStyle?.border || `1px solid ${colors.primaryBlue500}`,
+            backgroundColor: disabled
+              ? `${colors.neutral300}`
+              : customStyle?.backgroundColor || `${colors.primaryBlue100}`,
+            border: disabled
+              ? `1px solid ${colors.neutral300}`
+              : customStyle?.border || `1px solid ${colors.primaryBlue500}`
           }}
           variant={customStyle?.variant}
           startIcon={iconPosition === 'start' && icon}
@@ -148,38 +219,41 @@ export const ActionButtonWithPopper = ({
           {buttonTitle}
         </Button>
       </ButtonGroup>
-      <Popper
-        sx={{
-          marginTop: '10px !important',
-          zIndex: 1,
-          boxShadow:
-            '0px 5px 15px 0px rgba(0, 0, 0, 0.08), 0px 15px 35px -5px rgba(17, 24, 38, 0.15), 0px 0px 0px 1px rgba(152, 161, 178, 0.10)',
-          borderRadius: '6px',
-        }}
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => {
-          return (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin:
-                  placement === 'bottom' ? 'center top' : 'center bottom',
-              }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <RenderMenuVariant variant={searchGroupVariant} />
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          );
-        }}
-      </Popper>
+      {disabled ? null : (
+        <Popper
+          sx={{
+            marginTop: '10px !important',
+            zIndex: 9,
+            boxShadow:
+              '0px 5px 15px 0px rgba(0, 0, 0, 0.08), 0px 15px 35px -5px rgba(17, 24, 38, 0.15), 0px 0px 0px 1px rgba(152, 161, 178, 0.10)',
+            borderRadius: '6px'
+          }}
+          open={open}
+          anchorEl={anchorRef.current}
+          role={undefined}
+          transition
+          disablePortal
+        >
+          {({ TransitionProps, placement }) => {
+            return (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === 'bottom' ? 'center top' : 'center bottom'
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <RenderMenuVariant variant={searchGroupVariant} />
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            );
+          }}
+        </Popper>
+      )}
+      <Box mb={1.5} />
     </>
   );
 };

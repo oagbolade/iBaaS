@@ -12,7 +12,7 @@ export const StackContainer = {
   position: 'fixed',
   top: '50%',
   left: '50%',
-  transform: 'translate(-50%, -50%)',
+  transform: 'translate(-50%, -50%)'
 };
 
 export const branchTitle = {
@@ -32,8 +32,8 @@ export const branchTitle = {
     fontFamily: 'Averta Regular',
     fontSize: '14px',
     fontStyle: 'normal',
-    fontWeight: 600,
-  },
+    fontWeight: 600
+  }
 };
 
 export const branchButtonAdd = {
@@ -41,5 +41,5 @@ export const branchButtonAdd = {
   padding: '16px 78px',
   borderRadius: '8px',
   background: `${colors.activeBlue400}`,
-  color: `${colors.white}`,
+  color: `${colors.white}`
 };

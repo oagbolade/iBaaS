@@ -9,7 +9,7 @@ export const emptyTableMainTitle = {
   textAlign: 'center',
   fontSize: '16px',
   fontWeight: '600',
-  lineHeight: '24px',
+  lineHeight: '24px'
 };
 
 export const emptyTableSecondaryTitle = {
@@ -20,47 +20,51 @@ export const emptyTableSecondaryTitle = {
   lineHeight: '20px',
   width: '289px',
   height: '40px',
-  whiteSpace: 'wrap',
+  whiteSpace: 'wrap'
 };
 
-export const StyledMenu = styled((props: MenuProps) => {return (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    {...props}
-  />
-);})(({ theme }) => {return {
-  '& .MuiPaper-root': {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25) !important',
-    color:
-      theme.palette.mode === 'light'
-        ? 'rgb(55, 65, 81)'
-        : theme.palette.grey[300],
-    '& .MuiMenu-list': {
-      padding: '4px 0',
-    },
-    '& .MuiMenuItem-root': {
-      '& .MuiSvgIcon-root': {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
+export const StyledMenu = styled((props: MenuProps) => {
+  return (
+    <Menu
+      elevation={0}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right'
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }}
+      {...props}
+    />
+  );
+})(({ theme }) => {
+  return {
+    '& .MuiPaper-root': {
+      borderRadius: 6,
+      marginTop: theme.spacing(1),
+      minWidth: 180,
+      boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25) !important',
+      color:
+        theme.palette.mode === 'light'
+          ? 'rgb(55, 65, 81)'
+          : theme.palette.grey[300],
+      '& .MuiMenu-list': {
+        padding: '4px 0'
       },
-      '&:active': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
-        ),
-      },
-    },
-  },
-};});
+      '& .MuiMenuItem-root': {
+        '& .MuiSvgIcon-root': {
+          fontSize: 18,
+          color: theme.palette.text.secondary,
+          marginRight: theme.spacing(1.5)
+        },
+        '&:active': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            theme.palette.action.selectedOpacity
+          )
+        }
+      }
+    }
+  };
+});

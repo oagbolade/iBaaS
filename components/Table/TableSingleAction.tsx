@@ -8,7 +8,7 @@ const styles = {
   fontSize: '14px',
   fontWeight: 600,
   lineHeight: '20px',
-  cursor: 'pointer',
+  cursor: 'pointer'
 };
 
 type Props = {

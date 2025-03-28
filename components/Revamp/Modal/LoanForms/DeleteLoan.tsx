@@ -17,7 +17,7 @@ import {
   CancelButton,
   ConfirmButton,
   TypographyButton,
-  TypographyConfirm,
+  TypographyConfirm
 } from '../style';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
 import { PageTitle } from '@/components/Typography';
@@ -29,7 +29,7 @@ type Props = {
 
 export const DeleteLoan = ({
   handleClose,
-  showRejection,
+  showRejection
 }: Props): React.ReactElement => {
   return (
     <Box sx={DeleteContainer}>

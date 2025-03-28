@@ -14,23 +14,23 @@ const statusMap: StatusMap = {
   success: {
     color: '#36743D',
     border: '1px solid #BEF2B9',
-    background: '#F1FEF1',
+    background: '#F1FEF1'
   },
   warning: {
     color: '#AF5F26',
     border: '1px solid #AF5F26',
-    background: '#FDED94',
+    background: '#FDED94'
   },
   danger: {
     color: '#DC4437',
     border: '1px solid #DC4437',
-    background: '#F4B7B5',
+    background: '#F4B7B5'
   },
   matured: {
     color: '#1A4983',
     border: '1px solid #A8D6EF',
-    background: '#EBF8FE',
-  },
+    background: '#EBF8FE'
+  }
 };
 
 type Props = {
@@ -43,12 +43,12 @@ export const Status = ({ label, status = 'success' }: Props) => {
     <Box
       sx={{
         ...labelTypography,
-        color: statusMap[status].color,
-        border: statusMap[status].border,
-        backgroundColor: statusMap[status].background,
+        color: statusMap[status]?.color,
+        border: statusMap[status]?.border,
+        backgroundColor: statusMap[status]?.background
       }}
       style={{
-        backgroundColor: statusMap[status].background,
+        backgroundColor: statusMap[status]?.background
       }}
     >
       <CircleIcon sx={{ fontSize: 12, marginBottom: '2px' }} /> {label}

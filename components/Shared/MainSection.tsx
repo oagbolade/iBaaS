@@ -4,10 +4,10 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Grid } from '@mui/material';
 import { PageTitle } from '@/components/Typography';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { SetupContext } from '@/features/Setup/SetupContext';
+import { SetupContext } from '@/features/Setup-old/SetupContext';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
-import { useCurrentBreakpoint } from '@/utils/useCurrentBreakpoint';
-import { AdminContext } from '@/features/Admin-old/AdminContext';
+import { useCurrentBreakpoint } from '@/utils/hooks/useCurrentBreakpoint';
+// import { AdminContext } from '@/features/Admin-old/AdminContext';
 
 type Props = {
   title: string;
@@ -20,7 +20,7 @@ type Props = {
 
 export const MainSection = (props: Props) => {
   const { isMobile } = useCurrentBreakpoint();
-  const { toggleModal } = useContext(AdminContext);
+  // const { toggleModal } = useContext(AdminContext);
   const { toggleSetupModal } = useContext(SetupContext);
   const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
   const isEditing = false;
@@ -28,7 +28,7 @@ export const MainSection = (props: Props) => {
   const handleClick = (shouldEdit: boolean) => {
     if (props.isSetup) return toggleSetupModal(shouldEdit);
     if (props.isCustomerService) return toggleCustomerServiceModal(isEditing);
-    toggleModal(shouldEdit);
+    // toggleModal(shouldEdit);
   };
 
   const setDirection = () => {

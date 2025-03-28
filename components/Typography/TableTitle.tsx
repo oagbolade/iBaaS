@@ -16,8 +16,10 @@ type Props = {
   styles?: StylesI | undefined;
 };
 
-export const TableTitle = ({ title, styles }: Props) => {return (
-  <Typography sx={tableTitle} style={styles}>
-    {title}
-  </Typography>
-);};
+export const TableTitle = ({ title, styles }: Props) => {
+  return (
+    <Typography sx={tableTitle} style={styles}>
+      {title}
+    </Typography>
+  );
+};

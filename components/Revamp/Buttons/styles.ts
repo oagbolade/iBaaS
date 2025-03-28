@@ -10,5 +10,5 @@ export const actionButtonTypography = {
   borderRadius: '4px',
   fontSize: '16px',
   fontWeight: 600,
-  color: `${colors.primaryBlue500}`,
+  color: `${colors.primaryBlue500}`
 };

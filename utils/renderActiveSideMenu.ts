@@ -12,7 +12,7 @@ export const renderAsActive = (isActive?: boolean) => {
       background: 'var(--colour-primaryblue-primary-blue-100, #EBF8FE)',
       color: '#0275D8',
       width: '200px',
-      height: '40px',
+      height: '40px'
     };
   }
 };

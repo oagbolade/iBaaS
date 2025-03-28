@@ -12,7 +12,7 @@ export const TopBorderSection = () => {
       justifyContent="space-between"
       spacing={0.2}
       sx={{
-        ...topBorderSection,
+        ...topBorderSection
       }}
     >
       <Box>

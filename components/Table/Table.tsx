@@ -20,7 +20,7 @@ import {
   TablePaginationStyle,
   TablePaginationTitle,
   TableTitle,
-  inputFields,
+  inputFields
 } from './style';
 import colors from '@/assets/colors';
 import { Status } from '@/components/Labels';
@@ -29,35 +29,27 @@ import { EmptyTableIcon } from '@/assets/svg';
 import { CustomTableHeader } from '@/components/Revamp/Shared/Table/CustomTableHeader';
 import { ITableConfig, TableProps } from '@/components/Revamp/TableV2/TableV2';
 import { TextInput } from '@/components/FormikFields';
-import { useSetDirection } from '@/utils/useSetDirection';
-
-// Will change this once we start to make API calls
-interface DataI {
-  name: string;
-  status: boolean;
-  email: string;
-  role: string;
-  department: string;
-}
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { calculatePages } from '@/utils/calculatePages';
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => {
   return {
     '&:nth-of-type(even):hover': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     '&:nth-of-type(odd):hover': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     borderRadius: '8px',
     border: `1px solid ${colors.neutral300}`,
-    minWidth: '50px',
+    minWidth: '50px'
   };
 });
 
 const StyledTableHead = styled(TableHead)(({ theme }) => {
   return {
     borderRadius: '8px',
-    border: `1px solid ${colors.neutral300}`,
+    border: `1px solid ${colors.neutral300}`
   };
 });
 
@@ -65,9 +57,10 @@ const success = <Status label="Active" status="success" />;
 const warning = <Status label="Warning" status="warning" />;
 const danger = <Status label="Danger" status="danger" />;
 
-export const renderEmptyTableBody = () => {
+export const renderEmptyTableBody = (data: Array<any> | null = null) => {
   return (
     <Stack
+      data-testid="empty-table-body"
       direction="row"
       justifyContent="center"
       alignItems="center"
@@ -78,10 +71,14 @@ export const renderEmptyTableBody = () => {
           <EmptyTableIcon />
         </Box>
         <Typography sx={{ ...emptyTableMainTitle }}>
-          No Search Criteria Created
+          No Search {`${data?.length === 0 ? 'Found' : 'Criteria Created'}`}
         </Typography>
         <Typography sx={{ ...emptyTableSecondaryTitle }}>
-          Please create a search criteria above and you can see the results here
+          {`${
+            data?.length === 0
+              ? 'Please modify your search criteria'
+              : 'Please create a search criteria above and you can see the results here'
+          }`}
         </Typography>
       </Box>
     </Stack>
@@ -97,7 +94,7 @@ export interface HeaderI {
 
 type Props = {
   columns: string[];
-  data?: DataI[] | undefined;
+  data?: Array<any>;
   showHeader?: HeaderI;
   ActionMenuProps?: any;
   checkboxHeader?: any;
@@ -105,6 +102,10 @@ type Props = {
   tableConfig?: ITableConfig;
   showSearch?: boolean;
   children?: React.ReactNode;
+  page?: number;
+  setPage?: Function;
+  totalPages?: number;
+  totalElements?: number;
 };
 
 export const MuiTableContainer = ({
@@ -113,17 +114,29 @@ export const MuiTableContainer = ({
   ActionMenuProps,
   showHeader,
   tableConfig = {
-    hasActions: true,
+    hasActions: true
   },
   checkboxHeader,
   showSearch = false,
   children,
+  setPage,
+  page = 1,
+  totalPages,
+  totalElements
 }: Props) => {
   const actionsColumn = tableConfig?.hasActions ? 1 : 0;
   const { setDirection } = useSetDirection();
+  const paginationCount = totalPages || calculatePages(data?.length as number);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage?.(value);
+  };
 
   const StyledTableCell = styled(TableCell, {
-    shouldForwardProp: (prop) => prop !== 'isHeader',
+    shouldForwardProp: (prop) => prop !== 'isHeader'
   })(({ isHeader }: TableProps) => {
     return {
       color: `${colors.neutral900}`,
@@ -137,21 +150,21 @@ export const MuiTableContainer = ({
         backgroundColor: `${colors.neutral200}`,
         color: `${colors.neutral900}`,
         fontWeight: 600,
-        textAlign: 'left',
+        textAlign: 'left'
       },
 
       [`&.${tableCellClasses.body}`]: {
         fontWeight: 400,
-        textAlign: 'left',
+        textAlign: 'left'
       },
 
       ...(actionsColumn && {
-        padding: '10px 20px',
+        padding: '10px 20px'
       }),
 
       ...(isHeader && {
-        padding: '10px 20px',
-      }),
+        padding: '10px 20px'
+      })
     };
   });
 
@@ -163,7 +176,7 @@ export const MuiTableContainer = ({
           display: 'inline-block',
           width: '100%',
           borderRadius: '8px',
-          border: `1px solid ${colors.neutral300}`,
+          border: `1px solid ${colors.neutral300}`
         }}
         component={Paper}
       >
@@ -177,7 +190,7 @@ export const MuiTableContainer = ({
         {showSearch && (
           <TextInput
             customStyle={{
-              ...inputFields,
+              ...inputFields
             }}
             icon={<SearchIcon />}
             name="Search"
@@ -199,7 +212,6 @@ export const MuiTableContainer = ({
                   </StyledTableCell>
                 );
               })}
-
               {actionsColumn === 1 && <StyledTableCell />}
             </TableRow>
           </StyledTableHead>
@@ -211,12 +223,13 @@ export const MuiTableContainer = ({
                   component="th"
                   scope="row"
                 >
-                  {renderEmptyTableBody()}
+                  {renderEmptyTableBody(data)}
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
               children ||
               data?.map((dataItem) => {
+                // TODO: Remove defaults once API integration is complete
                 return (
                   <StyledTableRow key={dataItem.name}>
                     {checkboxHeader && (
@@ -251,20 +264,29 @@ export const MuiTableContainer = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack
-        direction={setDirection()}
-        justifyContent="space-between"
-        spacing={3}
-      >
-        <PageTitle title="276 results found" styles={{ ...TableTitle }} />
-        <Box sx={TablePaginationStyle}>
+      {data && data?.length > 0 && (
+        <Stack
+          direction={setDirection()}
+          justifyContent="space-between"
+          spacing={3}
+        >
           <PageTitle
-            title="Rows per page: 10"
-            styles={{ ...TablePaginationTitle }}
+            title={`${totalElements || data?.length} result(s) found`}
+            styles={{ ...TableTitle }}
           />
-          <TablePagination />
-        </Box>
-      </Stack>
+          <Box sx={TablePaginationStyle}>
+            <PageTitle
+              title="Rows per page: 10"
+              styles={{ ...TablePaginationTitle }}
+            />
+            <TablePagination
+              handlePageChange={handlePageChange}
+              page={page}
+              count={paginationCount}
+            />
+          </Box>
+        </Stack>
+      )}
     </>
   );
 };

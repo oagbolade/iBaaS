@@ -25,7 +25,7 @@ export const NestedMenu = ({ open, handleClose, anchorEl }: Props) => {
               'Loan Restructure',
               'Loan Underwriting',
               'Hotlist Account',
-              'Partial Payoff',
+              'Partial Payoff'
             ]}
           />
         </NestedMenuItem>
@@ -37,7 +37,7 @@ export const NestedMenu = ({ open, handleClose, anchorEl }: Props) => {
               'Chigozie Ndife',
               'Rebecca Tunde',
               'Tamarabibi Adams',
-              'Azeez Babalola',
+              'Azeez Babalola'
             ]}
           />
         </NestedMenuItem>
@@ -46,8 +46,8 @@ export const NestedMenu = ({ open, handleClose, anchorEl }: Props) => {
             sx={{
               padding: '10px',
               '& .MuiPickersToolbar-root': {
-                display: 'none',
-              },
+                display: 'none'
+              }
             }}
             defaultValue={dayjs('2022-04-17')}
           />

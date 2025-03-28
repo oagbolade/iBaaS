@@ -5,7 +5,8 @@ import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
+import { InputLabel } from '@mui/material';
 import { labelTypography, asterix, textStyle } from './styles';
 import colors from '@/assets/colors';
 
@@ -20,43 +21,54 @@ type Props = {
   icon?: any;
   options: OptionsI[];
   required?: boolean;
+  disabled?: boolean;
   customStyle?: object;
   placeholder?: string;
+  onChange?: Function;
+  value?: string;
 };
 
 export const FormSelectInput = ({
   label,
-  required,
+  required = false,
   icon,
   name,
   options,
   customStyle,
   placeholder,
+  disabled = false,
+  onChange,
+  value
 }: Props) => {
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-  };
-
   return (
-    <Box>
+    <Box mb={2}>
       <Stack
         sx={{
-          marginBottom: '3px',
+          marginBottom: '3px'
         }}
         direction="row"
       >
         <Typography sx={labelTypography}>{label} </Typography>
         {required && <Typography sx={asterix}>*</Typography>}
       </Stack>
+      <InputLabel sx={{ display: 'none' }} id="name-select-label">
+        {label}
+      </InputLabel>
       <Select
-        value={age}
-        onChange={handleChange}
-        sx={{ ...textStyle, paddingRight: '8px' }}
+        labelId="name-select-label"
+        disabled={disabled}
+        value={value}
+        onChange={(event) => onChange?.(event)}
+        sx={{
+          ...textStyle,
+          paddingRight: '8px',
+          background: disabled ? `${colors.neutral300}` : `${colors.neutral200}`
+        }}
         style={{ ...customStyle }}
         inputProps={{
           name,
+          'data-testid': name,
+          placeholder: name
         }}
         displayEmpty
         IconComponent={() => {
@@ -70,10 +82,11 @@ export const FormSelectInput = ({
           );
         }}
       >
-        <MenuItem disabled value="">
+        <MenuItem value="" selected>
           {placeholder || 'Select an Option'}
         </MenuItem>
-        {options.map((option) => {
+
+        {options?.map((option) => {
           return (
             <MenuItem key={option.name} value={option.value}>
               {option.name}
@@ -83,8 +96,4 @@ export const FormSelectInput = ({
       </Select>
     </Box>
   );
-};
-
-FormSelectInput.defaultProps = {
-  required: false,
 };

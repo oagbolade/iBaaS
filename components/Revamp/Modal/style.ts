@@ -16,7 +16,7 @@ export const ModalStyleContainer = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '40px',
-  zIndex: '2',
+  zIndex: '2'
 };
 
 export const RejectedModal = {
@@ -26,7 +26,7 @@ export const RejectedModal = {
   gap: '24px',
   width: '486px',
   height: '281px',
-  color: `${colors.neutral700}`,
+  color: `${colors.neutral700}`
 };
 
 export const ModalTitle = {
@@ -39,14 +39,14 @@ export const ModalTitle = {
   color: `${colors.neutral900}`,
   width: '486px',
   height: '60px',
-  borderBottom: `1px solid ${colors.neutral300}`,
+  borderBottom: `1px solid ${colors.neutral300}`
 };
 
 export const textTitle = {
   display: 'flex',
   alignItems: 'center',
   gap: '16px',
-  alignSelf: 'stretch',
+  alignSelf: 'stretch'
 };
 
 export const textTypography = {
@@ -56,7 +56,7 @@ export const textTypography = {
   fontWeight: 700,
   lineHeight: '32px',
   width: '200px',
-  height: '23px',
+  height: '23px'
 };
 
 export const modalTable = {
@@ -67,7 +67,7 @@ export const modalTable = {
   gap: '32px',
   alignSelf: 'stretch',
   width: '486px',
-  marginTop: '20px',
+  marginTop: '20px'
 };
 
 export const modalText = {
@@ -79,7 +79,7 @@ export const modalText = {
   flexShrink: 0,
   alignSelf: 'stretch',
   width: '300px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const pageText = {
@@ -91,7 +91,7 @@ export const pageText = {
   height: '20px',
   width: '40px',
   color: `${colors.neutral700}`,
-  marginRight: '170px',
+  marginRight: '170px'
 };
 
 export const TypographyText = {
@@ -99,7 +99,7 @@ export const TypographyText = {
   color: `${colors.neutral700}`,
   fontSize: '14px',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 export const RejectedLoadButtonContainer = {
@@ -109,7 +109,7 @@ export const RejectedLoadButtonContainer = {
   color: `${colors.neutral300}`,
   marginBottom: '10px',
   marginRight: '50px',
-  marginTop: '30px',
+  marginTop: '30px'
 };
 
 export const RejectedLoanStyle = {
@@ -119,7 +119,7 @@ export const RejectedLoanStyle = {
   border: `1px solid ${colors.neutral300} `,
   background: `${colors.neutral200}`,
   height: '82px',
-  marginRight: '60px',
+  marginRight: '60px'
 };
 
 export const RejectedButton = {
@@ -131,7 +131,7 @@ export const RejectedButton = {
   flexShrink: 0,
   width: '273px',
   color: `${colors.neutral900}`,
-  marginLeft: '180px',
+  marginLeft: '180px'
 };
 
 export const TextAreaContainer = {
@@ -144,18 +144,18 @@ export const TextAreaContainer = {
   flexShrink: 0,
   alignSelf: 'stretch',
   width: '474px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const TextArea = {
-  width: '400px',
+  width: '400px'
 };
 
 export const ButtonContainer = {
   width: { mobile: '289px', desktop: '486px' },
   height: '82px',
   flexShrink: 0,
-  color: `${colors.neutral300}`,
+  color: `${colors.neutral300}`
 };
 
 export const ButtonColorStyle = {
@@ -165,7 +165,7 @@ export const ButtonColorStyle = {
   border: `1px solid ${colors.neutral300} `,
   background: `${colors.neutral200}`,
   height: '82px',
-  marginTop: '30px',
+  marginTop: '30px'
 };
 
 export const ButtonText = {
@@ -177,7 +177,7 @@ export const ButtonText = {
   flexShrink: 0,
   width: { desktop: '273px' },
   color: `${colors.neutral900}`,
-  marginLeft: { desktop: '200px' },
+  marginLeft: { desktop: '200px' }
 };
 
 export const CancelButton = {
@@ -191,14 +191,14 @@ export const CancelButton = {
   borderRadius: '6px',
   backgroundColor: `${colors.white}`,
   color: `${colors.white}`,
-  marginTop: '50px',
+  marginTop: '50px'
 };
 export const TypographyButton = {
   color: `${colors.neutral900}`,
   fontSize: '16px',
   fontWeight: 600,
   lineHeight: '24px' /* 150% */,
-  backgroundColor: `${colors.white}`,
+  backgroundColor: `${colors.white}`
 };
 
 export const ConfirmButton = {
@@ -211,14 +211,14 @@ export const ConfirmButton = {
   gap: '8px',
   borderRadius: '6px',
   marginTop: '50px',
-  background: `${colors.activeBlue400}`,
+  background: `${colors.activeBlue400}`
 };
 
 export const TypographyConfirm = {
   color: `${colors.white}`,
   fontSize: '16px',
   fontWeight: 600,
-  lineHeight: '24px',
+  lineHeight: '24px'
 };
 
 export const DeleteContainer = {
@@ -228,7 +228,7 @@ export const DeleteContainer = {
   gap: '36px',
   flex: '1 0 0',
   width: '486px',
-  height: '254px',
+  height: '254px'
 };
 export const DeleteTitleContainer = {
   display: 'flex',
@@ -239,7 +239,7 @@ export const DeleteTitleContainer = {
   alignSelf: 'stretch',
   borderBottom: `1px solid ${colors.neutral300}`,
   width: '438px',
-  height: '60px',
+  height: '60px'
 };
 
 export const DeleteTypograph = {
@@ -248,7 +248,7 @@ export const DeleteTypograph = {
   fontSize: '20px',
   fontWeight: 700,
   lineHeight: '32px',
-  marginRight: '90px',
+  marginRight: '90px'
 };
 export const DeleteTitle = {
   display: 'flex',
@@ -257,7 +257,7 @@ export const DeleteTitle = {
   alignSelf: 'stretch',
   color: `${colors.neutral900}`,
   width: '438px',
-  height: '32px',
+  height: '32px'
 };
 
 export const DeleteIcon = {
@@ -265,7 +265,7 @@ export const DeleteIcon = {
   width: '24px',
   height: '24px',
   justifyContent: 'center',
-  alignItems: 'center',
+  alignItems: 'center'
 };
 
 export const DeleteModalContainer = {
@@ -275,7 +275,7 @@ export const DeleteModalContainer = {
   gap: '46px',
   alignSelf: 'stretch',
   width: '486px',
-  height: '158px',
+  height: '158px'
 };
 
 export const DeleteModal = {
@@ -287,7 +287,7 @@ export const DeleteModal = {
   gap: '24px',
   alignSelf: 'stretch',
   width: '486px',
-  color: `${colors.neutral700}`,
+  color: `${colors.neutral700}`
 };
 
 export const DeleteTypographTitle = {
@@ -296,14 +296,14 @@ export const DeleteTypographTitle = {
   fontSize: '14px',
   fontWeight: 400,
   whiteSpace: 'pre-line',
-  lineHeight: '20px' /* 142.857% */,
+  lineHeight: '20px' /* 142.857% */
 };
 
 export const AccountPasswordContainer = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '36px',
+  gap: '36px'
 };
 export const AccountPasswordTitleContainer = {
   display: 'flex',
@@ -313,21 +313,21 @@ export const AccountPasswordTitleContainer = {
   gap: '10px',
   alignSelf: 'stretch',
   borderBottom: `1px solid ${colors.neutral300} `,
-  color: `${colors.neutral700}`,
+  color: `${colors.neutral700}`
 };
 export const AccountPasswordTitle = {
   display: 'flex',
   alignItems: 'center',
   gap: '16px',
   alignSelf: 'stretch',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 export const AccountTitle = {
   flex: '1 0 0',
   color: `${colors.neutral900}`,
   fontSize: '20px',
   fontWeight: 700,
-  lineHeight: '32px',
+  lineHeight: '32px'
 };
 
 export const AccountPasswordBodyContainer = {
@@ -336,7 +336,7 @@ export const AccountPasswordBodyContainer = {
   alignItems: 'center',
   gap: '46px',
   flexShrink: 0,
-  alignSelf: 'stretch',
+  alignSelf: 'stretch'
 };
 
 export const AccountBody = {
@@ -346,7 +346,7 @@ export const AccountBody = {
   alignItems: 'center',
   gap: '24px',
   flexShrink: 0,
-  alignSelf: 'stretch',
+  alignSelf: 'stretch'
 };
 
 export const AccountBodyPage = {
@@ -356,7 +356,7 @@ export const AccountBodyPage = {
   fontWeight: 400,
   lineHeight: '20px',
   whiteSpace: 'pre-line',
-  marginLeft: '20px',
+  marginLeft: '20px'
 };
 export const AccountInputContainer = {
   display: 'flex',
@@ -367,11 +367,11 @@ export const AccountInputContainer = {
   gap: '24px',
   flexShrink: 0,
   alignSelf: 'stretch',
-  marginTop: '8px',
+  marginTop: '8px'
 };
 
 export const AccountInputText = {
-  width: '444px',
+  width: '444px'
 };
 
 export const ButtonFramContainer = {
@@ -382,7 +382,7 @@ export const ButtonFramContainer = {
   gap: '10px',
   flexShrink: 0,
   width: '486px',
-  color: `${colors.neutral300}`,
+  color: `${colors.neutral300}`
 };
 
 export const ButtonFrame = {
@@ -391,7 +391,7 @@ export const ButtonFrame = {
   borderRadius: '0px 0px 12px 12px',
   border: `1px solid ${colors.neutral300}`,
   background: `${colors.neutral200}`,
-  marginTop: '80px',
+  marginTop: '80px'
 };
 export const ButtonTitle = {
   width: '486px',
@@ -400,5 +400,5 @@ export const ButtonTitle = {
   border: `1px solid ${colors.neutral300} `,
   background: `${colors.neutral200}`,
   height: '82px',
-  marginTop: '85px',
+  marginTop: '85px'
 };

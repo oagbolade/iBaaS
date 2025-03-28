@@ -10,7 +10,7 @@ export const backButtonContainer = {
   borderRadius: '20px',
   borderBottom: `1px solid ${colors.loanTitleColor}`,
   height: 'auto',
-  marginTop: '10px',
+  marginTop: '10px'
 };
 
 export const backStyle = {
@@ -21,7 +21,7 @@ export const backStyle = {
   flex: '1 0 0',
   borderRadius: '12px',
   width: '100%',
-  height: 'auto',
+  height: 'auto'
 };
 
 export const backTitle = {
@@ -29,7 +29,7 @@ export const backTitle = {
   fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 700,
-  lineHeight: '32px' /* 160% */,
+  lineHeight: '32px' /* 160% */
 };
 
 export const ViewAccountContainer = {
@@ -41,10 +41,10 @@ export const ViewAccountContainer = {
   borderRadius: '5px',
   border: ` 1px solid ${colors.gray900}`,
   background: `${colors.white}`,
-  width: '1240px',
+  width: '1000px',
   height: 'fixed',
   marginTop: '60px',
-  marginLeft: '50px',
+  marginLeft: '50px'
 };
 
 export const AccountContainer = {
@@ -56,7 +56,7 @@ export const AccountContainer = {
   borderRadius: '6px',
   width: '1079px',
   height: 'auto',
-  top: '10px',
+  top: '10px'
 };
 
 export const ViewAccount = {
@@ -66,7 +66,7 @@ export const ViewAccount = {
   alignItems: 'center',
   gap: '55px',
   borderRadius: '0px',
-  height: 'auto',
+  height: 'auto'
 };
 
 export const ViewContainer = {
@@ -76,7 +76,7 @@ export const ViewContainer = {
   alignItems: 'flex-start',
   gap: '6px',
   borderRadius: '6px',
-  height: 'auto',
+  height: 'auto'
 };
 
 export const ViewStyle = {
@@ -88,7 +88,7 @@ export const ViewStyle = {
   flex: '1 0 0',
   borderRadius: '6px',
   width: '323px',
-  height: '44px',
+  height: '44px'
 };
 
 export const ViewAccountTitle = {
@@ -97,7 +97,7 @@ export const ViewAccountTitle = {
   fontStyle: 'normal',
   fontWeight: 400,
   lineHeight: '16px' /* 133.333% */,
-  textTransform: 'uppercase',
+  textTransform: 'uppercase'
 };
 
 export const ViewTitle = {
@@ -105,7 +105,7 @@ export const ViewTitle = {
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 600,
-  lineHeight: '24px' /* 150% */,
+  lineHeight: '24px' /* 150% */
 };
 
 export const ViewAccountStyle = {
@@ -117,7 +117,7 @@ export const ViewAccountStyle = {
   borderRadius: '6px',
   width: '323px',
   height: '44px',
-  marginLeft: '300px',
+  marginLeft: '300px'
 };
 
 export const AccountView = {
@@ -128,5 +128,5 @@ export const AccountView = {
   gap: '6px',
   borderRadius: '5px',
   height: '44px',
-  marginLeft: '300px',
+  marginLeft: '300px'
 };

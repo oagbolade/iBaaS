@@ -17,7 +17,7 @@ export const MuiSnackbar = () => {
       <Alert
         onClose={() => toggleSnackbar()}
         severity={severity as AlertColor}
-        sx={{ width: '20%' }}
+        sx={{ width: '40%' }}
       >
         {message}
       </Alert>

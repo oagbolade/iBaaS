@@ -15,6 +15,10 @@ type Props = {
   styles?: StylesI | undefined;
 };
 
-export const StepperLabel = ({ title, styles }: Props) => {return (
-  <Typography sx={stepperLabel} style={styles}>{title}</Typography>
-);};
+export const StepperLabel = ({ title, styles }: Props) => {
+  return (
+    <Typography sx={stepperLabel} style={styles}>
+      {title}
+    </Typography>
+  );
+};

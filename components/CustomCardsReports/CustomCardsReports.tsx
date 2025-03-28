@@ -1,6 +1,6 @@
 'use client';
-import { Box, Button } from '@mui/material';
 import React from 'react';
+import { Box, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 import CardActions from '@mui/material/CardActions';
@@ -13,7 +13,7 @@ import {
   detailsDescription,
   detailsTitle,
   detailsTitleContainer,
-  viewDetails,
+  viewDetails
 } from './style';
 import colors from '@/assets/colors';
 
@@ -26,7 +26,7 @@ type Props = {
 export const CustomCardsReports = ({
   title,
   description,
-  link = '',
+  link = ''
 }: Props) => {
   return (
     <Box sx={{ marginLeft: '16px' }}>
@@ -39,17 +39,17 @@ export const CustomCardsReports = ({
             <Typography sx={detailsDescription}>{description}</Typography>
           </Box>
           <CardActions sx={detailCardsArrow}>
-            <Box>
-              <Link href={link} style={viewDetails}>
-                View Details
+            <Stack direction="row" spacing={0.1}>
+              <Link href={link}>
+                <Typography sx={viewDetails}>View Details</Typography>
               </Link>
               <ArrowForwardOutlinedIcon
                 sx={{
                   color: `${colors.primaryBlue500}`,
-                  marginLeft: '20px',
+                  marginLeft: '20px'
                 }}
               />
-            </Box>
+            </Stack>
           </CardActions>
         </CardContent>
       </Card>

@@ -8,7 +8,7 @@ import { PageTitle } from '@/components/Typography';
 
 import { PrimaryIconButton } from '@/components/Buttons';
 import { handleRedirect } from '@/utils';
-import { SetupContext } from '@/features/Setup/SetupContext';
+import { SetupContext } from '@/features/Setup-old/SetupContext';
 
 type Props = {
   title: string;

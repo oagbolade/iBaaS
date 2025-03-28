@@ -3,7 +3,7 @@ import colors from '@/assets/colors';
 export const RadioButtonStyle = {
   display: 'flex',
   flexDirection: { mobile: 'column', desktop: 'row' },
-  alignItems: 'flex-start',
+  alignItems: 'flex-start'
 };
 
 export const RadioButtonTitle = {
@@ -12,5 +12,5 @@ export const RadioButtonTitle = {
   fontWeight: 600,
   lineHeight: '20px',
   marginBottom: '10px',
-  fontFamily: 'Averta Regular',
+  fontFamily: 'Averta Regular'
 };

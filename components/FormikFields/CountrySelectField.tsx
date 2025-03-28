@@ -18,7 +18,6 @@ export const CountrySelectField = ({ name, label, width }: Props) => {
   const [selectedCountry, setSelectedCountry] = useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
-    console.log(event.target.value);
     setSelectedCountry(event.target.value);
   };
 
@@ -29,7 +28,7 @@ export const CountrySelectField = ({ name, label, width }: Props) => {
       </Typography>
       <Select
         inputProps={{
-          name,
+          name
         }}
         IconComponent={() => {
           return <KeyboardArrowDownIcon fontSize="large" />;
@@ -39,7 +38,7 @@ export const CountrySelectField = ({ name, label, width }: Props) => {
           ...textStyle,
           width: width || '108px',
           paddingRight: '8px',
-          fontSize: '12px',
+          fontSize: '12px'
         }}
         onChange={handleChange}
       >

@@ -24,7 +24,7 @@ import {
   text,
   textField,
   optionsTextStyle,
-  optionsText,
+  optionsText
 } from '../FormFields/style';
 import { LoanAccountIcon } from '@/assets/svg';
 
@@ -115,7 +115,7 @@ export const FormSelect = ({
   icon,
   options,
   placeholder,
-  customStyle,
+  customStyle
 }: Props) => {
   const [value, setValue] = React.useState('');
 
@@ -137,7 +137,7 @@ export const FormSelect = ({
         sx={SelectedText}
         style={{ ...customStyle }}
         inputProps={{
-          name,
+          name
         }}
         IconComponent={() => {
           return (
