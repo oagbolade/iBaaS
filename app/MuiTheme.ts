@@ -22,15 +22,15 @@ export const theme = createTheme({
       mobile: 0,
       tablet: 481,
       desktop: 769,
-      largescreen: 1025,
-    },
+      largescreen: 1025
+    }
   },
   typography: {
     allVariants: {
       fontFamily: 'Averta Regular',
       textTransform: 'none',
       whiteSpace: 'nowrap',
-      lineHeight: '24px',
-    },
-  },
+      lineHeight: '24px'
+    }
+  }
 });

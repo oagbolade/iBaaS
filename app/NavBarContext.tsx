@@ -1,9 +1,9 @@
 'use client';
 import { createContext, useMemo } from 'react';
-import { usePageTitle } from '@/utils/usePageTitle';
+import { usePageTitle } from '@/utils/hooks/usePageTitle';
 
 const initialNavBarContext = {
-  pageTitle: '',
+  pageTitle: ''
 };
 type NavBarContextType = typeof initialNavBarContext;
 

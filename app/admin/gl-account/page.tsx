@@ -2,7 +2,7 @@ import { GLAccount } from '@/features/Administrator';
 
 export async function generateMetadata() {
   return {
-    title: 'GL Account',
+    title: 'GL Account'
   };
 }
 

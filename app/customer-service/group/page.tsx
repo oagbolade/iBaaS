@@ -1,4 +1,4 @@
-import { GroupTable } from '@/features/CustomerService/group';
+import { GroupTable } from '@/features/CustomerService/Group';
 
 export default function Group() {
   return <GroupTable />;

@@ -4,12 +4,12 @@ import { createContext, useMemo, useState } from 'react';
 const initialSideBarContext = {
   openMenu: false,
   setOpenMenu: (open: boolean): void => {},
-  toggleMenu: (): void => {},
+  toggleMenu: (): void => {}
 };
 type SideBarContextType = typeof initialSideBarContext;
 
 export const SideBarContext = createContext<SideBarContextType>(
-  initialSideBarContext,
+  initialSideBarContext
 );
 
 export default function SideBarContextProvider({ children }: any) {

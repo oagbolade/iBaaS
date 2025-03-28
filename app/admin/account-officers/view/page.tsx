@@ -1,5 +1,5 @@
-import { ViewRole } from '@/features/Administrator';
+import { ViewAccountOfficer } from '@/features/Administrator';
 
-export default function Admin() {
-  return <ViewRole />;
+export default function ViewAccountOfficerPage() {
+  return <ViewAccountOfficer />;
 }

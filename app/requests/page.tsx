@@ -1,5 +1,5 @@
-import { LoanRequests } from '@/features/Loan';
+import { RequestContainer } from '@/features/Requests';
 
 export default function RequestsPage() {
-  return <LoanRequests />;
+  return <RequestContainer />;
 }

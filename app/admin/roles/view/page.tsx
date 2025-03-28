@@ -1,5 +1,5 @@
 import { ViewRole } from '@/features/Administrator';
 
-export default function Admin() {
+export default function ViewRolePage() {
   return <ViewRole />;
 }

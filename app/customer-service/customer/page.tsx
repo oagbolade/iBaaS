@@ -1,4 +1,4 @@
-import { CustomerContainer } from '@/features/CustomerService/customer';
+import { CustomerContainer } from '@/features/CustomerService/Customer';
 
 export default function Customer() {
   return <CustomerContainer />;

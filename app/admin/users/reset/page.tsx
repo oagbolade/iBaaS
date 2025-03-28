@@ -1,5 +1,11 @@
-import { ResetUserDetails } from '@/features/Administrator';
+'use client';
+import { ResetUser } from '@/features/Administrator';
+import { useGetParams } from '@/utils/hooks/useGetParams';
 
 export default function ResetUserDetailsPage() {
-  return <ResetUserDetails />;
+  const userid = useGetParams('userid') || '';
+  const fullname = useGetParams('fullname') || '';
+  const roleId = useGetParams('roleId') || '';
+
+  return <ResetUser userid={userid} fullname={fullname} roleId={roleId} />;
 }
