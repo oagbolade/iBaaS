@@ -1,20 +1,29 @@
 // import nextJest from 'next/jest'
 const nextJest = require('next/jest');
- 
+
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: './',
-})
- 
+  dir: './'
+});
+
 // Add any custom config to be passed to Jest
 /** @type {import('jest').Config} */
 const config = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'jest-environment-jsdom',
-  preset: 'ts-jest'
-}
- 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(config);
-// export default createJestConfig(config)
+  setupFiles: ['jest-canvas-mock'],
+  testEnvironment: 'jsdom',
+  collectCoverage: false,
+  preset: 'ts-jest',
+  // Add transform configuration for TypeScript files
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest'
+  }
+};
+
+// createJestConfig is exported this way to enrsure that next/jest can load the Next.js config which is async
+module.exports = async () => {
+  const jestConfig = await createJestConfig(config)();
+  jestConfig.transformIgnorePatterns.push('/node_modules/(?!@mui/)');
+  return jestConfig;
+};
