@@ -1,64 +1,132 @@
 'use client';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
+import { FilterSection } from './FilterSection';
 import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
-import { TableSingleAction } from '@/components/Table';
-import { Box, Grid } from '@mui/material';
-import Link from 'next/link';
-import React from 'react';
-import { shortcards } from '@/features/Report/CustomReport/StatementAccount/style';
-import { TextInput } from '@/components/FormikFields';
-import SearchIcon from '@mui/icons-material/Search';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+
 import {
   totalContainer,
-  totalTitle,
+  totalTitle
 } from '@/components/CustomCardsReports/style';
 import { PageTitle } from '@/components/Typography';
-import { FilterSection } from './FilterSection';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetBranches } from '@/api/general/useBranches';
+import { ISearchParams } from '@/app/api/search/route';
+import { useGetTrialBalance } from '@/api/reports/useTrialBalance';
 
 export const TrialBalance = () => {
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [page, setPage] = React.useState(1);
+  const { branches } = useGetBranches();
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearch(true);
+    setSearchParams(params);
+  };
+
+  const {
+    trialBydateList: getAllTrialBalanceData,
+    isLoading: isTrialBalanceDataLoading
+  } = useGetTrialBalance({
+    ...searchParams,
+    page
+  });
+
   return (
-    <Box sx={{ marginTop: '50px', width: '80%' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>
-      <Box sx={{ marginTop: '40px', marginBottom: '30px', marginLeft: '50px' }}>
-        <FilterSection />
-      </Box>
+    <Box
+      sx={{
+        width: '100%'
+      }}
+    >
+      {branches && (
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      )}
+
       <Box>
-        <Box>
-          <ShortCards
-            title="Main Cash"
-            numberOfAccounts="₦321,654.65 Balance"
-            link="/report/custom-report/trial-balance/main-cash"
-          />
-        </Box>
-        <Box>
-          <ShortCards
-            link="/report/custom-report/trial-balance/commercial-banks"
-            title="Balances Held with Commercial Banks"
-            numberOfAccounts="₦321,654.65 Balance"
-          />
-        </Box>
-        <Box>
-          <ShortCards
-            title="Overdraft Facilities Current Account"
-            numberOfAccounts="₦321,654.65 Balance"
-            link="/report/custom-report/trial-balance/overdraft-current-account"
-          />
-        </Box>
-        <Box>
-          <ShortCards
-            title="Overdraft Facilities Saving Account"
-            numberOfAccounts="₦321,654.65 Balance"
-            link="/report/custom-report/trial-balance/overdraft-savings-account"
-          />
-        </Box>
-        <Box sx={totalContainer}>
-          <PageTitle title="Total Asset" styles={{ ...totalTitle }} />
-          <Box sx={{ paddingLeft: '74%' }}>
-            <PageTitle title="₦405,321.54" styles={{ ...totalTitle }} />
+        {isTrialBalanceDataLoading ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <Box>
+            {search ? (
+              <Box>
+                <Box>
+                  <Box>
+                    <ShortCards
+                      title="Main Cash"
+                      numberOfAccounts="₦ 0.00 Balance"
+                      link="/report/custom-report/trial-balance/main-cash"
+                    />
+                  </Box>
+                  <Box>
+                    <ShortCards
+                      link="/report/custom-report/trial-balance/commercial-banks"
+                      title="Balances Held with Commercial Banks"
+                      numberOfAccounts="₦ 0.00 Balance"
+                    />
+                  </Box>
+                  <Box>
+                    <ShortCards
+                      title="Overdraft Facilities Current Account"
+                      numberOfAccounts="₦ 0.00 Balance"
+                      link="/report/custom-report/trial-balance/overdraft-current-account"
+                    />
+                  </Box>
+                  <Box>
+                    <ShortCards
+                      title="Overdraft Facilities Saving Account"
+                      numberOfAccounts="₦ 0.00 Balance"
+                      link="/report/custom-report/trial-balance/overdraft-savings-account"
+                    />
+                  </Box>
+                  <Box sx={totalContainer}>
+                    <PageTitle title="Total Asset" styles={{ ...totalTitle }} />
+                    <Box sx={{ paddingLeft: '74%' }}>
+                      <PageTitle title="₦ 0.00" styles={{ ...totalTitle }} />
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            ) : (
+              <Box>
+                <Box>
+                  <ShortCards
+                    title="Main Cash"
+                    numberOfAccounts="₦ 0.00 Balance"
+                    link="/report/custom-report/trial-balance/main-cash"
+                  />
+                </Box>
+                <Box>
+                  <ShortCards
+                    link="/report/custom-report/trial-balance/commercial-banks"
+                    title="Balances Held with Commercial Banks"
+                    numberOfAccounts="₦ 0.00 Balance"
+                  />
+                </Box>
+                <Box>
+                  <ShortCards
+                    title="Overdraft Facilities Current Account"
+                    numberOfAccounts="₦ 0.00 Balance"
+                    link="/report/custom-report/trial-balance/overdraft-current-account"
+                  />
+                </Box>
+                <Box>
+                  <ShortCards
+                    title="Overdraft Facilities Saving Account"
+                    numberOfAccounts="₦ 0.00 Balance"
+                    link="/report/custom-report/trial-balance/overdraft-savings-account"
+                  />
+                </Box>
+                <Box sx={totalContainer}>
+                  <PageTitle title="Total Asset" styles={{ ...totalTitle }} />
+                  <Box sx={{ paddingLeft: '74%' }}>
+                    <PageTitle title="₦ 0.00" styles={{ ...totalTitle }} />
+                  </Box>
+                </Box>
+              </Box>
+            )}
           </Box>
-        </Box>
+        )}
       </Box>
     </Box>
   );

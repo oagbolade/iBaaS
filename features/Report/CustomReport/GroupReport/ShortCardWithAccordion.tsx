@@ -2,7 +2,7 @@ import React from 'react';
 import { styled as muistyled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary, {
-  AccordionSummaryProps,
+  AccordionSummaryProps
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import styled from 'styled-components';
@@ -21,7 +21,7 @@ const Accordion = muistyled((props: AccordionProps) => {
     borderRadius: '12px',
     border: `1px solid ${colors.neutral300}`,
     boxShadow: 'none',
-    marginBottom: '20px',
+    marginBottom: '20px'
   };
 });
 
@@ -35,14 +35,14 @@ const AccordionSummary = muistyled((props: AccordionSummaryProps) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       height: '40px',
-      padding: '20px 24px 5px 16px',
-    },
+      padding: '20px 24px 5px 16px'
+    }
   };
 });
 
 const AccordionDetails = muistyled(MuiAccordionDetails)(() => {
   return {
-    padding: '20px 24px 30px 16px',
+    padding: '20px 24px 30px 16px'
   };
 });
 
@@ -86,7 +86,7 @@ export const ShortCardWithAccordion = ({ cardTitle, groups }: Props) => {
                 color: `${colors.neutral1000}`,
                 fontSize: '20px',
                 fontWeight: 700,
-                lineHeight: '32px',
+                lineHeight: '32px'
               }}
             >
               {cardTitle}
@@ -94,7 +94,7 @@ export const ShortCardWithAccordion = ({ cardTitle, groups }: Props) => {
             <Box
               sx={{
                 marginBottom: expanded ? '35px' : '15px',
-                transform: `${expanded ? 'rotate(180deg)' : 'none'}`,
+                transform: `${expanded ? 'rotate(180deg)' : 'none'}`
               }}
               mt={1.2}
             >

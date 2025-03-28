@@ -5,7 +5,7 @@ import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { labelTypography } from '@/components/FormikFields/styles';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
 
 export const FilterSection = () => {
   const { setDirection } = useSetDirection();
@@ -30,7 +30,7 @@ export const FilterSection = () => {
             customStyle={{
               backgroundColor: `${colors.activeBlue400}`,
               border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
+              color: `${colors.white}`
             }}
             buttonTitle="Search"
           />

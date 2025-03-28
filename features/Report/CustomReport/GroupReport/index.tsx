@@ -5,7 +5,7 @@ import { ShortCardWithAccordion } from './ShortCardWithAccordion';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import {
   customerServiceReportsGroup,
-  operationalReportsGroup,
+  operationalReportsGroup
 } from '@/constants/Reports/groupReport';
 
 export const GroupReport = () => {
@@ -13,14 +13,14 @@ export const GroupReport = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection useBackButton />
       <Box
         sx={{
           padding: '25px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <ShortCardWithAccordion

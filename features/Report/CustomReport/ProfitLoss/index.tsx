@@ -10,17 +10,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import {
   totalContainer,
-  totalTitle,
+  totalTitle
 } from '@/components/CustomCardsReports/style';
 import { PageTitle } from '@/components/Typography';
 import { FilterSection } from '@/features/Report/CustomReport/TrialBalance/FilterSection';
 
 export const ProfitLoss = () => {
   return (
-    <Box sx={{ marginTop: '50px', width: '80%' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>
+    <Box sx={{ marginTop: '50px', width: '100%' }}>
+      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '40px', marginBottom: '30px', marginLeft: '50px' }}>
         <FilterSection />
       </Box>

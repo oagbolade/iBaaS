@@ -7,7 +7,7 @@ import { FilterSection } from './FilterSection';
 import {
   OfficePerformanceContainer,
   OfficePerformanceName,
-  OfficerGraphSection,
+  OfficerGraphSection
 } from '@/features/Report/CustomReport/GroupReport/styles';
 import { description } from '@/components/Confirmation/styles';
 import { pageTitle } from '@/components/Typography/styles';
@@ -20,13 +20,13 @@ export const OfficerPerformance = () => {
     <Box
       sx={{
         marginTop: '50px',
-        width: '100%',
+        width: '100%'
       }}
     >
       <TopOverViewSection useBackButton />
       <Box
         sx={{
-          padding: '25px',
+          padding: '25px'
         }}
       >
         <FilterSection />
@@ -78,7 +78,7 @@ export const OfficerPerformance = () => {
                       width: 900,
                       height: 330,
                       colors: [`${colors.greenLine}`],
-                      chartArea: { top: 80, left: 50 },
+                      chartArea: { top: 80, left: 50 }
                     }}
                   />
                 </Grid>

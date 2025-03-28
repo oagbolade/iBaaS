@@ -29,7 +29,7 @@ export const CustomerServiceContainer = (props: Props) => {
         sx={{
           padding: '25px',
           width: '100%',
-          marginTop: '80px',
+          marginTop: '80px'
         }}
       >
         <MainSection

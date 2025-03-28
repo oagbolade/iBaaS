@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { ActionMenu } from '@/components/Table';
 import { Tabs } from '@/components/Revamp/Tabs';
 import { LoanContainer } from '@/features/Loan/LoanContainer';
-import { useLoansModalToggle } from '@/utils/useLoansModalToggle';
+import { useLoansModalToggle } from '@/utils/hooks/useLoansModalToggle';
 
 export interface IOptions {
   buttonTitle: string;
@@ -19,16 +19,16 @@ const TabContent: React.FC = () => {
   const pendingRequestsOptions: IOptions[] = [
     {
       buttonTitle: 'View Application',
-      link: '/loan/loan-directory/cancel-loan',
+      link: '/loan/loan-directory/cancel-loan'
     },
-    { buttonTitle: 'Reject Loan', onClick: () => toggleModal('password') },
+    { buttonTitle: 'Reject Loan', onClick: () => toggleModal('password') }
   ];
 
   const rejectOptions: IOptions[] = [
     {
       buttonTitle: 'View Application',
-      link: '/loan/loan-directory/cancel-loan',
-    },
+      link: '/loan/loan-directory/cancel-loan'
+    }
   ];
 
   const PendingRequestsActions: React.FC = () => {
@@ -46,13 +46,13 @@ const TabContent: React.FC = () => {
           openPasswordModal,
           openRejectModal,
           handleClose,
-          toggleModal,
+          toggleModal
         }}
         checkBox
         showHeader={{
           mainTitle: 'Pending Requests',
           secondaryTitle:
-            'See a directory of all rejected requests on this platform.',
+            'See a directory of all rejected requests on this platform.'
         }}
         TableActionItems={PendingRequestsActions}
         customStyle={{ padding: '0px' }}
@@ -67,12 +67,12 @@ const TabContent: React.FC = () => {
           openPasswordModal,
           openRejectModal,
           handleClose,
-          toggleModal,
+          toggleModal
         }}
         showHeader={{
           mainTitle: 'Rejected Requests',
           secondaryTitle:
-            'See a directory of all rejected requests on this platform.',
+            'See a directory of all rejected requests on this platform.'
         }}
         TableActionItems={RejectedRequestsActions}
         customStyle={{ padding: '0px' }}
@@ -94,7 +94,7 @@ export const PendingApplications = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '40px',
+        marginTop: '40px'
       }}
     >
       <Box mt={5}>

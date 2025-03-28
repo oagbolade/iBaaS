@@ -10,13 +10,13 @@ export const SetupReports = () => {
   return (
     <Box
       sx={{
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection useBackButton />
       <Box
         sx={{
-          padding: '0 25px',
+          padding: '0 25px'
         }}
       >
         <FilterSection />

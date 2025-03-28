@@ -9,7 +9,7 @@ export const PortfolioContainer = {
   gap: '0px',
   borderRadius: '0px',
   height: '100px',
-  boxShadow: 'none',
+  boxShadow: 'none'
 };
 
 export const PortfolioCards = {
@@ -20,7 +20,7 @@ export const PortfolioCards = {
   gap: '24px',
   alignSelf: 'stretch',
   width: '1117px',
-  height: '404px',
+  height: '404px'
 };
 
 export const PortfolioTableCards = {
@@ -34,8 +34,8 @@ export const PortfolioTableCards = {
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
   background: `${colors.white}`,
-  width: '1237px',
-  height: 'auto',
+  width: '105%',
+  height: 'auto'
 };
 export const PortfolioCardStyle = {
   display: 'flex',
@@ -45,18 +45,13 @@ export const PortfolioCardStyle = {
   alignSelf: 'stretch',
   borderRadius: '4px',
   width: '100%',
-  height: 'auto',
+  height: 'auto'
 };
 
 export const PortfolioHeaderStyle = {
-  width: '100%',
-  height: 'auto',
   display: 'flex',
-  padding: '0px',
-  alignItems: 'flex-start',
-  gap: '16px',
-  flex: '1 0 0',
-  borderRadius: '0px',
+  justifyContent: 'space-between',
+  width: '100%'
 };
 
 export const PortfolioTitleHeader = {
@@ -65,25 +60,25 @@ export const PortfolioTitleHeader = {
   alignItems: 'center',
   gap: '2px',
   flex: '1 0 0',
-  borderRadius: '0px',
+  borderRadius: '0px'
 };
 export const PortfolioTableText = {
   display: 'flex',
-  width: '969px',
+  width: '1065px',
   padding: '0px',
   flexDirection: 'row',
-  gap: '4px',
+  gap: '14px',
   borderRadius: '0px',
-  height: '44px',
+  height: '44px'
 };
 
 export const PortfolioTitle = {
   color: `${colors.neutral900}`,
-  fontSize: '20px',
+  fontSize: '15px',
   fontStyle: 'normal',
   fontWeight: 700,
   lineHeight: '32px' /* 160% */,
-  width: '40px',
+  width: '40px'
 };
 
 export const PortfolioAccountContainer = {
@@ -96,7 +91,7 @@ export const PortfolioAccountContainer = {
   flex: '1 0 0',
   borderRadius: '0px',
   width: '100%',
-  height: 'auto',
+  height: 'auto'
 };
 export const PortfolioProduct = {
   color: `${colors.neutral700}`,
@@ -105,7 +100,7 @@ export const PortfolioProduct = {
   fontStyle: 'normal',
   fontWeight: 400,
   lineHeight: '16px' /* 133.333% */,
-  alignSelf: 'stretch',
+  alignSelf: 'stretch'
 };
 export const PortfolioProductTilte = {
   color: `${colors.neutral700}`,
@@ -114,5 +109,10 @@ export const PortfolioProductTilte = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '24px',
-  alignSelf: 'stretch',
+  alignSelf: 'stretch'
+};
+
+export const buttonBackgroundColor = {
+  backgroundColor: `${colors.activeBlue400}`,
+  color: `${colors.white}`
 };

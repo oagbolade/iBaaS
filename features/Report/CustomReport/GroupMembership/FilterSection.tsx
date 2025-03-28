@@ -7,7 +7,7 @@ import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
-  ActionButton,
+  ActionButton
 } from '@/components/Revamp/Buttons';
 import { ChevronDown } from '@/assets/svg';
 import { labelTypography } from '@/components/FormikFields/styles';
@@ -15,9 +15,9 @@ import { inputFields } from './style';
 import {
   Wrapper,
   branchOptions,
-  selectButton,
-} from '../ChartAccount/FilterSection';
-import { useSetDirection } from '@/utils/useSetDirection';
+  selectButton
+} from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
 
 export const FilterSection = () => {
   const { setDirection } = useSetDirection();
@@ -32,7 +32,7 @@ export const FilterSection = () => {
             options={branchOptions}
             customStyle={{
               ...allBranchesStyle,
-              ...selectButton,
+              ...selectButton
             }}
             icon={
               <ChevronDown
@@ -41,7 +41,7 @@ export const FilterSection = () => {
                   position: 'relative',
                   marginRight: '70px',
                   width: '12px',
-                  height: '12px',
+                  height: '12px'
                 }}
               />
             }
@@ -62,7 +62,7 @@ export const FilterSection = () => {
             customStyle={{
               backgroundColor: `${colors.activeBlue400}`,
               border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
+              color: `${colors.white}`
             }}
             buttonTitle="Search"
           />

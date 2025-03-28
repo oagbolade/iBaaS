@@ -1,29 +1,27 @@
 import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import styled from 'styled-components';
-import {
-  transactionVolumeStyle,
-  allBranchesStyle,
-} from '../../Overview/styles';
+import { allBranchesStyle } from '../../Overview/styles';
 import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
-  ActionButton,
+  ActionButton
 } from '@/components/Revamp/Buttons';
 import { ChevronDown } from '@/assets/svg';
 import { labelTypography } from '@/components/FormikFields/styles';
-import { inputFields } from '@/features/Report/CustomReport/style';
 import {
   Wrapper,
   branchOptions,
-  selectButton,
-} from '@/features/Report/CustomReport/ChartAccount/FilterSection';
-import { useSetDirection } from '@/utils/useSetDirection';
+  selectButton
+} from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { useCurrentBreakpoint } from '@/utils';
 
 export const FilterSection = () => {
   const { setDirection } = useSetDirection();
+  const { isMobile, setWidth } = useCurrentBreakpoint();
+
   return (
     <Box>
       <Stack direction={setDirection()} ml={{ mobile: 9, tablet: 0 }}>
@@ -34,7 +32,7 @@ export const FilterSection = () => {
             options={branchOptions}
             customStyle={{
               ...allBranchesStyle,
-              ...selectButton,
+              ...selectButton
             }}
             icon={
               <ChevronDown
@@ -43,7 +41,7 @@ export const FilterSection = () => {
                   position: 'relative',
                   marginRight: '70px',
                   width: '12px',
-                  height: '12px',
+                  height: '12px'
                 }}
               />
             }
@@ -56,7 +54,9 @@ export const FilterSection = () => {
             name="Search"
             placeholder="Search"
             icon={<SearchIcon />}
-            customStyle={{ ...inputFields }}
+            customStyle={{
+              width: setWidth(isMobile ? '240px' : '1100px')
+            }}
           />
         </Box>
         <Box mt={4.5}>
@@ -64,7 +64,7 @@ export const FilterSection = () => {
             customStyle={{
               backgroundColor: `${colors.activeBlue400}`,
               border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
+              color: `${colors.white}`
             }}
             buttonTitle="Search"
           />

@@ -4,7 +4,7 @@ import { createContext, useState } from 'react';
 const initialSetupContext = {
   isCustomerServiceModalOpen: false,
   isEditingCustomerService: false,
-  toggleCustomerServiceModal: (isEditingCustomerService: boolean) => {},
+  toggleCustomerServiceModal: (isEditingCustomerService: boolean) => {}
 };
 
 export const CustomerServiceContext =
@@ -16,9 +16,7 @@ export default function CustomerServiceContextProvider({ children }: any) {
   const [isCustomerServiceModalOpen, setOpen] = useState(false);
   const [isEditingCustomerService, setIsEditing] = useState(false);
 
-  const toggleCustomerServiceModal = (
-    isEditingCustomerService: boolean
-  ) => {
+  const toggleCustomerServiceModal = (isEditingCustomerService: boolean) => {
     setIsEditing(isEditingCustomerService);
     setOpen(!isCustomerServiceModalOpen);
   };
@@ -26,7 +24,7 @@ export default function CustomerServiceContextProvider({ children }: any) {
   const value: CustomerServiceContextType = {
     isCustomerServiceModalOpen,
     toggleCustomerServiceModal,
-    isEditingCustomerService,
+    isEditingCustomerService
   };
 
   return (

@@ -17,7 +17,7 @@ import {
   CustomStyleText,
   ButtonContainer,
   ButtonApprove,
-  ButtonApproveTitle,
+  ButtonApproveTitle
 } from './style';
 import Grid from '@mui/material/Grid';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
@@ -25,16 +25,16 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import Button from '@mui/material/Button';
 import {
   CurrencyOperation,
-  EditOperations,
+  EditOperations
 } from '@/constants/OperationOptions';
 import { AccountInfoIcons, PersonalInfoLine } from '@/assets/svg';
 import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import {
   ModalBackButton,
   ModalSaveButton,
-  ResetButton,
+  ResetButton
 } from '@/components/Modal/styles';
 import { ButtonForms } from './ButtonForm';
 import { ModalActions } from '@/components/Shared/ActionButtons';
@@ -49,7 +49,7 @@ export const ModalBackStyle = {
   color: `${colors.neutral900}`,
   backgroundColor: `${colors.white}`,
   borderRadius: '8px',
-  border: `1px solid ${colors.neutral300}`,
+  border: `1px solid ${colors.neutral300}`
 };
 
 export const CashDeposit = () => {
@@ -269,10 +269,10 @@ export const CashDeposit = () => {
                         width: {
                           desktop: '250px',
                           mobile: '40px',
-                          tablet: '250px',
+                          tablet: '250px'
                         },
                         flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        alignItems: 'flex-start'
                       }}
                       ml={{ mobile: 7, tablet: 0 }}
                       justifyContent="center"
@@ -283,7 +283,7 @@ export const CashDeposit = () => {
                         options={CurrencyOperation.currency}
                         label="Currency"
                         customStyle={{
-                          width: setWidth(),
+                          width: setWidth()
                         }}
                       />
                     </Box>
@@ -301,10 +301,10 @@ export const CashDeposit = () => {
                         width: {
                           desktop: '400px',
                           mobile: '40px',
-                          tablet: '200px',
+                          tablet: '200px'
                         },
                         flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        alignItems: 'flex-start'
                       }}
                       ml={{ mobile: 7, tablet: 0 }}
                       justifyContent="center"
@@ -315,7 +315,7 @@ export const CashDeposit = () => {
                         placeholder="Enter rate"
                         label="Rate"
                         customStyle={{
-                          width: setWidth(),
+                          width: setWidth()
                         }}
                       />
                     </Box>
@@ -331,7 +331,7 @@ export const CashDeposit = () => {
                   <Box
                     sx={{
                       marginRight: '20px',
-                      width: { tablet: '350px' },
+                      width: { tablet: '350px' }
                     }}
                     ml={{ mobile: 7, tablet: 0 }}
                     justifyContent="center"
@@ -342,7 +342,7 @@ export const CashDeposit = () => {
                       placeholder="Enter Transaction"
                       label="Transaction Amount"
                       customStyle={{
-                        width: setWidth(),
+                        width: setWidth()
                       }}
                     />
                   </Box>

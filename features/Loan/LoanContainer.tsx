@@ -45,7 +45,7 @@ export const LoanContainer = ({
   TableActionItems,
   checkBox,
   toastMessage,
-  customStyle,
+  customStyle
 }: Props) => {
   const showRejection = () => {
     return actionModal?.toggleModal?.('reject');
@@ -56,7 +56,7 @@ export const LoanContainer = ({
       sx={{
         padding: '25px',
         width: '100%',
-        ...customStyle,
+        ...customStyle
       }}
     >
       <MuiTableContainer

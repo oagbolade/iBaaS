@@ -4,16 +4,16 @@ const common = {
   padding: '16px 78px',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: '8px',
+  gap: '8px'
 };
 
 export const submitButton = {
   ...common,
   width: '136px',
-  color: 'white',
+  color: 'white'
 };
 
 export const cancelButton = {
   ...common,
-  width: '106px',
+  width: '106px'
 };

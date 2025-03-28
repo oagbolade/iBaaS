@@ -9,31 +9,31 @@ import { HeaderI } from '@/components/Table/Table';
 export const SharedView = ({
   mainTitle,
   secondaryTitle,
-  filterSection,
+  filterSection
 }: HeaderI) => {
   return (
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection useBackButton />
       <Box
         sx={{
           padding: '0 25px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <Box sx={{ marginBottom: '30px' }}>{filterSection}</Box>
         <MuiTableContainer
           tableConfig={{
-            hasActions: false,
+            hasActions: false
           }}
           showHeader={{
             mainTitle,
             secondaryTitle,
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           columns={MOCK_COLUMNS}
           data={MOCK_DATA}

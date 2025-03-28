@@ -1,46 +1,114 @@
 'use client';
-import * as React from 'react';
-import { Box, Typography } from '@mui/material';
-import Link from 'next/link';
-import { FilterSection } from '@/features/Report/CustomReport/OutFlowReport/FilterSection';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
-import { TableV2 } from '@/components/Revamp/TableV2';
-import { MOCK_COLUMNS_V2 } from '@/constants/MOCK_COLUMNSv2';
-import MOCK_DATA from '@/constants/MOCK_DATAv2.json';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
+import { COLUMN } from '../COLUMN';
+import { FilterSection } from '../SubFilterSection';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetBranches } from '@/api/general/useBranches';
+import { ISearchParams } from '@/app/api/search/route';
+import {
+  MuiTableContainer,
+  StyledTableRow,
+  renderEmptyTableBody
+} from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
+import { ITrialBalance } from '@/api/ResponseTypes/reports';
+import { useGetTrialBalance } from '@/api/reports/useTrialBalance';
+
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const CommercialBanks = () => {
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [page, setPage] = React.useState(1);
+  const { branches } = useGetBranches();
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearch(true);
+    setSearchParams(params);
+  };
+
+  const {
+    trialBydateList: getAllTrialBalanceData,
+    isLoading: isTrialBalanceDataLoading
+  } = useGetTrialBalance({
+    ...searchParams,
+    page
+  });
+
   return (
     <Box
       sx={{
-        width: '100%',
-        marginTop: '50px',
+        width: '100%'
       }}
     >
-      <TopOverViewSection useBackButton />
-      <Box
-        sx={{
-          padding: '25px',
-          width: '100%',
-        }}
-      >
-        <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
-          <FilterSection />
-        </Box>
-        <TableV2
-          tableConfig={{
-            hasActions: false,
-            paintedColumns: ['DR Product Balance', 'Total Balance'],
-            totalRow: ['Total Amount', '', '₦104,200.65', '₦321,654.65', ''],
-          }}
-          columns={MOCK_COLUMNS_V2}
-          data={MOCK_DATA}
-          hideFilterSection
-          showHeader={{
-            mainTitle: 'Balances held with commercial banks',
-            secondaryTitle:
-              'See a directory of all Balances held with commercial banks Report in this system.',
-          }}
-        />
+      {branches && (
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      )}
+      <Box sx={{ paddingX: '24px' }}>
+        {isTrialBalanceDataLoading ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <Box sx={{ width: '100%' }}>
+            <MuiTableContainer
+              columns={COLUMN}
+              tableConfig={{
+                hasActions: true
+              }}
+              showHeader={{
+                hideFilterSection: true,
+                mainTitle: 'Balances held with commercial banks',
+                secondaryTitle:
+                  'See a directory of all Balances held with commercial banks Report in this system.'
+              }}
+              data={getAllTrialBalanceData}
+              setPage={setPage}
+              page={page}
+            >
+              {search ? (
+                getAllTrialBalanceData?.map((dataItem: ITrialBalance) => {
+                  return (
+                    <StyledTableRow key={dataItem.acctno}>
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem?.gl_nodecode || 'N/A'}
+                      </StyledTableCell>
+
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem?.acctname || 'N/A'}
+                      </StyledTableCell>
+
+                      <StyledTableCell component="th" scope="row">
+                        {`NGN ${formatCurrency(dataItem?.last_night_balance2 || 0)}`}
+                      </StyledTableCell>
+
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem?.debitacct || 'N/A'}
+                      </StyledTableCell>
+
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem?.creditAcct || 'N/A'}
+                      </StyledTableCell>
+
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem?.totalname || 'N/A'}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                })
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell
+                    colSpan={COLUMN.length + 1}
+                    component="th"
+                    scope="row"
+                  >
+                    {renderEmptyTableBody(getAllTrialBalanceData)}
+                  </StyledTableCell>
+                </StyledTableRow>
+              )}
+            </MuiTableContainer>
+          </Box>
+        )}
       </Box>
     </Box>
   );

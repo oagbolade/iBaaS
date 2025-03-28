@@ -4,7 +4,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   ModalBackButton,
   ModalSaveButton,
-  ResetButton,
+  ResetButton
 } from '@/components/Modal/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -15,7 +15,7 @@ import {
   ButtonApproveTitle,
   ButtonContainer,
   ButtonDeposit,
-  ButtonReset,
+  ButtonReset
 } from './style';
 
 type Props = {

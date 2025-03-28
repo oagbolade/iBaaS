@@ -9,13 +9,13 @@ import {
   inputText,
   cashContentStyle,
   previewContentStyle,
-  WithdrawalContentStyle,
+  WithdrawalContentStyle
 } from '@/features/Operation/Forms/style';
 import Grid from '@mui/material/Grid';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { EditOperations } from '@/constants/OperationOptions';
 import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -30,7 +30,7 @@ export const DeactivateAccount = () => {
 
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
+    actions: { setSubmitting: (arg0: boolean) => void }
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -56,7 +56,7 @@ export const DeactivateAccount = () => {
                   placeholder="Enter account number"
                   label="Reactivation Charge"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
+                    width: setWidth(isMobile ? '250px' : '100%')
                   }}
                 />
               </Grid>

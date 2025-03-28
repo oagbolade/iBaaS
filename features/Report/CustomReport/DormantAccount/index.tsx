@@ -30,7 +30,7 @@ export const DormantAccount = () => {
             mainTitle: 'Dormant Account',
             secondaryTitle:
               'See a directory of all account enquiry on this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
         />

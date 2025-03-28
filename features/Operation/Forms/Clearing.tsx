@@ -1,122 +1,332 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import { PageTitle } from '@/components/Typography';
+import Grid from '@mui/material/Grid';
+import { Formik, Form } from 'formik';
+import dayjs, { Dayjs } from 'dayjs';
+import { useQuery } from '@tanstack/react-query';
+import { AlertColor } from '@mui/material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import {
   BatchContainer,
   BatchTitle,
   PostingContainer,
-  clearContentStyle,
+  clearContentStyle
 } from './style';
-import Grid from '@mui/material/Grid';
-import { FormTextInput, FormSelectField } from '@/components/FormikFields';
-import { EditOperations } from '@/constants/OperationOptions';
-import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
-import { userInitialValues } from '@/constants/types';
-import { useCurrentBreakpoint } from '@/utils';
 import { PreviewContentOne } from './CashDeposit';
-import { TopActionsArea } from '@/components/Revamp/Shared';
 import { MobilePreviewContent, actionButtons } from './BatchPosting';
+import { PageTitle } from '@/components/Typography';
+import {
+  FormTextInput,
+  FormSelectField,
+  FormikDateTimePicker
+} from '@/components/FormikFields';
+import { EditOperations } from '@/constants/OperationOptions';
+import { useCurrentBreakpoint } from '@/utils';
+import { OptionsI } from '@/components/FormikFields/FormSelectField';
+import { ICurrency } from '@/api/ResponseTypes/general';
+import { ToastMessageContext } from '@/context/ToastMessageContext';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
+import {
+  searchCustomer,
+  useGetAccountDetails
+} from '@/api/customer-service/useCustomer';
+import { queryKeys } from '@/react-query/constants';
+import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
+import { toast } from '@/utils/toast';
+import { IGetCommercialBank } from '@/api/ResponseTypes/setup';
+import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
+import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
+import { SearchIcon } from '@/assets/svg';
+import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
+import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
+import {
+  useCreateFwdAppOfficerInWardClearing,
+  useCreateInwardClearing
+} from '@/api/operation/useClearing';
+import {
+  IClearingParams,
+  InwardClearingInitialValues
+} from '@/schemas/schema-values/operation';
+import { inwardClearing } from '@/schemas/operation';
+import { useFinancialLastDate } from '@/utils/financialDates';
+import { encryptData } from '@/utils/encryptData';
+import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 
-export const InWard = () => {
+type SearchFilters = {
+  accountNumber: string | OptionsI[];
+  [key: string]: any;
+};
+
+type Props = {
+  currencies: ICurrency[] | Array<any>;
+  isSubmitting?: boolean;
+  setIsSubmitting?: (submit: boolean) => void;
+  commBanks: IGetCommercialBank[] | Array<any>;
+  setIsSubmittingForward?: (submit: boolean) => void;
+  isSubmittingForward?: boolean;
+};
+export const InWard = ({
+  currencies,
+  isSubmitting,
+  setIsSubmitting,
+  setIsSubmittingForward,
+  isSubmittingForward,
+  commBanks
+}: Props) => {
+  const toastActions = React.useContext(ToastMessageContext);
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { mappedCurrency, mappedCommercialBank } = useMapSelectOptions({
+    currencies,
+    commBanks
+  });
+  const [searchParams, setSearchParams] = useState<IClearingParams>({
+    bankcode: '',
+    cleartype: ''
+  });
 
-  const onSubmit = (
-    values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
-  ) => {
-    console.log({ values, actions });
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
+  const { mutate } = useCreateInwardClearing({ ...searchParams });
+  const { mutate: mutateInward } = useCreateFwdAppOfficerInWardClearing({
+    ...searchParams
+  });
+  const [searchValue, setSearchValue] = React.useState<SearchFilters>({
+    accountNumber: ''
+  });
+  const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
+    accountNumber: []
+  });
+  const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
+    accountNumber: ''
+  });
+  const accountId = String(
+    extractIdFromDropdown(selectedValue.accountNumber as string)
+  );
+  const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
+    useGetAccountDetails(encryptData(accountId) || '');
+  const handleSelectedValue = (value: string, name: string) => {
+    setSelectedValue((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+    setSearchParams((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
+  const { data, isLoading: isSearchLoading } = useQuery({
+    queryKey: [queryKeys.searchCustomer, searchValue],
+    queryFn: () =>
+      searchCustomer(toastActions, searchValue.accountNumber as string),
+    enabled: Boolean(searchValue.accountNumber.length > 0)
+  });
+
+  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+
+    setSearchValue((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+
+    const mappedSearchResults = mapCustomerAccountNumberSearch(
+      data?.accountDetailsResults
+    );
+
+    setFilteredValues((prev) => ({
+      ...prev,
+      [name]: mappedSearchResults
+    }));
+
+    if (value.trim().length === 0) {
+      setFilteredValues({
+        accountNumber: []
+      });
+    }
+  };
+  const onSubmit = async (values: any, actions: { resetForm: Function }) => {
+    const params: IClearingParams = {
+      bankcode: values.bankcode?.toString().length > 0 ? values.bankcode : null,
+      cleartype:
+        values.cleartype?.toString().length > 0 ? values.cleartype : null
+    };
+    const toastMessage = {
+      title: 'Validation error',
+      severity: 'error',
+      accountNumber: {
+        message: 'Account Name is required'
+      }
+    };
+    if (searchValue.accountNumber === '') {
+      toast(
+        toastMessage.accountNumber.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+
+      return;
+    }
+    setSearchParams(params);
+
+    const getAllValues = {
+      ...values,
+      debitAcct: accountData?.accountnumber as string
+    };
+    await mutate(getAllValues);
+  };
+  useEffect(() => {
+    const submit = document.getElementById('submitButton');
+
+    if (isSubmitting) {
+      submit?.click();
+    }
+    if (isSubmittingForward) {
+      submit?.click();
+    }
+    return () => {
+      setIsSubmittingForward?.(false);
+      setIsSubmitting?.(false);
+    };
+  }, [isSubmitting, isSubmittingForward]);
   return (
     <Formik
-      initialValues={userInitialValues}
+      initialValues={InwardClearingInitialValues}
       onSubmit={(values, actions) => onSubmit(values, actions)}
-      validationSchema={userSchema}
+      validationSchema={inwardClearing}
     >
       <Form>
-        <Box ml={{ desktop: 2, mobile: 2 }} sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
         <Grid container spacing={2}>
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-            <PageTitle title="Inward Clearing" styles={BatchTitle} />
-            <Grid container>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="name"
-                  placeholder="Enter name"
-                  label="Name"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
-                  }}
-                />
+          <Box sx={{ display: 'flex', width: '100%' }}>
+            <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+              <PageTitle title="Inward Clearing" styles={BatchTitle} />
+              <Grid container>
+                <Grid item={isTablet} mobile={12}>
+                  <StyledSearchableDropdown>
+                    <ActionButtonWithPopper
+                      loading={isSearchLoading}
+                      handleSelectedValue={(value: string) =>
+                        handleSelectedValue(value, 'accountNumber')
+                      }
+                      label="Account Name"
+                      name="accountNumber"
+                      searchGroupVariant="BasicSearchGroup"
+                      dropDownOptions={
+                        filteredValues.accountNumber as OptionsI[]
+                      }
+                      customStyle={{ ...dropDownWithSearch, width: '560px' }}
+                      icon={<SearchIcon />}
+                      iconPosition="end"
+                      buttonTitle={
+                        extractIdFromDropdown(
+                          selectedValue.accountNumber as string
+                        ) || 'Search  Destination Account'
+                      }
+                      onChange={handleSearch}
+                      searchValue={searchValue.accountNumber as string}
+                    />
+                  </StyledSearchableDropdown>
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormSelectField
+                    name="cleartype"
+                    options={EditOperations.clearingType}
+                    label="Clearing Type"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormSelectField
+                    name="bankcode"
+                    options={mappedCommercialBank}
+                    label="Clearing Bank"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormSelectField
+                    name="currencyCode"
+                    options={mappedCurrency}
+                    label="Currency"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="chkNum"
+                    placeholder="Enter number"
+                    label="Cheque Number"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormAmountInput
+                    name="tranamount"
+                    placeholder="Enter number"
+                    label="Pay Amount"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="crossrate"
+                    placeholder="Enter user"
+                    label="Rate"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    disabled
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <Box>
+                    <DemoContainer components={['DatePicker']}>
+                      <FormikDateTimePicker
+                        label="Value Date"
+                        name="valuedate"
+                      />
+                    </DemoContainer>
+                  </Box>
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="narration1"
+                    placeholder="Enter Narration"
+                    label="Narration"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormSelectField
-                  name="department"
-                  options={EditOperations.department}
-                  label="Department"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
-                  }}
+            </Box>
+            <Box sx={PostingContainer}>
+              {isMobile ? (
+                <MobilePreviewContent
+                  PreviewContent={
+                    <PreviewContentOne accountDetails={accountData} />
+                  }
+                  customStyle={{ ...clearContentStyle }}
                 />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="name"
-                  placeholder="Enter number"
-                  label="Name"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
-                  }}
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="name"
-                  placeholder="Enter user"
-                  label="Name"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
-                  }}
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="name"
-                  placeholder="Enter currency"
-                  label="Name"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
-                  }}
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="Narration"
-                  placeholder="Enter Narration"
-                  label="Narration"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-          <Box sx={PostingContainer}>
-            {isMobile ? (
-              <MobilePreviewContent
-                PreviewContent={<PreviewContentOne />}
-                customStyle={{ ...clearContentStyle }}
-              />
-            ) : (
-              <PreviewContentOne />
-            )}{' '}
+              ) : (
+                <PreviewContentOne accountDetails={accountData} />
+              )}{' '}
+            </Box>
           </Box>
         </Grid>
+        <button id="submitButton" type="submit" style={{ display: 'none' }}>
+          submit alias
+        </button>
       </Form>
     </Formik>
   );

@@ -45,7 +45,7 @@ export const FilterSection = () => {
             customStyle={{
               backgroundColor: `${colors.activeBlue400}`,
               border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
+              color: `${colors.white}`
             }}
             buttonTitle="Search"
           />

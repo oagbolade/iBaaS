@@ -13,9 +13,9 @@ export const buttonStyle = {
   color: `${colors.white}`,
   marginTop: '30px',
   marginLeft: '70px',
-  marginBottom: '3px',
+  marginBottom: '3px'
 };
 
 export const inputFields = {
-  width: '766px',
+  width: '766px'
 };

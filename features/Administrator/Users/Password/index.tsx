@@ -2,72 +2,76 @@
 import { Box, Stack } from '@mui/material';
 import React from 'react';
 import { TopActionsArea } from '@/components/Revamp/Shared';
-import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import colors from '@/assets/colors';
-import { ChangePasswordForm } from '@/features/Administrator/Forms/ChangePassword';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { ChangePasswordForm } from '@/features/Administrator/Forms/ChangePasswords';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { PrimaryIconButton } from '@/components/Buttons';
+import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
+import { useGetDepartments } from '@/api/general/useDepartments';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetRoles } from '@/api/admin/useRole';
 
-export const ChangePassword = () => {
-  const { setDirection } = useSetDirection();
+type Props = {
+  userid?: string;
+  fullname?: string;
+};
+
+export const ChangePassword = ({ userid, fullname }: Props) => {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+  const { isLoading } = useGlobalLoadingState();
+
+  const { roles } = useGetRoles();
+  const { departments } = useGetDepartments();
+
+  const triggerSubmission = () => {
+    setIsSubmitting(true);
+  };
+
+  const actionButtons: Array<React.ReactNode> = [
+    <Box ml={{ mobile: 12, desktop: 0 }}>
+      <PrimaryIconButton
+        isLoading={isLoading}
+        type="submit"
+        buttonTitle="Save Changes"
+        onClick={triggerSubmission}
+        customStyle={{
+          ...submitButton,
+          width: { mobile: '60px', desktop: '171' }
+        }}
+      />
+    </Box>
+  ];
+
+  if (isLoading) {
+    return (
+      <Box m={16}>
+        <FormSkeleton noOfLoaders={5} />
+      </Box>
+    );
+  }
 
   return (
     <>
-      <TopActionsArea customStyle={{ width: '100%' }} />
+      <TopActionsArea
+        customStyle={{ width: '100%' }}
+        actionButtons={actionButtons}
+      />
       <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
-        <Stack direction={setDirection()}>
+        <Stack direction="row">
           <Box
             mr={3}
             sx={{
               width: '50%',
-              padding: { mobile: 0, tablet: '30px 0' },
+              padding: { mobile: 0, tablet: '30px 0' }
             }}
           >
-            <ChangePasswordForm />
-          </Box>
-          <Box
-          mt={{ mobile: 2, desktop: 0 }}
-            sx={{
-              padding: { mobile: 6, tablet: '30px 32px' },
-              alignItems: { mobile: 'center', tablet: 'normal' },
-              width: '50%',
-              borderLeft: `1px solid ${colors.neutral300}`,
-            }}
-          >
-            <LargeTitle title="Permissions" />
-            <Box mt={2}>
-              <RadioButtons
-                options={[
-                  { label: 'Yes', value: 'yes' },
-                  { label: 'No', value: 'no' },
-                ]}
-                title="Can this user Login?"
-                name="status"
-                value="active"
-              />
-            </Box>
-            <Box mt={2}>
-              <RadioButtons
-                options={[
-                  { label: 'Yes', value: 'yes' },
-                  { label: 'No', value: 'no' },
-                ]}
-                title="Allow Multiple Login?"
-                name="status"
-                value="active"
-              />
-            </Box>
-            <Box mt={2}>
-              <RadioButtons
-                options={[
-                  { label: 'Yes', value: 'yes' },
-                  { label: 'No', value: 'no' },
-                ]}
-                title="Status Locked?"
-                name="status"
-                value="active"
-              />
-            </Box>
+            <ChangePasswordForm
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+              userid={userid}
+              fullname={fullname}
+              roles={roles}
+              departments={departments}
+            />
           </Box>
         </Stack>
       </Box>

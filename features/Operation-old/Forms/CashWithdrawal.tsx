@@ -18,28 +18,28 @@ import {
   ButtonContainer,
   ButtonApprove,
   ButtonApproveTitle,
-  ButtonReset,
+  ButtonReset
 } from './style';
 import Grid from '@mui/material/Grid';
 import {
   FormTextInput,
   FormSelectField,
-  TextFieldArea,
+  TextFieldArea
 } from '@/components/FormikFields';
 import { PrimaryIconButton } from '@/components/Buttons';
 import Button from '@mui/material/Button';
 import {
   CurrencyOperation,
-  EditOperations,
+  EditOperations
 } from '@/constants/OperationOptions';
 import { AccountInfoIcons, PersonalInfoLine } from '@/assets/svg';
 import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import {
   ModalBackButton,
   ModalSaveButton,
-  ResetButton,
+  ResetButton
 } from '@/components/Modal/styles';
 import { ButtonForms } from './ButtonForm';
 import { ModalActions } from '@/components/Shared/ActionButtons';
@@ -54,7 +54,7 @@ export const ModalBackStyle = {
   color: `${colors.neutral900}`,
   backgroundColor: `${colors.white}`,
   borderRadius: '8px',
-  border: `1px solid ${colors.neutral300}`,
+  border: `1px solid ${colors.neutral300}`
 };
 
 export const CashWithDrawal = () => {
@@ -262,10 +262,10 @@ export const CashWithDrawal = () => {
                         width: {
                           desktop: '250px',
                           mobile: '40px',
-                          tablet: '250px',
+                          tablet: '250px'
                         },
                         flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        alignItems: 'flex-start'
                       }}
                       ml={{ mobile: 7, tablet: 0 }}
                       justifyContent="center"
@@ -276,7 +276,7 @@ export const CashWithDrawal = () => {
                         options={CurrencyOperation.currency}
                         label="Currency"
                         customStyle={{
-                          width: setWidth(),
+                          width: setWidth()
                         }}
                       />
                     </Box>
@@ -294,10 +294,10 @@ export const CashWithDrawal = () => {
                         width: {
                           desktop: '400px',
                           mobile: '40px',
-                          tablet: '200px',
+                          tablet: '200px'
                         },
                         flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        alignItems: 'flex-start'
                       }}
                       ml={{ mobile: 7, tablet: 0 }}
                       justifyContent="center"
@@ -308,7 +308,7 @@ export const CashWithDrawal = () => {
                         placeholder="Enter rate"
                         label="Rate"
                         customStyle={{
-                          width: setWidth(),
+                          width: setWidth()
                         }}
                       />
                     </Box>
@@ -324,7 +324,7 @@ export const CashWithDrawal = () => {
                   <Box
                     sx={{
                       marginRight: '20px',
-                      width: { tablet: '350px' },
+                      width: { tablet: '350px' }
                     }}
                     ml={{ mobile: 7, tablet: 0 }}
                     justifyContent="center"
@@ -335,7 +335,7 @@ export const CashWithDrawal = () => {
                       placeholder="Enter Transaction"
                       label="Transaction Amount"
                       customStyle={{
-                        width: setWidth(),
+                        width: setWidth()
                       }}
                     />
                   </Box>

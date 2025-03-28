@@ -1,0 +1,40 @@
+'use client';
+import React, { useState } from 'react';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { stepTitle, formContainer } from './styles';
+import { BusinessMainSection } from './BusinessMainSection';
+import { ProgressBar } from '@/components/ProgressBar';
+import {
+  FormOne,
+  FormTwo
+} from '@/features/Setup-old/Forms/BusinessSetupForms';
+
+export const BusinessSetup = () => {
+  const [step, setStep] = useState<number>(1);
+  const maxSteps = 2;
+  const progress = step === 1 ? 50 : 100;
+
+  const handleSetStep = (isNext: boolean) => {
+    if (!isNext && step === 1) return;
+    if (isNext && step === maxSteps) return;
+    if (isNext) return setStep(step + 1);
+    setStep(step - 1);
+  };
+
+  const stepMapper = {
+    '1': <FormOne setStep={handleSetStep} />,
+    '2': <FormTwo setStep={handleSetStep} />
+  };
+
+  return (
+    <Box sx={{ width: { desktop: '100%' }, marginTop: '60px' }}>
+      <ProgressBar progress={progress} />
+      <Typography sx={stepTitle}>Step {step}/2</Typography>
+      <BusinessMainSection />
+      <Box sx={formContainer}>
+        {(stepMapper as { [key: number]: React.ReactNode })[step]}
+      </Box>
+    </Box>
+  );
+};

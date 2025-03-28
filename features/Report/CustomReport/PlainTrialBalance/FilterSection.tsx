@@ -1,87 +1,144 @@
 import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
+import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
-import { allBranchesStyle } from '@/features/Report/Overview/styles';
-import { TextInput } from '@/components/FormikFields';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import { exportData, dateFilter, inputFields } from '../style';
+import {
+  FormTextInput,
+  FormSelectField,
+  FormikRadioButton
+} from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
-import { ChevronDown } from '@/assets/svg';
-import { labelTypography } from '@/components/FormikFields/styles';
-import {
-  Wrapper,
-  branchOptions,
-  selectButton,
-} from '@/features/Report/CustomReport/ChartAccount/FilterSection';
-import { inputFields } from '@/features/Report/CustomReport/DrillDown/style';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { ExportIcon } from '@/assets/svg';
 
-export const RadioOption = [
-  { value: 'mainAction', label: 'Trial Balance' },
-  { value: 'profit', label: 'Profit & Loss ' },
-];
+import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { useCurrentBreakpoint } from '@/utils';
+import { IBranches } from '@/api/ResponseTypes/general';
+import { ISearchParams } from '@/app/api/search/route';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { plainTrailBalanceSchema } from '@/schemas/reports';
+import { getCurrentIsoDate } from '@/utils/getCurrentDate';
 
-export const FilterSection = () => {
+type Props = {
+  branches?: IBranches[];
+  onSearch?: Function;
+};
+
+export const FilterSection = ({ branches, onSearch }: Props) => {
   const { setDirection } = useSetDirection();
+  const { setWidth } = useCurrentBreakpoint();
+  const { mappedBranches } = useMapSelectOptions({
+    branches
+  });
 
+  const onSubmit = async (values: any) => {
+    const params: ISearchParams = {
+      branchID: values.branchID ? values.branchID : null,
+      reportType: values.reportType ? values.reportType : null,
+      searchWith: values.searchWith ? values.searchWith : null,
+      reportDate: `${getCurrentIsoDate()}`,
+
+      getAll: false
+    };
+    onSearch?.(params);
+  };
   return (
-    <Box>
-      <Stack direction={setDirection()}>
-        <Box>
-          <RadioButtons
-            options={RadioOption}
-            title="Select Report Type"
-            value="mainAction"
-            name="reportType"
-          />
-        </Box>
-        <Wrapper>
-          <Typography sx={labelTypography}>Branch ID</Typography>
-          <ActionButtonWithPopper
-            searchGroupVariant="BasicSearchGroup"
-            options={branchOptions}
-            customStyle={{
-              ...allBranchesStyle,
-              ...selectButton,
+    <Box marginTop={10}>
+      <Formik
+        initialValues={searchFilterInitialValues}
+        onSubmit={(values) => onSubmit(values)}
+        validationSchema={plainTrailBalanceSchema}
+      >
+        <Form>
+          <Box
+            sx={{
+              marginTop: '20px',
+              paddingX: '24px'
             }}
-            icon={
-              <ChevronDown
-                color={`${colors.Heading}`}
-                props={{
-                  position: 'relative',
-                  marginRight: '70px',
-                  width: '12px',
-                  height: '12px',
-                }}
-              />
-            }
-            iconPosition="end"
-            buttonTitle="Select"
-          />
-        </Wrapper>
+          >
+            <Box>
+              <Grid container spacing={2}>
+                <Grid
+                  mb={{ tablet: 6 }}
+                  item
+                  mobile={12}
+                  tablet={3}
+                  justifyContent="center"
+                >
+                  <FormikRadioButton
+                    options={[
+                      { label: 'Balance Sheet', value: '1' },
+                      { label: 'Profit & Loss', value: '0' }
+                    ]}
+                    title="Select Report Type"
+                    name="reportType"
+                    value="1"
+                  />
+                </Grid>
 
-        <Box mt={4.5} mr={4}>
-          <TextInput
-            name="Search"
-            placeholder="Search"
-            icon={<SearchIcon />}
-            customStyle={{ ...inputFields }}
-          />
-        </Box>
-        <Box mt={4.5}>
-          <ActionButton
-            customStyle={{
-              backgroundColor: `${colors.activeBlue400}`,
-              border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
-            }}
-            buttonTitle="Search"
-          />
-        </Box>
-      </Stack>
+                <Grid item mobile={12} tablet={3} justifyContent="center">
+                  <FormSelectField
+                    customStyle={{
+                      width: setWidth(),
+                      ...inputFields
+                    }}
+                    name="branchID"
+                    options={mappedBranches}
+                    label="Branch Name"
+                  />{' '}
+                </Grid>
+
+                <Grid
+                  mb={{ tablet: 6 }}
+                  item
+                  mobile={12}
+                  tablet={5}
+                  justifyContent="center"
+                >
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(),
+                      ...inputFields
+                    }}
+                    icon={<SearchIcon />}
+                    name="searchWith"
+                    placeholder="Search"
+                    label="Search"
+                  />{' '}
+                </Grid>
+
+                <Grid
+                  item
+                  mobile={12}
+                  tablet={1}
+                  sx={{ display: 'flex' }}
+                  justifyContent="flex-end"
+                  mt={{ tablet: 3.2 }}
+                  mr={{ mobile: 30, tablet: 0 }}
+                  mb={{ mobile: 6, tablet: 0 }}
+                >
+                  <ActionButton
+                    customStyle={{
+                      backgroundColor: `${colors.activeBlue400}`,
+                      border: `1px solid ${colors.activeBlue400}`,
+                      color: `${colors.white}`
+                    }}
+                    type="submit"
+                    buttonTitle="Search"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Form>
+      </Formik>
     </Box>
   );
 };

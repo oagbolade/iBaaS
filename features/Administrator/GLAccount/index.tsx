@@ -1,18 +1,24 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { DeleteConfirmationModal } from '../Forms/DeleteConfirmationModal';
 import { FilterSection } from './FilterSection';
+import { COLUMNS } from './COLUMNS';
+import { TableActionMenu } from './TableActionMenu';
 import { AdminContainer } from '@/features/Administrator/AdminContainer';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
-import { ToastMessage } from '@/components/Revamp/ToastMessage';
-import { ModalContainerV2 } from '@/components/Revamp/Modal';
+import { MuiTableContainer } from '@/components/Table';
+import { useFilterGLAccountSearch } from '@/api/admin/useCreateGLAccount';
+import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
+import { ISearchParams } from '@/app/api/search/route';
+import { SearchGLAccountResponse } from '@/api/ResponseTypes/admin';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetBranches } from '@/api/general/useBranches';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 
 const actionButtons: any = [
   <Link href="/admin/gl-account/create">
@@ -20,46 +26,38 @@ const actionButtons: any = [
       buttonTitle="Create General Ledger"
       customStyle={{ ...submitButton, width: '236px', height: '40px' }}
     />
-  </Link>,
+  </Link>
 ];
 
 export const GLAccount = () => {
-  const [deleteStep, setDeleteStep] = useState<
-    null | 'isConfirmation' | 'showToast' | 'password'
-  >(null);
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [page, setPage] = React.useState(1);
 
-  const toastMessageMapper = {
-    userDelete: {
-      title: 'User Deleted',
-      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.',
-    },
-    userCreated: { title: '', body: '' },
-    userReset: { title: '', body: '' },
-    userLocked: { title: '', body: '' },
+  const {
+    totalPages,
+    totalElements,
+    data: glData,
+    isLoading: isGLDataLoading
+  } = useFilterGLAccountSearch({
+    ...searchParams,
+    page
+  });
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearchParams(params);
+    setSearch(true);
   };
 
-  useEffect(() => {
-    if (deleteStep === 'showToast') {
-      setTimeout(() => {
-        setDeleteStep(null);
-      }, 3000);
-    }
-  }, [deleteStep]);
-
-  const handleDelete = (
-    currentStep: null | 'isConfirmation' | 'showToast' | 'password' = null,
-  ) => {
-    setDeleteStep(currentStep);
+  const ActionMenuProps = ({
+    glNumber
+  }: {
+    glNumber: string;
+  }): React.ReactElement => {
+    return <TableActionMenu glNumber={glNumber} />;
   };
+  const { branches } = useGetBranches();
 
-  const ActionMenuProps: React.FC = () => {
-    return (
-      <Link href="/admin/gl-account/create?isEditing=true">
-        {' '}
-        <TableSingleAction actionName="Edit" />
-      </Link>
-    );
-  };
   return (
     <>
       <TopActionsArea
@@ -68,43 +66,69 @@ export const GLAccount = () => {
         actionButtons={actionButtons}
       />
       <AdminContainer>
-        <FilterSection />
+        {branches && (
+          <FilterSection branches={branches} onSearch={handleSearch} />
+        )}
         <Box
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
-          <MuiTableContainer
-            columns={MOCK_COLUMNS}
-            data={MOCK_DATA}
-            tableConfig={{
-              hasActions: true,
-            }}
-            ActionMenuProps={ActionMenuProps}
-          />
+          {isGLDataLoading ? (
+            <FormSkeleton noOfLoaders={3} />
+          ) : (
+            <MuiTableContainer
+              columns={COLUMNS}
+              tableConfig={{
+                hasActions: true
+              }}
+              data={glData}
+              setPage={setPage}
+              page={page}
+              totalPages={totalPages}
+              totalElements={totalElements}
+            >
+              {search ? (
+                glData?.map(
+                  (dataItem: SearchGLAccountResponse, index: number) => {
+                    return (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem.glnumber}
+                        </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem.acctName}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {formatDateAndTime(dataItem.dateOpened)}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {formatCurrency(dataItem.bkbalance)}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          <ActionMenuProps glNumber={dataItem.glnumber} />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  }
+                )
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell
+                    colSpan={COLUMNS.length + 1}
+                    component="th"
+                    scope="row"
+                  >
+                    {renderEmptyTableBody()}
+                  </StyledTableCell>
+                </StyledTableRow>
+              )}
+            </MuiTableContainer>
+          )}
         </Box>
         <Box />
-        {deleteStep === 'showToast' && (
-          <ToastMessage
-            title={toastMessageMapper.userDelete.title}
-            body={toastMessageMapper.userDelete.body}
-          />
-        )}
-        {deleteStep !== null && deleteStep !== 'showToast' && (
-          <ModalContainerV2
-            handleClose={handleDelete}
-            form={
-              <DeleteConfirmationModal
-                modalTitle=""
-                modalDescription=""
-                deleteStep={deleteStep}
-                handleClose={handleDelete}
-              />
-            }
-          />
-        )}
       </AdminContainer>
     </>
   );

@@ -1,85 +1,115 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { FormSelectInput, TextInput } from '@/components/FormikFields';
+import { Formik, Form } from 'formik';
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
-import { Loan } from '@/constants/Loan/selectOptions';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
+import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { ISearchParams } from '@/app/api/search/route';
+import { IBranches } from '@/api/ResponseTypes/general';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { searchFieldsSchema } from '@/schemas/common';
 
 type Props = {
-  onSearch: () => void | undefined | number;
+  onSearch: Function;
+  branches: IBranches[];
 };
 
-export const FilterSection = ({ onSearch }: Props) => {
+export const FilterSection = ({ onSearch, branches }: Props) => {
+  const { mappedBranches } = useMapSelectOptions({ branches });
   const { setWidth } = useCurrentBreakpoint();
 
+  const onSubmit = async (values: any) => {
+    const statusOption = document.getElementsByClassName(
+      'statusOption'
+    ) as HTMLCollectionOf<HTMLInputElement>;
+    const status = statusOption[0].value || '';
+
+    const params: ISearchParams = {
+      status: status?.trim().length > 0 ? status : null,
+      branchID: values.branchID.toString().length > 0 ? values.branchID : null,
+      fullName: values.search.toString().length > 0 ? values.search : null
+    };
+
+    onSearch(params);
+  };
+
   return (
-    <Box>
-      <Grid container spacing={2}>
-        <Grid item mobile={12} tablet={2} justifyContent="center">
-          <RadioButtons
-            options={[
-              { label: 'Active', value: 'active' },
-              { label: 'Deleted', value: 'deleted' },
-            ]}
-            title="User Status"
-            name="status"
-            value="active"
-          />
-        </Grid>
-        <Grid
-          mb={{ tablet: 6 }}
-          item
-          mobile={12}
-          tablet={2}
-          justifyContent="center"
-        >
-          <FormSelectInput
-            customStyle={{
-              width: setWidth(),
-              fontSize: '14px',
-              ...inputFields,
-            }}
-            name="loanStatus"
-            options={Loan.status}
-            label="Branch ID"
-            placeholder="Please Enter"
-          />{' '}
-        </Grid>
-        <Grid
-          mb={{ tablet: 6 }}
-          item
-          mobile={12}
-          tablet={7}
-          justifyContent="center"
-        >
-          <TextInput
-            customStyle={{
-              width: setWidth(),
-              fontSize: '14px',
-              ...inputFields,
-            }}
-            icon={<SearchIcon />}
-            name="search"
-            placeholder="Search"
-            label="Search"
-          />{' '}
-        </Grid>
-        <Grid
-          item
-          mobile={12}
-          tablet={1}
-          sx={{ display: 'flex' }}
-          justifyContent="flex-end"
-          mt={{ tablet: 3.2 }}
-          mr={{ mobile: 30, tablet: 0 }}
-          mb={{ mobile: 6, tablet: 0 }}
-        >
-          <ActionButton onClick={onSearch} buttonTitle="Search" />
-        </Grid>
-      </Grid>
-    </Box>
+    <Formik
+      initialValues={searchFilterInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={searchFieldsSchema}
+    >
+      <Form>
+        <Box>
+          <Grid container spacing={2}>
+            <Grid item mobile={12} tablet={2} justifyContent="center">
+              <RadioButtons
+                className="statusOption"
+                options={[
+                  { label: 'Active', value: '1' },
+                  { label: 'In Active', value: '3' }
+                ]}
+                title="User Status"
+                name="status"
+                value=""
+              />
+            </Grid>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={2}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                name="branchID"
+                options={mappedBranches}
+                label="Branch ID"
+              />{' '}
+            </Grid>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={7}
+              justifyContent="center"
+            >
+              <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="search"
+                placeholder="Enter name"
+                label="Search By User Name"
+              />{' '}
+            </Grid>
+            <Grid
+              item
+              mobile={12}
+              tablet={1}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton type="submit" buttonTitle="Search" />
+            </Grid>
+          </Grid>
+        </Box>
+      </Form>
+    </Formik>
   );
 };

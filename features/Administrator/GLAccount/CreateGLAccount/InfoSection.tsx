@@ -11,30 +11,35 @@ export const InfoSection = () => {
       alignContent="center"
       sx={{
         width: '100%',
-        height: '64px',
+        height: { desktop: '64px', mobile: '80px' },
         padding: '12px 16px',
         borderRadius: '8px',
         border: `1px solid ${colors.neutral300}`,
         background: `${colors.lightGrey}`,
+        justifyContent: 'flex-start',
+        textWrap: 'wrap',
+        wordWrap: 'break-word'
       }}
     >
       <InfoOutlinedIcon
         sx={{
-          color: `${colors.primaryBlue}`,
+          color: `${colors.primaryBlue}`
         }}
       />
       <Typography
         ml={1}
         mt={0.3}
         sx={{
-          width: '200px',
+          width: 'auto',
           color: `${colors.neutral900}`,
           fontSize: '14px',
           fontWeight: 400,
           lineHeight: '20px',
+          textWrap: 'wrap',
+          wordWrap: 'break-word'
         }}
       >
-        System Posting Account incudes all Customer Account Related General
+        System Posting Account includes all Customer Account Related General
         Ledgers
       </Typography>
     </Stack>

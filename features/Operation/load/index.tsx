@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import {
   cardsDetailsContainer,
-  customReportContainer,
+  customReportContainer
 } from '@/features/Report/CustomReport/style';
 import { CustomCardsReports } from '@/components/CustomCardsReports/CustomCardsReports';
 import { TextInput } from '@/components/FormikFields';
@@ -21,14 +21,14 @@ export const LoanContainer = () => {
             <CustomCardsReports
               title="Collection"
               link="/operation/collection"
-              description="Optimize your financial transactions effortlessly, ensuring streamlined processing and enhanced clarity in transaction records."
+              description="Process Loan repayment from a group"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
               link="/operation/disbursement"
               title="Disbursement"
-              description="Seal the deal confidently, ensuring a smooth and secure release of funds for your financial milestones."
+              description="Payout Loan to a group"
             />
           </Box>
         </Box>

@@ -10,7 +10,7 @@ import {
   doughnutData,
   doughnutOptions,
   lineOptions,
-  linedata,
+  linedata
 } from '@/constants/Reports/graphs';
 
 export const OverView = () => {
@@ -19,7 +19,7 @@ export const OverView = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection />
@@ -176,7 +176,7 @@ export const OverView = () => {
 
         <Grid item desktop={6}>
           <ReportSummary
-            filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
+            filter={['ALL_BRANCHES']}
             title="Inflow/Outflow"
             link="/report/custom-report/cheque-book"
           >

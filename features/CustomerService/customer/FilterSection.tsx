@@ -1,76 +1,98 @@
 import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { inputFields } from './style';
-import { allBranchesStyle } from '@/features/Report/Overview/styles';
-import { TextInput } from '@/components/FormikFields';
-import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton,
-} from '@/components/Revamp/Buttons';
-import { ChevronDown } from '@/assets/svg';
-import { labelTypography } from '@/components/FormikFields/styles';
-import {
-  Wrapper,
-  branchOptions,
-  selectButton,
-} from '@/features/Report/CustomReport/ChartAccount/FilterSection';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { Formik, Form } from 'formik';
+import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
+import { ActionButton } from '@/components/Revamp/Buttons';
+import { inputFields } from '@/features/Loan/LoanDirectory/styles';
+import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { ISearchParams } from '@/app/api/search/route';
+import { IBranches } from '@/api/ResponseTypes/general';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { searchFieldsSchema } from '@/schemas/common';
 
-export const FilterSection = () => {
-  const { setDirection } = useSetDirection();
-  const { isMobile, setWidth } = useCurrentBreakpoint();
+type Props = {
+  onSearch?: Function;
+  branches?: IBranches[];
+};
+
+export const FilterSection = ({ onSearch, branches }: Props) => {
+  const { mappedBranches } = useMapSelectOptions({
+    branches
+  });
+  const { setWidth } = useCurrentBreakpoint();
+
+  const onSubmit = async (values: any) => {
+    const params: ISearchParams = {
+      branchID: `${values.branchID.trim().length > 0 ? values.branchID : null}`,
+      fullName: values.search.trim().length > 0 ? values.search : null
+    };
+
+    onSearch?.(params);
+  };
 
   return (
-    <Box>
-      <Stack direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
-        <Wrapper>
-          <Typography sx={labelTypography}>Branch ID</Typography>
-          <ActionButtonWithPopper
-            searchGroupVariant="BasicSearchGroup"
-            options={branchOptions}
-            customStyle={{
-              ...allBranchesStyle,
-              ...selectButton,
-            }}
-            icon={
-              <ChevronDown
-                color={`${colors.Heading}`}
-                props={{
-                  position: 'relative',
-                  marginRight: '70px',
-                  width: '12px',
-                  height: '12px',
+    <Formik
+      initialValues={searchFilterInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={searchFieldsSchema}
+    >
+      <Form>
+        <Box sx={{ height: '120px' }}>
+          <Grid container spacing={2}>
+            <Grid
+              mb={{ tablet: 3 }}
+              item
+              mobile={12}
+              tablet={5}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
                 }}
-              />
-            }
-            iconPosition="end"
-            buttonTitle="Select"
-          />
-        </Wrapper>
-        <Box mt={4.5} mr={4}>
-          <TextInput
-            name="Search"
-            placeholder="Search"
-            icon={<SearchIcon />}
-            customStyle={{
-              width: setWidth(isMobile ? '560px' : '980px'),
-            }}
-          />
+                name="branchID"
+                options={mappedBranches}
+                label="Branch ID"
+              />{' '}
+            </Grid>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
+              <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="search"
+                placeholder="Search by customer name"
+                label="Search"
+              />{' '}
+            </Grid>
+            <Grid
+              item
+              mobile={12}
+              tablet={1}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton type="submit" buttonTitle="Search" />
+            </Grid>
+          </Grid>
         </Box>
-        <Box mt={{ mobile: 3, tablet: 4.5 }}>
-          <ActionButton
-            customStyle={{
-              backgroundColor: `${colors.primaryBlue100}`,
-              border: `1px solid ${colors.primaryBlue500}`,
-              color: `${colors.primaryBlue500}`,
-            }}
-            buttonTitle="Search"
-          />
-        </Box>
-      </Stack>
-    </Box>
+      </Form>
+    </Formik>
   );
 };

@@ -28,7 +28,7 @@ export const MaturityLoan = () => {
             mainTitle: 'Maturity Loan',
             secondaryTitle:
               'See a directory of all Maturity Loan Report in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           columns={MOCK_COLUMNS}
           data={MOCK_DATA}

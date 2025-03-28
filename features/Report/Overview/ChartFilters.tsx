@@ -22,7 +22,7 @@ export const ChartFilters = ({ filter }: Props) => {
     'ID-475748  Festac Branch',
     'ID-475749  Yaba Branch',
     'ID-475750  Coker Branch',
-    'ID-475751  Somolu Branch',
+    'ID-475751  Somolu Branch'
   ];
 
   return (

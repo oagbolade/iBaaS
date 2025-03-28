@@ -7,7 +7,7 @@ export const BatchTitle = {
   fontWeight: 700,
   lineHeight: '36px',
   marginTop: '90px',
-  marginLeft: { mobile: '32px', tablet: '68px', desktop: '53px' },
+  marginLeft: { mobile: '32px', tablet: '68px', desktop: '53px' }
 };
 
 export const BatchContainer = {
@@ -22,7 +22,7 @@ export const BatchContainer = {
   marginRight: '10px',
   justifyContent: 'center',
   color: `${colors.batchColor}`,
-  margingBottom: { mobile: '30px', tablet: '0' },
+  margingBottom: { mobile: '30px', tablet: '0' }
 };
 
 export const PostingContainer = {
@@ -37,7 +37,7 @@ export const PostingContainer = {
   padding: '9px 10px',
   marginLeft: { tablet: '100px', mobile: '20px', desktop: '0' },
   color: `${colors.batchColor}`,
-  margingBottom: { mobile: '3px', tablet: '0' },
+  margingBottom: { mobile: '3px', tablet: '0' }
 };
 
 export const PostingTitle = {
@@ -48,7 +48,7 @@ export const PostingTitle = {
   lineHeight: '24px',
   width: '96px',
   height: '24px',
-  marginRigh: '120px',
+  marginRigh: '120px'
 };
 
 export const TitleStyle = {
@@ -56,13 +56,13 @@ export const TitleStyle = {
   fontSize: '12px',
   fontStyle: 'normal',
   fontWeight: 600,
-  lineHeight: '16px',
+  lineHeight: '16px'
 };
 export const PostingTitleContainer = {
   display: 'flex',
   marginLeft: '30px',
   marginTop: '10px',
-  margin: '30px',
+  margin: '30px'
 };
 export const AccountContainer = {
   display: 'flex',
@@ -72,7 +72,7 @@ export const AccountContainer = {
   gap: '15px',
   color: `${colors.gray500}`,
   width: '128px',
-  height: '61px',
+  height: '61px'
 };
 
 export const AccountTitle = {
@@ -81,14 +81,14 @@ export const AccountTitle = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '16px',
-  textTransform: 'uppercase',
+  textTransform: 'uppercase'
 };
 export const AccountPageTitle = {
   color: `${colors.gray500}`,
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 export const AccountSourceTitle = {
@@ -97,7 +97,7 @@ export const AccountSourceTitle = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 export const AccoutStatusTitle = {
@@ -106,7 +106,7 @@ export const AccoutStatusTitle = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 export const CustomStyle = {
@@ -121,12 +121,12 @@ export const CustomStyle = {
   color: `${colors.neutral600}`,
   width: '250px',
   height: '40px',
-  marginRight: '4px',
+  marginRight: '4px'
 };
 export const PersonalIcon = {
   marginBottom: '20px',
   display: 'flex',
-  marginTop: '10px',
+  marginTop: '10px'
 };
 
 export const CustomStyleInput = {
@@ -141,7 +141,7 @@ export const CustomStyleInput = {
   color: `${colors.neutral600}`,
   width: { desktop: '250px', mobile: '320px' },
   height: '40px',
-  marginRight: '50px',
+  marginRight: '50px'
 };
 
 export const CustomStyleText = {
@@ -154,7 +154,7 @@ export const CustomStyleText = {
   background: `${colors.neutral200}`,
   color: `${colors.neutral600}`,
   height: '50px',
-  width: '357px',
+  width: '357px'
 };
 
 export const ButtonContainer = {
@@ -166,7 +166,7 @@ export const ButtonContainer = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  margingTop: '40px',
+  margingTop: '40px'
 };
 
 export const ButtonApprove = {
@@ -181,7 +181,7 @@ export const ButtonApprove = {
   justifyContent: 'center',
   alignItems: 'center',
   gap: '8px',
-  marginLeft: '20px',
+  marginLeft: '20px'
 };
 
 export const ButtonApproveTitle = {
@@ -191,7 +191,7 @@ export const ButtonApproveTitle = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '24px',
-  color: `${colors.primaryBlue400}`,
+  color: `${colors.primaryBlue400}`
 };
 
 export const ButtonResetTitle = {
@@ -205,7 +205,7 @@ export const ButtonResetTitle = {
   flexShrink: 0,
   borderRadius: '6px',
   background: `${colors.white}`,
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const ButtonReset = {
@@ -218,7 +218,7 @@ export const ButtonReset = {
   gap: '8px',
   borderRadius: '8px',
   background: `${colors.white}`,
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const ButtonDeposit = {
@@ -230,7 +230,7 @@ export const ButtonDeposit = {
   alignItems: 'center',
   gap: '8px',
   borderRadius: '8px',
-  background: `${colors.activeBlue400}`,
+  background: `${colors.activeBlue400}`
 };
 
 export const ButtonPost = {
@@ -244,7 +244,7 @@ export const ButtonPost = {
   flexShrink: 0,
   borderRadius: '6px',
   background: `${colors.primaryBlue200}`,
-  color: `${colors.white}`,
+  color: `${colors.white}`
 };
 
 export const ButtonBack = {
@@ -259,5 +259,5 @@ export const ButtonBack = {
   borderRadius: '6px',
   border: `1px solid ${colors.primaryBlue400}`,
   background: `${colors.white}`,
-  color: `${colors.primaryBlue400}`,
+  color: `${colors.primaryBlue400}`
 };

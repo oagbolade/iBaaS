@@ -12,48 +12,63 @@ import {
   TableRow,
   Paper,
   Typography,
-  Stack,
+  Stack
 } from '@mui/material';
+import { sanitize } from 'dompurify';
 import { tableCard } from './styles';
 import { primaryTitle } from '@/components/Confirmation/styles';
 import colors from '@/assets/colors';
 import { TableSingleAction } from '@/components/Table';
+import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
+import { FormSkeleton } from '@/components/Loaders';
+import { IGetPendingRequest } from '@/api/ResponseTypes/loans';
+import { renderEmptyTableBody } from '@/components/Revamp/TableV2/TableV2';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     color: theme.palette.common.black,
-    background: `${colors.neutral200}`,
+    background: `${colors.neutral200}`
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
   // hide last border
   '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+    border: 0
+  }
 }));
 
-function createData(name: string, requestedBy: string, requestedDate: string) {
-  return { name, requestedBy, requestedDate };
-}
-
-const rows = [
-  createData('Loan Cancellation', 'Azeez Babalola', '23 October 2023. 11:04pm'),
-  createData('Partial Payoff', 'Daura Ahmed', '23 October 2023. 11:04pm'),
-  createData('Loan Cancellation', 'Usman Daura', '23 October 2023. 11:04pm'),
-  createData('Loan Cancellation', 'Chinedu Eze', '23 October 2023. 11:04pm'),
-];
-
+type Props = {
+  id: string;
+};
 export const PendingTasks = () => {
+  const { authsdetails, isLoading } = useGetPendingRequest();
+  const pendingData = authsdetails?.length || 0;
+
+  const ActionMenu = ({ id }: Props): React.ReactElement => {
+    return (
+      <Link
+        href={`/requests/view-single-pending-request/?authid=${sanitize(id)}`}
+      >
+        <TableSingleAction actionName="View" />
+      </Link>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <Box my={6}>
+        <FormSkeleton noOfLoaders={5} />
+      </Box>
+    );
+  }
   return (
     <Box mt={2} sx={tableCard}>
-      <Stack mb={2} direction='row'>
-      <Typography sx={primaryTitle}>
-        Pending tasks{' '}
-      </Typography>
+      <Stack mb={2} direction="row">
+        <Typography sx={primaryTitle}>Pending tasks </Typography>
         <Box
           ml={1}
           mt={0.6}
@@ -65,37 +80,40 @@ export const PendingTasks = () => {
             fontSize: '12px',
             fontWeight: 500,
             width: '30px',
-            height: '22px',
+            height: '22px'
           }}
         >
-          14
-          </Box>
-          </Stack>
+          {pendingData}
+        </Box>
+      </Stack>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <StyledTableCell>Request Type</StyledTableCell>
               <StyledTableCell>Requested By</StyledTableCell>
-              <StyledTableCell>Release Date</StyledTableCell>
               <StyledTableCell />
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
+            {authsdetails?.slice(0, 5).map((row: IGetPendingRequest) => (
+              <StyledTableRow key={row.id}>
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  {row?.authdesc}
                 </StyledTableCell>
-                <StyledTableCell>{row.requestedBy}</StyledTableCell>
-                <StyledTableCell>{row.requestedDate}</StyledTableCell>
+                <StyledTableCell>{row?.authid}</StyledTableCell>
                 <StyledTableCell>
-                  <Link href="/">
-                    <TableSingleAction actionName="View" />
-                  </Link>
+                  <ActionMenu id={row.id.toString()} />
                 </StyledTableCell>
               </StyledTableRow>
             ))}
+            {authsdetails?.length === 0 && (
+              <StyledTableRow>
+                <StyledTableCell colSpan={4} component="th" scope="row">
+                  {renderEmptyTableBody('No pending tasks')}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

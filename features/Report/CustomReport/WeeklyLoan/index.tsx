@@ -24,7 +24,7 @@ export const WeeklyLoan = () => {
             mainTitle: 'Weekly Loan Repayment',
             secondaryTitle:
               'See a directory of all Weekly Loan Repayments Report in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
         />

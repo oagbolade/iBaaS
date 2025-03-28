@@ -4,16 +4,34 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { TableActionMenu } from './TableActionMenu';
+import { COLUMNS } from './COLUMNS';
 import { DeleteConfirmationModal } from '@/features/Administrator/Forms/DeleteConfirmationModal';
 import { AdminContainer } from '@/features/Administrator/AdminContainer';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { MuiTableContainer } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
+import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
 import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
+import {
+  IAccountOfficers,
+  SearchAccountOfficersResponse
+} from '@/api/ResponseTypes/admin';
+import { useGetBranches } from '@/api/general/useBranches';
+import { FormSkeleton } from '@/components/Loaders';
+import { ISearchParams } from '@/app/api/search/route';
+import {
+  useDeleteAccountOfficer,
+  useFilterAccountOfficerSearch
+} from '@/api/admin/useAccountOfficer';
+import { ModalTitleDescriptionMapper } from '@/features/Administrator/Users';
+import { DeleteActionSteps } from '@/constants/Steps';
+import { useValidatePassword } from '@/api/admin/useAdminUsers';
+import { getStoredUser } from '@/utils/user-storage';
+import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
+import { useGetStatus } from '@/api/general/useStatus';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -23,49 +41,47 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' },
+          height: { mobile: '30px', desktop: '40px' }
         }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export const AccountOfficers = () => {
-  const [deleteStep, setDeleteStep] = useState<
-    | null
-    | 'isDisengageConfirmation'
-    | 'isDeactivateConfirmation'
-    | 'isDeactivatePassword'
-    | 'isDisengagePassword'
-    | 'showToast'
-  >(null);
-
-  interface IToastMapper {
-    title: string;
-    body: string;
-  }
-
-  type ToastMessageMapper = {
-    isDeactivatePassword: IToastMapper;
-    isDisengagePassword: IToastMapper;
-    officerCreated: IToastMapper;
-    officerEdited: IToastMapper;
-    [key: string]: IToastMapper;
+  const [deleteStep, setDeleteStep] = useState<DeleteActionSteps>(null);
+  const { mutate: validatePassword } = useValidatePassword();
+  const [currentOfficer, setCurrentOfficer] = useState<IAccountOfficers>();
+  const { mutate } = useDeleteAccountOfficer();
+  const toastMessageMapper = {
+    officerDelete: {
+      title: 'Officer Deleted',
+      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.'
+    }
   };
 
-  const toastMessageMapper: ToastMessageMapper = {
-    isDeactivatePassword: {
-      title: 'Account Officer Created',
-      body: '[Officer-name] has been successfully created.',
+  const modalTitleDescriptionMapper: ModalTitleDescriptionMapper = {
+    isDeleteConfirmation: {
+      title: 'Delete Officer',
+      body: 'When you delete an officer, the officer wont’t be able to access this platform, would you like to proceed?'
     },
-    isDisengagePassword: {
-      title: 'Officer Disengaged',
-      body: '[Officer-name] has been successfully disengaged.',
-    },
-    officerCreated: { title: '', body: '' },
-    officerEdited: { title: '', body: '' },
-    showToast: { title: 'Success', body: 'Action successfully completed' },
+    isPassword: { title: 'Delete User', body: '' }
   };
+
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const { branches } = useGetBranches();
+  const { status } = useGetStatus();
+  const [page, setPage] = React.useState(1);
+  const {
+    totalPages,
+    totalElements,
+    data: accountOfficerData,
+    isLoading: areAccountOfficersDataLoading
+  } = useFilterAccountOfficerSearch({
+    ...searchParams,
+    page
+  });
 
   useEffect(() => {
     if (deleteStep === 'showToast') {
@@ -75,47 +91,58 @@ export const AccountOfficers = () => {
     }
   }, [deleteStep]);
 
-  const handleDelete = (
-    currentStep:
-      | null
-      | 'isDisengageConfirmation'
-      | 'isDeactivateConfirmation'
-      | 'showToast'
-      | 'isDeactivatePassword'
-      | 'isDisengagePassword' = null,
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearchParams(params);
+    setSearch(true);
+  };
+
+  const refetch = () => {
+    handleSearch(searchParams);
+  };
+
+  const handleDelete = async (
+    currentStep: DeleteActionSteps = null,
+    officer: IAccountOfficers | null = null,
+    password: string | null = null
   ) => {
+    if (officer) {
+      setCurrentOfficer(officer);
+    }
+
+    if (currentStep === 'proceedToDelete') {
+      const body: ValidatePasswordRequest = {
+        oldpassword: password as string,
+        tenantid: getStoredUser()?.companyCode as string,
+        userid: getStoredUser()?.profiles.userid as string
+      };
+
+      await validatePassword?.(body);
+      await mutate?.(currentOfficer?.officercode);
+      setDeleteStep(null);
+
+      // do a refetch here
+      refetch();
+      return;
+    }
+
     setDeleteStep(currentStep);
   };
 
-  const modalTitle = (): string => {
-    const deactivate = ['isDeactivateConfirmation', 'isDeactivatePassword'];
-    const disengage = ['isDisengageConfirmation', 'isDisengagePassword'];
-    if (deactivate.includes(deleteStep as string)) {
-      return 'Deactivate Officer';
-    }
-
-    if (disengage.includes(deleteStep as string)) {
-      return 'Disengage Officer';
-    }
-
-    return '';
+  const ActionMenuProps = ({
+    officercode,
+    officer
+  }: {
+    officercode: string;
+    officer: IAccountOfficers;
+  }): React.ReactElement => {
+    return (
+      <TableActionMenu
+        officer={officer}
+        officercode={officercode}
+        handleDelete={handleDelete}
+      />
+    );
   };
-
-  const modalDescription = (): string => {
-    if (deleteStep === 'isDeactivateConfirmation') {
-      return 'When you deactivate an officer, the officer wont’t be able to access this platform any longer, would you like to proceed?';
-    }
-
-    if (deleteStep === 'isDisengageConfirmation') {
-      return 'When you disengage an officer, the officer wont’t be able to access this platform till you grant them access over again, would you like to proceed?';
-    }
-
-    return '';
-  };
-  const ActionMenuProps: React.FC = () => {
-    return <TableActionMenu handleDelete={handleDelete} />;
-  };
-
   return (
     <>
       <TopActionsArea
@@ -124,28 +151,80 @@ export const AccountOfficers = () => {
         actionButtons={actionButtons}
       />
       <AdminContainer>
-        <FilterSection />
+        {branches && status && (
+          <FilterSection
+            branches={branches}
+            status={status}
+            onSearch={handleSearch}
+          />
+        )}
         <Box
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
-          <MuiTableContainer
-            columns={MOCK_COLUMNS}
-            data={MOCK_DATA}
-            tableConfig={{
-              hasActions: true,
-            }}
-            ActionMenuProps={ActionMenuProps}
-          />
+          {areAccountOfficersDataLoading ? (
+            <FormSkeleton noOfLoaders={3} />
+          ) : (
+            <MuiTableContainer
+              columns={COLUMNS}
+              tableConfig={{
+                hasActions: true
+              }}
+              data={accountOfficerData}
+              setPage={setPage}
+              page={page}
+              totalPages={totalPages}
+              totalElements={totalElements}
+            >
+              {search ? (
+                accountOfficerData?.map(
+                  (dataItem: SearchAccountOfficersResponse) => {
+                    return (
+                      <StyledTableRow key={dataItem.officercode}>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem.officercode}
+                        </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem.staffID}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {dataItem.officerName}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {dataItem.deptName || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          <ActionMenuProps
+                            officercode={dataItem.officercode || 'N/A'}
+                            officer={dataItem}
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  }
+                )
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell
+                    colSpan={COLUMNS.length + 1}
+                    component="th"
+                    scope="row"
+                  >
+                    {renderEmptyTableBody(accountOfficerData)}
+                  </StyledTableCell>
+                </StyledTableRow>
+              )}
+            </MuiTableContainer>
+          )}
         </Box>
         <Box />
         {deleteStep === 'showToast' && (
           <ToastMessage
-            title={toastMessageMapper[deleteStep].title}
-            body={toastMessageMapper[deleteStep].body}
+            title={toastMessageMapper.officerDelete.title}
+            body={toastMessageMapper.officerDelete.body}
           />
         )}
         {deleteStep !== null && deleteStep !== 'showToast' && (
@@ -153,8 +232,12 @@ export const AccountOfficers = () => {
             handleClose={handleDelete}
             form={
               <DeleteConfirmationModal
-                modalTitle={modalTitle()}
-                modalDescription={modalDescription()}
+                modalTitle={`${
+                  modalTitleDescriptionMapper[deleteStep]?.title || ''
+                }`}
+                modalDescription={`${
+                  modalTitleDescriptionMapper[deleteStep]?.body || ''
+                }`}
                 deleteStep={deleteStep}
                 handleClose={handleDelete}
               />

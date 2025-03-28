@@ -11,14 +11,14 @@ import {
   templateUpload,
   templateUploadContainer,
   templateTitle,
-  documentUpload,
+  documentUpload
 } from '@/features/Operation/Forms/style';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { EditOperations } from '@/constants/OperationOptions';
 import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { CustomStyleI, userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -26,7 +26,7 @@ import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
   submitButton,
-  cancelButton,
+  cancelButton
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
 import { FileUploadPath, UploadDocument } from '@/assets/svg';
@@ -38,7 +38,7 @@ export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
     <PrimaryIconButton buttonTitle="Submit" customStyle={{ ...submitButton }} />
     ,
-  </Box>,
+  </Box>
 ];
 
 export const CreateMandate = () => {
@@ -46,7 +46,7 @@ export const CreateMandate = () => {
 
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
+    actions: { setSubmitting: (arg0: boolean) => void }
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -72,7 +72,7 @@ export const CreateMandate = () => {
                   placeholder="Enter Customer ID"
                   label="Customer ID"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
+                    width: setWidth(isMobile ? '250px' : '100%')
                   }}
                 />
               </Grid>
@@ -82,7 +82,7 @@ export const CreateMandate = () => {
                   placeholder="Enter Director ID"
                   label="Director ID"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
+                    width: setWidth(isMobile ? '250px' : '100%')
                   }}
                 />
               </Grid>
@@ -92,7 +92,7 @@ export const CreateMandate = () => {
                   placeholder="Enter Director Name"
                   label="Director Name"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
+                    width: setWidth(isMobile ? '250px' : '100%')
                   }}
                 />
               </Grid>

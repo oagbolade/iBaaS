@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import {
   cardsDetailsContainer,
-  customReportContainer,
+  customReportContainer
 } from '@/features/Report/CustomReport/style';
 import { CustomCardsReports } from '@/components/CustomCardsReports/CustomCardsReports';
 import { TextInput } from '@/components/FormikFields';
@@ -21,28 +21,28 @@ export const TransferContainer = () => {
             <CustomCardsReports
               title="Funds Transfer"
               link="/operation/fundsTransfer"
-              description="Enable proactive risk management by monitoring account within a financial institution that have incurred overdraft"
+              description="Process funds transfers within the same bank"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
               link="/operation/NIPTransfer"
               title="NIP Transfer"
-              description="View the TD maturity report to track the maturity dates of the Time deposit account and manage the corresponding action"
+              description="Process Interbank transfers connected through NIBBS"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
               link="/operation/posting"
               title="Batch Posting"
-              description="Detailed overview of the current status and details of active loans"
+              description="Process multiple related funds transfer"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
               link="/operation/bulkUpload"
               title="Bulk Upload"
-              description="Enable proactive risk management by monitoring account within a financial institution that have incurred overdraft"
+              description="Process and automate voluminous cash transactions with a guided template"
             />
           </Box>
         </Box>

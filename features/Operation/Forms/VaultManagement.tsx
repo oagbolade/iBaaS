@@ -1,276 +1,60 @@
 'use client';
 import React from 'react';
 import Box from '@mui/material/Box';
-import { BatchContainer, textInput } from './style';
-import Grid from '@mui/material/Grid';
-import { FormTextInput, FormSelectField } from '@/components/FormikFields';
-import { EditOperations } from '@/constants/OperationOptions';
-import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
-import { userInitialValues } from '@/constants/types';
-import { useCurrentBreakpoint } from '@/utils';
+import { BuyFromVault as BuyVaultForm } from './BuyFromVault';
+import { SellToVault as SellVaultForm } from './SellToVault';
+import {
+  submitButton,
+  cancelButton
+} from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { Tabs } from '@/components/Revamp/Tabs';
 import { TopActionsArea } from '@/components/Revamp/Shared';
-import { actionButtons } from './BatchPosting';
+import { PrimaryIconButton } from '@/components/Buttons';
+import { IBranches } from '@/api/ResponseTypes/general';
+import colors from '@/assets/colors';
 
-const PreviewFormOne = () => {
-  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+export const VaultManagement = ({ branches }: { branches: IBranches[] }) => {
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+  const tabTitle = ['Buy from Vault', 'Sell to Vault'];
 
-  const onSubmit = (
-    values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
-  ) => {
-    console.log({ values, actions });
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
+  const triggerSubmissionSubmit = () => {
+    setIsSubmitting(true);
   };
-  return (
-    <Formik
-      initialValues={userInitialValues}
-      onSubmit={(values, actions) => onSubmit(values, actions)}
-      validationSchema={userSchema}
-    >
-      <Form>
-        <Grid container spacing={2}>
-          <Box sx={BatchContainer}>
-            <Grid container item direction="column">
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter name"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormSelectField
-                    name="Select a Branch"
-                    options={EditOperations.department}
-                    label="Select a Branch"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter user"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter number"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter currency"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="Narration"
-                    placeholder="Enter Narration"
-                    label="Narration"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Form>
-    </Formik>
-  );
-};
-
-const PreviewFormTwo = () => {
-  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-
-  const onSubmit = (
-    values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
-  ) => {
-    console.log({ values, actions });
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
-  };
-  return (
-    <Formik
-      initialValues={userInitialValues}
-      onSubmit={(values, actions) => onSubmit(values, actions)}
-      validationSchema={userSchema}
-    >
-      <Form>
-        <Grid container spacing={2}>
-          <Box sx={BatchContainer}>
-            <Grid container item direction="column">
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter name"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormSelectField
-                    name="Select a Branch"
-                    options={EditOperations.department}
-                    label="Select a Branch"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter user"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter number"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="name"
-                    placeholder="Enter currency"
-                    label="Name"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item ml={{ tablet: 3, mobile: 3 }} justifyContent="center">
-                <Box
-                  sx={{ justifyContent: 'center' }}
-                  ml={{ desktop: 3, tablet: 3, mobile: 4 }}
-                >
-                  <FormTextInput
-                    name="Narration"
-                    placeholder="Enter Narration"
-                    label="Narration"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
-                    }}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Form>
-    </Formik>
-  );
-};
-
-const tabTitle = ['Buy from Vault', 'Sell to Vault'];
-const pageMenu = [<PreviewFormOne />, <PreviewFormTwo />];
-const PreviewContent: React.FC = () => {
-  return (
-    <Box sx={{ width: '100%' }} ml={35}>
-      <Tabs
-        tabTitle={tabTitle}
-        pageMenu={pageMenu}
-        customStyle={{ ...textInput }}
+  const actionButtons: any = [
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
+      <PrimaryIconButton
+        buttonTitle="Submit"
+        type="submit"
+        isLoading={isSubmitting}
+        onClick={triggerSubmissionSubmit}
+        customStyle={{
+          ...submitButton
+        }}
       />
     </Box>
-  );
-};
+  ];
 
-export const VaultManagement = () => {
+  const pageMenu = [
+    <BuyVaultForm
+      branches={branches}
+      isSubmitting={isSubmitting}
+      setIsSubmitting={setIsSubmitting}
+    />,
+
+    <SellVaultForm
+      branches={branches}
+      isSubmitting={isSubmitting}
+      setIsSubmitting={setIsSubmitting}
+    />
+  ];
+
   return (
     <Box sx={{ marginTop: '60px' }}>
       <TopActionsArea actionButtons={actionButtons} />
-      <Box sx={BatchContainer}>
-        <PreviewContent />
+      <Box>
+        <Box sx={{ width: '100%', padding: '25px' }}>
+          <Tabs tabTitle={tabTitle} pageMenu={pageMenu} />
+        </Box>
       </Box>
     </Box>
   );

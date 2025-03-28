@@ -13,7 +13,7 @@ export const PenaltyIncome = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <Box sx={{ width: '1300px' }}>
@@ -22,7 +22,7 @@ export const PenaltyIncome = () => {
       <Box
         sx={{
           padding: '25px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
@@ -32,7 +32,7 @@ export const PenaltyIncome = () => {
           tableConfig={{
             hasActions: false,
             paintedColumns: ['DR Product Balance', 'Total Balance'],
-            totalRow: ['Total Amount', '', '₦104,200.65', '₦321,654.65', ''],
+            totalRow: ['Total Amount', '', '₦104,200.65', '₦321,654.65', '']
           }}
           columns={MOCK_COLUMNS_V2}
           data={MOCK_DATA}
@@ -40,7 +40,7 @@ export const PenaltyIncome = () => {
           showHeader={{
             mainTitle: 'Penalty Income',
             secondaryTitle:
-              'See a directory of all Penalty Income Report in this system.',
+              'See a directory of all Penalty Income Report in this system.'
           }}
         />
       </Box>

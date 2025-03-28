@@ -5,14 +5,14 @@ import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButton,
-  ActionButtonWithPopper,
+  ActionButtonWithPopper
 } from '@/components/Revamp/Buttons';
 import { labelTypography } from '@/components/FormikFields/styles';
 import { ChevronDown } from '@/assets/svg';
 import { transactionVolumeStyle } from '@/features/Report/Overview/styles';
 import {
   Wrapper,
-  selectButton,
+  selectButton
 } from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
 import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
 import { useCurrentBreakpoint } from '@/utils';
@@ -46,7 +46,7 @@ export const FilterSection = () => {
               customStyle={{
                 ...transactionVolumeStyle,
                 ...selectButton,
-                width: '100%',
+                width: '100%'
               }}
               icon={
                 <ChevronDown
@@ -77,7 +77,7 @@ export const FilterSection = () => {
             customStyle={{
               backgroundColor: `${colors.activeBlue400}`,
               border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
+              color: `${colors.white}`
             }}
             buttonTitle="Search"
           />

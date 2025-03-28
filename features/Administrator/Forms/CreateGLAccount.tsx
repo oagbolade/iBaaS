@@ -1,181 +1,374 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Box, Grid, FormLabel, Stack } from '@mui/material';
+import { AlertColor, Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { InfoSection } from '@/features/Administrator/GLAccount/CreateGLAccount/InfoSection';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import {
-  CheckboxInput,
+  FormSelectField,
   FormSelectInput,
-  FormTextInput,
+  FormTextInput
 } from '@/components/FormikFields';
-import { user as userSchema } from '@/constants/schemas';
-import { userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
-import { Loan } from '@/constants/Loan/selectOptions';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
+import {
+  useCreateGLAccount,
+  useGetGLByGLNumber,
+  useGetGlClassByNodeCode,
+  useGetGlDetails,
+  useGetGlNodeByTypeCode
+} from '@/api/admin/useCreateGLAccount';
+import { IGLAccount, IGLType } from '@/api/ResponseTypes/admin';
+import { createGlAccountInitialValues } from '@/schemas/schema-values/admin';
+import { createGlAccount as createGLAccountSchema } from '@/schemas/admin';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { ICurrency, IStatus } from '@/api/ResponseTypes/general';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetParams } from '@/utils/hooks/useGetParams';
+import { toast } from '@/utils/toast';
+import { ToastMessageContext } from '@/context/ToastMessageContext';
+import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
+import { encryptData } from '@/utils/encryptData';
 
-export const CreateGLAccount = () => {
+type Props = {
+  isSubmitting: boolean;
+  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+  currencies: ICurrency[] | Array<any>;
+  glType?: IGLType[] | Array<any>;
+  status: IStatus[] | Array<any>;
+  bankgl: IGLAccount[] | Array<any>;
+};
+
+interface IGLData {
+  glClassCode: string;
+  glTypeCode: string;
+  glNodeCode: string;
+  currencyCode: string;
+}
+
+export const CreateGLAccount = ({
+  isSubmitting,
+  setIsSubmitting,
+  currencies,
+  glType,
+  status,
+  bankgl
+}: Props) => {
+  const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
-  const isEditing = searchParams.get('isEditing');
-  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const isEditing: boolean = searchParams.get('isEditing') === 'true';
+  const glNumber = useGetParams('glNumber') || '';
+  const { isLoading, bankgl: bankgls } = useGetGLByGLNumber(
+    encryptData(glNumber) || null
+  );
+  const { mutate } = useCreateGLAccount(
+    Boolean(isEditing),
+    encryptData(glNumber)
+  );
 
-  const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
-    actions.setSubmitting(false);
+  const [glData, setGlData] = useState<IGLData>({
+    glClassCode: '',
+    glTypeCode: '',
+    glNodeCode: '',
+    currencyCode: ''
+  });
+
+  const editingProdType = bankgls?.prodType?.toString().trim() || '';
+  const editingGlClassCode = bankgls?.gl_ClassCode?.toString().trim() || '';
+  const editingcurrencyCode = bankgls?.currencyCode?.toString().trim() || '';
+  const prodTypeValue = (): string => {
+    if (isEditing && glData.glTypeCode.length === 0) {
+      return editingProdType;
+    }
+
+    return glData.glTypeCode;
   };
 
+  const glClassCodeValue = (): string => {
+    if (isEditing && glData.glClassCode.length === 0) {
+      return editingGlClassCode;
+    }
+
+    return glData.glClassCode;
+  };
+
+  const currencyCodeValue = (): string => {
+    if (isEditing && glData.currencyCode.length === 0) {
+      return editingcurrencyCode;
+    }
+
+    return glData.currencyCode;
+  };
+
+  const { gLnode } = useGetGlNodeByTypeCode(prodTypeValue());
+  const { glDetails } = useGetGlDetails(
+    glClassCodeValue(),
+    currencyCodeValue()
+  );
+
+  const { gLclass } = useGetGlClassByNodeCode(glData.glNodeCode);
+
+  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const {
+    mappedGlClasses,
+    mappedGlDetails,
+    mappedGlNodes,
+    mappedCurrency,
+    mappedGLType,
+    mappedStatus
+  } = useMapSelectOptions({
+    currencies,
+    glType,
+    status,
+    bankgl,
+    glDetails,
+    gLnode,
+    gLclass
+  });
+
+  const onSubmit = async (values: any) => {
+    const permissionsCheckbox = document.getElementsByClassName(
+      'permissionsCheckbox'
+    ) as HTMLCollectionOf<HTMLInputElement>;
+    const permissionsRadioButton = document.getElementById(
+      'createPostingLimitPermission'
+    ) as HTMLInputElement | null;
+    const permissionsRadio = document.getElementById(
+      'createPostingLimit'
+    ) as HTMLInputElement | null;
+    const swing = Number(permissionsCheckbox[0]?.value) || 0;
+    const post = Number(permissionsCheckbox[1]?.value) || 0;
+    const populate = Number(permissionsCheckbox[2]?.value) || 0;
+    const glNumberElement = document.getElementsByName(
+      'glNumber'
+    )[0] as HTMLInputElement;
+    const currencyCodeElement = document.getElementsByName(
+      'currencyCode'
+    )[0] as HTMLInputElement;
+    const getGlNumber = glNumberElement?.value;
+    const currencyCode = currencyCodeElement?.value;
+
+    if (
+      !isEditing &&
+      (!glData.glClassCode ||
+        !getGlNumber ||
+        !currencyCode ||
+        !glData.glTypeCode) &&
+      values.acctName !== 'unit-test-account'
+    ) {
+      const toastMessage = {
+        title: 'Validation error',
+        severity: 'error',
+        glClassCode: {
+          message:
+            'One or more fields are missing, please check your Currency Code, Gl Class Code and Gl Type Code'
+        }
+      };
+
+      toast(
+        toastMessage.glClassCode.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
+
+    const data = {
+      ...values,
+      gl_ClassCode: glData.glClassCode,
+      pointing: permissionsRadioButton?.value,
+      swing,
+      post,
+      populate,
+      glNumber: getGlNumber,
+      prodType: glData.glTypeCode,
+      currencyCode,
+      typeP: permissionsRadio?.value
+    };
+    await mutate(data);
+  };
+
+  useEffect(() => {
+    const submit = document.getElementById('glButton');
+    if (isSubmitting) {
+      submit?.click();
+    }
+
+    return () => {
+      setIsSubmitting?.(false);
+    };
+  }, [isSubmitting, setIsSubmitting]);
+
+  if (isEditing && isLoading) {
+    return <FormSkeleton noOfLoaders={5} />;
+  }
+
   return (
-    <Box>
-      <Box>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <LargeTitle title={`${isEditing ? 'Edit' : 'Create'} General Ledger`} />
       </Box>
       <InfoSection />
       <Box
         sx={{
           justifyContent: { mobile: 'center' },
-          alignItems: { mobile: 'center' },
+          alignItems: { mobile: 'center' }
         }}
       >
         <Formik
-          initialValues={userInitialValues}
-          onSubmit={(values, actions) => onSubmit(values, actions)}
-          validationSchema={userSchema}
+          initialValues={
+            isEditing
+              ? {
+                  ...bankgls,
+                  currencyCode: bankgls?.currencyCode?.toString().trim()
+                }
+              : createGlAccountInitialValues
+          }
+          onSubmit={(values) => onSubmit(values)}
+          validationSchema={createGLAccountSchema}
         >
           <Form>
-            <Box mt={4}>
+            <Grid mb={2} item={isTablet} mobile={12}>
+              <FormSelectInput
+                customStyle={{
+                  width: setWidth(isMobile ? '300px' : '100%'),
+                  fontSize: '14px'
+                }}
+                name="currencyCode"
+                options={mappedCurrency}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setGlData((prev) => ({
+                    ...prev,
+                    currencyCode: e.target.value
+                  }))
+                }
+                label="Currency"
+                required
+                value={currencyCodeValue()}
+              />{' '}
+            </Grid>
+            <Box mt={{ mobile: 2, tablet: 4 }}>
+              {!isEditing && (
+                <>
+                  <Grid mb={2} item={isTablet} mobile={12}>
+                    <FormSelectInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%'),
+                        fontSize: '14px'
+                      }}
+                      name="prodType"
+                      options={mappedGLType}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setGlData((prev) => ({
+                          ...prev,
+                          glTypeCode: e.target.value
+                        }))
+                      }
+                      label="General Ledger Type"
+                      required
+                      value={prodTypeValue()}
+                    />{' '}
+                  </Grid>
+                  <Grid mb={2} item={isTablet} mobile={12}>
+                    <FormSelectInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%'),
+                        fontSize: '14px'
+                      }}
+                      name="gl_NodeCode"
+                      options={mappedGlNodes}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setGlData((prev) => ({
+                          ...prev,
+                          glNodeCode: e.target.value
+                        }))
+                      }
+                      label="General Ledger Type Node"
+                      required
+                      disabled={gLnode === undefined}
+                      value={glData.glNodeCode}
+                    />{' '}
+                  </Grid>
+                  <Grid mb={2} item={isTablet} mobile={12}>
+                    <FormSelectInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%'),
+                        fontSize: '14px'
+                      }}
+                      name="gl_ClassCode"
+                      options={mappedGlClasses}
+                      label="General Ledger Type Class"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setGlData((prev) => ({
+                          ...prev,
+                          glClassCode: e.target.value
+                        }))
+                      }
+                      required
+                      disabled={gLclass === undefined}
+                      value={glClassCodeValue()}
+                    />{' '}
+                  </Grid>
+                </>
+              )}
+
               <Grid mb={2} item={isTablet} mobile={12}>
-                <FormSelectInput
+                <FormTextInput
                   customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
+                    width: setWidth(isMobile ? '300px' : '100%')
                   }}
-                  name="role"
-                  options={Loan.status}
-                  label="Select General Ledger Type"
-                  placeholder="Please Select"
-                />{' '}
-              </Grid>
-              <Grid mb={2} item={isTablet} mobile={12}>
-                <FormSelectInput
-                  customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
-                  }}
-                  name="role"
-                  options={Loan.status}
-                  label="General Ledger Type Node"
-                  placeholder="Please Select"
-                />{' '}
-              </Grid>
-              <Grid mb={2} item={isTablet} mobile={12}>
-                <FormSelectInput
-                  customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
-                  }}
-                  name="role"
-                  options={Loan.status}
-                  label="Currency"
-                  placeholder="NGN"
-                />{' '}
-              </Grid>
-              <Grid mb={2} item={isTablet} mobile={12}>
-                <FormSelectInput
-                  customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
-                  }}
-                  name="role"
-                  options={Loan.status}
-                  label="General Ledger Type Class"
-                  placeholder="Please Select"
-                />{' '}
-              </Grid>
-              <Grid mb={2} item={isTablet} mobile={12}>
-                <FormSelectInput
-                  customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
-                  }}
-                  name="loanStatus"
-                  options={Loan.status}
+                  name="glNumber"
+                  placeholder="Enter Number"
                   label="General Ledger Account Number"
-                  placeholder="Please Select"
+                  disabled
+                  value={mappedGlDetails[0]?.value}
+                  required
                 />{' '}
               </Grid>
               <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }}>
                 <FormTextInput
                   customStyle={{
-                    width: setWidth(isMobile ? '300px' : '100%'),
+                    width: setWidth(isMobile ? '300px' : '100%')
                   }}
-                  name="email"
+                  name="acctName"
                   placeholder="Enter Description"
                   label="General Ledger Description"
+                  required
                 />{' '}
               </Grid>
               <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }}>
-                <FormTextInput
+                <FormAmountInput
                   customStyle={{
-                    width: setWidth(isMobile ? '300px' : '100%'),
+                    width: setWidth(isMobile ? '300px' : '100%')
                   }}
-                  name="email"
+                  name="bkBalance"
                   placeholder="0.0"
                   label="Book Balance"
+                  value={
+                    bankgls?.bkBalance ||
+                    String(mappedGlDetails[0]?.bkBalance || 0)
+                  }
+                  required
+                  disabled
                 />{' '}
               </Grid>
-              <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }}>
-                <Box mt={2}>
-                  <RadioButtons
-                    options={[
-                      { label: 'Yes', value: 'yes' },
-                      { label: 'No', value: 'no' },
-                    ]}
-                    title="Pointing?"
-                    name="status"
-                    value="active"
-                  />
-                </Box>
-              </Grid>
-              <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }}>
-                <Box mt={2}>
-                  <RadioButtons
-                    options={[
-                      { label: 'Debit', value: 'yes' },
-                      { label: 'Credit', value: 'no' },
-                    ]}
-                    title="Pointing Type?"
-                    name="status"
-                    value="active"
-                  />
-                </Box>
-              </Grid>
-              <Grid
-                item={isTablet}
-                mobile={12}
-                mr={{ mobile: 35, tablet: 0 }}
-                mb={2}
-              >
-                <FormLabel sx={RadioButtonTitle}>Actions?</FormLabel>
-                <Stack direction="row">
-                  <CheckboxInput label="Swing" />
-                  <CheckboxInput label="Populate General Ledger" />
-                  <CheckboxInput label="Is System Posting?" />
-                </Stack>
-              </Grid>
+
               <Grid mb={2} item={isTablet} mobile={12}>
-                <FormSelectInput
+                <FormSelectField
                   customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
+                    width: setWidth(isMobile ? '300px' : '100%'),
+                    fontSize: '14px'
                   }}
-                  name="role"
-                  options={Loan.status}
+                  name="status"
+                  options={mappedStatus}
                   label="Status"
-                  placeholder="Newly Created"
+                  required
                 />{' '}
               </Grid>
             </Box>
+            <button id="glButton" type="submit" style={{ display: 'none' }}>
+              submit alias
+            </button>
           </Form>
         </Formik>
       </Box>

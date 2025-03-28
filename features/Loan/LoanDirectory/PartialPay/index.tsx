@@ -1,106 +1,141 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
-import { LoanFormContainer } from '@/components/Revamp/Shared/LoanFormContainer';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Box, Stack } from '@mui/material';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
+import { TopActionsArea } from '@/components/Revamp/Shared';
 import {
   submitButton,
-  cancelButton,
+  cancelButton
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
-import {
-  Details,
-  MainTitle,
-  SubTitle,
-} from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { Status } from '@/components/Labels';
-import { LoanPartialPayOff } from '@/features/Loan/Forms';
+import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
+import { LoanPartialPayOff } from '@/features/Loan/Forms/LoanPartialPayOff';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import colors from '@/assets/colors';
+import { useCurrentBreakpoint, handleRedirect } from '@/utils';
+import LoanPreviewContent from '@/features/Loan/LoanDirectory/LoanPreviewContent';
+import { useGetLoanAccountByLoanAccountNumber } from '@/api/loans/useCreditFacility';
+import { encryptData } from '@/utils/encryptData';
 
-const PreviewContent: React.FC = () => {
+const MobilePreviewContent: React.FC<{ data?: any }> = ({ data }) => {
+  const searchParams = useSearchParams();
+  const accountNumber = searchParams.get('accountNumber') || '';
   return (
-    <Box
-      mt={{ mobile: 3 }}
-      sx={{
-        padding: { mobile: 6, tablet: 0 },
-        alignItems: { mobile: 'center', tablet: 'normal' },
-      }}
-    >
-      <MainTitle title="Loan Account Details" />
-
-      <SubTitle title="Settlement Account" />
-      <Details title="39483593939" />
-
-      <SubTitle title="Settlement Account Name" />
-      <Details title="Omodayo Oluwafunke" />
-
-      <SubTitle title="Loan Amount" />
-      <Details title="N1,800,320.54" />
-
-      <SubTitle title="Loan Purpose" />
-      <Details title="To buy equipments" />
-
-      <SubTitle title="Repayment Mode" />
-      <Details title="Equal principal & intrest" />
-
-      <SubTitle title="First Repayment Date" />
-      <Details title="02 January, 2023  11:03pm" />
-
-      <SubTitle title="Total No. of Installment" />
-      <Details title="4" />
-      <Box mb={{ mobile: 5, tablet: 0 }}>
-        <SubTitle title="Loan Status" />
-        <Status label="Active" status="success" />
-      </Box>
-    </Box>
+    <MobileModalContainer
+      ShowPreview={
+        <LoanPreviewContent accountNumber={accountNumber} data={data} />
+      }
+    />
   );
 };
 
-const FormFields: React.FC = () => {
-  return <LoanPartialPayOff />;
-};
+const FormFields: React.FC<{
+  isSubmitting: boolean;
+  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+  loanDetails: any;
+}> = ({ isSubmitting, setIsSubmitting, loanDetails }) => {
+  const searchParams = useSearchParams();
+  const accountNumber = searchParams.get('accountNumber') || '';
+  const settlementAccount = searchParams.get('settlementAccount');
 
-const MobilePreviewContent: React.FC = () => {
-  return <MobileModalContainer ShowPreview={<PreviewContent />} />;
+  return (
+    <LoanPartialPayOff
+      isSubmitting={isSubmitting}
+      setIsSubmitting={setIsSubmitting}
+      accountNumber={accountNumber}
+      settlementacct1={settlementAccount ?? ''}
+      loanDetails={loanDetails}
+    />
+  );
 };
 
 export const PartialPay = () => {
-  const [open, setOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const accountNumber = searchParams.get('accountNumber') || '';
+  const router = useRouter();
 
-  const showToastPlaceholder = (): void => {
-    setOpen(true);
+  const { setDirection } = useSetDirection();
+  const { isTablet } = useCurrentBreakpoint();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { isLoading } = useGlobalLoadingState();
+
+  const triggerSubmission = () => {
+    setIsSubmitting(true);
   };
 
-  useEffect(() => {
-    if (open) {
-      setTimeout(() => {
-        setOpen(false);
-      }, 3000);
-    }
-  }, [open]);
+  const { data } = useGetLoanAccountByLoanAccountNumber(
+    encryptData(accountNumber as string) || ''
+  );
+
+  const cancelAction = () => {
+    handleRedirect(router, '/loan/loan-directory/');
+  };
 
   const actionButtons: any = [
     <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
-      <ActionButton customStyle={{ ...cancelButton }} buttonTitle="Cancel" />,
+      <ActionButton
+        onClick={cancelAction}
+        customStyle={{ ...cancelButton }}
+        buttonTitle="Cancel"
+      />
+      ,
       <PrimaryIconButton
-        onClick={showToastPlaceholder}
+        isLoading={isLoading}
+        onClick={triggerSubmission}
         buttonTitle="Submit"
         customStyle={{ ...submitButton }}
       />
       ,
-    </Box>,
+    </Box>
   ];
+
   return (
-    <LoanFormContainer
-      ShowMobilePeview={MobilePreviewContent}
-      toastMessage={{
-        title: 'Partial Payoff Successful',
-        body: 'You have successfully done a partial payoff of [value] for [Account-name] and it has been sent for approval.',
-        open,
-      }}
-      FormFields={FormFields}
-      PreviewContent={PreviewContent}
-      actionButtons={actionButtons}
-    />
+    <Box>
+      <TopActionsArea actionButtons={actionButtons} />
+      <Box
+        sx={{
+          padding: { mobile: '0 5px', desktop: '0 25px' },
+          width: '100%'
+        }}
+      >
+        <MobilePreviewContent data={data} />
+        <Stack direction={setDirection()}>
+          <Box
+            sx={{
+              width: { mobile: '100%', desktop: '624px' },
+              padding: '32px'
+            }}
+          >
+            <FormFields
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+              loanDetails={data}
+            />
+          </Box>
+          {isTablet && (
+            <Box
+              sx={{
+                width: '477px',
+                padding: '32px',
+                gap: '24px',
+                borderLeft: `1px solid ${colors.neutral300}`,
+                background: `${colors.neutral100}`,
+                display: {
+                  tablet: 'block',
+                  mobile: 'none'
+                }
+              }}
+            >
+              <LargeTitle title="Preview" />
+              <Box mt={3} />
+              <LoanPreviewContent accountNumber={accountNumber} data={data} />
+            </Box>
+          )}
+        </Stack>
+      </Box>
+    </Box>
   );
 };

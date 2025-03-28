@@ -10,14 +10,14 @@ export const BalanceSheet = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '70px',
+        marginTop: '70px'
       }}
     >
       <TopOverViewSection useBackButton />
       <Box
         sx={{
           padding: '25px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <ShortCardWithAccordion column={column} data={data} />

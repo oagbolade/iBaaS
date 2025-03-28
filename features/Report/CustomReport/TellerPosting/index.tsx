@@ -24,7 +24,7 @@ export const TellerPosting = () => {
             mainTitle: 'Teller Posting',
             secondaryTitle:
               'See a directory of all teller posting in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
         />

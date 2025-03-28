@@ -4,7 +4,7 @@ import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { FormSelectInput, FormTextInput } from '@/components/FormikFields';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import { Loan } from '@/constants/Loan/selectOptions';
@@ -20,14 +20,14 @@ export const CreateGeneralLedger = () => {
   };
 
   return (
-    <Box>
-      <Box>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <LargeTitle title={`${isEditing ? 'Edit' : 'Create'} General Ledger`} />
       </Box>
       <Box
         sx={{
           justifyContent: { mobile: 'center' },
-          alignItems: { mobile: 'center' },
+          alignItems: { mobile: 'center' }
         }}
       >
         <Formik
@@ -36,12 +36,12 @@ export const CreateGeneralLedger = () => {
           validationSchema={userSchema}
         >
           <Form>
-            <Box mt={4}>
+            <Box mt={{ mobile: 2, tablet: 4 }}>
               <Grid mb={2} item={isTablet} mobile={12}>
                 <FormSelectInput
                   customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
+                    width: setWidth(isMobile ? '300px' : '100%'),
+                    fontSize: '14px'
                   }}
                   name="role"
                   options={Loan.status}
@@ -52,8 +52,8 @@ export const CreateGeneralLedger = () => {
               <Grid mb={2} item={isTablet} mobile={12}>
                 <FormSelectInput
                   customStyle={{
-                    width: setWidth(),
-                    fontSize: '14px',
+                    width: setWidth(isMobile ? '300px' : '100%'),
+                    fontSize: '14px'
                   }}
                   name="loanStatus"
                   options={Loan.status}
@@ -70,7 +70,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="staffId"
                     placeholder="0.0"
@@ -85,7 +85,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="staffName"
                     placeholder="0.0"
@@ -99,7 +99,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="email"
                     placeholder="0.0"
@@ -114,7 +114,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="email"
                     placeholder="0.0"
@@ -129,7 +129,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="email"
                     placeholder="0.0"
@@ -144,7 +144,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="email"
                     placeholder="0.0"
@@ -158,7 +158,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="email"
                     placeholder="0.0"
@@ -172,7 +172,7 @@ export const CreateGeneralLedger = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="email"
                     placeholder="0.0"
@@ -184,7 +184,7 @@ export const CreateGeneralLedger = () => {
                   <RadioButtons
                     options={[
                       { label: 'Yes', value: 'yes' },
-                      { label: 'No', value: 'no' },
+                      { label: 'No', value: 'no' }
                     ]}
                     title="Pointing?"
                     name="status"
@@ -195,7 +195,7 @@ export const CreateGeneralLedger = () => {
                   <RadioButtons
                     options={[
                       { label: 'Debit', value: 'yes' },
-                      { label: 'Credit', value: 'no' },
+                      { label: 'Credit', value: 'no' }
                     ]}
                     title="Pointing Type?"
                     name="status"

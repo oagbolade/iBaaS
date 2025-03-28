@@ -10,7 +10,7 @@ export const backButtonContainer = {
   borderRadius: '20px',
   borderBottom: `1px solid ${colors.loanTitleColor}`,
   height: 'auto',
-  marginTop: '10px',
+  marginTop: '10px'
 };
 
 export const backStyle = {
@@ -21,7 +21,7 @@ export const backStyle = {
   flex: '1 0 0',
   borderRadius: '12px',
   width: '100%',
-  height: 'auto',
+  height: 'auto'
 };
 
 export const backTitle = {
@@ -29,14 +29,14 @@ export const backTitle = {
   fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 700,
-  lineHeight: '32px' /* 160% */,
+  lineHeight: '32px' /* 160% */
 };
 
 export const inputFields = {
   padding: '16px 12px',
   height: '52px',
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'center'
 };
 export const buttonStyle = {
   display: 'flex',
@@ -51,5 +51,5 @@ export const buttonStyle = {
   color: `${colors.white}`,
   marginTop: '30px',
   marginLeft: '70px',
-  marginBottom: '3px',
+  marginBottom: '3px'
 };

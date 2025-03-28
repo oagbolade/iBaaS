@@ -6,10 +6,13 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
+import { sanitize } from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
 import colors from '@/assets/colors';
+import { IRoles } from '@/api/ResponseTypes/admin';
+import { DeleteActionSteps } from '@/constants/Steps';
 
 const MenuWrapper = styled.section`
   .MuiBox-root {
@@ -20,9 +23,11 @@ const MenuWrapper = styled.section`
 
 type Props = {
   handleDelete: Function;
+  roleid: string;
+  role: IRoles;
 };
 
-export const TableActionMenu = ({ handleDelete }: Props) => {
+export const TableActionMenu = ({ handleDelete, roleid, role }: Props) => {
   const router = useRouter();
   const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -46,10 +51,10 @@ export const TableActionMenu = ({ handleDelete }: Props) => {
 
   return (
     <Box>
-      <Button onClick={handleClick}>
+      <Button data-testid="view-actions" onClick={handleClick}>
         <MoreVertIcon
           sx={{
-            color: 'black',
+            color: 'black'
           }}
         />
       </Button>
@@ -60,7 +65,7 @@ export const TableActionMenu = ({ handleDelete }: Props) => {
               return handleClose(null);
             }}
           >
-            <Link href="/admin/roles/view">
+            <Link href={`/admin/roles/view?roleid=${sanitize(roleid)}`}>
               <TableMenuButton buttonTitle="View Role" />
             </Link>
           </MenuItem>
@@ -69,14 +74,17 @@ export const TableActionMenu = ({ handleDelete }: Props) => {
               return handleClose(null);
             }}
           >
-            <Link href="/admin/roles/create?isEditing=true">
+            <Link
+              href={`/admin/roles/create?roleid=${sanitize(roleid)}&isEditing=true`}
+            >
               <TableMenuButton buttonTitle="Edit Role" />
             </Link>
           </MenuItem>
           <MenuItem
+            data-testid="delete-role"
             onClick={() => {
-              handleDelete('isConfirmation');
-              return handleClose(null);
+              const step: DeleteActionSteps = 'isDeleteConfirmation';
+              handleDelete(step, role);
             }}
           >
             <TableMenuButton

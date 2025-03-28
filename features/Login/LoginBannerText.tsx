@@ -5,18 +5,18 @@ import Typography from '@mui/material/Typography';
 import {
   bannerMainTitle,
   bannerSubtitle,
-  bannerTitleContainer,
+  bannerTitleContainer
 } from './styles';
 
 export const LoginBannerText = () => {
   return (
     <Box sx={bannerTitleContainer}>
       <Typography sx={bannerMainTitle}>
-        One Platform. Multiple Functions
+        One Platform, Infinite Banking Possibilities!
       </Typography>
       <Typography sx={bannerSubtitle}>
-        Say hello to various services, features, and functions of multiple
-        mobile apps in a single app
+        Experience seamless banking with one powerful platform that delivers
+        multiple functions effortlessly
       </Typography>
     </Box>
   );

@@ -1,63 +1,142 @@
 'use client';
-import * as React from 'react';
-import { Box, Typography } from '@mui/material';
-import Link from 'next/link';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { COLUMN, keys } from './Column';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetBranches } from '@/api/general/useBranches';
+import { ISearchParams } from '@/app/api/search/route';
+import {
+  MuiTableContainer,
+  StyledTableRow,
+  renderEmptyTableBody
+} from '@/components/Table/Table';
+import { useGetPlainTrialBalance } from '@/api/reports/usePlainTrialBalance';
+import { StyledTableCell } from '@/components/Table/style';
+import { IPlainTrialBalance } from '@/api/ResponseTypes/reports';
+
 import { TableV2 } from '@/components/Revamp/TableV2';
-import { MOCK_COLUMNS_V2 } from '@/constants/MOCK_COLUMNSv2';
-import MOCK_DATA from '@/constants/MOCK_DATAv2.json';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { DateRange } from '@mui/x-date-pickers-pro';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
 
 export const PlainTrialBalance = () => {
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [pageNumber, setpageNumber] = React.useState(1);
+  const { branches } = useGetBranches();
+
+  const [dateValue, setDateValue] = React.useState<DateRange<Dayjs>>([
+    dayjs(),
+    dayjs()
+  ]);
+
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
+  const { isDateFilterApplied } = React.useContext(DateRangePickerContext);
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearch(true);
+    setSearchParams(params);
+  };
+
+  const {
+    plainTrialBalanceList = {
+      pagedRecords: [],
+      totalDr: 0,
+      totalCr: 0,
+      bkBalance: 0
+    },
+    isLoading: isPlainTrailBalanceDataLoading,
+    totalRecords
+  } = useGetPlainTrialBalance({
+    ...searchParams,
+    pageNumber: pageNumber.toString()
+  });
+
+  const {
+    pagedRecords: getAllPlainTrialBalanceData,
+    totalDr,
+    totalCr,
+    bkBalance
+  } = plainTrialBalanceList;
+
+  React.useEffect(() => {
+    if (getAllPlainTrialBalanceData?.length > 0) {
+      const mapPlainTrailBalance = getAllPlainTrialBalanceData.map((item) => ({
+        glNumber: item.glNumber,
+        oldGlNo: item.oldGLno,
+        acctName: item.acctName,
+        debit: `NGN ${item.dr}`,
+        credit: `NGN ${item.cr}`
+      }));
+
+      setExportData(mapPlainTrailBalance as []);
+      setReportType('PlainTrialBalance');
+    }
+  }, [getAllPlainTrialBalanceData, setExportData, setReportType]);
+
+  const DateRangePicker = () => {
+    return (
+      <DateRangeCalendar
+        value={dateValue}
+        onChange={(newValue) => {
+          if (newValue[1] !== null) {
+            setDateValue(newValue);
+          }
+        }}
+      />
+    );
+  };
+
   return (
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
-      <TopOverViewSection useBackButton />
-      <Box
-        sx={{
-          padding: '25px',
-          width: '100%',
-        }}
-      >
-        <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
-          <FilterSection />
-        </Box>
-        <TableV2
-          tableConfig={{
-            hasActions: false,
-            paintedColumns: ['DR Product Balance', 'Total Balance'],
-            totalRow: [
-              'Total Amount',
-              '',
-              '157.00',
-              'N10,856,917.78',
-              '-N4,550,372.0',
-              'N6,306,545.78',
-              '',
-            ],
-            grandTotalRow: [
-              'Balance in Book',
-              '',
-              '',
-              '',
-              '',
-              'N405,321.54',
-              '',
-            ],
-          }}
-          columns={MOCK_COLUMNS_V2}
-          data={MOCK_DATA}
-          hideFilterSection
-          showHeader={{
-            mainTitle: 'Plain Trial Balance',
-            secondaryTitle:
-              'See a directory of all Plain Trial Balance this system.',
-          }}
+      <Box sx={{ width: '100%' }}>
+        <TopOverViewSection
+          useBackButton
+          CustomDateRangePicker={<DateRangePicker />}
         />
+      </Box>{' '}
+      {branches && (
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      )}
+      <Box sx={{ paddingX: '24px' }}>
+        {isPlainTrailBalanceDataLoading ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <Box sx={{ width: '100%' }}>
+            <TableV2
+              isSearched={search}
+              tableConfig={{
+                hasActions: false,
+                paintedColumns: ['dr', 'cr'],
+                totalRow: ['Total', '', '', `${totalDr}`, `${totalCr}`],
+                grandTotalRow: ['Grand Total', '', '', '', `${bkBalance}`]
+              }}
+              keys={keys as []}
+              columns={COLUMN}
+              data={getAllPlainTrialBalanceData}
+              hideFilterSection
+              showHeader={{
+                mainTitle: 'Customer Balances',
+                secondaryTitle:
+                  'See a directory of all Customer Balance Report in this system.'
+              }}
+              setPage={setpageNumber}
+              totalElements={totalRecords}
+              page={pageNumber}
+            />
+          </Box>
+        )}
       </Box>
     </Box>
   );

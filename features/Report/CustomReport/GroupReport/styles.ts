@@ -7,7 +7,7 @@ export const miniCardContainer = {
   minWidth: '310px',
   height: '72px',
   borderRadius: '4px',
-  border: `1px solid ${colors.neutral300}`,
+  border: `1px solid ${colors.neutral300}`
 };
 
 export const OfficePerformanceContainer = {
@@ -16,7 +16,7 @@ export const OfficePerformanceContainer = {
   width: '100%',
   height: '633px',
   borderRadius: '4px',
-  border: `1px solid ${colors.neutral300}`,
+  border: `1px solid ${colors.neutral300}`
 };
 
 export const OfficePerformanceName = {
@@ -24,7 +24,7 @@ export const OfficePerformanceName = {
   padding: '16px 24px',
   margin: '0',
   width: '100%',
-  height: '98px',
+  height: '98px'
 };
 
 export const OfficerTrendSection = {
@@ -33,7 +33,7 @@ export const OfficerTrendSection = {
   margin: '0px',
   width: '95%',
   height: '144px',
-  marginBottom: '14.6px',
+  marginBottom: '14.6px'
 };
 
 export const OfficerGraphSection = {
@@ -41,7 +41,7 @@ export const OfficerGraphSection = {
   padding: '24px',
   width: '90%',
   height: '464px',
-  margin: '0px',
+  margin: '0px'
 };
 
 export const OfficeAmountTypography = {
@@ -49,12 +49,12 @@ export const OfficeAmountTypography = {
   fontSize: '40px',
   fontWeight: 400,
   lineHeight: '48px',
-  width: '289px',
+  width: '289px'
 };
 
 export const OfficeTrendNumberTypography = {
   color: `${colors.activeGreen300}`,
   fontSize: '14px',
   fontWeight: 600,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };

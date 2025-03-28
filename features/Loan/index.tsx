@@ -1,9 +1,3 @@
 export { LoanDirectory } from './LoanDirectory/LoanDirectory';
-export { PartialPay } from './LoanDirectory/PartialPay';
-export { RestructureLoan } from './LoanDirectory/RestructureLoan';
-export { CancelLoan } from './LoanDirectory/CancelLoan';
-export { TerminateLoan } from './LoanDirectory/TerminateLoan';
-export { LoanUnderwriting } from './LoanDirectory/LoanUnderwriting';
 export { ViewLoan } from './LoanDirectory/ViewLoan';
-export { LoanRequests } from './LoanRequests/LoanRequests';
 export { PendingApplications } from './PendingApplications/PendingApplications';

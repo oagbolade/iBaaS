@@ -1,13 +1,15 @@
+import { Height } from '@mui/icons-material';
 import colors from '@/assets/colors';
 
 export const BatchTitle = {
   color: `${colors.neutral900}`,
-  fontSize: '28px',
+  fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 700,
   lineHeight: '36px',
-  marginTop: { mobile: '35px', tablet: '0px' },
+  marginTop: { mobile: '35px', tablet: '0px' }
 };
+
 export const title = {
   color: `${colors.neutral900}`,
   fontSize: { tablet: '28px', mobile: '20px' },
@@ -15,16 +17,19 @@ export const title = {
   fontWeight: 700,
   lineHeight: '36px',
   marginTop: '7px',
-  marginBottom: '30px',
+  marginBottom: '30px'
 };
+
 export const downloadDocument = {
-  color: `${colors.white}`,
+  color: `${colors.primaryRedBase}`,
   textAlign: 'right',
   fontSize: { tablet: '14px', mobile: '12px' },
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '20px',
+  backgroundColor: `${colors.white}`
 };
+
 export const documentUpload = {
   display: 'flex',
   padding: '20px 24px 19px 16px',
@@ -35,11 +40,13 @@ export const documentUpload = {
   border: `1px solid ${colors.neutral300}`,
   background: `${colors.white}`,
   width: { tablet: '560px', mobile: '400px' },
-  margin: '4px',
+  minHeight: '63px',
+  margin: '4px'
 };
+
 export const BatchContainer = {
   display: 'flex',
-  width: { tablet: '624px', mobile: '500px' },
+  width: { tablet: '770px', mobile: '500px' },
   padding: '32px 32px 16px 32px',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -47,13 +54,13 @@ export const BatchContainer = {
   borderLeft: '1px solid rgba(0, 0, 0, 0.00)',
   background: `${colors.white}`,
   heigh: '80px',
-  marginTop: '17px',
+  marginTop: '17px'
 };
 
 export const PostingContainer = {
   display: 'flex',
-  width: { tablet: '541px', mobile: '300px' },
-  height: '899px',
+  width: { tablet: '461px', mobile: '300px' },
+  minHeight: '100vh',
   padding: '32px',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -61,8 +68,7 @@ export const PostingContainer = {
   flexShrink: 0,
   borderLeft: `1px solid ${colors.neutral300}`,
   background: `${colors.neutral100}`,
-  marginTop: '17px',
-  marginBottom: { tablet: '0px', mobile: '190px' },
+  marginBottom: { tablet: '0px', mobile: '190px' }
 };
 
 export const PostingTitle = {
@@ -73,7 +79,7 @@ export const PostingTitle = {
   lineHeight: '24px',
   width: '96px',
   height: '24px',
-  marginRigh: '120px',
+  marginRigh: '120px'
 };
 
 export const TitleStyle = {
@@ -81,14 +87,16 @@ export const TitleStyle = {
   fontSize: '12px',
   fontStyle: 'normal',
   fontWeight: 600,
-  lineHeight: '16px',
+  lineHeight: '16px'
 };
+
 export const PostingTitleContainer = {
   display: 'flex',
   marginLeft: '30px',
   marginTop: '10px',
-  margin: '30px',
+  margin: '30px'
 };
+
 export const templateUpload = {
   display: 'flex',
   padding: '8px',
@@ -97,23 +105,25 @@ export const templateUpload = {
   borderRadius: '28px',
   border: `1px solid ${colors.activeBlue400}`,
   width: '32px',
-  height: '32px',
+  height: '32px'
 };
+
 export const templateCopy = {
   color: `${colors.activeBlue400}`,
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 700,
   lineHeight: '24px' /* 171.429% */,
-  alignSelf: 'stretch',
+  alignSelf: 'stretch'
 };
 export const templateTitle = {
   color: `${colors.neutral600}`,
   fontSize: '12px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '16px' /* 133.333% */,
+  lineHeight: '16px' /* 133.333% */
 };
+
 export const templateDownload = {
   color: `${colors.neutral900}`,
 
@@ -130,12 +140,14 @@ export const templateDownload = {
     fontWeight: 700,
     lineHeight: '16px',
     textDecorationLine: 'underline',
-    whiteSpace: { mobile: 'pre-line', tablet: 'normal' },
-  },
+    whiteSpace: { mobile: 'pre-line', tablet: 'normal' }
+  }
 };
+
 export const templateStyle = {
-  whiteSpace: { mobile: 'pre-line', tablet: 'normal' },
+  whiteSpace: { mobile: 'pre-line', tablet: 'normal' }
 };
+
 export const templateUploadContainer = {
   display: 'flex',
   padding: '24px 12px',
@@ -149,8 +161,9 @@ export const templateUploadContainer = {
   background: `${colors.neutral200}`,
   width: { tablet: '560px', mobile: '400px' },
   height: '132px',
-  boxShadow: 'none',
+  boxShadow: 'none'
 };
+
 export const AccountContainer = {
   display: 'flex',
   padding: '10px 15px',
@@ -159,7 +172,7 @@ export const AccountContainer = {
   gap: '15px',
   color: `${colors.gray500}`,
   width: '128px',
-  height: '61px',
+  height: '61px'
 };
 
 export const AccountTitle = {
@@ -168,14 +181,15 @@ export const AccountTitle = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '16px',
-  textTransform: 'uppercase',
+  textTransform: 'uppercase'
 };
+
 export const AccountPageTitle = {
   color: `${colors.gray500}`,
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 export const AccountSourceTitle = {
@@ -184,7 +198,7 @@ export const AccountSourceTitle = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 export const AccoutStatusTitle = {
@@ -193,55 +207,58 @@ export const AccoutStatusTitle = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
+
 export const inputText = {
-  width: '660px',
+  width: '660px'
 };
+
 export const textInput = {
-  width: '760px',
+  width: '760px'
 };
+
 export const previewContentStyle = {
   marginTop: '-1100%',
-  marginLeft: '15px',
+  marginLeft: '15px'
 };
 export const cashContentStyle = {
   marginTop: '-1300%',
-  marginLeft: '22px',
+  marginLeft: '22px'
 };
 
 export const WithdrawalContentStyle = {
   marginTop: '-1200%',
-  marginLeft: '22px',
+  marginLeft: '22px'
 };
 export const ChequelContentStyle = {
   marginTop: '-1200%',
-  marginLeft: '17px',
+  marginLeft: '17px'
 };
 
 export const chargeContentStyle = {
   marginTop: '-750%',
-  marginLeft: '13px',
+  marginLeft: '13px'
 };
 export const clearContentStyle = {
   marginTop: '-950%',
-  marginLeft: '23px',
+  marginLeft: '23px'
 };
 export const bulkContentStyle = {
   marginTop: '-850%',
-  marginLeft: '32px',
+  marginLeft: '32px'
 };
 
 export const fundsContentStyle = {
   marginTop: '-1400%',
-  marginLeft: '29px',
+  marginLeft: '29px'
 };
 export const totalText = {
   color: `${colors.activeBlue400}`,
   fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 700,
-  lineHeight: '32px' /* 160% */,
+  lineHeight: '32px' /* 160% */
 };
 export const CustomStyle = {
   display: 'flex',
@@ -255,12 +272,12 @@ export const CustomStyle = {
   color: `${colors.neutral600}`,
   width: '250px',
   height: '40px',
-  marginRight: '4px',
+  marginRight: '4px'
 };
 export const PersonalIcon = {
   marginBottom: '20px',
   display: 'flex',
-  marginTop: '10px',
+  marginTop: '10px'
 };
 
 export const CustomStyleInput = {
@@ -275,7 +292,7 @@ export const CustomStyleInput = {
   color: `${colors.neutral600}`,
   width: { desktop: '250px', mobile: '320px' },
   height: '40px',
-  marginRight: '50px',
+  marginRight: '50px'
 };
 
 export const CustomStyleText = {
@@ -288,7 +305,7 @@ export const CustomStyleText = {
   background: `${colors.neutral200}`,
   color: `${colors.neutral600}`,
   height: '50px',
-  width: '357px',
+  width: '357px'
 };
 
 export const ButtonContainer = {
@@ -300,7 +317,7 @@ export const ButtonContainer = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  margingTop: '40px',
+  margingTop: '40px'
 };
 
 export const ButtonApprove = {
@@ -315,7 +332,7 @@ export const ButtonApprove = {
   justifyContent: 'center',
   alignItems: 'center',
   gap: '8px',
-  marginLeft: '20px',
+  marginLeft: '20px'
 };
 
 export const ButtonApproveTitle = {
@@ -325,7 +342,7 @@ export const ButtonApproveTitle = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '24px',
-  color: `${colors.primaryBlue400}`,
+  color: `${colors.primaryBlue400}`
 };
 
 export const ButtonResetTitle = {
@@ -339,7 +356,7 @@ export const ButtonResetTitle = {
   flexShrink: 0,
   borderRadius: '6px',
   background: `${colors.white}`,
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const ButtonReset = {
@@ -352,7 +369,7 @@ export const ButtonReset = {
   gap: '8px',
   borderRadius: '8px',
   background: `${colors.white}`,
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const ButtonDeposit = {
@@ -364,7 +381,7 @@ export const ButtonDeposit = {
   alignItems: 'center',
   gap: '8px',
   borderRadius: '8px',
-  background: `${colors.activeBlue400}`,
+  background: `${colors.activeBlue400}`
 };
 
 export const ButtonPost = {
@@ -378,7 +395,7 @@ export const ButtonPost = {
   flexShrink: 0,
   borderRadius: '6px',
   background: `${colors.primaryBlue200}`,
-  color: `${colors.white}`,
+  color: `${colors.white}`
 };
 
 export const ButtonBack = {
@@ -393,5 +410,74 @@ export const ButtonBack = {
   borderRadius: '6px',
   border: `1px solid ${colors.primaryBlue400}`,
   background: `${colors.white}`,
-  color: `${colors.primaryBlue400}`,
+  color: `${colors.primaryBlue400}`
+};
+
+export const SaveBranch = {
+  display: 'flex',
+  width: '560px',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  borderRadius: '8px',
+  border: `1px solid ${colors.neutral300}`,
+  background: `${colors.white}`,
+  height: '83px',
+  padding: '20px 24px 19px 16px'
+};
+
+export const savePosting = {
+  display: 'flex',
+  height: '40px',
+  padding: '16px 32px',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '8px',
+  borderRadius: '6px',
+  border: `1px solid ${colors.activeBlue400}`,
+  backgroundColor: `${colors.white}`
+};
+export const postingDetails = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '16px',
+  height: '182px',
+  width: '560px'
+};
+export const saveBatches = {
+  display: 'flex',
+  width: '660px',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  borderRadius: '8px',
+  border: `1px solid ${colors.neutral300}`,
+  backgroundColor: `${colors.white}`,
+  height: '83px'
+};
+export const saveBatchesDetails = {
+  display: 'flex',
+  padding: '20px 24px 19px 16px',
+  alignItems: 'center',
+  gap: '16px',
+  alignSelf: 'stretch'
+};
+export const viewSavedBatches = {
+  color: `${colors.primaryRedBase}`,
+  textAlign: 'right',
+  /* header/H8 */
+  fontSize: '14px',
+  fontStyle: 'normal',
+  fontWeight: 600,
+  lineHeight: '20px' /* 142.857% */
+};
+export const DeleteSavedBatches = {
+  color: `${colors.activeBlue400}`,
+  textAlign: 'right',
+  /* header/H8 */
+  fontSize: '14px',
+  fontStyle: 'normal',
+  fontWeight: 600,
+  lineHeight: '20px' /* 142.857% */
 };

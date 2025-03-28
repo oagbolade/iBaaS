@@ -30,7 +30,7 @@ export const CASAAccount = () => {
             mainTitle: 'Statement of Account',
             secondaryTitle:
               'See a directory of all Account statements on this system',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
         />

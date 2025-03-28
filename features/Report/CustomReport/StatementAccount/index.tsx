@@ -9,10 +9,8 @@ import { shortCardsTitle } from './style';
 
 export const StatementAccount = () => {
   return (
-    <Box sx={{ marginTop: '50px', width: '80%' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>
+    <Box sx={{ marginTop: '50px', width: '100%' }}>
+      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '40px', marginBottom: '30px', marginLeft: '50px' }}>
         <TextInput
           name="Search"

@@ -14,7 +14,7 @@ export const modalContainer = {
   top: '50%',
   background: `${colors.white}`,
   boxShadow:
-    '0px 10px 30px 0px rgba(0, 0, 0, 0.20), 0px 30px 70px 0px rgba(26, 34, 64, 0.15), 0px 0px 0px 1px rgba(136, 143, 170, 0.10)',
+    '0px 10px 30px 0px rgba(0, 0, 0, 0.20), 0px 30px 70px 0px rgba(26, 34, 64, 0.15), 0px 0px 0px 1px rgba(136, 143, 170, 0.10)'
 };
 
 export const modalTitleContainer = {
@@ -23,7 +23,7 @@ export const modalTitleContainer = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '36px',
+  gap: '36px'
 };
 
 export const modalTitle = {
@@ -36,7 +36,7 @@ export const modalTitle = {
   borderBottom: `1px solid ${colors.neutral300}`,
   color: `${colors.neutral900}`,
   width: { mobile: '300px', desktop: '492px' },
-  height: '60px',
+  height: '60px'
 };
 
 export const modalTitleStyle = {
@@ -46,7 +46,7 @@ export const modalTitleStyle = {
   alignSelf: 'stretch',
   width: { mobile: '280px', desktop: '444px' },
   height: '32px',
-  color: `${colors.neutral900}`,
+  color: `${colors.neutral900}`
 };
 
 export const modalTyopgraphy = {
@@ -55,7 +55,7 @@ export const modalTyopgraphy = {
   fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 700,
-  lineHeight: '32px' /* 160% */,
+  lineHeight: '32px' /* 160% */
 };
 
 export const modalBodyContainer = {
@@ -68,7 +68,7 @@ export const modalBodyContainer = {
   width: '492px',
   height: '720px',
   color: `${colors.neutral900}`,
-  top: '40px',
+  top: '40px'
 };
 
 export const modalBody = {
@@ -80,7 +80,7 @@ export const modalBody = {
   width: '444px',
   height: '624px',
   '& fieldset': { border: 'none' },
-  padding: '0 0 24px',
+  padding: '0 0 24px'
 };
 
 export const textTypography = {
@@ -91,7 +91,7 @@ export const textTypography = {
   gap: '4px',
   height: '624px',
   '& fieldset': { border: 'none' },
-  textDecoration: 'none',
+  textDecoration: 'none'
 };
 export const text = {
   alignSelf: 'stretch',
@@ -99,7 +99,7 @@ export const text = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '20px' /* 142.857% */,
+  lineHeight: '20px' /* 142.857% */
 };
 
 export const textField = {
@@ -108,7 +108,7 @@ export const textField = {
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 600,
-  lineHeight: '24px',
+  lineHeight: '24px'
 };
 
 export const textSuccess = {
@@ -116,9 +116,9 @@ export const textSuccess = {
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 600,
-  lineHeight: '24px' /* 150% */,
+  lineHeight: '24px' /* 150% */
 };
 
 export const inputFields = {
-  width: { mobile: '250px', tablet: '566px' },
+  width: { mobile: '250px', tablet: '566px' }
 };

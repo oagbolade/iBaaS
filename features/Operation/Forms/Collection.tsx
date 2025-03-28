@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { EditOperations } from '@/constants/OperationOptions';
 import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -18,7 +18,7 @@ export const CollectionContainer = () => {
 
   const onSubmit = (
     values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
+    actions: { setSubmitting: (arg0: boolean) => void }
   ) => {
     console.log({ values, actions });
     alert(JSON.stringify(values, null, 2));
@@ -50,7 +50,7 @@ export const CollectionContainer = () => {
                     placeholder="Enter name"
                     label="Name"
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
+                      width: setWidth(isMobile ? '250px' : '560px')
                     }}
                   />
                 </Box>
@@ -65,7 +65,7 @@ export const CollectionContainer = () => {
                     options={EditOperations.department}
                     label="Currency"
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
+                      width: setWidth(isMobile ? '250px' : '560px')
                     }}
                   />
                 </Box>
@@ -80,7 +80,7 @@ export const CollectionContainer = () => {
                     placeholder="Enter Cheque Number"
                     label="Cheque Number"
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
+                      width: setWidth(isMobile ? '250px' : '560px')
                     }}
                   />
                 </Box>
@@ -95,7 +95,7 @@ export const CollectionContainer = () => {
                     placeholder="."
                     label="Rate"
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
+                      width: setWidth(isMobile ? '250px' : '560px')
                     }}
                   />
                 </Box>
@@ -110,7 +110,7 @@ export const CollectionContainer = () => {
                     placeholder="Enter"
                     label="Narration"
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px'),
+                      width: setWidth(isMobile ? '250px' : '560px')
                     }}
                   />
                 </Box>

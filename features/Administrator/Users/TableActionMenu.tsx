@@ -6,10 +6,12 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
+import { sanitize } from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
 import colors from '@/assets/colors';
+import { IUsers } from '@/api/ResponseTypes/admin';
 
 const MenuWrapper = styled.section`
   .MuiBox-root {
@@ -20,9 +22,11 @@ const MenuWrapper = styled.section`
 
 type Props = {
   handleDelete: Function;
+  userid: string;
+  user: IUsers;
 };
 
-export const TableActionMenu = ({ handleDelete }: Props) => {
+export const TableActionMenu = ({ handleDelete, userid, user }: Props) => {
   const router = useRouter();
   const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -46,10 +50,10 @@ export const TableActionMenu = ({ handleDelete }: Props) => {
 
   return (
     <Box>
-      <Button onClick={handleClick}>
+      <Button data-testid="view-actions" onClick={handleClick}>
         <MoreVertIcon
           sx={{
-            color: 'black',
+            color: 'black'
           }}
         />
       </Button>
@@ -60,7 +64,20 @@ export const TableActionMenu = ({ handleDelete }: Props) => {
               return handleClose(null);
             }}
           >
-            <Link href="/admin/users/reset">
+            <Link
+              href={`/admin/users/update/?isEditing=true&userid=${sanitize(userid)}`}
+            >
+              <TableMenuButton buttonTitle="Edit User" />
+            </Link>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              return handleClose(null);
+            }}
+          >
+            <Link
+              href={`/admin/users/reset/?userid=${sanitize(userid)}&fullname=${sanitize(user.fullname as string)}&roleId=${sanitize(user.role_id as string)}`}
+            >
               <TableMenuButton buttonTitle="Reset User" />
             </Link>
           </MenuItem>
@@ -69,21 +86,27 @@ export const TableActionMenu = ({ handleDelete }: Props) => {
               return handleClose(null);
             }}
           >
-            <Link href="/admin/users/password">
+            <Link
+              href={`/admin/users/password/?userid=${sanitize(userid)}&fullname=${sanitize(user.fullname as string)}&deptId=${sanitize(user.deptcode as string)}&roleId=${sanitize(user.role_id as string)}`}
+            >
               <TableMenuButton buttonTitle="Change Password" />
             </Link>
           </MenuItem>
           <MenuItem
             onClick={() => {
-              return handleClose(null);
+              const step = 'isLockConfirmation';
+              handleDelete(step, user);
             }}
           >
-            <TableMenuButton buttonTitle="Lock User" />
+            <TableMenuButton
+              buttonTitle={`${user.lockcount ? 'Unlock User' : 'Lock User'}`}
+            />
           </MenuItem>
           <MenuItem
+            data-testid="delete-user"
             onClick={() => {
-              handleDelete('isConfirmation');
-              return handleClose(null);
+              const step = 'isDeleteConfirmation';
+              handleDelete(step, user);
             }}
           >
             <TableMenuButton

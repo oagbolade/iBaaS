@@ -1,41 +1,49 @@
-import React from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
-import {
-  LargeTitle,
-  Details,
-} from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { FormTextInput } from '@/components/FormikFields';
-import { user as userSchema } from '@/constants/schemas';
-import { userInitialValues } from '@/constants/types';
+import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
+import { FormTextInput, FormikDateTimePicker } from '@/components/FormikFields';
+import { setCancelValues } from '@/schemas/schema-values/loan/index';
+import { cancelLoanSchema } from '@/schemas/loan/index';
 import { useCurrentBreakpoint } from '@/utils';
-import colors from '@/assets/colors';
+import { useCancelLoan } from '@/api/loans/useCreditFacility';
 
-export const Balance = ({ amount }: { amount: string }) => (
-  <Typography
-    sx={{
-      color: `${colors.activeBlue400}`,
-      fontSize: '20px',
-      fontWeight: 700,
-      lineHeight: '32px',
-      position: 'relative',
-      bottom: '20px',
-    }}
-  >
-    {amount}
-  </Typography>
-);
-
-export const CancelLoanForm = () => {
+export const CancelLoanForm = ({
+  accountNumber,
+  customerID,
+  isSubmitting,
+  setIsSubmitting
+}: {
+  accountNumber: string;
+  customerID: string;
+  isSubmitting?: boolean;
+  setIsSubmitting: (submit: boolean) => void;
+}) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { mutate } = useCancelLoan();
 
-  const onSubmit = (
-    values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
-  ) => {
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
+  const onSubmit = (values: any) => {
+    const data = {
+      accountNumber,
+      oPrincipal: values.oPrincipal,
+      oInterest: values.oInterest,
+      oPenalInt: values.oPenalInt,
+      oExtinterest: values.oExtinterest
+    };
+    mutate(data);
+    setIsSubmitting(false);
   };
+
+  useEffect(() => {
+    const submit = document.getElementById('submitButton');
+    if (isSubmitting) {
+      submit?.click();
+    }
+
+    return () => {
+      setIsSubmitting?.(false);
+    };
+  }, [isSubmitting, setIsSubmitting]);
 
   return (
     <Box>
@@ -45,13 +53,12 @@ export const CancelLoanForm = () => {
       <Box
         sx={{
           justifyContent: { mobile: 'center' },
-          alignItems: { mobile: 'center' },
+          alignItems: { mobile: 'center' }
         }}
       >
         <Formik
-          initialValues={userInitialValues}
-          onSubmit={(values, actions) => onSubmit(values, actions)}
-          validationSchema={userSchema}
+          initialValues={setCancelValues}
+          onSubmit={(values) => onSubmit(values)}
         >
           <Form>
             <Box mt={4}>
@@ -59,132 +66,44 @@ export const CancelLoanForm = () => {
                 <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
-                    name="newRate"
-                    placeholder="3.2"
-                    label="New Rate (%)"
+                    name="customerID"
+                    placeholder="0011"
+                    label="Customer ID"
+                    value={customerID}
                     required
+                    disabled
                   />{' '}
                 </Grid>
+
                 <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
-                    name="newTerm"
-                    placeholder="5"
-                    label="New Term (Months)"
+                    name="accountNumber"
+                    placeholder="0011223344"
+                    label="Loan Account"
+                    value={accountNumber}
                     required
+                    disabled
                   />{' '}
                 </Grid>
+
                 <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="startDate"
-                    placeholder="04 August, 2023"
-                    label="Start Date"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="maturityDate"
-                    placeholder="04 August, 2023"
-                    label="Maturity Date"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="totalDays"
-                    placeholder="365"
-                    label="Total Days"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="principalOutstanding"
-                    placeholder="33,432,432"
-                    label="Principal Outstanding"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="interestOutstanding"
-                    placeholder="32,432"
-                    label="Interest Outstanding"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="penalInterestOutstanding"
-                    placeholder="32,432"
-                    label="Penal Interest Outstanding"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="principalPayout"
-                    placeholder="1,432,532.53"
-                    label="Principal Payout"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="interestPayout"
-                    placeholder="2,532.53"
-                    label="Interest Payout"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
-                    }}
-                    name="penalInterestPayout"
-                    placeholder="2,532.53"
-                    label="Penal Interest Payout"
-                    required
-                  />{' '}
-                </Grid>
-                <Grid item={isTablet} mobile={8}>
-                  <Box>
-                    <Details title="Balance After" />
-                    <Balance amount="N132,432,543.43" />
-                  </Box>
+                  <FormikDateTimePicker
+                    label="Value Date"
+                    name="valueDate"
+                    value=""
+                  />
                 </Grid>
               </Grid>
             </Box>
+
+            <button id="submitButton" type="submit" style={{ display: 'none' }}>
+              submit alias
+            </button>
           </Form>
         </Formik>
       </Box>

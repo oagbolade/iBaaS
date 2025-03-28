@@ -20,7 +20,7 @@ import {
   ButtonResetTitle,
   ButtonPost,
   ButtonBack,
-  TitleStyle,
+  TitleStyle
 } from './style';
 import Grid from '@mui/material/Grid';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
@@ -28,16 +28,16 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import Button from '@mui/material/Button';
 import {
   CurrencyOperation,
-  EditOperations,
+  EditOperations
 } from '@/constants/OperationOptions';
 import { AccountInfoIcons, PersonalInfoLine } from '@/assets/svg';
 import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
+import { user as userSchema } from '@/schemas/auth';
 import { userInitialValues } from '@/constants/types';
 import {
   ModalBackButton,
   ModalSaveButton,
-  ResetButton,
+  ResetButton
 } from '@/components/Modal/styles';
 import { useCurrentBreakpoint } from '@/utils';
 import { ModalActions } from '@/components/Shared/ActionButtons';
@@ -159,7 +159,7 @@ export const BatchPosting = () => {
                 <Box
                   sx={{
                     justifyContent: 'center',
-                    marginBottom: { mobile: '4px' },
+                    marginBottom: { mobile: '4px' }
                   }}
                   ml={{ desktop: 3, tablet: 3, mobile: 4 }}
                 >
@@ -275,10 +275,10 @@ export const BatchPosting = () => {
                         width: {
                           desktop: '250px',
                           mobile: '40px',
-                          tablet: '250px',
+                          tablet: '250px'
                         },
                         flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        alignItems: 'flex-start'
                       }}
                       ml={{ mobile: 7, tablet: 0 }}
                       justifyContent="center"
@@ -289,7 +289,7 @@ export const BatchPosting = () => {
                         options={CurrencyOperation.currency}
                         label="Currency"
                         customStyle={{
-                          width: setWidth(),
+                          width: setWidth()
                         }}
                       />
                     </Box>
@@ -307,10 +307,10 @@ export const BatchPosting = () => {
                         width: {
                           desktop: '400px',
                           mobile: '40px',
-                          tablet: '200px',
+                          tablet: '200px'
                         },
                         flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        alignItems: 'flex-start'
                       }}
                       ml={{ mobile: 7, tablet: 0 }}
                       justifyContent="center"
@@ -321,7 +321,7 @@ export const BatchPosting = () => {
                         placeholder="Enter rate"
                         label="Rate"
                         customStyle={{
-                          width: setWidth(),
+                          width: setWidth()
                         }}
                       />
                     </Box>
@@ -338,7 +338,7 @@ export const BatchPosting = () => {
                   <Box
                     sx={{
                       marginRight: '20px',
-                      width: { tablet: '350px' },
+                      width: { tablet: '350px' }
                     }}
                     ml={{ mobile: 7, tablet: 0 }}
                     justifyContent="center"
@@ -349,7 +349,7 @@ export const BatchPosting = () => {
                       placeholder="Enter Transaction"
                       label="Transaction Amount"
                       customStyle={{
-                        width: setWidth(),
+                        width: setWidth()
                       }}
                     />
                   </Box>

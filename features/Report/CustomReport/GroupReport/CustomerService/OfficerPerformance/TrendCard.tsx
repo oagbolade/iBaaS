@@ -3,14 +3,14 @@ import { Box, Stack, Typography } from '@mui/material';
 import {
   OfficerTrendSection,
   OfficeAmountTypography,
-  OfficeTrendNumberTypography,
+  OfficeTrendNumberTypography
 } from '@/features/Report/CustomReport/GroupReport/styles';
 import { description } from '@/components/Confirmation/styles';
 import {
   DownTrendIcon,
   NegativeTrendIcon,
   PositiveTrendIcon,
-  UpTrendIcon,
+  UpTrendIcon
 } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { CustomStyleI } from '@/constants/types';
@@ -28,7 +28,7 @@ export const TrendCard = ({
   amount,
   isPositiveTrend,
   percentage,
-  customStyle,
+  customStyle
 }: Props) => {
   return (
     <Stack direction="row" sx={{ ...OfficerTrendSection, ...customStyle }}>
@@ -38,7 +38,9 @@ export const TrendCard = ({
         </Box>
         <Stack direction="row" justifyContent="space-between">
           <Box mt={3}>
-            <Typography sx={OfficeAmountTypography}>{amount}</Typography>
+            <Typography sx={OfficeAmountTypography}>
+              {amount || '--'}
+            </Typography>
           </Box>
           {percentage && (
             <Box mt={3} ml={3}>
@@ -56,10 +58,10 @@ export const TrendCard = ({
                       ...OfficeTrendNumberTypography,
                       color: isPositiveTrend
                         ? `${colors.activeGreen300}`
-                        : `${colors.primaryRedBase}`,
+                        : `${colors.primaryRedBase}`
                     }}
                   >
-                    {percentage}
+                    {percentage || '--'}
                   </Typography>
                 </Box>
                 <Box>

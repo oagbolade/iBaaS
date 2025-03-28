@@ -1,6 +1,6 @@
 export const shortcards = {
-  marginLeft: '700px',
+  marginLeft: '700px'
 };
 export const shortCardsTitle = {
-  width: { mobile: '450px', tablet: '560px' },
+  width: { mobile: '450px', tablet: '560px' }
 };

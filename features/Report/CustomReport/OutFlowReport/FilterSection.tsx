@@ -1,77 +1,106 @@
-import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
+import React, { ChangeEvent, useState } from 'react';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import styled from 'styled-components';
-import {
-  transactionVolumeStyle,
-  allBranchesStyle,
-} from '@/features/Report/Overview/styles';
-import { TextInput } from '@/components/FormikFields';
-import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton,
-} from '@/components/Revamp/Buttons';
-import { ChevronDown } from '@/assets/svg';
-import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
-import { labelTypography } from '@/components/FormikFields/styles';
-import { inputFields } from '@/features/Report/CustomReport/style';
-import {
-  Wrapper,
-  branchOptions,
-  selectButton,
-} from '@/features/Report/CustomReport/ChartAccount/FilterSection';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { buttonBackgroundColor } from './style';
+import { FormSelectInput, TextInput } from '@/components/FormikFields';
+import { ActionButton } from '@/components/Revamp/Buttons';
+import { inputFields } from '@/features/Loan/LoanDirectory/styles';
+import { IBranches } from '@/api/ResponseTypes/general';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { IInflowOutflowParams } from '@/api/reports/useGetInflowOutflowReport';
 
-export const FilterSection = () => {
-  const { setDirection } = useSetDirection();
+type Props = {
+  branches?: IBranches[];
+  onSearch?: (params: IInflowOutflowParams | null) => void;
+};
+
+export const FilterSection = ({ branches, onSearch }: Props) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedBranch, setSelectedBranch] = useState('');
+
+  const { mappedBranches } = useMapSelectOptions({
+    branches
+  });
+
+  const handleSearchClick = () => {
+    const searchParams: IInflowOutflowParams = {
+      branchId: selectedBranch || null,
+      tellerId: searchTerm || null
+    };
+
+    onSearch?.(searchParams);
+  };
 
   return (
     <Box>
-      <Stack direction={setDirection()} ml={{ mobile: 9, tablet: 0 }}>
-        <Wrapper>
-          <Typography sx={labelTypography}>Branch Name</Typography>
-          <ActionButtonWithPopper
-            searchGroupVariant="BasicSearchGroup"
-            options={branchOptions}
-            customStyle={{
-              ...allBranchesStyle,
-              ...selectButton,
-            }}
-            icon={
-              <ChevronDown
-                color={`${colors.Heading}`}
-                props={{
-                  position: 'relative',
-                  marginRight: '70px',
-                  width: '12px',
-                  height: '12px',
-                }}
-              />
-            }
-            iconPosition="end"
-            buttonTitle="Select"
-          />
-        </Wrapper>
-        <Box mt={4.5} mr={4}>
-          <TextInput
-            name="Search"
-            placeholder="Search"
-            icon={<SearchIcon />}
-            customStyle={{ ...inputFields }}
-          />
-        </Box>
-        <Box mt={4.5}>
-          <ActionButton
-            customStyle={{
-              backgroundColor: `${colors.activeBlue400}`,
-              border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
-            }}
-            buttonTitle="Search"
-          />
-        </Box>
-      </Stack>
+      <Box sx={{ height: '120px' }}>
+        <Grid
+          sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
+          spacing={2}
+        >
+          <Grid
+            mb={{ tablet: 3 }}
+            item
+            mobile={12}
+            tablet={5}
+            justifyContent="center"
+          >
+            <FormSelectInput
+              customStyle={{
+                width: '400px',
+                fontSize: '14px',
+                ...inputFields
+              }}
+              name="branchID"
+              options={mappedBranches}
+              label="Branch ID"
+              value={selectedBranch}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSelectedBranch(e.target.value)
+              }
+            />{' '}
+          </Grid>
+          <Grid
+            mb={{ tablet: 6 }}
+            item
+            mobile={12}
+            tablet={6}
+            justifyContent="center"
+          >
+            <TextInput
+              customStyle={{
+                width: '500px',
+                fontSize: '14px',
+                ...inputFields
+              }}
+              icon={<SearchIcon />}
+              name="search"
+              value={searchTerm}
+              placeholder="Search by account number or name"
+              label="Account Number/Name"
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchTerm(e.target.value)
+              }
+            />{' '}
+          </Grid>
+          <Grid
+            item
+            mobile={12}
+            tablet={1}
+            sx={{ display: 'flex' }}
+            justifyContent="flex-end"
+            mt={{ tablet: 3.2 }}
+            mr={{ mobile: 30, tablet: 0 }}
+            mb={{ mobile: 6, tablet: 0 }}
+          >
+            <ActionButton
+              onClick={handleSearchClick}
+              customStyle={buttonBackgroundColor}
+              buttonTitle="Search"
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };

@@ -30,7 +30,7 @@ export const DisbursedLoan = () => {
             mainTitle: 'Disbursed Loan Report',
             secondaryTitle:
               'See a directory of all Disbursed Loan Report in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
         />

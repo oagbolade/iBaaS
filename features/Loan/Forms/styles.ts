@@ -5,5 +5,5 @@ export const ContainerStyle = {
   height: 'auto',
   padding: '34px 32px',
   border: `1px solid ${colors.neutral300}`,
-  borderRadius: '4px',
+  borderRadius: '4px'
 };

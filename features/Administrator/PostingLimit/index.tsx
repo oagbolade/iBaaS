@@ -1,18 +1,23 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { DeleteConfirmationModal } from '../Forms/DeleteConfirmationModal';
 import { FilterSection } from './FilterSection';
+import { COLUMNS } from './COLUMNS';
+import { TableActionMenu } from './TableActionMenu';
 import { AdminContainer } from '@/features/Administrator/AdminContainer';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
-import { ToastMessage } from '@/components/Revamp/ToastMessage';
-import { ModalContainerV2 } from '@/components/Revamp/Modal';
+import { MuiTableContainer } from '@/components/Table';
+import { StyledTableCell } from '@/components/Table/style';
+import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
+import { SearchPostingLimitResponse } from '@/api/ResponseTypes/admin';
+import { ISearchParams } from '@/app/api/search/route';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetBranches } from '@/api/general/useBranches';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { useFilterPostingLimitSearch } from '@/api/admin/usePostingLimit';
 
 const actionButtons: any = [
   <Link href="/admin/posting-limit/create">
@@ -20,46 +25,39 @@ const actionButtons: any = [
       buttonTitle="Create New Limit"
       customStyle={{ ...submitButton }}
     />
-  </Link>,
+  </Link>
 ];
 
 export const PostingLimit = () => {
-  const [deleteStep, setDeleteStep] = useState<
-    null | 'isConfirmation' | 'showToast' | 'password'
-  >(null);
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [page, setPage] = React.useState(1);
+  const {
+    totalPages,
+    totalElements,
+    data: postingData,
+    isLoading: isPostingDataLoading
+  } = useFilterPostingLimitSearch({
+    ...searchParams,
+    page
+  });
 
-  const toastMessageMapper = {
-    userDelete: {
-      title: 'User Deleted',
-      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.',
-    },
-    userCreated: { title: '', body: '' },
-    userReset: { title: '', body: '' },
-    userLocked: { title: '', body: '' },
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearchParams(params);
+    setSearch(true);
   };
 
-  useEffect(() => {
-    if (deleteStep === 'showToast') {
-      setTimeout(() => {
-        setDeleteStep(null);
-      }, 3000);
-    }
-  }, [deleteStep]);
-
-  const handleDelete = (
-    currentStep: null | 'isConfirmation' | 'showToast' | 'password' = null,
-  ) => {
-    setDeleteStep(currentStep);
+  const ActionMenuProps = ({
+    roleId,
+    branchId
+  }: {
+    roleId: string;
+    branchId: string;
+  }): React.ReactElement => {
+    return <TableActionMenu roleId={roleId} branchId={branchId} />;
   };
+  const { branches } = useGetBranches();
 
-  const ActionMenuProps: React.FC = () => {
-    return (
-      <Link href="/admin/posting-limit/create?isEditing=true">
-        {' '}
-        <TableSingleAction actionName="Edit Limit" />
-      </Link>
-    );
-  };
   return (
     <>
       <TopActionsArea
@@ -68,43 +66,69 @@ export const PostingLimit = () => {
         actionButtons={actionButtons}
       />
       <AdminContainer>
-        <FilterSection />
+        {branches && (
+          <FilterSection branches={branches} onSearch={handleSearch} />
+        )}
         <Box
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
-          <MuiTableContainer
-            columns={MOCK_COLUMNS}
-            data={MOCK_DATA}
-            tableConfig={{
-              hasActions: true,
-            }}
-            ActionMenuProps={ActionMenuProps}
-          />
+          {isPostingDataLoading ? (
+            <FormSkeleton noOfLoaders={3} />
+          ) : (
+            <MuiTableContainer
+              columns={COLUMNS}
+              tableConfig={{
+                hasActions: true
+              }}
+              setPage={setPage}
+              page={page}
+              data={postingData}
+              totalPages={totalPages}
+              totalElements={totalElements}
+            >
+              {search ? (
+                postingData?.map(
+                  (dataItem: SearchPostingLimitResponse, index: number) => {
+                    return (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem.role_name || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {`NGN ${formatCurrency(dataItem.branchCredit || 0) || 'N/A'}`}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {`NGN ${formatCurrency(dataItem.branchDebit || 0) || 'N/A'}`}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          <ActionMenuProps
+                            roleId={dataItem.roleid}
+                            branchId={dataItem.branchcode}
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  }
+                )
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell
+                    colSpan={COLUMNS.length + 1}
+                    component="th"
+                    scope="row"
+                  >
+                    {renderEmptyTableBody()}
+                  </StyledTableCell>
+                </StyledTableRow>
+              )}
+            </MuiTableContainer>
+          )}
         </Box>
         <Box />
-        {deleteStep === 'showToast' && (
-          <ToastMessage
-            title={toastMessageMapper.userDelete.title}
-            body={toastMessageMapper.userDelete.body}
-          />
-        )}
-        {deleteStep !== null && deleteStep !== 'showToast' && (
-          <ModalContainerV2
-            handleClose={handleDelete}
-            form={
-              <DeleteConfirmationModal
-                modalTitle=""
-                modalDescription=""
-                deleteStep={deleteStep}
-                handleClose={handleDelete}
-              />
-            }
-          />
-        )}
       </AdminContainer>
     </>
   );

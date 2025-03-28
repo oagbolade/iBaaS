@@ -1,70 +1,167 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { Box } from '@mui/material';
+import { COLUMNS } from './COLUMN';
+import { TableActionMenu } from './TableActionMenu';
 import { FilterSection } from './FilterSection';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
-import { ActionMenu, MuiTableContainer } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
+import {
+  MuiTableContainer,
+  StyledTableRow,
+  renderEmptyTableBody
+} from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
+import { Status } from '@/components/Labels';
+import { useGetAllLoans } from '@/api/loans/useCreditFacility';
+import { useGetBranches } from '@/api/general/useBranches';
+import { ISearchParams } from '@/app/api/search/route';
+import { FormSkeleton } from '@/components/Loaders';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
-/* Certain statuses can view loans, see visibility mapper below */
-const visibilityMapper = {
-  active: ['all'],
-  matured: ['View Loan'],
-  rejected: ['View Loan', 'Reapply'],
+const ActionMenuProps = ({
+  accountNumber,
+  status,
+  settlementAccount,
+  productCode,
+  customerId
+}: {
+  status: string;
+  accountNumber: string;
+  settlementAccount: string;
+  productCode: string;
+  customerId: string;
+}): React.ReactElement => {
+  return (
+    <TableActionMenu
+      accountNumber={accountNumber}
+      status={status}
+      settlementAccount={settlementAccount}
+      productCode={productCode}
+      customerId={customerId}
+    />
+  );
 };
 
-const options = [
-  { buttonTitle: 'View Loan', link: '/loan/loan-directory/view-loan' },
-  { buttonTitle: 'Cancel Loan', link: '/loan/loan-directory/cancel-loan' },
-  {
-    buttonTitle: 'Restructure Loan',
-    link: '/loan/loan-directory/restructure-loan',
-  },
-  { buttonTitle: 'Partial Pay', link: '/loan/loan-directory/partial-pay' },
-  {
-    buttonTitle: 'Terminate Loan',
-    link: '/loan/loan-directory/terminate-loan',
-  },
-];
-
-const ActionMenuProps: React.FC = () => {
-  return <ActionMenu options={options} useDefault={false} />;
-};
 export const LoanDirectory = () => {
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [page, setPage] = React.useState(1);
+
+  const { branches } = useGetBranches();
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearchParams(params);
+    setSearch(true);
+  };
+
+  const {
+    totalPages,
+    totalElements,
+    data: getAllLoanData,
+    isLoading: isLoanDataLoading
+  } = useGetAllLoans({
+    ...searchParams,
+    page
+  });
+
   return (
     <Box
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '80px',
+        marginTop: '80px'
       }}
     >
       <Box
         mb={3}
         mr={{ mobile: 3, tablet: 0 }}
-        sx={{ display: 'flex', justifyContent: 'flex-end' }}
+        sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}
       >
         <Link href="/loan/loan-directory/loan-underwriting">
           <PrimaryIconButton
             customStyle={{
               width: '245px',
               height: '48px',
-              variant: 'contained',
+              variant: 'contained'
             }}
             buttonTitle="Create Loan Underwriting"
           />
         </Link>
       </Box>
-      <FilterSection />
-      <Box sx={{ width: '100%' }}>
-        <MuiTableContainer
-          columns={MOCK_COLUMNS}
-          data={MOCK_DATA}
-          ActionMenuProps={ActionMenuProps}
-        />
-      </Box>
+
+      {branches && (
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      )}
+
+      {isLoanDataLoading ? (
+        <FormSkeleton noOfLoaders={3} />
+      ) : (
+        <Box sx={{ width: '100%' }}>
+          <MuiTableContainer
+            columns={COLUMNS}
+            tableConfig={{
+              hasActions: true
+            }}
+            data={getAllLoanData}
+            totalPages={totalPages}
+            totalElements={totalElements}
+            setPage={setPage}
+            page={page}
+          >
+            {search ? (
+              getAllLoanData?.map((dataItem: any) => {
+                return (
+                  <StyledTableRow key={dataItem.userid}>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem.fullName}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.accountNumber}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem.productName}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {`NGN ${formatCurrency(dataItem?.loanAmount || 0) || 'N/A'}`}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <Status
+                        label={
+                          dataItem?.loanStatus === '4' ? 'Active' : 'Matured'
+                        }
+                        status={
+                          dataItem?.loanStatus === '4' ? 'success' : 'matured'
+                        }
+                      />{' '}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <ActionMenuProps
+                        accountNumber={dataItem.accountNumber || 'N/A'}
+                        status={dataItem.loanStatus || '2'}
+                        settlementAccount={dataItem?.settlementAcct1}
+                        productCode={dataItem?.productCode}
+                        customerId={dataItem?.customerID}
+                      />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={COLUMNS.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody(getAllLoanData)}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
+        </Box>
+      )}
     </Box>
   );
 };

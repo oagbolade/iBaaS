@@ -1,69 +1,118 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { FormSelectInput, TextInput } from '@/components/FormikFields';
+import { Form, Formik } from 'formik';
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
-import { Loan } from '@/constants/Loan/selectOptions';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
+import { ISearchParams } from '@/app/api/search/route';
+import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { IBranches } from '@/api/ResponseTypes/general';
+import { searchFieldsSchema } from '@/schemas/common';
 
-export const FilterSection = () => {
+type Props = {
+  onSearch: Function;
+  branches: IBranches[];
+};
+
+export const FilterSection = ({ onSearch, branches }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
+  const { mappedBranches } = useMapSelectOptions({ branches });
+
+  const onSubmit = async (values: any) => {
+    const params: ISearchParams = {
+      branchCredit:
+        values.branchCredit.toString().length > 0 ? values.branchCredit : null,
+      branchDebit:
+        values.branchDebit.toString().length > 0 ? values.branchDebit : null,
+      branchID: values.branchID.toString().length > 0 ? values.branchID : null
+    };
+
+    onSearch(params);
+  };
 
   return (
-    <Box>
-      <Grid container spacing={2}>
-        <Grid
-          mb={{ tablet: 6 }}
-          item
-          mobile={12}
-          tablet={3}
-          justifyContent="center"
-        >
-          <FormSelectInput
-            customStyle={{
-              width: setWidth(),
-              fontSize: '14px',
-              ...inputFields,
-            }}
-            name="loanStatus"
-            options={Loan.status}
-            label="Branch ID"
-            placeholder="Please Enter"
-          />{' '}
-        </Grid>
-        <Grid
-          mb={{ tablet: 6 }}
-          item
-          mobile={12}
-          tablet={8}
-          justifyContent="center"
-        >
-          <TextInput
-            customStyle={{
-              width: setWidth(),
-              fontSize: '14px',
-              ...inputFields,
-            }}
-            icon={<SearchIcon />}
-            name="search"
-            placeholder="Search"
-            label="Search"
-          />{' '}
-        </Grid>
-        <Grid
-          item
-          mobile={12}
-          tablet={1}
-          sx={{ display: 'flex' }}
-          justifyContent="flex-end"
-          mt={{ tablet: 3.2 }}
-          mr={{ mobile: 30, tablet: 0 }}
-          mb={{ mobile: 6, tablet: 0 }}
-        >
-          <ActionButton buttonTitle="Search" />
-        </Grid>
-      </Grid>
-    </Box>
+    <Formik
+      initialValues={searchFilterInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={searchFieldsSchema}
+    >
+      <Form>
+        <Box>
+          <Grid container spacing={2}>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={3}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                name="branchID"
+                options={mappedBranches}
+                label="Branch ID"
+              />{' '}
+            </Grid>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={4}
+              justifyContent="center"
+            >
+              <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="branchCredit"
+                placeholder="Search by Branch Credit"
+                label="Search by Branch Credit"
+              />{' '}
+            </Grid>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={4}
+              justifyContent="center"
+            >
+              <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="branchDebit"
+                placeholder="Search by Branch Debit"
+                label="Search by Branch Debit"
+              />{' '}
+            </Grid>
+            <Grid
+              item
+              mobile={12}
+              tablet={1}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton type="submit" buttonTitle="Search" />
+            </Grid>
+          </Grid>
+        </Box>
+      </Form>
+    </Formik>
   );
 };

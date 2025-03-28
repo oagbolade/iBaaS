@@ -30,7 +30,7 @@ export const PostingJournal = () => {
             mainTitle: 'Posting Journal',
             secondaryTitle:
               'See a directory of all Posting Journal in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
         />

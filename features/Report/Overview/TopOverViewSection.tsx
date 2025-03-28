@@ -1,28 +1,41 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Stack } from '@mui/material';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import { exportData, topFilterStyle, dateFilter } from './styles';
 import {
   ActionButtonWithPopper,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ChevronDown, ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { allCategoryOptions } from '@/constants/Reports/selectOptions';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   useBackButton?: boolean;
+  CustomDateRangePicker?: React.ReactNode;
 };
 
-export const TopOverViewSection = ({ useBackButton }: Props) => {
+export const TopOverViewSection = ({
+  useBackButton,
+  CustomDateRangePicker,
+}: Props) => {
+  const { dateValue } = React.useContext(DateRangePickerContext);
+  const formattedDateRange = useMemo(() => {
+    const startMonthAndDay = `${dateValue?.[0]?.format('MMM') ?? ''} ${dateValue?.[0]?.format('DD') ?? ''}`;
+    const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
+
+    return `${startMonthAndDay} - ${endMonthAndDay}`;
+  }, [dateValue]);
+
   const { setDirection } = useSetDirection();
 
   return (
     <Stack
       sx={{
         borderBottom: `${useBackButton ? '1px solid #E8E8E8' : 'none'}`,
-        padding: '12px 20px',
+        padding: '12px 20px'
       }}
       direction={setDirection()}
       justifyContent="space-between"
@@ -65,17 +78,18 @@ export const TopOverViewSection = ({ useBackButton }: Props) => {
         </Box>
         <Box>
           <ActionButtonWithPopper
+            CustomDateRangePicker={CustomDateRangePicker}
             searchGroupVariant="DateRangePicker"
             customStyle={{ ...dateFilter }}
             icon={
               <CalendarTodayOutlinedIcon
                 sx={{
-                  color: `${colors.Heading}`,
+                  color: `${colors.Heading}`
                 }}
               />
             }
             iconPosition="end"
-            buttonTitle="Aug 22 - Sep 23"
+            buttonTitle={formattedDateRange}
           />
         </Box>
       </Stack>

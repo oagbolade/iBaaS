@@ -37,7 +37,7 @@ export const MiniCard = ({ reportName, link }: Props) => {
               color: `${colors.primaryBlue500}`,
               borderRadius: '6px',
               padding: '16px',
-              backgroundColor: `${colors.primaryBlue100}`,
+              backgroundColor: `${colors.primaryBlue100}`
             }}
           >
             View

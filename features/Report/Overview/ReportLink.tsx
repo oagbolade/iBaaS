@@ -19,7 +19,7 @@ export const ReportLink = ({ link = '' }: Props) => {
           lineHeight: '20px',
           float: 'right',
           position: 'relative',
-          bottom: '40px',
+          bottom: '40px'
         }}
       >
         See full report{' '}

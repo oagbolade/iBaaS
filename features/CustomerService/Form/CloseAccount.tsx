@@ -1,46 +1,70 @@
 'use client';
 import React from 'react';
 import Box from '@mui/material/Box';
+import dayjs, { Dayjs } from 'dayjs';
+import Grid from '@mui/material/Grid';
+import { Formik, Form } from 'formik';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { useSearchParams } from 'next/navigation';
+import { PreviewAccountInfo } from '../Customer/CloseAccount/PreviewAccountInfo';
+import { actionButtons } from './AddLien';
 import { PageTitle } from '@/components/Typography';
 import {
   BatchContainer,
   BatchTitle,
-  PostingContainer,
-  inputText,
-  cashContentStyle,
-  previewContentStyle,
-  WithdrawalContentStyle,
+  PostingContainer
 } from '@/features/Operation/Forms/style';
-import Grid from '@mui/material/Grid';
-import { FormTextInput, FormSelectField } from '@/components/FormikFields';
-import { EditOperations } from '@/constants/OperationOptions';
-import { Formik, Form } from 'formik';
-import { user as userSchema } from '@/constants/schemas';
-import { userInitialValues } from '@/constants/types';
+import {
+  FormTextInput,
+  FormikDateTimePicker,
+  TextInput
+} from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { MobilePreviewContent } from '@/features/Operation/Forms//BatchPosting';
-import { actionButtons } from './AddLien';
-import { PreviewContentOne } from '@/features/Operation/Forms/CashDeposit';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
+import {
+  useCloseCustomerAccount,
+  useGetAccountDetails
+} from '@/api/customer-service/useCustomer';
+import { closeCustomerAccountInitialValues } from '@/schemas/schema-values/customer-service';
+import { closeCustomerAccount } from '@/schemas/customer-service';
+import { FormSkeleton } from '@/components/Loaders';
+import { getCurrentDate } from '@/utils/getCurrentDate';
+import { encryptData } from '@/utils/encryptData';
 
 export const CloseAccount = () => {
+  const searchParams = useSearchParams();
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const accountnumber = searchParams.get('accountNumber') || '';
+  const { mutate } = useCloseCustomerAccount();
+  const { accDetailsResults, isLoading: isAccountDetailsLoading } =
+    useGetAccountDetails(encryptData(accountnumber) as string);
+  const currentDate = dayjs(getCurrentDate());
 
-  const onSubmit = (
-    values: any,
-    actions: { setSubmitting: (arg0: boolean) => void },
-  ) => {
-    console.log({ values, actions });
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
+  const onSubmit = (values: any) => {
+    const getAllValues = {
+      ...values,
+      accountnumber,
+      intDebit: accDetailsResults?.dintrate,
+      intcredit: accDetailsResults?.cintrate
+    };
+
+    mutate(getAllValues);
   };
+
+  if (isAccountDetailsLoading) {
+    return (
+      <Box m={16}>
+        <FormSkeleton noOfLoaders={3} />
+      </Box>
+    );
+  }
+
   return (
     <Formik
-      initialValues={userInitialValues}
-      onSubmit={(values, actions) => onSubmit(values, actions)}
-      validationSchema={userSchema}
+      initialValues={closeCustomerAccountInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={closeCustomerAccount}
     >
       <Form>
         <Box sx={{ marginTop: '60px' }}>
@@ -52,38 +76,57 @@ export const CloseAccount = () => {
             <Grid container>
               <Grid item={isTablet} mobile={12}>
                 <FormTextInput
-                  name="name"
-                  placeholder="Enter account number"
+                  name="settlementAcct"
+                  placeholder="Enter settlement account number"
                   label="Account Number"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
+                    width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  required
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>
                 <FormTextInput
-                  name="name"
-                  placeholder="Enter account number"
+                  name="chargeDue"
+                  placeholder="Enter total charge due"
                   label="Total Charge"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
+                    width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  required
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>
                 <FormTextInput
-                  name="name"
-                  placeholder="Enter account number"
+                  name="closeBalance"
+                  placeholder="Enter close balance"
+                  label="Close Balance"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  required
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <TextInput
+                  name="narration"
+                  placeholder="Enter narration"
                   label="Narration"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%'),
+                    width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  disabled
+                  value={`Account Closure In Favour Of: ${accDetailsResults?.accounttitle || 'N/A'}`}
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>
                 <Box>
                   <DemoContainer components={['DatePicker']}>
-                    <DateTimePicker label="Value Date" />
+                    <FormikDateTimePicker
+                      disabled
+                      label="Value Date"
+                      value={currentDate as Dayjs}
+                    />
                   </DemoContainer>
                 </Box>
               </Grid>
@@ -91,9 +134,13 @@ export const CloseAccount = () => {
           </Box>
           <Box sx={PostingContainer}>
             {isMobile ? (
-              <MobilePreviewContent PreviewContent={<PreviewContentOne />} />
+              <MobilePreviewContent
+                PreviewContent={
+                  <PreviewAccountInfo accDetailsResults={accDetailsResults} />
+                }
+              />
             ) : (
-              <PreviewContentOne />
+              <PreviewAccountInfo accDetailsResults={accDetailsResults} />
             )}
           </Box>
         </Grid>

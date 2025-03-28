@@ -1,50 +1,79 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { FormSelectInput, FormTextInput } from '@/components/FormikFields';
-import { user as userSchema } from '@/constants/schemas';
-import { userInitialValues } from '@/constants/types';
+import {
+  FormTextInput,
+  FormSelectField,
+  FormikRadioButton
+} from '@/components/FormikFields';
+import { classifyAccount } from '@/schemas/customer-service';
+import { classifyAccountInitialValues } from '@/schemas/schema-values/customer-service';
 import { useCurrentBreakpoint } from '@/utils';
-import { Loan } from '@/constants/Loan/selectOptions';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
+import { useAddAccountClassify } from '@/api/finance/useFinanceAccount';
 
-export const ClassifyAccount = () => {
+type Props = {
+  isSubmitting: boolean;
+  setIsSubmitting: (submit: boolean) => void;
+  accountNumber?: string;
+};
+
+export const ClassifyAccount = ({
+  isSubmitting,
+  setIsSubmitting,
+  accountNumber
+}: Props) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-
-  const onSubmit = (values: any, actions: { setSubmitting: Function }) => {
-    actions.setSubmitting(false);
+  const { mutate } = useAddAccountClassify();
+  const onSubmit = async (values: any) => {
+    const data: any = {
+      ...values,
+      accountNumber
+    };
+    mutate(data);
+    setIsSubmitting(false);
   };
 
+  useEffect(() => {
+    const submit = document.getElementById('submitButton');
+    if (isSubmitting) {
+      submit?.click();
+    }
+
+    return () => {
+      setIsSubmitting?.(false);
+    };
+  }, [isSubmitting, setIsSubmitting]);
+
   return (
-    <Box>
-      <Box>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <LargeTitle title="Classify Account" />
       </Box>
       <Box
         sx={{
           justifyContent: { mobile: 'center' },
-          alignItems: { mobile: 'center' },
+          alignItems: { mobile: 'center' }
         }}
       >
         <Formik
-          initialValues={userInitialValues}
-          onSubmit={(values, actions) => onSubmit(values, actions)}
-          validationSchema={userSchema}
+          initialValues={classifyAccountInitialValues}
+          onSubmit={(values) => onSubmit(values)}
+          validationSchema={classifyAccount}
         >
           <Form>
-            <Box mt={4}>
+            <Box mt={{ mobile: 2, tablet: 4 }}>
               <Grid container>
                 <Grid mb={2} item={isTablet} mobile={12}>
                   <Box mt={2}>
-                    <RadioButtons
+                    <FormikRadioButton
                       options={[
-                        { label: 'Classify', value: 'De-Classify' },
-                        { label: 'No', value: 'no' },
+                        { label: 'Classify', value: '1' },
+                        { label: 'De-Classify', value: '0' }
                       ]}
                       title="Please select"
-                      name="status"
-                      value="active"
+                      name="classify"
+                      value="1"
                     />
                   </Box>
                 </Grid>
@@ -56,27 +85,42 @@ export const ClassifyAccount = () => {
                 >
                   <FormTextInput
                     customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%'),
+                      width: setWidth(isMobile ? '300px' : '100%')
                     }}
-                    name="staffId"
-                    placeholder="932048794392"
+                    disabled
+                    name="accountNumber"
+                    placeholder="Account Number"
                     label="Account Number"
+                    value={accountNumber}
                   />{' '}
                 </Grid>
-                <Grid mb={2} item={isTablet} mobile={12}>
-                  <FormSelectInput
+                <Grid
+                  mb={2}
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                  width={{ mobile: '100%', tablet: 0 }}
+                >
+                  <FormSelectField
                     customStyle={{
-                      width: setWidth(),
-                      fontSize: '14px',
+                      width: setWidth(isMobile ? '300px' : '100%'),
+                      fontSize: '14px'
                     }}
-                    name="loanStatus"
-                    options={Loan.status}
-                    label="Classify Type"
-                    placeholder="Active Interest Accrual"
+                    options={[
+                      { name: 'Active Interest Accrual', value: '0' },
+                      { name: 'Accure Into Suspense', value: '1' },
+                      { name: 'Stop Insterest Accural', value: '2' }
+                    ]}
+                    label="Classification Type"
+                    name="provisionType"
                   />{' '}
                 </Grid>
               </Grid>
             </Box>
+
+            <button id="submitButton" type="submit" style={{ display: 'none' }}>
+              submit alias
+            </button>
           </Form>
         </Formik>
       </Box>

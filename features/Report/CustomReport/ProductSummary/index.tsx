@@ -18,7 +18,7 @@ const ViewMore = (): React.ReactNode => {
           fontWeight: 600,
           lineHeight: '20px',
           color: `${colors.activeBlue400}`,
-          cursor: 'pointer',
+          cursor: 'pointer'
         }}
       >
         View More
@@ -31,7 +31,7 @@ export const ProductSummary = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <Box sx={{ width: '1300px' }}>
@@ -40,7 +40,7 @@ export const ProductSummary = () => {
       <Box
         sx={{
           padding: '25px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
@@ -57,9 +57,9 @@ export const ProductSummary = () => {
               'N10,856,917.78',
               '-N4,550,372.0',
               'N6,306,545.78',
-              '',
+              ''
             ],
-            grandTotalRow: ['Balance', '', '', '', '', 'N405,321.54', ''],
+            grandTotalRow: ['Balance', '', '', '', '', 'N405,321.54', '']
           }}
           columns={MOCK_COLUMNS_V2}
           data={MOCK_DATA}
@@ -68,7 +68,7 @@ export const ProductSummary = () => {
           showHeader={{
             mainTitle: 'Product Summary',
             secondaryTitle:
-              'See a directory of all Product Summary Report in this system.',
+              'See a directory of all Product Summary Report in this system.'
           }}
         />
       </Box>

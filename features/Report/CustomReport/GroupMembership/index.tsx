@@ -30,7 +30,7 @@ export const GroupMembership = () => {
             mainTitle: 'Group Membership Report',
             secondaryTitle:
               'See a directory of all Group Membership Report in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
         />

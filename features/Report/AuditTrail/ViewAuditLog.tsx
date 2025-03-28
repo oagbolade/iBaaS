@@ -13,11 +13,12 @@ import {
   text,
   textField,
   textSuccess,
-  textTypography,
+  textTypography
 } from './style';
 import { TableSingleAction } from '@/components/Table';
+import { IAuditTrail } from '@/api/ResponseTypes/reports';
 
-export const ViewAuditLog = () => {
+export const ViewAuditLog = ({ auditReport }: { auditReport: IAuditTrail }) => {
   const [open, setOpen] = React.useState(false);
 
   const toggleModal = () => {
@@ -26,7 +27,7 @@ export const ViewAuditLog = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <Box>
-        <Button sx={{ marginLeft: '190px' }} onClick={toggleModal}>
+        <Button onClick={toggleModal}>
           <TableSingleAction actionName="View" />
         </Button>
         <Modal open={open} onClose={toggleModal}>
@@ -44,43 +45,58 @@ export const ViewAuditLog = () => {
                 <Box sx={modalBody}>
                   <Box sx={textTypography}>
                     <Typography sx={text}>Action</Typography>
-                    <Typography sx={textField}>User Login</Typography>
+                    <Typography sx={textField}>
+                      {auditReport?.action_performed || 'N/A'}
+                    </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>Action Taken By</Typography>
                     <Typography sx={textField}>
-                      ID - 493994 . Tamarabibi Adams
+                      ID - {auditReport?.action_performed || 'N/A'} .{' '}
+                      {auditReport?.userId || 'N/A'}
                     </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>Old Data</Typography>
                     <Typography sx={textField}>
-                      iswadmin4445thTHIS GOOD
+                      {auditReport?.old_data || 'N/A'}
                     </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>New Data</Typography>
-                    <Typography sx={textSuccess}>Successful</Typography>
+                    <Typography sx={textSuccess}>
+                      {auditReport?.new_data || 'N/A'}
+                    </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>Timestamp</Typography>
-                    <Typography sx={textField}>Nov 24, 2023. 8:00am</Typography>
+                    <Typography sx={textField}>
+                      {auditReport?.createDate || 'N/A'}
+                    </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>Affected Table</Typography>
-                    <Typography sx={textField}>tbl_Login</Typography>
+                    <Typography sx={textField}>
+                      {auditReport?.tablename || 'N/A'}
+                    </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>Menu</Typography>
-                    <Typography sx={textField}>User Login</Typography>
+                    <Typography sx={textField}>
+                      {auditReport?.menuname || 'N/A'}
+                    </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>Procedure Called</Typography>
-                    <Typography sx={textField}>Proc_Validation</Typography>
+                    <Typography sx={textField}>
+                      {auditReport?.procedurename || 'N/A'}
+                    </Typography>
                   </Box>
                   <Box sx={textTypography}>
                     <Typography sx={text}>IP Address</Typography>
-                    <Typography sx={textField}>69.247.238.50</Typography>
+                    <Typography sx={textField}>
+                      {auditReport?.id || 'N/A'}
+                    </Typography>
                   </Box>
                 </Box>
               </Box>

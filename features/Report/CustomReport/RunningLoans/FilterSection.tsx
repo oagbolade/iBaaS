@@ -4,18 +4,18 @@ import SearchIcon from '@mui/icons-material/Search';
 import styled from 'styled-components';
 import {
   transactionVolumeStyle,
-  allBranchesStyle,
+  allBranchesStyle
 } from '../../Overview/styles';
 import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
-  ActionButton,
+  ActionButton
 } from '@/components/Revamp/Buttons';
 import { ChevronDown } from '@/assets/svg';
 import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
 import { labelTypography } from '@/components/FormikFields/styles';
-import { useSetDirection } from '@/utils/useSetDirection';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
 
 export const FilterSection = () => {
   const Wrapper = styled.section`
@@ -32,7 +32,7 @@ export const FilterSection = () => {
     'ID-475748  Festac Branch',
     'ID-475749  Yaba Branch',
     'ID-475750  Coker Branch',
-    'ID-475751  Somolu Branch',
+    'ID-475751  Somolu Branch'
   ];
 
   const selectButton = {
@@ -42,7 +42,7 @@ export const FilterSection = () => {
     color: `${colors.neutral600}`,
     fontSize: '14px',
     fontWeight: 400,
-    lineHeight: '20px',
+    lineHeight: '20px'
   };
   const { setDirection } = useSetDirection();
   return (
@@ -105,7 +105,7 @@ export const FilterSection = () => {
             customStyle={{
               backgroundColor: `${colors.activeBlue400}`,
               border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`,
+              color: `${colors.white}`
             }}
             buttonTitle="Search"
           />
