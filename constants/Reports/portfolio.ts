@@ -9,8 +9,8 @@ export const Portfolio = {
       PrincipalatRisk: 'Principal at Risk',
       PrincipalatRiskNumber: 'N3,049,493',
       LoanBalance: 'Loan Balance',
-      LoanBalanceNumber: 'N13,543,789.54',
-    },
+      LoanBalanceNumber: 'N13,543,789.54'
+    }
   ],
   ThriveLoan: [
     {
@@ -22,8 +22,8 @@ export const Portfolio = {
       PrincipalatRisk: 'Principal at Risk',
       PrincipalatRiskNumber: 'N3,049,493',
       LoanBalance: 'Loan Balance',
-      LoanBalanceNumber: 'N13,543,789.54',
-    },
+      LoanBalanceNumber: 'N13,543,789.54'
+    }
   ],
   MSFLoan: [
     {
@@ -35,8 +35,8 @@ export const Portfolio = {
       PrincipalatRisk: 'Principal at Risk',
       PrincipalatRiskNumber: 'N3,049,493',
       LoanBalance: 'Loan Balance',
-      LoanBalanceNumber: 'N13,543,789.54',
-    },
+      LoanBalanceNumber: 'N13,543,789.54'
+    }
   ],
   AgriculturualLoan: [
     {
@@ -48,7 +48,7 @@ export const Portfolio = {
       PrincipalatRisk: 'Principal at Risk',
       PrincipalatRiskNumber: 'N3,049,493',
       LoanBalance: 'Loan Balance',
-      LoanBalanceNumber: 'N13,543,789.54',
-    },
-  ],
+      LoanBalanceNumber: 'N13,543,789.54'
+    }
+  ]
 };

@@ -6,14 +6,14 @@ export const Loan = {
     { name: 'ID: 52739', value: 'ID: 22739' },
     { name: 'ID: 62739', value: 'ID: 22739' },
     { name: 'ID: 72739', value: 'ID: 22739' },
-    { name: 'ID: 82739', value: 'ID: 22739' },
+    { name: 'ID: 82739', value: 'ID: 22739' }
   ],
   status: [
-    { name: 'All Loans', value: 'loans' },
-    { name: 'Active Loans', value: 'loans' },
-    { name: 'Matured Loans', value: 'loans' },
-    { name: 'Rejected Loans', value: 'loans' },
-  ],
+    { name: 'All Loans', value: '5' },
+    // { name: 'Rejected Loans', value: '1' }, // verrified this later
+    { name: 'Matured Loans', value: '3' },
+    { name: 'Active Loans', value: '4' }
+  ]
 };
 
 export const Audit = {
@@ -23,7 +23,7 @@ export const Audit = {
     { name: 'Loan Creation', value: 'loanCreation' },
     { name: 'Loan Approval', value: 'loanApproval' },
     { name: 'Another Action', value: 'anotherAction' },
-    { name: 'Another Action', value: 'anotherAction' },
+    { name: 'Another Action', value: 'anotherAction' }
   ],
   action: [
     { name: 'All', value: 'all' },
@@ -31,8 +31,8 @@ export const Audit = {
     { name: 'User Management', value: 'UserManagement' },
     { name: 'Module 3', value: 'Module 3' },
     { name: 'Module 4', value: 'Module 4' },
-    { name: 'Module 5', value: 'Module 5' },
-  ],
+    { name: 'Module 5', value: 'Module 5' }
+  ]
 };
 
 export const Account = {
@@ -42,13 +42,13 @@ export const Account = {
     { name: 'Loan Creation', value: 'loanCreation' },
     { name: 'Loan Approval', value: 'loanApproval' },
     { name: 'Another Action', value: 'anotherAction' },
-    { name: 'Another Action', value: 'anotherAction' },
-  ],
+    { name: 'Another Action', value: 'anotherAction' }
+  ]
 };
 export const options = [
   { name: 'Adeola Group', Id: 'ID - 00009', value: 'didiid' },
   { name: 'Ikechi Group', Id: 'ID - 00192', value: 'nbnnb' },
   { name: 'Design Group', Id: 'ID - 00009', value: 'babbba' },
   { name: 'Head FINCON Group', Id: 'ID - 00009', value: 'akkaka' },
-  { name: 'Credit Risk Management Group', Id: 'ID - 00009', value: 'akkaka' },
+  { name: 'Credit Risk Management Group', Id: 'ID - 00009', value: 'akkaka' }
 ];

@@ -12,5 +12,5 @@ export const allCategoryOptions = [
   'Inflow/Outflow',
   'Dormant Account',
   'Overdraft',
-  'Holding Transaction',
+  'Holding Transaction'
 ];

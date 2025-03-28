@@ -1,1 +1,0 @@
-export { OfficerTransfer } from './OfficerTransfer';

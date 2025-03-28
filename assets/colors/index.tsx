@@ -1,5 +1,6 @@
 const colors = {
   Heading: '#0C111D',
+  disabledColor: '#DCE0E6',
   lightGrey: '#F9FBFC', // or neutal100
   stepTitleBlue: '#0172CB',
   backButtonGrey: '#595959',
@@ -8,8 +9,6 @@ const colors = {
   activeBlue200: '#A8D6EF',
   activeBlue400: '#0275D8',
   activeBlue600: '#10345E',
-  neutral900: '#353F50',
-  neutral1000: '#1F2126',
   navBarColor: '#EFF2F5',
   neutral100: '#F9FBFC',
   neutral200: '#F3F5F6',
@@ -18,6 +17,8 @@ const colors = {
   neutral600: '#848F9F',
   neutral700: '#5F738C',
   neutral800: '#4E5A6C',
+  neutral900: '#353F50',
+  neutral1000: '#1F2126',
   primaryBlue: '#00425F',
   primaryBlue100: '#EBF8FE',
   primaryBlue200: '#AEDDF1',
@@ -37,7 +38,10 @@ const colors = {
   activeGreen200: '#BEF2B9',
   activeGreen400: '#519E47',
   activeGreen600: '#163C29',
+  activeYellow100: '#FEF6CF',
+  activeYellow200: '#FDED94',
   activeYellow400: '#EC9B40',
+  activeYellow600: '#6B2B0D',
   gray50: '#F9FAFB',
   gray200: '#E5E7EB',
   gray300: '#D0D5DD',
@@ -47,6 +51,7 @@ const colors = {
   darkGrayishBlue: '#475467',
   greenLine: '#76DEE4',
   blueLine: '#4D80E4',
+  Gray900: '#101828'
 };
 
 export default colors;

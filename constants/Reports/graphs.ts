@@ -4,7 +4,7 @@ const randomColors = [
   `${colors.activeBlue400}`,
   `${colors.activeBlue600}`,
   `${colors.primaryRed500}`,
-  `${colors.activeGreen400}`,
+  `${colors.activeGreen400}`
 ];
 
 function getRandomColor(color: Array<string>) {
@@ -18,7 +18,7 @@ export const doughnutData = [
   ['Task', 'Hours per Day'],
   ['Eat', 7],
   ['Work', 5],
-  ['Commute', 3],
+  ['Commute', 3]
 ];
 
 export const doughnutOptions = {
@@ -32,8 +32,8 @@ export const doughnutOptions = {
   slices: {
     0: { color: `${colors.activeBlue400}` },
     1: { color: `${colors.primaryBlue200}` },
-    2: { color: `${colors.primaryRed400}` },
-  },
+    2: { color: `${colors.primaryRed400}` }
+  }
 };
 
 export const baroptions = {
@@ -44,8 +44,8 @@ export const baroptions = {
       lineWidth: 3,
       opacity: 1,
       showR2: true,
-      visibleInLegend: true,
-    },
+      visibleInLegend: true
+    }
   },
   legend: 'none',
   fontSize: 12,
@@ -53,18 +53,18 @@ export const baroptions = {
   height: 330,
   chartArea: { left: 40, top: 30 },
   bar: {
-    groupWidth: 60,
+    groupWidth: 60
   },
   vAxis: {
     gridlines: {
-      color: `${colors.neutral300}`,
+      color: `${colors.neutral300}`
     },
     minorGridlines: {
       // hides the minor grid lines
       minSpacing: 50,
-      count: -1,
-    },
-  },
+      count: -1
+    }
+  }
 };
 
 const getColor = getRandomColor(randomColors);
@@ -74,7 +74,7 @@ export const bardata = [
   ['Copper', 8.94, `${getColor}`], // RGB value
   ['Silver', 10.49, `${getColor}`], // English color name
   ['Gold', 19.3, `${getColor}`],
-  ['Platinum', 21.45, `${getColor}`],
+  ['Platinum', 21.45, `${getColor}`]
 ];
 
 export const linedata = [
@@ -89,7 +89,7 @@ export const linedata = [
   ['Igando', 130, 540],
   ['Orile', 230, 540],
   ['Lekki', 430, 540],
-  ['Others', 630, 540],
+  ['Others', 630, 540]
 ];
 
 export const linedatav2 = [
@@ -104,7 +104,7 @@ export const linedatav2 = [
   ['Igando', 130],
   ['Orile', 230],
   ['Lekki', 430],
-  ['Others', 630],
+  ['Others', 630]
 ];
 
 export const lineOptions = {
@@ -118,12 +118,12 @@ export const lineOptions = {
   vAxis: {
     minValue: 0,
     gridlines: {
-      color: `${colors.neutral300}`,
+      color: `${colors.neutral300}`
     },
     minorGridlines: {
       // hides the minor grid lines
       minSpacing: 50,
-      count: -1,
-    },
-  },
+      count: -1
+    }
+  }
 };

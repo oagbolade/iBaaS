@@ -1,1 +1,5 @@
-export const MOCK_COLUMNS = ['Name', 'Status', 'Email', 'Role', 'Department'];
+export const MOCK_COLUMNS = [
+  'Request Type',
+  'Request Date',
+  'Approving Officer'
+];

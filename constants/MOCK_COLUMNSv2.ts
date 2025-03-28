@@ -4,5 +4,5 @@ export const MOCK_COLUMNS_V2 = [
   'Number of Accounts',
   'CR Product Balance',
   'DR Product Balance',
-  'Total Balance',
+  'Total Balance'
 ];

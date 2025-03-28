@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import loginBanner from '@/assets/images/loginBanner.png';
 import Box from '@mui/material/Box';
+import loginBanner from '@/public/loginBanner.svg';
+import buttonLoader from '@/public/buttonLoader.svg';
 
 type Props = {
   width?: string;
@@ -15,15 +16,15 @@ export const LoginBanner = ({ width, height }: Props) => {
         position: 'relative',
         width,
         height,
-        flexShrink: 0,
+        flexShrink: 0
       }}
     >
       <Image
         alt="Login Banner"
         src={loginBanner}
         layout="fill"
-        objectFit="cover"
-        objectPosition="center"
+        priority
+        style={{ objectFit: 'cover', objectPosition: 'center' }}
       />
       <Box
         style={{
@@ -32,14 +33,23 @@ export const LoginBanner = ({ width, height }: Props) => {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'rgba(0, 0, 0, 0.3)', // Adjust the opacity (last value) to control the darkness
+          background: 'rgba(0, 0, 0, 0.3)' // Adjust the opacity (last value) to control the darkness
         }}
       />
     </Box>
   );
 };
 
-LoginBanner.defaultProps = {
-  width: '686px',
-  height: '900px',
+export const ButtonLoader = () => {
+  return (
+    <Image
+      alt="Loading..."
+      src={buttonLoader}
+      style={{
+        width: '50px',
+        height: '36px',
+        flexShrink: 0
+      }}
+    />
+  );
 };

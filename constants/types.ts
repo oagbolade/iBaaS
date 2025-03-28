@@ -1,9 +1,21 @@
+/* eslint-disable import/no-cycle */
 import React from 'react';
+import {
+  IAccountDetailsResults,
+  ICustomerResult,
+  IDirectorDetails,
+  IProductInfos
+} from '@/api/ResponseTypes/customer-service';
 
 interface RoleFormValues {
   roleName: string;
   roleDescription: string;
   ideleTimeOut: string;
+}
+
+export interface IPermissionValues {
+  canauth: boolean | number;
+  isoperation: boolean | number;
 }
 
 interface UserFormValues {
@@ -18,30 +30,19 @@ interface UserLogin {
   password: string;
 }
 
-interface PostingLimitValues {
-  role: string;
-  branch: string;
-  creditLimit: string;
-  crBranchLimit: string;
-  crBankLimit: string;
-  depositLimit: string;
-  debitLimit: string;
-  drBranchLimit: string;
-  drBankLimit: string;
-  drLoadLimit: string;
+interface UserResetPassword {
+  password: string;
+  confirmPassword: string;
 }
 
-interface ManageAccountValues {
-  currency: string;
-  gLType: string;
-  gLTypeNode: string;
-  gLTypeClass: string;
-  gLAccountNumber: string;
-  gLAccountDescription: string;
-  BookBalance: string;
-  pointing: string;
-  status: string;
-  pointingType: string;
+interface SignUpFormStepOneInitialValues {
+  cbnCode: string;
+  companyName: string;
+  emailAddress: string;
+  country: string;
+  companyAddress: string;
+  headOffice: string;
+  isNonDMBInstitution: string;
 }
 
 interface PasswordChangeForm {
@@ -78,7 +79,7 @@ export type ChildrenProps = {
 export const bankValues: CommercialBank = {
   bankName: '',
   bankCode: '',
-  bankMnemonic: '',
+  bankMnemonic: ''
 };
 
 export const branchValues: ManageBranch = {
@@ -92,32 +93,47 @@ export const branchValues: ManageBranch = {
   town: '',
   emailAddress: '',
   fax: '',
-  telePhoneNumber: '',
+  telePhoneNumber: ''
 };
 
 export const loginInitialValues: UserLogin = {
   companyCode: '',
   username: '',
+  password: ''
+};
+
+export const resetpasswordInitialValues: UserResetPassword = {
   password: '',
+  confirmPassword: ''
+};
+
+export const signUpFormStepOneInitialValues: SignUpFormStepOneInitialValues = {
+  cbnCode: '',
+  companyName: '',
+  emailAddress: '',
+  country: '',
+  companyAddress: '',
+  headOffice: '',
+  isNonDMBInstitution: ''
 };
 
 export const userInitialValues: UserFormValues = {
   staffId: '',
   staffName: '',
-  branch: '',
+  branch: ''
 };
 
 export const passwordChange: PasswordChangeForm = {
   oldPassword: '',
   newPassword: '',
   confirmPassword: '',
-  accessKey: '',
+  accessKey: ''
 };
 
 export const roleInitialValues: RoleFormValues = {
   roleName: '',
   roleDescription: '',
-  ideleTimeOut: '',
+  ideleTimeOut: ''
 };
 
 export interface CustomStyleI {
@@ -142,3 +158,31 @@ export interface CustomStyleI {
   color?: string | object;
   position?: string | object;
 }
+
+export interface IToastActions {
+  toggleSnackbar: Function;
+  setMessage: Function;
+  setTitle: Function;
+  setSeverity: Function;
+}
+
+export interface IFetchingState {
+  isError?: boolean;
+  isLoading?: boolean;
+  mutate?: Function;
+  isPending?: boolean;
+  error?: Error | null;
+}
+
+export type PreviewAccountEditingInfoProps = {
+  loading?: boolean;
+  accDetailsResults?: IAccountDetailsResults;
+  productInfos?: IProductInfos;
+};
+
+export type PreviewDirectorInfoProps = {
+  loading?: boolean;
+  directorDetails?: IDirectorDetails[];
+  customerResult?: ICustomerResult;
+  customerId?: string;
+};

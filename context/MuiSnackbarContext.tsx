@@ -5,7 +5,7 @@ import {
   createContext,
   useMemo,
   useState,
-  useCallback,
+  useCallback
 } from 'react';
 import { AlertColor } from '@mui/material/Alert';
 
@@ -15,7 +15,7 @@ const initialSnackbarContext = {
   severity: 'success' as AlertColor,
   toggleSnackbar: () => {},
   setMessage: (() => {}) as Dispatch<SetStateAction<string>>,
-  setSeverity: (() => {}) as Dispatch<SetStateAction<AlertColor>>,
+  setSeverity: (() => {}) as Dispatch<SetStateAction<AlertColor>>
 };
 
 type MuiSnackbarContextType = {
@@ -28,7 +28,7 @@ type MuiSnackbarContextType = {
 };
 
 export const MuiSnackbarContext = createContext<MuiSnackbarContextType>(
-  initialSnackbarContext,
+  initialSnackbarContext
 );
 
 export default function MuiSnackbarContextProvider({ children }: any) {

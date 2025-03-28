@@ -1,5 +1,21 @@
 [
   {
+    "customerID": "string",
+    "fullName": "string",
+    "accountNumber": "string",
+    "productCode": "string",
+    "productName": "string",
+    "tdAmount": 0,
+    "intRate": 0,
+    "tdPurpose": "string",
+    "startDate": "string",
+    "matDate": "string",
+    "currentBalance": 0,
+    "interest_At_Maturity": 0,
+    "accrued_Interest": 0,
+    "tenor": 0
+  },
+  {
     "productCode": "101",
     "productName": "Staff Current",
     "numberOfAccounts": 9,
