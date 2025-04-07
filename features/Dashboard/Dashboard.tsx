@@ -12,6 +12,7 @@ import { useGetTellerBalanceByUserId } from '@/api/operation/useVaultManagement'
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
 import { getStoredUser } from '@/utils/user-storage';
+import useSingleTabSession from '@/utils/useSessionTimeout';
 
 export const Dashboard = () => {
   const { total, dRtotal, cRtotal, isLoading } = useGetTellerBalanceByUserId();
@@ -23,6 +24,8 @@ export const Dashboard = () => {
   const roundedTotalPercentage = Number.isNaN(totalPercentage)
     ? '0.00'
     : totalPercentage.toFixed(2);
+  useSingleTabSession();
+
   if (isLoading) {
     return (
       <Box my={6}>
@@ -64,7 +67,7 @@ export const Dashboard = () => {
                 width: '98%'
               }}
               isPositiveTrend={false}
-              percentage={roundedTotalPercentage}
+              // percentage={roundedTotalPercentage}
               title="Till Balance"
               amount={formattedTotal}
             />

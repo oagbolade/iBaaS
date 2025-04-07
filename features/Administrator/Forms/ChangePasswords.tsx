@@ -13,6 +13,12 @@ import { useChangePassword } from '@/api/admin/useAdminUsers';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IDepartments, IRoles } from '@/api/ResponseTypes/general';
 import { useGetParams } from '@/utils/hooks/useGetParams';
+import { toISOStringFormat } from '@/utils/convertDateToISOFormat';
+import {
+  getPasswordFromLocalStorage,
+  getStoredUser
+} from '@/utils/user-storage';
+import { environment } from '@/axiosInstance';
 
 type Props = {
   isSubmitting: boolean;
@@ -36,14 +42,17 @@ export const ChangePasswordForm = ({
   const { mutate, isError } = useChangePassword();
   const roleId = useGetParams('roleId') || 'N/A';
   const departmentId = useGetParams('deptId') || 'N/A';
-
   const { mappedDepartments, mappedRole } = useMapSelectOptions({
     roles,
     departments
   });
-
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    await mutate?.(values);
+    await mutate?.({
+      ...values,
+      passchange_date: toISOStringFormat(
+        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      )
+    });
 
     if (!isError) {
       actions.resetForm();
@@ -153,37 +162,15 @@ export const ChangePasswordForm = ({
                     value={departmentId}
                   />{' '}
                 </Grid>
-                {/* We cannot validate old password for a user */}
-                {/* <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    type={showPassword ? 'text' : 'password'}
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%'),
-                    }}
-                    name="password"
-                    placeholder="Enter password"
-                    label="Old Password"
-                    endAdornment={
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    }
-                  />{' '}
-                </Grid> */}
                 <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     type={showPassword ? 'text' : 'password'}
                     customStyle={{
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
-                    name="newPassword"
-                    placeholder="Enter password"
-                    label="New Password"
+                    name="oldpassword"
+                    placeholder="Enter old password"
+                    label="Old Password"
                     endAdornment={
                       <IconButton
                         aria-label="toggle password visibility"
@@ -196,6 +183,32 @@ export const ChangePasswordForm = ({
                     }
                   />{' '}
                 </Grid>
+
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    type={showPassword ? 'text' : 'password'}
+                    customStyle={{
+                      width: setWidth(isMobile ? '285px' : '100%')
+                    }}
+                    name="newpassword"
+                    placeholder="Enter New password"
+                    label="New Password"
+                    autoComplete={
+                      environment === 'development' ? 'on' : 'new-password'
+                    }
+                    endAdornment={
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    }
+                  />{' '}
+                </Grid>
+
                 <Grid
                   item={isTablet}
                   mobile={12}
@@ -205,8 +218,8 @@ export const ChangePasswordForm = ({
                     customStyle={{
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
-                    name="accessKey"
-                    placeholder="38944849"
+                    name="sscode"
+                    placeholder="Enter access key"
                     label="Access Key"
                     required
                   />{' '}

@@ -19,7 +19,8 @@ import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
   FormSelectField,
-  FormikDateTimePicker
+  FormikDateTimePicker,
+  FormSelectInput
 } from '@/components/FormikFields';
 import { EditOperations } from '@/constants/OperationOptions';
 import { useCurrentBreakpoint } from '@/utils';
@@ -81,6 +82,8 @@ export const InWard = ({
     currencies,
     commBanks
   });
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(true);
   const [searchParams, setSearchParams] = useState<IClearingParams>({
     bankcode: '',
     cleartype: ''
@@ -155,6 +158,9 @@ export const InWard = ({
       severity: 'error',
       accountNumber: {
         message: 'Account Name is required'
+      },
+      selectedCurrency: {
+        message: 'Currency is required'
       }
     };
     if (searchValue.accountNumber === '') {
@@ -167,11 +173,23 @@ export const InWard = ({
 
       return;
     }
+
+    if (selectedCurrency === '') {
+      toast(
+        toastMessage.selectedCurrency.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
+
     setSearchParams(params);
 
     const getAllValues = {
       ...values,
-      debitAcct: accountData?.accountnumber as string
+      debitAcct: accountData?.accountnumber as string,
+      currencyCode: selectedCurrency
     };
     await mutate(getAllValues);
   };
@@ -189,6 +207,27 @@ export const InWard = ({
       setIsSubmitting?.(false);
     };
   }, [isSubmitting, isSubmittingForward]);
+
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+      setIsLoading(false);
+    }
+  }, [mappedCurrency]); // Runs when mappedCurrency changes
+
+  if (isLoading) return <div>Loading currencies...</div>;
+
   return (
     <Formik
       initialValues={InwardClearingInitialValues}
@@ -248,13 +287,17 @@ export const InWard = ({
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
-                  <FormSelectField
+                  <FormSelectInput
                     name="currencyCode"
                     options={mappedCurrency}
                     label="Currency"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
+                    value={selectedCurrency}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setSelectedCurrency(e.target.value)
+                    }
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>

@@ -11,6 +11,7 @@ import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
 import { encryptData } from '@/utils/encryptData';
+import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 
 const MenuWrapper = styled.section`
   .MuiBox-root {
@@ -53,7 +54,18 @@ export const TableActionMenu = ({
     setAnchorEl(null);
     handleMenuClose();
   };
+  const [shouldDisableOverdraft, setshouldDisableOverdraft] = React.useState(false);
 
+
+
+  React.useEffect(() => {
+    const disableOverDreaft = !checkMultipleUserRoleAccess(
+      'Overdrafts',
+      'OVERDRAFT'
+    );
+
+    setshouldDisableOverdraft(disableOverDreaft);
+  }, []);
   return (
     <Box>
       <Button onClick={handleClick}>
@@ -72,6 +84,13 @@ export const TableActionMenu = ({
               }}
             >
               <Link
+
+                style={{
+                  pointerEvents: shouldDisableOverdraft ? 'none' : 'auto'
+                }}
+                aria-disabled={shouldDisableOverdraft}
+                tabIndex={shouldDisableOverdraft ? -1 : undefined}
+
                 href={`/loan/overdrafts/view-single-overdraft?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(
                   customerId
                 )}&odDetail=${detail}`}
@@ -87,6 +106,14 @@ export const TableActionMenu = ({
                   }}
                 >
                   <Link
+
+                    style={{
+                      pointerEvents: shouldDisableOverdraft ? 'none' : 'auto'
+                    }}
+                    aria-disabled={shouldDisableOverdraft}
+                    tabIndex={shouldDisableOverdraft ? -1 : undefined}
+
+
                     href={`/loan/overdrafts/set-overdraft?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(
                       customerId
                     )}&actionType=update&odDetail=${detail}`}
@@ -100,6 +127,13 @@ export const TableActionMenu = ({
                   }}
                 >
                   <Link
+
+                    style={{
+                      pointerEvents: shouldDisableOverdraft ? 'none' : 'auto'
+                    }}
+                    aria-disabled={shouldDisableOverdraft}
+                    tabIndex={shouldDisableOverdraft ? -1 : undefined}
+
                     href={`/loan/overdrafts/terminate?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(
                       customerId
                     )}&odDetail=${detail}`}

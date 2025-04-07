@@ -50,8 +50,16 @@ export const PortfolioAtRisk = () => {
   return (
     <Box sx={{ width: '100%', marginTop: '50px' }}>
       <TopOverViewSection useBackButton />
-      <Box sx={{ marginTop: '30px', marginBottom: '30px', marginLeft: '20px' }}>
+      <Box
+        sx={{
+          marginTop: '30px',
+          marginBottom: '30px',
+          marginLeft: '20px',
+          width: '100%'
+        }}
+      >
         <TextInput
+          customStyle={{ width: '100%' }}
           label="Product Name/Code"
           name="Search"
           placeholder="Search for product code or name"

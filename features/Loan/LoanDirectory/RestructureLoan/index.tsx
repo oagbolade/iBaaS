@@ -66,10 +66,6 @@ export const RestructureLoan = () => {
     encryptData(accountNumber as string) || ''
   );
 
-
-
-  // console.log(loanAccDetails, 'loanAccDetails');
-
   const { loanProducts } = useGetLoansProductDetailCode(
     encryptData(productCode as string) || ''
   );

@@ -26,6 +26,13 @@ import {
 } from '@/components/FormikFields';
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
+import { PrimaryIconButton } from '@/components/Buttons';
+import {
+  useGenerateProductCode,
+  generateProductCode
+} from '@/api/setup/useProduct';
+import { Field, useFormikContext } from 'formik';
 
 type Props = {
   titles?: ITitle[];
@@ -60,10 +67,21 @@ export const PersonalDetailsForm = ({
     CustomerCreationContext
   );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
+  const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
+  const { setFieldValue, values } = useFormikContext<any>();
 
   const handleCheck = (booleanValue: string, value: string) => {
     setCustomerType(value);
   };
+
+  const handleGenerateCode = async (code: string) => {
+    generateProductCode(code).then(resp => {
+      console.log(resp)
+      setProductCodeGenarate(resp.productCode);
+      setFieldValue('productCode', resp.productCode);
+    })
+  };
+
   const {
     mappedProductType,
     mappedCurrency,
@@ -80,29 +98,38 @@ export const PersonalDetailsForm = ({
 
   return (
     <>
+
+
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
-          name="productCode"
+          name="productclass"
           options={mappedProductClass}
           label="Product Class"
+          onChange={(e) => handleGenerateCode(e.target.value)}
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
           required
         />
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="productCode"
           placeholder="Enter Product Code"
           label="Product Code"
+          type="number"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
+          value={productCodeGenarate}
           required
           disabled
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="productName"
@@ -125,6 +152,19 @@ export const PersonalDetailsForm = ({
           required
         />
       </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <FormTextInput
+          name="maxLoan"
+          placeholder="Enter Maximum Loan Amount"
+          label="Maximun Loan Amount"
+          customStyle={{
+            width: setWidth(isMobile ? '250px' : '70%')
+          }}
+          required
+        />
+      </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="currencycode"
@@ -139,24 +179,14 @@ export const PersonalDetailsForm = ({
       <Grid item={isTablet} mobile={12}>
         <Box sx={{ width: '70%' }}>
           <DemoContainer components={['DatePicker']}>
-            <FormikDateTimePicker
-              disableFuture
-              label="Start Date"
-              name="productstart"
-              required
-            />
+            <DateTimePicker label="Start Date" name="productstart" />
           </DemoContainer>
         </Box>
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <Box sx={{ width: '70%' }}>
           <DemoContainer components={['DatePicker']}>
-            <FormikDateTimePicker
-              disableFuture
-              label="Expiry Birth"
-              name="productExpire"
-              required
-            />
+            <DateTimePicker label="Expiry Date" name="productExpire" />
           </DemoContainer>
         </Box>
       </Grid>

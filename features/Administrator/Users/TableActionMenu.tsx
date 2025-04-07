@@ -12,6 +12,7 @@ import { CustomerServiceContext } from '@/features/CustomerService/CustomerServi
 import { StyledMenu } from '@/components/Table';
 import colors from '@/assets/colors';
 import { IUsers } from '@/api/ResponseTypes/admin';
+import { getStoredUser } from '@/utils/user-storage';
 
 const MenuWrapper = styled.section`
   .MuiBox-root {
@@ -39,7 +40,7 @@ export const TableActionMenu = ({ handleDelete, userid, user }: Props) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
+  // eslint-disable-next-line no-unsafe-optional-chaining, no-redeclare
   const handleClose = (link: string | null = null) => {
     if (link) router.push(link || '');
     const isEditing = true;
@@ -79,17 +80,6 @@ export const TableActionMenu = ({ handleDelete, userid, user }: Props) => {
               href={`/admin/users/reset/?userid=${sanitize(userid)}&fullname=${sanitize(user.fullname as string)}&roleId=${sanitize(user.role_id as string)}`}
             >
               <TableMenuButton buttonTitle="Reset User" />
-            </Link>
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              return handleClose(null);
-            }}
-          >
-            <Link
-              href={`/admin/users/password/?userid=${sanitize(userid)}&fullname=${sanitize(user.fullname as string)}&deptId=${sanitize(user.deptcode as string)}&roleId=${sanitize(user.role_id as string)}`}
-            >
-              <TableMenuButton buttonTitle="Change Password" />
             </Link>
           </MenuItem>
           <MenuItem

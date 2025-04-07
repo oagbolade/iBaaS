@@ -43,7 +43,11 @@ const FileNameMapper: IFileNameMapper = {
   TermDepositMaturity: 'TermDepositMaturity',
   TellerBalance: 'TellerBalance',
   PortfolioAtRisk: 'PortfolioAtRisk',
-  PortfolioAtRiskProductList: 'PortfolioAtRiskProductList'
+  PortfolioAtRiskProductList: 'PortfolioAtRiskProductList',
+  CustomerBalance: 'CustomerBalance',
+  PlainTrialBalance: 'PlainTrialBalance',
+
+
 };
 
 const generatePdf = (

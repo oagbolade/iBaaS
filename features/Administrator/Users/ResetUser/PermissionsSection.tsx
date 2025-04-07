@@ -51,8 +51,8 @@ export const PermissionsSection = ({
             { label: 'No', value: '0' }
           ]}
           title="Can this user Login?"
-          name="status"
-          value={userDetails?.logincount?.toString() || ''}
+          name="loginStatus"
+          value={userDetails?.loginStatus?.toString() || '0'}
         />
       </Box>
       <Box mt={2}>
@@ -90,7 +90,7 @@ export const PermissionsSection = ({
             { label: 'No', value: '0' }
           ]}
           title="Status Locked?"
-          name="status"
+          name="lockStatus"
           value={userDetails?.lockcount?.toString() || ''}
         />
       </Box>

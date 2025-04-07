@@ -336,7 +336,8 @@ export const AccountPasswordBodyContainer = {
   alignItems: 'center',
   gap: '46px',
   flexShrink: 0,
-  alignSelf: 'stretch'
+  padding: '0px 24px',
+  // alignSelf: 'stretch'
 };
 
 export const AccountBody = {

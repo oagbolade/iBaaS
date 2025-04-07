@@ -50,16 +50,30 @@ const StyledTableHead = styled(TableHead)(({ theme }) => {
 export const renderEmptyTableBody = (message: string | null = null) => {
   return (
     <TableRow>
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
+      <TableCell 
+        colSpan={100} // This ensures it spans all columns
+        sx={{ 
+          border: 'none',
+          height: '400px',
+          width: '100%',
+          position: 'relative',
+          padding: 0
+        }}
       >
-        <Box>
-          <Box ml={8}>
-            <EmptyTableIcon />
-          </Box>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '100%'
+          }}
+        >
+          <EmptyTableIcon />
           <Typography sx={{ ...emptyTableMainTitle }}>
             {message || 'No Search Criteria Created'}
           </Typography>
@@ -67,8 +81,8 @@ export const renderEmptyTableBody = (message: string | null = null) => {
             {!message &&
               'Please create a search criteria above and you can see the results here'}
           </Typography>
-        </Box>
-      </Stack>
+        </Stack>
+      </TableCell>
     </TableRow>
   );
 };
@@ -267,15 +281,7 @@ export const TableV2 = <T,>({
                 );
               })
             ) : (
-              <StyledTableRow>
-                <StyledTableCell
-                  colSpan={columns.length + actionsColumn}
-                  component="th"
-                  scope="row"
-                >
-                  {renderEmptyTableBody()}
-                </StyledTableCell>
-              </StyledTableRow>
+              renderEmptyTableBody()
             )}
             <StyledTableRow>
               {isSearched &&

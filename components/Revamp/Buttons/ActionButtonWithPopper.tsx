@@ -18,7 +18,8 @@ import {
   BasicSearchGroup,
   CheckBoxSearchGroup,
   ExportData,
-  LoanCustomerSearch
+  LoanCustomerSearch,
+  GlSearchGroup
 } from '@/components/Revamp/Menu/SearchGroupVariants';
 
 import { CustomStyleI } from '@/constants/types';
@@ -41,6 +42,7 @@ type Props = {
   searchGroupVariant?:
     | 'Default'
     | 'LoanCustomerSearch'
+    | 'GLSearchGroup'
     | 'BasicSearchGroup'
     | 'CheckBoxSearchGroup'
     | 'ExportReport'
@@ -60,6 +62,7 @@ type Props = {
 
 type SearchGroupMapperType = {
   LoanCustomerSearch: React.ReactNode;
+  GLSearchGroup: React.ReactNode;
   BasicSearchGroup: React.ReactNode;
   CheckBoxSearchGroup: React.ReactNode;
   ExportReport: React.ReactNode;
@@ -123,6 +126,19 @@ export const ActionButtonWithPopper = ({
         <LoanCustomerSearch
           handleClose={handleClose}
           options={loanDropDownOptions}
+          handleMenuItemClick={handleMenuItemClick}
+          onChange={onChange}
+          searchValue={searchValue}
+          name={name}
+          autoFocus
+          loading={loading}
+        />
+      ),
+
+      GLSearchGroup: (
+        <GlSearchGroup
+          handleClose={handleClose}
+          options={dropDownOptions}
           handleMenuItemClick={handleMenuItemClick}
           onChange={onChange}
           searchValue={searchValue}

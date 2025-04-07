@@ -128,24 +128,6 @@ export const partialPayOffSchema = Yup.object({
 
 export const restructuredLoanSchema = Yup.object({
   restructureType: Yup.number().required(),
-
-  principalWriteOff_GL: Yup.number().required(),
-  interestWriteOff_GL: Yup.number().required(),
-  penalWriteOff_GL: Yup.number().required(),
-
-  outstandingPrincipal: Yup.number().required(),
-  outstandingInterest: Yup.number().required(),
-  outstandingPenalInterest: Yup.number().required(),
-
-  principal_To_WriteOff: Yup.number().required(),
-  interest_To_WriteOff: Yup.number().required(),
-  penal_To_WriteOff: Yup.number().required(),
-
-  principalWriteOff_Type: Yup.number().required(),
-  interestlWriteOff_Type: Yup.number().required(),
-  penalWriteOff_Type: Yup.number().required(),
-
-  amt_To_Liquidate: Yup.number().required(),
   newPrincipal: Yup.number().required(),
 
   refinancingAmt: Yup.number().required(),

@@ -74,6 +74,7 @@ export function useAuth(): UseAuth {
       }
       if (data.responseCode === statusCodes.LOGIN_SUCCESS) {
         setLoading(false);
+        sessionStorage.setItem('shouldRefreshDashboard', 'true');
         if (auth) {
           setTimeout(() => {
             window.location.href = `${getLastPage()}`;

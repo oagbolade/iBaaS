@@ -51,7 +51,9 @@ const colors = {
   darkGrayishBlue: '#475467',
   greenLine: '#76DEE4',
   blueLine: '#4D80E4',
-  Gray900: '#101828'
+  Gray900: '#101828',
+  primaryText: '#353F50',
+  secondaryText: ' #5F738C'
 };
 
 export default colors;

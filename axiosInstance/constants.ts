@@ -6,6 +6,10 @@ export const REPORT_BASE_URL =
 const env = process.env.NODE_ENV;
 
 // Assign baseUrl based on environment
+const AuthFaBaseUrl =
+  env === 'development'
+    ? 'https://ibaas-2fa.qa.interswitchng.com/api'
+    : 'https://ibaas-2fa.qa.interswitchng.com/api';
 const baseUrl =
   env === 'development'
     ? 'https://iswcbaapi.qa.interswitchng.com/api'
@@ -21,4 +25,4 @@ const reportsBaseUrl =
     ? 'https://isw-reportsapi.qa.interswitchng.com/api'
     : 'https://isw-reportsapi.qa.interswitchng.com/api';
 
-export { baseUrl, nipBaseUrl, reportsBaseUrl };
+export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl };

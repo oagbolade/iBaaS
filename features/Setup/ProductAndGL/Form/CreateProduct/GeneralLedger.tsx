@@ -36,6 +36,8 @@ import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
 import { IGLAccount } from '@/api/ResponseTypes/admin';
 import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
+import { Field, useFormikContext } from 'formik';
+
 
 type Props = {
   titles?: ITitle[];
@@ -78,9 +80,12 @@ export const GeneralLedgerForm = ({
   const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
 
+  const { setFieldValue, values } = useFormikContext<any>();
+
+
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
     accountNumber: '',
-    principalbalance: '',
+    princbalBalance: '',
     susinterest: '',
     intaccrual: '',
     interestincome: '',
@@ -94,9 +99,11 @@ export const GeneralLedgerForm = ({
     penalSuspense: ''
   });
 
+
+
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
     accountNumber: [],
-    principalbalance: [],
+    princbalBalance: [],
     susinterest: [],
     intaccrual: [],
     interestincome: [],
@@ -109,9 +116,11 @@ export const GeneralLedgerForm = ({
     penalInterest: [],
     penalSuspense: []
   });
+
+
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
     accountNumber: '',
-    principalbalance: '',
+    princbalBalance: '',
     susinterest: '',
     intaccrual: '',
     interestincome: '',
@@ -126,12 +135,18 @@ export const GeneralLedgerForm = ({
   });
 
   const handleSelectedValue = (value: string, name: string) => {
+
     setSelectedValue((prev) => ({
       ...prev,
       [name]: value
     }));
+
+    setFieldValue(name, value);
   };
+
+
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const { value, name } = event.target;
 
     setSearchValue((prev) => ({
@@ -146,10 +161,12 @@ export const GeneralLedgerForm = ({
       [name]: filteredGlItems
     }));
 
+
+
     if (value.trim().length === 0) {
       setFilteredValues({
         accountNumber: mappedGlAccount,
-        principalbalance: mappedGlAccount,
+        princbalBalance: mappedGlAccount,
         susinterest: mappedGlAccount,
         intaccrual: mappedGlAccount,
         interestincome: mappedGlAccount,
@@ -163,7 +180,10 @@ export const GeneralLedgerForm = ({
         penalSuspense: mappedGlAccount
       });
     }
+
   };
+
+
 
   return (
     <>
@@ -173,9 +193,9 @@ export const GeneralLedgerForm = ({
             handleSelectedValue={(value: string) =>
               handleSelectedValue(value, 'accountNumber')
             }
-            label="GL Account"
+            label="GL Account Number"
             name="accountNumber"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.accountNumber as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -188,28 +208,33 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'principalbalance')
+              handleSelectedValue(value, 'princbalBalance')
             }
             label="Principal Balance"
-            name="principalbalance"
-            searchGroupVariant="BasicSearchGroup"
-            dropDownOptions={filteredValues.principalbalance as OptionsI[]}
+            name="princbalBalance"
+            searchGroupVariant="GLSearchGroup"
+            dropDownOptions={filteredValues.princbalBalance as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.principalbalance as string) ||
+              (selectedValue.princbalBalance as string) ||
               'Search Principal Balance'
             }
             onChange={handleSearch}
-            searchValue={searchValue.principalbalance as string}
+            searchValue={searchValue.princbalBalance as string}
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -218,7 +243,7 @@ export const GeneralLedgerForm = ({
             }
             label="Suspended Asset"
             name="susinterest"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.susinterest as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -231,6 +256,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -239,7 +267,7 @@ export const GeneralLedgerForm = ({
             }
             label="Interest Accrual"
             name="intaccrual"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.intaccrual as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -252,6 +280,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -260,7 +291,7 @@ export const GeneralLedgerForm = ({
             }
             label="Interest Income"
             name="interestincome"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interestincome as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -274,6 +305,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -282,7 +316,7 @@ export const GeneralLedgerForm = ({
             }
             label="Inter Branch GL"
             name="interbr"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interbr as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -295,6 +329,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -303,7 +340,7 @@ export const GeneralLedgerForm = ({
             }
             label="Penal Accrual"
             name="penalIntAccrual"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.penalIntAccrual as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -317,6 +354,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -325,7 +365,7 @@ export const GeneralLedgerForm = ({
             }
             label="Interest Receivable"
             name="interestReceivable"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interestReceivable as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -339,6 +379,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -347,7 +390,7 @@ export const GeneralLedgerForm = ({
             }
             label="Suspended Principal"
             name="susprinc"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.susprinc as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -360,6 +403,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -368,7 +414,7 @@ export const GeneralLedgerForm = ({
             }
             label="Unearned Income GL"
             name="uid"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.uid as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -381,6 +427,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -389,7 +438,7 @@ export const GeneralLedgerForm = ({
             }
             label="Miscellaneous income"
             name="micincome"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.micincome as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -403,6 +452,8 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -411,7 +462,7 @@ export const GeneralLedgerForm = ({
             }
             label="Penal Interest"
             name="penalInterest"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.penalInterest as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -424,6 +475,8 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -432,7 +485,7 @@ export const GeneralLedgerForm = ({
             }
             label="Penal Suspense"
             name="penalSuspense"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.penalSuspense as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -445,6 +498,9 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+
+
     </>
   );
 };

@@ -364,7 +364,7 @@ export const FundTransferInitialValues: FundTransferFormValues = {
   tellerno: 0,
   inp_Branch: '',
   narration1: '',
-  reversal: '',
+  reversal: '0',
   currencyCode: '',
   drProductclass: '',
   crProductclass: '',

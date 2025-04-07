@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 'use client';
 import React, { useEffect, useContext, useState } from 'react';
 import { Formik, Form } from 'formik';
@@ -9,8 +10,9 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { AlertColor } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { LoginHeader } from './LoginHeader';
-import { loginButton, loginIbaas } from './styles';
+import { loginButton, loginFormStyle, loginIbaas } from './styles';
 import ResetPassword from './ResetPassword';
+import { AuthenticationCode } from './AuthenticationCode';
 import { InterSwitchImage } from '@/assets/interswitch/image';
 import { login as userLoginSchema } from '@/schemas/auth';
 import { loginInitialValues } from '@/constants/types';
@@ -21,15 +23,29 @@ import { useUser } from '@/api/auth/useUser';
 import { MuiSnackbar } from '@/components/Snackbar';
 import { MuiSnackbarContext } from '@/context/MuiSnackbarContext';
 import { encryptData } from '@/utils/encryptData';
-import { getStoredUser } from '@/utils/user-storage';
+import {
+  getStoredUser,
+  savePasswordToLocalStorage
+} from '@/utils/user-storage';
 import { isTokenExistingOrExpired } from '@/utils/hooks/useAuthGuard';
 import { environment } from '@/axiosInstance';
 import { PageTitle } from '@/components/Typography';
+import { ModalContainerV2 } from '@/components/Revamp/Modal';
+import { useAuth2faCheck } from '@/api/auth/use2FA';
+import { UseGetAllAuth2faCheck } from '@/api/ResponseTypes/admin';
+import {
+  clearSession,
+  generateSessionId,
+  getBroadcastChannel,
+  setSessionActive
+} from '@/utils/user-storage/broadcastChannel';
+import { shouldEnforce2FA } from '@/utils/use2FaConfig';
 
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = React.useState(false);
+  const [isActiveTab, setIsActiveTab] = useState(true);
 
   const { isLoading, login } = useAuth();
   const { user } = useUser();
@@ -43,18 +59,48 @@ export function LoginForm() {
 
   useEffect(() => {
     const tokenExpiration = getStoredUser()?.tokenExpire;
-
-    if (isTokenExistingOrExpired(tokenExpiration)) {
+    const userId = getStoredUser()?.profiles.userid as string;
+    const existingSession = localStorage.getItem('activeSession');
+    const newSessionId = generateSessionId();
+    const currentSession = localStorage.getItem('activeSession');
+    const sessionData = currentSession ? JSON.parse(currentSession) : null;
+    // eslint-disable-next-line no-use-before-define
+    if (existingSession && existingSession !== userId) {
+      setIsActiveTab(false);
+      router.push('/login'); // Redirect user to login page
       return;
     }
 
-    if (user) {
+    if (isTokenExistingOrExpired(tokenExpiration) && user) {
+      setSessionActive(userId, newSessionId);
       setTimeout(() => {
         router.push('/dashboard');
       }, 3000);
 
       toast('Login successful, redirecting please wait...', 'success');
     }
+    const handleBroadcastMessage = (event: MessageEvent) => {
+      if (event.data.type === 'SESSION_START' && event.data.userId !== userId) {
+        setIsActiveTab(false);
+        clearSession();
+        router.push('/login'); // Redirect user to login page
+      }
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        getBroadcastChannel()?.postMessage({ type: 'SESSION_END' });
+      }
+    };
+
+    getBroadcastChannel()?.addEventListener('message', handleBroadcastMessage);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      getBroadcastChannel()?.removeEventListener(
+        'message',
+        handleBroadcastMessage
+      );
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -67,30 +113,99 @@ export function LoginForm() {
 
   const [oldPassword, setOldPassword] = useState<string>('');
   const [userid, setUserId] = useState<string>('');
-
+  const [openModel, setOpenModel] = useState(false);
+  const is2FARequired = shouldEnforce2FA();
+  const [loginCredentials, setLoginCredentials] = useState<any>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate: check2fa } = useAuth2faCheck();
   const handleFirstTimeLogin = (oldPasscode: string, useridLogin: string) => {
     setIsFirstTimeUser(true);
     setOldPassword(oldPasscode);
     setUserId(useridLogin);
   };
+  const handleClose = () => {
+    setOpenModel(false);
+    setLoginCredentials(null); // Clear credentials when modal closes
+  };
+  const handleVerifyCode = (authCode: string) => {
+    if (!loginCredentials || !authCode) {
+      toast('No credentials or authentication code provided', 'error');
+      return;
+    }
+    const { companyCode, username, password } = loginCredentials;
+    const encryptedPassword = encryptData(password);
 
-  const onSubmit = (values: any) => {
-    const encryptedPassword = encryptData(values.password);
-
-    login(values.companyCode, values.username, encryptedPassword || '', () =>
-      handleFirstTimeLogin(values.password, values.username)
-    );
+    const newSessionId = generateSessionId();
+    try {
+      login(companyCode, username, encryptedPassword || '', () => {
+        handleFirstTimeLogin(password, username);
+        setSessionActive(username, newSessionId);
+        setOldPassword(password);
+        // Set session active after successful login
+      });
+      handleClose(); // Close modal after verification
+    } catch (error: any) {
+      if (
+        error.responseCode === '10' ||
+        error.responseMessage?.includes('invalid token')
+      ) {
+        toast('Invalid authentication code. Please try again.', 'error');
+      } else {
+        toast(
+          `Login failed: ${error.responseMessage || 'Unknown error'}`,
+          'error'
+        );
+      }
+    }
   };
 
+  const onSubmit = (values: any) => {
+    if (!values.companyCode || !values.username || !values.password) return;
+
+    const encryptedPassword = encryptData(values.password);
+    const newSessionId = generateSessionId();
+
+    const handleSuccessfulLogin = () => {
+      setOldPassword(values.password);
+      setSessionActive(values.username, newSessionId);
+      getBroadcastChannel()?.postMessage({
+        type: 'SESSION_START',
+        userId: values.username
+      });
+    };
+
+    if (is2FARequired) {
+      setLoginCredentials(values);
+      setOpenModel(true);
+      setOldPassword(values.password);
+      return;
+    }
+
+    check2fa(
+      { tenantId: values.companyCode, userId: values.username },
+      {
+        onSuccess: (data: UseGetAllAuth2faCheck) => {
+          const loginCallback = () => {
+            handleSuccessfulLogin();
+            if (!data.data.use2FA) {
+              handleFirstTimeLogin(values.password, values.username);
+              toast('Login successful, redirecting please wait...', 'success');
+            }
+          };
+          login(
+            values.companyCode,
+            values.username,
+            encryptedPassword || '',
+            loginCallback
+          );
+          setIsSubmitting(false);
+        },
+        onError: () => setIsSubmitting(false) // Optional: Add error handling if needed
+      }
+    );
+  };
   return (
-    <Box
-      sx={{
-        padding: { desktop: '30px 200px 0 200px', mobile: '50px 50px 0 50px' },
-        width: { desktop: '55vw', mobile: '100vw' }
-      }}
-    >
-      <InterSwitchImage />
-      <PageTitle title="IBaaS" styles={loginIbaas} />
+    <Box sx={loginFormStyle}>
       <LoginHeader />
       <Formik
         initialValues={loginInitialValues}
@@ -100,8 +215,8 @@ export function LoginForm() {
         validationSchema={userLoginSchema}
       >
         <Form autoComplete={environment === 'development' ? 'on' : 'off'}>
-          <Box sx={{ width: '100%' }}>
-            <Grid container spacing={2}>
+          <Box sx={{ marginBottom: '90px' }}>
+            <Grid container spacing={2} sx={{ marginBottom: '100px' }}>
               <Grid item mobile={12}>
                 <FormTextInput
                   customStyle={{
@@ -173,8 +288,11 @@ export function LoginForm() {
                 <Grid item mobile={12}>
                   <PrimaryIconButton
                     type="submit"
-                    buttonTitle={isLoading ? 'Loading...' : 'Login'}
+                    buttonTitle={
+                      isLoading || isSubmitting ? 'Loading...' : 'Login'
+                    }
                     customStyle={loginButton}
+                    disabled={isLoading || isSubmitting}
                   />
                 </Grid>
               </Grid>
@@ -182,13 +300,31 @@ export function LoginForm() {
           </Box>
         </Form>
       </Formik>
+      {openModel && loginCredentials && (
+        <ModalContainerV2
+          form={
+            <AuthenticationCode
+              handleClose={handleClose}
+              handleVerifyCode={handleVerifyCode}
+              credentials={loginCredentials}
+            />
+          }
+        />
+      )}
       <MuiSnackbar />
-      <ResetPassword
-        isFirstTimeUser={isFirstTimeUser}
-        setIsFirstTimeUser={setIsFirstTimeUser}
-        oldPassword={oldPassword}
-        userId={userid}
-      />
+
+      {isFirstTimeUser && (
+        <ModalContainerV2
+          form={
+            <ResetPassword
+              isFirstTimeUser={isFirstTimeUser}
+              setIsFirstTimeUser={setIsFirstTimeUser}
+              oldPassword={oldPassword}
+              userId={userid}
+            />
+          }
+        />
+      )}
     </Box>
   );
 }

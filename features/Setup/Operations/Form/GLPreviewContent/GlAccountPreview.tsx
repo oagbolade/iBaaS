@@ -8,6 +8,7 @@ import {
 } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { PageTitle } from '@/components/Typography';
 import { title } from '@/features/Operation/Forms/style';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 interface Props {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -39,13 +40,13 @@ export const GLAccountPreviewContent = ({ accountDetails, loading }: Props) => {
 
       <SubTitle title="Product Name" />
       <Details title={accountDetails.prodType || 'NIL'} />
-
       <SubTitle title="Name" />
       <Details title={accountDetails.name || 'NIL'} />
 
       <SubTitle title="Book Balance" />
-      <Details title={accountDetails.BKBalance || 'NIL'} />
-
+      <Details
+        title={`NGN ${formatCurrency(accountDetails?.bkBalance || 0) || '0.00'}`}
+      />
       <SubTitle title="Date Open" />
       <Details title={accountDetails.DateOpened || 'NIL'} />
 

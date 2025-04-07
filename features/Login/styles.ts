@@ -6,7 +6,67 @@ export const bannerTitleContainer = {
   bottom: '130px',
   padding: '20px 0 20px 120px'
 };
-
+export const bannerContainer = {
+  display: 'flex',
+  width: '488px',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '48px',
+  marginTop: '340px'
+};
+export const bannerTitle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '24px',
+  alignSelf: 'stretch'
+};
+export const platformTitle = {
+  color: `${colors.neutral900}`,
+  fontFamily: 'Averta',
+  fontSize: '40px',
+  fontStyle: 'normal',
+  fontWeight: 700,
+  lineHeight: '48px' /* 120% */,
+  whiteSpace: 'pre-line',
+  alignSelf: 'stretch'
+};
+export const bankTitle = {
+  color: `${colors.neutral700}`,
+  /* body/large */
+  fontFamily: 'Averta',
+  fontSize: '16px',
+  fontStyle: 'normal',
+  fontWeight: 400,
+  lineHeight: '24px' /* 150% */,
+  whiteSpace: 'pre-line',
+  alignSelf: 'stretch'
+};
+export const loginContainer = {
+  display: 'flex',
+  width: '690px',
+  height: '72px',
+  padding: '20px 58px',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  gap: '8px',
+  flexShrink: 0,
+  marginTop: '60px'
+};
+export const loginFormStyle = {
+  display: 'flex',
+  padding: { desktop: '10px 90px 0 90px', mobile: '50px 50px 0 50px' },
+  width: { desktop: '45vw', mobile: '100vw' },
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '32px',
+  borderRadius: '8px',
+  border: `1px solid ${colors.neutral300}`,
+  background: `${colors.white}`,
+  marginTop: '25px',
+  height: '770px'
+};
 export const bannerMainTitle = {
   fontSize: '28px',
   fontWeight: 700,
@@ -104,4 +164,62 @@ export const forgotPassword = {
   alignSelf: 'center',
   width: '127px',
   marginTop: '18px'
+};
+export const authItem = {
+  display: 'flex',
+  width: '583px',
+  padding: '40px 0px',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '24px',
+  borderRadius: '8px 8px 0px 0px',
+  border: `1px solid ${colors.neutral200}`,
+  background: `${colors.white}`
+};
+export const inputText = {
+  display: 'flex',
+  // padding: '16px 0px',
+  flexDirection: 'column',
+  alignItems: 'flex-end',
+  gap: '10px',
+  alignSelf: 'stretch'
+};
+export const textStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-end',
+  gap: '42px',
+  alignSelf: 'stretch'
+};
+export const authContainer = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '16px',
+  alignSelf: 'stretch'
+};
+export const authTitle = {
+  display: 'flex',
+  padding: '0px 24px',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '4px',
+  alignSelf: 'stretch'
+};
+
+export const titleStyle = {
+  color: `${colors.primaryText}`,
+  fontFamily: 'Averta',
+  fontSize: '16px',
+  fontStyle: 'normal',
+  fontWeight: 600,
+  lineHeight: '24px' /* 150% */
+};
+export const subtitleStyle = {
+  color: `${colors.secondaryText}`,
+  fontFamily: 'Averta',
+  fontSize: '14px',
+  fontStyle: 'normal',
+  fontWeight: 400,
+  lineHeight: '20px' /* 142.857% */
 };

@@ -95,3 +95,12 @@ export const NavTypography = {
   fontWeight: 400,
   lineHeight: '24px'
 };
+export const NavChangePasswordTypography = {
+  color: `${colors.neutral900}`,
+  fontSize: '10px',
+  fontStyle: 'normal',
+  fontWeight: 100,
+  lineHeight: '10px',
+  whiteSpace: 'pre-line',
+  letterSpacing: '0.2px'
+};

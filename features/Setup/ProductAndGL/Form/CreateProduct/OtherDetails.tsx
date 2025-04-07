@@ -66,29 +66,29 @@ export const OtherDetailsForm = ({
             { label: 'No', value: '0' }
           ]}
           title="Manage Collection date?"
-          value="Manage Collection date?"
+          value="0"
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <RadioButtons
-          name="allowOD"
+          name="securityDepType"
           options={[
             { label: 'Yes', value: '1' },
             { label: 'No', value: '0' }
           ]}
           title="Security Deposit Required?"
-          value="Security Deposit Required?"
+          value="0"
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <RadioButtons
-          name="postnodebit"
+          name="healthInsuranceAmt"
           options={[
             { label: 'Yes', value: '1' },
             { label: 'No', value: '0' }
           ]}
           title="Health Insurance?"
-          value="Health Insurance?"
+          value="0"
         />
       </Grid>
     </>

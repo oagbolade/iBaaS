@@ -56,14 +56,18 @@ export const role = Yup.object({
 });
 
 export const changePassword = Yup.object({
-  newPassword: Yup.string().required('Required'),
-  accessKey: Yup.string().required('Required')
+  newpassword: Yup.string().required('Required'),
+  oldpassword: Yup.string().required('Required'),
+  sscode: Yup.string()
+    .required('Required')
+    .min(5, 'access key should be more then 4')
+    .max(10, 'access should be 10')
+    .matches(numericRegex, 'invalid access key')
 });
 
 export const resetUser = Yup.object({
   userId: Yup.string().required('Required'),
   lockStatus: Yup.number().required('Required'),
-  loginStatus: Yup.number().required('Required'),
   allowMultipleLogin: Yup.number().required('Required')
 });
 
@@ -128,4 +132,8 @@ export const createUser = Yup.object({
     .min(10, 'too short')
     .max(12, 'too long'),
   status: Yup.string().required('Required')
+  // password: Yup.string()
+  //   .required('Password is Required')
+  //   .min(8, 'Password should be at least 8 characters')
+  //   .max(32, 'Password should be below 32 characters')
 });

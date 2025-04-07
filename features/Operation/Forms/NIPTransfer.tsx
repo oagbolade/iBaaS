@@ -72,6 +72,8 @@ import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { INibbsBankData } from '@/api/ResponseTypes/operation';
 import { decryptData } from '@/utils/decryptData';
 import { NibbsBankRequest } from '@/schemas/schema-values/auth';
+import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
+import { fundsTransferRadioOptions } from '@/constants/SetupOptions';
 
 interface Props {
   currencies?: ICurrency[] | Array<any>;
@@ -159,6 +161,10 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
   const [selectedValue, setSelectedValue] = useState({ accountNumber: '' });
   const [benAccNum, setBenAccNum] = useState<null | string>(null);
   const [filteredValues, setFilteredValues] = useState({ accountNumber: [] });
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const [, setIsLoading] = React.useState(true);
+  const [transferType, setTransferType] = useState('0');
+  const [isReversal, setIsReversal] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState({ accountNumber: '' });
   const [beneficiaryBankCode, setBeneficiaryBankCode] = useState<string>('');
   const [beneficiaryBankName, setBeneficiaryBankName] = useState<
@@ -365,6 +371,12 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
       },
       beneficiayBank: {
         message: 'Beneficiary Bank is required'
+      },
+      selectedCurrency: {
+        message: 'Currency is required'
+      },
+      transferType: {
+        message: 'Transfer type is required'
       }
     };
 
@@ -400,6 +412,26 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
 
       return;
     }
+
+    if (selectedCurrency === '') {
+      toast(
+        toastMessage.selectedCurrency.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
+    if (transferType === '') {
+      toast(
+        toastMessage.transferType.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
+
     const getAllValues = {
       nameEnquiryRef: beneficiaryDetails?.nameInquiryReference ?? '',
       sourceBankCode: '999426',
@@ -413,7 +445,10 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
       originatorKycLevel: '3',
       location: `${latitude},${longitude}`,
       narration: values?.narration1,
-      amount: Number(values.tranamount)
+      amount: Number(values.tranamount),
+      reversal: String(Number(isReversal)),
+      transfertype: transferType,
+      currencyCode: selectedCurrency
     };
     mutate(getAllValues);
   };
@@ -424,6 +459,24 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
       [name]: value
     }));
   };
+
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+      setIsLoading(false);
+    }
+  }, [mappedCurrency]); // Runs when mappedCurrency changes
 
   return (
     <Formik
@@ -440,37 +493,48 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
             <PageTitle title="NIP Transfer" styles={BatchTitle} />
             <Grid container>
               <Grid item={isTablet} mobile={12}>
-                <FormSelectField
+                <FormSelectInput
                   name="currencyCode"
                   options={mappedCurrency}
                   label="Currency"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>
-                <FormSelectField
-                  name="cleartype"
+                <FormSelectInput
+                  name="transfertype"
                   options={[
-                    { name: 'Transfer with COT', value: 'Transfer with COT' },
+                    { name: 'Transfer with COT', value: '1' },
                     {
                       name: 'Transfer with no COT',
-                      value: 'Transfer with no COT'
+                      value: '0'
                     }
                   ]}
                   label="Transfer Type"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setTransferType(e.target.value)
+                  }
+                  value={transferType}
                 />
               </Grid>
               <Grid mt={1} item={isTablet} mobile={12}>
-                <FormikRadioButton
-                  options={nipTransferRadioOptions}
+                <RadioButtons
+                  options={fundsTransferRadioOptions}
                   title="Reversal"
                   name="reversal"
-                  value="mianAction"
+                  value={isReversal ? '1' : '0'}
+                  handleCheck={(value: boolean) => {
+                    setIsReversal(value);
+                  }}
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>

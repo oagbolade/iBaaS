@@ -345,6 +345,7 @@ export interface ILoanAccDetails {
   collateralValue: string
   drawDownDate: string
   loanterm: string
+  collateralType: string
 }
 
 export interface LoanUnderwriteInitialValues {

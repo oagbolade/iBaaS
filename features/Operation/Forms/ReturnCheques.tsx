@@ -20,7 +20,8 @@ import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
   FormSelectField,
-  FormikDateTimePicker
+  FormikDateTimePicker,
+  FormSelectInput
 } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
@@ -72,6 +73,8 @@ export const ReturnCheque = ({
     currencies,
     commBanks
   });
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(true);
   const { mutate } = useCreateReturnCheque();
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
     accountNumber: ''
@@ -129,6 +132,9 @@ export const ReturnCheque = ({
       severity: 'error',
       accountNumber: {
         message: 'Account Number is required'
+      },
+      selectedCurrency: {
+        message: 'Currency is required'
       }
     };
     if (searchValue.accountNumber === '') {
@@ -141,9 +147,20 @@ export const ReturnCheque = ({
 
       return;
     }
+
+    if (selectedCurrency === '') {
+      toast(
+        toastMessage.selectedCurrency.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
     const getAllValues = {
       ...values,
-      accountNumber: accountData?.accountnumber as string
+      accountNumber: accountData?.accountnumber as string,
+      currencyCode: selectedCurrency
     };
     await mutate(getAllValues);
   };
@@ -158,6 +175,27 @@ export const ReturnCheque = ({
       setIsSubmitting?.(false);
     };
   }, [isSubmitting]);
+
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+      setIsLoading(false);
+    }
+  }, [mappedCurrency]); // Runs when mappedCurrency changes
+
+  if (isLoading) return <div>Loading currencies...</div>;
+
   return (
     <Formik
       initialValues={ReturnChequeInitialValues}
@@ -217,13 +255,17 @@ export const ReturnCheque = ({
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
-                  <FormSelectField
-                    name="currencycode"
+                  <FormSelectInput
+                    name="currencyCode"
                     options={mappedCurrency}
                     label="Currency"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
+                    value={selectedCurrency}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setSelectedCurrency(e.target.value)
+                    }
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>

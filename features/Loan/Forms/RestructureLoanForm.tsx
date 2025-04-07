@@ -7,7 +7,8 @@ import {
   FormSelectField,
   FormTextInput,
   TextFieldArea,
-  FormikDateTimePicker
+  FormikDateTimePicker,
+  FormikRadioButton
 } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
@@ -20,7 +21,7 @@ import { useRestructureLoan } from '@/api/loans/useCreditFacility';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { getStoredUser } from '@/utils/user-storage';
 import dayjs from 'dayjs';
-import {frequencyOptions} from '@/utils';
+import { frequencyOptions } from '@/utils';
 
 
 export const RestructureLoanForm = ({
@@ -46,7 +47,7 @@ export const RestructureLoanForm = ({
 }) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const { mutate } = useRestructureLoan();
-  const [loanDetail, setLoanDetail] = useState<any>({});
+  const [loanDetail, setLoanDetail] = useState<ILoanAccDetails>(loanDetails);
   const { mappedLoanRepayment, mappedLoansources, mappedLoanCollateral } =
     useMapSelectOptions({
       repaymentTypes,
@@ -55,6 +56,7 @@ export const RestructureLoanForm = ({
     });
 
 
+  
   const user = getStoredUser();
   const userLoanMenuid = Array.isArray(user?.menuItems)
     ? user.menuItems.find((resp: any) => resp.menu_id === 57)
@@ -81,9 +83,6 @@ export const RestructureLoanForm = ({
       prodcode: loanDetail.productcode,
       branchcode: loanDetail?.branchcode,
       menuId: userLoanMenuid?.menu_id,
-      PenalWriteOff_GL: '',
-      InterestWriteOff_GL: '',
-      PrincipalWriteOff_GL: '',
       ...restValues
     };
     mutate(data);
@@ -102,10 +101,10 @@ export const RestructureLoanForm = ({
   }, [isSubmitting, setIsSubmitting]);
 
   // Add state to track selected restructure type
-  const [selectedRestructureType, setSelectedRestructureType] = useState(true);
+  const [selectedRestructureType, setSelectedRestructureType] = useState('1');
 
   // Add handler for radio button change
-  const handleRestructureTypeChange = (value: boolean) => {
+  const handleRestructureTypeChange = (value: string) => {
     setSelectedRestructureType(value);
   }
 
@@ -121,8 +120,14 @@ export const RestructureLoanForm = ({
         }}
       >
         <Formik
-         
-          initialValues={{ ...loanDetails }}
+
+          initialValues={{
+            ...loanDetail,
+            source: loanDetail?.loanSourceCode,
+            collateraltype: loanDetail?.collateralType,
+            collateralvalue: loanDetail?.collateralValue,
+            restructureType: selectedRestructureType
+          }}
           onSubmit={(values) => onSubmit(values)}
           validationSchema={restructuredLoanSchema}
         >
@@ -134,7 +139,7 @@ export const RestructureLoanForm = ({
 
 
                 <Grid my={2} item={isTablet} mobile={12}>
-                  <RadioButtons
+                  <FormikRadioButton
                     options={[
                       { label: 'Full Liquidation', value: '1' },
                       { label: 'Restructure', value: '3' }
@@ -142,7 +147,7 @@ export const RestructureLoanForm = ({
                     title="Please select"
                     name="restructureType"
                     value='1'
-                    handleCheck={handleRestructureTypeChange}
+                    handleCheck={(value: boolean) => handleRestructureTypeChange(value ? '1' : '3')}
                   />
                 </Grid>
 
@@ -169,7 +174,7 @@ export const RestructureLoanForm = ({
                     name="prodcode"
                     placeholder="Select loan product"
                     label="Loan Product"
-                    value={loanDetails?.productname}
+                    value={loanDetail?.productname}
                     disabled
                   />{' '}
                 </Grid>
@@ -183,7 +188,7 @@ export const RestructureLoanForm = ({
                     }}
                     options={mappedLoansources}
                     label="Loan Source"
-                    value={loanDetails?.loanSourceCode}
+                    value={loanDetail?.loanSourceCode}
                     name="source"
                     required
                   />{' '}
@@ -214,7 +219,7 @@ export const RestructureLoanForm = ({
                   writeOffActionType="principalWriteOff_Type"
                   restructureType={selectedRestructureType}
                   glAccountNumber="principalWriteOff_GL"
-                  sectionValue={loanDetails?.principaldue}
+                  sectionValue={loanDetail?.principaldue}
                 />
 
 
@@ -227,7 +232,7 @@ export const RestructureLoanForm = ({
                   sectionName='outstandingInterest'
                   restructureType={selectedRestructureType}
                   glAccountNumber='interestWriteOff_GL'
-                  sectionValue={loanDetails?.accruedInterest}
+                  sectionValue={loanDetail?.accruedInterest}
                 />
 
 
@@ -240,7 +245,7 @@ export const RestructureLoanForm = ({
                   sectionName='outstandingPenalInterest'
                   restructureType={selectedRestructureType}
                   glAccountNumber='penalWriteOff_GL'
-                  sectionValue={loanDetails?.outstandingPenalInterest}
+                  sectionValue={loanDetail?.outstandingPenalInterest}
                 />
 
 
@@ -253,7 +258,7 @@ export const RestructureLoanForm = ({
                     name="newPrincipal"
                     placeholder=""
                     label="New Principal"
-                    value={loanDetails?.principaldue}
+                    value={loanDetail?.principaldue}
                     required
                     disabled
                   />{' '}
@@ -279,9 +284,9 @@ export const RestructureLoanForm = ({
                     name="interestRate"
                     placeholder=""
                     label="Loan Rate (%)"
-                    value={loanDetails?.intrate}
+                    value={loanDetail?.intrate}
                     onChange={(e) =>
-                      setLoanDetail({ ...loanDetails, intrate: e.target.value })
+                      setLoanDetail({ ...loanDetail, intrate: e.target.value })
                     }
                     required
                   />{' '}
@@ -301,10 +306,10 @@ export const RestructureLoanForm = ({
                         name="term"
                         placeholder="Enter Loan term"
                         label="Loan Term"
-                        value={loanDetails?.loanterm}
+                        value={loanDetail?.loanterm}
                         onChange={(e) =>
                           setLoanDetail({
-                            ...loanDetails,
+                            ...loanDetail,
                             loanterm: e.target.value
                           })
                         }
@@ -320,10 +325,10 @@ export const RestructureLoanForm = ({
                         }}
                         options={frequencyOptions}
                         name="termFreq"
-                        value={loanDetails?.termfreq}
+                        value={loanDetail?.termfreq}
                         onChange={(e) =>
                           setLoanDetail({
-                            ...loanDetails,
+                            ...loanDetail,
                             termfreq: e.target.value
                           })
                         }
@@ -334,16 +339,16 @@ export const RestructureLoanForm = ({
                 </Grid>
 
                 <Grid my={2} item={isTablet} mobile={12}>
-                  <RadioButtons
+                  <FormikRadioButton
                     options={[
                       { label: 'Flat Rate', value: '1' },
                       { label: 'Annualise', value: '0' }
                     ]}
                     title="Calculation Method"
                     name="calcmethod"
-                    value={loanDetails?.calcmethod}
+                    value={loanDetail?.calcmethod}
                     handleCheck={(e: any) =>
-                      setLoanDetail({ ...loanDetails, calcmethod: e })
+                      setLoanDetail({ ...loanDetail, calcmethod: e })
                     }
                   />
                 </Grid>
@@ -357,10 +362,10 @@ export const RestructureLoanForm = ({
                     options={mappedLoanRepayment}
                     label="Repayment Type"
                     name="repaytype"
-                    value={loanDetails?.repaytype}
+                    value={loanDetail?.repaytype}
                     onChange={(e) =>
                       setLoanDetail({
-                        ...loanDetails,
+                        ...loanDetail,
                         repaytype: e.target.value
                       })
                     }
@@ -387,7 +392,14 @@ export const RestructureLoanForm = ({
                     }}
                     options={mappedLoanCollateral}
                     label="Collateral Type"
-                    name="collateraltype"
+                    name="collateralType"
+                    value={loanDetail?.collateralType}
+                    onChange={(e) =>
+                      setLoanDetail({
+                        ...loanDetail,
+                        collateralType: e.target.value
+                      })
+                    }
                     required
                   />{' '}
                 </Grid>
@@ -397,10 +409,10 @@ export const RestructureLoanForm = ({
                     customStyle={{
                       width: setWidth(isMobile ? '300px' : '100%')
                     }}
-                    name="collateralValue"
+                    name="collateralvalue"
                     placeholder="1,432,532.53"
                     label="Collateral Value"
-                    value={loanDetails?.collateralValue}
+                    value={loanDetail?.collateralValue}
                     required
                   />{' '}
                 </Grid>
@@ -425,7 +437,7 @@ export const RestructureLoanForm = ({
                   <FormikDateTimePicker
                     label="Start Date"
                     name="startdate"
-                    value={dayjs(loanDetails?.startdate)}
+                    value={dayjs(loanDetail?.startdate)}
                   />
                 </Grid>
 
@@ -438,7 +450,7 @@ export const RestructureLoanForm = ({
                   <FormikDateTimePicker
                     label="Drawn-down Date"
                     name="drawdown"
-                    value={dayjs(loanDetails?.drawDownDate)}
+                    value={dayjs(loanDetail?.drawDownDate)}
 
                   />
                 </Grid>
@@ -452,7 +464,7 @@ export const RestructureLoanForm = ({
                   <FormikDateTimePicker
                     label="Maturity Date"
                     name="matdate"
-                    value={dayjs(loanDetails?.matdate)}
+                    value={dayjs(loanDetail?.matdate)}
 
                   />
                 </Grid>
@@ -466,7 +478,7 @@ export const RestructureLoanForm = ({
                   <FormikDateTimePicker
                     label="First Payment Date"
                     name="firstdate"
-                    value={dayjs(loanDetails?.firstpmtdate)}
+                    value={dayjs(loanDetail?.firstpmtdate)}
 
                   />
                 </Grid>
@@ -519,7 +531,7 @@ export const RestructureLoanForm = ({
                 </Grid>
 
                 <Grid my={2} item={isTablet} mobile={12}>
-                  <RadioButtons
+                  <FormikRadioButton
                     options={[
                       { label: 'Yes', value: '1' },
                       { label: 'No', value: '0' }
@@ -538,6 +550,6 @@ export const RestructureLoanForm = ({
           </Form>
         </Formik>
       </Box>
-    </Box>
+    </Box >
   );
 };

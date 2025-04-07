@@ -108,6 +108,7 @@ export const InterestLoanChargesForm = ({
     bankproducts,
     exception
   });
+
   const MultiSelectWithCheckboxes = ({
     field,
     form,
@@ -152,6 +153,7 @@ export const InterestLoanChargesForm = ({
       </FormControl>
     );
   };
+
   return (
     <>
       <Grid item={isTablet} mobile={12}>
@@ -165,9 +167,10 @@ export const InterestLoanChargesForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
-          name="actualRate"
+          name="actualRAte"
           placeholder="Enter actual Rate"
           label="Actual Rate"
           customStyle={{
@@ -176,6 +179,7 @@ export const InterestLoanChargesForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="penalrate"
@@ -187,17 +191,31 @@ export const InterestLoanChargesForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
-          name="minloan"
-          placeholder="Enter middle name"
-          label="Minimum Loan Amount"
+          name="minterm"
+          placeholder="Enter Mininum Term "
+          label="Minimum Terms"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
           required
         />
       </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <FormTextInput
+          name="maxterm"
+          placeholder="Enter Maximum Term"
+          label="Maximum Terms"
+          customStyle={{
+            width: setWidth(isMobile ? '250px' : '70%')
+          }}
+          required
+        />
+      </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="moratorium"
@@ -209,6 +227,7 @@ export const InterestLoanChargesForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="collval"
@@ -220,6 +239,7 @@ export const InterestLoanChargesForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="schtype"
@@ -242,42 +262,46 @@ export const InterestLoanChargesForm = ({
           required
         />
       </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <RadioButtons
+          name="allowOD"
+          options={[
+            { label: 'Yes', value: '1' },
+            { label: 'No', value: '0' }
+          ]}
+          title="Allow OD on Account?"
+          value="0"
+        />
+      </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <RadioButtons
+          name="actualRateCalcMethod"
+          options={[
+            { label: 'Flat', value: '1' },
+            { label: 'Annualized', value: '0' }
+          ]}
+          title="Please Select"
+          value="0"
+        />
+      </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <Field
-          name="chargecode"
+          name="ProdCharges"
           component={MultiSelectWithCheckboxes}
-          options={mappedBankproducts}
+          options={mappedException}
           label="Product Charges"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <RadioButtons
-          name="actualRateCalcMethod"
-          options={[
-            { label: 'Yes', value: '1' },
-            { label: 'No', value: '0' }
-          ]}
-          title="Allow OD on Account?"
-          value="Allow OD on Account?"
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <RadioButtons
-          name="penalrateCalcMethod"
-          options={[
-            { label: 'Flat', value: '1' },
-            { label: 'Annualized', value: '0' }
-          ]}
-          title="Please Select"
-          value="Allow OD on Account?"
-        />
-      </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <Field
-          name="exceptioncode"
+          name="ProdException"
           component={MultiSelectWithCheckboxes}
           options={mappedException}
           label="Product Exceptions"
@@ -286,7 +310,8 @@ export const InterestLoanChargesForm = ({
           }}
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+
+      {/* <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="shortName"
           placeholder="Enter short name"
@@ -296,7 +321,7 @@ export const InterestLoanChargesForm = ({
           }}
           required
         />
-      </Grid>
+      </Grid> */}
     </>
   );
 };

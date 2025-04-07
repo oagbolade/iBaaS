@@ -1,6 +1,11 @@
 /* eslint-disable no-console */
 import axios, { AxiosRequestConfig, AxiosHeaders } from 'axios';
-import { baseUrl, nipBaseUrl, reportsBaseUrl } from './constants';
+import {
+  AuthFaBaseUrl,
+  baseUrl,
+  nipBaseUrl,
+  reportsBaseUrl
+} from './constants';
 import { UserLoginResponse } from '@/api/ResponseTypes/login';
 import { getStoredUser, USER_LOCALSTORAGE_KEY } from '@/utils/user-storage';
 import { encryptData } from '@/utils/encryptData';
@@ -33,6 +38,9 @@ export const axiosInstance = axios.create(config);
 
 export const nipAxiosInstance = axios.create({
   baseURL: nipBaseUrl
+});
+export const AuthFaAxiosInstance = axios.create({
+  baseURL: AuthFaBaseUrl
 });
 
 export const reportsAxiosInstance = axios.create({

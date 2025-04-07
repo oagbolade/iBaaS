@@ -16,8 +16,8 @@ export interface ValidatePasswordRequest {
 }
 
 export interface ResetPasswordPayload {
-  oldpassword: string;
-  newpassword: string;
+  Oldpassword: string;
+  Newpassword: string;
   sscode: string;
   passchange_date: string;
   userid: string;

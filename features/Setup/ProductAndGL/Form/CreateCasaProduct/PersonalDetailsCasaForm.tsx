@@ -25,6 +25,7 @@ import {
 } from '@/components/FormikFields';
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
 
 type Props = {
   titles?: ITitle[];
@@ -85,18 +86,20 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="productCode"
-          placeholder="Enter surname"
+          placeholder="Enter Product code"
+          type="number"
           label="Product Code"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
           required
-          disabled
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="productName"
@@ -108,6 +111,7 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="openbalance"
@@ -119,6 +123,7 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="currencycode"
@@ -130,32 +135,23 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <Box sx={{ width: '70%' }}>
           <DemoContainer components={['DatePicker']}>
-            <FormikDateTimePicker
-              disableFuture
-              label="Start Birth"
-              name="productstart"
-              value=""
-              required
-            />
+            <DateTimePicker label="Start Date" name="productstart" />
           </DemoContainer>
         </Box>
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <Box sx={{ width: '70%' }}>
           <DemoContainer components={['DatePicker']}>
-            <FormikDateTimePicker
-              disableFuture
-              label="Expiry Birth"
-              name="productExpire"
-              value=""
-              required
-            />
+            <DateTimePicker label="Expiry Date" name="productExpire" />
           </DemoContainer>
         </Box>
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="appType"
@@ -167,6 +163,7 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="statecode"
@@ -178,6 +175,7 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="shortname"
@@ -189,10 +187,11 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="closeBalance"
-          placeholder="Enter short name"
+          placeholder="Enter Closing Balance"
           label="Closing Balance"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
@@ -200,10 +199,11 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="minintbalance"
-          placeholder="Enter short name"
+          placeholder="Enter Min Balance for Interest"
           label="Minimum Balance for Interest"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
@@ -211,10 +211,11 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="maxamt"
-          placeholder="Enter short name"
+          placeholder="Enter NDIC Limit"
           label="Max NDIC Limit"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
@@ -222,10 +223,11 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="taxabsorbed1"
-          placeholder="Enter short name"
+          placeholder="Enter Penalty Rate"
           label="Penalty Rate % (Annualise)"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
@@ -233,10 +235,11 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="dayint"
-          placeholder="Enter short name"
+          placeholder="Enter Interest Days"
           label="Interest (Days)"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')

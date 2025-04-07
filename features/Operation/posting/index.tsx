@@ -61,13 +61,13 @@ export const PreviewContentOne = ({ accountDetails, loading }: Props) => {
       <Details title={accountDetails.branch || 'NIL'} />
 
       <SubTitle title="Book Balance" />
-      <Details title={accountDetails.bkbal || 'NIL'} />
+      <Details title={accountDetails.bkbal || '0.00'} />
 
       <SubTitle title="Effective Balance" />
-      <Details title={accountDetails.effbal || 'NIL'} />
+      <Details title={accountDetails.effbal || '0.00'} />
 
       <SubTitle title="Usable Balance" />
-      <Details title={accountDetails.usebal || 'NIL'} />
+      <Details title={accountDetails.usebal || '0.00'} />
 
       <SubTitle title="Source Type" />
       <Details title={accountDetails.apptype || 'NIL'} />

@@ -1,6 +1,7 @@
 'use client';
 import React, { useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { usePathname } from 'next/navigation';
 import { useRemoveSideBar } from '@/utils/hooks/useRemoveSidebar';
 import { SideBarContext } from '@/app/SideBarContext';
 import { usePageTitle } from '@/utils/hooks/usePageTitle';
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export const RenderChildren = ({ children }: Props) => {
+  const pathname = usePathname();
   const toastActions = useContext(ToastMessageContext);
   const { setRecentlyVisitedModules } = useContext(
     TrackRecentlyVisitedModulesContext
@@ -44,7 +46,17 @@ export const RenderChildren = ({ children }: Props) => {
 
   const { signout } = useAuth();
 
-  useIdleTimer(5 * 60 * 1000, signout, toastActions); // 5 minutes in milliseconds
+  useIdleTimer(10 * 60 * 1000, signout, toastActions); // 10 minutes in milliseconds
+
+  useEffect(() => {
+    if (
+      pathname?.includes('dashboard') &&
+      sessionStorage.getItem('shouldRefreshDashboard')
+    ) {
+      sessionStorage.removeItem('shouldRefreshDashboard');
+      window.location.reload();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

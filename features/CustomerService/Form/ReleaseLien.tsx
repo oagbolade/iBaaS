@@ -100,7 +100,8 @@ export const ReleaseLien = () => {
     setMappedLienReason(reasons);
   }, [lienReason]);
 
-  const onSubmit = (values: any, actions: { resetForm: Function }) => {
+  const onSubmit = (values: any) => {
+    console.log('fefefe');
     const getAllValues = {
       accountnumber: accountNumber,
       lienDetail: [
@@ -113,16 +114,12 @@ export const ReleaseLien = () => {
     };
 
     mutate(getAllValues);
-
-    // if (!isError) {
-    // actions.resetForm();
-    // }  };
   };
 
   return (
     <Formik
       initialValues={createLienInitialValues}
-      onSubmit={(values, actions) => onSubmit(values, actions)}
+      onSubmit={(values) => onSubmit(values)}
       validationSchema={createLien}
     >
       <Form>
@@ -131,7 +128,7 @@ export const ReleaseLien = () => {
         </Box>
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-            <PageTitle title="Release Lien" styles={BatchTitle} />
+            <PageTitle title="Release Lien111" styles={BatchTitle} />
             <Grid container>
               <Grid item={isTablet} mobile={12}>
                 <FormSelectInput

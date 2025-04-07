@@ -54,7 +54,7 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
         </Box>
       </Box>
       <Box sx={AccountPasswordBodyContainer}>
-        <Box>
+        <Box sx={{ width: '100%', maxWidth: '400px' }}>
           <RadioButtons
             className="permissionOptions"
             options={[

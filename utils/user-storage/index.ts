@@ -20,7 +20,14 @@ export function getStoredUser(): UserLoginResponse | null {
 
   return null;
 }
+export const savePasswordToLocalStorage = (password: string) => {
+  localStorage.setItem('userPassword', password);
+};
 
+// Utility function to get password from localStorage (can be used outside)
+export const getPasswordFromLocalStorage = () => {
+  return localStorage.getItem('userPassword');
+};
 export function getLastPage(): string | null {
   if (typeof window !== 'undefined') {
     const lastPage = localStorage.getItem(LAST_PAGE_LOCALSTORAGE_KEY);

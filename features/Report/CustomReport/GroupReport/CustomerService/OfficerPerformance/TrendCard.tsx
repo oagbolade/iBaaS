@@ -44,13 +44,14 @@ export const TrendCard = ({
           </Box>
           {percentage && (
             <Box mt={3} ml={3}>
-              <Box>
+              {/*on Hold */}
+              {/* <Box>
                 {isPositiveTrend ? (
                   <PositiveTrendIcon />
                 ) : (
                   <NegativeTrendIcon />
                 )}
-              </Box>
+              </Box> */}
               <Stack direction="row">
                 <Box>
                   <Typography

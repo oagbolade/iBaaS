@@ -40,6 +40,15 @@ export interface NipLoginValue {
   username: string | undefined;
   password: string | undefined;
 }
+export interface Aut2FaValue {
+  userId: string;
+  otp: string;
+  tenantId: string;
+}
+export interface Aut2FaChcheckValue {
+  userId: string;
+  tenantId: string;
+}
 
 export interface NibbsBankRequest {
   sessionID: string;
@@ -89,7 +98,15 @@ export const loginInitialValues: UserLogin = {
   username: '',
   password: ''
 };
-
+export const Auth2FaInitialValues: Aut2FaValue = {
+  userId: '',
+  otp: '',
+  tenantId: ''
+};
+export const Auth2FaCheckInitialValues: Aut2FaChcheckValue = {
+  userId: '',
+  tenantId: ''
+};
 export const accountOfficerInitialValues: CreateAccountOfficerFormValues = {
   officercode: '221',
   officerName: '',

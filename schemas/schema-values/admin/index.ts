@@ -17,21 +17,17 @@ export interface CreateAccountOfficerFormValues {
 }
 
 export interface ChangePasswordFormValues {
+  oldpassword: string;
+  newpassword: string;
+  sscode: string;
+  passchange_date: string;
   userid: string;
-  lockStatus: number;
-  loginStatus: string;
-  resetLoginCount: number;
-  resetpassword: number;
-  newPassword: string;
-  confirmPassword: string;
-  allowMultipleLogin: number;
-  accessKey: string;
 }
 
 export interface ResetUserFormValues {
   userId: string;
   lockStatus: number;
-  loginStatus: number;
+  loginStatus: string;
   resetLoginCount: number;
   resetpassword: number;
   newPassword: string;
@@ -87,6 +83,7 @@ export interface CreateUserFormValues {
   rolelevel: number;
   comments: string;
   authListID: number;
+  enable2FA: string;
 }
 
 export const accountOfficerInitialValues: CreateAccountOfficerFormValues = {
@@ -158,21 +155,17 @@ export const roleInitialValues: CreateRoleFormValues = {
 };
 
 export const changePasswordInitialValies: ChangePasswordFormValues = {
-  userid: '',
-  lockStatus: 0,
-  loginStatus: '1',
-  resetLoginCount: 0,
-  resetpassword: 0,
-  newPassword: '',
-  confirmPassword: '',
-  allowMultipleLogin: 0,
-  accessKey: ''
+  oldpassword: '',
+  newpassword: '',
+  sscode: '',
+  passchange_date: '',
+  userid: 'string'
 };
 
 export const resetUserInitialValies: ResetUserFormValues = {
   userId: '',
   lockStatus: 0,
-  loginStatus: 0,
+  loginStatus: '',
   resetLoginCount: 0,
   resetpassword: 0,
   newPassword: '',
@@ -203,7 +196,8 @@ export const createUserInitialValues: CreateUserFormValues = {
   menuid: 8, // TODO: remove hardcoded value once infosight returns the proper menu id
   rolelevel: getStoredUser()?.profiles.rolelevel || 0,
   comments: '',
-  authListID: 0
+  authListID: 0,
+  enable2FA: ''
 };
 
 export interface CreateGlAccountFormValues {

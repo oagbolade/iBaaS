@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import { ContainerStyle } from './styles';
-import { FormTextInput } from '@/components/FormikFields';
+import { FormTextInput , FormikRadioButton} from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { useFormikContext } from 'formik';
+import { Stringifier } from 'postcss';
 
 interface InterestSectionProps {
   label: string;
@@ -12,7 +13,7 @@ interface InterestSectionProps {
   sectionName: string;
   writeOffValue: string;
   writeOffActionType: string;
-  restructureType: boolean;
+  restructureType: string;
   glAccountNumber: string;
   sectionValue?: string | number;
 }
@@ -48,7 +49,7 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
   const { setFieldValue } = useFormikContext();
 
   useEffect(() => {
-    if (restructureType) {
+    if (restructureType === "1") {
       const fieldsToReset = [
         { name: sectionName, value: sectionValue || '' },
         { name: writeOffActionType, value: '' },
@@ -74,17 +75,17 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
             value={sectionValue?.toString()}
             placeholder={placeholder}
             label={label}
-            disabled
+            disabled={true}
           />
         </Grid>
 
         <Grid my={2} item={isTablet} mobile={12}>
-          <RadioButtons
+          <FormikRadioButton
             options={ACTION_OPTIONS}
             title="Actions"
             name={writeOffActionType}
             value={writeOffActionType}
-            disabled={restructureType}
+            disable={restructureType === "1"}
           />
         </Grid>
 
@@ -94,7 +95,7 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
             name={writeOffValue}
             placeholder=""
             label="Add Value"
-            disabled={restructureType}
+            disabled={restructureType === "1"}
           />
         </Grid>
 
@@ -104,7 +105,7 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
             name={glAccountNumber}
             placeholder=""
             label="Enter GL Account"
-            disabled={restructureType}
+            disabled={restructureType === "1"}
           />
         </Grid>
       </Grid>

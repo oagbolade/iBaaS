@@ -40,7 +40,7 @@ export const CustomerBalances = () => {
     dayjs()
   ]);
 
-  const { setReportType, setExportData } = React.useContext(
+  const { setReportType, setExportData , setReportQueryParams} = React.useContext(
     DownloadReportContext
   );
   const { isDateFilterApplied } = React.useContext(DateRangePickerContext);
@@ -59,8 +59,8 @@ export const CustomerBalances = () => {
     page
   });
 
-  const { pagedCustomerBalances, grandTotal, totalAvaiBal, totalBkBal } =
-    customerBalanceList;
+  const { pagedCustomerBalances = [], grandTotal = 0, totalAvaiBal = 0, totalBkBal = 0 } =
+    customerBalanceList || [];
 
   React.useEffect(() => {
     if (pagedCustomerBalances?.length > 0) {
@@ -76,7 +76,7 @@ export const CustomerBalances = () => {
       }));
 
       setExportData(mapCustomerBalance as []);
-      setReportType('CustomerBalance');
+     
     }
   }, [pagedCustomerBalances, setExportData, setReportType]);
 
@@ -87,6 +87,8 @@ export const CustomerBalances = () => {
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
+
+    setReportType('CustomerBalance');
   };
 
   const DateRangePicker = () => {

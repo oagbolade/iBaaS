@@ -36,6 +36,8 @@ import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
 import { IGLAccount } from '@/api/ResponseTypes/admin';
 import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
+import { Field, useFormikContext } from 'formik';
+
 
 type Props = {
   titles?: ITitle[];
@@ -81,6 +83,8 @@ export const GeneralCasaLedgerForm = ({
     });
   const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
+  const { setFieldValue, values } = useFormikContext<any>();
+
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
     accountNumber: '',
     liabilityBal: '',
@@ -136,6 +140,10 @@ export const GeneralCasaLedgerForm = ({
       ...prev,
       [name]: value
     }));
+
+    setFieldValue(name, value);
+
+
   };
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -180,7 +188,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="GL Account"
             name="accountNumber"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.accountNumber as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -201,7 +209,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Principal Balance"
             name="liabilityBal"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.liabilityBal as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -223,7 +231,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Suspended Asset"
             name="suspendedAsset"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.suspendedAsset as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -245,7 +253,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Asset Balance"
             name="assetBalance"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.assetBalance as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -266,7 +274,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Int. Receivable"
             name="interestReceivable"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interestReceivable as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -288,7 +296,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Interest Unpaid (Accrued)"
             name="unearnincome"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.unearnincome as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -310,7 +318,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Liability Balances"
             name="liabilityBal"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.liabilityBal as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -332,7 +340,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Interest Expense"
             name="interestExpense"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interestExpense as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -354,7 +362,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Int Income"
             name="interestIncome"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interestIncome as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -375,7 +383,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Suspended Interest"
             name="suspendedIntIncome"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.suspendedIntIncome as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -397,7 +405,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Interest Payable"
             name="interestPayable"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interestPayable as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -419,7 +427,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Inter Branch GL"
             name="interbr"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.interbr as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -440,7 +448,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Tax Account"
             name="taxabsorbed1"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.taxabsorbed1 as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
@@ -461,7 +469,7 @@ export const GeneralCasaLedgerForm = ({
             }
             label="Closing GL Account"
             name="acctClosegl"
-            searchGroupVariant="BasicSearchGroup"
+            searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.acctClosegl as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}

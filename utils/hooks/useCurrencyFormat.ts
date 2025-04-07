@@ -1,6 +1,6 @@
 export const formatCurrency = (amount: any) => {
   if (!amount) {
-    return 'N/A';
+    return '0.00';
   }
 
   const formattedAmount = parseFloat(amount).toFixed(2);

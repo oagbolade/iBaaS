@@ -44,11 +44,10 @@ async function createLoanAccountProduct(
   productcode: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/General/Product/${
-      isUpdating
-        ? `UpdateLoanAccountProduct?productcode=${productcode}`
-        : 'CreateLoanAccountProduct'
-    }`;
+    const urlEndpoint = `/General/Product/${isUpdating
+      ? `UpdateLoanAccountProduct?productcode=${productcode}`
+      : 'CreateLoanAccountProduct'
+      }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: isUpdating ? 'PUT' : 'POST',
@@ -61,9 +60,14 @@ async function createLoanAccountProduct(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
+    if (data.responseCode !== '00') {
+      throw new Error(message);
+    }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+    throw errorResponse;
+
   }
 }
 async function createDemandDepositProduct(
@@ -73,11 +77,10 @@ async function createDemandDepositProduct(
   productcode: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/General/Product/${
-      isUpdating
-        ? `UpdateDemandDepositProduct?productcode=${productcode}`
-        : 'CreateDemandDepositProduct'
-    }`;
+    const urlEndpoint = `/General/Product/${isUpdating
+      ? `UpdateDemandDepositProduct?productcode=${productcode}`
+      : 'CreateDemandDepositProduct'
+      }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: isUpdating ? 'PUT' : 'POST',
@@ -95,6 +98,7 @@ async function createDemandDepositProduct(
     toast(message, title, severity, toastActions);
   }
 }
+
 export async function filterAllProductSearch(
   toastActions: IToastActions,
   params: ISearchParams | null
@@ -271,6 +275,7 @@ async function getMinMaxCreditInterest(
 
   return result;
 }
+
 async function getProductClass(
   toastActions: IToastActions
 ): Promise<UseGetAllLoanAccountResponse> {
@@ -304,6 +309,7 @@ async function getProductClass(
 
   return result;
 }
+
 async function getLoanClass(
   toastActions: IToastActions
 ): Promise<UseGetAllLoanAccountResponse> {
@@ -337,6 +343,7 @@ async function getLoanClass(
 
   return result;
 }
+
 async function getAllException(
   toastActions: IToastActions
 ): Promise<UseGetAllLoanAccountResponse> {
@@ -370,6 +377,7 @@ async function getAllException(
 
   return result;
 }
+
 async function getAllProduct(
   toastActions: IToastActions
 ): Promise<UseGetAllLoanAccountResponse> {
@@ -403,6 +411,7 @@ async function getAllProduct(
 
   return result;
 }
+
 async function getLoanTerm(
   toastActions: IToastActions
 ): Promise<UseGetAllLoanAccountResponse> {
@@ -471,6 +480,7 @@ async function getLoanProductByCode(
 
   return result;
 }
+
 async function getDemandDepositByProductCode(
   toastActions: IToastActions,
   productcode: string | null
@@ -505,6 +515,7 @@ async function getDemandDepositByProductCode(
 
   return result;
 }
+
 export function useFilterLoanProductSearch(params: ISearchParams | null) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as SearchResultsGenericResponse;
@@ -524,13 +535,14 @@ export function useFilterLoanProductSearch(params: ISearchParams | null) {
     queryFn: () => filterAllProductSearch(toastActions, params),
     enabled: Boolean(
       (params?.productClass?.toString() || '').length > 0 ||
-        (params?.productName || '').length > 0 ||
-        (params?.productCode || '').length > 0
+      (params?.productName || '').length > 0 ||
+      (params?.productCode || '').length > 0
     )
   });
 
   return { ...data, isError, isLoading };
 }
+
 export function useGetAllProductByCode(
   prodcode: string | null
 ): UseGetAllLoanAccountResponse {
@@ -751,6 +763,7 @@ export function useCreateLoanAccountProduct(
     error
   };
 }
+
 export function useCreateDemandDepositProduct(
   isUpdating: boolean = false,
   productcode: string | null = null
@@ -784,3 +797,60 @@ export function useCreateDemandDepositProduct(
 }
 
 // Return the user object and auth methods
+
+interface IProductCode {
+  productCode: string;
+  responseCode: string;
+  responseDescription: string;
+}
+
+// Generate Product code using product class 
+export async function generateProductCode(
+  // toastActions: IToastActions,
+  productClass: string
+): Promise<IProductCode> {
+  let result: IProductCode = {} as IProductCode;
+
+
+  try {
+    const urlEndpoint = `/General/Product/GenerateProductCode?productclass=${productClass}`;
+
+    const { data }: AxiosResponse<IProductCode> = await axiosInstance({
+      url: urlEndpoint,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getStoredUser()?.token}`
+      }
+    });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    result = data
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+  }
+
+  return result;
+}
+
+export function useGenerateProductCode(
+  productClass: string
+) {
+
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = { productCode: '' } as IProductCode;
+
+
+
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.generateProductCode],
+    queryFn: () => generateProductCode(productClass),
+    enabled: true
+  });
+
+  return { data, isError, isLoading };
+}

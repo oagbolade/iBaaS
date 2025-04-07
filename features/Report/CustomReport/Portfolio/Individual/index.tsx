@@ -49,8 +49,8 @@ export const IndividualLoan = () => {
     const formattedExportData = portfolioatRiskDetailRptList.map((item) => ({
       'Account Number': item.accountnumber || '',
       'Account Name': item.fullname || '',
-      'Start Date': item.startdate || '',
-      'Maturity Date': item.matdate || '',
+      'Start Date': item.startdate.split('T')[0] || '',
+      'Maturity Date': item.matdate.split('T')[0] || '',
       'Principal At Risk': item.principal_At_Risk || '',
       'Loan Amount': item.loanAmount || '',
       'Loan Balance': item.currentbalance || '',
@@ -112,10 +112,10 @@ export const IndividualLoan = () => {
                       {reportDetails.fullname}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {reportDetails.startdate}
+                      {reportDetails.startdate.split('T')[0]}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {reportDetails.matdate}
+                      {reportDetails.matdate.split('T')[0]}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {reportDetails.principal_At_Risk}

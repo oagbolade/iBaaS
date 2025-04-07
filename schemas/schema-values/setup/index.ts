@@ -353,16 +353,14 @@ export interface CreateDemandDepositFormValues {
   dayint: number;
   maxamt: number;
   penal: number;
-  ProdDocuments: [{ docId: string }];
+  minAge: number;
+  maxAge: number;
+  ProdDocuments: [];
   ProdCharges: [
-    {
-      chargecode: string;
-    }
+
   ];
   ProdException: [
-    {
-      exceptioncode: string;
-    }
+
   ];
 }
 export interface CreateLoanAccountFormValues {
@@ -412,16 +410,13 @@ export interface CreateLoanAccountFormValues {
   chkHealthInsurance: 0;
   healthInsuranceAcct: string;
   healthInsuranceAmt: number;
-  ProdDocuments: [{ docId: string }];
+  securityDepType: number,
+  securityDepFigure: number,
+  guarantorFlg: number,
+  ProdDocuments: [];
   ProdCharges: [
-    {
-      chargecode: string;
-    }
   ];
   ProdException: [
-    {
-      exceptioncode: string;
-    }
   ];
 }
 export interface CreateChargeFormValues {
@@ -563,19 +558,14 @@ export const createLoanAccountInitialValues: CreateLoanAccountFormValues = {
   moratoriumtype: 0,
   intRateCode: '',
   chkHealthInsurance: 0,
-  healthInsuranceAcct: 'string',
+  healthInsuranceAcct: '',
   healthInsuranceAmt: 0,
-  ProdDocuments: [{ docId: '' }],
-  ProdCharges: [
-    {
-      chargecode: ''
-    }
-  ],
-  ProdException: [
-    {
-      exceptioncode: ''
-    }
-  ]
+  securityDepType: 0,
+  securityDepFigure: 0,
+  guarantorFlg: 0,
+  ProdDocuments: [],
+  ProdCharges: [],
+  ProdException: []
 };
 export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   productCode: '',
@@ -616,17 +606,11 @@ export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   dayint: 0,
   maxamt: 0,
   penal: 0,
-  ProdDocuments: [{ docId: '' }],
-  ProdCharges: [
-    {
-      chargecode: ''
-    }
-  ],
-  ProdException: [
-    {
-      exceptioncode: ''
-    }
-  ]
+  minAge: 0,
+  maxAge: 0,
+  ProdDocuments: [],
+  ProdCharges: [],
+  ProdException: []
 };
 
 export const createChargeInitialValues: CreateChargeFormValues = {
@@ -722,20 +706,20 @@ export const createEducationInitialValues: CreateEducationFormValues = {
 };
 
 export const createTransactionTypeInitialValues: CreateTransactionTypeFormValues =
-  {
-    tranName: '',
-    tranType: '',
-    tranShortname: '',
-    charged: 0,
-    reversal: 0,
-    module: 0,
-    status: 0,
-    clearing: 'string',
-    authid: 'string',
-    createdate: getCurrentIsoDate(),
-    sms: 0,
-    cashIndicator: 0
-  };
+{
+  tranName: '',
+  tranType: '',
+  tranShortname: '',
+  charged: 0,
+  reversal: 0,
+  module: 0,
+  status: 0,
+  clearing: 'string',
+  authid: 'string',
+  createdate: getCurrentIsoDate(),
+  sms: 0,
+  cashIndicator: 0
+};
 export const createClearingBanksInitialValues: CreateClearingBankFormValues = {
   bankCode: '',
   chequeinClear: '',
@@ -746,13 +730,13 @@ export const createClearingBanksInitialValues: CreateClearingBankFormValues = {
 };
 
 export const createCommercialBankInitialValue: CreateCommercialBankFormValues =
-  {
-    bankName: '',
-    bankshortname: '',
-    authorisedby: 'string',
-    authid: 'string',
-    cbnCode: 'string'
-  };
+{
+  bankName: '',
+  bankshortname: '',
+  authorisedby: 'string',
+  authid: 'string',
+  cbnCode: 'string'
+};
 
 export const createProfessionInitialValue: CreateProfessionFormValues = {
   profname: '',
@@ -789,9 +773,9 @@ export const createInterestInitialValue: CreateInterestFormValues = {
   variance: 0
 };
 export const createSetupConditionInitialValue: CreateSetupConditionFormValues =
-  {
-    description: ''
-  };
+{
+  description: ''
+};
 
 export const createDormancyInitialValue: CreateDormancyFormValues = {
   prodCode: '',

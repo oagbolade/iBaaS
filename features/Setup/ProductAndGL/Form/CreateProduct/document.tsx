@@ -21,12 +21,14 @@ export const DocumentForm = () => {
     );
   }
 
+
+  
   const handleCheck = (docId: string) => {
-    const currentDocIds = values.docIds || [];
+    const currentDocIds = values.ProdDocuments || [];
     const updatedDocIds = currentDocIds.includes(docId)
       ? currentDocIds.filter((id: string) => id !== docId) // Remove if already selected
       : [...currentDocIds, docId]; // Add if not selected
-    setFieldValue('docIds', updatedDocIds); // Update Formik state
+    setFieldValue('ProdDocuments', updatedDocIds); // Update Formik state
   };
 
   return (
@@ -35,9 +37,8 @@ export const DocumentForm = () => {
         <Grid item={isTablet} mobile={6} key={doc.docid}>
           <Box sx={{ display: 'flex', width: '50%' }}>
             <Checkbox
-              checked={values.docIds?.includes(String(doc.docid)) || false}
+              checked={values.ProdDocuments?.includes(String(doc.docid)) || false}
               onChange={() => handleCheck(String(doc.docid))}
-              name="docIds"
             />
             <Typography
               mt={1}
@@ -48,7 +49,6 @@ export const DocumentForm = () => {
                 height: '20px',
                 textWrap: 'wrap'
               }}
-              className="docIds"
             >
               {doc.docName}
             </Typography>

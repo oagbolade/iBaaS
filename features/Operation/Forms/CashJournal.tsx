@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Formik, Form, useFormikContext } from 'formik';
+import { AlertColor } from '@mui/material';
 import {
   BatchContainer,
   BatchTitle,
@@ -15,7 +16,8 @@ import {
   FormTextInput,
   FormSelectField,
   FormikRadioButton,
-  FormikDateTimePicker
+  FormikDateTimePicker,
+  FormSelectInput
 } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -45,6 +47,9 @@ import { GLAccountPreviewContent } from '@/features/Setup/Operations/Form/GLPrev
 import { IGLAccount } from '@/api/ResponseTypes/admin';
 import { CustomStyleI } from '@/constants/types';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
+import { toast } from '@/utils/toast';
+import { mockToastActions } from '@/mocks';
+import { ToastMessageContext } from '@/context/ToastMessageContext';
 
 interface Props {
   accountDetails?: IAccountDetailsResults | undefined;
@@ -121,6 +126,11 @@ export const PreviewContentOne = ({ accountDetails }: Props) => {
 export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [transactionType, setTransactionType] = React.useState<boolean>(false);
+  const [, setIsLoading] = React.useState(true);
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+
+  const toastActions = useContext(ToastMessageContext);
+
   const [glAccount, setGLAccount] = React.useState<string | null>(null);
   const { mutate } = useCreateCashJournal();
   // eslint-disable-next-line no-lone-blocks
@@ -151,8 +161,25 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
     encryptData(glAccount as string)
   );
   const onSubmit = async (values: any) => {
+    const toastMessage = {
+      title: 'Validation error',
+      severity: 'error',
+      selectedCurrency: {
+        message: 'Currency is required'
+      }
+    };
+    if (selectedCurrency === '') {
+      toast(
+        toastMessage.selectedCurrency.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
     const getAllValues = {
-      ...values
+      ...values,
+      currencyCode: selectedCurrency
     };
     mutate(getAllValues);
   };
@@ -163,6 +190,24 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
   const handleGlAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGLAccount(e.target.value);
   };
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+      setIsLoading(false);
+    }
+  }, [mappedCurrency]); // Runs when mappedCurrency changes
+
   return (
     <Formik
       initialValues={CreateCashJournlInitalValues}
@@ -217,13 +262,17 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
                 />
               </Grid>
               <Grid sx={{ marginTop: 2 }} item={isTablet} mobile={12}>
-                <FormSelectField
+                <FormSelectInput
                   name="currencyCode"
                   options={mappedCurrency}
                   label="Currency"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
                 />
               </Grid>
               <Grid sx={{ marginTop: 2 }} item={isTablet} mobile={12}>

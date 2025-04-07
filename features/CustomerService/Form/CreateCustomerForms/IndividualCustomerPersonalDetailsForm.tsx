@@ -91,7 +91,9 @@ export const IndividualCustomerPersonalDetailsForm = ({
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
 
   const { states: allNationStates } = useGetStateByCountryCode(
-    encryptData(customerResultCodes?.nationality || residentDetails.nationality) as string,
+    encryptData(
+      customerResultCodes?.nationality || residentDetails.nationality
+    ) as string,
     formType
   );
 
@@ -114,7 +116,6 @@ export const IndividualCustomerPersonalDetailsForm = ({
       default:
         return customerResultCodes?.statecode || '';
     }
-
   };
 
   const { states: allResidentNationStates, isLoading: isLoadingStates } =

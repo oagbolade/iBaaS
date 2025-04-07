@@ -72,7 +72,7 @@ export const OtherCasaDetailsForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
-          name="penal"
+          name="minAge"
           placeholder="Enter Minimum Age"
           label="Minimum Age"
           customStyle={{
@@ -83,7 +83,7 @@ export const OtherCasaDetailsForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
-          name="maxamt"
+          name="maxAge"
           placeholder="Enter Maximum Age"
           label="Maximum Age"
           customStyle={{
@@ -154,7 +154,7 @@ export const OtherCasaDetailsForm = ({
             { label: 'Yes', value: '1' },
             { label: 'No', value: '0' }
           ]}
-          title="State to Inactive/Dormant A/C?"
+          title="Set to Inactive/Dormant A/C?"
           value="0"
         />
       </Grid>

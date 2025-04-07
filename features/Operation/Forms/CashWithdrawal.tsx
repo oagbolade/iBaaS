@@ -22,7 +22,8 @@ import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
   FormSelectField,
-  FormikDateTimePicker
+  FormikDateTimePicker,
+  FormSelectInput
 } from '@/components/FormikFields';
 import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import { useCurrentBreakpoint } from '@/utils';
@@ -127,6 +128,9 @@ export const CashWithDrawal = ({ currencies }: Props) => {
   const [searchValue, setSearchValue] = useState({ accountNumber: '' });
   const [selectedValue, setSelectedValue] = useState({ accountNumber: '' });
   const { mutate } = useCreateCashWithdrawal();
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+
   const [filteredValues, setFilteredValues] = useState({ accountNumber: [] });
   const toastActions = useContext(ToastMessageContext);
 
@@ -201,6 +205,9 @@ export const CashWithDrawal = ({ currencies }: Props) => {
       severity: 'error',
       accountNumber: {
         message: 'Account Number is required'
+      },
+      selectedCurrency: {
+        message: 'Currency is required'
       }
     };
     if (searchValue.accountNumber === '') {
@@ -213,12 +220,42 @@ export const CashWithDrawal = ({ currencies }: Props) => {
 
       return;
     }
+    if (selectedCurrency === '') {
+      toast(
+        toastMessage.selectedCurrency.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
     const getAllValues = {
       ...values,
-      accountNumber: accountId
+      accountNumber: accountId,
+      currencyCode: selectedCurrency
     };
     mutate(getAllValues);
   };
+
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+      setIsLoading(false);
+    }
+  }, [mappedCurrency]); // Runs when mappedCurrency changes
+
+  if (isLoading) return <div>Loading currencies...</div>;
 
   return (
     <Formik
@@ -259,13 +296,17 @@ export const CashWithDrawal = ({ currencies }: Props) => {
                 </StyledSearchableDropdown>
               </Grid>
               <Grid item={isTablet} mobile={12}>
-                <FormSelectField
+                <FormSelectInput
                   name="currencyCode"
                   options={mappedCurrency}
                   label="Currency"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>

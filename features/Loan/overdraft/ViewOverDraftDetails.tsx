@@ -12,6 +12,8 @@ import { useGetOverdraftDetails } from '@/api/loans/useCreditFacility';
 import { Status } from '@/components/Labels';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { FormSkeleton } from '@/components/Loaders';
+import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
+
 
 import {
   MuiTableContainer,
@@ -52,7 +54,18 @@ const ViewOverDraftDetails = () => {
   const { odAccDetails, isLoading } = useGetOverdraftDetails(accountNumber);
   const [search, setSearch] = useState<boolean>(true);
   const overdraftData = Array.isArray(odAccDetails) ? odAccDetails : [];
+  const [shouldDisableOverdraft, setshouldDisableOverdraft] = React.useState(false);
 
+
+
+  React.useEffect(() => {
+    const disableOverDreaft = !checkMultipleUserRoleAccess(
+      'Overdrafts',
+      'OVERDRAFT'
+    );
+
+    setshouldDisableOverdraft(disableOverDreaft);
+  }, []);
   const actionButtons: any = [
     <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
       <Button
@@ -70,6 +83,14 @@ const ViewOverDraftDetails = () => {
         }}
       >
         <Link
+
+          style={{
+            pointerEvents: shouldDisableOverdraft ? 'none' : 'auto'
+          }}
+          aria-disabled={shouldDisableOverdraft}
+          tabIndex={shouldDisableOverdraft ? -1 : undefined}
+
+
           href={`/loan/overdrafts/set-overdraft?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(
             customerId
           )}&actionType=set`}

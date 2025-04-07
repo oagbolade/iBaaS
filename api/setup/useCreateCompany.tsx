@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { ICompany, UseGetAllCompanyResponse } from '../ResponseTypes/setup';
 import { axiosInstance } from '@/axiosInstance';
@@ -142,11 +142,16 @@ export function useGetCompanyByCode(): UseGetAllCompanyResponse {
 
 export function useCreateCompany(code: string | null = null) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const toastActions = useContext(ToastMessageContext);
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CreateCompanyFormValues) =>
       updateCompany(toastActions, body, code),
     onSuccess: () => {
+      const keysToInvalidate = [[queryKeys.bankLogo]];
+      keysToInvalidate.forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: key })
+      );
       handleRedirect(router, '/setup/company/');
     }
   });

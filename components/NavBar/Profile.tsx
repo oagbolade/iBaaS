@@ -3,10 +3,12 @@ import React, { MouseEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import { Box, Tooltip } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 import {
   NavTypography,
   navSettings,
@@ -15,7 +17,8 @@ import {
   systemDateCont,
   systemDateTitle,
   systemDetails,
-  profileTitle
+  profileTitle,
+  NavChangePasswordTypography
 } from './styles';
 import { NavBarTitle, PageTitle } from '@/components/Typography';
 import { DownIcon, SettingsIcon, SignOutIcon } from '@/assets/svg';
@@ -30,6 +33,7 @@ export const Profile = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [avatarInitials, setAvatarInitials] = useState<null | string>(null);
   const { sysmodel } = useGetSystemDate();
+  const router = useRouter();
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -39,8 +43,13 @@ export const Profile = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleRedirect = () => {
+    router.push('/admin/users/password/');
+  };
 
-  const formattedDate = new Date(sysmodel?.systemDate || dayjs().format()).toDateString();
+  const formattedDate = new Date(
+    sysmodel?.systemDate || dayjs().format()
+  ).toDateString();
 
   const getInitials = (fullName: string): string => {
     if (!fullName) return '';
@@ -54,7 +63,8 @@ export const Profile = () => {
 
     return names[0].charAt(0).toUpperCase();
   };
-
+  const loggedInUserId: string | undefined =
+    getStoredUser()?.profiles?.userid?.toLowerCase();
   React.useEffect(() => {
     setAvatarInitials(getInitials(getStoredUser()?.fullName || '🚫'));
   }, []);
@@ -140,7 +150,19 @@ export const Profile = () => {
           </ListItemIcon>
           <ListItemText sx={NavTypography}>Settings</ListItemText>
         </MenuItem>
-
+        {loggedInUserId && (
+          <MenuItem sx={navSettings} onClick={handleClose}>
+            <ListItemIcon>
+              <Person2OutlinedIcon />
+            </ListItemIcon>
+            <ListItemText
+              onClick={() => handleRedirect()}
+              sx={NavChangePasswordTypography}
+            >
+              Change <br /> Password <br />
+            </ListItemText>
+          </MenuItem>
+        )}
         <MenuItem sx={navSettings} onClick={handleClose}>
           <ListItemIcon>
             <SignOutIcon />

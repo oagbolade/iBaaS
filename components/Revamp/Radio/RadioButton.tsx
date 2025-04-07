@@ -66,8 +66,13 @@ export const RadioButtons = ({
         defaultValue={value || selectedValue}
         onChange={handleChange}
         name={name}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}
       >
-        <Box sx={RadioButtonStyle}>
+        <Box>
           {options.map((option) => {
             return (
               <FormControlLabel

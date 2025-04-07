@@ -25,7 +25,9 @@ export const SideBarContainer = () => {
   const customReportPage = '/report/custom-report';
   const { bank } = useGetCompanyByCode();
   const { logo } = useGetBankLogo();
-  const BankLogo = logo?.toString();
+  const BankLogo = logo?.toString()
+    ? `data:image/png;image/jpg;base64,${logo}`
+    : null;
   const setHeight = {
     height: `${pathname === customReportPage ? '420vh' : '100vh'}`
   };

@@ -25,8 +25,16 @@ export const CustomReports = () => {
 
   return (
     <Box sx={{ margin: '90px 0', padding: '0 25px 45px 0' }}>
-      <Box sx={{ marginTop: '10px', marginBottom: '30px', marginLeft: '20px' }}>
+      <Box
+        sx={{
+          marginTop: '10px',
+          marginBottom: '30px',
+          marginLeft: '20px',
+          width: '100%'
+        }}
+      >
         <TextInput
+          customStyle={{ width: '90%' }}
           name="Search"
           placeholder="Search"
           icon={<SearchIcon />}

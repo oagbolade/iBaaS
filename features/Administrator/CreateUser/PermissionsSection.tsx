@@ -17,6 +17,7 @@ export interface UserData {
     statement?: number;
     canauth?: number;
     isoperation?: number;
+    enable2FA?: string;
   };
 }
 
@@ -75,6 +76,18 @@ export const PermissionsSection = () => {
           title="Global Authoriser?"
           name="status"
           value={`${isEditing ? userDetails?.globalAuth : 0}`}
+        />
+      </Box>
+      <Box mt={2}>
+        <RadioButtons
+          className="permissionOptions"
+          options={[
+            { label: 'Yes', value: '1' },
+            { label: 'No', value: '0' }
+          ]}
+          title="Enable 2FA"
+          name="enable2FA"
+          value={`${isEditing ? userDetails?.enable2FA : '1'}`}
         />
       </Box>
     </Box>

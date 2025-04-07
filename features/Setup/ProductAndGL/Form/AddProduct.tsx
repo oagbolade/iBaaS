@@ -51,24 +51,10 @@ export const AddNewProduct = ({
       'term',
       'shortname'
     ],
-    interestCharges: [
-      'maxintrate',
-      'actualRate',
-      'penalrate',
-      'minloan',
-      'moratorium',
-      'collval',
-      'schtype',
-      'loanclass',
-      'chargecode',
-      'actualRateCalcMethod',
-      'penalrateCalcMethod',
-      'exceptioncode',
-      'shortName'
-    ],
+    interestCharges: [],
     generalLedge: [
       'accountNumber',
-      'principalbalance',
+      'princbalBalance',
       'susinterest',
       'intaccrual',
       'interestincome',
@@ -87,42 +73,26 @@ export const AddNewProduct = ({
 
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('isEditing');
-  const { loanProducts, isLoading } = useGetLoanProductByCode(
-    encryptData(productId as string)
-  );
+  const { loanProducts, isLoading } = useGetLoanProductByCode(productId);
+
   const { mutate } = useCreateLoanAccountProduct(
     Boolean(isEditing),
     encryptData(productId as string)
   );
+
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    const prodDocuments = values.docIds.map((docId: string) => ({
-      docId
+    values.ProdException = values.ProdException.map((resp: string) => ({
+      exceptioncode: resp
     }));
-    const prodException = values?.exceptioncode?.map(
-      (exceptioncode: string) => ({
-        exceptioncode
-      })
-    );
-    const prodCharges = values?.chargecode?.map((chargecode: string) => ({
-      chargecode
+    values.ProdCharges = values.ProdCharges.map((resp: string) => ({
+      chargecode: resp
     }));
+    values.ProdDocuments = values.ProdDocuments.map((resp: string) => ({
+      docId: resp.trim()
+    }));
+
     await mutate({
-      ...values,
-      ProdDocuments: [
-        {
-          prodDocuments
-        }
-      ],
-      ProdCharges: [
-        {
-          prodCharges
-        }
-      ],
-      ProdException: [
-        {
-          prodException
-        }
-      ]
+      ...values
     });
   };
 
@@ -165,6 +135,7 @@ export const AddNewProduct = ({
         >
           {({ values }) => {
             const completed = useFormProgress({ requiredFields, values });
+
             return (
               <Form>
                 <ShortCardWithAccordion

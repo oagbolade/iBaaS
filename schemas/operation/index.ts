@@ -15,6 +15,13 @@ export const batchPosting = Yup.object({
     .matches(numericRegex, 'Input must be a number'),
   valueDate: Yup.string().required('Value date is Required')
 });
+export const auth2faSchema = Yup.object({
+  otp: Yup.string()
+    .min(6, 'Value must not be less than 6')
+    .max(6, 'Value must not be less than 6')
+    .matches(numericRegex, 'Input must be a number')
+    .required(' otp is Required')
+});
 
 export const cashDepositSchema = Yup.object({
   transAmount: Yup.number()
@@ -30,7 +37,6 @@ export const cashDepositSchema = Yup.object({
   depositorName: Yup.string()
     .matches(stringRegex, 'Invalid Depositor Name')
     .required('Depositor Name   is Required'),
-  currencyCode: Yup.string().required('Currency Code is Required'),
   tellerno: Yup.string()
     .matches(numericRegex, 'Input must be a number')
     .required('Teller number is Required')
@@ -58,7 +64,6 @@ export const chequeDeposit = Yup.object({
     .matches(numericRegex, 'Input must be a number')
 });
 export const chequeWithdraw = Yup.object({
-  currencyCode: Yup.string().required('currency Code is Required'),
   narration: Yup.string()
     .matches(stringRegex, 'Invalid Narration')
     .required('Narration   is Required'),
@@ -81,11 +86,9 @@ export const returnCheque = Yup.object({
     .required('Pay Amount is Required'),
   narration: Yup.string()
     .matches(stringRegex, 'Invalid Narration')
-    .required('Narration   is Required'),
-  currencycode: Yup.string().required('Currency Code is required')
+    .required('Narration   is Required')
 });
 export const inwardClearing = Yup.object({
-  currencyCode: Yup.string().required('currency Code is Required'),
   narration1: Yup.string()
     .matches(stringRegex, 'Invalid Narration')
     .required('Narration   is Required'),
@@ -100,7 +103,6 @@ export const inwardClearing = Yup.object({
     .required('check number is  Required')
 });
 export const outwardClearing = Yup.object({
-  currencyCode: Yup.string().required('currency Code is Required'),
   narration1: Yup.string()
     .matches(stringRegex, 'Invalid Narration')
     .required('Narration   is Required'),
@@ -116,9 +118,6 @@ export const outwardClearing = Yup.object({
   chequetype: Yup.string().required(' Cheque Type is Required')
 });
 export const NipTransferSchema = Yup.object({
-  currencyCode: Yup.string().required('Currency Code is Required'),
-  cleartype: Yup.string().required('clear Type is Required'),
-  reversal: Yup.string().required('Reversal is Required'),
   valuedate: Yup.string().required('Value date is Required'),
   tranamount: Yup.number()
     .typeError('Must be a numeric value')
@@ -142,17 +141,13 @@ export const cashWithdrawalSchema = Yup.object({
   narration: Yup.string()
     .matches(stringRegex, 'Invalid Narration')
     .required('Narration   is Required'),
-  currencyCode: Yup.string().required('Currency Code is Required'),
   tellerno: Yup.string()
     .matches(numericRegex, 'Input must be a number')
     .required('Voucher Number is  Required'),
   rate: Yup.string().required('Rate is Required')
 });
 export const FundTransferSchema = Yup.object({
-  transfertype: Yup.string().required('Trnasfer Type is Required'),
-  reversal: Yup.string().required('Reversal is Required'),
   valuedate: Yup.string().required('Value Date is Required'),
-  currencyCode: Yup.string().required('currency Code is Required'),
   tranamount: Yup.number()
     .typeError('Must be a numeric value')
     .min(0, 'Value must not be less than 0')
@@ -176,7 +171,6 @@ export const cashJournalSchema = Yup.object({
   narration1: Yup.string()
     .matches(stringRegex, 'Invalid Narration')
     .required('Narration   is Required'),
-  currencyCode: Yup.string().required('Currency Code is Required'),
   chequetype: Yup.string().required('Transaction Type is Required'),
   debitAcct: Yup.string()
     .matches(numericRegex, 'Input must be a number')

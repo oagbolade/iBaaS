@@ -20,7 +20,8 @@ import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
   FormSelectField,
-  FormikDateTimePicker
+  FormikDateTimePicker,
+  FormSelectInput
 } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import {
@@ -121,17 +122,17 @@ export const PreviewContentOne = ({ accountDetails }: Props) => {
 
       <SubTitle title="Book Balance" />
       <Details
-        title={`NGN ${formatCurrency(accountDetails?.bkbal || 0) || 'N/A'}`}
+        title={`NGN ${formatCurrency(accountDetails?.bkbal || 0) || '0.00'}`}
       />
 
       <SubTitle title="Effective Balance" />
       <Details
-        title={`NGN ${formatCurrency(accountDetails?.effbal || 0) || 'N/A'}`}
+        title={`NGN ${formatCurrency(accountDetails?.effbal || 0) || '0.00'}`}
       />
 
       <SubTitle title="Usable Balance" />
       <Details
-        title={`NGN ${formatCurrency(accountDetails?.usebal || 0) || 'N/A'}`}
+        title={`NGN ${formatCurrency(accountDetails?.usebal || 0) || '0.00'}`}
       />
 
       <SubTitle title="Source Type" />
@@ -153,7 +154,7 @@ export const PreviewContentOne = ({ accountDetails }: Props) => {
 
       <SubTitle title="Total Charge" />
       <Details
-        title={`NGN ${formatCurrency(accountDetails?.totalCharge || 0) || 'N/A'}`}
+        title={`NGN ${formatCurrency(accountDetails?.totalCharge || 0) || '0.00'}`}
       />
     </Box>
   );
@@ -174,6 +175,8 @@ const MobilePreviewContent = ({
 export const CashDeposit = ({ currencies }: Props) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [selectedValue, setSelectedValue] = useState({ accountNumber: '' });
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(true);
   const [searchValue, setSearchValue] = useState({ accountNumber: '' });
   const [filteredValues, setFilteredValues] = useState({ accountNumber: [] });
   const { mutate } = useCreateCashDeposit();
@@ -243,6 +246,9 @@ export const CashDeposit = ({ currencies }: Props) => {
       severity: 'error',
       accountNumber: {
         message: 'Account Number is required'
+      },
+      selectedCurrency: {
+        message: 'Currency is required'
       }
     };
     if (searchValue.accountNumber === '') {
@@ -255,12 +261,42 @@ export const CashDeposit = ({ currencies }: Props) => {
 
       return;
     }
+    if (selectedCurrency === '') {
+      toast(
+        toastMessage.selectedCurrency.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
     const getAllValues = {
       ...values,
-      accountNumber: accountId
+      accountNumber: accountId,
+      currencyCode: selectedCurrency
     };
     mutate(getAllValues);
   };
+
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+      setIsLoading(false);
+    }
+  }, [mappedCurrency]); // Runs when mappedCurrency changes
+
+  if (isLoading) return <div>Loading currencies...</div>;
 
   return (
     <Formik
@@ -306,13 +342,17 @@ export const CashDeposit = ({ currencies }: Props) => {
                 </Box>
               </Grid>
               <Grid item={isTablet} mobile={12}>
-                <FormSelectField
+                <FormSelectInput
                   name="currencyCode"
                   options={mappedCurrency}
                   label="Currency"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>

@@ -138,7 +138,7 @@ async function validatePassword(
 
 async function resetUser(
   toastActions: IToastActions,
-  body: ResetUserFormValues | ChangePasswordFormValues
+  body: ResetUserFormValues
 ): Promise<APIResponse> {
   let result: APIResponse = {
     responseCode: '',
@@ -204,6 +204,39 @@ async function changePassword(
   return result;
 }
 
+async function changePasswords(
+  toastActions: IToastActions,
+  body: ChangePasswordFormValues
+): Promise<APIResponse> {
+  let result: APIResponse = {
+    responseCode: '',
+    responseDescription: ''
+  };
+
+  try {
+    const urlEndpoint = '/Admin/ChangePassword';
+
+    const { data }: AxiosResponse<APIResponse> = await axiosInstance({
+      url: urlEndpoint,
+      method: 'POST',
+      data: { ...body },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getStoredUser()?.token}`
+      }
+    });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
 async function lockOrUnlockUser(
   toastActions: IToastActions,
   userid: string,
@@ -458,7 +491,7 @@ export function useChangePassword(): APIResponse {
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: ChangePasswordFormValues) =>
-      resetUser(toastActions, body), // ChangePassword for other users uses resetuser endpoint
+      changePasswords(toastActions, body), // ChangePassword for other users uses resetuser endpoint
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.filterUserSearch] });
       handleRedirect(router, '/admin/users');

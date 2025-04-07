@@ -25,7 +25,8 @@ import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
   FormSelectField,
-  FormikDateTimePicker
+  FormikDateTimePicker,
+  FormSelectInput
 } from '@/components/FormikFields';
 import { CustomStyleI } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
@@ -124,6 +125,8 @@ export const BatchPosting = ({
     currencies,
     details
   });
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const { mutate } = useCreateBatchPosting();
   const { batchno } = useGetGenerateBatchNo();
@@ -215,6 +218,9 @@ export const BatchPosting = ({
       severity: 'error',
       accountNumber: {
         message: 'Account Number is required'
+      },
+      selectedCurrency: {
+        message: 'Currency is required'
       }
     };
     if (searchValue.accountNumber === '') {
@@ -227,6 +233,16 @@ export const BatchPosting = ({
 
       return;
     }
+
+    if (selectedCurrency === '') {
+      toast(
+        toastMessage.selectedCurrency.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
     const latestSavedBatches = savedBatchData.slice(-3);
     if (latestSavedBatches.length > 0) {
       // eslint-disable-next-line array-callback-return
@@ -237,7 +253,7 @@ export const BatchPosting = ({
           chequeno: batch.chequeno,
           userid: `${getStoredUser()?.profiles?.userid}`,
           computedAmount: batch.computedAmount,
-          currency: batch.currency,
+          currency: selectedCurrency,
           narration: batch.narration,
           tellerno: batch.tellerno,
           trancode: batch.trancode,
@@ -256,6 +272,26 @@ export const BatchPosting = ({
       setIsSubmitting?.(false); // Reset isSubmitting to avoid repeat submissions
     }
   }, [isSubmitting]);
+
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+      setIsLoading(false);
+    }
+  }, [mappedCurrency]); // Runs when mappedCurrency changes
+
+  if (isLoading) return <div>Loading currencies...</div>;
   return (
     <Formik
       initialValues={BatchPostingInitialValues}
@@ -310,13 +346,17 @@ export const BatchPosting = ({
                     </DemoContainer>
                   </Grid>
                   <Grid item={isTablet} mobile={12}>
-                    <FormSelectField
+                    <FormSelectInput
                       name="currency"
                       options={mappedCurrency}
                       label="Currency"
                       customStyle={{
                         width: setWidth(isMobile ? '250px' : '100%')
                       }}
+                      value={selectedCurrency}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setSelectedCurrency(e.target.value)
+                      }
                     />
                   </Grid>
                   <Grid item={isTablet} mobile={12}>

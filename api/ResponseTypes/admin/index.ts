@@ -129,6 +129,8 @@ export interface IUsers {
   statement?: number;
   isSupervisor?: number;
   globalAuth?: number;
+  enable2FA?: string;
+  loginStatus?: string;
 }
 
 export interface ISupervisors {
@@ -337,6 +339,18 @@ export interface UseGetAllPostingLimit extends IFetchingState {
   limit?: IPostingLimit[] | Array<any>;
   limits?: IPostingLimit[] | Array<any>;
   results?: IPostingLimit[] | Array<any>;
+}
+export interface UseGetAllAuth2fa extends IFetchingState {
+  responseCode?: string;
+  responseMessage?: string;
+  data: [];
+}
+export interface UseGetAllAuth2faCheck extends IFetchingState {
+  responseCode?: string;
+  responseMessage?: string;
+  data: {
+    use2FA: boolean;
+  };
 }
 export interface UseGetPostingLimitByBranchCodeAndRoleid
   extends IFetchingState {

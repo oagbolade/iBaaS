@@ -21,7 +21,7 @@ import {
   PostingContainer,
   previewContentStyle
 } from '@/features/Operation/Forms/style';
-import { FormTextInput, FormSelectField } from '@/components/FormikFields';
+import { FormTextInput, FormSelectField, FormikRadioButton } from '@/components/FormikFields';
 import { CustomStyleI } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -179,14 +179,14 @@ export const CreateAccount = ({
     useGetDocuments(
       typeOne,
       (extractIdFromDropdown(selectedValue.customerid as string) as string) ||
-        customerIdForEditing,
+      customerIdForEditing,
       productcode || productCodeForEditing
     );
   const { documents: notSubmitted, isLoading: isNotSubmittedLoading } =
     useGetDocuments(
       typeTwo,
       (extractIdFromDropdown(selectedValue.customerid as string) as string) ||
-        customerIdForEditing,
+      customerIdForEditing,
       productcode || productCodeForEditing
     );
 
@@ -276,7 +276,7 @@ export const CreateAccount = ({
 
     // Set default values for branch and customer when editing
     const constructCustomerIDForExtraction = accDetailsResults
-      ? `ID ${accDetailsResults?.customerid || ''}: ${accDetailsResults?.accountdesc || ''}`
+      ? `ID ${accDetailsResults?.customerid || ''}: ${accDetailsResults?.accounttitle || ''}`
       : 'Search customer name';
     setSelectedValue({
       branchcode: accDetailsResults?.branch || '',
@@ -388,20 +388,20 @@ export const CreateAccount = ({
 
   const pickInitialValues = isEditing
     ? {
-        productcode: accDetailsResults?.productcode,
-        acctdesc: accDetailsResults?.accountdesc,
-        cintrate: Number(accDetailsResults?.cintrate),
-        dintrate: Number(accDetailsResults?.dintrate),
-        customerid: accDetailsResults?.customerid,
-        offc: accDetailsResults?.officercode,
-        sweep: 'string', // TODO: Hardcoded until we know what "sweep" is
-        stafid: `${getStoredUser()?.profiles.userid}`,
-        disv: 0,
-        eventlogid: 0,
-        userid: `${getStoredUser()?.profiles.userid}`,
-        authid: `${getStoredUser()?.profiles.userid}`,
-        oldacct: accDetailsResults?.oldacctno
-      }
+      productcode: accDetailsResults?.productcode,
+      acctdesc: accDetailsResults?.accountdesc,
+      cintrate: Number(accDetailsResults?.cintrate),
+      dintrate: Number(accDetailsResults?.dintrate),
+      customerid: accDetailsResults?.customerid,
+      offc: accDetailsResults?.officercode,
+      sweep: 'string', // TODO: Hardcoded until we know what "sweep" is
+      stafid: `${getStoredUser()?.profiles.userid}`,
+      disv: 0,
+      eventlogid: 0,
+      userid: `${getStoredUser()?.profiles.userid}`,
+      authid: `${getStoredUser()?.profiles.userid}`,
+      oldacct: accDetailsResults?.oldacctno
+    }
     : createCustomerAccountInitialValues;
 
   return (
@@ -430,6 +430,8 @@ export const CreateAccount = ({
               styles={BatchTitle}
             />
             <Grid container>
+
+
               <Grid item={isTablet} mobile={12}>
                 <StyledSearchableDropdown>
                   <ActionButtonWithPopper
@@ -451,7 +453,10 @@ export const CreateAccount = ({
                   />
                 </StyledSearchableDropdown>
               </Grid>
+
+
               <Grid item={isTablet} mobile={12}>
+
                 <StyledSearchableDropdown>
                   <ActionButtonWithPopper
                     loading={isSearchLoading}
@@ -470,9 +475,15 @@ export const CreateAccount = ({
                     }
                     onChange={handleSearch}
                     searchValue={searchValue.customerid as string}
+                    disabled={!!isEditing}
                   />
                 </StyledSearchableDropdown>
+
+
               </Grid>
+
+
+
               <Grid item={isTablet} mobile={12}>
                 <FormSelectField
                   name="productcode"
@@ -483,9 +494,10 @@ export const CreateAccount = ({
                   }}
                 />
               </Grid>
+
               {/* TODO: need to find out how this is fed into the API */}
               <Grid item={isTablet} mobile={12} my={3}>
-                <RadioButtons
+                <FormikRadioButton
                   id="channelSelect"
                   options={[
                     { label: 'Yes', value: 'yes' },
@@ -496,6 +508,7 @@ export const CreateAccount = ({
                   value="yes"
                 />
               </Grid>
+
               <Grid item={isTablet} mobile={12}>
                 <FormAmountInput
                   name="dintrate"
@@ -506,6 +519,7 @@ export const CreateAccount = ({
                   }}
                 />
               </Grid>
+
               <Grid item={isTablet} mobile={12}>
                 <FormAmountInput
                   name="cintrate"
@@ -516,6 +530,7 @@ export const CreateAccount = ({
                   }}
                 />
               </Grid>
+
               <Grid item={isTablet} mobile={12}>
                 <FormTextInput
                   name="oldacct"
@@ -527,6 +542,8 @@ export const CreateAccount = ({
                   disabled={!!isEditing}
                 />
               </Grid>
+
+
               <Grid item={isTablet} mobile={12}>
                 <FormTextInput
                   name="acctdesc"
@@ -537,6 +554,8 @@ export const CreateAccount = ({
                   }}
                 />
               </Grid>
+
+
               {documents?.current?.submitted !== undefined && (
                 <DocumentSection
                   handleSubmittedDocuments={handleSubmittedDocuments}

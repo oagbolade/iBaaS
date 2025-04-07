@@ -17,6 +17,7 @@ import { resetUser } from '@/schemas/admin';
 import { IRoles } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { toast } from '@/utils/toast';
+import { environment } from '@/axiosInstance';
 
 type Props = {
   isSubmitting: boolean;
@@ -66,13 +67,6 @@ export const ResetUserDetails = ({
   };
 
   const onSubmit = async (values: ResetUserFormValues) => {
-    const updatedValues = {
-      ...values,
-      resetpassword: showPassWordField ? 1 : 0,
-      newPassword: showPassWordField ? values.newPassword : '',
-      confirmPassword: showPassWordField ? values.confirmPassword : ''
-    };
-
     if (showPassWordField && values.newPassword !== values.confirmPassword) {
       toast('Passwords do not match', 'No Match', 'error', toastActions);
       return;
@@ -81,18 +75,23 @@ export const ResetUserDetails = ({
     const permissionOptions = document.getElementsByClassName(
       'permissionOptions'
     ) as HTMLCollectionOf<HTMLInputElement>;
-
-    const resetLoginCount = Number(permissionOptions[0].value) || 0;
+    const loginStatus = String(permissionOptions[0].value) || '0';
     const allowMultipleLogin = Number(permissionOptions[1].value) || 0;
-    const lockStatus = Number(permissionOptions[2].value) || 0;
-
-    await mutate?.({
-      updatedValues,
+    const resetLoginCount = Number(permissionOptions[2].value) || 0;
+    const lockStatus = Number(permissionOptions[3].value) || 0;
+    const updatedValues = {
+      ...values,
+      resetpassword: showPassWordField ? 1 : 0,
+      newPassword: showPassWordField ? values.newPassword : '',
+      confirmPassword: showPassWordField ? values.confirmPassword : '',
       userId: userid,
       resetLoginCount,
       allowMultipleLogin,
-      lockStatus
-    });
+      lockStatus,
+      loginStatus
+    };
+
+    await mutate?.(updatedValues);
   };
 
   React.useEffect(() => {
@@ -188,6 +187,9 @@ export const ResetUserDetails = ({
                         name="newPassword"
                         placeholder="Enter password"
                         label="Password"
+                        autoComplete={
+                          environment === 'development' ? 'on' : 'new-password'
+                        }
                         endAdornment={
                           <IconButton
                             aria-label="toggle password visibility"

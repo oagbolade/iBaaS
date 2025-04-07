@@ -210,6 +210,7 @@ interface IQueryKeys {
   getAccountInDebit: string;
   getTellerBalanceReport: string;
   getAllProductDocs: string;
+  generateProductCode: string;
 }
 
 export const queryKeys: IQueryKeys = {
@@ -423,5 +424,6 @@ export const queryKeys: IQueryKeys = {
   getGroupLoan: ' getGroupLoan',
   getStandingInstruction: 'getStandingInstruction',
   getincomeAssurance: 'getincomeAssurance',
-  geTransactionClearing: 'geTransactionClearing'
+  geTransactionClearing: 'geTransactionClearing',
+  generateProductCode: 'generateProductCode',
 };

@@ -12,6 +12,8 @@ import { CustomerServiceContext } from '@/features/CustomerService/CustomerServi
 import { StyledMenu } from '@/components/Table';
 import { useGetStatus } from '@/api/general/useStatus';
 
+import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
+
 const MenuWrapper = styled.section`
   .MuiBox-root {
     padding: 0 10px;
@@ -47,6 +49,15 @@ export const TableActionMenu = ({
     setAnchorEl(null);
   };
 
+  const [shouldDisable, setShouldDisable] = React.useState({
+    view: false,
+    cancel: false,
+    terminate: false,
+    partialPayOff: false,
+    restructLaon: false
+
+  });
+
   const handleClose = (link: string | null = null) => {
     if (link) router.push(link || '');
     const isEditing = true;
@@ -54,6 +65,52 @@ export const TableActionMenu = ({
     setAnchorEl(null);
     handleMenuClose();
   };
+
+
+  React.useEffect(() => {
+    const shouldDisableView = !checkMultipleUserRoleAccess(
+      'Loan Directory',
+      'VIEW LOAN APPLICATION'
+    );
+    const shouldDisableCancel = !checkMultipleUserRoleAccess(
+      'Loan Directory',
+      'CANCEL LOAN'
+    );
+
+    const shouldDisableTerminate = !checkMultipleUserRoleAccess(
+      'Loan Directory',
+      'LOAN CLOSURE_WRITEOFF'
+    );
+
+
+    const shouldDisablePartailPayOff = !checkMultipleUserRoleAccess(
+      'Loan Directory',
+      'PARTIAL PAYOFF'
+    );
+
+
+
+    const shouldDisableRestructure = !checkMultipleUserRoleAccess(
+      'Loan Directory',
+      'LOAN RESTRUCTURE'
+    );
+
+
+
+    setShouldDisable((prev) => ({
+      ...prev,
+      view: shouldDisableView,
+      cancel: shouldDisableCancel,
+      terminate: shouldDisableTerminate,
+      partialPayOff: shouldDisablePartailPayOff,
+      restructLaon: shouldDisableRestructure
+
+    }));
+
+
+
+
+  }, []);
 
   return (
     <Box>
@@ -72,6 +129,11 @@ export const TableActionMenu = ({
             }}
           >
             <Link
+              style={{
+                pointerEvents: shouldDisable.view ? 'none' : 'auto'
+              }}
+              aria-disabled={shouldDisable.view}
+              tabIndex={shouldDisable.view ? -1 : undefined}
               href={`/loan/loan-directory/view-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
             >
               <TableMenuButton buttonTitle="View Loan" />
@@ -86,6 +148,11 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
+                  style={{
+                    pointerEvents: shouldDisable.cancel ? 'none' : 'auto'
+                  }}
+                  aria-disabled={shouldDisable.cancel}
+                  tabIndex={shouldDisable.cancel ? -1 : undefined}
                   href={`/loan/loan-directory/cancel-loan/?accountNumber=${accountNumber as string}&action=${sanitize(status)}&customerId=${sanitize(customerId)}`}
                 >
                   <TableMenuButton buttonTitle="Cancel Loan" />
@@ -98,6 +165,11 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
+                  style={{
+                    pointerEvents: shouldDisable.terminate ? 'none' : 'auto'
+                  }}
+                  aria-disabled={shouldDisable.terminate}
+                  tabIndex={shouldDisable.terminate ? -1 : undefined}
                   href={`/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}`}
                 >
                   <TableMenuButton buttonTitle="Terminate Loan" />
@@ -110,6 +182,11 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
+                  style={{
+                    pointerEvents: shouldDisable.partialPayOff ? 'none' : 'auto'
+                  }}
+                  aria-disabled={shouldDisable.partialPayOff}
+                  tabIndex={shouldDisable.partialPayOff ? -1 : undefined}
                   href={`/loan/loan-directory/partial-pay/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}`}
                 >
                   <TableMenuButton buttonTitle="Partial Pay" />
@@ -122,6 +199,11 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
+                  style={{
+                    pointerEvents: shouldDisable.restructLaon ? 'none' : 'auto'
+                  }}
+                  aria-disabled={shouldDisable.restructLaon}
+                  tabIndex={shouldDisable.restructLaon ? -1 : undefined}
                   href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
                 >
                   <TableMenuButton buttonTitle="Restructure Loan" />

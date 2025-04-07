@@ -1,6 +1,9 @@
 import { Box } from '@mui/material';
 import { title } from '../../Forms/style';
-import { IAccountDetailsResults, IMandateInfo } from '@/api/ResponseTypes/customer-service';
+import {
+  IAccountDetailsResults,
+  IMandateInfo
+} from '@/api/ResponseTypes/customer-service';
 import { PageTitle } from '@/components/Typography';
 import { Details, SubTitle } from '@/features/Administrator/Role/ViewRole';
 import { Status } from '@/components/Labels';
@@ -8,10 +11,13 @@ import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
 
 interface Props {
   accountDetails?: IAccountDetailsResults | undefined;
-  mandateInfo: IMandateInfo[] | undefined
+  mandateInfo: IMandateInfo[] | undefined;
 }
 
-export const AccountInformationPreview = ({ accountDetails, mandateInfo }: Props) => {
+export const AccountInformationPreview = ({
+  accountDetails,
+  mandateInfo
+}: Props) => {
   if (!accountDetails) {
     return (
       <Box mb={3} sx={{ width: '200px', height: '200px' }}>
@@ -42,7 +48,10 @@ export const AccountInformationPreview = ({ accountDetails, mandateInfo }: Props
 
       <Box sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
         <SubTitle title="Photo" />
-        <img src={mandateInfo && mandateInfo[0]?.customerPictBase64} alt="customer pic" />
+        <img
+          src={mandateInfo && mandateInfo[0]?.customerPictBase64}
+          alt="customer pic"
+        />
       </Box>
 
       <Box
@@ -54,7 +63,10 @@ export const AccountInformationPreview = ({ accountDetails, mandateInfo }: Props
         }}
       >
         <SubTitle title="Signature" />
-        <img src={mandateInfo && mandateInfo[0]?.customerSignBase64} alt="customer pic" />
+        <img
+          src={mandateInfo && mandateInfo[0]?.customerSignBase64}
+          alt="customer pic"
+        />
       </Box>
 
       <SubTitle title="Product Name" />
@@ -64,13 +76,13 @@ export const AccountInformationPreview = ({ accountDetails, mandateInfo }: Props
       <Details title={accountDetails?.branch || 'NIL'} />
 
       <SubTitle title="Book Balance" />
-      <Details title={accountDetails?.bkbal || 'NIL'} />
+      <Details title={accountDetails?.bkbal || '0.00'} />
 
       <SubTitle title="Effective Balance" />
-      <Details title={accountDetails?.effbal || 'NIL'} />
+      <Details title={accountDetails?.effbal || '0.00'} />
 
       <SubTitle title="Usable Balance" />
-      <Details title={accountDetails?.usebal || 'NIL'} />
+      <Details title={accountDetails?.usebal || '0.00'} />
 
       <SubTitle title="Source Type" />
       <Details title={accountDetails?.source || 'NIL'} />

@@ -44,7 +44,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       reportType: values.reportType ? values.reportType : null,
       searchWith: values.searchWith ? values.searchWith : null,
       reportDate: `${getCurrentIsoDate()}`,
-
       getAll: false
     };
     onSearch?.(params);
@@ -74,12 +73,12 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                 >
                   <FormikRadioButton
                     options={[
-                      { label: 'Balance Sheet', value: '1' },
-                      { label: 'Profit & Loss', value: '0' }
+                      { label: 'Balance Sheet', value: 'trailbalance' },
+                      { label: 'Profit & Loss', value: 'pandl' }
                     ]}
                     title="Select Report Type"
                     name="reportType"
-                    value="1"
+                    value="trailbalance"
                   />
                 </Grid>
 
@@ -109,7 +108,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
-                    placeholder="Search"
+                    placeholder="Search by Gl number or Gl name"
                     label="Search"
                   />{' '}
                 </Grid>

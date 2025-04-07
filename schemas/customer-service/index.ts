@@ -220,7 +220,6 @@ export const individualCustomerPersonalDetails = {
         return noSpaceValue.length <= 80;
       }
     ),
-  sectorcode: Yup.string().required('Required'),
   othername: Yup.string().matches(
     stringRegexNoNumberAllowed,
     'Invalid middle name,  no numbers or special character allowed'
@@ -260,7 +259,6 @@ export const corporateCustomerPersonalDetails = {
         return noSpaceValue.length <= 80;
       }
     ),
-  sectorcode: Yup.string().required('Required'),
   bvn: Yup.string()
     .matches(numericRegex, 'Invalid bvn')
     .min(11, 'Bank verification number must be 11 characters long')

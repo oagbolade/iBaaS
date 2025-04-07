@@ -147,12 +147,14 @@ export const CreateUserForm = ({
     const authtype = Number(permissionOptions[0]?.value) || 0;
     const statement = Number(permissionOptions[1]?.value) || 0;
     const globalAuth = Number(permissionOptions[2]?.value) || 0;
+    const enable2FA = String(permissionOptions[2]?.value) || '1';
 
     await mutate({
       ...values,
       authtype,
       statement,
-      globalAuth
+      globalAuth,
+      enable2FA
     });
   };
 
@@ -199,14 +201,14 @@ export const CreateUserForm = ({
           initialValues={
             isEditing
               ? {
-                ...userDetails,
-                status: userDetails?.status,
-                role_id: userDetails?.role_id?.toString(),
-                authListID: null,
-                authid: getStoredUser()?.profiles.userid,
-                menuid: 1,
-                branchcode: userDetails?.branchcode?.trim()
-              }
+                  ...userDetails,
+                  status: userDetails?.status,
+                  role_id: userDetails?.role_id?.toString(),
+                  authListID: null,
+                  authid: getStoredUser()?.profiles.userid,
+                  menuid: 1,
+                  branchcode: userDetails?.branchcode?.trim()
+                }
               : unitTestInitialValues || createUserInitialValues
           }
           onSubmit={(values: any) => onSubmit(values)}
@@ -228,7 +230,7 @@ export const CreateUserForm = ({
                     }}
                     name="userid"
                     autoComplete="new-userid"
-                    placeholder="202210107481"
+                    placeholder="Enter Staff / Login ID"
                     label="Staff / Login ID"
                     required
                   />{' '}
@@ -243,7 +245,7 @@ export const CreateUserForm = ({
                       width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="fullname"
-                    placeholder="Omodayo Oluwafunke"
+                    placeholder="Enter Full Name"
                     label="Staff Name"
                     required
                   />{' '}
@@ -258,7 +260,7 @@ export const CreateUserForm = ({
                       width: setWidth(isMobile ? '300px' : '100%')
                     }}
                     name="email"
-                    placeholder="Omodayo_Oluwafunke@testcompany.com"
+                    placeholder="Enter valid Email address"
                     label="Email Address"
                     required
                   />{' '}

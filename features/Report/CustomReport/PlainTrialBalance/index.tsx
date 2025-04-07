@@ -59,11 +59,11 @@ export const PlainTrialBalance = () => {
   });
 
   const {
-    pagedRecords: getAllPlainTrialBalanceData,
-    totalDr,
-    totalCr,
-    bkBalance
-  } = plainTrialBalanceList;
+    pagedRecords: getAllPlainTrialBalanceData = [],
+    totalDr = 0,
+    totalCr = 0,
+    bkBalance = 0
+  } = plainTrialBalanceList || {};
 
   React.useEffect(() => {
     if (getAllPlainTrialBalanceData?.length > 0) {
@@ -127,7 +127,7 @@ export const PlainTrialBalance = () => {
               data={getAllPlainTrialBalanceData}
               hideFilterSection
               showHeader={{
-                mainTitle: 'Customer Balances',
+                mainTitle: 'Plain Trial Balance',
                 secondaryTitle:
                   'See a directory of all Customer Balance Report in this system.'
               }}

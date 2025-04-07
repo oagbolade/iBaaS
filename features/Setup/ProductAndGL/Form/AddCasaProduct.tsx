@@ -33,12 +33,16 @@ type Props = {
   isSubmitting: boolean;
   setIsSubmitting: (submit: boolean) => void;
 };
+
+
+
 export const AddCasaNewProduct = ({
   productCode,
   isSubmitting,
   setIsSubmitting
 }: Props) => {
   const requiredFields: Record<string, string[]> = {
+
     personalDetails: [
       'dayint',
       'taxabsorbed1',
@@ -55,6 +59,7 @@ export const AddCasaNewProduct = ({
       'productName',
       'productclass'
     ],
+
     interestCharges: [
       'interbr',
       'currencycode',
@@ -63,6 +68,7 @@ export const AddCasaNewProduct = ({
       'drType',
       'crtype'
     ],
+
     generalLedge: [
       'acctClosegl',
       'taxabsorbed1',
@@ -78,10 +84,13 @@ export const AddCasaNewProduct = ({
       'suspendedAsset',
       'liabilityBal'
     ],
+
     otherDetails: [
       'floor',
       'penal',
       'maxamt',
+      'maxAge',
+      'minAge',
       'checkBook',
       'sweepIn',
       'si',
@@ -89,6 +98,7 @@ export const AddCasaNewProduct = ({
       'lien',
       'stateInactive'
     ],
+
     document: ['docIds']
   };
 
@@ -99,37 +109,31 @@ export const AddCasaNewProduct = ({
     decryptData(productCode as string)
   );
   const { demandDeposit } = useGetDemandDepositByCode(productCode);
+
+
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    const prodDocuments = values.docIds.map((docId: string) => ({
-      docId
+    
+    values.ProdException = values.ProdException.map((resp: string) => ({
+      exceptioncode: resp
     }));
-    const prodException = values?.exceptioncode?.map(
-      (exceptioncode: string) => ({
-        exceptioncode
-      })
-    );
-    const prodCharges = values?.chargecode?.map((chargecode: string) => ({
-      chargecode
+    values.ProdCharges = values.ProdCharges.map((resp: string) => ({
+      chargecode: resp
     }));
+    values.ProdDocuments = values.ProdDocuments.map((resp: string) => ({
+      docId: resp.trim()
+    })); 
+
+
+
     await mutate({
       ...values,
-      ProdDocuments: [
-        {
-          prodDocuments
-        }
-      ],
-      ProdCharges: [
-        {
-          prodCharges
-        }
-      ],
-      ProdException: [
-        {
-          prodException
-        }
-      ]
     });
+
+
   };
+
+
+
   React.useEffect(() => {
     const submit = document.getElementById('submitButton');
 
@@ -141,6 +145,9 @@ export const AddCasaNewProduct = ({
       setIsSubmitting(false);
     };
   }, [isSubmitting]);
+
+
+
   return (
     <Box
       sx={{

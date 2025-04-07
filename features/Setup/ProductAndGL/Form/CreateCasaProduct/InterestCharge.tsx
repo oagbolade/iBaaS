@@ -178,7 +178,7 @@ export const InterestCasaChargesForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="withallowed"
-          placeholder="Enter actual Rate"
+          placeholder="Enter Withdrawal allowed"
           label="Maximum Withdrawal Allowed for Interest"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
@@ -189,7 +189,7 @@ export const InterestCasaChargesForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="interestIncome"
-          placeholder="Enter Penalty Rate"
+          placeholder="Enter Interest Days"
           label="Interest Days"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
@@ -199,9 +199,9 @@ export const InterestCasaChargesForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <Field
-          name="chargecode"
+          name="ProdCharges"
           component={MultiSelectWithCheckboxes}
-          options={mappedBankproducts}
+          options={mappedException}
           label="Product Charges"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
@@ -210,7 +210,7 @@ export const InterestCasaChargesForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <Field
-          name="exceptioncode"
+          name="ProdException"
           component={MultiSelectWithCheckboxes}
           options={mappedException}
           label="Product Exceptions"
