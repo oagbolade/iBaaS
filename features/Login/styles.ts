@@ -23,7 +23,6 @@ export const bannerTitle = {
 };
 export const platformTitle = {
   color: `${colors.neutral900}`,
-  fontFamily: 'Averta',
   fontSize: '40px',
   fontStyle: 'normal',
   fontWeight: 700,
@@ -33,8 +32,6 @@ export const platformTitle = {
 };
 export const bankTitle = {
   color: `${colors.neutral700}`,
-  /* body/large */
-  fontFamily: 'Averta',
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 400,
@@ -209,7 +206,6 @@ export const authTitle = {
 
 export const titleStyle = {
   color: `${colors.primaryText}`,
-  fontFamily: 'Averta',
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 600,
@@ -217,7 +213,6 @@ export const titleStyle = {
 };
 export const subtitleStyle = {
   color: `${colors.secondaryText}`,
-  fontFamily: 'Averta',
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 400,
