@@ -128,7 +128,7 @@ export const ReleaseLien = () => {
         </Box>
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-            <PageTitle title="Release Lien111" styles={BatchTitle} />
+            <PageTitle title="Release Lien" styles={BatchTitle} />
             <Grid container>
               <Grid item={isTablet} mobile={12}>
                 <FormSelectInput
