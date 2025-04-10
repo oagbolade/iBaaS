@@ -12,12 +12,12 @@ import {
   BatchContainer,
   BatchTitle,
   PostingContainer,
-  previewContentStyle
+  previewContentStyle,
 } from '@/features/Operation/Forms/style';
 import {
   FormTextInput,
   FormSelectField,
-  FormSelectInput
+  FormSelectInput,
 } from '@/components/FormikFields';
 import { CustomStyleI } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
@@ -29,11 +29,11 @@ import { createLien } from '@/schemas/customer-service';
 import {
   useGetLienDetail,
   useGetLienReason,
-  useReleaseLien
+  useReleaseLien,
 } from '@/api/customer-service/useLien';
 import {
   LienOption,
-  LienType
+  LienType,
 } from '@/constants/CustomerService/viewCustomerDetails';
 import { ILienReason } from '@/api/ResponseTypes/customer-service';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
@@ -42,13 +42,14 @@ import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
 import { encryptData } from '@/utils/encryptData';
 
 export const actionButtons: any = [
-  <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
+  <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }} key="submit-button-box">
     <PrimaryIconButton
+      key="submit-button"
       type="submit"
       buttonTitle="Submit"
       customStyle={{ ...submitButton }}
     />
-  </Box>
+  </Box>,
 ];
 
 type Props = {
@@ -57,7 +58,7 @@ type Props = {
 };
 export const MobilePreviewContent = ({
   PreviewContent,
-  customStyle
+  customStyle,
 }: Props) => {
   return (
     <MobileModalContainer
@@ -87,14 +88,15 @@ export const ReleaseLien = () => {
   >([]);
 
   const lienType = '1';
-  const { lienReason } = useGetLienReason(lienType);
-  const { liendetail, accName, lienexist, isLoading } =
-    useGetLienDetail(encryptData(accountNumber) as string);
+  const { lienReason } = useGetLienReason(encryptData(lienType) as string);
+  const { liendetail, accName, lienexist, isLoading } = useGetLienDetail(
+    encryptData(accountNumber) as string,
+  );
 
   React.useEffect(() => {
     const reasons = lienReason?.map((reason: ILienReason) => ({
       name: reason.holdreason,
-      value: reason.reasoncode
+      value: reason.reasoncode,
     }));
 
     setMappedLienReason(reasons);
@@ -108,9 +110,9 @@ export const ReleaseLien = () => {
         {
           myHoldnumber,
           releaseAmount: values.holdAmount,
-          reasonCode: values.reasoncode
-        }
-      ]
+          reasonCode: values.reasoncode,
+        },
+      ],
     };
 
     mutate(getAllValues);
@@ -138,7 +140,7 @@ export const ReleaseLien = () => {
                   disabled
                   label="Lien Type"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
+                    width: setWidth(isMobile ? '250px' : '100%'),
                   }}
                 />
               </Grid>
@@ -150,7 +152,7 @@ export const ReleaseLien = () => {
                   options={LienOption}
                   label="Lien Option"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
+                    width: setWidth(isMobile ? '250px' : '100%'),
                   }}
                 />
               </Grid>
@@ -184,7 +186,7 @@ export const ReleaseLien = () => {
                   placeholder="Enter amount"
                   label="Amount"
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
+                    width: setWidth(isMobile ? '250px' : '100%'),
                   }}
                 />
               </Grid>
@@ -195,7 +197,7 @@ export const ReleaseLien = () => {
                     options={mappedLienReason as OptionsI[]}
                     label="Lien Reason"
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
+                      width: setWidth(isMobile ? '250px' : '100%'),
                     }}
                   />
                 </Grid>

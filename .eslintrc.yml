@@ -8,7 +8,6 @@ extends:
   - plugin:react/recommended
   - airbnb
   - plugin:css/recommended
-  - plugin:react-hooks/recommended
   - prettier
 parserOptions:
   ecmaFeatures:
