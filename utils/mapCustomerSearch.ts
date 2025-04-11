@@ -9,20 +9,25 @@ interface Customer {
   accounttitle: string;
   customerid: string;
   accountnumber: string;
+  phone: string
 }
 
 interface Staff {
   userid: string;
   fullname: string;
+  phone: string
 }
 
 export const mapCustomerSearch = (
   customers: ICustomers[] | undefined
-): { value: string; name: string }[] => {
+): {
+  phone: string; value: string; name: string 
+}[] => {
   return (
     (customers as unknown as Customer[])?.map((customer: Customer) => ({
       value: customer.customerid.toString(),
-      name: customer.accounttitle
+      name: customer.accounttitle,
+      phone: customer.phone
     })) || []
   );
 };
@@ -42,11 +47,14 @@ export const mapCustomerAccountNumberSearch = (
 
 export const mapStaffSearch = (
   staff: IUsers[] | undefined
-): { value: string; name: string }[] => {
+): {
+  phone: string; value: string; name: string 
+}[] => {
   return (
     (staff as unknown as Staff[])?.map((eachStaff: Staff) => ({
       value: eachStaff.userid.toString(),
-      name: eachStaff.fullname
+      name: eachStaff.fullname,
+      phone: eachStaff.phone
     })) || []
   );
 };

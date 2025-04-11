@@ -60,6 +60,7 @@ type Props = {
 };
 
 export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
+  
   const customerId = useGetParams('customerId') || '';
 
   const { customerResult: customerResultCodes } = useGetCustomerByIdCodes(
@@ -132,6 +133,9 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
         return mappedStaffSearchResults;
       }
     };
+
+const activeSearchResults = pickResult();
+console.log('active', activeSearchResults);
 
     setFilteredValues((prev) => ({
       ...prev,
@@ -219,32 +223,45 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
     setIsGroupMember(value);
   };
 
-  return (
+const SearchResults_customer = mapCustomerSearch(accountDetailsResults);
+const SearchResults_staff = mapStaffSearch(users);
+// console.log("Selected Value Object:", selectedValue);
+const extractedCustomerId = 
+  typeof selectedValue.introid === 'string'
+    ? selectedValue.introid.split('ID ')[1]?.split(':')[0]?.trim()
+    : undefined;
+
+const rawStaffSource = selectedValue.acctOfficer || selectedValue.introid;
+const extractedStaffId = 
+  typeof rawStaffSource === 'string'
+    ? rawStaffSource.split('ID ')[1]?.split(':')[0]?.trim()
+    : undefined;
+
+const selectedCustomer = SearchResults_customer.find(
+  (item) => item.value === extractedCustomerId
+) || { name: 'No customer found', phone: '' };
+
+const selectedStaff = SearchResults_staff.find(
+  (item) => item.value === extractedStaffId
+) || { name: 'No staff found', phone: '' };
+
+// 🟩 Final values
+const customername = selectedCustomer.name;
+const customerphone = selectedCustomer.phone;
+const staffname = selectedStaff.name;
+const staffphone = selectedStaff.phone || 'No phone Number';
+
+let finalName = customername; 
+if (finalName === 'No customer found') {
+  finalName = staffname; 
+}else{
+  finalName = customername;
+}  
+return (
     <Grid container spacing={2}>
       <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
         <Grid container>
-          <Grid item={isTablet} mobile={12}>
-            <FormTextInput
-              name="refname"
-              placeholder="Enter first name"
-              label="Name"
-              customStyle={{
-                width: setWidth(isMobile ? '250px' : '100%')
-              }}
-              required
-            />
-          </Grid>
-          <Grid item={isTablet} mobile={12}>
-            <FormTextInput
-              name="refphone"
-              placeholder="Enter phone number"
-              label="Phone Number"
-              customStyle={{
-                width: setWidth(isMobile ? '250px' : '100%')
-              }}
-              required
-            />
-          </Grid>
+          
           <Grid item={isTablet} mobile={12}>
             <FormSelectInput
               onChange={handleSelectChange}
@@ -302,6 +319,31 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
                 searchValue={searchValue.acctOfficer as string}
               />
             </StyledSearchableDropdown>
+          </Grid>
+
+          <Grid item={isTablet} mobile={12}>
+            <FormTextInput
+              name="refname"
+              placeholder="Enter first name"
+              label="Name"
+              value={finalName}
+              customStyle={{
+                width: setWidth(isMobile ? '250px' : '100%')
+              }}
+              disabled
+            />
+          </Grid>
+          <Grid item={isTablet} mobile={12}>
+            <FormTextInput
+              name="refphone"
+              placeholder="Enter phone number"
+              value={customerphone || staffphone}
+              label="Phone Number"
+              customStyle={{
+                width: setWidth(isMobile ? '250px' : '100%')
+              }}
+              disabled
+            />
           </Grid>
           <Grid item={isTablet} mobile={12}>
             <RadioButtons
@@ -380,4 +422,5 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
       </Box>
     </Grid>
   );
+
 };
