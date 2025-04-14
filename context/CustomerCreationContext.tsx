@@ -34,7 +34,7 @@ export const progressCompletionInitialValues: Record<string, ProgressType> = {
     progress: 0
   },
   referrerDetails: {
-    total: 5,
+    total: 3,
     progress: 0
   }
 };
