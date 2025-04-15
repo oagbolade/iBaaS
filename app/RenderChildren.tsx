@@ -18,6 +18,7 @@ import { decryptData } from '@/utils/decryptData';
 import { useNipAuthprovider } from '@/utils/hooks/NipAuthProvider/useNipAuthprovider';
 import { useAuth } from '@/api/auth/useAuth';
 import useIdleTimer from '@/utils/hooks/useIdleTimer';
+import useSingleTabSession from '@/utils/useSessionTimeout';
 
 type Props = {
   children: React.ReactNode;
@@ -74,7 +75,7 @@ export const RenderChildren = ({ children }: Props) => {
   }, []);
 
   useNipAuthprovider();
-
+  useSingleTabSession();
   return (
     <div
       tabIndex={0}

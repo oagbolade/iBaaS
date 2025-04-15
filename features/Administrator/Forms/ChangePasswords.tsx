@@ -39,6 +39,8 @@ export const ChangePasswordForm = ({
 }: Props) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setshowConfirmPassword] = React.useState(false);
+
   const { mutate, isError } = useChangePassword();
   const roleId = useGetParams('roleId') || 'N/A';
   const departmentId = useGetParams('deptId') || 'N/A';
@@ -51,7 +53,8 @@ export const ChangePasswordForm = ({
       ...values,
       passchange_date: toISOStringFormat(
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-      )
+      ),
+      userid: `${getStoredUser()?.profiles?.userid}`
     });
 
     if (!isError) {
@@ -61,6 +64,12 @@ export const ChangePasswordForm = ({
 
   const handleClickShowPassword = () => {
     return setShowPassword((show) => {
+      return !show;
+    });
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    return setshowConfirmPassword((show) => {
       return !show;
     });
   };
@@ -101,67 +110,6 @@ export const ChangePasswordForm = ({
           <Form>
             <Box mt={4}>
               <Grid container>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="userid"
-                    placeholder="202210107481"
-                    label="Staff / Login ID"
-                    required
-                    disabled
-                  />{' '}
-                </Grid>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="fullname"
-                    placeholder="Omodayo Oluwafunke"
-                    label="Staff Name"
-                    required
-                    disabled
-                  />{' '}
-                </Grid>
-                <Grid mb={1} item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%'),
-                      fontSize: '14px'
-                    }}
-                    name="role"
-                    options={mappedRole}
-                    label="Role Name"
-                    placeholder="IT Department"
-                    value={roleId}
-                    disabled
-                  />{' '}
-                </Grid>
-                <Grid mb={1} item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%'),
-                      fontSize: '14px'
-                    }}
-                    name="department"
-                    options={mappedDepartments}
-                    label="Department"
-                    placeholder="IT Department"
-                    disabled
-                    value={departmentId}
-                  />{' '}
-                </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <FormTextInput
                     type={showPassword ? 'text' : 'password'}
@@ -186,7 +134,7 @@ export const ChangePasswordForm = ({
 
                 <Grid item={isTablet} mobile={12}>
                   <FormTextInput
-                    type={showPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     customStyle={{
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
@@ -199,11 +147,15 @@ export const ChangePasswordForm = ({
                     endAdornment={
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        onClick={handleClickShowConfirmPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                        {showConfirmPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
                       </IconButton>
                     }
                   />{' '}

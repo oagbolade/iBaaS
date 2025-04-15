@@ -34,7 +34,7 @@ export interface CreateChargeConcessionFormValues {
 
 export const chargeConcessionInitialValues: CreateChargeConcessionFormValues = {
   accountnumber: '',
-  originatingAccount: 'string', // TODO: get clarity from infosight on what account number to use here,
+  originatingAccount: '', // TODO: get clarity from infosight on what account number to use here,
   chargetype: '',
   chargeamount: 0,
   amount: 0,

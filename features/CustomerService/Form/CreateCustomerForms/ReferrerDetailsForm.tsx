@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { useDebounce } from '@uidotdev/usehooks';
 import SearchIcon from '@mui/icons-material/Search';
@@ -66,7 +66,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
     encryptData(customerId) as string
   );
 
-  const { setAccountOfficerValue, setIntroducerIdValue } = React.useContext(
+  const { setAccountOfficerValue, setIntroducerIdValue, setIntroducerTypeValue } = React.useContext(
     CustomerCreationContext
   );
 
@@ -161,7 +161,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
 
   const handleSelectedValue = (
     value: string,
-    name: 'acctOfficer' | 'introid'
+    name: 'acctOfficer' | 'introid' | 'introducerType'
   ) => {
     if (selectInputRef.current) {
       (selectInputRef.current as Record<string, string>)[name] = value;
@@ -183,11 +183,17 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
     if (name === 'acctOfficer') {
       setAccountOfficerValue(value);
     }
+
+    if (name === 'introducerType') {
+      setIntroducerTypeValue(value);
+    }
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    handleSelectedValue(value, 'introducerType');
     setIntroducerType({ [value]: value });
+    setIntroducerTypeValue(value);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

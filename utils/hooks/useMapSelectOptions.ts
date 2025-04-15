@@ -19,7 +19,8 @@ import {
   IGlDetails,
   IGlNode,
   IGLType,
-  INodeType
+  INodeType,
+  IUsers
 } from '@/api/ResponseTypes/admin';
 import {
   IBankProducts,
@@ -117,6 +118,7 @@ interface ISelect {
   products?: IProducts[];
   exception?: IException[];
   frequency?: IFrequency[];
+  users?: IUsers[];
 }
 
 export const useMapSelectOptions = ({
@@ -138,6 +140,7 @@ export const useMapSelectOptions = ({
   relationships,
   idCards,
   officers,
+  users,
   groups,
   sectors,
   education,
@@ -183,6 +186,7 @@ export const useMapSelectOptions = ({
   const [mappedEducation, setEducation] = useState<OptionsI[]>([]);
   const [mappedGroups, setGroups] = useState<OptionsI[]>([]);
   const [mappedAccountOfficers, setAccountOfficers] = useState<OptionsI[]>([]);
+  const [mappedUsers, setMappedUsers] = useState<OptionsI[]>([]);
   const [mappedTitles, setTitles] = useState<OptionsI[]>([]);
   const [mappedCountries, setCountries] = useState<OptionsI[]>([]);
   const [mappedStates, setStates] = useState<OptionsI[]>([]);
@@ -404,6 +408,15 @@ export const useMapSelectOptions = ({
       });
     });
 
+    const allUserArray: OptionsI[] = [];
+
+    users?.forEach((user: IUsers) => {
+      allUserArray.push({
+        name: user.fullname as string,
+        value: user.userid as string
+      });
+    });
+
     const titleArray: OptionsI[] = [];
 
     titles?.forEach((title: ITitle) => {
@@ -586,14 +599,12 @@ export const useMapSelectOptions = ({
 
     const allStateTownsArray: OptionsI[] = [];
     if (Array.isArray(allStateTowns)) {
-      allStateTowns?.forEach(
-        (town: ITown) => {
-          allStateTownsArray.push({
-            name: town.townName,
-            value: town.townCode
-          });
-        }
-      );
+      allStateTowns?.forEach((town: ITown) => {
+        allStateTownsArray.push({
+          name: town.townName,
+          value: town.townCode
+        });
+      });
     }
 
     const glDetailsArray: IGlDetailsOptions[] = [];
@@ -673,6 +684,7 @@ export const useMapSelectOptions = ({
     setEducation(educationArray);
     setGroups(groupsArray);
     setAccountOfficers(accountOfficersArray);
+    setMappedUsers(allUserArray);
     setCountries(countriesArray);
     setStates(statesArray);
     setTowns(townArray);
@@ -737,6 +749,7 @@ export const useMapSelectOptions = ({
     lienReason,
     node,
     officers,
+    users,
     productTypes,
     professions,
     relationships,
@@ -773,6 +786,7 @@ export const useMapSelectOptions = ({
     mappedEducation,
     mappedGroups,
     mappedAccountOfficers,
+    mappedUsers,
     mappedTitles,
     mappedCountries,
     mappedStates,

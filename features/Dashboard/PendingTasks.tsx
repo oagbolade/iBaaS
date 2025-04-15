@@ -109,7 +109,7 @@ export const PendingTasks = () => {
             ))}
             {authsdetails?.length === 0 && (
               <StyledTableRow>
-                <StyledTableCell colSpan={4} component="th" scope="row">
+                <StyledTableCell colSpan={12} component="th" >
                   {renderEmptyTableBody('No pending tasks')}
                 </StyledTableCell>
               </StyledTableRow>

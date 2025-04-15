@@ -494,7 +494,7 @@ export function useChangePassword(): APIResponse {
       changePasswords(toastActions, body), // ChangePassword for other users uses resetuser endpoint
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.filterUserSearch] });
-      handleRedirect(router, '/admin/users');
+      handleRedirect(router, '/dashboard');
     }
   });
   return { mutate, isPending, isError, error };

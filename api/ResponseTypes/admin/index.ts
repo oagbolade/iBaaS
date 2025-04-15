@@ -112,6 +112,7 @@ export interface IAccountOfficers {
 export interface IUsers {
   Userid?: string;
   userId?: string;
+  userid?: string;
   fullname?: string;
   DeptName?: string;
   deptcode?: string;

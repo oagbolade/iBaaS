@@ -45,6 +45,7 @@ import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
 import { toast } from '@/utils/toast';
 import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
+import { FormSkeleton } from '@/components/Loaders';
 
 type Props = {
   isSubmitting?: boolean;
@@ -64,88 +65,28 @@ export const ChargeConcession = ({
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
-  const { mutate } = useCreateChargeConcession();
-  const [searchValue, setSearchValue] = React.useState<SearchFilters>({
-    accountNumber: ''
-  });
+  const { mutate, isPending } = useCreateChargeConcession();
+  const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const [chargeConcessions, setChargeConcessions] = useState<
     Partial<IChargeConcessionType>
   >({
     chargeAmt: 0,
     chargeCode: ''
   });
-  const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
-    accountNumber: []
-  });
-  const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
-    accountNumber: ''
-  });
+
   const { mappedChargeConcessionType } = useMapSelectOptions({
     charges
   });
-  const accountId = String(
-    extractIdFromDropdown(selectedValue.accountNumber as string)
+  const { accDetailsResults: accountData, isLoading } = useGetAccountDetails(
+    encryptData(accountNumber) || ''
   );
-  const { accDetailsResults: accountData } = useGetAccountDetails(
-    encryptData(accountId) || ''
-  );
-  const { data, isLoading: isSearchLoading } = useQuery({
-    queryKey: [queryKeys.searchCustomer, searchValue],
-    queryFn: () =>
-      searchCustomer(toastActions, searchValue.accountNumber as string),
-    enabled: Boolean(searchValue.accountNumber.length > 0)
-  });
-  const handleSelectedValue = (value: string, name: string) => {
-    setSelectedValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccountNumber(e.target.value);
   };
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setSearchValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-
-    const mappedSearchResults = mapCustomerAccountNumberSearch(
-      data?.accountDetailsResults
-    );
-    setFilteredValues((prev) => ({
-      ...prev,
-      [name]: mappedSearchResults
-    }));
-
-    if (value.trim().length === 0) {
-      setFilteredValues({
-        accountNumber: []
-      });
-    }
-  };
-
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    const toastMessage = {
-      title: 'Validation error',
-      severity: 'error',
-      accountNumber: {
-        message: 'Account Number is required'
-      }
-    };
-    if (searchValue.accountNumber === '') {
-      toast(
-        toastMessage.accountNumber.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-
-      return;
-    }
     await mutate({
       ...values,
-      accountnumber: accountData?.accountnumber as string,
-      originatingAccount: accountData?.accountnumber as string,
+      OriginatingAccount: accountNumber as string,
       chargetype: chargeConcessions.chargeCode as string,
       chargeamount: chargeConcessions.chargeAmt as number
     });
@@ -161,6 +102,10 @@ export const ChargeConcession = ({
       setIsSubmitting?.(false);
     };
   }, [isSubmitting]);
+
+  if (isLoading) {
+    return <FormSkeleton noOfLoaders={5} />;
+  }
   return (
     <Formik
       initialValues={chargeConcessionInitialValues}
@@ -173,31 +118,23 @@ export const ChargeConcession = ({
             <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
               <PageTitle title="Charge Concession" styles={BatchTitle} />
               <Grid container>
-                <Grid item={isTablet} mobile={12}>
-                  <StyledSearchableDropdown>
-                    <ActionButtonWithPopper
-                      loading={isSearchLoading}
-                      handleSelectedValue={(value: string) =>
-                        handleSelectedValue(value, 'accountNumber')
-                      }
-                      label="Account Name"
-                      name="accountNumber"
-                      searchGroupVariant="BasicSearchGroup"
-                      dropDownOptions={
-                        filteredValues.accountNumber as OptionsI[]
-                      }
-                      customStyle={{ ...dropDownWithSearch, width: '560px' }}
-                      icon={<SearchIcon />}
-                      iconPosition="end"
-                      buttonTitle={
-                        extractIdFromDropdown(
-                          selectedValue.accountNumber as string
-                        ) || 'Search Account Number'
-                      }
-                      onChange={handleSearch}
-                      searchValue={searchValue.accountNumber as string}
-                    />
-                  </StyledSearchableDropdown>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                  width={{ mobile: '100%', tablet: 0 }}
+                  mb={5}
+                >
+                  <FormTextInput
+                    name="accountnumber"
+                    placeholder="Enter Account Number"
+                    label="Account Number"
+                    value={accountNumber?.toString()}
+                    onChange={handleAccountNumber}
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <FormSelectInput

@@ -14,15 +14,6 @@ export const emailRegex = /@[^.]*\./;
 export const decimalRegex = /^\d+(\.\d{1,2})?$/;
 
 export const accountOfficer = Yup.object({
-  officercode: Yup.string()
-    .matches(
-      stringRegexNoSpaceAllowed,
-      'Invalid officer code, no spaces or special characters allowed'
-    )
-    .required('Required'),
-  officerName: Yup.string()
-    .matches(stringRegex, 'Invalid officer name')
-    .required('Required'),
   branchcode: Yup.string().required('Required'),
   dept: Yup.string().required('Required'),
   email: Yup.string()
@@ -60,8 +51,8 @@ export const changePassword = Yup.object({
   oldpassword: Yup.string().required('Required'),
   sscode: Yup.string()
     .required('Required')
-    .min(5, 'access key should be more then 4')
-    .max(10, 'access should be 10')
+    .min(5, 'Access key should be more than 5 numbers')
+    .max(5, 'Access should be 5 numbers')
     .matches(numericRegex, 'invalid access key')
 });
 

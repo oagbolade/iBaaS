@@ -6,6 +6,7 @@ import { Formik, Form } from 'formik';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useQuery } from '@tanstack/react-query';
 import { AlertColor } from '@mui/material';
+import dayjs from 'dayjs';
 import {
   BatchContainer,
   BatchTitle,
@@ -49,6 +50,8 @@ import { ChequeWithdrawalInitialValues } from '@/schemas/schema-values/operation
 import { chequeWithdraw } from '@/schemas/operation';
 import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type SearchFilters = {
   accountNumber: string | OptionsI[];
@@ -76,59 +79,16 @@ export const ChequeWithdrawal = ({
   const [isLoading, setIsLoading] = React.useState(true);
 
   const { mutate } = useCreateChequeWithdrawal();
+  const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const [selectValue, setSelectValue] = React.useState<boolean>(false);
-  const [searchValue, setSearchValue] = React.useState<SearchFilters>({
-    accountNumber: ''
-  });
 
-  const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
-    accountNumber: []
-  });
-  const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
-    accountNumber: ''
-  });
-  const accountId = String(
-    extractIdFromDropdown(selectedValue.accountNumber as string)
-  );
-  const { nextCounterCheqNo } = useGetCounterCheqNo(accountId);
+  const { nextCounterCheqNo } = useGetCounterCheqNo(accountNumber);
   const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
-    useGetAccountDetails(encryptData(accountId) || '');
-  const handleSelectedValue = (value: string, name: string) => {
-    setSelectedValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    useGetAccountDetails(encryptData(accountNumber) || '');
+  const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccountNumber(e.target.value);
   };
-  const { data, isLoading: isSearchLoading } = useQuery({
-    queryKey: [queryKeys.searchCustomer, searchValue],
-    queryFn: () =>
-      searchCustomer(toastActions, searchValue.accountNumber as string),
-    enabled: Boolean(searchValue.accountNumber.length > 0)
-  });
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setSearchValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-
-    const mappedSearchResults = mapCustomerAccountNumberSearch(
-      data?.accountDetailsResults
-    );
-
-    setFilteredValues((prev) => ({
-      ...prev,
-      [name]: mappedSearchResults
-    }));
-
-    if (value.trim().length === 0) {
-      setFilteredValues({
-        accountNumber: []
-      });
-    }
-  };
   const tabTitle = ['Account Information', 'Signatory  Information'];
   const pageMenu = [
     <PreviewContentOne accountDetails={accountData} />,
@@ -150,24 +110,10 @@ export const ChequeWithdrawal = ({
     const toastMessage = {
       title: 'Validation error',
       severity: 'error',
-      accountNumber1: {
-        message: 'Account Name is required'
-      },
       selectedCurrency: {
         message: 'Currency is required'
       }
     };
-    if (searchValue.accountNumber1 === '') {
-      toast(
-        toastMessage.accountNumber1.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-
-      return;
-    }
-
     if (selectedCurrency === '') {
       toast(
         toastMessage.selectedCurrency.message,
@@ -180,7 +126,6 @@ export const ChequeWithdrawal = ({
 
     const getAllValues = {
       ...values,
-      accountNumber1: accountData?.accountnumber as string,
       currencyCode: selectedCurrency
     };
     await mutate(getAllValues);
@@ -200,6 +145,9 @@ export const ChequeWithdrawal = ({
     setSelectValue(value);
   };
 
+  const { sysmodel } = useGetSystemDate();
+  const systemDate = dayjs(sysmodel?.systemDate || new Date());
+
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
       const defaultCurrency =
@@ -218,16 +166,19 @@ export const ChequeWithdrawal = ({
     }
   }, [mappedCurrency]); // Runs when mappedCurrency changes
 
-  if (isLoading) return <div>Loading currencies...</div>;
+  if (isLoading) return <FormSkeleton noOfLoaders={5} />;
   return (
     <Formik
-      initialValues={ChequeWithdrawalInitialValues}
+      initialValues={{
+        ...ChequeWithdrawalInitialValues,
+        valueDate: sysmodel?.systemDate
+      }}
       onSubmit={(values, actions) => onSubmit(values, actions)}
       validationSchema={chequeWithdraw}
     >
       <Form>
         <Grid container spacing={2}>
-          <Box sx={{ display: 'flex', width: '100%' }}>
+          <Box sx={{ display: 'flex' }}>
             <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
               <PageTitle title="Cheque Withdrawal" styles={BatchTitle} />
               <Grid container>
@@ -243,32 +194,25 @@ export const ChequeWithdrawal = ({
                     handleCheck={handleRadioButton}
                   />
                 </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <StyledSearchableDropdown>
-                    <ActionButtonWithPopper
-                      loading={isSearchLoading}
-                      handleSelectedValue={(value: string) =>
-                        handleSelectedValue(value, 'accountNumber')
-                      }
-                      label="Account Name"
-                      name="accountNumber"
-                      searchGroupVariant="BasicSearchGroup"
-                      dropDownOptions={
-                        filteredValues.accountNumber as OptionsI[]
-                      }
-                      customStyle={{ ...dropDownWithSearch, width: '560px' }}
-                      icon={<SearchIcon />}
-                      iconPosition="end"
-                      buttonTitle={
-                        extractIdFromDropdown(
-                          selectedValue.accountNumber as string
-                        ) || 'Search Source Number'
-                      }
-                      onChange={handleSearch}
-                      searchValue={searchValue.accountNumber as string}
-                    />
-                  </StyledSearchableDropdown>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                  width={{ mobile: '100%', tablet: 0 }}
+                  mb={5}
+                >
+                  <FormTextInput
+                    name="accountNumber1"
+                    placeholder="Enter Account Number"
+                    label="Account Number"
+                    value={accountNumber?.toString()}
+                    onChange={handleAccountNumber}
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
                 </Grid>
+
                 <Grid item={isTablet} mobile={12}>
                   <FormSelectInput
                     name="currencyCode"
@@ -312,6 +256,7 @@ export const ChequeWithdrawal = ({
                       <FormikDateTimePicker
                         label="Value Date"
                         name="valueDate"
+                        value={systemDate}
                       />
                     </DemoContainer>
                   </Box>

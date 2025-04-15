@@ -7,7 +7,7 @@ export const tableCard = {
   border: `1px solid  ${colors.neutral300}`,
   background: `${colors.white}`,
   minHeight: '313px',
-  width: '49%'
+  width: 'auto'
 };
 
 export const basicSetupContainer = {
@@ -32,6 +32,7 @@ export const recetntModulesTypography = {
 
 export const setupAndPendingContainer = {
   display: 'flex',
+  width: '100%',
   justifyContent: 'space-between'
 };
 

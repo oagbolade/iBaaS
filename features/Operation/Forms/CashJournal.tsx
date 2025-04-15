@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Formik, Form, useFormikContext } from 'formik';
 import { AlertColor } from '@mui/material';
+import dayjs from 'dayjs';
 import {
   BatchContainer,
   BatchTitle,
@@ -50,6 +51,7 @@ import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalCont
 import { toast } from '@/utils/toast';
 import { mockToastActions } from '@/mocks';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 interface Props {
   accountDetails?: IAccountDetailsResults | undefined;
@@ -190,6 +192,9 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
   const handleGlAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGLAccount(e.target.value);
   };
+
+  const { sysmodel } = useGetSystemDate();
+  const systemDate = dayjs(sysmodel?.systemDate || new Date());
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
       const defaultCurrency =
@@ -210,7 +215,10 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
 
   return (
     <Formik
-      initialValues={CreateCashJournlInitalValues}
+      initialValues={{
+        ...CreateCashJournlInitalValues,
+        valuedate: sysmodel?.systemDate
+      }}
       onSubmit={(values) => onSubmit(values)}
       validationSchema={cashJournalSchema}
     >
@@ -352,7 +360,11 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
               </Grid>
               <Grid sx={{ marginTop: 2 }} item={isTablet} mobile={12}>
                 <Box>
-                  <FormikDateTimePicker label="Value Date" name="valuedate" />
+                  <FormikDateTimePicker
+                    label="Value Date"
+                    name="valuedate"
+                    value={systemDate}
+                  />
                 </Box>
               </Grid>
               <Grid sx={{ marginTop: 2 }} item={isTablet} mobile={12}>

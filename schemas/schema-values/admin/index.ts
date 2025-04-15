@@ -159,7 +159,7 @@ export const changePasswordInitialValies: ChangePasswordFormValues = {
   newpassword: '',
   sscode: '',
   passchange_date: '',
-  userid: 'string'
+  userid: `${getStoredUser()?.profiles.userid}`
 };
 
 export const resetUserInitialValies: ResetUserFormValues = {
