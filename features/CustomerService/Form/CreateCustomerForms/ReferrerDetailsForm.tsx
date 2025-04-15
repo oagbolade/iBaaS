@@ -252,7 +252,7 @@ let finalName = customerName;
 if (finalName === 'No customer found') {
   finalName = staffName; 
 }else{
-  finalName = customerName;
+  finalName = customerName; 
 } 
 
   return (
