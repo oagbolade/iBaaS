@@ -4,6 +4,7 @@ interface Customer {
   custID: string;
   acctTitle: string;
   accountNumber: string;
+  phone: string;
 
   // new update key due to new build
   accounttitle: string;
@@ -14,15 +15,17 @@ interface Customer {
 interface Staff {
   userid: string;
   fullname: string;
+  phone: string;
 }
 
 export const mapCustomerSearch = (
   customers: ICustomers[] | undefined
-): { value: string; name: string }[] => {
+): { value: string; name: string; phone:string }[] => {
   return (
     (customers as unknown as Customer[])?.map((customer: Customer) => ({
       value: customer.customerid.toString(),
-      name: customer.accounttitle
+      name: customer.accounttitle,
+      phone: customer.phone
     })) || []
   );
 };
@@ -42,11 +45,12 @@ export const mapCustomerAccountNumberSearch = (
 
 export const mapStaffSearch = (
   staff: IUsers[] | undefined
-): { value: string; name: string }[] => {
+): { value: string; name: string; phone:string }[] => {
   return (
     (staff as unknown as Staff[])?.map((eachStaff: Staff) => ({
       value: eachStaff.userid.toString(),
-      name: eachStaff.fullname
+      name: eachStaff.fullname,
+      phone: eachStaff.phone
     })) || []
   );
 };
