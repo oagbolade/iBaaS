@@ -243,7 +243,7 @@ const selectedCustomer = SearchResults_customer.find(
 
 const selectedStaff = SearchResults_staff.find(
   (item) => item.value === extractedStaffId
-) || { name: 'No staff found', phone: '' };
+) || { name: '', phone: '' };
 
 // 🟩 Final values
 const customername = selectedCustomer.name;
