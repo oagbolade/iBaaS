@@ -10,6 +10,7 @@ import {
   FormSelectField,
   CheckboxInput
 } from '@/components/FormikFields';
+
 import { useCurrentBreakpoint } from '@/utils';
 import { BatchContainer } from '@/features/Operation/Forms/style';
 import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
@@ -39,6 +40,7 @@ import { useCreateValidationKeysMapper } from '@/utils/hooks/useCreateValidation
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { encryptData } from '@/utils/encryptData';
 import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
+import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 
 export type SearchFilters = {
   introid: string | OptionsI[];
@@ -225,32 +227,38 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
     setIsGroupMember(value);
   };
 
+  const searchCustomer = mapCustomerSearch(accountDetailsResults);
+  const searchStaff = mapStaffSearch(users);
+  
+const rawSource =  selectedValue.introid;
+const extractedId = extractIdFromDropdown(
+  typeof rawSource === 'string' ? rawSource : null
+);
+
+const selectedCustomer = searchCustomer.find(
+  (item) => item.value === extractedId
+) || { name: 'No customer found', phone: '' };
+
+const selectedStaff = searchStaff.find(
+  (item) => item.value === extractedId
+) || { name: '', phone: '' };
+  
+const customerName = selectedCustomer.name;
+const customerPhone = selectedCustomer.phone;
+const staffName = selectedStaff.name;
+const staffPhone = selectedStaff.phone || 'No phone Number';
+
+let finalName = customerName; 
+if (finalName === 'No customer found') {
+  finalName = staffName; 
+}else{
+  finalName = customerName; 
+} 
+
   return (
     <Grid container spacing={2}>
       <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
         <Grid container>
-          <Grid item={isTablet} mobile={12}>
-            <FormTextInput
-              name="refname"
-              placeholder="Enter first name"
-              label="Name"
-              customStyle={{
-                width: setWidth(isMobile ? '250px' : '100%')
-              }}
-              required
-            />
-          </Grid>
-          <Grid item={isTablet} mobile={12}>
-            <FormTextInput
-              name="refphone"
-              placeholder="Enter phone number"
-              label="Phone Number"
-              customStyle={{
-                width: setWidth(isMobile ? '250px' : '100%')
-              }}
-              required
-            />
-          </Grid>
           <Grid item={isTablet} mobile={12}>
             <FormSelectInput
               onChange={handleSelectChange}
@@ -308,6 +316,30 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
                 searchValue={searchValue.acctOfficer as string}
               />
             </StyledSearchableDropdown>
+          </Grid>
+          <Grid item={isTablet} mobile={12}>
+            <FormTextInput
+              name="refname"
+              placeholder="Enter first name"
+              label="Name"
+              value={finalName}
+              customStyle={{
+                width: setWidth(isMobile ? '250px' : '100%')
+              }}
+              disabled
+            />
+          </Grid>
+          <Grid item={isTablet} mobile={12}>
+            <FormTextInput
+              name="refphone"
+              placeholder="Enter phone number"
+              value={customerPhone || staffPhone}
+              label="Phone Number"
+              customStyle={{
+                width: setWidth(isMobile ? '250px' : '100%')
+              }}
+              disabled
+            />
           </Grid>
           <Grid item={isTablet} mobile={12}>
             <RadioButtons
