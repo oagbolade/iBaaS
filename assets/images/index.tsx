@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
+import cancelButton from '@/public/cancelButton.png'
 import loginBanner from '@/public/loginBanner.svg';
 import buttonLoader from '@/public/buttonLoader.svg';
 
@@ -49,6 +50,18 @@ export const ButtonLoader = () => {
         width: '50px',
         height: '36px',
         flexShrink: 0
+      }}
+    />
+  );
+};
+export const CancelButton = () => {
+  return (
+    <Image
+      alt="Loading..."
+      src={cancelButton}
+      style={{
+        width: '20px',
+        height: '20px',
       }}
     />
   );

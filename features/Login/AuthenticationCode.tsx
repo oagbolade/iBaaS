@@ -24,6 +24,7 @@ import { useUser } from '@/api/auth/useUser';
 import { isTokenExistingOrExpired } from '@/utils/hooks/useAuthGuard';
 import { getStoredUser } from '@/utils/user-storage';
 import { MuiSnackbarContext } from '@/context/MuiSnackbarContext';
+import { CancelButton } from '@/assets/images';
 
 type Props = {
   handleClose: Function;
@@ -102,71 +103,70 @@ export const AuthenticationCode = ({
       validationSchema={auth2faSchema}
     >
       <Form>
-        <Box sx={authItem}>
-          <Box sx={authContainer}>
-            <Box sx={authTitle}>
-              <PageTitle
-                title="Enter your Authentication Code"
-                styles={{ ...titleStyle }}
-              />
-              <PageTitle
-                title="You can use your mobile application to get your authentication code"
-                styles={{ ...subtitleStyle }}
-              />
-            </Box>
-            <Box sx={authTitle}>
-              <FormTextInput
-                placeholder="Enter Code"
-                label="Enter Code"
-                name="otp"
-                customStyle={{
-                  width: setWidth(isMobile ? '250px' : '547px')
-                }}
-              />
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-evenly',
-                  margin: '33px'
-                }}
-              >
-                <PrimaryIconButton
-                  type="submit"
-                  buttonTitle={
-                    isPending || isSubmitting ? 'Submitting...' : 'Confirm Code'
-                  }
+        <Box sx={{ position: 'relative' }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              cursor: 'pointer',
+              color: '#333',
+              width: '20px',
+              height: '20px'
+            }}
+            onClick={() => handleClose()}><CancelButton /></Box>
+
+
+          {/* Your existing code */}
+          <Box sx={authItem}>
+            <Box sx={authContainer}>
+              <Box sx={authTitle}>
+                <PageTitle
+                  title="Enter your Authentication Code"
+                  styles={{ ...titleStyle }}
+                />
+                <PageTitle
+                  title="You can use your mobile application to get your authentication code"
+                  styles={{ ...subtitleStyle }}
+                />
+              </Box>
+              <Box sx={authTitle}>
+                <FormTextInput
+                  placeholder="Enter Code"
+                  label="Enter Code"
+                  name="otp"
                   customStyle={{
-                    ...TypographyConfirm,
-                    backgroundColor: `${colors.activeBlue400}`,
-                    width: `${isMobile ? '80px' : '200px'}`,
-                    height: '40px',
-                    borderRadius: '6px',
-                    padding: { mobile: '8px 50px', desktop: '16px 32px' },
-                    marginRight: { mobile: '70px', desktop: 0 }
+                    width: setWidth(isMobile ? '250px' : '532px')
                   }}
                 />
-                <Box sx={{ marginLeft: '40px' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    marginTop: '33px',
+                    marginBottom: '20px'
+                  }}
+                >
                   <PrimaryIconButton
                     type="submit"
                     buttonTitle={
-                      isPending || isSubmitting ? 'Submitting...' : 'Close'
+                      isPending || isSubmitting ? 'Submitting...' : 'Confirm Code'
                     }
                     customStyle={{
                       ...TypographyConfirm,
                       backgroundColor: `${colors.activeBlue400}`,
-                      width: `${isMobile ? '80px' : '200px'}`,
-                      height: '40px',
+                      width: `${isMobile ? '80px' : '532px'}`,
+                      height: '45px',
                       borderRadius: '6px',
                       padding: { mobile: '8px 50px', desktop: '16px 32px' },
                       marginRight: { mobile: '70px', desktop: 0 }
                     }}
-                    onClick={() => handleClose()}
                   />
                 </Box>
               </Box>
             </Box>
           </Box>
         </Box>
+
       </Form>
     </Formik>
   );
