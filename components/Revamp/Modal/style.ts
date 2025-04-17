@@ -218,7 +218,8 @@ export const TypographyConfirm = {
   color: `${colors.white}`,
   fontSize: '16px',
   fontWeight: 600,
-  lineHeight: '24px'
+  lineHeight: '24px',
+  fontStyle: 'normal'
 };
 
 export const DeleteContainer = {
