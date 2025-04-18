@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
@@ -28,9 +28,12 @@ export const SideBarContainer = () => {
   const BankLogo = logo?.toString()
     ? `data:image/png;image/jpg;base64,${logo}`
     : null;
-  const setHeight = {
-    height: `${pathname === customReportPage ? '420vh' : '100vh'}`
-  };
+    const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+
+    const setHeight = {
+      height: `${pathname === customReportPage ? '420vh' : isAccordionOpen ? '140vh' : '100vh'}`
+    };
+  
   return (
     <>
       <Box
@@ -74,7 +77,7 @@ export const SideBarContainer = () => {
           <Profile />
         </Box>
 
-        <SideBarDropdown sideBarMenu={sideBarMenu} />
+        <SideBarDropdown sideBarMenu={sideBarMenu}  setIsAccordionOpen={setIsAccordionOpen}/>
         <Box sx={companyContainer}>
           <PageTitle title={bank?.bankName} styles={companyNameTitle} />
           <PageTitle title={bank?.address} styles={{ ...companyAddress }} />

@@ -14,11 +14,12 @@ export const companyContainer = {
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300} `,
   background: `${colors.neutral100}`,
-  position: 'absolute',
-  bottom: 8.5,
+  // position: 'absolute',
+  // bottom: 8.5,
   zIndex: 1,
   width: '243px',
-  minHeight: '124px'
+  minHeight: '124px',
+  marginTop: 1
 };
 
 export const companyNameTitle = {

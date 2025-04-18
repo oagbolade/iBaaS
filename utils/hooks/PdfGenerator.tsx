@@ -11,6 +11,7 @@ import { useGenerateReportDescription } from './useGenerateReportDescription';
 import { Base64InterswitchLogo } from '@/public/InterswitchBase64Logo';
 import { IReportQueryParams } from '@/context/DownloadReportContext';
 import { TextInput } from '@/components/FormikFields';
+import { useGetBankLogo } from '@/api/general/useBankLogo';
 
 const previewAndDownloadPdf = (
   pdf: { save: (arg0: string) => void; output: (arg0: string) => any },
@@ -28,18 +29,21 @@ export const PdfGenerator = ({
   exportData,
   fileName,
   reportType,
-  reportQueryParams
+  reportQueryParams,
+  bankLogo
 }: {
   exportData: Array<any>;
   fileName: string;
   reportQueryParams: IReportQueryParams;
   reportType: ReportType;
+  bankLogo?: string | null;
 }) => {
   const { reportDescription } = useGenerateReportDescription(
     reportType,
     reportQueryParams
   );
 
+  const logoImage = bankLogo || Base64InterswitchLogo;
   // Create a new PDF in landscape mode
   const pdf = new JsPDF('l', 'mm', 'a4'); // 'l' for landscape, 'a4' for A4 size
 
@@ -47,7 +51,7 @@ export const PdfGenerator = ({
     title: `${reportType} Report`
   });
 
-  pdf.addImage(Base64InterswitchLogo, 'PNG', 10, 5, 40, 10);
+  pdf.addImage(logoImage, 'PNG', 10, 5, 40, 10);
   pdf.setFontSize(10);
   pdf.setFont('custom', 'bold');
   pdf.text(`${reportType} Report`, 150, 12);
