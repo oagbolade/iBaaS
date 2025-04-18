@@ -40,6 +40,7 @@ import {
   setSessionActive
 } from '@/utils/user-storage/broadcastChannel';
 import { shouldEnforce2FA } from '@/utils/use2FaConfig';
+import { twoFactorConfig } from '@/assets/2fa/2faconfig';
 
 export function LoginForm() {
   const router = useRouter();
@@ -66,9 +67,8 @@ export function LoginForm() {
     const sessionData = currentSession ? JSON.parse(currentSession) : null;
     // eslint-disable-next-line no-use-before-define
     if (existingSession && existingSession !== userId) {
-      setIsActiveTab(false);
       router.push('/login'); // Redirect user to login page
-      return;
+      setIsActiveTab(false);
     }
 
     if (isTokenExistingOrExpired(tokenExpiration) && user) {
@@ -89,6 +89,7 @@ export function LoginForm() {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         getBroadcastChannel()?.postMessage({ type: 'SESSION_END' });
+        router.push('/login'); // Redirect user to login page
       }
     };
 
@@ -174,35 +175,50 @@ export function LoginForm() {
       });
     };
 
-    if (is2FARequired) {
-      setLoginCredentials(values);
-      setOpenModel(true);
-      setOldPassword(values.password);
-      return;
-    }
+    const loginCallback = () => {
+      handleSuccessfulLogin();
+      handleFirstTimeLogin(values.password, values.username);
+      toast('Login successful, redirecting please wait...', 'success');
+    };
 
-    check2fa(
-      { tenantId: values.companyCode, userId: values.username },
-      {
-        onSuccess: (data: UseGetAllAuth2faCheck) => {
-          const loginCallback = () => {
-            handleSuccessfulLogin();
-            if (!data.data.use2FA) {
-              handleFirstTimeLogin(values.password, values.username);
-              toast('Login successful, redirecting please wait...', 'success');
+    if (!is2FARequired) {
+      // Global config disables 2FA, login directly
+      login(
+        values.companyCode,
+        values.username,
+        encryptedPassword || '',
+        loginCallback
+      );
+      setIsSubmitting(false);
+    } else {
+      // Global config enables 2FA, check backend status
+      check2fa(
+        { tenantId: values.companyCode, userId: values.username },
+        {
+          onSuccess: (data: UseGetAllAuth2faCheck) => {
+            if (data.data.use2FA) {
+              // Backend requires 2FA, show modal
+              setOpenModel(true);
+              setLoginCredentials(values);
+              setOldPassword(values.password);
+            } else {
+              // Backend does not require 2FA, login directly
+              login(
+                values.companyCode,
+                values.username,
+                encryptedPassword || '',
+                loginCallback
+              );
             }
-          };
-          login(
-            values.companyCode,
-            values.username,
-            encryptedPassword || '',
-            loginCallback
-          );
-          setIsSubmitting(false);
-        },
-        onError: () => setIsSubmitting(false) // Optional: Add error handling if needed
-      }
-    );
+            setIsSubmitting(false);
+          },
+          onError: () => {
+            setIsSubmitting(false);
+            toast('Failed to verify 2FA status. Please try again.', 'error');
+          }
+        }
+      );
+    }
   };
   return (
     <Box sx={loginFormStyle}>

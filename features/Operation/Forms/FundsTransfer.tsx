@@ -7,6 +7,7 @@ import { Formik, Form, useFormikContext } from 'formik';
 import { useQuery } from '@tanstack/react-query';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AlertColor, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 import { PreviewBeneficiaryInformation } from '../fundsTransfer/PreviewSection/PreviewBeneficiaryInformation';
 import { PreviewDebitInformation } from '../fundsTransfer/PreviewSection/PreviewDebitInformation';
 import {
@@ -61,6 +62,8 @@ import { fundsTransferRadioOptions } from '@/constants/SetupOptions';
 import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 interface Props {
   currencies?: ICurrency[] | Array<any>;
@@ -77,35 +80,16 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [transferType, setTransferType] = useState('0');
   const [isReversal, setIsReversal] = useState<boolean>(false);
-  const [selectedValue, setSelectedValue] = useState<SearchFilters>({
-    accountNumber: '',
-    beneficiaryNumber: ''
-  });
-  const [filteredValues, setFilteredValues] = useState<SearchFilters>({
-    accountNumber: [],
-    beneficiaryNumber: []
-  });
-  const [searchValue, setSearchValue] = useState<SearchFilters>({
-    accountNumber: '',
-    beneficiaryNumber: ''
-  });
   const toastActions = useContext(ToastMessageContext);
   const { mutate } = useFundsTransfer();
-  const { mutate: mutateForward } = useForwardTransferApprovingOffice();
-
+  const [debitAccount, setDebitAccount] = React.useState<string | null>(null);
+  const [creditAccount, setCreditAccount] = React.useState<string | null>(null);
   const { submitForm } = useFormikContext() ?? {};
-
-  const accountId = String(
-    extractIdFromDropdown(selectedValue.accountNumber as string)
-  );
-  const beneficiaryId = String(
-    extractIdFromDropdown(selectedValue.beneficiaryNumber as string)
-  );
   const { accDetailsResults: accountData } = useGetAccountDetails(
-    encryptData(accountId) || ''
+    encryptData(debitAccount) || ''
   );
   const { accDetailsResults: beneficiaryData } = useGetAccountDetails(
-    encryptData(beneficiaryId) || ''
+    encryptData(creditAccount) || ''
   );
   const tabTitle = ['Debit  Information', 'Beneficiary  Information'];
   const pageMenu = [
@@ -129,81 +113,11 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
     commBanks
   });
 
-  const { data, isLoading: isSearchLoading } = useQuery({
-    queryKey: [queryKeys.searchCustomer, searchValue],
-    queryFn: () =>
-      searchCustomer(toastActions, searchValue.accountNumber as string),
-    enabled: Boolean(searchValue.accountNumber.length > 0)
-  });
-  const { data: beneficiaryDetail, isLoading: isbeneficiaryLoading } = useQuery(
-    {
-      queryKey: [queryKeys.beneficiaryCustomer, searchValue],
-      queryFn: () =>
-        searchCustomer(toastActions, searchValue.beneficiaryNumber as string),
-      enabled: Boolean(searchValue.beneficiaryNumber.length > 0)
-    }
-  );
-
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setSearchValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-
-    const mappedSearchResults = mapCustomerAccountNumberSearch(
-      data?.accountDetailsResults
-    );
-    setFilteredValues((prev) => ({
-      ...prev,
-      [name]: mappedSearchResults
-    }));
-
-    if (value.trim().length === 0) {
-      setFilteredValues({
-        accountNumber: [],
-        beneficiaryNumber: []
-      });
-    }
-  };
-
-  const handleCreditSearch = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value, name } = event.target;
-
-    setSearchValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-
-    const mappedbeneficiaryResults = mapCustomerAccountNumberSearch(
-      beneficiaryDetail?.accountDetailsResults
-    );
-    setFilteredValues((prev) => ({
-      ...prev,
-      [name]: mappedbeneficiaryResults
-    }));
-
-    if (value.trim().length === 0) {
-      setFilteredValues({
-        accountNumber: [],
-        beneficiaryNumber: []
-      });
-    }
-  };
   const beneficiaryAccount = beneficiaryData?.accountnumber?.toString();
   const onSubmit = async (values: any) => {
     const toastMessage = {
       title: 'Validation error',
       severity: 'error',
-      accountNumber: {
-        message: 'Debit and Beneficiary Account Name are required'
-      },
-      creditAcct: {
-        message: 'Beneficiary Account Name is required'
-      },
       selectedCurrency: {
         message: 'Currency is required'
       },
@@ -211,25 +125,7 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
         message: 'Transfer type is required'
       }
     };
-    if (searchValue.accountNumber === '') {
-      toast(
-        toastMessage.accountNumber.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-      return;
-    }
 
-    if (searchValue.beneficiaryNumber === '') {
-      toast(
-        toastMessage.creditAcct.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-      return;
-    }
     if (selectedCurrency === '') {
       toast(
         toastMessage.selectedCurrency.message,
@@ -251,8 +147,6 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
 
     const getAllValues = {
       ...values,
-      debitAcct: accountId,
-      creditAcct: beneficiaryAccount,
       reversal: String(Number(isReversal)),
       transfertype: transferType,
       currencyCode: selectedCurrency
@@ -270,13 +164,16 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
       />
     </Box>
   ];
-  const handleSelectedValue = (value: string, name: string) => {
-    setSelectedValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+
+  const handleDebitAccount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDebitAccount(e.target.value);
+  };
+  const handleCreditAccount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCreditAccount(e.target.value);
   };
 
+  const { sysmodel } = useGetSystemDate();
+  const systemDate = dayjs(sysmodel?.systemDate || new Date());
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
       const defaultCurrency =
@@ -295,11 +192,14 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
     }
   }, [mappedCurrency]); // Runs when mappedCurrency changes
 
-  if (isLoading) return <div>Loading currencies...</div>;
+  if (isLoading) return <FormSkeleton noOfLoaders={5} />;
 
   return (
     <Formik
-      initialValues={FundTransferInitialValues}
+      initialValues={{
+        ...FundTransferInitialValues,
+        valuedate: sysmodel?.systemDate
+      }}
       onSubmit={(values) => onSubmit(values)}
       validationSchema={FundTransferSchema}
     >
@@ -356,60 +256,50 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
                   }}
                 />
               </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <StyledSearchableDropdown>
-                  <ActionButtonWithPopper
-                    loading={isSearchLoading}
-                    handleSelectedValue={(value: string) =>
-                      handleSelectedValue(value, 'accountNumber')
-                    }
-                    label="Debit Account Name"
-                    name="accountNumber"
-                    searchGroupVariant="BasicSearchGroup"
-                    dropDownOptions={filteredValues.accountNumber as OptionsI[]}
-                    customStyle={{ ...dropDownWithSearch, width: '560px' }}
-                    icon={<SearchIcon />}
-                    iconPosition="end"
-                    buttonTitle={
-                      extractIdFromDropdown(
-                        selectedValue.accountNumber as string
-                      ) || 'Search'
-                    }
-                    onChange={handleSearch}
-                    searchValue={searchValue.accountNumber as string}
-                  />
-                </StyledSearchableDropdown>
+              <Grid
+                item={isTablet}
+                mobile={12}
+                mr={{ mobile: 35, tablet: 0 }}
+                width={{ mobile: '100%', tablet: 0 }}
+                mb={5}
+              >
+                <FormTextInput
+                  name="debitAcct"
+                  placeholder="Enter Debit Account Name"
+                  label="Debit Account Name"
+                  value={debitAccount?.toString()}
+                  onChange={handleDebitAccount}
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
               </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <StyledSearchableDropdown>
-                  <ActionButtonWithPopper
-                    loading={isbeneficiaryLoading}
-                    handleSelectedValue={(value: string) =>
-                      handleSelectedValue(value, 'beneficiaryNumber')
-                    }
-                    label="Credit Account Name"
-                    name="beneficiaryNumber"
-                    searchGroupVariant="BasicSearchGroup"
-                    dropDownOptions={
-                      filteredValues.beneficiaryNumber as OptionsI[]
-                    }
-                    customStyle={{ ...dropDownWithSearch, width: '560px' }}
-                    icon={<SearchIcon />}
-                    iconPosition="end"
-                    buttonTitle={
-                      extractIdFromDropdown(
-                        selectedValue.beneficiaryNumber as string
-                      ) || 'Search'
-                    }
-                    onChange={handleCreditSearch}
-                    searchValue={searchValue.beneficiaryNumber as string}
-                  />
-                </StyledSearchableDropdown>
+              <Grid
+                item={isTablet}
+                mobile={12}
+                mr={{ mobile: 35, tablet: 0 }}
+                width={{ mobile: '100%', tablet: 0 }}
+                mb={5}
+              >
+                <FormTextInput
+                  name="creditAcct"
+                  placeholder="Enter Credit Account Name"
+                  label="Credit Account Name"
+                  value={creditAccount?.toString()}
+                  onChange={handleCreditAccount}
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
               </Grid>
               <Grid item={isTablet} mobile={12}>
                 <Box>
                   <DemoContainer components={['DatePicker']}>
-                    <FormikDateTimePicker label="Value Date" name="valuedate" />
+                    <FormikDateTimePicker
+                      label="Value Date"
+                      name="valuedate"
+                      value={systemDate}
+                    />
                   </DemoContainer>
                 </Box>
               </Grid>

@@ -39,14 +39,20 @@ export const cashDepositSchema = Yup.object({
     .required('Depositor Name   is Required'),
   tellerno: Yup.string()
     .matches(numericRegex, 'Input must be a number')
-    .required('Teller number is Required')
+    .required('Teller number is Required'),
+  accountNumber: Yup.string()
+    .matches(numericRegex, 'Input must be a number')
+    .required('Account number is Required')
 });
 
 export const chargeConcession = Yup.object({
   amount: Yup.number()
     .typeError('Must be a numeric value')
     .min(0, 'Value must not be less than 0')
-    .required('Amount is Required')
+    .required('Amount is Required'),
+  accountnumber: Yup.string()
+    .required('Account number is Required')
+    .matches(numericRegex, 'Input must be a number')
 });
 export const chequeDeposit = Yup.object({
   narration: Yup.string()
@@ -61,6 +67,12 @@ export const chequeDeposit = Yup.object({
     .required('Required'),
   cheqNumber: Yup.string()
     .required('Cheques number is Required')
+    .matches(numericRegex, 'Input must be a number'),
+  accountNumber1: Yup.string()
+    .required('Account number is Required')
+    .matches(numericRegex, 'Input must be a number'),
+  accountNumber2: Yup.string()
+    .required('Account number is Required')
     .matches(numericRegex, 'Input must be a number')
 });
 export const chequeWithdraw = Yup.object({
@@ -69,6 +81,9 @@ export const chequeWithdraw = Yup.object({
     .required('Narration   is Required'),
   tellerno: Yup.string()
     .required('Teller Number is Required')
+    .matches(numericRegex, 'Input must be a number'),
+  accountNumber1: Yup.string()
+    .required('Account Number is Required')
     .matches(numericRegex, 'Input must be a number'),
   transAmount: Yup.number()
     .typeError('Must be a numeric value')
@@ -80,6 +95,9 @@ export const returnCheque = Yup.object({
   chequeNumber: Yup.string()
     .matches(numericRegex, 'Input must be a number')
     .required('Cheque Number is  Required'),
+  accountNumber: Yup.string()
+    .matches(numericRegex, 'Input must be a number')
+    .required('Account Number is  Required'),
   payAmount: Yup.number()
     .typeError('Must be a numeric value')
     .min(0, 'Value must not be less than 0')
@@ -100,7 +118,10 @@ export const inwardClearing = Yup.object({
   cleartype: Yup.string().required(' Clearing Type is Required'),
   chkNum: Yup.string()
     .matches(numericRegex, 'Input must be a number')
-    .required('check number is  Required')
+    .required('check number is  Required'),
+  debitAcct: Yup.string()
+    .matches(numericRegex, 'Input must be a number')
+    .required('Debit Account number is  Required')
 });
 export const outwardClearing = Yup.object({
   narration1: Yup.string()
@@ -115,6 +136,9 @@ export const outwardClearing = Yup.object({
   chkNum: Yup.string()
     .matches(numericRegex, 'Input must be a number')
     .required('check number is  Required'),
+  creditAcct: Yup.string()
+    .matches(numericRegex, 'Input must be a number')
+    .required('credit Account number is  Required'),
   chequetype: Yup.string().required(' Cheque Type is Required')
 });
 export const NipTransferSchema = Yup.object({
@@ -126,6 +150,9 @@ export const NipTransferSchema = Yup.object({
   crossrate: Yup.string()
     .matches(numericRegex, 'Input must be a number')
     .required(' Rate is Required'),
+  debitAcct: Yup.string()
+    .matches(numericRegex, 'Input must be a number')
+    .required('Debit Account number is Required'),
   tellerno: Yup.string()
     .required('Teller Number is Required')
     .matches(numericRegex, 'Input must be a number'),
@@ -144,7 +171,10 @@ export const cashWithdrawalSchema = Yup.object({
   tellerno: Yup.string()
     .matches(numericRegex, 'Input must be a number')
     .required('Voucher Number is  Required'),
-  rate: Yup.string().required('Rate is Required')
+  rate: Yup.string().required('Rate is Required'),
+  accountNumber: Yup.string()
+    .matches(numericRegex, 'Input must be a number')
+    .required('Account Number is  Required')
 });
 export const FundTransferSchema = Yup.object({
   valuedate: Yup.string().required('Value Date is Required'),
@@ -157,6 +187,12 @@ export const FundTransferSchema = Yup.object({
     .required('Cross Rate is Required'),
   tellerno: Yup.string()
     .required('Teller number is Required')
+    .matches(numericRegex, 'Input must be a number'),
+  debitAcct: Yup.string()
+    .required('Debit account number is Required')
+    .matches(numericRegex, 'Input must be a number'),
+  creditAcct: Yup.string()
+    .required('credit account number is Required')
     .matches(numericRegex, 'Input must be a number'),
   narration1: Yup.string()
     .matches(stringRegex, 'Invalid Narration')

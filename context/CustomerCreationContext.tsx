@@ -42,10 +42,12 @@ export const progressCompletionInitialValues: Record<string, ProgressType> = {
 const initialCustomerCreationContext = {
   accountOfficerValue: '',
   introducerIdValue: '',
+  introducerTypeValue: '',
   customerType: '',
   completed: progressCompletionInitialValues,
   setAccountOfficerValue: (() => {}) as Dispatch<SetStateAction<string>>,
   setIntroducerIdValue: (() => {}) as Dispatch<SetStateAction<string>>,
+  setIntroducerTypeValue: (() => {}) as Dispatch<SetStateAction<string>>,
   setCustomerType: (() => {}) as Dispatch<SetStateAction<string>>,
   setCompleted: (() => {}) as Dispatch<
     SetStateAction<Record<string, ProgressType>>
@@ -60,6 +62,7 @@ export const CustomerCreationContext =
 export default function CustomerCreationContextProvider({ children }: any) {
   const [accountOfficerValue, setAccountOfficerValue] = useState<string>('');
   const [introducerIdValue, setIntroducerIdValue] = useState<string>('');
+  const [introducerTypeValue, setIntroducerTypeValue] = useState<string>('');
   const [customerType, setCustomerType] = useState('individual');
   const [completed, setCompleted] = useState<Record<string, ProgressType>>(
     progressCompletionInitialValues
@@ -73,10 +76,12 @@ export default function CustomerCreationContextProvider({ children }: any) {
       setAccountOfficerValue,
       introducerIdValue,
       setIntroducerIdValue,
+      introducerTypeValue,
+      setIntroducerTypeValue,
       completed,
       setCompleted
     };
-  }, [accountOfficerValue, introducerIdValue, customerType, completed]);
+  }, [accountOfficerValue, introducerIdValue, customerType, completed, introducerTypeValue]);
 
   return (
     <CustomerCreationContext.Provider value={value}>

@@ -4,25 +4,23 @@ interface Customer {
   custID: string;
   acctTitle: string;
   accountNumber: string;
+  phone: string;
 
   // new update key due to new build
   accounttitle: string;
   customerid: string;
   accountnumber: string;
-  phone: string
 }
 
 interface Staff {
   userid: string;
   fullname: string;
-  phone: string
+  phone: string;
 }
 
 export const mapCustomerSearch = (
   customers: ICustomers[] | undefined
-): {
-  phone: string; value: string; name: string 
-}[] => {
+): { value: string; name: string; phone:string }[] => {
   return (
     (customers as unknown as Customer[])?.map((customer: Customer) => ({
       value: customer.customerid.toString(),
@@ -47,9 +45,7 @@ export const mapCustomerAccountNumberSearch = (
 
 export const mapStaffSearch = (
   staff: IUsers[] | undefined
-): {
-  phone: string; value: string; name: string 
-}[] => {
+): { value: string; name: string; phone:string }[] => {
   return (
     (staff as unknown as Staff[])?.map((eachStaff: Staff) => ({
       value: eachStaff.userid.toString(),

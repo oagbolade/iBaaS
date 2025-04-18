@@ -244,7 +244,8 @@ export function useCreateGlNode(
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.getGlNodeById],
-        [queryKeys.filterGlNodeSearch]
+        [queryKeys.filterGlNodeSearch],
+        [queryKeys.node]
       ];
       keysToInvalidate.forEach((key) =>
         queryClient.invalidateQueries({ queryKey: key })

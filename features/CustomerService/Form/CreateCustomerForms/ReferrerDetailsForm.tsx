@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { useDebounce } from '@uidotdev/usehooks';
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,6 +10,7 @@ import {
   FormSelectField,
   CheckboxInput
 } from '@/components/FormikFields';
+
 import { useCurrentBreakpoint } from '@/utils';
 import { BatchContainer } from '@/features/Operation/Forms/style';
 import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
@@ -39,6 +40,7 @@ import { useCreateValidationKeysMapper } from '@/utils/hooks/useCreateValidation
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { encryptData } from '@/utils/encryptData';
 import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
+import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 
 export type SearchFilters = {
   introid: string | OptionsI[];
@@ -60,14 +62,13 @@ type Props = {
 };
 
 export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
-  
   const customerId = useGetParams('customerId') || '';
 
   const { customerResult: customerResultCodes } = useGetCustomerByIdCodes(
     encryptData(customerId) as string
   );
 
-  const { setAccountOfficerValue, setIntroducerIdValue } = React.useContext(
+  const { setAccountOfficerValue, setIntroducerIdValue, setIntroducerTypeValue } = React.useContext(
     CustomerCreationContext
   );
 
@@ -134,9 +135,6 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
       }
     };
 
-const activeSearchResults = pickResult();
-console.log('active', activeSearchResults);
-
     setFilteredValues((prev) => ({
       ...prev,
       introid: pickResult() || []
@@ -165,7 +163,7 @@ console.log('active', activeSearchResults);
 
   const handleSelectedValue = (
     value: string,
-    name: 'acctOfficer' | 'introid'
+    name: 'acctOfficer' | 'introid' | 'introducerType'
   ) => {
     if (selectInputRef.current) {
       (selectInputRef.current as Record<string, string>)[name] = value;
@@ -187,11 +185,17 @@ console.log('active', activeSearchResults);
     if (name === 'acctOfficer') {
       setAccountOfficerValue(value);
     }
+
+    if (name === 'introducerType') {
+      setIntroducerTypeValue(value);
+    }
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    handleSelectedValue(value, 'introducerType');
     setIntroducerType({ [value]: value });
+    setIntroducerTypeValue(value);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -223,45 +227,38 @@ console.log('active', activeSearchResults);
     setIsGroupMember(value);
   };
 
-const SearchResults_customer = mapCustomerSearch(accountDetailsResults);
-const SearchResults_staff = mapStaffSearch(users);
-// console.log("Selected Value Object:", selectedValue);
-const extractedCustomerId = 
-  typeof selectedValue.introid === 'string'
-    ? selectedValue.introid.split('ID ')[1]?.split(':')[0]?.trim()
-    : undefined;
+  const searchCustomer = mapCustomerSearch(accountDetailsResults);
+  const searchStaff = mapStaffSearch(users);
+  
+const rawSource =  selectedValue.introid;
+const extractedId = extractIdFromDropdown(
+  typeof rawSource === 'string' ? rawSource : null
+);
 
-const rawStaffSource = selectedValue.acctOfficer || selectedValue.introid;
-const extractedStaffId = 
-  typeof rawStaffSource === 'string'
-    ? rawStaffSource.split('ID ')[1]?.split(':')[0]?.trim()
-    : undefined;
-
-const selectedCustomer = SearchResults_customer.find(
-  (item) => item.value === extractedCustomerId
+const selectedCustomer = searchCustomer.find(
+  (item) => item.value === extractedId
 ) || { name: 'No customer found', phone: '' };
 
-const selectedStaff = SearchResults_staff.find(
-  (item) => item.value === extractedStaffId
+const selectedStaff = searchStaff.find(
+  (item) => item.value === extractedId
 ) || { name: '', phone: '' };
+  
+const customerName = selectedCustomer.name;
+const customerPhone = selectedCustomer.phone;
+const staffName = selectedStaff.name;
+const staffPhone = selectedStaff.phone || 'No phone Number';
 
-// 🟩 Final values
-const customername = selectedCustomer.name;
-const customerphone = selectedCustomer.phone;
-const staffname = selectedStaff.name;
-const staffphone = selectedStaff.phone || 'No phone Number';
-
-let finalName = customername; 
+let finalName = customerName; 
 if (finalName === 'No customer found') {
-  finalName = staffname; 
+  finalName = staffName; 
 }else{
-  finalName = customername;
-}  
-return (
+  finalName = customerName; 
+} 
+
+  return (
     <Grid container spacing={2}>
       <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
         <Grid container>
-          
           <Grid item={isTablet} mobile={12}>
             <FormSelectInput
               onChange={handleSelectChange}
@@ -320,7 +317,6 @@ return (
               />
             </StyledSearchableDropdown>
           </Grid>
-
           <Grid item={isTablet} mobile={12}>
             <FormTextInput
               name="refname"
@@ -337,7 +333,7 @@ return (
             <FormTextInput
               name="refphone"
               placeholder="Enter phone number"
-              value={customerphone || staffphone}
+              value={customerPhone || staffPhone}
               label="Phone Number"
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
@@ -422,5 +418,4 @@ return (
       </Box>
     </Grid>
   );
-
 };

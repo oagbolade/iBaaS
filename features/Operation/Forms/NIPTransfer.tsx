@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import { Formik, Form, useFormikContext } from 'formik';
 import { useQuery } from '@tanstack/react-query';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { AlertColor, SelectChangeEvent, Typography } from '@mui/material';
 import { PreviewDebitInformation } from '../transfer/PreviewSection/PreviewDebitInformation';
 import { PreviewBeneficiaryInformation } from '../transfer/PreviewSection/PreviewBeneficiaryInformation';
@@ -74,6 +74,7 @@ import { decryptData } from '@/utils/decryptData';
 import { NibbsBankRequest } from '@/schemas/schema-values/auth';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { fundsTransferRadioOptions } from '@/constants/SetupOptions';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 interface Props {
   currencies?: ICurrency[] | Array<any>;
@@ -225,10 +226,10 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
 
     getLocation();
   }, []);
-
+  const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const accountId = String(extractIdFromDropdown(selectedValue.accountNumber));
   const { accDetailsResults: accountData } = useGetAccountDetails(
-    encryptData(accountId) || ''
+    encryptData(accountNumber) || ''
   );
 
   const { data: beneficiaryDetails, isLoading } =
@@ -308,30 +309,6 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
     enabled: Boolean(searchValue.accountNumber.length > 0)
   });
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setSearchValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-
-    const mappedSearchResults = mapCustomerAccountNumberSearch(
-      data?.accountDetailsResults
-    );
-
-    setFilteredValues((prev) => ({
-      ...prev,
-      [name]: mappedSearchResults
-    }));
-
-    if (value.trim().length === 0) {
-      setFilteredValues({
-        accountNumber: []
-      });
-    }
-  };
-
   const handleBeneficiaryAccountNumberSearch = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -363,12 +340,6 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
     const toastMessage = {
       title: 'Validation error',
       severity: 'error',
-      accountNumber: {
-        message: 'Debit Account Number is required'
-      },
-      creditAcct: {
-        message: 'Beneficiary Account Number is required'
-      },
       beneficiayBank: {
         message: 'Beneficiary Bank is required'
       },
@@ -379,29 +350,6 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
         message: 'Transfer type is required'
       }
     };
-
-    if (searchValue.accountNumber === '') {
-      toast(
-        toastMessage.accountNumber.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-
-      return;
-    }
-
-    if (benAccNum === '') {
-      toast(
-        toastMessage.creditAcct.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-
-      return;
-    }
-
     if (beneficiaryBankName?.bankCode === '') {
       toast(
         toastMessage.beneficiayBank.message,
@@ -440,7 +388,7 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
       beneficiaryAccountName: beneficiaryDetails?.accountName ?? '',
       beneficiaryAccountNumber: benAccNum ?? '',
       originatorAccountName: accountData?.accounttitle ?? '',
-      originatorAccountNumber: accountId ?? '',
+      originatorAccountNumber: accountNumber ?? '',
       originatorBvn: accountData?.bvn ?? '',
       originatorKycLevel: '3',
       location: `${latitude},${longitude}`,
@@ -452,13 +400,12 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
     };
     mutate(getAllValues);
   };
-
-  const handleSelectedValue = (value: string, name: string) => {
-    setSelectedValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccountNumber(e.target.value);
   };
+
+  const { sysmodel } = useGetSystemDate();
+  const systemDate = dayjs(sysmodel?.systemDate || new Date());
 
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
@@ -480,7 +427,10 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
 
   return (
     <Formik
-      initialValues={NipTransferInitialValues}
+      initialValues={{
+        ...NipTransferInitialValues,
+        valuedate: sysmodel?.systemDate
+      }}
       onSubmit={(values) => onSubmit(values)}
       validationSchema={NipTransferSchema}
     >
@@ -537,30 +487,25 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
                   }}
                 />
               </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <StyledSearchableDropdown>
-                  <ActionButtonWithPopper
-                    loading={isSearchLoading}
-                    handleSelectedValue={(value: string) =>
-                      handleSelectedValue(value, 'accountNumber')
-                    }
-                    label="Debit Account Number"
-                    name="accountNumber"
-                    searchGroupVariant="BasicSearchGroup"
-                    dropDownOptions={filteredValues.accountNumber as OptionsI[]}
-                    customStyle={{ ...dropDownWithSearch, width: '560px' }}
-                    icon={<SearchIcon />}
-                    iconPosition="end"
-                    buttonTitle={
-                      extractIdFromDropdown(
-                        selectedValue.accountNumber as string
-                      ) || 'Search'
-                    }
-                    onChange={handleSearch}
-                    searchValue={searchValue.accountNumber as string}
-                  />
-                </StyledSearchableDropdown>
+              <Grid
+                item={isTablet}
+                mobile={12}
+                mr={{ mobile: 35, tablet: 0 }}
+                width={{ mobile: '100%', tablet: 0 }}
+                mb={5}
+              >
+                <FormTextInput
+                  name="debitAcct"
+                  placeholder="Enter Account Number"
+                  label="Debit Account Number"
+                  value={accountNumber?.toString()}
+                  onChange={handleAccountNumber}
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
               </Grid>
+
               <Grid mt={1} item={isTablet} mobile={12}>
                 <FormSelectInput
                   name="bankcode"
@@ -601,7 +546,11 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
               <Grid item={isTablet} mobile={12}>
                 <Box>
                   <DemoContainer components={['DatePicker']}>
-                    <FormikDateTimePicker name="valuedate" label="Value Date" />
+                    <FormikDateTimePicker
+                      name="valuedate"
+                      label="Value Date"
+                      value={systemDate}
+                    />
                   </DemoContainer>
                 </Box>
               </Grid>

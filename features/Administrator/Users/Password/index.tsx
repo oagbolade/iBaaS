@@ -67,10 +67,6 @@ export const ChangePassword = ({ userid, fullname }: Props) => {
             <ChangePasswordForm
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
-              userid={userid}
-              fullname={fullname}
-              roles={roles}
-              departments={departments}
             />
           </Box>
         </Stack>

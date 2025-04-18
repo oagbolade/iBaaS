@@ -8,6 +8,7 @@ import { Formik, Form, useFormikContext } from 'formik';
 import styled from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
 import { AlertColor } from '@mui/material';
+import dayjs from 'dayjs';
 import {
   BatchContainer,
   BatchTitle,
@@ -65,6 +66,8 @@ import { toast } from '@/utils/toast';
 import { CustomStyleI } from '@/constants/types';
 import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 interface Props {
   accountDetails?: IAccountDetailsResults | undefined;
@@ -174,11 +177,9 @@ const MobilePreviewContent = ({
 
 export const CashDeposit = ({ currencies }: Props) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-  const [selectedValue, setSelectedValue] = useState({ accountNumber: '' });
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
-  const [searchValue, setSearchValue] = useState({ accountNumber: '' });
-  const [filteredValues, setFilteredValues] = useState({ accountNumber: [] });
+  const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const { mutate } = useCreateCashDeposit();
   const { mappedCurrency } = useMapSelectOptions({
     currencies
@@ -199,68 +200,21 @@ export const CashDeposit = ({ currencies }: Props) => {
 
   const toastActions = useContext(ToastMessageContext);
 
-  const accountId = String(extractIdFromDropdown(selectedValue.accountNumber));
-
   const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
-    useGetAccountDetails(encryptData(accountId) || '');
-  const { data, isLoading: isSearchLoading } = useQuery({
-    queryKey: [queryKeys.searchCustomer, searchValue],
-    queryFn: () => searchCustomer(toastActions, searchValue.accountNumber),
-    enabled: Boolean(searchValue.accountNumber.length > 0)
-  });
+    useGetAccountDetails(encryptData(accountNumber) || '');
 
-  const handleSelectedValue = (value: string, name: string) => {
-    setSelectedValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccountNumber(e.target.value);
   };
-
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setSearchValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-
-    const mappedSearchResults = mapCustomerAccountNumberSearch(
-      data?.accountDetailsResults
-    );
-
-    setFilteredValues((prev) => ({
-      ...prev,
-      [name]: mappedSearchResults
-    }));
-
-    if (value.trim().length === 0) {
-      setFilteredValues({
-        accountNumber: []
-      });
-    }
-  };
-
   const onSubmit = async (values: any) => {
     const toastMessage = {
       title: 'Validation error',
       severity: 'error',
-      accountNumber: {
-        message: 'Account Number is required'
-      },
       selectedCurrency: {
         message: 'Currency is required'
       }
     };
-    if (searchValue.accountNumber === '') {
-      toast(
-        toastMessage.accountNumber.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
 
-      return;
-    }
     if (selectedCurrency === '') {
       toast(
         toastMessage.selectedCurrency.message,
@@ -272,11 +226,13 @@ export const CashDeposit = ({ currencies }: Props) => {
     }
     const getAllValues = {
       ...values,
-      accountNumber: accountId,
       currencyCode: selectedCurrency
     };
     mutate(getAllValues);
   };
+
+  const { sysmodel } = useGetSystemDate();
+  const systemDate = dayjs(sysmodel?.systemDate || new Date());
 
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
@@ -296,11 +252,14 @@ export const CashDeposit = ({ currencies }: Props) => {
     }
   }, [mappedCurrency]); // Runs when mappedCurrency changes
 
-  if (isLoading) return <div>Loading currencies...</div>;
+  if (isLoading) return <FormSkeleton noOfLoaders={5} />;
 
   return (
     <Formik
-      initialValues={CashDepositInitialValues}
+      initialValues={{
+        ...CashDepositInitialValues,
+        valueDate: sysmodel?.systemDate
+      }}
       onSubmit={(values) => onSubmit(values)}
       validationSchema={cashDepositSchema}
     >
@@ -312,33 +271,31 @@ export const CashDeposit = ({ currencies }: Props) => {
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Cash Deposit" styles={BatchTitle} />
             <Grid container>
-              <Grid item={isTablet} mobile={12}>
-                <StyledSearchableDropdown>
-                  <ActionButtonWithPopper
-                    loading={isSearchLoading}
-                    handleSelectedValue={(value: string) =>
-                      handleSelectedValue(value, 'accountNumber')
-                    }
-                    label="Account Number"
-                    name="accountNumber"
-                    searchGroupVariant="BasicSearchGroup"
-                    dropDownOptions={filteredValues.accountNumber as OptionsI[]}
-                    customStyle={{ ...dropDownWithSearch, width: '560px' }}
-                    icon={<SearchIcon />}
-                    iconPosition="end"
-                    buttonTitle={
-                      extractIdFromDropdown(
-                        selectedValue.accountNumber as string
-                      ) || 'Search'
-                    }
-                    onChange={handleSearch}
-                    searchValue={searchValue.accountNumber}
-                  />
-                </StyledSearchableDropdown>
+              <Grid
+                item={isTablet}
+                mobile={12}
+                mr={{ mobile: 35, tablet: 0 }}
+                width={{ mobile: '100%', tablet: 0 }}
+                mb={5}
+              >
+                <FormTextInput
+                  name="accountNumber"
+                  placeholder="Enter Account Number"
+                  label="Account Number"
+                  value={accountNumber?.toString()}
+                  onChange={handleAccountNumber}
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
               </Grid>
               <Grid item={isTablet} mobile={12}>
                 <Box>
-                  <FormikDateTimePicker label="Value Date" name="valueDate" />
+                  <FormikDateTimePicker
+                    label="Value Date"
+                    name="valueDate"
+                    value={systemDate}
+                  />
                 </Box>
               </Grid>
               <Grid item={isTablet} mobile={12}>

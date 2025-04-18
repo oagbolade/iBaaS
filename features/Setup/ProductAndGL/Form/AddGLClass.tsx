@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
 import { useSearchParams } from 'next/navigation';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
-import { EditOperations } from '@/constants/OperationOptions';
 import { useCurrentBreakpoint } from '@/utils';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
@@ -52,18 +51,19 @@ export const CreateGLClass = ({
     decryptData(classId ?? '') || null
   );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
+    const combinedCode = `${values.nodeCode}${values.gL_ClassCode}`.trim();
+
     await mutate({
-      ...values
+      ...values,
+      gL_ClassCode: combinedCode
     });
   };
 
   useEffect(() => {
     const submit = document.getElementById('submitButton');
-
     if (isSubmitting) {
       submit?.click();
     }
-
     return () => {
       setIsSubmitting(false);
     };
@@ -72,6 +72,7 @@ export const CreateGLClass = ({
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
   }
+
   return (
     <Box>
       <Box>
@@ -90,13 +91,11 @@ export const CreateGLClass = ({
         >
           <Form>
             <Box mt={4}>
-              <Grid container>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
+              <Grid container spacing={2}>
+                {' '}
+                {/* Added spacing for better separation */}
+                {/* Row 1: GL Node Type */}
+                <Grid item mobile={12}>
                   <FormSelectField
                     name="nodeCode"
                     options={mappedNode}
@@ -106,43 +105,32 @@ export const CreateGLClass = ({
                     }}
                   />
                 </Grid>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    name="nodeCode"
-                    placeholder="Enter GL Class Code"
-                    label="GL Node"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    disabled
-                  />
+                {/* Row 2: GL Node and GL Class Code side by side */}
+                <Grid container item mobile={12} spacing={2}>
+                  <Grid item mobile={6} tablet={4}>
+                    <FormTextInput
+                      name="nodeCode"
+                      placeholder="Enter GL Class Code"
+                      label="GL Node"
+                      customStyle={{
+                        width: '100%' // Full width within its grid item
+                      }}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item mobile={6} tablet={8}>
+                    <FormTextInput
+                      name="gL_ClassCode"
+                      placeholder="Enter GL Class Code"
+                      label="GL Class Code"
+                      customStyle={{
+                        width: '100%'
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    name="gL_ClassCode"
-                    placeholder="Enter GL Class Code"
-                    label="GL Class Code"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
+                {/* Row 3: GL Class Name */}
+                <Grid item mobile={12}>
                   <FormTextInput
                     name="gL_ClassName"
                     placeholder="Enter GL Class Name"

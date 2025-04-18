@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Box, Grid } from '@mui/material';
+import React, { useContext, useEffect } from 'react';
+import { AlertColor, Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useSearchParams } from 'next/navigation';
 import { accountOfficer as accountOfficerSchema } from '@/schemas/admin';
@@ -24,9 +24,11 @@ import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
 import { SearchIcon } from '@/assets/svg';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
-import { IAccountOfficers } from '@/api/ResponseTypes/admin';
+import { IAccountOfficers, IUsers } from '@/api/ResponseTypes/admin';
 import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
+import { toast } from '@/utils/toast';
+import { ToastMessageContext } from '@/context/ToastMessageContext';
 
 type Props = {
   officers?: IAccountOfficers[];
@@ -36,6 +38,7 @@ type Props = {
   status: IStatus[] | Array<any>;
   departments: IDepartments[] | Array<any>;
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+  users: IUsers[];
 };
 
 type SearchFilters = {
@@ -49,35 +52,55 @@ export const CreateAccountOfficer = ({
   departments,
   setIsSubmitting,
   unitTestInitialValues,
-  officers
+  officers,
+  users
 }: Props) => {
   const officercode = (useGetParams('officercode') || '').trim();
-  const { mappedBranches, mappedDepartments, mappedStatus, mappedAccountOfficers } =
-    useMapSelectOptions({
-      branches,
-      departments,
-      status,
-      officers
-    });
+  const {
+    mappedBranches,
+    mappedDepartments,
+    mappedStatus,
+    mappedAccountOfficers,
+    mappedUsers
+  } = useMapSelectOptions({
+    branches,
+    departments,
+    status,
+    officers,
+    users
+  });
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-  const { mutate } = useCreateAccountOfficer(Boolean(isEditing), encryptData(officercode));
+  const { mutate } = useCreateAccountOfficer(
+    Boolean(isEditing),
+    encryptData(officercode)
+  );
 
   const { officer, isLoading } = useGetAccountOfficerByCode(
     encryptData(officercode) || null
   );
 
+  const toastActions = useContext(ToastMessageContext);
+
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
-    accountOfficers: isEditing ? `ID ${officer?.officercode?.trim()}: ${officer?.officerName}` :'',
+    accountOfficers: ''
   });
 
+  useEffect(() => {
+    if (isEditing && officer) {
+      setSelectedValue({
+        accountOfficers: `ID ${officer?.officercode?.trim()}: ${officer?.officerName}`
+      });
+    }
+  }, [isEditing, officer]);
+
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
-    accountOfficers: [],
+    accountOfficers: []
   });
 
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
-    accountOfficers: '',
+    accountOfficers: ''
   });
 
   const onSubmit = async (values: CreateAccountOfficerFormValues) => {
@@ -85,11 +108,31 @@ export const CreateAccountOfficer = ({
       'createOfficerPermission'
     ) as HTMLInputElement | null;
 
-    await mutate({
+    const toastMessage = {
+      title: 'Validation error',
+      severity: 'error',
+      userName: {
+        message: 'UserName is required'
+      }
+    };
+
+    if (selectedValue.accountOfficers === '') {
+      toast(
+        toastMessage.userName.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
+
+    const data = {
       ...values,
       officercode: `${extractIdFromDropdown(selectedValue.accountOfficers as string)}`,
       auth: Number(createOfficerPermission?.value || '0')
-    });
+    };
+
+    await mutate(data);
   };
 
   useEffect(() => {
@@ -119,7 +162,7 @@ export const CreateAccountOfficer = ({
       [name]: value
     }));
 
-    const filteredItems = filterDropdownSearch(mappedAccountOfficers, value);
+    const filteredItems = filterDropdownSearch(mappedUsers, value);
 
     setFilteredValues((prev) => ({
       ...prev,
@@ -128,12 +171,12 @@ export const CreateAccountOfficer = ({
 
     if (value.trim().length === 0) {
       setFilteredValues({
-        [name]: mappedAccountOfficers,
+        [name]: mappedUsers
       });
     }
   };
 
-  if (isEditing && isLoading) {
+  if (isEditing && (isLoading || !officer)) {
     return <FormSkeleton noOfLoaders={5} />;
   }
 
@@ -154,10 +197,10 @@ export const CreateAccountOfficer = ({
           initialValues={
             isEditing
               ? {
-                ...officer,
-                branchcode: String(officer?.branchcode).trim(),
-                officercode: String(officer?.staffID).trim()
-              }
+                  ...officer,
+                  branchcode: String(officer?.branchcode).trim(),
+                  officercode: String(officer?.staffID).trim()
+                }
               : unitTestInitialValues || accountOfficerInitialValues
           }
           onSubmit={(values: any) => onSubmit(values)}
@@ -173,14 +216,22 @@ export const CreateAccountOfficer = ({
                       handleSelectedValue={(value: string) =>
                         handleSelectedValue(value, 'accountOfficers')
                       }
-                      label="Search Officer Name"
+                      label="Search User Name"
                       name="accountOfficers"
                       searchGroupVariant="BasicSearchGroup"
-                      dropDownOptions={filteredValues.accountOfficers as OptionsI[]}
-                      customStyle={{ ...dropDownWithSearch, width: setWidth(isMobile ? '300px' : '900px'), }}
+                      dropDownOptions={
+                        filteredValues.accountOfficers as OptionsI[]
+                      }
+                      customStyle={{
+                        ...dropDownWithSearch,
+                        width: setWidth(isMobile ? '300px' : '900px')
+                      }}
                       icon={<SearchIcon />}
                       iconPosition="end"
-                      buttonTitle={(selectedValue.accountOfficers as string) || 'Search Account Officer'}
+                      buttonTitle={
+                        (selectedValue.accountOfficers as string) ||
+                        'Search User'
+                      }
                       onChange={handleSearch}
                       searchValue={searchValue.accountOfficers as string}
                     />

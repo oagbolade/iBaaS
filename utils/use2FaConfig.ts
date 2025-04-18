@@ -1,6 +1,6 @@
 // lib/2fa-config.ts
 export const twoFactorConfig = {
-  is2FADisabled: process.env.NEXT_PUBLIC_ENABLE_2FA === 'false'
+  is2FADisabled: process.env.NEXT_PUBLIC_ENABLE_2FA === 'true'
 };
 
 /**

@@ -47,7 +47,7 @@ const useSingleTabSession = () => {
             'success'
           );
           clearSession();
-          setTimeout(() => router.push('/login'), 0);
+          router.push('/login');
         } else {
           // This is the first tab; set its session
           setSessionActive('', newSessionId); // Assuming userId is not needed here
@@ -55,6 +55,7 @@ const useSingleTabSession = () => {
       }
 
       if (type === 'SESSION_END') {
+        router.push('/login');
         // Another tab closed; no action needed unless you want to allow new tabs
       }
     };

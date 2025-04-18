@@ -14,7 +14,38 @@ import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
 import { getStoredUser } from '@/utils/user-storage';
 import useSingleTabSession from '@/utils/useSessionTimeout';
 
-export const Dashboard = () => {
+
+
+
+interface SetupTaskProps {
+  label: string;
+  isChecked: boolean;
+  link: string;
+  linkText: string;
+}
+
+
+
+interface DashboardProps {
+  branchData: any
+  glNodeData: any
+  chargeData: any
+  productTypes: any
+  departmentData: any
+  isBranchLoading: boolean
+  isChargeLoading: boolean
+  isGLLoading: boolean
+  isDepartmentLoading: boolean
+  isProductTypeLoading: boolean
+}
+
+export const Dashboard = ({ branchData, glNodeData, chargeData, productTypes, departmentData,
+  isBranchLoading,
+  isChargeLoading,
+  isGLLoading,
+  isDepartmentLoading,
+  isProductTypeLoading
+}: DashboardProps) => {
   const { total, dRtotal, cRtotal, isLoading } = useGetTellerBalanceByUserId();
   const { authsdetails } = useGetPendingRequest();
   const pendingData = authsdetails?.length || 0;
@@ -24,8 +55,6 @@ export const Dashboard = () => {
   const roundedTotalPercentage = Number.isNaN(totalPercentage)
     ? '0.00'
     : totalPercentage.toFixed(2);
-  useSingleTabSession();
-
   if (isLoading) {
     return (
       <Box my={6}>
@@ -33,6 +62,44 @@ export const Dashboard = () => {
       </Box>
     );
   }
+
+  const tasks: SetupTaskProps[] = [
+    {
+      label: 'Add Branches',
+      isChecked: branchData.length > 0,
+      link: '/setup/company/branch/',
+      linkText: 'Add a branch'
+    },
+    {
+      label: 'Add a product',
+      isChecked: productTypes.length > 0,
+      link: '/setup/product-gl/product-setup/',
+      linkText: 'Add New Product'
+    },
+    {
+      label: 'Add Department',
+      isChecked: departmentData.length > 0,
+      link: '/setup/company/department/',
+      linkText: 'Add Department'
+    },
+    {
+      label: 'Add General Ledger',
+      isChecked: glNodeData.length > 0,
+      link: '/setup/product-gl/product-class/',
+      linkText: 'Add General Ledger'
+    },
+    {
+      label: 'Add Charges',
+      isChecked: chargeData.length > 0,
+      link: '/setup/product-gl/charge/',
+      linkText: 'Add Charges'
+    }
+  ];
+
+  const completedTasks = tasks.filter((task) => task.isChecked).length;
+  const totalTasks = tasks.length;
+  const completionPercentage = (completedTasks / totalTasks) * 100;
+
 
   return (
     <Box>
@@ -43,6 +110,7 @@ export const Dashboard = () => {
           marginTop: '80px'
         }}
       >
+
         <Box mb={2}>
           <Box>
             <Typography sx={mainTitle}>
@@ -56,6 +124,7 @@ export const Dashboard = () => {
             </Typography>
           </Box>
         </Box>
+
         <Stack direction="row" justifyContent="space-between">
           <Box
             sx={{
@@ -81,9 +150,27 @@ export const Dashboard = () => {
           </Box>
           <RecentlyVisitedModules />
         </Stack>
+
+
         <Box sx={setupAndPendingContainer}>
-          <BasicSetup />
-          <PendingTasks />
+          {completionPercentage < 100 ? (
+            <>
+              <BasicSetup
+                tasks={tasks}
+                isBranchLoading={isBranchLoading}
+                isChargeLoading={isChargeLoading}
+                isGLLoading={isGLLoading}
+                isDepartmentLoading={isDepartmentLoading}
+                isProductTypeLoading={isProductTypeLoading}
+                completionPercentage={completionPercentage}
+              />
+              <PendingTasks />
+            </>
+          ) : (
+            <Box sx={{ width: '100%' }}>
+              <PendingTasks />
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

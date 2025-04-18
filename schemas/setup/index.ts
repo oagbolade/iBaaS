@@ -99,17 +99,17 @@ export const createGroupSchema = Yup.object({
     .matches(stringRegex, 'Invalid group name')
     .required('group  Name is Required'),
   groupAddress: Yup.string()
-        .max(80, 'Address must be at most 80 characters long')
-        .required('Required')
-        .test(
-          'no-space-count',
-          'Address must be at most 80 characters long',
-          (value) => {
-            if (!value) return false;
-            const noSpaceValue = value.replace(/\s+/g, '');
-            return noSpaceValue.length <= 80;
-          }
-        ),
+    .max(80, 'Address must be at most 80 characters long')
+    .required('Required')
+    .test(
+      'no-space-count',
+      'Address must be at most 80 characters long',
+      (value) => {
+        if (!value) return false;
+        const noSpaceValue = value.replace(/\s+/g, '');
+        return noSpaceValue.length <= 80;
+      }
+    ),
   branchcode: Yup.string().required(' Branch Code is Required'),
   memberLimit: Yup.string()
     .matches(numericRegex, 'Input must be a number')
@@ -392,8 +392,8 @@ export const createNodeSchema = Yup.object({
     .required('GL Node  Name is Required'),
   gL_NodeCode: Yup.string()
     .matches(numericRegex, 'Invalid Gl Node code')
-    .min(2, ' Gl Node Code should have two characters ')
-    .max(8, 'Gl Node Code should have two characters')
+    .min(2, ' Gl Node Code should have 2 characters ')
+    .max(2, 'Gl Node Code should have 2 characters')
     .required(' Gl Node Code is Required')
 });
 
@@ -428,7 +428,9 @@ export const createGlClassSchema = Yup.object({
     .required('Gl Class Name is Required'),
   gL_ClassCode: Yup.string()
     .matches(numericRegex, 'Invalid Gl Class code')
-    .required('GL Class Code is Required'),
+    .required('GL Class Code is Required')
+    .min(3, 'Minimum of 3 number')
+    .max(3, 'maximum of 3 number'),
   nodeCode: Yup.string()
     .matches(numericRegex, 'Invalid  Node code')
     .required('Node Code is Required')

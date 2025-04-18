@@ -17,9 +17,7 @@ import { queryKeys } from '@/react-query/constants';
 import { IToastActions } from '@/constants/types';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
-import {
-  CreateGlClassFormValues
-} from '@/schemas/schema-values/setup';
+import { CreateGlClassFormValues } from '@/schemas/schema-values/setup';
 import { ISearchParams } from '@/app/api/search/route';
 import { SEARCH_BASE_URL } from '@/axiosInstance/constants';
 import { handleRedirect } from '@/utils';
@@ -31,8 +29,9 @@ async function createGLClass(
   glClassCode: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/Configuration/GLCLass/${isUpdating ? `UpdateGLClass?GL_ClassCode=${glClassCode}` : 'CreateGLClass'
-      }`;
+    const urlEndpoint = `/Configuration/GLCLass/${
+      isUpdating ? `UpdateGLClass?GL_ClassCode=${glClassCode}` : 'CreateGLClass'
+    }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: isUpdating ? 'PUT' : 'POST',
@@ -143,8 +142,8 @@ export function useFilterGLClassSearch(params: ISearchParams | null) {
     queryFn: () => filterGlClassSearch(toastActions, params),
     enabled: Boolean(
       (params?.status?.toString() || '').length > 0 ||
-      (params?.gl_ClassCode || '').length > 0 ||
-      (params?.gl_ClassName || '').length > 0
+        (params?.gl_ClassCode || '').length > 0 ||
+        (params?.gl_ClassName || '').length > 0
     )
   });
 
@@ -183,8 +182,14 @@ export function useCreateGlClass(
     mutationFn: (body: CreateGlClassFormValues) =>
       createGLClass(toastActions, body, isUpdating, glClassCode),
     onSuccess: () => {
-      const keysToInvalidate = [[queryKeys.getGlClassCode], [queryKeys.filterGlClassSearch]];
-      keysToInvalidate.forEach(key => queryClient.invalidateQueries({ queryKey: key }));
+      const keysToInvalidate = [
+        [queryKeys.getGlClassCode],
+        [queryKeys.filterGlClassSearch],
+        [queryKeys.node]
+      ];
+      keysToInvalidate.forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: key })
+      );
 
       handleRedirect(router, '/setup/product-gl/product-class/');
     }

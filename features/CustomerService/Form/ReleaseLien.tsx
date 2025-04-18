@@ -87,7 +87,7 @@ export const ReleaseLien = () => {
   >([]);
 
   const lienType = '1';
-  const { lienReason } = useGetLienReason(lienType);
+  const { lienReason } = useGetLienReason(encryptData(lienType) as string);
   const { liendetail, accName, lienexist, isLoading } =
     useGetLienDetail(encryptData(accountNumber) as string);
 
@@ -101,7 +101,6 @@ export const ReleaseLien = () => {
   }, [lienReason]);
 
   const onSubmit = (values: any) => {
-    console.log('fefefe');
     const getAllValues = {
       accountnumber: accountNumber,
       lienDetail: [

@@ -54,6 +54,8 @@ import { inwardClearing } from '@/schemas/operation';
 import { useFinancialLastDate } from '@/utils/financialDates';
 import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type SearchFilters = {
   accountNumber: string | OptionsI[];
@@ -90,63 +92,11 @@ export const InWard = ({
   });
 
   const { mutate } = useCreateInwardClearing({ ...searchParams });
-  const { mutate: mutateInward } = useCreateFwdAppOfficerInWardClearing({
-    ...searchParams
-  });
-  const [searchValue, setSearchValue] = React.useState<SearchFilters>({
-    accountNumber: ''
-  });
-  const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
-    accountNumber: []
-  });
-  const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
-    accountNumber: ''
-  });
-  const accountId = String(
-    extractIdFromDropdown(selectedValue.accountNumber as string)
-  );
+  const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
+
   const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
-    useGetAccountDetails(encryptData(accountId) || '');
-  const handleSelectedValue = (value: string, name: string) => {
-    setSelectedValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-    setSearchParams((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-  const { data, isLoading: isSearchLoading } = useQuery({
-    queryKey: [queryKeys.searchCustomer, searchValue],
-    queryFn: () =>
-      searchCustomer(toastActions, searchValue.accountNumber as string),
-    enabled: Boolean(searchValue.accountNumber.length > 0)
-  });
+    useGetAccountDetails(encryptData(accountNumber) || '');
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-
-    setSearchValue((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-
-    const mappedSearchResults = mapCustomerAccountNumberSearch(
-      data?.accountDetailsResults
-    );
-
-    setFilteredValues((prev) => ({
-      ...prev,
-      [name]: mappedSearchResults
-    }));
-
-    if (value.trim().length === 0) {
-      setFilteredValues({
-        accountNumber: []
-      });
-    }
-  };
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     const params: IClearingParams = {
       bankcode: values.bankcode?.toString().length > 0 ? values.bankcode : null,
@@ -156,24 +106,10 @@ export const InWard = ({
     const toastMessage = {
       title: 'Validation error',
       severity: 'error',
-      accountNumber: {
-        message: 'Account Name is required'
-      },
       selectedCurrency: {
         message: 'Currency is required'
       }
     };
-    if (searchValue.accountNumber === '') {
-      toast(
-        toastMessage.accountNumber.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-
-      return;
-    }
-
     if (selectedCurrency === '') {
       toast(
         toastMessage.selectedCurrency.message,
@@ -188,7 +124,6 @@ export const InWard = ({
 
     const getAllValues = {
       ...values,
-      debitAcct: accountData?.accountnumber as string,
       currencyCode: selectedCurrency
     };
     await mutate(getAllValues);
@@ -207,7 +142,12 @@ export const InWard = ({
       setIsSubmitting?.(false);
     };
   }, [isSubmitting, isSubmittingForward]);
+  const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccountNumber(e.target.value);
+  };
 
+  const { sysmodel } = useGetSystemDate();
+  const systemDate = dayjs(sysmodel?.systemDate || new Date());
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
       const defaultCurrency =
@@ -226,45 +166,40 @@ export const InWard = ({
     }
   }, [mappedCurrency]); // Runs when mappedCurrency changes
 
-  if (isLoading) return <div>Loading currencies...</div>;
+  if (isLoading) return <FormSkeleton noOfLoaders={5} />;
 
   return (
     <Formik
-      initialValues={InwardClearingInitialValues}
+      initialValues={{
+        ...InwardClearingInitialValues,
+        valuedate: sysmodel?.systemDate
+      }}
       onSubmit={(values, actions) => onSubmit(values, actions)}
       validationSchema={inwardClearing}
     >
       <Form>
         <Grid container spacing={2}>
-          <Box sx={{ display: 'flex', width: '100%' }}>
+          <Box sx={{ display: 'flex' }}>
             <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
               <PageTitle title="Inward Clearing" styles={BatchTitle} />
               <Grid container>
-                <Grid item={isTablet} mobile={12}>
-                  <StyledSearchableDropdown>
-                    <ActionButtonWithPopper
-                      loading={isSearchLoading}
-                      handleSelectedValue={(value: string) =>
-                        handleSelectedValue(value, 'accountNumber')
-                      }
-                      label="Account Name"
-                      name="accountNumber"
-                      searchGroupVariant="BasicSearchGroup"
-                      dropDownOptions={
-                        filteredValues.accountNumber as OptionsI[]
-                      }
-                      customStyle={{ ...dropDownWithSearch, width: '560px' }}
-                      icon={<SearchIcon />}
-                      iconPosition="end"
-                      buttonTitle={
-                        extractIdFromDropdown(
-                          selectedValue.accountNumber as string
-                        ) || 'Search  Destination Account'
-                      }
-                      onChange={handleSearch}
-                      searchValue={searchValue.accountNumber as string}
-                    />
-                  </StyledSearchableDropdown>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                  width={{ mobile: '100%', tablet: 0 }}
+                  mb={5}
+                >
+                  <FormTextInput
+                    name="debitAcct"
+                    placeholder="Enter Account Number"
+                    label="Account Number"
+                    value={accountNumber?.toString()}
+                    onChange={handleAccountNumber}
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <FormSelectField
@@ -337,6 +272,7 @@ export const InWard = ({
                       <FormikDateTimePicker
                         label="Value Date"
                         name="valuedate"
+                        value={systemDate}
                       />
                     </DemoContainer>
                   </Box>
