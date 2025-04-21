@@ -33,9 +33,10 @@ export interface SidebarMenuItem {
 
 export interface SidebarMenuProps {
   sideBarMenu: SidebarMenuItem[];
+  setIsAccordionOpen?: (isOpen: boolean) => void;
 }
 
-export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
+export default function SideBarDropdown({ sideBarMenu,  setIsAccordionOpen }: SidebarMenuProps) {
   const mapped = _.map(sideBarMenu, _.partialRight(_.pick, ['subMenuItems']));
   const pathname: string | null = usePathname();
   const defaultExpanded = pathname;
@@ -57,8 +58,12 @@ export default function SideBarDropdown({ sideBarMenu }: SidebarMenuProps) {
   const handleChange = (panel: string) => {
     return (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : '');
+      if (typeof setIsAccordionOpen === 'function') {
+        setIsAccordionOpen(isExpanded); // ✅ update parent
+      }
     };
   };
+  
 
   const RenderMenuItems = () => {
     const items = sideBarMenu.map((menuItem) => {
