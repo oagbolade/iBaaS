@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { Field, useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
 import { BatchContainer } from '@/features/Operation/Forms/style';
 import {
@@ -35,9 +36,10 @@ import { queryKeys } from '@/react-query/constants';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
 import { IGLAccount } from '@/api/ResponseTypes/admin';
-import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
-import { Field, useFormikContext } from 'formik';
-
+import {
+  filterDropdownSearch,
+  filterGeneralLedgerDropdownSearch
+} from '@/utils/filterDropdownSearch';
 
 type Props = {
   titles?: ITitle[];
@@ -82,7 +84,6 @@ export const GeneralLedgerForm = ({
 
   const { setFieldValue, values } = useFormikContext<any>();
 
-
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
     accountNumber: '',
     princbalBalance: '',
@@ -99,8 +100,6 @@ export const GeneralLedgerForm = ({
     penalSuspense: ''
   });
 
-
-
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
     accountNumber: [],
     princbalBalance: [],
@@ -116,7 +115,6 @@ export const GeneralLedgerForm = ({
     penalInterest: [],
     penalSuspense: []
   });
-
 
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
     accountNumber: '',
@@ -135,7 +133,6 @@ export const GeneralLedgerForm = ({
   });
 
   const handleSelectedValue = (value: string, name: string) => {
-
     setSelectedValue((prev) => ({
       ...prev,
       [name]: value
@@ -144,9 +141,7 @@ export const GeneralLedgerForm = ({
     setFieldValue(name, value);
   };
 
-
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-
     const { value, name } = event.target;
 
     setSearchValue((prev) => ({
@@ -154,14 +149,14 @@ export const GeneralLedgerForm = ({
       [name]: value
     }));
 
-    const filteredGlItems = filterDropdownSearch(mappedGlAccount, value);
-
+    const filteredGlItems = filterGeneralLedgerDropdownSearch(
+      mappedGlAccount,
+      value
+    );
     setFilteredValues((prev) => ({
       ...prev,
       [name]: filteredGlItems
     }));
-
-
 
     if (value.trim().length === 0) {
       setFilteredValues({
@@ -180,10 +175,7 @@ export const GeneralLedgerForm = ({
         penalSuspense: mappedGlAccount
       });
     }
-
   };
-
-
 
   return (
     <>
@@ -209,7 +201,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -233,8 +224,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -257,8 +246,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -280,8 +267,6 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-
-
 
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
@@ -306,8 +291,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -329,8 +312,6 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-
-
 
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
@@ -355,8 +336,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -380,8 +359,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -404,8 +381,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -427,8 +402,6 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-
-
 
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
@@ -453,7 +426,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -476,7 +448,6 @@ export const GeneralLedgerForm = ({
         </StyledSearchableDropdown>
       </Grid>
 
-
       <Grid item={isTablet} mobile={12}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
@@ -498,9 +469,6 @@ export const GeneralLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-
-
-
     </>
   );
 };

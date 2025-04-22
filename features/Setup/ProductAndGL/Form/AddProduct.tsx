@@ -23,6 +23,8 @@ import { BatchTitle } from '@/features/Operation/Forms/style';
 import { encryptData } from '@/utils/encryptData';
 import { FormSkeleton } from '@/components/Loaders';
 import useFormProgress from '@/utils/hooks/useFormProgress';
+import { useGetParams } from '@/utils/hooks/useGetParams';
+import { decryptData } from '@/utils/decryptData';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -70,14 +72,14 @@ export const AddNewProduct = ({
     otherDetails: ['manageCollection', 'allowOD', 'postnodebit'],
     document: ['docIds']
   };
-
-  const searchParams = useSearchParams();
-  const isEditing = searchParams.get('isEditing');
-  const { loanProducts, isLoading } = useGetLoanProductByCode(productId);
+  const isEditing = useGetParams('isEditing') || null;
+  const { loanProducts, isLoading } = useGetLoanProductByCode(
+    decryptData(productId as string)
+  );
 
   const { mutate } = useCreateLoanAccountProduct(
     Boolean(isEditing),
-    encryptData(productId as string)
+    decryptData(productId as string)
   );
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
@@ -128,7 +130,6 @@ export const AddNewProduct = ({
             styles={BatchTitle}
           />
         </Box>
-
         <Formik
           initialValues={loanProducts || createLoanAccountInitialValues}
           onSubmit={(values, actions) => onSubmit(values, actions)}

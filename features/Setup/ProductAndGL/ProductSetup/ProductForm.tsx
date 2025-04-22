@@ -54,7 +54,14 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
         </Box>
       </Box>
       <Box sx={AccountPasswordBodyContainer}>
-        <Box sx={{ width: '100%', maxWidth: '400px' }}>
+        <Box
+          sx={{
+            width: '100%',
+            maxWidth: '400px',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
           <RadioButtons
             className="permissionOptions"
             options={[
@@ -63,6 +70,9 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
             ]}
             title="Kindly select which product you want to add"
             name="addProduct"
+            customStyle={{
+              display: 'flex'
+            }}
             value={addValues.toString()}
             handleCheck={(event: any) => handleChange(event)}
           />

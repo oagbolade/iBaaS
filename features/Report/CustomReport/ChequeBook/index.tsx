@@ -19,9 +19,10 @@ import { useGetStatus } from '@/api/general/useStatus';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 
+
 export const ChequeBookStatus = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType } = React.useContext(
+  const { setExportData, setReportType, setReportQueryParams } = React.useContext(
     DownloadReportContext
   );
   
@@ -39,6 +40,8 @@ export const ChequeBookStatus = () => {
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
+
+    setReportType('ChequeBookStatus');
   };
 
   const {
@@ -55,7 +58,7 @@ export const ChequeBookStatus = () => {
       if (getAllChequeBookStatusData?.length > 0) {
         setExportData(getAllChequeBookStatusData);
       }
-    }, [getAllChequeBookStatusData]);
+    }, [getAllChequeBookStatusData, setExportData, setReportType]);
 
   return (
     <Box

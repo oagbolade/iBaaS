@@ -7,9 +7,7 @@ import {
   authTitle,
   titleStyle,
   subtitleStyle,
-  authItem,
-  inputText,
-  textStyle
+  authItem
 } from './styles';
 import { PageTitle } from '@/components/Typography';
 import { FormTextInput } from '@/components/FormikFields';
@@ -24,7 +22,7 @@ import { useUser } from '@/api/auth/useUser';
 import { isTokenExistingOrExpired } from '@/utils/hooks/useAuthGuard';
 import { getStoredUser } from '@/utils/user-storage';
 import { MuiSnackbarContext } from '@/context/MuiSnackbarContext';
-import { CancelButton } from '@/assets/images';
+import { CloseIcon } from '@/assets/svg';
 
 type Props = {
   handleClose: Function;
@@ -114,8 +112,10 @@ export const AuthenticationCode = ({
               width: '20px',
               height: '20px'
             }}
-            onClick={() => handleClose()}><CancelButton /></Box>
-
+            onClick={() => handleClose()}
+          >
+            <CloseIcon />
+          </Box>
 
           {/* Your existing code */}
           <Box sx={authItem}>
@@ -149,7 +149,9 @@ export const AuthenticationCode = ({
                   <PrimaryIconButton
                     type="submit"
                     buttonTitle={
-                      isPending || isSubmitting ? 'Submitting...' : 'Confirm Code'
+                      isPending || isSubmitting
+                        ? 'Submitting...'
+                        : 'Confirm Code'
                     }
                     customStyle={{
                       ...TypographyConfirm,
@@ -166,7 +168,6 @@ export const AuthenticationCode = ({
             </Box>
           </Box>
         </Box>
-
       </Form>
     </Formik>
   );

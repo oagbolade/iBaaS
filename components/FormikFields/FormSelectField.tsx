@@ -43,7 +43,7 @@ export const FormSelectField = ({
   value = ''
 }: Props) => {
   const safeValue =
-    !options.some((option) => option.value === value)
+    !options?.some((option) => option?.value === value)
       ? ''
       : value;
 

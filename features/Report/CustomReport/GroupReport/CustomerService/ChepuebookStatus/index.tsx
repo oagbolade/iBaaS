@@ -3,7 +3,7 @@ import React from 'react';
 import { SharedView } from '@/features/Report/CustomReport/GroupReport/CustomerService/SharedView';
 import { FilterSection } from '@/features/Report/CustomReport/GroupReport/CustomerService/ClearingItems/FilterSection';
 
-export const ChepuebookStatus = () => {
+export const ChequebookStatus = () => {
   return (
     <SharedView
       filterSection={<FilterSection />}

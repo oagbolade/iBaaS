@@ -17,8 +17,8 @@ import './App.module.css';
 import { Profile } from '@/components/NavBar/Profile';
 import colors from '@/assets/colors';
 import { useGetCompanyByCode } from '@/api/setup/useCreateCompany';
-import { DIGITVANTImageSVG } from '@/assets/interswitch/image';
 import { useGetBankLogo } from '@/api/general/useBankLogo';
+import { saveBankLogoToLocalStorage } from '@/utils/user-storage';
 
 export const SideBarContainer = () => {
   const pathname: string | null = usePathname();
@@ -28,12 +28,22 @@ export const SideBarContainer = () => {
   const BankLogo = logo?.toString()
     ? `data:image/png;image/jpg;base64,${logo}`
     : null;
-    const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
-    const setHeight = {
-      height: `${pathname === customReportPage ? '420vh' : isAccordionOpen ? '140vh' : '100vh'}`
-    };
-  
+  saveBankLogoToLocalStorage(BankLogo || '');
+
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+
+  function getSidebarHeight() {
+    if (pathname === customReportPage) {
+      return isAccordionOpen ? '500px' : '300px'; // Adjust heights as needed
+    }
+    return '100%'; // Default height for other pages
+  }
+
+  const setHeight = {
+    height: `${getSidebarHeight()}`
+  };
+
   return (
     <>
       <Box
@@ -77,7 +87,10 @@ export const SideBarContainer = () => {
           <Profile />
         </Box>
 
-        <SideBarDropdown sideBarMenu={sideBarMenu}  setIsAccordionOpen={setIsAccordionOpen}/>
+        <SideBarDropdown
+          sideBarMenu={sideBarMenu}
+          setIsAccordionOpen={setIsAccordionOpen}
+        />
         <Box sx={companyContainer}>
           <PageTitle title={bank?.bankName} styles={companyNameTitle} />
           <PageTitle title={bank?.address} styles={{ ...companyAddress }} />

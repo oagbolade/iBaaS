@@ -5,6 +5,7 @@ import { UserLoginResponse } from '@/api/ResponseTypes/login';
 export const USER_LOCALSTORAGE_KEY = 'ibaas_user';
 export const LAST_PAGE_LOCALSTORAGE_KEY = 'ibaas_last_page';
 export const RECENTLY_VISITED_LOCALSTORAGE_KEY = 'recently_visited_modules';
+export const BANK_LOGO_LOCALSTORAGE_KEY = 'bank_logo';
 
 export interface IRecentlyVisited {
   moduleName: string;
@@ -20,6 +21,7 @@ export function getStoredUser(): UserLoginResponse | null {
 
   return null;
 }
+
 export const savePasswordToLocalStorage = (password: string) => {
   localStorage.setItem('userPassword', password);
 };
@@ -28,6 +30,7 @@ export const savePasswordToLocalStorage = (password: string) => {
 export const getPasswordFromLocalStorage = () => {
   return localStorage.getItem('userPassword');
 };
+
 export function getLastPage(): string | null {
   if (typeof window !== 'undefined') {
     const lastPage = localStorage.getItem(LAST_PAGE_LOCALSTORAGE_KEY);
@@ -62,6 +65,21 @@ export function setStoredUser(user: UserLoginResponse): void {
     USER_LOCALSTORAGE_KEY,
     String(encryptData(JSON.stringify(user)))
   );
+}
+
+export function saveBankLogoToLocalStorage(logo: string): void {
+  localStorage.setItem(
+    BANK_LOGO_LOCALSTORAGE_KEY,
+    String(encryptData(JSON.stringify(logo)))
+  );
+}
+
+export function getBankLogoFromLocalStorage(): string | null {
+  if (typeof window !== 'undefined') {
+    const bankLogo = localStorage.getItem(BANK_LOGO_LOCALSTORAGE_KEY);
+    return bankLogo ? JSON.parse(decryptData(bankLogo) as string) : null;
+  }
+  return null;
 }
 
 export function clearStoredUser(): void {

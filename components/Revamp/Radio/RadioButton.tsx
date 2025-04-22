@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { Box } from '@mui/material';
 import { RadioButtonStyle, RadioButtonTitle } from './style';
+import { CustomStyleI } from '@/constants/types';
 
 // Note: Deprecatted, use this instead: import { FormikRadioButton } from '@/components/FormikFields';
 
@@ -22,9 +23,11 @@ type Props = {
   className?: string;
   handleCheck?: Function;
   disabled?: boolean;
+  customStyle?: object;
 };
 
 function BpRadio(props: RadioProps) {
+  // eslint-disable-next-line no-undef
   return <Radio disableRipple color="default" {...props} />;
 }
 
@@ -36,7 +39,8 @@ export const RadioButtons = ({
   name,
   options,
   handleCheck,
-  disabled
+  disabled,
+  customStyle
 }: Props) => {
   const [selectedValue, setValue] = React.useState(value);
 
@@ -78,10 +82,13 @@ export const RadioButtons = ({
               <FormControlLabel
                 key={option.value}
                 value={option.value}
-                control={<BpRadio disabled={disabled} />}
+                control={
+                  <BpRadio disabled={disabled} style={{ ...customStyle }} />
+                }
                 label={option.label}
                 name={name}
                 disabled={disabled}
+                style={{ ...customStyle }}
               />
             );
           })}

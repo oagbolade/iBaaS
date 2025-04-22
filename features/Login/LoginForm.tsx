@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 'use client';
 import React, { useEffect, useContext, useState } from 'react';
 import { Formik, Form } from 'formik';
@@ -10,10 +9,9 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { AlertColor } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { LoginHeader } from './LoginHeader';
-import { loginButton, loginFormStyle, loginIbaas } from './styles';
+import { loginButton, loginFormStyle } from './styles';
 import ResetPassword from './ResetPassword';
 import { AuthenticationCode } from './AuthenticationCode';
-import { InterSwitchImage } from '@/assets/interswitch/image';
 import { login as userLoginSchema } from '@/schemas/auth';
 import { loginInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
@@ -23,13 +21,9 @@ import { useUser } from '@/api/auth/useUser';
 import { MuiSnackbar } from '@/components/Snackbar';
 import { MuiSnackbarContext } from '@/context/MuiSnackbarContext';
 import { encryptData } from '@/utils/encryptData';
-import {
-  getStoredUser,
-  savePasswordToLocalStorage
-} from '@/utils/user-storage';
+import { getStoredUser } from '@/utils/user-storage';
 import { isTokenExistingOrExpired } from '@/utils/hooks/useAuthGuard';
 import { environment } from '@/axiosInstance';
-import { PageTitle } from '@/components/Typography';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import { useAuth2faCheck } from '@/api/auth/use2FA';
 import { UseGetAllAuth2faCheck } from '@/api/ResponseTypes/admin';
@@ -40,18 +34,17 @@ import {
   setSessionActive
 } from '@/utils/user-storage/broadcastChannel';
 import { shouldEnforce2FA } from '@/utils/use2FaConfig';
-import { twoFactorConfig } from '@/assets/2fa/2faconfig';
 
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = React.useState(false);
-  const [isActiveTab, setIsActiveTab] = useState(true);
 
   const { isLoading, login } = useAuth();
   const { user } = useUser();
   const { toggleSnackbar, setMessage, setSeverity } =
     useContext(MuiSnackbarContext);
+
   const toast = (message: string, severity: AlertColor) => {
     toggleSnackbar();
     setMessage(message);
@@ -63,12 +56,9 @@ export function LoginForm() {
     const userId = getStoredUser()?.profiles.userid as string;
     const existingSession = localStorage.getItem('activeSession');
     const newSessionId = generateSessionId();
-    const currentSession = localStorage.getItem('activeSession');
-    const sessionData = currentSession ? JSON.parse(currentSession) : null;
-    // eslint-disable-next-line no-use-before-define
+
     if (existingSession && existingSession !== userId) {
       router.push('/login'); // Redirect user to login page
-      setIsActiveTab(false);
     }
 
     if (isTokenExistingOrExpired(tokenExpiration) && user) {
@@ -79,13 +69,14 @@ export function LoginForm() {
 
       toast('Login successful, redirecting please wait...', 'success');
     }
+
     const handleBroadcastMessage = (event: MessageEvent) => {
       if (event.data.type === 'SESSION_START' && event.data.userId !== userId) {
-        setIsActiveTab(false);
         clearSession();
         router.push('/login'); // Redirect user to login page
       }
     };
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         getBroadcastChannel()?.postMessage({ type: 'SESSION_END' });
@@ -119,15 +110,18 @@ export function LoginForm() {
   const [loginCredentials, setLoginCredentials] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutate: check2fa } = useAuth2faCheck();
+
   const handleFirstTimeLogin = (oldPasscode: string, useridLogin: string) => {
     setIsFirstTimeUser(true);
     setOldPassword(oldPasscode);
     setUserId(useridLogin);
   };
+
   const handleClose = () => {
     setOpenModel(false);
     setLoginCredentials(null); // Clear credentials when modal closes
   };
+
   const handleVerifyCode = (authCode: string) => {
     if (!loginCredentials || !authCode) {
       toast('No credentials or authentication code provided', 'error');
@@ -142,26 +136,28 @@ export function LoginForm() {
         handleFirstTimeLogin(password, username);
         setSessionActive(username, newSessionId);
         setOldPassword(password);
-        // Set session active after successful login
       });
+
       handleClose(); // Close modal after verification
     } catch (error: any) {
       if (
         error.responseCode === '10' ||
         error.responseMessage?.includes('invalid token')
       ) {
-        toast('Invalid authentication code. Please try again.', 'error');
-      } else {
-        toast(
-          `Login failed: ${error.responseMessage || 'Unknown error'}`,
-          'error'
-        );
+        return toast('Invalid authentication code. Please try again.', 'error');
       }
+
+      toast(
+        `Login failed: ${error.responseMessage || 'Unknown error'}`,
+        'error'
+      );
     }
   };
 
   const onSubmit = (values: any) => {
     if (!values.companyCode || !values.username || !values.password) return;
+
+    setIsSubmitting(true);
 
     const encryptedPassword = encryptData(values.password);
     const newSessionId = generateSessionId();
@@ -220,9 +216,11 @@ export function LoginForm() {
       );
     }
   };
+
   return (
-    <Box sx={loginFormStyle}>
+    <Box className="p-10" sx={loginFormStyle}>
       <LoginHeader />
+
       <Formik
         initialValues={loginInitialValues}
         onSubmit={(values) => {
@@ -230,58 +228,64 @@ export function LoginForm() {
         }}
         validationSchema={userLoginSchema}
       >
-        <Form autoComplete={environment === 'development' ? 'on' : 'off'}>
-          <Box sx={{ marginBottom: '90px' }}>
-            <Grid container spacing={2} sx={{ marginBottom: '100px' }}>
-              <Grid item mobile={12}>
-                <FormTextInput
-                  customStyle={{
-                    width: '100%'
-                  }}
-                  type={environment === 'development' ? 'text' : 'search'}
-                  name="companyCode"
-                  placeholder="Enter company code"
-                  label="Company Code"
-                  autoComplete={environment === 'development' ? 'on' : 'off'}
-                />
-              </Grid>
-              <Grid item mobile={12}>
-                <FormTextInput
-                  customStyle={{
-                    width: '100%'
-                  }}
-                  name="username"
-                  placeholder="Enter username"
-                  type={environment === 'development' ? 'text' : 'search'}
-                  label="Username"
-                  autoComplete={environment === 'development' ? 'on' : 'off'}
-                />
-              </Grid>
-              <Grid item mobile={12}>
-                <FormTextInput
-                  type={showPassword ? 'text' : 'password'}
-                  customStyle={{
-                    width: '100%'
-                  }}
-                  name="password"
-                  placeholder="Enter password"
-                  label="Password"
-                  autoComplete={
-                    environment === 'development' ? 'on' : 'new-password'
-                  }
-                  endAdornment={
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  }
-                />
-              </Grid>
-              {/* <Grid   // Hidden row for further discussion
+        <Form
+          className="mt-10"
+          autoComplete={environment === 'development' ? 'on' : 'off'}
+        >
+          <Grid item mobile={12}>
+            <FormTextInput
+              customStyle={{
+                width: '100%'
+              }}
+              type={environment === 'development' ? 'text' : 'search'}
+              name="companyCode"
+              placeholder="Enter company code"
+              label="Company Code"
+              autoComplete={environment === 'development' ? 'on' : 'off'}
+            />
+          </Grid>
+
+          <Grid item mobile={12}>
+            <FormTextInput
+              customStyle={{
+                width: '100%'
+              }}
+              name="username"
+              placeholder="Enter username"
+              type={environment === 'development' ? 'text' : 'search'}
+              label="Username"
+              autoComplete={environment === 'development' ? 'on' : 'off'}
+            />
+          </Grid>
+
+          <Grid item mobile={12}>
+            <FormTextInput
+              type={showPassword ? 'text' : 'password'}
+              customStyle={{
+                width: '100%'
+              }}
+              name="password"
+              placeholder="Enter password"
+              label="Password"
+              autoComplete={
+                environment === 'development' ? 'on' : 'new-password'
+              }
+              endAdornment={
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              }
+            />
+          </Grid>
+
+          {/* 
+            
+            <Grid   // Hidden row for further discussion
                 sx={{
                   width: '100%',
                   display: 'flex',
@@ -299,23 +303,23 @@ export function LoginForm() {
                 <div>
                   <PageTitle title="Forgot Password?" styles={forgotPassword} />
                 </div>
-              </Grid> */}
-              <Grid container mt={7} ml={2} mobile={12}>
-                <Grid item mobile={12}>
-                  <PrimaryIconButton
-                    type="submit"
-                    buttonTitle={
-                      isLoading || isSubmitting ? 'Loading...' : 'Login'
-                    }
-                    customStyle={loginButton}
-                    disabled={isLoading || isSubmitting}
-                  />
-                </Grid>
               </Grid>
+              
+            */}
+
+          <Grid mt={7} ml={2} mobile={12}>
+            <Grid item mobile={12}>
+              <PrimaryIconButton
+                type="submit"
+                buttonTitle={isLoading || isSubmitting ? 'Loading...' : 'Login'}
+                customStyle={loginButton}
+                disabled={isLoading || isSubmitting}
+              />
             </Grid>
-          </Box>
+          </Grid>
         </Form>
       </Formik>
+
       {openModel && loginCredentials && (
         <ModalContainerV2
           form={
@@ -327,6 +331,7 @@ export function LoginForm() {
           }
         />
       )}
+
       <MuiSnackbar />
 
       {isFirstTimeUser && (

@@ -9,7 +9,6 @@ import {
   useEffect
 } from 'react';
 import { AlertColor } from '@mui/material/Alert';
-import { domain } from '@/utils/hooks/useAuthGuard';
 
 const initialSnackbarContext = {
   open: false,
@@ -46,7 +45,7 @@ export default function ToastMessageContextProvider({ children }: any) {
   useEffect(() => {
     if (title === 'Unauthorised user') {
       setTimeout(() => {
-        window.location.href = `${domain}/login?auth=false`;
+        window.location.href = `/login?auth=false`;
       }, 3000);
     }
   }, [title]);

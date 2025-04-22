@@ -1,40 +1,73 @@
 'use client';
-import React, { useState } from 'react';
-import { Box } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { Box, Typography } from '@mui/material';
 import { COLUMN } from '../COLUMN';
 import { FilterSection } from '../SubFilterSection';
+import {
+  totalInflowContainerStyle,
+  totalStyle
+} from '../../OutFlowReport/style';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { ISearchParams } from '@/app/api/search/route';
-import {
-  MuiTableContainer,
-  StyledTableRow,
-  renderEmptyTableBody
-} from '@/components/Table/Table';
+import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
+import { MuiTableContainer } from '@/components/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ITrialBalance } from '@/api/ResponseTypes/reports';
 import { useGetTrialBalance } from '@/api/reports/useTrialBalance';
-
+import { useGetParams } from '@/utils/hooks/useGetParams';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
 
 export const MainCash = () => {
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
+  const glClassCode = useGetParams('classCode') || '';
+  const selectedReport = useGetParams('name') || '';
+  const reportType = useGetParams('reportType') || '';
+
+  const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
+
+  const { trialBydateList, isLoading: isTrialBalanceDataLoading } =
+    useGetTrialBalance({
+      ...searchParams,
+      pageSize: '20',
+      pageNumber: String(page),
+      getAll: isDateFilterApplied
+    });
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
-    setSearchParams(params);
+    setSearchParams({
+      ...params,
+      gl_ClassCode: glClassCode,
+      reportType,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || ''
+    });
   };
 
-  const {
-    trialBydateList: getAllTrialBalanceData,
-    isLoading: isTrialBalanceDataLoading
-  } = useGetTrialBalance({
-    ...searchParams,
-    page
-  });
+  useEffect(() => {
+    if (!trialBydateList?.pagedTrialBalances.length) return;
+
+    const formattedExportData = trialBydateList?.pagedTrialBalances.map(
+      (item) => ({
+        'GL Account Number': item?.acctno || '',
+        'Account Name': item?.acctname || '',
+        'Last Night Balance': item?.last_night_balance2 || 0,
+        Debit: item?.debitacct || 0,
+        Credit: item?.creditAcct || 0,
+        Balance: item?.totalname || 0
+      })
+    );
+
+    // Ensure no blank row or misplaced headers
+    setExportData(formattedExportData);
+    setReportType('TrialBalanceByDate');
+  }, [trialBydateList?.pagedTrialBalances]);
 
   return (
     <Box
@@ -57,44 +90,45 @@ export const MainCash = () => {
               }}
               showHeader={{
                 hideFilterSection: true,
-                mainTitle: 'Main Cash',
-                secondaryTitle:
-                  'See a directory of all Main Cash Report in this system.'
+                mainTitle: selectedReport.toUpperCase(),
+                secondaryTitle: `See a directory of all ${selectedReport} Report in this system.`
               }}
-              data={getAllTrialBalanceData}
+              data={trialBydateList?.pagedTrialBalances}
               setPage={setPage}
               page={page}
             >
               {search ? (
-                getAllTrialBalanceData?.map((dataItem: ITrialBalance) => {
-                  return (
-                    <StyledTableRow key={dataItem.acctno}>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.gl_nodecode || 'N/A'}
-                      </StyledTableCell>
+                trialBydateList?.pagedTrialBalances?.map(
+                  (dataItem: ITrialBalance) => {
+                    return (
+                      <StyledTableRow key={dataItem.acctno}>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.acctno || 'N/A'}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.acctname || 'N/A'}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.acctname || 'N/A'}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {`NGN ${formatCurrency(dataItem?.last_night_balance2 || 0)}`}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {`NGN ${formatCurrency(dataItem?.last_night_balance2 || 0)}`}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.debitacct || 'N/A'}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.debitacct || 0}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.creditAcct || 'N/A'}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.creditAcct || 0}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.totalname || 'N/A'}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.totalname || 0}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  }
+                )
               ) : (
                 <StyledTableRow>
                   <StyledTableCell
@@ -102,11 +136,32 @@ export const MainCash = () => {
                     component="th"
                     scope="row"
                   >
-                    {renderEmptyTableBody(getAllTrialBalanceData)}
+                    {renderEmptyTableBody(trialBydateList?.pagedTrialBalances)}
                   </StyledTableCell>
                 </StyledTableRow>
               )}
             </MuiTableContainer>
+
+            {trialBydateList?.pagedTrialBalances?.length > 0 && (
+              <Box sx={totalInflowContainerStyle}>
+                <Typography>Total Amount</Typography>
+
+                <Box sx={totalStyle}>
+                  <Typography>
+                    ₦ {trialBydateList?.lastNightBalance?.toLocaleString()}
+                  </Typography>
+                  <Typography>
+                    ₦ {trialBydateList?.totalDrBal?.toLocaleString()}
+                  </Typography>
+                  <Typography>
+                    ₦ {trialBydateList?.totalCrBal?.toLocaleString()}
+                  </Typography>
+                  <Typography>
+                    ₦ {trialBydateList?.totalBal?.toLocaleString()}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
           </Box>
         )}
       </Box>

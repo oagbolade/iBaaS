@@ -39,6 +39,7 @@ import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IProductLoanRepayment } from '@/api/ResponseTypes/loans';
 import { PageTitle } from '@/components/Typography';
+import { IChargeConcessionType } from '@/api/ResponseTypes/operation';
 
 type Props = {
   titles?: ITitle[];
@@ -55,6 +56,7 @@ type Props = {
   loanClass?: ILoanClass[];
   bankproducts?: IBankProducts[];
   exception?: IException[];
+  charges?: IChargeConcessionType[] | Array<any>;
 };
 interface Option {
   value: string | number; // Adjust based on your actual data
@@ -81,7 +83,8 @@ export const InterestLoanChargesForm = ({
   creditInterests,
   loanClass,
   bankproducts,
-  exception
+  exception,
+  charges
 }: Props) => {
   const { customerType, setCustomerType } = React.useContext(
     CustomerCreationContext
@@ -98,7 +101,8 @@ export const InterestLoanChargesForm = ({
     mappedCreditInterests,
     mappedLoanClass,
     mappedBankproducts,
-    mappedException
+    mappedException,
+    mappedChargeConcessionType
   } = useMapSelectOptions({
     productTypes,
     currencies,
@@ -106,7 +110,8 @@ export const InterestLoanChargesForm = ({
     creditInterests,
     loanClass,
     bankproducts,
-    exception
+    exception,
+    charges
   });
 
   const MultiSelectWithCheckboxes = ({
@@ -291,7 +296,7 @@ export const InterestLoanChargesForm = ({
         <Field
           name="ProdCharges"
           component={MultiSelectWithCheckboxes}
-          options={mappedException}
+          options={mappedChargeConcessionType}
           label="Product Charges"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')

@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { Field, useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
 import { BatchContainer } from '@/features/Operation/Forms/style';
 import {
@@ -35,9 +36,10 @@ import { queryKeys } from '@/react-query/constants';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
 import { IGLAccount } from '@/api/ResponseTypes/admin';
-import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
-import { Field, useFormikContext } from 'formik';
-
+import {
+  filterDropdownSearch,
+  filterGeneralLedgerDropdownSearch
+} from '@/utils/filterDropdownSearch';
 
 type Props = {
   titles?: ITitle[];
@@ -142,8 +144,6 @@ export const GeneralCasaLedgerForm = ({
     }));
 
     setFieldValue(name, value);
-
-
   };
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -152,7 +152,10 @@ export const GeneralCasaLedgerForm = ({
       ...prev,
       [name]: value
     }));
-    const filteredGLItems = filterDropdownSearch(mappedGlAccount, value);
+    const filteredGLItems = filterGeneralLedgerDropdownSearch(
+      mappedGlAccount,
+      value
+    );
 
     setFilteredValues((prev) => ({
       ...prev,

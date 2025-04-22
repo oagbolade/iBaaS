@@ -13,6 +13,7 @@ import '@/features/Setup/ProductAndGL/Form/removeDivider.module.css';
 import { InterestCasaChargesForm } from '../Form/CreateCasaProduct/InterestCharge';
 import { GeneralCasaLedgerForm } from '../Form/CreateCasaProduct/GeneralLedger';
 import { DocumentForm } from '../Form/CreateProduct/document';
+import { OtherCasaDetailsForm } from '../Form/CreateCasaProduct/OtherCasaDetails';
 import {
   ChevronDown,
   CompletedStepIcon,
@@ -57,7 +58,10 @@ import {
 } from '@/api/setup/useProduct';
 import { useGetGLAccount } from '@/api/admin/useCreateGLAccount';
 import { useGetAllCustomerAccountProducts } from '@/api/customer-service/useCustomer';
-import { OtherCasaDetailsForm } from '../Form/CreateCasaProduct/OtherCasaDetails';
+import { useGetChargeConcession } from '@/api/operation/useChargeConcession';
+import { IChargeConcessionType } from '@/api/ResponseTypes/operation';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGetParams } from '@/utils/hooks/useGetParams';
 
 const Accordion = muistyled((props: AccordionProps) => {
   return <MuiAccordion {...props} />;
@@ -130,6 +134,7 @@ type Props = {
   exception?: IException[];
   // eslint-disable-next-line react/no-unused-prop-types
   bankgl?: IGLAccount[] | Array<any>;
+  charges?: IChargeConcessionType[] | Array<any>;
 };
 
 const FormSelector = ({
@@ -154,7 +159,8 @@ const FormSelector = ({
   frequency,
   bankgl,
   bankproducts,
-  exception
+  exception,
+  charges
 }: Props) => {
   let selectedForm;
   switch (cardKey) {
@@ -187,6 +193,7 @@ const FormSelector = ({
           productTypes={productTypes}
           bankproducts={bankproducts}
           exception={exception}
+          charges={charges}
         />
       );
       break;
@@ -224,6 +231,7 @@ export const ShortCardCasaWithAccordion = ({
   sectors,
   education,
   professions,
+  charges,
   productTypes,
   currencies,
   creditInterests,
@@ -235,7 +243,7 @@ export const ShortCardCasaWithAccordion = ({
 }: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
-
+  const isEditing = useGetParams('isEditing') || null;
   const handleChange = () => {
     setExpanded(!expanded);
   };
@@ -248,6 +256,12 @@ export const ShortCardCasaWithAccordion = ({
   const { bankgl: bankgls } = useGetGLAccount();
   const { bankproducts: bankproduct } = useGetAllCustomerAccountProducts();
   const { exception: exceptions } = useGetAllException();
+  const { charges: charge, isLoading } = useGetChargeConcession();
+
+  if (isEditing && isLoading) {
+    return <FormSkeleton noOfLoaders={5} />;
+  }
+
   return (
     <Box mb={2}>
       <AccordionWrapper>
@@ -334,6 +348,7 @@ export const ShortCardCasaWithAccordion = ({
                 bankgl={bankgls as IGLAccount[] | undefined}
                 bankproducts={bankproduct}
                 exception={exceptions}
+                charges={charge}
               />
             </Grid>
           </AccordionDetails>

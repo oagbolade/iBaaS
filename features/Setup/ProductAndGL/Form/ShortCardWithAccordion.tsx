@@ -63,6 +63,10 @@ import {
 } from '@/api/setup/useProduct';
 import { useGetAllCustomerAccountProducts } from '@/api/customer-service/useCustomer';
 import { useGetGLAccount } from '@/api/admin/useCreateGLAccount';
+import { useGetChargeConcession } from '@/api/operation/useChargeConcession';
+import { IChargeConcessionType } from '@/api/ResponseTypes/operation';
+import { useGetParams } from '@/utils/hooks/useGetParams';
+import { FormSkeleton } from '@/components/Loaders';
 
 const Accordion = muistyled((props: AccordionProps) => {
   return <MuiAccordion {...props} />;
@@ -136,8 +140,8 @@ type Props = {
   exception?: IException[];
   frequency?: IFrequency[];
   bankgl?: IGLAccount[] | Array<any>;
+  charges?: IChargeConcessionType[] | Array<any>;
 };
-
 
 const FormSelector = ({
   cardKey,
@@ -163,7 +167,8 @@ const FormSelector = ({
   bankproducts,
   exception,
   frequency,
-  bankgl
+  bankgl,
+  charges
 }: Props) => {
   let selectedForm;
   switch (cardKey) {
@@ -195,6 +200,7 @@ const FormSelector = ({
           loanClass={loanClass}
           bankproducts={bankproducts}
           exception={exception}
+          charges={charges}
         />
       );
       break;
@@ -232,6 +238,7 @@ export const ShortCardWithAccordion = ({
   sectors,
   education,
   professions,
+  charges,
   productTypes,
   currencies,
   repaymentTypes,
@@ -246,6 +253,7 @@ export const ShortCardWithAccordion = ({
 }: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
+  const isEditing = useGetParams('isEditing') || null;
 
   const handleChange = () => {
     setExpanded(!expanded);
@@ -260,6 +268,7 @@ export const ShortCardWithAccordion = ({
   const { exception: exceptions } = useGetAllException();
   const { frequency: frequencys } = useGetAllLoanTerm();
   const { bankgl: bankgls } = useGetGLAccount();
+  const { charges: charge } = useGetChargeConcession();
 
   return (
     <Box mb={2}>
@@ -348,6 +357,7 @@ export const ShortCardWithAccordion = ({
                 products={productclass}
                 frequency={frequencys}
                 bankgl={bankgls as IGLAccount[] | undefined}
+                charges={charge}
               />
             </Grid>
           </AccordionDetails>

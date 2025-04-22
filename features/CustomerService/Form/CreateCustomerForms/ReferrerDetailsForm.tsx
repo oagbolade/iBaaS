@@ -229,31 +229,31 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
 
   const searchCustomer = mapCustomerSearch(accountDetailsResults);
   const searchStaff = mapStaffSearch(users);
-  
-const rawSource =  selectedValue.introid;
-const extractedId = extractIdFromDropdown(
-  typeof rawSource === 'string' ? rawSource : null
-);
 
-const selectedCustomer = searchCustomer.find(
-  (item) => item.value === extractedId
-) || { name: 'No customer found', phone: '' };
+  const rawSource = selectedValue.introid;
+  const extractedId = extractIdFromDropdown(
+    typeof rawSource === 'string' ? rawSource : null
+  );
 
-const selectedStaff = searchStaff.find(
-  (item) => item.value === extractedId
-) || { name: '', phone: '' };
-  
-const customerName = selectedCustomer.name;
-const customerPhone = selectedCustomer.phone;
-const staffName = selectedStaff.name;
-const staffPhone = selectedStaff.phone || 'No phone Number';
+  const selectedCustomer = searchCustomer.find(
+    (item) => item.value === extractedId
+  ) || { name: 'No customer found', phone: '' };
 
-let finalName = customerName; 
-if (finalName === 'No customer found') {
-  finalName = staffName; 
-}else{
-  finalName = customerName; 
-} 
+  const selectedStaff = searchStaff.find(
+    (item) => item.value === extractedId
+  ) || { name: '', phone: '' };
+
+  const customerName = selectedCustomer.name;
+  const customerPhone = selectedCustomer?.phone;
+  const staffName = selectedStaff.name;
+  const staffPhone = selectedStaff?.phone || 'No phone Number';
+
+  let finalName = customerName;
+  if (finalName === 'No customer found') {
+    finalName = staffName;
+  } else {
+    finalName = customerName;
+  }
 
   return (
     <Grid container spacing={2}>

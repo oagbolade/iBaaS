@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
 import { BatchContainer } from '@/features/Operation/Forms/style';
 import {
@@ -26,6 +27,9 @@ import {
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
+import { generateProductCode } from '@/api/setup/useProduct';
+import { useGetParams } from '@/utils/hooks/useGetParams';
+import { FormSkeleton } from '@/components/Loaders';
 
 type Props = {
   titles?: ITitle[];
@@ -58,10 +62,21 @@ export const PersonalCasaDetailsForm = ({
     CustomerCreationContext
   );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
+  const { setFieldValue, values } = useFormikContext<any>();
+  const isEditing = useGetParams('isEditing') || null;
+
+  const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
+  const handleGenerateCode = async (code: string) => {
+    generateProductCode(code).then((resp) => {
+      setProductCodeGenarate(resp.productCode);
+      setFieldValue('productCode', resp.productCode);
+    });
+  };
 
   const handleCheck = (booleanValue: string, value: string) => {
     setCustomerType(value);
   };
+
   const {
     mappedProductType,
     mappedCurrency,
@@ -73,6 +88,7 @@ export const PersonalCasaDetailsForm = ({
     frequency,
     products
   });
+
   return (
     <>
       <Grid item={isTablet} mobile={12}>
@@ -80,6 +96,7 @@ export const PersonalCasaDetailsForm = ({
           name="productclass"
           options={mappedProductClass}
           label="Product Class"
+          onChange={(e) => handleGenerateCode(e.target.value)}
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
@@ -96,6 +113,8 @@ export const PersonalCasaDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
+          value={productCodeGenarate}
+          disabled
           required
         />
       </Grid>
@@ -115,7 +134,7 @@ export const PersonalCasaDetailsForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="openbalance"
-          placeholder="Enter middle name"
+          placeholder="Enter opening balance"
           label="Opening Balance"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')

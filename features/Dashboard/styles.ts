@@ -7,7 +7,7 @@ export const tableCard = {
   border: `1px solid  ${colors.neutral300}`,
   background: `${colors.white}`,
   minHeight: '313px',
-  width: 'auto'
+  width: '100%'
 };
 
 export const basicSetupContainer = {

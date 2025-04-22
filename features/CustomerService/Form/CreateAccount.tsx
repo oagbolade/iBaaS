@@ -33,7 +33,6 @@ import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
@@ -177,7 +176,7 @@ export const CreateAccount = ({
   ) as string;
 
   const { productInfos, isLoading: isProductInfoLoading } =
-    useGetProductDetailsByPcode(customerIdForEditing, productCodeForEditing);
+    useGetProductDetailsByPcode(isEditing ? customerIdForEditing : customerId, isEditing ? productCodeForEditing : productcode);
 
   const { documents: submitted, isLoading: isSubmittedLoading } =
     useGetDocuments(
@@ -277,11 +276,13 @@ export const CreateAccount = ({
   React.useEffect(() => {
     setProductCodeForEditing(accDetailsResults?.productcode || '');
     setCustomerIdForEditing(accDetailsResults?.customerid || '');
+    const placeholder = isEditing && 'Search customer name';
 
     // Set default values for branch and customer when editing
     const constructCustomerIDForExtraction = accDetailsResults
       ? `ID ${accDetailsResults?.customerid || ''}: ${accDetailsResults?.accounttitle || ''}`
-      : 'Search customer name';
+      : placeholder;
+
     setSelectedValue({
       branchcode: accDetailsResults?.branch || '',
       customerid: constructCustomerIDForExtraction || ''
@@ -506,24 +507,28 @@ export const CreateAccount = ({
               </Grid>
 
               <Grid item={isTablet} mobile={12}>
-                <FormAmountInput
+                <FormTextInput
                   name="dintrate"
-                  placeholder="Enter Debit Interest"
+                  placeholder="Debit Interest"
                   label="Debit Interest (Per Annum)"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  value={String(productInfos?.drrate || 0)}
+                  disabled
                 />
               </Grid>
 
               <Grid item={isTablet} mobile={12}>
-                <FormAmountInput
+                <FormTextInput
                   name="cintrate"
-                  placeholder="Enter credit interest"
+                  placeholder="Credit interest"
                   label="Credit Interest (Per Annum)"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  value={String(productInfos?.crrate || 0)}
+                  disabled
                 />
               </Grid>
 
@@ -593,9 +598,6 @@ export const CreateAccount = ({
             </Box>
           )}
         </Stack>
-        {/* <button id="submitButton" type="submit" style={{ display: 'none' }}>
-          submit alias
-        </button> */}
       </Form>
     </Formik>
   );

@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useContext, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { LoginForm } from './LoginForm';
@@ -13,24 +14,37 @@ import {
 import { PageTitle } from '@/components/Typography';
 import { InterSwitchImage } from '@/assets/interswitch/image';
 import colors from '@/assets/colors';
+import { getStoredUser } from '@/utils/user-storage';
+import { useRouter } from 'next/navigation';
 
 export const LoginContainer = () => {
+  const router = useRouter();
+  useEffect(() => {
+    if (getStoredUser()) {
+      router.push('/dashboard');
+    }
+  }, []);
+
   return (
     <Stack
-      direction="row"
+      direction={{ xs: 'column', md: 'row' }}
       sx={{
         background: `${colors.neutral200}`,
-        height: '860px',
-        padding: '49px 150px'
+        height: '100vh',
+        padding: { xs: '10px', md: '30px 50px' },
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
     >
-      <Box sx={loginContainer}>
+      {/** Show only LoginForm on mobile view */}
+      <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+        <LoginForm />
+      </Box>
+
+      {/** Show banner and LoginForm on larger screens */}
+      <Box sx={{ display: { xs: 'none', md: 'block' }, marginRight: '80px' }}>
         <Box sx={bannerContainer}>
-          <Box
-            sx={{
-              marginTop: '60px'
-            }}
-          >
+          <Box>
             <InterSwitchImage />
             <PageTitle title="IBaaS" styles={loginIbaas} />
           </Box>
@@ -46,7 +60,8 @@ export const LoginContainer = () => {
           </Box>
         </Box>
       </Box>
-      <Box>
+
+      <Box sx={{ display: { xs: 'none', md: 'block' }, ...loginContainer }}>
         <LoginForm />
       </Box>
     </Stack>

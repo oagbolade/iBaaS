@@ -24,14 +24,13 @@ import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
 import { SearchIcon } from '@/assets/svg';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
-import { IAccountOfficers, IUsers } from '@/api/ResponseTypes/admin';
+import { IUsers } from '@/api/ResponseTypes/admin';
 import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 
 type Props = {
-  officers?: IAccountOfficers[];
   unitTestInitialValues?: CreateAccountOfficerFormValues;
   isSubmitting: boolean;
   branches: IBranches[] | Array<any>;
@@ -52,7 +51,6 @@ export const CreateAccountOfficer = ({
   departments,
   setIsSubmitting,
   unitTestInitialValues,
-  officers,
   users
 }: Props) => {
   const officercode = (useGetParams('officercode') || '').trim();
@@ -60,13 +58,11 @@ export const CreateAccountOfficer = ({
     mappedBranches,
     mappedDepartments,
     mappedStatus,
-    mappedAccountOfficers,
     mappedUsers
   } = useMapSelectOptions({
     branches,
     departments,
     status,
-    officers,
     users
   });
   const searchParams = useSearchParams();

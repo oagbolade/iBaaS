@@ -22,6 +22,8 @@ import { BatchTitle } from '@/features/Operation/Forms/style';
 import { encryptData } from '@/utils/encryptData';
 import { decryptData } from '@/utils/decryptData';
 import useFormProgress from '@/utils/hooks/useFormProgress';
+import { useGetParams } from '@/utils/hooks/useGetParams';
+import { FormSkeleton } from '@/components/Loaders';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -34,15 +36,12 @@ type Props = {
   setIsSubmitting: (submit: boolean) => void;
 };
 
-
-
 export const AddCasaNewProduct = ({
   productCode,
   isSubmitting,
   setIsSubmitting
 }: Props) => {
   const requiredFields: Record<string, string[]> = {
-
     personalDetails: [
       'dayint',
       'taxabsorbed1',
@@ -101,18 +100,15 @@ export const AddCasaNewProduct = ({
 
     document: ['docIds']
   };
-
-  const searchParams = useSearchParams();
-  const isEditing = searchParams.get('isEditing');
+  const isEditing = useGetParams('isEditing') || null;
   const { mutate } = useCreateDemandDepositProduct(
     Boolean(isEditing),
     decryptData(productCode as string)
   );
-  const { demandDeposit } = useGetDemandDepositByCode(productCode);
-
-
+  const { demandDeposit, isLoading } = useGetDemandDepositByCode(
+    decryptData(productCode as string)
+  );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    
     values.ProdException = values.ProdException.map((resp: string) => ({
       exceptioncode: resp
     }));
@@ -121,18 +117,12 @@ export const AddCasaNewProduct = ({
     }));
     values.ProdDocuments = values.ProdDocuments.map((resp: string) => ({
       docId: resp.trim()
-    })); 
-
-
+    }));
 
     await mutate({
-      ...values,
+      ...values
     });
-
-
   };
-
-
 
   React.useEffect(() => {
     const submit = document.getElementById('submitButton');
@@ -146,7 +136,9 @@ export const AddCasaNewProduct = ({
     };
   }, [isSubmitting]);
 
-
+  if (isEditing && isLoading) {
+    return <FormSkeleton noOfLoaders={5} />;
+  }
 
   return (
     <Box

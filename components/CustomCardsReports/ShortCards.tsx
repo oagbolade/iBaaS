@@ -30,7 +30,10 @@ export const ShortCards = ({ title, numberOfAccounts, link = '' }: Props) => {
             <Box sx={shortCardtitle}>
               <Box sx={shortCardText}>
                 <Box>
-                  <PageTitle title={title} styles={{ ...shortTitle }} />
+                  <PageTitle
+                    title={title.toUpperCase()}
+                    styles={{ ...shortTitle }}
+                  />
                 </Box>
                 <PageTitle
                   title={numberOfAccounts}

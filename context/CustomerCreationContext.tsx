@@ -45,11 +45,11 @@ const initialCustomerCreationContext = {
   introducerTypeValue: '',
   customerType: '',
   completed: progressCompletionInitialValues,
-  setAccountOfficerValue: (() => {}) as Dispatch<SetStateAction<string>>,
-  setIntroducerIdValue: (() => {}) as Dispatch<SetStateAction<string>>,
-  setIntroducerTypeValue: (() => {}) as Dispatch<SetStateAction<string>>,
-  setCustomerType: (() => {}) as Dispatch<SetStateAction<string>>,
-  setCompleted: (() => {}) as Dispatch<
+  setAccountOfficerValue: (() => { }) as Dispatch<SetStateAction<string>>,
+  setIntroducerIdValue: (() => { }) as Dispatch<SetStateAction<string>>,
+  setIntroducerTypeValue: (() => { }) as Dispatch<SetStateAction<string>>,
+  setCustomerType: (() => { }) as Dispatch<SetStateAction<string>>,
+  setCompleted: (() => { }) as Dispatch<
     SetStateAction<Record<string, ProgressType>>
   >
 };

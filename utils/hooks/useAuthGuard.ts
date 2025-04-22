@@ -9,7 +9,6 @@ import { IToastActions } from '@/constants/types';
 import { environment } from '@/axiosInstance';
 
 const UNPROTECTED_ROUTES = ['/login/', '/login', '/signup/', '/signup'];
-export const domain = process.env.DOMAIN || '';
 
 export function isTokenExistingOrExpired(tokenExpire?: string): boolean {
   if (!tokenExpire) {
@@ -28,7 +27,7 @@ const getCurrentPath = (): string => {
     const ibassIndex = path?.indexOf('/');
 
     if (ibassIndex !== -1) {
-      return path?.substring((ibassIndex as number) + domain.length);
+      return path?.substring(ibassIndex);
     }
   }
 
@@ -57,26 +56,24 @@ const handleTokenExpiration = (toastActions: IToastActions) => {
       return;
     }
 
-    window.location.href = '/ibaas-ui/login?auth=false';
+    window.location.href = '/login?auth=false';
   }, 2000);
 };
 
 export const authGuard = (toastActions: IToastActions): void => {
-    const isProtectedRoute = !UNPROTECTED_ROUTES.includes(getCurrentPath());
+  const isProtectedRoute = !UNPROTECTED_ROUTES.includes(getCurrentPath());
 
-    if (isProtectedRoute && typeof window !== 'undefined') {
-      const currentUrl = window.location.href;
-      setLastPage(currentUrl);
-      const checkTokenStatus = () => {
-        const authFailed = isTokenExistingOrExpired(
-          getStoredUser()?.tokenExpire
-        );
+  if (isProtectedRoute && typeof window !== 'undefined') {
+    const currentUrl = window.location.href;
+    setLastPage(currentUrl);
+    const checkTokenStatus = () => {
+      const authFailed = isTokenExistingOrExpired(getStoredUser()?.tokenExpire);
 
-        if (authFailed) {
-          handleTokenExpiration(toastActions);
-        }
-      };
+      if (authFailed) {
+        handleTokenExpiration(toastActions);
+      }
+    };
 
-      checkTokenStatus();
-    }
+    checkTokenStatus();
+  }
 };

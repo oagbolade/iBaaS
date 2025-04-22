@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import { stringRegex } from '../admin';
-import { p } from 'msw/lib/core/GraphQLHandler-COiPfZ8k';
 
 export const searchFieldsSchema = Yup.object({
   search: Yup.string().matches(stringRegex, 'Invalid Search Input'),
@@ -37,8 +36,13 @@ export const chartOfAccountSchema = Yup.object({
   searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
-export const trialBalanceSchema = Yup.object({
-  branch: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  reportdate: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+export const trialBalanceGroupSchema = Yup.object({
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  customerID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   reportType: Yup.string().matches(stringRegex, 'Invalid Search Input')
+});
+
+export const trialBalanceSchema = Yup.object({
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  customerID: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });

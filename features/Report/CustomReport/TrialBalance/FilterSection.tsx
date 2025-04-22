@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
-import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import { exportData, dateFilter, inputFields } from '../style';
 import {
-  FormTextInput,
   FormSelectField,
   FormikRadioButton
 } from '@/components/FormikFields';
@@ -23,27 +21,30 @@ import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
-import { trialBalanceSchema } from '@/schemas/reports';
+import { trialBalanceGroupSchema } from '@/schemas/reports';
+import { IGLType } from '@/api/ResponseTypes/admin';
 
 type Props = {
   branches?: IBranches[];
   onSearch?: Function;
+  glType?: IGLType[] | Array<any>;
 };
 
-export const FilterSection = ({ branches, onSearch }: Props) => {
+export const FilterSection = ({ branches, onSearch, glType }: Props) => {
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
-  const { mappedBranches } = useMapSelectOptions({
-    branches
+  const { mappedBranches, mappedGLType } = useMapSelectOptions({
+    branches,
+    glType
   });
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      reportDate:
-        values.reportDate?.toString().trim().length > 0
-          ? values.reportDate
+      customerID:
+        values.customerID?.toString().trim().length > 0
+          ? values.customerID
           : null,
       reportType:
         values.reportType?.toString().trim().length > 0
@@ -58,7 +59,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       <Formik
         initialValues={searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
-        validationSchema={trialBalanceSchema}
+        validationSchema={trialBalanceGroupSchema}
       >
         <Form>
           <Stack
@@ -156,11 +157,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                       width: setWidth(),
                       ...inputFields
                     }}
-                    name="assetLiability"
-                    options={[
-                      { name: 'Asset', value: '1' },
-                      { name: 'Liabilities and Provision', value: '2' }
-                    ]}
+                    name="customerID"
+                    options={mappedGLType}
                     label="Filter"
                   />{' '}
                 </Grid>

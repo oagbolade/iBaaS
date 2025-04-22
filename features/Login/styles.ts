@@ -11,8 +11,7 @@ export const bannerContainer = {
   width: '488px',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '48px',
-  marginTop: '340px'
+  gap: '48px'
 };
 export const bannerTitle = {
   display: 'flex',
@@ -40,29 +39,12 @@ export const bankTitle = {
   alignSelf: 'stretch'
 };
 export const loginContainer = {
-  display: 'flex',
-  width: '690px',
-  height: '72px',
-  padding: '20px 58px',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
-  gap: '8px',
-  flexShrink: 0,
-  marginTop: '60px'
+  width: '650px'
 };
 export const loginFormStyle = {
-  display: 'flex',
-  padding: { desktop: '10px 90px 0 90px', mobile: '50px 50px 0 50px' },
-  width: { desktop: '45vw', mobile: '100vw' },
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: '32px',
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
-  background: `${colors.white}`,
-  marginTop: '25px',
-  height: '770px'
+  background: `${colors.white}`
 };
 export const bannerMainTitle = {
   fontSize: '28px',

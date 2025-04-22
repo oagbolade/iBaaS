@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { Field, useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
 import { BatchContainer } from '@/features/Operation/Forms/style';
 import {
@@ -32,7 +33,6 @@ import {
   useGenerateProductCode,
   generateProductCode
 } from '@/api/setup/useProduct';
-import { Field, useFormikContext } from 'formik';
 
 type Props = {
   titles?: ITitle[];
@@ -75,11 +75,10 @@ export const PersonalDetailsForm = ({
   };
 
   const handleGenerateCode = async (code: string) => {
-    generateProductCode(code).then(resp => {
-      console.log(resp)
+    generateProductCode(code).then((resp) => {
       setProductCodeGenarate(resp.productCode);
       setFieldValue('productCode', resp.productCode);
-    })
+    });
   };
 
   const {
@@ -98,8 +97,6 @@ export const PersonalDetailsForm = ({
 
   return (
     <>
-
-
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="productclass"
@@ -112,8 +109,6 @@ export const PersonalDetailsForm = ({
           required
         />
       </Grid>
-
-
 
       <Grid item={isTablet} mobile={12}>
         <FormTextInput

@@ -1,12 +1,7 @@
 'use client';
-import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
-import { TableSingleAction } from '@/components/Table';
-import { Box, Grid } from '@mui/material';
-import Link from 'next/link';
 import React from 'react';
-import { shortcards } from '@/features/Report/CustomReport/StatementAccount/style';
-import { TextInput } from '@/components/FormikFields';
-import SearchIcon from '@mui/icons-material/Search';
+import { Box } from '@mui/material';
+import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import {
   totalContainer,

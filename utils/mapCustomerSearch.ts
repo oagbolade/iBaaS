@@ -20,7 +20,7 @@ interface Staff {
 
 export const mapCustomerSearch = (
   customers: ICustomers[] | undefined
-): { value: string; name: string; phone:string }[] => {
+): { value: string; name: string; phone: string }[] => {
   return (
     (customers as unknown as Customer[])?.map((customer: Customer) => ({
       value: customer.customerid.toString(),
@@ -45,7 +45,7 @@ export const mapCustomerAccountNumberSearch = (
 
 export const mapStaffSearch = (
   staff: IUsers[] | undefined
-): { value: string; name: string; phone:string }[] => {
+): { value: string; name: string; phone: string }[] => {
   return (
     (staff as unknown as Staff[])?.map((eachStaff: Staff) => ({
       value: eachStaff.userid.toString(),

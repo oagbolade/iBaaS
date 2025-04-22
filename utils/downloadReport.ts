@@ -7,7 +7,6 @@ import { getCurrentDate } from './getCurrentDate';
 import { PdfGenerator } from './hooks/PdfGenerator';
 // eslint-disable-next-line import/no-cycle
 import { IReportQueryParams } from '@/context/DownloadReportContext';
-import { useGetBankLogo } from '@/api/general/useBankLogo';
 
 export type ReportType =
   | 'AccountEnquiry'
@@ -25,6 +24,8 @@ export type ReportType =
   | 'CustomerBalance'
   | 'AccountDebit'
   | 'ChequeBookStatus'
+  | 'TrialBalanceByDate'
+  | 'TrialBalanceByDate'
   | 'PlainTrialBalance';
 
 export type ReportFormat = 'excel' | 'pdf' | 'csv';
@@ -47,23 +48,18 @@ const FileNameMapper: IFileNameMapper = {
   PortfolioAtRiskProductList: 'PortfolioAtRiskProductList',
   CustomerBalance: 'CustomerBalance',
   PlainTrialBalance: 'PlainTrialBalance',
-
-
+  ChequeBookStatus: 'ChequeBookStatus',
+  TrialBalanceByDate: 'TrialBalanceByDate'
 };
 
 const generatePdf = (
   exportData: Array<any>,
   reportType: ReportType,
-  reportQueryParams: IReportQueryParams,
-  bankLogo?: string | null
+  reportQueryParams: IReportQueryParams
 ) => {
   const fileName = FileNameMapper[reportType as ReportType];
-  const { logo } = useGetBankLogo();
-  const BankLogo = logo?.toString()
-    ? `data:image/png;image/jpg;base64,${logo}`
-    : null;
 
-  PdfGenerator({ exportData, fileName, reportType, reportQueryParams, bankLogo: BankLogo});
+  PdfGenerator({ exportData, fileName, reportType, reportQueryParams });
 };
 
 // TODO: See how to integrate report description into excel and csv
@@ -93,6 +89,17 @@ const generateCSV = (
   const blob = new Blob([csv], { type: 'text/plain;charset=utf-8;' });
   const fileName = FileNameMapper[reportType as ReportType];
   FileSaver.saveAs(blob, `${fileName}  ${getCurrentDate()}.csv`);
+
+  /** ***********  ✨ Windsurf Command ⭐  *************/
+  /**
+   * Downloads a report in the specified format.
+   * @param {{ reportFormat: ReportFormat, exportData: Array<any>, reportType: ReportType, reportQueryParams: IReportQueryParams }} options
+   * @param {ReportFormat} options.reportFormat - The format of the report to download.
+   * @param {Array<any>} options.exportData - The data to export.
+   * @param {ReportType} options.reportType - The type of report.
+   * @param {IReportQueryParams} options.reportQueryParams - The query parameters for the report.
+   */
+  /** *****  bda2f5a0-b88f-4e5c-914d-5316321ecb57  *******/
 };
 
 type DownloadReportProps = {
@@ -107,15 +114,14 @@ export const downloadReport = ({
   reportFormat,
   exportData,
   reportType,
-  reportQueryParams,
-  bankLogo
+  reportQueryParams
 }: DownloadReportProps) => {
   switch (reportFormat) {
     case 'excel':
       generateExcel(exportData || [], reportType, reportQueryParams);
       break;
     case 'pdf':
-      generatePdf(exportData || [], reportType, reportQueryParams,  bankLogo);
+      generatePdf(exportData || [], reportType, reportQueryParams);
       break;
     case 'csv':
       generateCSV(exportData || [], reportType, reportQueryParams);

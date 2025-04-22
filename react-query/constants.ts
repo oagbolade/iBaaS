@@ -211,10 +211,12 @@ interface IQueryKeys {
   getTellerBalanceReport: string;
   getAllProductDocs: string;
   generateProductCode: string;
+  getTrialBalanceByGroup: string;
 }
 
 export const queryKeys: IQueryKeys = {
   getAllTermDepositMaturityReports: 'getAllTermDepositMaturityReports',
+  getTrialBalanceByGroup: 'getTrialBalanceByGroup',
   getAllProductDocs: 'getAllTermDepositMaturityReports',
   getTellerBalanceReport: 'getTellerBalanceReport',
   getAccountInDebit: 'getAccountInDebit',
@@ -425,5 +427,5 @@ export const queryKeys: IQueryKeys = {
   getStandingInstruction: 'getStandingInstruction',
   getincomeAssurance: 'getincomeAssurance',
   geTransactionClearing: 'geTransactionClearing',
-  generateProductCode: 'generateProductCode',
+  generateProductCode: 'generateProductCode'
 };

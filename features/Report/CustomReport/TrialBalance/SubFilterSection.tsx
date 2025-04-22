@@ -19,7 +19,7 @@ import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
-import { customerBalanceSchema } from '@/schemas/reports';
+import { customerBalanceSchema, trialBalanceSchema } from '@/schemas/reports';
 
 type Props = {
   branches?: IBranches[];
@@ -36,7 +36,10 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
-        values.branchID?.toString().trim().length > 0 ? values.branchID : null
+        values.branchID?.toString().trim().length > 0 ? values.branchID : null,
+
+      customerID:
+        values.customerID?.toString().length > 0 ? values.customerID : null
     };
     onSearch?.(params);
   };
@@ -46,7 +49,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       <Formik
         initialValues={searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
-        validationSchema={customerBalanceSchema}
+        validationSchema={trialBalanceSchema}
       >
         <Form>
           <Stack
@@ -130,8 +133,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                       ...inputFields
                     }}
                     icon={<SearchIcon />}
-                    name="accountNumber"
-                    placeholder="Search by Serial Number or  Account number"
+                    name="customerID"
+                    placeholder="Search by GL Account Number or  Account Name"
                     label=""
                   />{' '}
                 </Grid>

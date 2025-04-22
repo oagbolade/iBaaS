@@ -92,7 +92,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                     }}
                     name="pCode"
                     options={mappedBankproducts}
-                    label="Account"
+                    label="Product Code"
                   />{' '}
                 </Grid>
                 <Grid

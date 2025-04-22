@@ -12,14 +12,12 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { useGetDepartments } from '@/api/general/useDepartments';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { useGetStatus } from '@/api/general/useStatus';
-import { useGetAccountOfficers } from '@/api/admin/useAccountOfficer';
 import { useGetAllUsers } from '@/api/admin/useAdminUsers';
 
 export const CreateAccountOfficer = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { setDirection } = useSetDirection();
   const { isLoading } = useGlobalLoadingState();
-  const { officers } = useGetAccountOfficers();
   const { users } = useGetAllUsers();
 
   const searchParams = useSearchParams();
@@ -64,12 +62,10 @@ export const CreateAccountOfficer = () => {
             }}
           >
             {branches !== undefined &&
-              officers !== undefined &&
               users !== undefined &&
               departments !== undefined &&
               status !== undefined && (
                 <CreateAccountOfficerForm
-                  officers={officers}
                   branches={branches}
                   departments={departments}
                   status={status}

@@ -6,12 +6,11 @@ import { getCurrentDate } from '../getCurrentDate';
 // eslint-disable-next-line import/no-cycle
 import { ReportType } from '../downloadReport';
 import { formatKey } from '../formatKey';
-import { getStoredUser } from '../user-storage';
+import { getBankLogoFromLocalStorage, getStoredUser } from '../user-storage';
 import { useGenerateReportDescription } from './useGenerateReportDescription';
 import { Base64InterswitchLogo } from '@/public/InterswitchBase64Logo';
 import { IReportQueryParams } from '@/context/DownloadReportContext';
 import { TextInput } from '@/components/FormikFields';
-import { useGetBankLogo } from '@/api/general/useBankLogo';
 
 const previewAndDownloadPdf = (
   pdf: { save: (arg0: string) => void; output: (arg0: string) => any },
@@ -29,21 +28,22 @@ export const PdfGenerator = ({
   exportData,
   fileName,
   reportType,
-  reportQueryParams,
-  bankLogo
+  reportQueryParams
 }: {
   exportData: Array<any>;
   fileName: string;
   reportQueryParams: IReportQueryParams;
   reportType: ReportType;
-  bankLogo?: string | null;
 }) => {
   const { reportDescription } = useGenerateReportDescription(
     reportType,
     reportQueryParams
   );
 
+  const bankLogo = getBankLogoFromLocalStorage() || null;
+
   const logoImage = bankLogo || Base64InterswitchLogo;
+
   // Create a new PDF in landscape mode
   const pdf = new JsPDF('l', 'mm', 'a4'); // 'l' for landscape, 'a4' for A4 size
 
