@@ -15,7 +15,7 @@ import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { APIResponse } from '@/api/RequestTypes/CommonTypes';
 import { queryKeys } from '@/react-query/constants';
 import { IToastActions } from '@/constants/types';
-import { globalErrorHandler } from '@/utils/globalErrorHandler';
+import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import { UpdateStateFromValue } from '@/schemas/schema-values/setup';
 import { ISearchParams } from '@/app/api/search/route';
@@ -43,6 +43,9 @@ async function updateState(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
+    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
+      throw new Error(message);
+    }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);

@@ -1,24 +1,24 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { reportsAxiosInstance } from '@/axiosInstance';
+import { TrailBalanceGroupResponse } from '../ResponseTypes/reports';
+import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { IToastActions } from '@/constants/types';
 import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
-import { TrailBalanceResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
+import { getCurrentIsoDate } from '@/utils/getCurrentDate';
 
-export async function getTrialBalance(
+export async function getTrialBalanceGroup(
   toastActions: IToastActions,
   params: ISearchParams | null
-) {
-  let result: TrailBalanceResponse = {} as TrailBalanceResponse;
+): Promise<TrailBalanceGroupResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/TrialBalanceByDate';
-    const { data }: AxiosResponse<TrailBalanceResponse> =
+    const urlEndpoint = '/ReportServices/TrialBalanceByDateByGroup';
+    const { data }: AxiosResponse<TrailBalanceGroupResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
           branchCode: params?.branchID,
@@ -28,7 +28,6 @@ export async function getTrialBalance(
           startDate: params?.startDate,
           endDate: params?.endDate,
           reportType: Number(params?.reportType),
-          glClassCode: params?.gl_ClassCode,
           getAll: params?.getAll || false
         },
         headers: {
@@ -36,38 +35,37 @@ export async function getTrialBalance(
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
       });
-    const { message, title, severity } = globalErrorHandler({
-      ...data
-    });
+    const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
-    result = data;
+    return data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+    return null;
   }
-  return result;
 }
-export function useGetTrialBalance(params: ISearchParams | null) {
+export function useGetTrialBalanceGroup(params: ISearchParams | null) {
   const toastActions = useContext(ToastMessageContext);
-  const fallback = {} as TrailBalanceResponse;
+  const fallback = {} as TrailBalanceGroupResponse;
   const {
     data = fallback,
     isError,
     isLoading
   } = useQuery({
     queryKey: [
-      queryKeys.plainTrialBalance,
-      params?.branchID,
-      params?.reportDate,
-      params?.startDate,
-      params?.customerID,
-      params?.reportType
+      queryKeys.getTrialBalanceByGroup,
+      params?.branchID || '',
+      params?.customerID || '',
+      params?.pageNumber || 1,
+      params?.startDate || '',
+      params?.reportType || '',
+      params?.endDate || ''
     ],
-    queryFn: () => getTrialBalance(toastActions, params || {}),
+    queryFn: () => getTrialBalanceGroup(toastActions, params || {}),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
         (params?.reportType || '').length > 0 ||
-        (params?.reportDate || '').length > 0
+        (params?.search || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

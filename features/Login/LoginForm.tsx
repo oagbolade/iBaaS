@@ -177,7 +177,7 @@ export function LoginForm() {
       toast('Login successful, redirecting please wait...', 'success');
     };
 
-    if (!is2FARequired) {
+    if (is2FARequired) {
       // Global config disables 2FA, login directly
       login(
         values.companyCode,

@@ -60,40 +60,42 @@ export const OverdraftSavingsAccount = () => {
                 secondaryTitle:
                   'See a directory of all Overdraft facilities savings account Report in this system.'
               }}
-              data={getAllTrialBalanceData}
+              data={getAllTrialBalanceData.pagedTrialBalances}
               setPage={setPage}
               page={page}
             >
               {search ? (
-                getAllTrialBalanceData?.map((dataItem: ITrialBalance) => {
-                  return (
-                    <StyledTableRow key={dataItem.acctno}>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.gl_nodecode || 'N/A'}
-                      </StyledTableCell>
+                getAllTrialBalanceData?.pagedTrialBalances?.map(
+                  (dataItem: ITrialBalance) => {
+                    return (
+                      <StyledTableRow key={dataItem.acctno}>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.gl_nodecode || 'N/A'}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.acctname || 'N/A'}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.acctname || 'N/A'}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {`NGN ${formatCurrency(dataItem?.last_night_balance2 || 0)}`}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {`NGN ${formatCurrency(dataItem?.last_night_balance2 || 0)}`}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.debitacct || 'N/A'}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.debitacct || 'N/A'}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.creditAcct || 'N/A'}
-                      </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.creditAcct || 'N/A'}
+                        </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.totalname || 'N/A'}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem?.totalname || 'N/A'}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  }
+                )
               ) : (
                 <StyledTableRow>
                   <StyledTableCell
@@ -101,7 +103,9 @@ export const OverdraftSavingsAccount = () => {
                     component="th"
                     scope="row"
                   >
-                    {renderEmptyTableBody(getAllTrialBalanceData)}
+                    {renderEmptyTableBody(
+                      getAllTrialBalanceData.pagedTrialBalances
+                    )}
                   </StyledTableCell>
                 </StyledTableRow>
               )}

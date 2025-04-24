@@ -25,7 +25,7 @@ import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { APIResponse } from '@/api/RequestTypes/CommonTypes';
 import { queryKeys } from '@/react-query/constants';
 import { IToastActions } from '@/constants/types';
-import { globalErrorHandler } from '@/utils/globalErrorHandler';
+import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import {
   CreateDemandDepositFormValues,
@@ -44,10 +44,11 @@ async function createLoanAccountProduct(
   productcode: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/General/Product/${isUpdating
-      ? `UpdateLoanAccountProduct?productcode=${productcode}`
-      : 'CreateLoanAccountProduct'
-      }`;
+    const urlEndpoint = `/General/Product/${
+      isUpdating
+        ? `UpdateLoanAccountProduct?productcode=${productcode}`
+        : 'CreateLoanAccountProduct'
+    }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: isUpdating ? 'PUT' : 'POST',
@@ -60,14 +61,13 @@ async function createLoanAccountProduct(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
-    if (data.responseCode !== '00') {
+    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
       throw new Error(message);
     }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
     throw errorResponse;
-
   }
 }
 async function createDemandDepositProduct(
@@ -77,10 +77,11 @@ async function createDemandDepositProduct(
   productcode: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/General/Product/${isUpdating
-      ? `UpdateDemandDepositProduct?productcode=${productcode}`
-      : 'CreateDemandDepositProduct'
-      }`;
+    const urlEndpoint = `/General/Product/${
+      isUpdating
+        ? `UpdateDemandDepositProduct?productcode=${productcode}`
+        : 'CreateDemandDepositProduct'
+    }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: isUpdating ? 'PUT' : 'POST',
@@ -93,6 +94,9 @@ async function createDemandDepositProduct(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
+    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
+      throw new Error(message);
+    }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
@@ -448,7 +452,7 @@ async function getLoanTerm(
 
 async function getLoanProductByCode(
   toastActions: IToastActions,
-  prodcode: string | null
+  productcode: string | null
 ): Promise<UseGetAllLoanAccountResponse> {
   let result: UseGetAllLoanAccountResponse = {
     responseCode: '',
@@ -457,7 +461,7 @@ async function getLoanProductByCode(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetLoanProductByPcode?productcode=${prodcode}`;
+    const urlEndpoint = `/General/Product/GetLoanProductByPcode?productcode=${productcode}`;
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
       await axiosInstance({
@@ -535,8 +539,8 @@ export function useFilterLoanProductSearch(params: ISearchParams | null) {
     queryFn: () => filterAllProductSearch(toastActions, params),
     enabled: Boolean(
       (params?.productClass?.toString() || '').length > 0 ||
-      (params?.productName || '').length > 0 ||
-      (params?.productCode || '').length > 0
+        (params?.productName || '').length > 0 ||
+        (params?.productCode || '').length > 0
     )
   });
 
@@ -581,7 +585,7 @@ export function useGetAllProductDocs(): UseGetAllProductDocsResponse {
 }
 
 export function useGetLoanProductByCode(
-  prodcode: string | null
+  productcode: string | null
 ): UseGetAllLoanAccountResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = [] as UseGetAllLoanAccountResponse;
@@ -592,9 +596,9 @@ export function useGetLoanProductByCode(
     isError,
     isLoading
   } = useQuery({
-    queryKey: [queryKeys.getLoanProductByCode, prodcode],
-    queryFn: () => getLoanProductByCode(toastActions, prodcode),
-    enabled: Boolean((prodcode || '').length > 0)
+    queryKey: [queryKeys.getLoanProductByCode, productcode],
+    queryFn: () => getLoanProductByCode(toastActions, productcode),
+    enabled: Boolean((productcode || '').length > 0)
   });
 
   return { ...data, isError, isLoading };
@@ -804,14 +808,12 @@ interface IProductCode {
   responseDescription: string;
 }
 
-// Generate Product code using product class 
+// Generate Product code using product class
 export async function generateProductCode(
   // toastActions: IToastActions,
   productClass: string
 ): Promise<IProductCode> {
   let result: IProductCode = {} as IProductCode;
-
-
   try {
     const urlEndpoint = `/General/Product/GenerateProductCode?productclass=${productClass}`;
 
@@ -825,7 +827,7 @@ export async function generateProductCode(
     });
 
     const { message, title, severity } = globalErrorHandler(data);
-    result = data
+    result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
   }
@@ -833,15 +835,9 @@ export async function generateProductCode(
   return result;
 }
 
-export function useGenerateProductCode(
-  productClass: string
-) {
-
+export function useGenerateProductCode(productClass: string) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = { productCode: '' } as IProductCode;
-
-
-
   const {
     data = fallback,
     isError,

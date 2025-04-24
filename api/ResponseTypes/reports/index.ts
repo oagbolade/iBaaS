@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { ITellerBalance } from '../../operation/useVaultManagement';
 import { IFetchingState } from '@/constants/types';
 
@@ -123,14 +124,13 @@ export interface IInflowOutflowList {
   inflow: number;
   outflow: number;
 }
-
-export interface PlainTrialBalanceResponse {
-  responseCode: string;
-  responseDescription: string;
-  plainTrialBalanceList: PlainTrialBalanceList;
-  pageNumber: number;
-  pageSize: number;
-  totalRecords: number;
+export interface TrialBalanceRecord {
+  id: number;
+  glNumber: string;
+  oldGLno: string | null;
+  acctName: string;
+  dr: number;
+  cr: number;
 }
 
 interface PlainTrialBalanceList {
@@ -139,14 +139,13 @@ interface PlainTrialBalanceList {
   totalCr: number;
   bkBalance: number;
 }
-
-interface TrialBalanceRecord {
-  id: number;
-  glNumber: string;
-  oldGLno: string | null;
-  acctName: string;
-  dr: number;
-  cr: number;
+export interface PlainTrialBalanceResponse {
+  responseCode: string;
+  responseDescription: string;
+  plainTrialBalanceList: PlainTrialBalanceList;
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
 }
 
 export interface IGetAccountEnquiry {
@@ -373,8 +372,28 @@ export interface ITrialBalance {
   differ: string;
   totalname: string;
 }
+
+export interface ITrialBalanceGroup {
+  balance: number;
+  gl_classname: string;
+  gl_classcode: string;
+}
+export interface TrailBalanceGroupResponse
+  extends IFetchingState,
+    IReportsResponse {
+  trialBydateList?: ITrialBalanceGroup[];
+}
 export interface TrailBalanceResponse extends IFetchingState, IReportsResponse {
-  trialBydateList?: ITrialBalance[];
+  trialBydateList: {
+    map(
+      arg0: (dataItem: ITrialBalance) => JSX.Element
+    ): import('react').ReactNode;
+    lastNightBalance: number;
+    totalCrBal: number;
+    totalDrBal: number;
+    totalBal: number;
+    pagedTrialBalances: ITrialBalance[];
+  };
 }
 
 export interface GetAllPortfolioAtRiskResponse

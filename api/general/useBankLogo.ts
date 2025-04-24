@@ -1,15 +1,10 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
-import { AlertColor } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { axiosInstance, environment } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
-import {
-  IBankLogo,
-  UseBankLogo,
-  UseBranches
-} from '@/api/ResponseTypes/general';
+import { IBankLogo, UseBankLogo } from '@/api/ResponseTypes/general';
 import { queryKeys } from '@/react-query/constants';
 import { IToastActions } from '@/constants/types';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
