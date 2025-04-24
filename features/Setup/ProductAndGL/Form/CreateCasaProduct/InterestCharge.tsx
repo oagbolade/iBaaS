@@ -177,7 +177,6 @@ export const InterestCasaChargesForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
-          required
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>
@@ -188,7 +187,6 @@ export const InterestCasaChargesForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
-          required
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>

@@ -515,7 +515,6 @@ export const CreateAccount = ({
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
                   value={String(productInfos?.drrate || 0)}
-                  disabled
                 />
               </Grid>
 
@@ -528,7 +527,6 @@ export const CreateAccount = ({
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
                   value={String(productInfos?.crrate || 0)}
-                  disabled
                 />
               </Grid>
 
