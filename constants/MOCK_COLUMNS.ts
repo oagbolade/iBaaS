@@ -1,5 +1,8 @@
 export const MOCK_COLUMNS = [
-  'Request Type',
-  'Request Date',
-  'Approving Officer'
+  'Account Number',
+  'Account Name',
+  'Account Officer',
+  'Book Balance',
+  'Average Balance',
+  'Customer ID',
 ];

@@ -99,6 +99,22 @@ export interface IPortfolioAtRiskProduct {
   par: number;
 }
 
+export interface IDormantAccountList {
+  accountnumber: string;
+  accounttitle: string;
+  branchcode: string;
+  branchname: string;
+  productcode: string;
+  productname: string;
+  officercode: string;
+  bkbalance: number;
+  averagebal: number;
+  dateOpened: string;
+  customerId: number;
+  officerName: string;
+  nuban: string;
+}
+
 export interface IPortfoliodetailedReport {
   accountnumber: string;
   fullname: string;
@@ -411,4 +427,10 @@ export interface InflowOutflowReportResponse
   inflowOutflowList?: IInflowOutflowList[];
   totalInflow?: number;
   totalOutflow?: number;
+}
+
+export interface GetAllDormantAccountResponse
+  extends IFetchingState,
+    IReportsResponse {
+  dormantAccountList?: IDormantAccountList[];
 }

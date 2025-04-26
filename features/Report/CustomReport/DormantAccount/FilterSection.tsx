@@ -17,8 +17,14 @@ import {
 } from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
+import { IBranches } from '@/api/ResponseTypes/general';
 
-export const FilterSection = () => {
+type Props = {
+  branches?: IBranches[];
+  onSearch?: Function;
+};
+
+export const FilterSection = ({ branches, onSearch }: Props) => {
   const { setDirection } = useSetDirection();
   const { isMobile, setWidth } = useCurrentBreakpoint();
 
