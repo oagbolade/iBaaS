@@ -31,6 +31,9 @@ export async function getChequebookStatus(
       ...data
     });
     toast(message, title, severity, toastActions);
+    if (data.chequeBookList === null) {
+      data.chequeBookList = []
+    }
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
@@ -57,8 +60,8 @@ export function useGetCheckbookStatus(params: ISearchParams | null) {
     queryFn: () => getChequebookStatus(toastActions, params || {}),
     enabled: Boolean(
       (params?.accountNumber || '').length > 0 ||
-        (params?.status?.toString || '').length > 0 ||
-        (params?.branchID?.toString || '').length > 0
+      (params?.status?.toString || '').length > 0 ||
+      (params?.branchID?.toString || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

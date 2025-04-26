@@ -14,7 +14,7 @@ export const emailRegex = /@[^.]*\./;
 export const decimalRegex = /^\d+(\.\d{1,2})?$/;
 
 export const accountOfficer = Yup.object({
-  branchcode: Yup.string().required('Required'),
+  branchcode: Yup.string().required('Required here'),
   dept: Yup.string().required('Required'),
   email: Yup.string()
     .email('Please enter a valid email address')

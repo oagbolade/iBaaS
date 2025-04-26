@@ -33,7 +33,6 @@ import {
   getBroadcastChannel,
   setSessionActive
 } from '@/utils/user-storage/broadcastChannel';
-import { shouldEnforce2FA } from '@/utils/use2FaConfig';
 
 export function LoginForm() {
   const router = useRouter();
@@ -106,7 +105,7 @@ export function LoginForm() {
   const [oldPassword, setOldPassword] = useState<string>('');
   const [userid, setUserId] = useState<string>('');
   const [openModel, setOpenModel] = useState(false);
-  const is2FARequired = shouldEnforce2FA();
+  const is2FARequired = process.env.NEXT_PUBLIC_ENABLE_2FA === 'true';
   const [loginCredentials, setLoginCredentials] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutate: check2fa } = useAuth2faCheck();

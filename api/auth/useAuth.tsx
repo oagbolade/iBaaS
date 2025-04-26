@@ -176,7 +176,7 @@ export function useAuth(): UseAuth {
           return;
         }
 
-        window.location.href = '/ibaas-ui/login';
+        window.location.href = '/login';
       }, 1500);
     } catch (errorResponse) {
       toast((errorResponse as { message: string })?.message, 'error');

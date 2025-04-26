@@ -1,5 +1,4 @@
-import { localStorage } from 'reactive-localstorage';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -7,13 +6,10 @@ import {
   UseGetbeneficiaryDetails
 } from '../ResponseTypes/operation';
 import { IToastActions } from '@/constants/types';
-import { getStoredUser } from '@/utils/user-storage';
-import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { queryKeys } from '@/react-query/constants';
 import { nipAxiosInstance } from '@/axiosInstance';
-import { decryptData } from '@/utils/decryptData';
 
 export async function nipGetBeneficiaryInformation(
   toastActions: IToastActions,

@@ -14,7 +14,7 @@ import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { APIResponse } from '@/api/RequestTypes/CommonTypes';
 import { queryKeys } from '@/react-query/constants';
 import { IToastActions } from '@/constants/types';
-import { globalErrorHandler } from '@/utils/globalErrorHandler';
+import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import { CreateCommercialBankFormValues } from '@/schemas/schema-values/setup';
 import { SEARCH_BASE_URL } from '@/axiosInstance/constants';
@@ -44,6 +44,9 @@ async function createCommercialBank(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
+    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
+      throw new Error(message);
+    }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);

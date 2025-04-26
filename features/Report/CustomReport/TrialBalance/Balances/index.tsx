@@ -35,6 +35,7 @@ export const CommercialBanks = () => {
     ...searchParams,
     page
   });
+  const trialBalanceData = getAllTrialBalanceData?.pagedTrialBalances || [];
 
   return (
     <Box
@@ -61,12 +62,12 @@ export const CommercialBanks = () => {
                 secondaryTitle:
                   'See a directory of all Balances held with commercial banks Report in this system.'
               }}
-              data={getAllTrialBalanceData}
+              data={trialBalanceData}
               setPage={setPage}
               page={page}
             >
               {search ? (
-                getAllTrialBalanceData?.map((dataItem: ITrialBalance) => {
+                trialBalanceData?.map((dataItem: ITrialBalance) => {
                   return (
                     <StyledTableRow key={dataItem.acctno}>
                       <StyledTableCell component="th" scope="row">
@@ -102,7 +103,7 @@ export const CommercialBanks = () => {
                     component="th"
                     scope="row"
                   >
-                    {renderEmptyTableBody(getAllTrialBalanceData)}
+                    {renderEmptyTableBody(trialBalanceData)}
                   </StyledTableCell>
                 </StyledTableRow>
               )}
