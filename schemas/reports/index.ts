@@ -16,6 +16,12 @@ export const chequebookSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
+export const dormantAccountSchema = Yup.object({
+  accountNumber: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input')
+});
+
+
 export const customerBalanceSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input'),
