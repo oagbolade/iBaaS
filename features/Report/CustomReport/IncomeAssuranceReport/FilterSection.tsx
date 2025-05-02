@@ -73,9 +73,12 @@ export const FilterSection = ({ branches, onSearch, productTypes }: Props) => {
     productTypes,
   });
   const onSubmit = async (values: any) => {
+    console.log('values', values);
     const params: ISearchParams = {
       branchID:
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
+        pCode:
+        values.pCode?.toString().trim().length > 0 ? values.pCode : null,
       search:
         values.search?.toString().trim().length > 0 ? values.search : null,
       startDate:

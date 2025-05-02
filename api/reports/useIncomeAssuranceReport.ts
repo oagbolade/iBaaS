@@ -23,7 +23,7 @@ export async function getincomeAssurance(
   let result: GetAllIncomeAssuranceReportResponse =
     {} as GetAllIncomeAssuranceReportResponse;
   try {
-    const urlEndpoint = `/ReportServices/IncomeAssuranceReport?actionCode=${params?.branchID}&Startdate=${params?.startDate}&enddate=${params?.endDate}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}`;
+    const urlEndpoint = `/ReportServices/IncomeAssuranceReport?actionCode=${params?.pCode}&Startdate=${params?.startDate}&enddate=${params?.endDate}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}`;
     const { data }: AxiosResponse<GetAllIncomeAssuranceReportResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -55,7 +55,8 @@ export function useGetIncomeAssuranceReport(params: ISearchParams | null) {
   } = useQuery({
     queryKey: [
       queryKeys.getincomeAssurance,
-      params?.branchID || '',
+      params?.pCode || '',
+      // params?.branchID || '',
       params?.startDate || '',
       params?.endDate || '',
       params?.page || 1
@@ -63,6 +64,7 @@ export function useGetIncomeAssuranceReport(params: ISearchParams | null) {
     queryFn: () => getincomeAssurance(toastActions, params || {}),
     enabled: Boolean(
       (params?.startDate || '').length > 0 ||
+      (params?.pCode || '').length > 0 ||
         (params?.branchID || '').length > 0 ||
         (params?.endDate || '').length > 0
     )

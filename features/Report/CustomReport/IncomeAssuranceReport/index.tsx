@@ -28,6 +28,9 @@ export const IncomeAssuranceReport = () => {
   });
   const { productTypes } = useGetProductType();
   const { branches } = useGetBranches();
+
+  console.log('actionCode1Model', productTypes);
+  console.log('actionCode1Modefrerel', branches);
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
     setSearchParams({

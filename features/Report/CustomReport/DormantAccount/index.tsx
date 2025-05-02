@@ -17,6 +17,7 @@ import { IDormantAccountList } from '@/api/ResponseTypes/reports';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { FormSkeleton } from '@/components/Loaders';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const DormantAccount = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(
@@ -104,11 +105,11 @@ export const DormantAccount = () => {
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">
-                      {dataItem?.bkbalance || 'N/A'}
+                      {formatCurrency(dataItem?.bkbalance || 'N/A')}
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">
-                      {dataItem?.averagebal || 'N/A'}
+                      {formatCurrency(dataItem?.averagebal || 'N/A')}
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">
