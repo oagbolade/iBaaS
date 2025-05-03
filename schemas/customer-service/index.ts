@@ -32,11 +32,9 @@ export const createCustomerAccount = Yup.object({
       }
     ),
   cintrate: Yup.number()
-    .typeError('Must be a numeric value')
-    .required('Required'),
+    .typeError('Must be a numeric value'),
   dintrate: Yup.number()
     .typeError('Must be a numeric value')
-    .required('Required')
 });
 
 export const editCheque = Yup.object({

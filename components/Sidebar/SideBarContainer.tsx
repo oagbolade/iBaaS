@@ -59,15 +59,17 @@ export const SideBarContainer = () => {
       >
         <Link href="/dashboard">
           {BankLogo ? (
-            <Image
-              src={BankLogo}
-              alt={bank?.bankName || 'Bank Logo'}
-              width={170} // Required prop: specify width in pixels
-              height={50} // Required prop: specify height in pixels (adjust as needed)
-            />
-          ) : (
-            <PageTitle title={bank?.bankName} />
-          )}
+            <div className="w-[200px] h-[20px] flex items-center justify-center mt-4">
+              <Image
+                src={BankLogo}
+                alt={bank?.bankName || 'Bank Logo'}
+                width={170}
+                height={20}
+              />
+            </div>
+            ) : (
+              <PageTitle title={bank?.bankName} />
+            )}
         </Link>
       </Box>
       <Box
