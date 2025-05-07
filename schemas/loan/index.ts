@@ -129,34 +129,24 @@ export const partialPayOffSchema = Yup.object({
 export const restructuredLoanSchema = Yup.object({
   restructureType: Yup.number().required(),
   newPrincipal: Yup.number().required(),
-
   refinancingAmt: Yup.number().required(),
-
   interestRate: Yup.number().required(),
-
   addtoPrincipal: Yup.number().required(),
-
   term: Yup.number().required(),
   days: Yup.number().required(),
   termFreq: Yup.string().required(),
-
   repaytype: Yup.string().required(),
-
   paytype: Yup.number().required(),
-
   startdate: Yup.date().required(),
   matdate: Yup.date().required(),
   firstdate: Yup.date().required(),
   drawdate: Yup.date().required(),
   postdate: Yup.date().required(),
-
   collateraltype: Yup.number().required(),
   collateralvalue: Yup.number().required(),
   collateraldetails: Yup.string().required(),
-
   source: Yup.number().required(),
   narration: Yup.string().required(),
-
   calcmethod: Yup.number().required(),
   moratatriumtype: Yup.number().required(),
   moratarium: Yup.number().required(),

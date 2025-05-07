@@ -213,7 +213,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
   const { accountDetailsResults, isLoading: isCustomerSearchLoading } =
     useSearchCustomer(
       introducerType?.customer && introducerType.customer?.length > 0
-        ? (debouncedSearchValue as string)
+        ? encryptData(debouncedSearchValue as string) as string
         : ''
     );
 

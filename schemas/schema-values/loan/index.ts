@@ -347,6 +347,7 @@ export interface ILoanAccDetails {
   loanterm: string
   collateralType: string
   branchcode: string
+  outstandingPrincipal: number
 }
 
 export interface LoanUnderwriteInitialValues {

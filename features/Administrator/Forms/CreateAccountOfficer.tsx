@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AlertColor, Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useSearchParams } from 'next/navigation';
@@ -8,7 +8,11 @@ import {
   CreateAccountOfficerFormValues
 } from '@/schemas/schema-values/admin';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { FormTextInput, FormSelectField } from '@/components/FormikFields';
+import {
+  FormTextInput,
+  FormSelectField,
+  FormSelectInput
+} from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import {
   useCreateAccountOfficer,
@@ -29,6 +33,7 @@ import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
+import { useGetUserByID } from '@/api/admin/useAdminUsers';
 
 type Props = {
   unitTestInitialValues?: CreateAccountOfficerFormValues;
@@ -54,23 +59,26 @@ export const CreateAccountOfficer = ({
   users
 }: Props) => {
   const officercode = (useGetParams('officercode') || '').trim();
-  const {
-    mappedBranches,
-    mappedDepartments,
-    mappedStatus,
-    mappedUsers
-  } = useMapSelectOptions({
-    branches,
-    departments,
-    status,
-    users
-  });
+  const { mappedBranches, mappedDepartments, mappedStatus, mappedUsers } =
+    useMapSelectOptions({
+      branches,
+      departments,
+      status,
+      users
+    });
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const [selectedUserId, setSelecteduserId] = useState<
+    string | null | undefined
+  >(null);
   const { mutate } = useCreateAccountOfficer(
     Boolean(isEditing),
     encryptData(officercode)
+  );
+
+  const { userDetails: userId } = useGetUserByID(
+    encryptData(selectedUserId as string)
   );
 
   const { officer, isLoading } = useGetAccountOfficerByCode(
@@ -125,7 +133,11 @@ export const CreateAccountOfficer = ({
     const data = {
       ...values,
       officercode: `${extractIdFromDropdown(selectedValue.accountOfficers as string)}`,
-      auth: Number(createOfficerPermission?.value || '0')
+      auth: Number(createOfficerPermission?.value || '0'),
+      officerName: userId?.fullname || '',
+      dept: userId?.deptcode?.trim() || '',
+      phone: userId?.phoneno || '',
+      email: userId?.email || ''
     };
 
     await mutate(data);
@@ -148,6 +160,12 @@ export const CreateAccountOfficer = ({
       ...prev,
       [name]: value
     }));
+
+    // Extract user ID when a user is selected
+    if (name === 'accountOfficers' && value) {
+      const ID = extractIdFromDropdown(value);
+      setSelecteduserId(ID); // This will trigger the useGetUserByID hook
+    }
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,7 +276,8 @@ export const CreateAccountOfficer = ({
                     placeholder="Omodayo Oluwafunke"
                     label="Staff Name"
                     required
-                    disabled={Boolean(isEditing)}
+                    value={userId?.fullname}
+                    disabled
                   />{' '}
                 </Grid>
                 <Grid mb={1} item={isTablet} mobile={12}>
@@ -270,6 +289,8 @@ export const CreateAccountOfficer = ({
                     name="dept"
                     options={mappedDepartments}
                     label="Department"
+                    value={userId?.deptcode}
+                    disabled
                   />{' '}
                 </Grid>
                 <Grid
@@ -285,6 +306,8 @@ export const CreateAccountOfficer = ({
                     placeholder="Omodayo_Oluwafunke@testcompany.com"
                     label="Email Address"
                     required
+                    value={userId?.email}
+                    disabled
                   />{' '}
                 </Grid>
                 <Grid mb={1} item={isTablet} mobile={12}>
@@ -294,7 +317,9 @@ export const CreateAccountOfficer = ({
                     }}
                     name="phone"
                     label="Phone Number"
+                    value={userId?.phoneno}
                     placeholder="090587483822"
+                    disabled
                   />{' '}
                 </Grid>
                 <Grid mb={1} item={isTablet} mobile={12}>

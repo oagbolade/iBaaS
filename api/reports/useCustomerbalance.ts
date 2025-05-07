@@ -18,10 +18,19 @@ export async function getCustomerBalance(
 ) {
   let result: CustomerBalanceResponse = {} as CustomerBalanceResponse;
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/Customerbalances?BranchCode=${params?.branchID}&pageNumber=${params?.page}&pageSize=${params?.pageSize}&getAll=${params?.getAll}`;
+  
+    const queryParams = {
+      BranchCode: params?.branchID || '',
+      pCode: params?.pCode || '',
+      pageNumber: params?.pageNumber || '1',
+      pageSize: params?.pageSize || '10',
+      getAll: String(params?.getAll || 'false'),
+      startdate: params?.startDate || '',
+      enddate: params?.endDate || '',
+      searchWith: params?.searchWith || ''
+    };
+    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/Customerbalances?${new URLSearchParams(queryParams)}`;
 
-    // TODO : Uncomment the below line when the API is ready to accept searchWith, startDate, endDate and pCode
-    // const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/Customerbalances?BranchCode=${params?.branchID}&startDate=${params?.startDate}&endDate=${params?.endDate}&pageNumber=${params?.page}&pCode=${params?.pCode}&pageSize=${params?.pageSize}&searchWith=${params?.searchWith}&getAll=${params?.getAll}`;
     const { data }: AxiosResponse<CustomerBalanceResponse> =
       await axiosInstance({
         url: urlEndpoint,

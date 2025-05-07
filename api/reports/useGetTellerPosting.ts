@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { GetDetailedPortfolioReport } from '../ResponseTypes/reports';
+import { GetTellerPostingReport } from '../ResponseTypes/reports';
 import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
@@ -10,33 +10,28 @@ import { toast } from '@/utils/toast';
 import { queryKeys } from '@/react-query/constants';
 import { getStoredUser } from '@/utils/user-storage';
 
-export interface IDetailedPortfolioAtRiskParams {
+export interface ITellerPostingParams {
   pageSize?: number;
   pageNumber?: number;
-  productCode?: string;
-  branchCode?: string;
   search?: string;
   startDate?: string | null;
   endDate?: string | null;
   getAll?: boolean | null;
 }
 
-async function fetchDetailedPortfolioAtRisk(
-  params: IDetailedPortfolioAtRiskParams,
+async function getTellerPosting(
+  params: ITellerPostingParams,
   toastActions: IToastActions
-): Promise<GetDetailedPortfolioReport | null> {
+): Promise<GetTellerPostingReport | null> {
   try {
-    const urlEndpoint = '/ReportServices/PortfolioatRiskDetailReport';
-    const { data }: AxiosResponse<GetDetailedPortfolioReport> =
+    const urlEndpoint = '/ReportServices/TellerPostingsSummary';
+    const { data }: AxiosResponse<GetTellerPostingReport> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
-          productcode: params.productCode?.trim(),
-          branchcode: params.branchCode,
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1,
-          searchWith: params.search?.trim(),
-          startDate: params.startDate,
-          endDate: params.endDate,
+          userId: params.search?.trim(),
+          postByDate: params.startDate,
           getAll: params.getAll || false
         },
         headers: {
@@ -56,11 +51,11 @@ async function fetchDetailedPortfolioAtRisk(
   }
 }
 
-export function useGetDetailedPortfolioReport(
-  params: IDetailedPortfolioAtRiskParams
-): GetDetailedPortfolioReport {
+export function useGetTellerPosting(
+  params: ITellerPostingParams
+): GetTellerPostingReport {
   const toastActions = useContext(ToastMessageContext);
-  const fallback = {} as GetDetailedPortfolioReport;
+  const fallback = {} as GetTellerPostingReport;
 
   const {
     data = fallback,
@@ -69,16 +64,16 @@ export function useGetDetailedPortfolioReport(
   } = useQuery({
     queryKey: [
       queryKeys.detailedpPortfolioAtRisk,
-      params?.branchCode || '',
-      params?.productCode || '',
       params?.pageNumber || '',
       params?.pageSize || '',
       params?.search,
       params?.startDate || '',
       params?.endDate || ''
     ],
-    queryFn: () => fetchDetailedPortfolioAtRisk(params, toastActions),
-    enabled: Boolean(params?.branchCode)
+    queryFn: () => getTellerPosting(params, toastActions),
+    enabled: Boolean(
+      (params?.search || '').length > 0 || (params?.startDate || '').length > 0
+    )
   });
 
   return { ...data, isError, isLoading };

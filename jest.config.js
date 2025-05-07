@@ -18,7 +18,23 @@ const config = {
   // Add transform configuration for TypeScript files
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
-  }
+  },
+  coveragePathIgnorePatterns: [
+    '/react-query/',
+    '/public/',
+    '/api/',
+    '/node_modules/',
+    '/features/Report/',
+    '/npm/',
+    '/constants/',
+    '/utils/',
+    '/context/',
+    '/assets/',
+    '/schemas/',
+    '/axiosInstance/',
+    '/components/',
+    '/app/'
+  ]
 };
 
 // createJestConfig is exported this way to enrsure that next/jest can load the Next.js config which is async

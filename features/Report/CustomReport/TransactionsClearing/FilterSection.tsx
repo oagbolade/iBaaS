@@ -28,8 +28,9 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       // If no value input, return null
-      branchID: `${values.branchID.trim().length > 0 ? values.branchID : null}`,
-      status: values.status?.toString().length > 0 ? values.status : null
+      branchID: `${values.branchID.trim()}`,
+      customerID: `${values.search.trim()}`,
+      status: values.status
     };
     onSearch?.(params);
   };
@@ -57,7 +58,8 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
                 }}
                 name="branchID"
                 options={mappedBranches}
-                label="Branch ID"
+                label="Branch Name"
+                required
               />{' '}
             </Grid>
             <Grid
@@ -76,6 +78,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
                 name="status"
                 options={mappedStatus}
                 label="Status"
+                required
               />{' '}
             </Grid>
             <Grid

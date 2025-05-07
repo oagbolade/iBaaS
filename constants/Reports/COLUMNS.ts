@@ -25,6 +25,14 @@ export const detailedPortfolioAtRiskColumn = [
   'PAR (%)'
 ];
 
+export const tellerPostingColumn = [
+  'Account Number',
+  'Account title',
+  'Narration',
+  'Value Date',
+  'Reference'
+];
+
 export const drillDownReportGlColumns = [
   'GL Node Name',
   'GL Node Code',

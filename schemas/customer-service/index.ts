@@ -32,11 +32,9 @@ export const createCustomerAccount = Yup.object({
       }
     ),
   cintrate: Yup.number()
-    .typeError('Must be a numeric value')
-    .required('Required'),
+    .typeError('Must be a numeric value'),
   dintrate: Yup.number()
     .typeError('Must be a numeric value')
-    .required('Required')
 });
 
 export const editCheque = Yup.object({
@@ -376,8 +374,8 @@ export const createCustomer = {
       stringRegexNoNumberAllowed,
       'Invalid name, no numbers or special character allowed'
     )
-    .min(2, "Referrer's name must be at least 2 characters long")
-    .max(50, "Referrer's name must be at most 50 characters long")
+    .min(2, 'Referrer\'s name must be at least 2 characters long')
+    .max(50, 'Referrer\'s name must be at most 50 characters long')
     .test(
       'no-space-count',
       'Name must be at most 50 characters long',

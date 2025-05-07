@@ -56,7 +56,7 @@ export const RestructureLoanForm = ({
     });
 
 
-  
+
   const user = getStoredUser();
   const userLoanMenuid = Array.isArray(user?.menuItems)
     ? user.menuItems.find((resp: any) => resp.menu_id === 57)
@@ -73,6 +73,7 @@ export const RestructureLoanForm = ({
       PenalWriteOff_GL,
       InterestWriteOff_GL,
       PrincipalWriteOff_GL,
+      outstandingPrincipal,
       ...restValues
     } = values;
 
@@ -81,10 +82,15 @@ export const RestructureLoanForm = ({
       settlementAccno: settlementacct1,
       loanAccno: accountNumber,
       prodcode: loanDetail.productcode,
-      branchcode: loanDetail?.branchcode,
+      branchcode: loanDetail?.branchCode,
       menuId: userLoanMenuid?.menu_id,
+      outstandingPrincipal : Number(loanDetail?.outstandingPrincipal),
+      PenalWriteOff_GL,
+      InterestWriteOff_GL,
+      PrincipalWriteOff_GL,
       ...restValues
     };
+    console.log(data);
     mutate(data);
     setIsSubmitting(false);
   };
@@ -108,6 +114,8 @@ export const RestructureLoanForm = ({
     setSelectedRestructureType(value);
   }
 
+
+  
   return (
     <Box>
       <Box>
@@ -126,7 +134,7 @@ export const RestructureLoanForm = ({
             source: loanDetail?.loanSourceCode,
             collateraltype: loanDetail?.collateralType,
             collateralvalue: loanDetail?.collateralValue,
-            restructureType: selectedRestructureType
+            restructureType: selectedRestructureType,
           }}
           onSubmit={(values) => onSubmit(values)}
           validationSchema={restructuredLoanSchema}
@@ -544,7 +552,11 @@ export const RestructureLoanForm = ({
               </Grid>
             </Box>
 
-            <button id="submitButton" type="submit" style={{ display: 'none' }}>
+            <button
+              id="submitButton"
+              type="submit"
+              style={{ display: 'none' }}
+            >
               submit alias
             </button>
           </Form>

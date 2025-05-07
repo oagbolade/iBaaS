@@ -8,21 +8,28 @@ import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { IToastActions } from '@/constants/types';
 import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
-import { PlainTrialBalanceResponse } from '@/api/ResponseTypes/reports';
+import { ILoanMaturityResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
-
 import { REPORT_BASE_URL } from '@/axiosInstance/constants';
 
-export async function getPlainTrialBalance(
+export async function getMaturityLoan(
   toastActions: IToastActions,
   params: ISearchParams | null
 ) {
-  let result: PlainTrialBalanceResponse = {} as PlainTrialBalanceResponse;
+  let result: ILoanMaturityResponse = {} as ILoanMaturityResponse;
   try {
-    // report url
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/PLAINTRIALBALANCE?reportdate=${params?.reportDate}&reporttype=${params?.reportType}&branchcode=${params?.branchID}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize || '20'}&getAll=${params?.getAll}&searchWith=${params?.searchWith}`;
-  
-    const { data }: AxiosResponse<PlainTrialBalanceResponse> =
+    const queryParams = {
+      branchcode: params?.branchID || '',
+      productcode: params?.prodCode || '',
+      pageNumber: params?.pageNumber || '1',
+      pageSize: params?.pageSize || '10',
+      getAll: String(params?.getAll || 'false'),
+      startdate: params?.startDate || '',
+      enddate: params?.endDate || '',
+      searchWith: params?.searchWith || ''
+    };
+    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/LoanMaturityReport?${new URLSearchParams(queryParams)}`;
+    const { data }: AxiosResponse<ILoanMaturityResponse> =
       await axiosInstance({
         url: urlEndpoint,
         method: 'GET',
@@ -35,34 +42,42 @@ export async function getPlainTrialBalance(
       ...data
     });
     toast(message, title, severity, toastActions);
+    if (data.loanMaturityList === null) {
+      data.loanMaturityList = []
+    }
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+
   }
+  if (result?.loanMaturityList === null||result?.loanMaturityList === undefined) {  
+    result.loanMaturityList = []
+  }
+  
   return result;
 }
 
-export function useGetPlainTrialBalance(params: ISearchParams | null) {
+export function useGetMaturityLoan(params: ISearchParams | null) {
   const toastActions = useContext(ToastMessageContext);
-  const fallback = {} as PlainTrialBalanceResponse;
+  const fallback = {} as ILoanMaturityResponse;
   const {
     data = fallback,
     isError,
     isLoading
   } = useQuery({
     queryKey: [
-      queryKeys.plainTrialBalance,
+      queryKeys.maturityLoan,
       params?.branchID,
-      params?.reportDate,
-      params?.reportType
+      params?.prodCode,
     ],
-    queryFn: () => getPlainTrialBalance(toastActions, params || {}),
+    queryFn: () => getMaturityLoan(toastActions, params || {}),
     enabled: Boolean(
-      (params?.branchID || '').length > 0 ||
-        (params?.reportType || '').length > 0 ||
-        (params?.searchWith || '').length > 0 ||
-        (params?.reportDate || '').length > 0
+        (params?.branchID || '').length > 0 ||
+        (params?.prodCode || '').length > 0 ||
+        (params?.startDate || '').length > 0 ||
+        (params?.endDate || '').length > 0 ||
+        (params?.searchWith || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

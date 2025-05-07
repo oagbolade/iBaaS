@@ -68,10 +68,12 @@ export function setStoredUser(user: UserLoginResponse): void {
 }
 
 export function saveBankLogoToLocalStorage(logo: string): void {
-  localStorage.setItem(
-    BANK_LOGO_LOCALSTORAGE_KEY,
-    String(encryptData(JSON.stringify(logo)))
-  );
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(
+      BANK_LOGO_LOCALSTORAGE_KEY,
+      String(encryptData(JSON.stringify(logo)))
+    );
+  }
 }
 
 export function getBankLogoFromLocalStorage(): string | null {

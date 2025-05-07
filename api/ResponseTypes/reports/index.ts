@@ -131,6 +131,28 @@ export interface IPortfoliodetailedReport {
   branchname: string;
 }
 
+export interface ITellerPostingReport {
+  accountNumber: string;
+  accounttitle: string;
+  userid: string;
+  tranDate: string;
+  valuedate: string;
+  tranname: string;
+  prevbal: number;
+  curbal: number;
+  deposit: number;
+  withdrawal: number;
+  fromVault: number;
+  toVault: number;
+  refNo: string;
+  postseq: string;
+  debitacct: string;
+  creditAcct: string;
+  postingMode: string;
+  narration: string;
+  tranAmount: string;
+}
+
 export interface IInflowOutflowList {
   accountnumber: string;
   accounttitle: string;
@@ -335,13 +357,19 @@ export interface IIncomeAssurance {
   productCode: string;
 }
 export interface ITransactionClearing {
+  id: string;
   accountnumber: string;
-  amt: number;
-  tranName: string;
-  processed: string;
-  chequeType: string;
-  bankName: string;
-  value_Dt: string;
+  accounttitle: string;
+  create_dt: string;
+  valuedate: string;
+  status: string;
+  tranamount: string;
+  userid: string;
+  bankname: string;
+  chequeno: string;
+  narration: string;
+  chequetype: string;
+  branchcode: string;
 }
 
 export interface ChartOfAccountResponse
@@ -367,7 +395,7 @@ export interface GetAllIncomeAssuranceReportResponse
 export interface GetAllTransactionClearingReportResponse
   extends IFetchingState,
     IReportsResponse {
-  transactionsinClearingList?: ITransactionClearing[];
+  data?: ITransactionClearing[];
 }
 export interface ITrialBalance {
   reportClass: string;
@@ -423,6 +451,12 @@ export interface GetDetailedPortfolioReport
   portfolioatRiskDetailRptList?: IPortfoliodetailedReport[];
   pageNumber?: number;
 }
+export interface GetTellerPostingReport
+  extends IFetchingState,
+    IReportsResponse {
+  tellerPostByDateList?: ITellerPostingReport[];
+  pageNumber?: number;
+}
 export interface IGlMainGroupResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
@@ -453,3 +487,61 @@ export interface GetAllDormantAccountResponse
     IReportsResponse {
   dormantAccountList?: IDormantAccountList[];
 }
+
+export interface ILoanMaturityReport {    
+  id: number
+  accountNumber: string
+  customerID: string
+  phone1: string
+  branch: string
+  productCode: string
+  settlementAcct1: string
+  fullName: string
+  startDate: string
+  loanMatDate: string
+  adjustedMatDate: string
+  loanAmount: string
+  currentbalance: string
+  gender: string
+  officerName: string
+  groupname: string
+  loanStageCycle: number
+  riskRating: string
+}
+
+export interface ILoanMaturityResponse {
+  responseCode: string
+  responseDescription: string
+  loanMaturityList: ILoanMaturityReport[]
+  pageNumber: number
+  pageSize: number
+  totalRecords: number
+}
+
+
+
+
+export interface IPostingJournal {
+  accountNumber: string;
+  accounttitle: string;
+  tranDate: string;
+  valuedate: string;
+  tranname: string;
+  batchno: number;
+  postSeq: number;
+  debitacct: number;
+  creditAcct: number;
+  postingMode: string;
+  accountModule: string;
+  narration: string;
+  userid: string;
+  authid: string;
+  branchcode: string;
+}
+
+export interface IPostingJournalResponse extends IFetchingState, IReportsResponse {
+  postingJournalList: IPostingJournal[];
+}
+
+
+

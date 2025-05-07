@@ -62,14 +62,17 @@ export const AddDormancy = ({
   const [penaltyAccount, setPenaltyAccount] = React.useState<string | null>(
     null
   );
+  const [productType, setProductType] = React.useState<string | null>(null);
 
   const { bankgl: accountData } = useGetGLByGLNumber(
     encryptData(penaltyAccount) || ''
   );
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
+    const combinedCode = `${values.durations}${values.duration}`.trim();
     await mutate({
-      ...values
+      ...values,
+      duration: combinedCode
     });
   };
   useEffect(() => {
@@ -87,6 +90,14 @@ export const AddDormancy = ({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setPenaltyAccount(e.target.value);
+  };
+
+  const handleProductTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    const productTypeName = mappedProductType.find(
+      (item) => item.value === selectedValue
+    )?.name;
+    setProductType(productTypeName || null);
   };
 
   if (isEditing && isLoading) {
@@ -108,142 +119,153 @@ export const AddDormancy = ({
           onSubmit={(values, actions) => onSubmit(values, actions)}
           validationSchema={createDormancySchema}
         >
-          <Form>
-            <Box sx={{ display: 'flex' }}>
-              <Box mt={4} sx={{ width: '960px', height: '100px' }}>
-                <Grid container>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormSelectField
-                      name="prodCode"
-                      options={mappedProductType}
-                      label="Select Product Type"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormSelectField
-                      name="durations"
-                      options={EditOperations.duration}
-                      label="Duration Plan"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="narration"
-                      placeholder="Enter Dormancy Criteria"
-                      label="Dormancy Criteria"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="prodCode"
-                      placeholder="Enter Product Code"
-                      label="Product Code"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="duration"
-                      placeholder="Enter Timeframe"
-                      label="Timeframe"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="penalty"
-                      placeholder="Enter Penalty Amount"
-                      label="Penalty Amount"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                    mb={5}
-                  >
-                    <FormTextInput
-                      name="penaltyGlAccount"
-                      placeholder="Enter Penalty GL Account Number"
-                      label="Penalty GL Account Number"
-                      value={penaltyAccount?.toString()}
-                      onChange={handlePenaltyAccountChange}
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box ml={{ desktop: 20, mobile: 5 }}>
-                {isMobile ? (
-                  <MobilePreviewContent
-                    PreviewContent={
-                      <GLAccountPreviewContent
-                        accountDetails={accountData as any}
+          {({ setFieldValue }) => (
+            <Form>
+              <Box sx={{ display: 'flex' }}>
+                <Box mt={4} sx={{ width: '960px', height: '100px' }}>
+                  <Grid container>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormSelectField
+                        name="prodCode"
+                        options={mappedProductType}
+                        label="Select Product Type"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '120%')
+                        }}
+                        onChange={(e: any) => {
+                          setFieldValue('prodCode', e.target.value); // Update Formik state
+                          handleProductTypeChange(e); // Update local state
+                        }}
                       />
-                    }
-                    customStyle={{ ...chargeContentStyle }}
-                  />
-                ) : (
-                  <GLAccountPreviewContent
-                    accountDetails={accountData as any}
-                  />
-                )}{' '}
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormSelectField
+                        name="durations"
+                        options={EditOperations.duration}
+                        label="Duration Plan"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '120%')
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="narration"
+                        placeholder="Enter Dormancy Criteria"
+                        label="Dormancy Criteria"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '120%')
+                        }}
+                        value={productType as string}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="prodCode"
+                        placeholder="Enter Product Code"
+                        label="Product Code"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '120%')
+                        }}
+                        disabled
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="duration"
+                        placeholder="Enter Timeframe"
+                        label="Timeframe"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '120%')
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="penalty"
+                        placeholder="Enter Penalty Amount"
+                        label="Penalty Amount"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '120%')
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                      mb={5}
+                    >
+                      <FormTextInput
+                        name="penaltyGlAccount"
+                        placeholder="Enter Penalty GL Account Number"
+                        label="Penalty GL Account Number"
+                        value={penaltyAccount?.toString()}
+                        onChange={handlePenaltyAccountChange}
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '120%')
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Box ml={{ desktop: 20, mobile: 5 }}>
+                  {isMobile ? (
+                    <MobilePreviewContent
+                      PreviewContent={
+                        <GLAccountPreviewContent
+                          accountDetails={accountData as any}
+                        />
+                      }
+                      customStyle={{ ...chargeContentStyle }}
+                    />
+                  ) : (
+                    <GLAccountPreviewContent
+                      accountDetails={accountData as any}
+                    />
+                  )}{' '}
+                </Box>
               </Box>
-            </Box>
-            <button id="submitButton" type="submit" style={{ display: 'none' }}>
-              submit alias
-            </button>
-          </Form>
+              <button
+                id="submitButton"
+                type="submit"
+                style={{ display: 'none' }}
+              >
+                submit alias
+              </button>
+            </Form>
+          )}
         </Formik>
       </Box>
     </Box>

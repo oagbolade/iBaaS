@@ -90,7 +90,7 @@ export const AddCheque = ({
   return (
     <Box>
       <Box>
-        <LargeTitle title={`${isEditing ? 'Edit' : 'Add'} ChequeBook`} />
+        <LargeTitle title={`${isEditing ? 'Edit' : 'Add'} Cheque book`} />
       </Box>
       <Box
         sx={{

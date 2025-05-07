@@ -1,81 +1,75 @@
-import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
+import React, { ChangeEvent, useState } from 'react';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import styled from 'styled-components';
-import {
-  transactionVolumeStyle,
-  allBranchesStyle
-} from '@/features/Report/Overview/styles';
+import { buttonBackgroundColor } from '../AccountDebit/style';
 import { TextInput } from '@/components/FormikFields';
-import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton
-} from '@/components/Revamp/Buttons';
-import { ChevronDown } from '@/assets/svg';
-import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
-import { labelTypography } from '@/components/FormikFields/styles';
+import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Report/CustomReport/style';
-import {
-  Wrapper,
-  branchOptions,
-  selectButton
-} from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
-import { useCurrentBreakpoint } from '@/utils';
+import { ITellerPostingParams } from '@/api/reports/useGetTellerPosting';
 
-export const FilterSection = () => {
-  const { setDirection } = useSetDirection();
-  const { isMobile, setWidth } = useCurrentBreakpoint();
+type Props = {
+  onSearch: (params: ITellerPostingParams | null) => void;
+};
+
+export const FilterSection = ({ onSearch }: Props) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchClick = () => {
+    const searchParams = {
+      search: searchTerm || undefined
+    };
+
+    onSearch(searchParams);
+  };
 
   return (
     <Box>
-      <Stack direction={setDirection()}>
-        <Wrapper>
-          <Typography sx={labelTypography}>Branch Name</Typography>
-          <ActionButtonWithPopper
-            searchGroupVariant="BasicSearchGroup"
-            options={branchOptions}
-            customStyle={{
-              ...allBranchesStyle,
-              ...selectButton
-            }}
-            icon={
-              <ChevronDown
-                color={`${colors.Heading}`}
-                props={{
-                  position: 'relative',
-                  marginRight: '70px',
-                  width: '12px',
-                  height: '12px'
-                }}
-              />
-            }
-            iconPosition="end"
-            buttonTitle="Select"
-          />
-        </Wrapper>
-        <Box mt={4.5} mr={4}>
-          <TextInput
-            name="Search"
-            placeholder="Search"
-            icon={<SearchIcon />}
-            customStyle={{
-              width: setWidth(isMobile ? '240px' : '1100px')
-            }}
-          />
-        </Box>
-        <Box mt={4.5}>
-          <ActionButton
-            customStyle={{
-              backgroundColor: `${colors.activeBlue400}`,
-              border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`
-            }}
-            buttonTitle="Search"
-          />
-        </Box>
-      </Stack>
+      <Box sx={{ height: '120px' }}>
+        <Grid
+          sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
+          spacing={2}
+        >
+          <Grid
+            mb={{ tablet: 6 }}
+            item
+            mobile={12}
+            tablet={6}
+            justifyContent="center"
+          >
+            <TextInput
+              customStyle={{
+                width: '600px',
+                fontSize: '14px',
+                ...inputFields
+              }}
+              icon={<SearchIcon />}
+              name="search"
+              value={searchTerm}
+              placeholder="Search a Teller or User ID"
+              label="Teller/User ID"
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchTerm(e.target.value)
+              }
+            />{' '}
+          </Grid>
+          <Grid
+            item
+            mobile={12}
+            tablet={1}
+            sx={{ display: 'flex' }}
+            justifyContent="flex-end"
+            mt={{ tablet: 3.2 }}
+            mr={{ mobile: 30, tablet: 0 }}
+            mb={{ mobile: 6, tablet: 0 }}
+          >
+            <ActionButton
+              onClick={handleSearchClick}
+              customStyle={buttonBackgroundColor}
+              buttonTitle="Search"
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
