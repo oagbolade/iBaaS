@@ -16,6 +16,8 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DateRange } from '@mui/x-date-pickers-pro';
 import dayjs, { Dayjs } from 'dayjs';
 import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -28,6 +30,7 @@ interface CustomerBalanceList {
   totalRecords: number;
 }
 
+
 export const CustomerBalances = () => {
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
@@ -35,15 +38,12 @@ export const CustomerBalances = () => {
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
 
-  const [dateValue, setDateValue] = React.useState<DateRange<Dayjs>>([
-    dayjs(),
-    dayjs()
-  ]);
 
-  const { setReportType, setExportData , setReportQueryParams} = React.useContext(
+  const { setReportType, setExportData, setReportQueryParams, readyDownload, setReadyDownload } = React.useContext(
     DownloadReportContext
   );
-  const { isDateFilterApplied } = React.useContext(DateRangePickerContext);
+
+  const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
 
   const {
     customerBalanceList = {
@@ -56,14 +56,14 @@ export const CustomerBalances = () => {
     totalRecords = 0
   }: CustomerBalanceList = useGetCustomerBalance({
     ...searchParams,
+    getAll: readyDownload,
     page
   });
 
-  const { pagedCustomerBalances = [], grandTotal = 0, totalAvaiBal = 0, totalBkBal = 0 } =
-    customerBalanceList || [];
+  const { pagedCustomerBalances = [], grandTotal = 0, totalAvaiBal = 0, totalBkBal = 0 } = customerBalanceList || [];
 
   React.useEffect(() => {
-    if (pagedCustomerBalances?.length > 0) {
+    if (pagedCustomerBalances?.length > 0 && readyDownload) {
       const mapCustomerBalance = pagedCustomerBalances.map((item) => ({
         accountnumber: item.accountnumber,
         accounttitle: item.accounttitle,
@@ -74,20 +74,20 @@ export const CustomerBalances = () => {
         holdBal: `NGN ${item.holdbal}`,
         pendingCC: `NGN ${item.pendingCC}`
       }));
-
       setExportData(mapCustomerBalance as []);
-     
     }
-  }, [pagedCustomerBalances, setExportData, setReportType]);
+  }, [pagedCustomerBalances, setExportData, setReportType, readyDownload, setReadyDownload]);
+
+
 
   const handleSearch = async (params: ISearchParams | null) => {
+    setReadyDownload(false)
     setSearch(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
-
     setReportType('CustomerBalance');
   };
 
@@ -111,12 +111,9 @@ export const CustomerBalances = () => {
         marginTop: '50px'
       }}
     >
-      <Box sx={{ width: '100%' }}>
-        <TopOverViewSection
-          useBackButton
-          CustomDateRangePicker={<DateRangePicker />}
-        />
-      </Box>{' '}
+     
+
+      
       {branches && bankproducts && (
         <FilterSection
           branches={branches}
@@ -138,8 +135,8 @@ export const CustomerBalances = () => {
                   'Total',
                   '',
                   '',
-                  `${totalBkBal}`,
-                  `${totalAvaiBal}`,
+                  `NGN ${formatCurrency(totalBkBal)}`,
+                  `NGN ${formatCurrency(totalAvaiBal)}`,
                   '',
                   '',
                   ''
@@ -152,7 +149,7 @@ export const CustomerBalances = () => {
                   '',
                   '',
                   '',
-                  `${grandTotal}`
+                  `NGN ${formatCurrency(grandTotal)}`
                 ]
               }}
               keys={keys as []}
@@ -166,6 +163,7 @@ export const CustomerBalances = () => {
               }}
               setPage={setPage}
               totalElements={totalRecords}
+              totalPages={Math.ceil(totalRecords / 10)}
               page={page}
             />
           </Box>

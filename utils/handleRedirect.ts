@@ -1,3 +1,6 @@
+import { sanitize } from 'dompurify';
+
 export const handleRedirect = (router: any, link: string = '') => {
-  return router.push(link);
+  if (!link) return;
+  return router.push(sanitize(link));
 };

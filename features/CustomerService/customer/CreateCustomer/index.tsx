@@ -133,11 +133,11 @@ export const CreateCustomerContainer = () => {
 
   const { mutate } = useCreateIndividualCustomer(
     Boolean(isEditing),
-    customerId
+    encryptData(customerId)
   );
   const { mutate: mutateCorporateCustomer } = useCreateCorporateCustomer(
     Boolean(isEditing),
-    customerId
+    encryptData(customerId) as string
   );
   const { customerResult, isLoading: isCustomerResultLoading } =
     useGetCustomerByIdCodes(encryptData(customerId) as string);

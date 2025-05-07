@@ -12,7 +12,6 @@ import {
   BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
-
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
@@ -45,7 +44,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
           ? values.searchWith
           : null,
       pCode: values.pCode?.toString().trim().length > 0 ? values.pCode : null,
-      getAll: false,
       pageSize: '10'
     };
     onSearch?.(params);
@@ -59,6 +57,55 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
         validationSchema={customerBalanceSchema}
       >
         <Form>
+
+        <Stack
+            sx={{
+              borderBottom: '1px solid #E8E8E8',
+              marginTop: '10px',
+              paddingX: '24px'
+            }}
+            direction={setDirection()}
+            justifyContent="space-between"
+          >
+            <Box>
+              <Box mt={2.3}>
+                <BackButton />
+              </Box>
+            </Box>
+            <Stack
+              mt={1}
+              direction={setDirection()}
+              spacing={2}
+              justifyContent="space-between"
+            >
+              <Box>
+                <ActionButtonWithPopper
+                  searchGroupVariant="ExportReport"
+                  customStyle={{ ...exportData }}
+                  icon={<ExportIcon />}
+                  iconPosition="start"
+                  buttonTitle="Export Data"
+                />
+              </Box>
+              <Box>
+                <ActionButtonWithPopper
+                  searchGroupVariant="DateRangePicker"
+                  customStyle={{ ...dateFilter }}
+                  icon={
+                    <CalendarTodayOutlinedIcon
+                      sx={{
+                        color: `${colors.Heading}`
+                      }}
+                    />
+                  }
+                  iconPosition="end"
+                  buttonTitle="Aug 22 - Sep 23"
+                />
+              </Box>
+            </Stack>
+          </Stack>
+
+          
           <Box
             sx={{
               marginTop: '20px',
@@ -110,7 +157,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
-                    placeholder="Search by Serial Number or  Account number"
+                    placeholder="Search by Account number or Account title"
                     label=""
                   />{' '}
                 </Grid>

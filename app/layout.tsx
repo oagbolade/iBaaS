@@ -1,15 +1,15 @@
 import './globals.css';
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@mui/material/styles';
+import { LoginTheme } from './MuiTheme';
 import { queryClient } from '@/react-query/queryClient';
 import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { MuiSnackbar } from '@/components/Snackbar';
 import MuiSnackbarContextProvider from '@/context/MuiSnackbarContext';
 import ToastMessageContextProvider from '@/context/ToastMessageContext';
-import { ThemeProvider } from '@mui/material/styles';
-import { LoginTheme } from './MuiTheme';
 
 const inter = Inter({ subsets: ['latin'] });
 

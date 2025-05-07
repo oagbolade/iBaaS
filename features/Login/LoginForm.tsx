@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { AlertColor } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { LoginHeader } from './LoginHeader';
 import { loginButton, loginFormStyle } from './styles';
 import ResetPassword from './ResetPassword';
@@ -17,30 +16,24 @@ import { loginInitialValues } from '@/constants/types';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { FormTextInput } from '@/components/FormikFields';
 import { useAuth } from '@/api/auth/useAuth';
-import { useUser } from '@/api/auth/useUser';
 import { MuiSnackbar } from '@/components/Snackbar';
 import { MuiSnackbarContext } from '@/context/MuiSnackbarContext';
 import { encryptData } from '@/utils/encryptData';
-import { getStoredUser } from '@/utils/user-storage';
-import { isTokenExistingOrExpired } from '@/utils/hooks/useAuthGuard';
 import { environment } from '@/axiosInstance';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import { useAuth2faCheck } from '@/api/auth/use2FA';
 import { UseGetAllAuth2faCheck } from '@/api/ResponseTypes/admin';
 import {
-  clearSession,
   generateSessionId,
   getBroadcastChannel,
   setSessionActive
 } from '@/utils/user-storage/broadcastChannel';
 
 export function LoginForm() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const [isFirstTimeUser, setIsFirstTimeUser] = React.useState(false);
 
   const { isLoading, login } = useAuth();
-  const { user } = useUser();
   const { toggleSnackbar, setMessage, setSeverity } =
     useContext(MuiSnackbarContext);
 
@@ -49,50 +42,6 @@ export function LoginForm() {
     setMessage(message);
     setSeverity(severity);
   };
-
-  useEffect(() => {
-    const tokenExpiration = getStoredUser()?.tokenExpire;
-    const userId = getStoredUser()?.profiles.userid as string;
-    const existingSession = localStorage.getItem('activeSession');
-    const newSessionId = generateSessionId();
-
-    if (existingSession && existingSession !== userId) {
-      router.push('/login'); // Redirect user to login page
-    }
-
-    if (isTokenExistingOrExpired(tokenExpiration) && user) {
-      setSessionActive(userId, newSessionId);
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 3000);
-
-      toast('Login successful, redirecting please wait...', 'success');
-    }
-
-    const handleBroadcastMessage = (event: MessageEvent) => {
-      if (event.data.type === 'SESSION_START' && event.data.userId !== userId) {
-        clearSession();
-        router.push('/login'); // Redirect user to login page
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        getBroadcastChannel()?.postMessage({ type: 'SESSION_END' });
-        router.push('/login'); // Redirect user to login page
-      }
-    };
-
-    getBroadcastChannel()?.addEventListener('message', handleBroadcastMessage);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => {
-      getBroadcastChannel()?.removeEventListener(
-        'message',
-        handleBroadcastMessage
-      );
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

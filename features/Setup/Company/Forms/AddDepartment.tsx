@@ -101,6 +101,7 @@ export const AddDepartment = ({
                       customStyle={{
                         width: setWidth(isMobile ? '250px' : '100%')
                       }}
+                      disabled
                     />
                   </Grid>
                 )}

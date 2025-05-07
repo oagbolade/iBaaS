@@ -1,0 +1,1 @@
+export const COLUMN = ['Account  Number', 'Account Name', 'Trans. Name', 'Trans. Date', 'Credit', 'Debit'];

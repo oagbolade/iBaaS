@@ -1,9 +1,8 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { Field, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
-import { BatchContainer } from '@/features/Operation/Forms/style';
 import {
   ITitle,
   ICountries,
@@ -19,20 +18,17 @@ import {
   ISector
 } from '@/api/ResponseTypes/setup';
 import { CustomerCreationContext } from '@/context/CustomerCreationContext';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import {
-  FormikDateTimePicker,
   FormSelectField,
   FormTextInput
 } from '@/components/FormikFields';
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
-import { PrimaryIconButton } from '@/components/Buttons';
 import {
-  useGenerateProductCode,
   generateProductCode
 } from '@/api/setup/useProduct';
+import { encryptData } from '@/utils/encryptData';
 
 type Props = {
   titles?: ITitle[];
@@ -68,6 +64,7 @@ export const PersonalDetailsForm = ({
   );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
   const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const { setFieldValue, values } = useFormikContext<any>();
 
   const handleCheck = (booleanValue: string, value: string) => {
@@ -75,7 +72,7 @@ export const PersonalDetailsForm = ({
   };
 
   const handleGenerateCode = async (code: string) => {
-    generateProductCode(code).then((resp) => {
+    generateProductCode(encryptData(code) as string).then((resp) => {
       setProductCodeGenarate(resp.productCode);
       setFieldValue('productCode', resp.productCode);
     });
@@ -94,7 +91,22 @@ export const PersonalDetailsForm = ({
     products,
     frequency
   });
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
 
+      setSelectedCurrency(defaultCurrency);
+    }
+  }, [mappedCurrency]);
   return (
     <>
       <Grid item={isTablet} mobile={12}>
@@ -168,6 +180,8 @@ export const PersonalDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
+          value={selectedCurrency}
+          onChange={(e: any) => setSelectedCurrency(e.target.value)}
           required
         />
       </Grid>

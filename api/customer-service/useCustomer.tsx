@@ -605,7 +605,7 @@ export function useSearchCustomer(customerName: string) {
     isLoading
   } = useQuery({
     queryKey: [queryKeys.searchCustomer, customerName],
-    queryFn: () => searchCustomer(toastActions, customerName),
+    queryFn: () => searchCustomer(toastActions, decryptData(customerName) as string),
     enabled: Boolean(customerName.length > 0)
   });
 
@@ -652,7 +652,7 @@ async function createIndividualCustomer(
   try {
     const urlEndpoint = `/CustomerServices/${
       isUpdating
-        ? `UpdateIndividualCustomer?customerId=${sanitize(customerId ?? '')}`
+        ? `UpdateIndividualCustomer?customerId=${sanitize((customerId) ?? '')}`
         : 'CreateIndividualCustomer'
     }`;
     const { data }: AxiosResponse<CreateCustomerAccountResponse> =
@@ -964,7 +964,7 @@ export function useCreateIndividualCustomer(
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CreateIndividualCustomerFormValues) =>
-      createIndividualCustomer(toastActions, body, isUpdating, customerId),
+      createIndividualCustomer(toastActions, body, isUpdating, decryptData(customerId as string)),
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.searchCustomer],
@@ -996,7 +996,7 @@ export function useCreateCorporateCustomer(
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CreateCorporateCustomerFormValues) =>
-      createCorporateCustomer(toastActions, body, isUpdating, customerId),
+      createCorporateCustomer(toastActions, body, isUpdating, decryptData(customerId as string)),
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.searchCustomer],

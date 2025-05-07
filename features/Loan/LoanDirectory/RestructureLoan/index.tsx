@@ -96,6 +96,7 @@ export const RestructureLoan = () => {
 
       <PrimaryIconButton
         isLoading={isLoading}
+        type='submit'
         onClick={triggerSubmission}
         buttonTitle="Restructure Loan"
         customStyle={{ ...submitButton }}
