@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
 import { Box } from '@mui/material';
-import moment from 'moment';
 import {
   ShortCardWithViewDetailsAccordion,
   IViewProductInfo
@@ -9,13 +8,11 @@ import {
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { useGetCustomerById } from '@/api/customer-service/useCustomer';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetAllProductByCode } from '@/api/setup/useProduct';
 
 import { encryptData } from '@/utils/encryptData';
-import { decryptData } from '@/utils/decryptData';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -25,7 +22,7 @@ export const actionButtons: any = [
 
 export const ViewDetailContainer = () => {
   const productId = useGetParams('productCode') || '';
-  const { productInfos, isLoading } = useGetAllProductByCode(productId);
+  const { productInfos, isLoading } = useGetAllProductByCode(encryptData(productId));
   if (isLoading) {
     return (
       <Box my={6}>

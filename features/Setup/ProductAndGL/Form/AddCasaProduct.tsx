@@ -98,7 +98,7 @@ export const AddCasaNewProduct = ({
       'stateInactive'
     ],
 
-    document: ['docIds']
+    document: ['docId']
   };
   const isEditing = useGetParams('isEditing') || null;
   const { mutate } = useCreateDemandDepositProduct(

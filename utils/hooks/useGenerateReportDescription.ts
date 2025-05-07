@@ -1,6 +1,6 @@
 'use client';
 // eslint-disable-next-line import/no-cycle
-import { ReportType } from '../downloadReport';
+import { ReportType } from '@/constants/downloadReport';
 import { formatKey } from '../formatKey';
 import { IReportQueryParams } from '@/context/DownloadReportContext';
 

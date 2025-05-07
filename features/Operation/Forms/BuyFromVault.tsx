@@ -53,7 +53,7 @@ export const BuyFromVault = ({
   const setTellervalue = (value: string) => {
     setTellerNumber(value);
     setTimeout(() => {
-      getTellerBalanceByUserTerllerNumber(toastActions, value).then((data) => {
+      getTellerBalanceByUserTerllerNumber(toastActions, encryptData(value) as string).then((data) => {
         setTellerAmount(data.total);
       });
     }, 1000);

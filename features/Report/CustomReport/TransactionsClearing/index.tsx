@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
@@ -16,20 +16,60 @@ import { FormSkeleton } from '@/components/Loaders';
 import { ITransactionClearing } from '@/api/ResponseTypes/reports';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 export const TransactionClearing = () => {
-  const [search, setSearch] = useState<boolean>(false);
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { status } = useGetStatus();
   const { branches } = useGetBranches();
-  const { transactionsinClearingList, isLoading } = useGetTransactionClearing({
-    ...searchParams,
-    page
-  });
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
+
+  const { branchID, customerID, status: reportStatus } = searchParams || {};
+
+  const { data: transactionsinClearingList = [], isLoading } =
+    useGetTransactionClearing({
+      ...searchParams,
+      page,
+      customerID,
+      branchID,
+      status: reportStatus,
+      pageNumber: String(pageNumber),
+      pageSize: '20',
+      getAll: isDateFilterApplied
+    });
+
+  React.useEffect(() => {
+    if (!transactionsinClearingList?.length) return;
+
+    const formattedExportData = transactionsinClearingList?.map((item) => ({
+      'Account Number': item?.accountnumber || '',
+      'Bank Name': item?.bankname || '',
+      'Cheque No': item?.chequeno || '',
+      'Created Date': item?.create_dt?.split(' ')[0] || '',
+      'Value Date': item?.valuedate?.split(' ')[0] || '',
+      Amount: item?.tranamount || '',
+      Narration: item?.narration || '',
+      'Posted By': item?.userid || ''
+    }));
+
+    // Ensure no blank row or misplaced headers
+    setExportData(formattedExportData);
+    setReportType('TransactionInClearing');
+  }, [transactionsinClearingList]);
+
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
-    setSearchParams(params);
+    setSearchParams({
+      ...params,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+    });
+    setPageNumber(1); // Reset to the first page on new search
   };
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
@@ -59,10 +99,8 @@ export const TransactionClearing = () => {
             tableConfig={{
               hasActions: false
             }}
-            setPage={setPage}
-            page={page}
           >
-            {search ? (
+            {transactionsinClearingList.length > 0 ? (
               transactionsinClearingList?.map(
                 (dataItem: ITransactionClearing) => {
                   return (
@@ -71,25 +109,25 @@ export const TransactionClearing = () => {
                         {dataItem?.accountnumber || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.bankName || 'N/A'}
+                        {dataItem?.bankname || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.chequeType || 'N/A'}
+                        {dataItem?.chequeno || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.processed || 'N/A'}
+                        {dataItem?.create_dt?.split(' ')[0] || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.value_Dt || 'N/A'}
+                        {dataItem?.valuedate?.split(' ')[0] || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.amt || 'N/A'}
+                        {dataItem?.tranamount || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.processed || 'N/A'}
+                        {dataItem?.narration || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.tranName || 'N/A'}
+                        {dataItem?.userid || 'N/A'}
                       </StyledTableCell>
                     </StyledTableRow>
                   );

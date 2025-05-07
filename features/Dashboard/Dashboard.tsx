@@ -12,10 +12,6 @@ import { useGetTellerBalanceByUserId } from '@/api/operation/useVaultManagement'
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
 import { getStoredUser } from '@/utils/user-storage';
-import useSingleTabSession from '@/utils/useSessionTimeout';
-
-
-
 
 interface SetupTaskProps {
   label: string;
@@ -23,8 +19,6 @@ interface SetupTaskProps {
   link: string;
   linkText: string;
 }
-
-
 
 interface DashboardProps {
   branchData: any
@@ -46,15 +40,11 @@ export const Dashboard = ({ branchData, glNodeData, chargeData, productTypes, de
   isDepartmentLoading,
   isProductTypeLoading
 }: DashboardProps) => {
-  const { total, dRtotal, cRtotal, isLoading } = useGetTellerBalanceByUserId();
+  const { total, isLoading } = useGetTellerBalanceByUserId();
   const { authsdetails } = useGetPendingRequest();
   const pendingData = authsdetails?.length || 0;
   const formattedTotal = total ? `₦${total.toLocaleString()}` : '₦0';
-  const totalDRCR = cRtotal + dRtotal;
-  const totalPercentage = total ? ((totalDRCR / total) * 100) / 1 : 0;
-  const roundedTotalPercentage = Number.isNaN(totalPercentage)
-    ? '0.00'
-    : totalPercentage.toFixed(2);
+
   if (isLoading) {
     return (
       <Box my={6}>
@@ -100,7 +90,6 @@ export const Dashboard = ({ branchData, glNodeData, chargeData, productTypes, de
   const totalTasks = tasks.length;
   const completionPercentage = (completedTasks / totalTasks) * 100;
 
-
   return (
     <Box>
       <Box
@@ -136,7 +125,6 @@ export const Dashboard = ({ branchData, glNodeData, chargeData, productTypes, de
                 width: '98%'
               }}
               isPositiveTrend={false}
-              // percentage={roundedTotalPercentage}
               title="Till Balance"
               amount={formattedTotal}
             />
@@ -150,7 +138,6 @@ export const Dashboard = ({ branchData, glNodeData, chargeData, productTypes, de
           </Box>
           <RecentlyVisitedModules />
         </Stack>
-
 
         <Box sx={setupAndPendingContainer}>
           {completionPercentage < 100 ? (

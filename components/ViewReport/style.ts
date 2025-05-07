@@ -47,6 +47,18 @@ export const ViewAccountContainer = {
   marginLeft: '50px'
 };
 
+export const tellerPostingContainerStyles = {
+  border: `1px solid ${colors.gray900}`,
+  margin: '50px 0 0 50px',
+  padding: '30px'
+};
+
+export const ViewTellerPostingStyle = {
+  margin: '60px 0 0 0',
+  display: 'flex',
+  gap: '100px'
+};
+
 export const AccountContainer = {
   display: 'flex',
   padding: '0px',

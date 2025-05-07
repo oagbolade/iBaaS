@@ -147,18 +147,41 @@ export const MainCash = () => {
                 <Typography>Total Amount</Typography>
 
                 <Box sx={totalStyle}>
-                  <Typography>
-                    ₦ {trialBydateList?.lastNightBalance?.toLocaleString()}
-                  </Typography>
-                  <Typography>
-                    ₦ {trialBydateList?.totalDrBal?.toLocaleString()}
-                  </Typography>
-                  <Typography>
-                    ₦ {trialBydateList?.totalCrBal?.toLocaleString()}
-                  </Typography>
-                  <Typography>
-                    ₦ {trialBydateList?.totalBal?.toLocaleString()}
-                  </Typography>
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    <Typography>Last Night Balance</Typography>
+                    <Typography>
+                      ₦ {trialBydateList?.lastNightBalance?.toLocaleString()}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    <Typography>Debit</Typography>
+                    <Typography>
+                      ₦ {trialBydateList?.totalDrBal?.toLocaleString()}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    <Typography>Credit</Typography>
+                    <Typography>
+                      ₦ {trialBydateList?.totalCrBal?.toLocaleString()}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                  >
+                    <Typography>Balance</Typography>
+                    <Typography>
+                      ₦ {trialBydateList?.totalBal?.toLocaleString()}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
             )}

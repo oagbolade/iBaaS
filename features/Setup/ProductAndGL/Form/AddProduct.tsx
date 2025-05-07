@@ -53,7 +53,17 @@ export const AddNewProduct = ({
       'term',
       'shortname'
     ],
-    interestCharges: [],
+    interestCharges: [
+      'maxintrate',
+      'actualRAte',
+      'penalrate',
+      'minterm',
+      'maxterm',
+      'moratorium',
+      'collval',
+      'schtype',
+      'loanclass'
+    ],
     generalLedge: [
       'accountNumber',
       'princbalBalance',
@@ -70,7 +80,7 @@ export const AddNewProduct = ({
       'penalSuspense'
     ],
     otherDetails: ['manageCollection', 'allowOD', 'postnodebit'],
-    document: ['docIds']
+    document: ['ProdDocuments']
   };
   const isEditing = useGetParams('isEditing') || null;
   const { loanProducts, isLoading } = useGetLoanProductByCode(

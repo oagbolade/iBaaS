@@ -22,7 +22,13 @@ import { TableSingleAction } from '@/components/Table';
 import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
 import { FormSkeleton } from '@/components/Loaders';
 import { IGetPendingRequest } from '@/api/ResponseTypes/loans';
-import { renderEmptyTableBody } from '@/components/Revamp/TableV2/TableV2';
+
+
+import {
+  MuiTableContainer,
+  StyledTableRow,
+  renderEmptyTableBody
+} from '@/components/Table/Table';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,12 +40,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }
 }));
 
-const StyledTableRow = styled(TableRow)(() => ({
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0
-  }
-}));
 
 type Props = {
   id: string;
@@ -67,6 +67,8 @@ export const PendingTasks = () => {
   }
   return (
     <Box mt={2} sx={tableCard}>
+
+
       <Stack mb={2} direction="row">
         <Typography sx={primaryTitle}>Pending tasks </Typography>
         <Box
@@ -86,6 +88,9 @@ export const PendingTasks = () => {
           {pendingData}
         </Box>
       </Stack>
+
+
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -107,16 +112,26 @@ export const PendingTasks = () => {
                 </StyledTableCell>
               </StyledTableRow>
             ))}
+
             {authsdetails?.length === 0 && (
               <StyledTableRow>
-                <StyledTableCell colSpan={12} component="th" >
-                  {renderEmptyTableBody('No pending tasks')}
-                </StyledTableCell>
+              <StyledTableCell
+                colSpan={12}
+                component="th"
+                sx={{ verticalAlign: 'middle', textAlign: 'center', height: 80 }}
+              >
+                {renderEmptyTableBody(authsdetails ?? [])}
+              </StyledTableCell>
               </StyledTableRow>
             )}
+
+
           </TableBody>
         </Table>
       </TableContainer>
+
+
+      
     </Box>
   );
 };

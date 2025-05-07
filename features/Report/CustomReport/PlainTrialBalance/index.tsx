@@ -6,15 +6,9 @@ import { COLUMN, keys } from './Column';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { ISearchParams } from '@/app/api/search/route';
-import {
-  MuiTableContainer,
-  StyledTableRow,
-  renderEmptyTableBody
-} from '@/components/Table/Table';
 import { useGetPlainTrialBalance } from '@/api/reports/usePlainTrialBalance';
 import { StyledTableCell } from '@/components/Table/style';
 import { IPlainTrialBalance } from '@/api/ResponseTypes/reports';
-
 import { TableV2 } from '@/components/Revamp/TableV2';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
@@ -22,6 +16,7 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DateRange } from '@mui/x-date-pickers-pro';
 import dayjs, { Dayjs } from 'dayjs';
 import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const PlainTrialBalance = () => {
   const [search, setSearch] = useState<boolean>(false);
@@ -29,15 +24,10 @@ export const PlainTrialBalance = () => {
   const [pageNumber, setpageNumber] = React.useState(1);
   const { branches } = useGetBranches();
 
-  const [dateValue, setDateValue] = React.useState<DateRange<Dayjs>>([
-    dayjs(),
-    dayjs()
-  ]);
-
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { isDateFilterApplied } = React.useContext(DateRangePickerContext);
+  
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
@@ -71,8 +61,8 @@ export const PlainTrialBalance = () => {
         glNumber: item.glNumber,
         oldGlNo: item.oldGLno,
         acctName: item.acctName,
-        debit: `NGN ${item.dr}`,
-        credit: `NGN ${item.cr}`
+        debit: `NGN ${formatCurrency(item.dr)}`,
+        credit: `NGN ${formatCurrency(item.cr)}`
       }));
 
       setExportData(mapPlainTrailBalance as []);
@@ -80,18 +70,6 @@ export const PlainTrialBalance = () => {
     }
   }, [getAllPlainTrialBalanceData, setExportData, setReportType]);
 
-  const DateRangePicker = () => {
-    return (
-      <DateRangeCalendar
-        value={dateValue}
-        onChange={(newValue) => {
-          if (newValue[1] !== null) {
-            setDateValue(newValue);
-          }
-        }}
-      />
-    );
-  };
 
   return (
     <Box
@@ -100,12 +78,7 @@ export const PlainTrialBalance = () => {
         marginTop: '50px'
       }}
     >
-      <Box sx={{ width: '100%' }}>
-        <TopOverViewSection
-          useBackButton
-          CustomDateRangePicker={<DateRangePicker />}
-        />
-      </Box>{' '}
+
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
@@ -119,8 +92,8 @@ export const PlainTrialBalance = () => {
               tableConfig={{
                 hasActions: false,
                 paintedColumns: ['dr', 'cr'],
-                totalRow: ['Total', '', '', `${totalDr}`, `${totalCr}`],
-                grandTotalRow: ['Grand Total', '', '', '', `${bkBalance}`]
+                totalRow: ['Total', '', '', `${formatCurrency(totalDr)}`, `${formatCurrency(totalCr)}`],
+                grandTotalRow: ['Balance in Book', '', '', '', `${formatCurrency(bkBalance)}`]
               }}
               keys={keys as []}
               columns={COLUMN}

@@ -15,16 +15,6 @@ export const decimalRegex = /^\d+(\.\d{1,2})?$/;
 
 export const accountOfficer = Yup.object({
   branchcode: Yup.string().required('Required here'),
-  dept: Yup.string().required('Required'),
-  email: Yup.string()
-    .email('Please enter a valid email address')
-    .matches(emailRegex, 'invalid Email')
-    .required('Required'),
-  phone: Yup.string()
-    .required('Required')
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .min(10, 'too short')
-    .max(12, 'too long'),
   status: Yup.string().required('Required')
 });
 

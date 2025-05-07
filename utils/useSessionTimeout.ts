@@ -1,5 +1,5 @@
 'use client'; // Ensure this runs only on the client
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useCallback } from 'react';
 import { AlertColor } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import {
@@ -14,11 +14,11 @@ const useSingleTabSession = () => {
   const { toggleSnackbar, setMessage, setSeverity } =
     useContext(MuiSnackbarContext);
 
-  const toast = (message: string, severity: AlertColor) => {
+  const toast = useCallback((message: string, severity: AlertColor) => {
     toggleSnackbar();
     setMessage(message);
     setSeverity(severity);
-  };
+  }, [toggleSnackbar, setMessage, setSeverity]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return; // Skip on server

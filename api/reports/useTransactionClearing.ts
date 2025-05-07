@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/axiosInstance';
+import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -24,24 +24,22 @@ export async function geTransactionClearing(
   try {
     const urlEndpoint = `/ReportServices/TransactionsinClearingReport?pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<GetAllTransactionClearingReportResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'POST',
-        data: {
-          status: params?.status?.toString(),
+      await reportsAxiosInstance.get(urlEndpoint, {
+        params: {
+          status: params?.status,
           startDate: params?.startDate,
           endDate: params?.endDate,
-          branch: params?.branchID,
-          accountNumber: params?.accountNumber
+          pageSize: Number(params?.pageSize) || 20,
+          pageNumber: Number(params?.pageNumber) || 1,
+          branchCode: params?.branchID
         },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
       });
-    const { message, title, severity } = globalErrorHandler({
-      ...data
-    });
+
+    const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
     result = data;
   } catch (errorResponse) {
@@ -62,12 +60,15 @@ export function useGetTransactionClearing(params: ISearchParams | null) {
       queryKeys.geTransactionClearing,
       params?.status?.toString(),
       params?.startDate,
-      params?.endDate
+      params?.endDate,
+      params?.customerID,
+      params?.branchID
     ],
     queryFn: () => geTransactionClearing(toastActions, params || {}),
     enabled: Boolean(
       (params?.startDate?.toString() || '').length > 0 ||
         (params?.status || '').length > 0 ||
+        (params?.branchID || '').length > 0 ||
         (params?.endDate || '').length > 0
     )
   });

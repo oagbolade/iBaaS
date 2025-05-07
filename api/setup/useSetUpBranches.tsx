@@ -15,7 +15,7 @@ import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { queryKeys } from '@/react-query/constants';
 import { IToastActions } from '@/constants/types';
-import { globalErrorHandler } from '@/utils/globalErrorHandler';
+import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import {
   BranchSearchParams,
   CreateBranchFormValues
@@ -162,6 +162,9 @@ async function CreateBranch(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
+    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
+      throw new Error(message);
+    }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);

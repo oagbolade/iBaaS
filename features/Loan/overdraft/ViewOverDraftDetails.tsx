@@ -14,7 +14,6 @@ import { TopActionsArea } from '@/components/Revamp/Shared';
 import { FormSkeleton } from '@/components/Loaders';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 
-
 import {
   MuiTableContainer,
   StyledTableRow,
@@ -22,6 +21,7 @@ import {
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { encryptData } from '@/utils/encryptData';
 
 type Props = {
   customerId: string;
@@ -51,12 +51,10 @@ const ViewOverDraftDetails = () => {
   const accountNumber = searchParams.get('accountNumber') || '';
   const accountName = searchParams.get('accountName') || '';
   const customerId = searchParams.get('customerId') || '';
-  const { odAccDetails, isLoading } = useGetOverdraftDetails(accountNumber);
+  const { odAccDetails, isLoading } = useGetOverdraftDetails(encryptData(accountNumber) as string);
   const [search, setSearch] = useState<boolean>(true);
   const overdraftData = Array.isArray(odAccDetails) ? odAccDetails : [];
   const [shouldDisableOverdraft, setshouldDisableOverdraft] = React.useState(false);
-
-
 
   React.useEffect(() => {
     const disableOverDreaft = !checkMultipleUserRoleAccess(
@@ -89,8 +87,6 @@ const ViewOverDraftDetails = () => {
           }}
           aria-disabled={shouldDisableOverdraft}
           tabIndex={shouldDisableOverdraft ? -1 : undefined}
-
-
           href={`/loan/overdrafts/set-overdraft?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(
             customerId
           )}&actionType=set`}

@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { LoginForm } from './LoginForm';
@@ -14,17 +14,8 @@ import {
 import { PageTitle } from '@/components/Typography';
 import { InterSwitchImage } from '@/assets/interswitch/image';
 import colors from '@/assets/colors';
-import { getStoredUser } from '@/utils/user-storage';
-import { useRouter } from 'next/navigation';
 
 export const LoginContainer = () => {
-  const router = useRouter();
-  useEffect(() => {
-    if (getStoredUser()) {
-      router.push('/dashboard');
-    }
-  }, []);
-
   return (
     <Stack
       direction={{ xs: 'column', md: 'row' }}

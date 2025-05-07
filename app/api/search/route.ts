@@ -95,4 +95,6 @@ export interface ISearchParams {
   getAll?: boolean | null;
   searchWith?: string | null;
   pCode?: string | null;
+  till?: string | null;
+  
 }

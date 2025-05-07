@@ -372,6 +372,7 @@ export async function restructurelLoan(
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+    throw errorResponse;
   }
 }
 
@@ -997,7 +998,7 @@ export function useGetOverdraftDetails(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getOverdraftDetail],
-    queryFn: () => getOverdraftDetails(toastActions, accountnumber)
+    queryFn: () => getOverdraftDetails(toastActions, decryptData(accountnumber) as string)
   });
 
   return { ...data, isError, isLoading };

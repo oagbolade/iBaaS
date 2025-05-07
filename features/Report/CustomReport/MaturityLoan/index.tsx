@@ -1,39 +1,158 @@
 'use client';
 import { Box } from '@mui/material';
-import React from 'react';
-import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
+import React, { useState } from 'react';
+import { MuiTableContainer, StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import Link from 'next/link';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { FilterSection } from './FilterSection';
+import { useGetBranches } from '@/api/general/useBranches';
+import { FormSkeleton } from '@/components/Loaders';
+import { ISearchParams } from '@/app/api/search/route';
+import { COLUMN } from './Column';
+import { useGetMaturityLoan } from '@/api/reports/useMaturityLoan';
+import { ILoanMaturityResponse, ILoanMaturityReport } from '@/api/ResponseTypes/reports';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
+import { useGetAllProduct } from '@/api/setup/useProduct';
+import { StyledTableCell } from '@/components/Table/style';
+import colors from '@/assets/colors';
+
+
+interface ActionMenuProps {
+  detail: string;
+}
+
+const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
+  return (
+    <Link href={`/report/custom-report/view-report/?getMaturityLoan=maturityLoan&loanDetail=${detail}`}  style={{ color: `${colors.activeBlue400}`}}>
+      View
+    </Link>
+  );
+};
+
 
 export const MaturityLoan = () => {
-  const ActionMenu: React.FC = () => {
-    return (
-      <Link href="/report/custom-report/view-report">
-        <TableSingleAction actionName="View" />
-      </Link>
-    );
+  const [search, setSearch] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [pageNumber, setpageNumber] = React.useState(1);
+  const { branches } = useGetBranches();
+  const { bankproducts } = useGetAllProduct();
+  const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
+
+
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
+
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearch(true);
+    setSearchParams(
+      {
+        ...params,
+        startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+        endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+        pageNumber: String(pageNumber),
+        pageSize: '10',
+      });
+    setReportType('MaturityLoan')
   };
+
+
+
+  const { loanMaturityList, pageSize, totalRecords,
+    isLoading
+  } = useGetMaturityLoan({ ...searchParams });
+
+
+
+  // Set export data when loanMaturityList is retrieved
+  React.useEffect(() => {
+    if (loanMaturityList?.length > 0) {
+      setExportData(loanMaturityList);
+    }
+  }, [loanMaturityList, setExportData, setReportType]);
+
+
   return (
-    <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <TopOverViewSection useBackButton />
-      <Box sx={{ marginTop: '30px', padding: '25px' }}>
-        <FilterSection />
-      </Box>
-      <Box sx={{ padding: '25px', width: '100%' }}>
-        <MuiTableContainer
-          showHeader={{
-            mainTitle: 'Maturity Loan',
-            secondaryTitle:
-              'See a directory of all Maturity Loan Report in this system.',
-            hideFilterSection: true
-          }}
-          columns={MOCK_COLUMNS}
-          data={MOCK_DATA}
-          ActionMenuProps={ActionMenu}
+    <Box sx={{ width: '100%' }}>
+
+      {branches && bankproducts && (
+        <FilterSection
+          branches={branches}
+          bankproducts={bankproducts}
+          onSearch={handleSearch}
         />
+      )}
+
+      <Box sx={{ paddingX: '24px', }}>
+        {isLoading ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <MuiTableContainer
+            showHeader={{
+              mainTitle: 'Maturity Loan',
+              secondaryTitle:
+                'See a directory of all Maturity Loan Report in this system.',
+              hideFilterSection: true
+            }}
+            tableConfig={{
+              hasActions: true,
+            }}
+            columns={COLUMN}
+            data={loanMaturityList}
+            totalPages={totalRecords}
+            totalElements={totalRecords}
+            setPage={setpageNumber}
+            page={pageNumber}
+            ActionMenuProps={ActionMenu}
+          >
+            {search ? (
+              loanMaturityList?.map((dataItem: ILoanMaturityReport) => {
+                return (
+                  <StyledTableRow key={dataItem.accountNumber}>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.accountNumber || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem?.customerID || 'N/A'}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.fullName || 'N/A'}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.branch || 'N/A'}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.productCode || 'N/A'}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.settlementAcct1 || 'N/A'}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      <ActionMenu detail={JSON.stringify(dataItem) as string} />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={COLUMN.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody(loanMaturityList)}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
+        )}
       </Box>
     </Box>
   );

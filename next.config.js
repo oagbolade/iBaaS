@@ -9,11 +9,11 @@ const nextConfig = {
   output: 'export', // Use for deployment
   // images: { unoptimized: true }, // remove when deploying, we want to optimise images in production
   env: {
-    DOMAIN: domain,
+    DOMAIN: domain
   },
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
+    removeConsole: process.env.NODE_ENV === 'production'
+  }
 };
 
 module.exports = nextConfig;
