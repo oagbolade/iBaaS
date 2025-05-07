@@ -100,22 +100,6 @@ export interface IPortfolioAtRiskProduct {
   par: number;
 }
 
-export interface IDormantAccountList {
-  accountnumber: string;
-  accounttitle: string;
-  branchcode: string;
-  branchname: string;
-  productcode: string;
-  productname: string;
-  officercode: string;
-  bkbalance: number;
-  averagebal: number;
-  dateOpened: string;
-  customerId: number;
-  officerName: string;
-  nuban: string;
-}
-
 export interface IPortfoliodetailedReport {
   accountnumber: string;
   fullname: string;
@@ -430,7 +414,7 @@ export interface TrailBalanceGroupResponse
 export interface TrailBalanceResponse extends IFetchingState, IReportsResponse {
   trialBydateList: {
     map(
-      arg0: (dataItem: ITrialBalance) => JSX.Element
+      arg0: (dataItem: ITrialBalance) => JSX.Element,
     ): import('react').ReactNode;
     lastNightBalance: number;
     totalCrBal: number;
@@ -480,6 +464,20 @@ export interface InflowOutflowReportResponse
   inflowOutflowList?: IInflowOutflowList[];
   totalInflow?: number;
   totalOutflow?: number;
+}
+
+export interface IDormantAccountList {
+  accountnumber: string;
+  accounttitle: string;
+  branchcode: string;
+  branchname: string;
+  productcode: string;
+  productname: string;
+  officercode: string;
+  officerName: string;
+  bkbalance: number;
+  averagebal: number;
+  customerId: number;
 }
 
 export interface GetAllDormantAccountResponse
