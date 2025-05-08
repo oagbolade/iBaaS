@@ -100,22 +100,6 @@ export interface IPortfolioAtRiskProduct {
   par: number;
 }
 
-export interface IDormantAccountList {
-  accountnumber: string;
-  accounttitle: string;
-  branchcode: string;
-  branchname: string;
-  productcode: string;
-  productname: string;
-  officercode: string;
-  bkbalance: number;
-  averagebal: number;
-  dateOpened: string;
-  customerId: number;
-  officerName: string;
-  nuban: string;
-}
-
 export interface IPortfoliodetailedReport {
   accountnumber: string;
   fullname: string;
@@ -129,6 +113,28 @@ export interface IPortfoliodetailedReport {
   branch: string;
   productname: string;
   branchname: string;
+}
+
+export interface ITellerPostingReport {
+  accountNumber: string;
+  accounttitle: string;
+  userid: string;
+  tranDate: string;
+  valuedate: string;
+  tranname: string;
+  prevbal: number;
+  curbal: number;
+  deposit: number;
+  withdrawal: number;
+  fromVault: number;
+  toVault: number;
+  refNo: string;
+  postseq: string;
+  debitacct: string;
+  creditAcct: string;
+  postingMode: string;
+  narration: string;
+  tranAmount: string;
 }
 
 export interface IInflowOutflowList {
@@ -335,13 +341,19 @@ export interface IIncomeAssurance {
   productCode: string;
 }
 export interface ITransactionClearing {
+  id: string;
   accountnumber: string;
-  amt: number;
-  tranName: string;
-  processed: string;
-  chequeType: string;
-  bankName: string;
-  value_Dt: string;
+  accounttitle: string;
+  create_dt: string;
+  valuedate: string;
+  status: string;
+  tranamount: string;
+  userid: string;
+  bankname: string;
+  chequeno: string;
+  narration: string;
+  chequetype: string;
+  branchcode: string;
 }
 
 export interface ChartOfAccountResponse
@@ -367,7 +379,7 @@ export interface GetAllIncomeAssuranceReportResponse
 export interface GetAllTransactionClearingReportResponse
   extends IFetchingState,
     IReportsResponse {
-  transactionsinClearingList?: ITransactionClearing[];
+  data?: ITransactionClearing[];
 }
 export interface ITrialBalance {
   reportClass: string;
@@ -402,7 +414,7 @@ export interface TrailBalanceGroupResponse
 export interface TrailBalanceResponse extends IFetchingState, IReportsResponse {
   trialBydateList: {
     map(
-      arg0: (dataItem: ITrialBalance) => JSX.Element
+      arg0: (dataItem: ITrialBalance) => JSX.Element,
     ): import('react').ReactNode;
     lastNightBalance: number;
     totalCrBal: number;
@@ -421,6 +433,12 @@ export interface GetDetailedPortfolioReport
   extends IFetchingState,
     IReportsResponse {
   portfolioatRiskDetailRptList?: IPortfoliodetailedReport[];
+  pageNumber?: number;
+}
+export interface GetTellerPostingReport
+  extends IFetchingState,
+    IReportsResponse {
+  tellerPostByDateList?: ITellerPostingReport[];
   pageNumber?: number;
 }
 export interface IGlMainGroupResponse extends IFetchingState {
@@ -448,8 +466,80 @@ export interface InflowOutflowReportResponse
   totalOutflow?: number;
 }
 
+export interface IDormantAccountList {
+  accountnumber: string;
+  accounttitle: string;
+  branchcode: string;
+  branchname: string;
+  productcode: string;
+  productname: string;
+  officercode: string;
+  officerName: string;
+  bkbalance: number;
+  averagebal: number;
+  customerId: number;
+}
+
 export interface GetAllDormantAccountResponse
   extends IFetchingState,
     IReportsResponse {
   dormantAccountList?: IDormantAccountList[];
 }
+
+export interface ILoanMaturityReport {    
+  id: number
+  accountNumber: string
+  customerID: string
+  phone1: string
+  branch: string
+  productCode: string
+  settlementAcct1: string
+  fullName: string
+  startDate: string
+  loanMatDate: string
+  adjustedMatDate: string
+  loanAmount: string
+  currentbalance: string
+  gender: string
+  officerName: string
+  groupname: string
+  loanStageCycle: number
+  riskRating: string
+}
+
+export interface ILoanMaturityResponse {
+  responseCode: string
+  responseDescription: string
+  loanMaturityList: ILoanMaturityReport[]
+  pageNumber: number
+  pageSize: number
+  totalRecords: number
+}
+
+
+
+
+export interface IPostingJournal {
+  accountNumber: string;
+  accounttitle: string;
+  tranDate: string;
+  valuedate: string;
+  tranname: string;
+  batchno: number;
+  postSeq: number;
+  debitacct: number;
+  creditAcct: number;
+  postingMode: string;
+  accountModule: string;
+  narration: string;
+  userid: string;
+  authid: string;
+  branchcode: string;
+}
+
+export interface IPostingJournalResponse extends IFetchingState, IReportsResponse {
+  postingJournalList: IPostingJournal[];
+}
+
+
+

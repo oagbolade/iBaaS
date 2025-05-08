@@ -291,7 +291,7 @@ export async function getTellerBalanceByUserTerllerNumber(
   };
 
   try {
-    const urlEndpoint = `/Operations/GetTellerBalanceByTillAccountNo?Tillaccountno=${tellerNo}`;
+    const urlEndpoint = `/Operations/GetTellerBalanceByTillAccountNo?Tillaccountno=${decryptData(tellerNo)}`;
     const { data } = await axiosInstance({
       url: urlEndpoint,
       method: 'GET',

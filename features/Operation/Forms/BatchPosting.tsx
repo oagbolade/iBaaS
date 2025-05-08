@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { useQuery } from '@tanstack/react-query';
 import { AlertColor, Button } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { PreviewContentOne } from '../posting';
@@ -71,6 +70,21 @@ import { MenuItemsType } from '@/api/ResponseTypes/login';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
 
+// Define type for saved batch data
+interface BatchData {
+  accountNumber: string;
+  trancode: string;
+  valueDate: string;
+  currency: string;
+  computedAmount: string;
+  batchno: string;
+  narration: string;
+  tellerno: string;
+  chequeno: string;
+  accnttype: string;
+  menuid: number;
+}
+
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
     <ActionButton
@@ -113,7 +127,7 @@ export const MobilePreviewContent = ({
 };
 type MenuItemType = {
   menu_name: string;
-  menu_id?: string; // Optional property if menu_id might not exist
+  menu_id?: string;
 };
 export const BatchPosting = ({
   currencies,
@@ -129,26 +143,52 @@ export const BatchPosting = ({
   });
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
-
   const { mutate } = useCreateBatchPosting();
   const { batchno } = useGetGenerateBatchNo();
-  const [savedBatchData, setSavedBatchData] = useState<any[]>([]);
-  // Temporary storage for saved form data
+  const [savedBatchData, setSavedBatchData] = useState<BatchData[]>([]);
   const batchPostingNo = batchno ? batchno.toString() : '';
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
 
   const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
     useGetAccountDetails(encryptData(accountNumber) || '');
 
-  const handleViewPosting = (value: any) => {
-    const updatedBatches = [...savedBatchData];
-    setSavedBatchData(updatedBatches);
+  const handleViewPosting = (
+    index: number,
+    setValues: (values: any) => void
+  ) => {
+    const batch = savedBatchData[index];
+    if (batch) {
+      setValues({
+        accountNumber: batch.accountNumber,
+        trancode: batch.trancode,
+        valueDate: dayjs(batch.valueDate), // Parse string to Dayjs
+        currency: batch.currency,
+        computedAmount: batch.computedAmount,
+        batchno: batch.batchno,
+        narration: batch.narration,
+        tellerno: batch.tellerno,
+        chequeno: batch.chequeno,
+        accnttype: batch.accnttype
+      });
+      setSelectedCurrency(batch.currency);
+      setAccountNumber(batch.accountNumber);
+    }
   };
-  const handleDeletePosting = (index: Number) => {
-    const updatedBatches = [...savedBatchData];
-    updatedBatches.splice(Number(index), 1);
-    setSavedBatchData(updatedBatches);
+
+  const handleDeletePosting = (index: number) => {
+    if (index >= 0 && index < savedBatchData.length) {
+      const updatedBatches = [...savedBatchData];
+      updatedBatches.splice(index, 1);
+      setSavedBatchData(updatedBatches);
+      toast(
+        'Batch deleted successfully',
+        'Success',
+        'success' as AlertColor,
+        toastActions
+      );
+    }
   };
+
   const rawMenuItems = getStoredUser()?.menuItems;
   const menuItems: MenuItemsType[] = Array.isArray(rawMenuItems)
     ? (rawMenuItems as MenuItemsType[])
@@ -156,21 +196,30 @@ export const BatchPosting = ({
   const manageCharges =
     menuItems.find((item) => item.menu_name === 'BATCH POSTING') ?? null;
   const menuId = manageCharges?.menu_id ?? '';
+
   const handleSaveBatch = (values: any, resetForm: () => void) => {
     const formattedDate = dayjs(values.valueDate).format('YYYY-MM-DD');
-    const newBatchData = {
+    const newBatchData: BatchData = {
       ...values,
       batchno: batchPostingNo,
       valueDate: formattedDate,
-      menuid: Number(menuId)
+      menuid: Number(menuId),
+      currency: selectedCurrency
     };
-    setSavedBatchData((prevBatches) => [...prevBatches, newBatchData]); // Add the new batch
+    setSavedBatchData((prevBatches) => [...prevBatches, newBatchData]);
     resetForm();
+    toast(
+      'Batch saved successfully',
+      'Success',
+      'success' as AlertColor,
+      toastActions
+    );
   };
-  const onSubmit = async (values: any, { resetForm }: any) => {
+
+  const onSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     const toastMessage = {
       title: 'Validation error',
-      severity: 'error',
+      severity: 'error' as AlertColor,
       selectedCurrency: {
         message: 'Currency is required'
       }
@@ -179,22 +228,21 @@ export const BatchPosting = ({
       toast(
         toastMessage.selectedCurrency.message,
         toastMessage.title,
-        toastMessage.severity as AlertColor,
+        toastMessage.severity,
         toastActions
       );
       return;
     }
     const latestSavedBatches = savedBatchData.slice(-3);
     if (latestSavedBatches.length > 0) {
-      // eslint-disable-next-line array-callback-return
-      latestSavedBatches.map((batch) => {
+      latestSavedBatches.forEach((batch) => {
         mutate({
           accountNumber: batch.accountNumber,
           batchno: batch.batchno,
           chequeno: batch.chequeno,
           userid: `${getStoredUser()?.profiles?.userid}`,
           computedAmount: batch.computedAmount,
-          currency: selectedCurrency,
+          currency: batch.currency,
           narration: batch.narration,
           tellerno: batch.tellerno,
           trancode: batch.trancode,
@@ -205,17 +253,25 @@ export const BatchPosting = ({
       });
       resetForm();
       setSavedBatchData([]);
+      toast(
+        'Batches posted successfully',
+        'Success',
+        'success' as AlertColor,
+        toastActions
+      );
     }
   };
+
   const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccountNumber(e.target.value);
   };
+
   useEffect(() => {
     if (isSubmitting) {
-      document.getElementById('submitButton')?.click(); // Programmatically submit form
-      setIsSubmitting?.(false); // Reset isSubmitting to avoid repeat submissions
+      document.getElementById('submitButton')?.click();
+      setIsSubmitting?.(false);
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, setIsSubmitting]);
 
   const { sysmodel } = useGetSystemDate();
   const systemDate = dayjs(sysmodel?.systemDate || new Date());
@@ -232,22 +288,22 @@ export const BatchPosting = ({
         )?.value ||
         mappedCurrency[0]?.value ||
         '';
-
       setSelectedCurrency(defaultCurrency);
       setIsLoading(false);
     }
-  }, [mappedCurrency]); // Runs when mappedCurrency changes
-
+  }, [mappedCurrency]);
   if (isLoading) return <FormSkeleton noOfLoaders={5} />;
+
   return (
     <Formik
       initialValues={{
         ...BatchPostingInitialValues,
-        valueDate: sysmodel?.systemDate
+        valueDate: systemDate
       }}
-      onSubmit={(values, { resetForm }) => onSubmit(values, { resetForm })}
+      onSubmit={onSubmit}
+      validationSchema={batchPosting}
     >
-      {({ values, resetForm }) => (
+      {({ values, resetForm, setValues }) => (
         <Form>
           <Grid container spacing={2}>
             <Box sx={{ display: 'flex' }}>
@@ -287,7 +343,8 @@ export const BatchPosting = ({
                       <DateTimePicker
                         label="Value Date"
                         name="valueDate"
-                        value={systemDate}
+                        value={values.valueDate || systemDate}
+                        required
                       />
                     </DemoContainer>
                   </Grid>
@@ -384,7 +441,7 @@ export const BatchPosting = ({
                       buttonTitle="Save Batch"
                       customStyle={{ ...savePosting }}
                       icon={<AddIcon />}
-                      onClick={(e) => handleSaveBatch(values, resetForm)}
+                      onClick={() => handleSaveBatch(values, resetForm)}
                     />
                   </Grid>
                 </Grid>
@@ -445,7 +502,9 @@ export const BatchPosting = ({
                                       border: 'none',
                                       backgroundColor: `${colors.white}`
                                     }}
-                                    onClick={() => handleViewPosting(index)}
+                                    onClick={() =>
+                                      handleViewPosting(index, setValues)
+                                    }
                                   />
                                 </Box>
                                 <Box>

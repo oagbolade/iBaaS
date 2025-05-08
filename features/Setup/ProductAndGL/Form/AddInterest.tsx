@@ -110,7 +110,7 @@ export const CreateInterest = ({
                 >
                   <FormTextInput
                     name="intName"
-                    placeholder="Enter Exception Code"
+                    placeholder="Enter Interest Name"
                     label="Interest Name"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
@@ -125,7 +125,7 @@ export const CreateInterest = ({
                 >
                   <FormTextInput
                     name="minRate"
-                    placeholder="Enter Exception Code"
+                    placeholder="Enter Minimum Rate"
                     label="Minimum Rate"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
@@ -140,7 +140,7 @@ export const CreateInterest = ({
                 >
                   <FormTextInput
                     name="maxRate"
-                    placeholder="Enter Exception Name"
+                    placeholder="Enter Maxiumum Rate"
                     label="Maxiumum Rate"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')

@@ -21,7 +21,9 @@ export const TopOverViewSection = ({
   useBackButton,
   CustomDateRangePicker,
 }: Props) => {
+  
   const { dateValue } = React.useContext(DateRangePickerContext);
+
   const formattedDateRange = useMemo(() => {
     const startMonthAndDay = `${dateValue?.[0]?.format('MMM') ?? ''} ${dateValue?.[0]?.format('DD') ?? ''}`;
     const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;

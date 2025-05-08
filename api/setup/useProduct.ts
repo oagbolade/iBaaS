@@ -34,7 +34,6 @@ import {
 import { ISearchParams } from '@/app/api/search/route';
 import { SEARCH_BASE_URL } from '@/axiosInstance/constants';
 import { handleRedirect } from '@/utils';
-
 import { decryptData } from '@/utils/decryptData';
 
 async function createLoanAccountProduct(
@@ -560,7 +559,7 @@ export function useGetAllProductByCode(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getAllProductByCode, prodcode],
-    queryFn: () => getAllProductByCode(toastActions, prodcode),
+    queryFn: () => getAllProductByCode(toastActions, decryptData(prodcode as string)),
     enabled: Boolean((prodcode || '').length > 0)
   });
 
@@ -815,7 +814,7 @@ export async function generateProductCode(
 ): Promise<IProductCode> {
   let result: IProductCode = {} as IProductCode;
   try {
-    const urlEndpoint = `/General/Product/GenerateProductCode?productclass=${productClass}`;
+    const urlEndpoint = `/General/Product/GenerateProductCode?productclass=${decryptData(productClass)}`;
 
     const { data }: AxiosResponse<IProductCode> = await axiosInstance({
       url: urlEndpoint,
@@ -844,7 +843,7 @@ export function useGenerateProductCode(productClass: string) {
     isLoading
   } = useQuery({
     queryKey: [queryKeys.generateProductCode],
-    queryFn: () => generateProductCode(productClass),
+    queryFn: () => generateProductCode(decryptData(productClass) as string),
     enabled: true
   });
 

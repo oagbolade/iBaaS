@@ -7,50 +7,10 @@ import { getCurrentDate } from './getCurrentDate';
 import { PdfGenerator } from './hooks/PdfGenerator';
 // eslint-disable-next-line import/no-cycle
 import { IReportQueryParams } from '@/context/DownloadReportContext';
-
-export type ReportType =
-  | 'AccountEnquiry'
-  | 'StatementOfAccountCASA'
-  | 'StatementOfAccountTD'
-  | 'DormantAccount'
-  | 'TermDepositMaturity'
-  | 'TellerBalance'
-  | 'PortfolioAtRisk'
-  | 'PortfolioAtRiskProductList'
-  | 'TellerBalance'
-  | 'InflowOutflow'
-  | 'CheckBookStatus'
-  | 'ChartOfAccount'
-  | 'CustomerBalance'
-  | 'AccountDebit'
-  | 'ChequeBookStatus'
-  | 'TrialBalanceByDate'
-  | 'TrialBalanceByDate'
-  | 'PlainTrialBalance';
-
+import { ReportType } from '@/constants/downloadReport';
+import {FileNameMapper} from '@/constants/downloadReport';
 export type ReportFormat = 'excel' | 'pdf' | 'csv';
 
-interface IFileNameMapper {
-  AccountEnquiry: string;
-  [key: string]: string;
-}
-
-const FileNameMapper: IFileNameMapper = {
-  AccountEnquiry: 'AccountEnquiryReport',
-  StatementOfAccountCASA: 'StatementOfAccountCASA',
-  StatementOfAccountTD: 'StatementOfAccountTD',
-  DormantAccount: 'DormantAccount',
-  CheckBookStatus: 'CheckBookStatus',
-  InflowOutflow: 'InflowOutflow',
-  TermDepositMaturity: 'TermDepositMaturity',
-  TellerBalance: 'TellerBalance',
-  PortfolioAtRisk: 'PortfolioAtRisk',
-  PortfolioAtRiskProductList: 'PortfolioAtRiskProductList',
-  CustomerBalance: 'CustomerBalance',
-  PlainTrialBalance: 'PlainTrialBalance',
-  ChequeBookStatus: 'ChequeBookStatus',
-  TrialBalanceByDate: 'TrialBalanceByDate'
-};
 
 const generatePdf = (
   exportData: Array<any>,
@@ -61,7 +21,7 @@ const generatePdf = (
 
   PdfGenerator({ exportData, fileName, reportType, reportQueryParams });
 };
-
+ 
 // TODO: See how to integrate report description into excel and csv
 const generateExcel = (
   exportData: Array<any>,

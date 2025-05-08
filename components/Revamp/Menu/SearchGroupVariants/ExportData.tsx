@@ -36,13 +36,27 @@ const CustomizedRadioLabel = styled(FormControlLabel)(
 );
 
 export const ExportData = ({ handleClose }: Props) => {
+  const [loading, setLoading] = React.useState(false);
   const [reportFormat, setReportformat] = React.useState<ReportFormat>('pdf');
-  const { exportData, reportType, reportQueryParams } = React.useContext(
+  const { exportData, reportType, reportQueryParams, setReadyDownload } = React.useContext(
     DownloadReportContext
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReportformat((event.target as HTMLInputElement).value as ReportFormat);
+  };
+
+  const exportReport = () => {
+    setLoading(true);
+    setReadyDownload(true);
+    downloadReport({
+      exportData,
+      reportFormat,
+      reportType,
+      reportQueryParams
+    });
+    handleClose();
+    setLoading(false);
   };
 
   return (
@@ -117,15 +131,8 @@ export const ExportData = ({ handleClose }: Props) => {
         </FormControl>
 
         <PrimaryIconButton
-          onClick={() => {
-            handleClose();
-            downloadReport({
-              exportData,
-              reportFormat,
-              reportType,
-              reportQueryParams
-            });
-          }}
+          isLoading={loading}
+          onClick={exportReport}
           customStyle={{
             ...applyFilterButton,
             width: { mobile: '260px', desktop: '352px' },

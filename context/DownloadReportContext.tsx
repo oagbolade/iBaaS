@@ -7,7 +7,7 @@ import {
   useState
 } from 'react';
 // eslint-disable-next-line import/no-cycle
-import { ReportType } from '@/utils/downloadReport';
+import { ReportType } from '@/constants/downloadReport';
 
 export interface IReportQueryParams {
   branchCode?: null;
@@ -28,7 +28,9 @@ const initialDownloadReportContext = {
   setReportQueryParams: (() => {}) as Dispatch<
     SetStateAction<IReportQueryParams>
   >,
-  setReportDescription: (() => {}) as Dispatch<SetStateAction<string>>
+  setReportDescription: (() => {}) as Dispatch<SetStateAction<string>>,
+  readyDownload: false,
+  setReadyDownload: (() => {}) as Dispatch<SetStateAction<boolean>>
 };
 
 type DownloadReportContextType<T = any> = {
@@ -40,6 +42,8 @@ type DownloadReportContextType<T = any> = {
   setReportType: Dispatch<SetStateAction<ReportType>>;
   setReportQueryParams: Dispatch<SetStateAction<IReportQueryParams>>;
   setReportDescription: Dispatch<SetStateAction<string>>;
+  readyDownload: boolean;
+  setReadyDownload: Dispatch<SetStateAction<boolean>>;
 };
 
 export const DownloadReportContext = createContext<DownloadReportContextType>(
@@ -52,6 +56,7 @@ export default function DownloadReportContextProvider({ children }: any) {
   const [reportQueryParams, setReportQueryParams] =
     useState<IReportQueryParams>({});
   const [reportDescription, setReportDescription] = useState<string>('');
+  const [readyDownload, setReadyDownload] = useState<boolean>(false);
 
   const value: DownloadReportContextType = useMemo(() => {
     return {
@@ -62,9 +67,11 @@ export default function DownloadReportContextProvider({ children }: any) {
       setExportData,
       setReportType,
       setReportQueryParams,
-      setReportDescription
+      setReportDescription,
+      readyDownload,
+      setReadyDownload
     };
-  }, [exportData, reportType, reportQueryParams, reportDescription]);
+  }, [exportData, reportType, reportQueryParams, reportDescription, readyDownload, setReadyDownload]);
 
   return (
     <DownloadReportContext.Provider value={value}>

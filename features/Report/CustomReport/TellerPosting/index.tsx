@@ -1,25 +1,126 @@
 'use client';
-import React from 'react';
-import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
+import React, { useContext, useState } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { FilterSection } from './FilterSection';
+import { MuiTableContainer, TableSingleAction } from '@/components/Table';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { ActionMenu } from '@/features/Report/CustomReport/StandingInstructions';
+import {
+  ITellerPostingParams,
+  useGetTellerPosting
+} from '@/api/reports/useGetTellerPosting';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { tellerPostingColumn } from '@/constants/Reports/COLUMNS';
+import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
+import { ITellerPostingReport } from '@/api/ResponseTypes/reports';
+import { FormSkeleton } from '@/components/Loaders';
+
+interface ActionProps {
+  data: ITellerPostingReport;
+}
+
+const TellerPostingActions = ({ data }: ActionProps) => {
+  return (
+    <Link
+      href={`/report/custom-report/view-teller-posting-details?acctNo=${data?.accountNumber}&ref=${data?.refNo}&narration=${data?.narration}&valueDate=${data?.valuedate?.trim()}&tranAmount=${data?.tranAmount}&accountTitle=${data?.accounttitle}&postingMode=${data?.postingMode}&creditAcct=${data?.creditAcct}&tranDate=${data?.tranDate}&userId=${data?.userid}&debitacct=${data?.debitacct}&postseq=${data?.postseq}&prevbal=${data?.prevbal}&deposit=${data?.deposit}&fromVault=${data?.fromVault}&curbal=${data?.curbal}&withdrawal=${data?.withdrawal}&toVault=${data?.toVault}`}
+    >
+      <TableSingleAction actionName="View More" />
+    </Link>
+  );
+};
 
 export const TellerPosting = () => {
+  const [searchParams, setSearchParams] = useState<ITellerPostingParams | null>(
+    null
+  );
+  const [page, setPage] = useState(1);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
+
+  const { search } = searchParams || {};
+
+  const {
+    tellerPostByDateList = [],
+    isLoading,
+    totalRecords
+  } = useGetTellerPosting({
+    ...searchParams,
+    search,
+    pageNumber: page,
+    pageSize: 10,
+    getAll: isDateFilterApplied
+  });
+
+  React.useEffect(() => {
+    if (!tellerPostByDateList?.length) return;
+
+    const formattedExportData = tellerPostByDateList.map((item) => ({
+      'Account Number': item?.accountNumber || '',
+      'Account title': item?.accounttitle || '',
+      Narration: item?.narration || '',
+      'Value Date': item?.valuedate?.trim() || '',
+      Reference: item?.refNo || '',
+      'Transaction Amount': item?.tranAmount || '',
+      'Posting Mode': item?.postingMode || '',
+      'Credit Account': item?.creditAcct || '',
+      'Transaction Date': item?.tranDate || '',
+      'User ID': item?.userid || '',
+      'Debit Account': item?.debitacct || '',
+      'Post Sequence': item?.postseq || '',
+      'Previous Balance': item?.prevbal || '',
+      Deposit: item?.deposit || '',
+      'From Vault': item?.fromVault || '',
+      'Current Balance': item?.curbal || '',
+      Withdrawal: item?.withdrawal || '',
+      'To Vault': item?.toVault || ''
+    }));
+
+    // Ensure no blank row or misplaced headers
+    setExportData(formattedExportData);
+    setReportType('TellerPostingSummary');
+  }, [tellerPostByDateList]);
+
+  const rowsPerPage = 10;
+  const totalElements = tellerPostByDateList.length;
+  const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
+
+  const handleSearch = (params: ITellerPostingParams | null) => {
+    setSearchParams({
+      ...params,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+    });
+    setPage(1); // Reset to the first page on new search
+  };
+
+  if (isLoading) {
+    return (
+      <Box m={16}>
+        <FormSkeleton noOfLoaders={5} />
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
-        <FilterSection />
+        <FilterSection onSearch={handleSearch} />
       </Box>
       <Box sx={{ width: '100%', padding: '25px' }}>
         <MuiTableContainer
-          columns={MOCK_COLUMNS}
-          data={MOCK_DATA}
+          tableConfig={{ hasActions: false }}
+          columns={tellerPostingColumn}
+          data={tellerPostByDateList}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          totalElements={totalRecords}
           showHeader={{
             mainTitle: 'Teller Posting',
             secondaryTitle:
@@ -27,7 +128,46 @@ export const TellerPosting = () => {
             hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
-        />
+        >
+          {tellerPostByDateList?.length > 0 ? (
+            tellerPostByDateList?.map(
+              (reportDetails: ITellerPostingReport, index) => {
+                return (
+                  <StyledTableRow key={index}>
+                    <StyledTableCell component="th" scope="row">
+                      {reportDetails?.accountNumber}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {reportDetails?.accounttitle}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {reportDetails?.narration}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {reportDetails?.valuedate?.trim()}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {reportDetails?.refNo}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <TellerPostingActions data={reportDetails} />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              }
+            )
+          ) : (
+            <StyledTableRow>
+              <StyledTableCell
+                colSpan={tellerPostingColumn.length + 1}
+                component="th"
+                scope="row"
+              >
+                {renderEmptyTableBody()}
+              </StyledTableCell>
+            </StyledTableRow>
+          )}
+        </MuiTableContainer>
       </Box>
     </Box>
   );

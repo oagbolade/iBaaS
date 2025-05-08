@@ -30,6 +30,7 @@ import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
 import { generateProductCode } from '@/api/setup/useProduct';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { FormSkeleton } from '@/components/Loaders';
+import { encryptData } from '@/utils/encryptData';
 
 type Props = {
   titles?: ITitle[];
@@ -63,11 +64,12 @@ export const PersonalCasaDetailsForm = ({
   );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
   const { setFieldValue, values } = useFormikContext<any>();
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const isEditing = useGetParams('isEditing') || null;
 
   const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
   const handleGenerateCode = async (code: string) => {
-    generateProductCode(code).then((resp) => {
+    generateProductCode(encryptData(code) as string).then((resp) => {
       setProductCodeGenarate(resp.productCode);
       setFieldValue('productCode', resp.productCode);
     });
@@ -88,6 +90,22 @@ export const PersonalCasaDetailsForm = ({
     frequency,
     products
   });
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['naira', 'nigeria', 'ngn'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+    }
+  }, [mappedCurrency]);
 
   return (
     <>
@@ -151,6 +169,8 @@ export const PersonalCasaDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}
+          value={selectedCurrency}
+          onChange={(e: any) => setSelectedCurrency(e.target.value)}
           required
         />
       </Grid>
@@ -182,19 +202,6 @@ export const PersonalCasaDetailsForm = ({
           required
         />
       </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <FormSelectField
-          name="statecode"
-          options={mappedFrequency}
-          label="Loan Term"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
-          }}
-          required
-        />
-      </Grid>
-
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
           name="shortname"

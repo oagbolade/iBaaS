@@ -32,7 +32,7 @@ async function fetchDetailedPortfolioAtRisk(
         params: {
           productcode: params.productCode?.trim(),
           branchcode: params.branchCode,
-          pageSize: params.pageSize || 20,
+          pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1,
           searchWith: params.search?.trim(),
           startDate: params.startDate,

@@ -102,7 +102,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
   const { accountDetailsResults, isLoading: isCustomerSearchLoading } =
     useSearchCustomer(
       introducerType?.customer && introducerType.customer?.length > 0
-        ? (debouncedSearchValue as string)
+        ? encryptData(debouncedSearchValue as string) as string
         : ''
     );
   const { mappedAccountOfficers, mappedBranches, mappedGroups } =

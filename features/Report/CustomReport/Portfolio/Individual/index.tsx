@@ -33,15 +33,16 @@ export const IndividualLoan = () => {
 
   const { branchCode, search } = searchParams || {};
 
-  const { portfolioatRiskDetailRptList = [] } = useGetDetailedPortfolioReport({
-    ...searchParams,
-    branchCode,
-    search,
-    productCode: detailedPortfolioAtRiskReportData.productCode,
-    pageNumber,
-    pageSize: 20,
-    getAll: isDateFilterApplied
-  });
+  const { portfolioatRiskDetailRptList = [], totalRecords } =
+    useGetDetailedPortfolioReport({
+      ...searchParams,
+      branchCode,
+      search,
+      productCode: detailedPortfolioAtRiskReportData.productCode,
+      pageNumber: page,
+      pageSize: 10,
+      getAll: isDateFilterApplied
+    });
 
   React.useEffect(() => {
     if (!portfolioatRiskDetailRptList.length) return;
@@ -64,6 +65,7 @@ export const IndividualLoan = () => {
 
   const rowsPerPage = 10;
   const totalElements = portfolioatRiskDetailRptList.length;
+  const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   const handleSearch = (params: IDetailedPortfolioAtRiskParams | null) => {
     setSearchParams({
@@ -93,6 +95,10 @@ export const IndividualLoan = () => {
           tableConfig={{ hasActions: false }}
           columns={detailedPortfolioAtRiskColumn}
           data={portfolioatRiskDetailRptList}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          totalElements={totalRecords}
           showHeader={{
             mainTitle: detailedPortfolioAtRiskReportData?.productName,
             secondaryTitle:

@@ -15,7 +15,12 @@ interface ISearchFilter {
   tellerName?: string | null;
   pCode?: string | null;
   searchWith?: string | null;
+  getAll?: boolean;
+  pageNumber?: string | null;
+  pageSize?: string | null;
+  prodCode?: string | null;
 }
+
 
 export const searchFilterInitialValues: ISearchFilter = {
   userID: '',
@@ -33,5 +38,9 @@ export const searchFilterInitialValues: ISearchFilter = {
   fullName: '',
   tellerName: '',
   pCode: '',
-  searchWith: ''
+  searchWith: '',
+  getAll: false,
+  pageNumber: '1',
+  pageSize: '10',
+  prodCode: ''
 };

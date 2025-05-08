@@ -12,45 +12,38 @@ import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import { queryKeys } from '@/react-query/constants';
 import { getStoredUser } from '@/utils/user-storage';
-
-export interface IDormantAccountParams {
-  pageSize?: number;
-  pageNumber?: number;
-}
+import { ISearchParams } from '@/app/api/search/route';
 
 async function fetchAllDormantAccount(
-  params: IDormantAccountParams,
   toastActions: IToastActions,
-): Promise<GetAllDormantAccountResponse | null> {
+  params: ISearchParams | null,
+) {
+  let result: GetAllDormantAccountResponse = {} as GetAllDormantAccountResponse;
+
   try {
-    const urlEndpoint = '/ReportServices/DormantAccounts';
+    const urlEndpoint = `/ReportServices/DormantAccounts?pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&branchCode=${params?.branchID}`;
     const { data }: AxiosResponse<GetAllDormantAccountResponse> =
-      await axiosInstance.get(urlEndpoint, {
-        params: {
-          pageSize: params.pageSize || 20,
-          pageNumber: params.pageNumber || 1,
-          getAll: false,
-          branchCode: '001',
-        },
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`,
         },
       });
 
-    const { message, title, severity } = globalErrorHandler(data);
+    const { message, title, severity } = globalErrorHandler({ ...data });
     toast(message, title, severity, toastActions);
-
-    return data;
+    result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
-    return null;
   }
+  return result;
 }
 
 export function useGetAllDormantAccount(
-  params: IDormantAccountParams,
+  params: ISearchParams | null,
 ): GetAllDormantAccountResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetAllDormantAccountResponse;
@@ -61,12 +54,21 @@ export function useGetAllDormantAccount(
     isLoading,
   } = useQuery({
     queryKey: [
-      queryKeys.portfolioAtRisk,
-      params?.pageNumber || '',
-      params?.pageSize || '',
+      queryKeys.dormantAccount,
+      params?.branchID || '',
+      params?.getAll || false,
+      params?.pageSize || 10,
+      params?.page || 1,
+      params?.searchWith || '',
     ],
-    queryFn: () => fetchAllDormantAccount(params, toastActions),
-    enabled: Boolean(params?.pageNumber || '' || params.pageSize),
+    queryFn: () => fetchAllDormantAccount(toastActions, params || {}),
+    enabled: Boolean(
+      params?.page ||
+        '' ||
+        params?.pageSize ||
+        (params?.branchID || '').length > 0 ||
+        params?.searchWith,
+    ),
   });
 
   return { ...data, isError, isLoading };

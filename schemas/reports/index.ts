@@ -16,6 +16,12 @@ export const chequebookSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
+export const dormantAccountSchema = Yup.object({
+  accountNumber: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input')
+});
+
+
 export const customerBalanceSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input'),
@@ -45,4 +51,21 @@ export const trialBalanceGroupSchema = Yup.object({
 export const trialBalanceSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   customerID: Yup.string().matches(stringRegex, 'Invalid Search Input')
+});
+
+
+export const maturityLoanSchema = Yup.object({
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Branch ID is required'),
+  searchWith: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Search With is required'),
+    prodCode: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Product is required')
+});
+
+export const prostingJournalSchema = Yup.object({
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
 });

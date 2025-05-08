@@ -20,10 +20,8 @@ export async function getPlainTrialBalance(
   let result: PlainTrialBalanceResponse = {} as PlainTrialBalanceResponse;
   try {
     // report url
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/PLAINTRIALBALANCE?reportdate=${params?.reportDate}&reporttype=${params?.reportType}&branchcode=${params?.branchID}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize || '20'}&getAll=${params?.getAll}`;
-    // TODO: Uncomment the below line when the API is ready to accept searchWith
-    // &searchWith=${params?.searchWith}
-
+    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/PLAINTRIALBALANCE?reportdate=${params?.reportDate}&reporttype=${params?.reportType}&branchcode=${params?.branchID}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize || '20'}&getAll=${params?.getAll}&searchWith=${params?.searchWith}`;
+  
     const { data }: AxiosResponse<PlainTrialBalanceResponse> =
       await axiosInstance({
         url: urlEndpoint,

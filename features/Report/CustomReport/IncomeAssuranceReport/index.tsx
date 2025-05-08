@@ -12,8 +12,11 @@ import { FormSkeleton } from '@/components/Loaders';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { IIncomeAssurance } from '@/api/ResponseTypes/reports';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 export const IncomeAssuranceReport = () => {
+    const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
+
   const [search, setSearch] = React.useState<boolean>(false);
   const [searchParams, setSearchParams] = React.useState<ISearchParams | null>(
     null
@@ -25,9 +28,16 @@ export const IncomeAssuranceReport = () => {
   });
   const { productTypes } = useGetProductType();
   const { branches } = useGetBranches();
+
+  console.log('actionCode1Model', productTypes);
+  console.log('actionCode1Modefrerel', branches);
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
-    setSearchParams(params);
+    setSearchParams({
+      ...params,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+    });
   };
   return (
     <Box sx={{ width: '100%' }}>
