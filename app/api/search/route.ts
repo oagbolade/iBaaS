@@ -96,5 +96,5 @@ export interface ISearchParams {
   searchWith?: string | null;
   pCode?: string | null;
   till?: string | null;
-  
+  accttype?: string | null;
 }
