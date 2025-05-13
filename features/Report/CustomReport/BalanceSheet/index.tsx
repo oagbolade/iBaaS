@@ -30,7 +30,7 @@ export const BalanceSheet = () => {
         <ShortCardWithAccordion column={column} data={data} />
         <ShortCardWithAccordion column={column} data={data} />
         <ShortCardWithAccordion column={column} data={data} />
-        <GrandTotal amount={'56679805321.54'} title="Grand Total" />
+        <GrandTotal title="Grand Total" amount={'56679805321.54'} />
       </Box>
     </Box>
   );
