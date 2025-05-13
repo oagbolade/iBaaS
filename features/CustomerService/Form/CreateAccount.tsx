@@ -112,18 +112,39 @@ export const MobilePreviewContent = ({
 interface MyFormValues {
   productcode: string;
 }
+interface TrackProductCodeProps {
+  setProductCode: (code: string) => void;
+  // setProductCode: Function;
+  // setFieldValue: Function;
+  // productInfos?: any; // Or use a proper type if you have one
+}
 
 const TrackProductCodeAndCustomerIdFields = ({
-  setProductCode
-}: {
-  setProductCode: Function;
-}) => {
+  setProductCode,
+  // setFieldValue,
+  // productInfos
+}: TrackProductCodeProps) => {
   const { values } = useFormikContext<MyFormValues>();
   const { productcode } = values as {
     productcode: string;
   };
+  
+//   React.useEffect(() => {
+//     setProductCode(productcode);
+//     if (productInfos) {
+//       setFieldValue('dintrate', productInfos.drrate || '');
+//       setFieldValue('cintrate', productInfos.crrate || '');
+//     }
+//   }, [productcode, productInfos, setFieldValue, setProductCode]);
+
+//   return null;
+// };
+
+React.useEffect(() => {
   setProductCode(productcode);
-  return null;
+}, [productcode, setProductCode]);
+
+return null;
 };
 
 export type SubmittedNotSubmittedDocuments = {
@@ -178,7 +199,20 @@ export const CreateAccount = ({
   const { productInfos, isLoading: isProductInfoLoading } =
     useGetProductDetailsByPcode(isEditing ? customerIdForEditing : customerId, isEditing ? productCodeForEditing : productcode);
 
-  const { documents: submitted, isLoading: isSubmittedLoading } =
+    const RateUpdater = () => {
+      const formik = useFormikContext();
+      React.useEffect(() => {
+        if (productInfos) {
+          formik.setFieldValue('dintrate', productInfos.drrate || '');
+          formik.setFieldValue('cintrate', productInfos.crrate || '');
+        }
+      }, [productInfos, formik.setFieldValue]);
+      
+      return null;
+    };
+  
+  
+    const { documents: submitted, isLoading: isSubmittedLoading } =
     useGetDocuments(
       typeOne,
       (extractIdFromDropdown(selectedValue.customerid as string) as string) ||
@@ -393,25 +427,25 @@ export const CreateAccount = ({
 
   const pickInitialValues = isEditing
     ? {
-      productcode: accDetailsResults?.productcode,
-      acctdesc: accDetailsResults?.accountdesc,
-      cintrate: Number(accDetailsResults?.cintrate),
-      dintrate: Number(accDetailsResults?.dintrate),
-      customerid: accDetailsResults?.customerid,
-      offc: accDetailsResults?.officercode,
-      sweep: 'string', // TODO: Hardcoded until we know what "sweep" is
-      stafid: `${getStoredUser()?.profiles.userid}`,
-      disv: 0,
-      eventlogid: 0,
-      userid: `${getStoredUser()?.profiles.userid}`,
-      authid: `${getStoredUser()?.profiles.userid}`,
-      oldacct: accDetailsResults?.oldacctno
-    }
+        productcode: accDetailsResults?.productcode,
+        acctdesc: accDetailsResults?.accountdesc,
+        cintrate: Number(accDetailsResults?.cintrate),
+        dintrate: Number(accDetailsResults?.dintrate),
+        customerid: accDetailsResults?.customerid,
+        offc: accDetailsResults?.officercode,
+        sweep: 'string',
+        stafid: `${getStoredUser()?.profiles.userid}`,
+        disv: 0,
+        eventlogid: 0,
+        userid: `${getStoredUser()?.profiles.userid}`,
+        authid: `${getStoredUser()?.profiles.userid}`,
+        oldacct: accDetailsResults?.oldacctno
+      }
     : {
-      ...createCustomerAccountInitialValues,
-      cintrate: String(productInfos?.crrate),
-      dintrate: String(productInfos?.drrate),
-    };
+        ...createCustomerAccountInitialValues,
+        cintrate: productInfos?.crrate ? String(productInfos.crrate) : '',
+        dintrate: productInfos?.drrate ? String(productInfos.drrate) : '',
+      };
 
   return (
     <Formik
@@ -420,7 +454,8 @@ export const CreateAccount = ({
       validationSchema={createCustomerAccount}
     >
       <Form>
-        <TrackProductCodeAndCustomerIdFields setProductCode={setProductCode} />
+        <TrackProductCodeAndCustomerIdFields 
+        setProductCode={setProductCode} />
         <Box sx={{ marginTop: '60px' }}>
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
@@ -518,7 +553,8 @@ export const CreateAccount = ({
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
-                  value={String(productInfos?.drrate || 0)}
+                  // value={String(productInfos?.drrate)}
+                  initialValue={productInfos?.drrate}
                 />
               </Grid>
 
@@ -530,7 +566,8 @@ export const CreateAccount = ({
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
-                  value={String(productInfos?.crrate || 0)}
+                  // value={String(productInfos?.crrate)}
+                  initialValue={productInfos?.drrate}
                 />
               </Grid>
 
