@@ -3,12 +3,26 @@ import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js';
 import { fixupConfigRules } from '@eslint/compat';
+import path from 'path';
 
 export default [
   { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-  { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
-  { languageOptions: { globals: globals.browser } },
+  {
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
+      globals: globals.browser,
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: path.resolve('./tsconfig.json'),
+        },
+      },
+    },
+  },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  ...fixupConfigRules(pluginReactConfig)
+  ...fixupConfigRules(pluginReactConfig),
 ];
