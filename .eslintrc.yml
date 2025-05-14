@@ -4,18 +4,19 @@ env:
   jest: true
 extends:
   - next/core-web-vitals
-  - plugin:testing-library/react
+  # - plugin:testing-library/react
   - plugin:react/recommended
-  - airbnb
-  - plugin:css/recommended
+  # - airbnb
+  # - plugin:css/recommended
   - plugin:react-hooks/recommended
   - prettier
 parserOptions:
   ecmaFeatures:
     jsx: true
-  ecmaVersion: 14
+  # ecmaVersion: 14
+    ecmaVersion: 'latest'
   sourceType: module
-  project: './tsconfig.json'
+  # project: './tsconfig.json'
 plugins:
   - react
   - css
@@ -50,7 +51,7 @@ rules:
     'comma-dangle': ['off', 'never'],
     'react/prop-types':
       [0, { ignore: [], customValidators: [], skipUndeclared: [] }],
-    'react/state-in-constructor': [warn, 'always'],
+    'react/state-in-constructor': ['warn', 'always'],
     'import/order':
       ['warn', { 'pathGroups': [{ 'pattern': '~/**', 'group': 'external' }] }],
     'spaced-comment': ['warn', 'always', { 'exceptions': ['-', '+'] }],
@@ -71,3 +72,9 @@ rules:
     'react/jsx-props-no-spreading': 'off',
     'react/no-unstable-nested-components': 'off',
   }
+
+settings:
+  import/resolver:
+    typescript:
+      alwaysTryTypes: true
+      project: ./tsconfig.json

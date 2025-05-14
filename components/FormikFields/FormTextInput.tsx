@@ -17,6 +17,7 @@ type Props = {
   name: string;
   label?: string;
   value?: string;
+  initialValue?: string | number;
   required?: boolean;
   disabled?: boolean;
   autoComplete?: 'on' | 'off' | 'new-password' | 'new-userid';
@@ -49,12 +50,16 @@ export const FormTextInput = ({
   endAdornment,
   disabled,
   value,
+  initialValue,
   onChange
 }: Props) => {
   return (
     <Box sx={{ marginBottom: '15px' }}>
       <Field name={name}>
         {({ field, form }: FieldProps) => {
+          if (initialValue !== undefined && !field.value) {
+            form.setFieldValue(name, initialValue);
+          }
           return (
             <>
               <Stack
@@ -76,7 +81,8 @@ export const FormTextInput = ({
                   disabled={disabled}
                   type={type}
                   {...field}
-                  value={value || field.value}
+                  // value={value || field.value}
+                  value={field.value || ''}
                   id={name}
                   autoComplete={autoComplete}
                   placeholder={placeholder}
