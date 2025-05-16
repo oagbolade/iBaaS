@@ -6,6 +6,7 @@ import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSectio
 import { column, data } from '@/constants/Reports/ASSETS_DATA';
 import { FilterSection } from './FilterSection';
 import { useGetBranches } from '@/api/general/useBranches';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const BalanceSheet = () => {
   const { branches } = useGetBranches();
@@ -30,7 +31,10 @@ export const BalanceSheet = () => {
         <ShortCardWithAccordion column={column} data={data} />
         <ShortCardWithAccordion column={column} data={data} />
         <ShortCardWithAccordion column={column} data={data} />
-        <GrandTotal amount={'56679805321.54'} title="Grand Total" />
+        <GrandTotal
+          title="Grand Total"
+          amount={`${formatCurrency(56679805321.54)}`}
+        />
       </Box>
     </Box>
   );
