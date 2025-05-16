@@ -6,7 +6,6 @@ import { Formik, Form } from 'formik';
 import { useSearchParams } from 'next/navigation';
 import { GLAccountPreviewContent } from './GLPreviewContent/GlAccountPreview';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
-import { user as userSchema } from '@/schemas/auth';
 import { useCurrentBreakpoint } from '@/utils';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
@@ -49,6 +48,8 @@ export const AddDormancy = ({
   const searchParams = useSearchParams();
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const isEditing = searchParams.get('isEditing');
+  const [selectedDuration, setSelectedDuration] = React.useState('');
+
   const { mutate } = useCreateDormancy(
     Boolean(isEditing),
     decryptData(dormancyId) || null
@@ -69,23 +70,22 @@ export const AddDormancy = ({
   );
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    const combinedCode = `${values.durations}${values.duration}`.trim();
     await mutate({
       ...values,
-      duration: combinedCode
+      narration: values.narration
     });
   };
+
   useEffect(() => {
     const submit = document.getElementById('submitButton');
-
     if (isSubmitting) {
       submit?.click();
     }
-
     return () => {
       setIsSubmitting(false);
     };
   }, [isSubmitting]);
+
   const handlePenaltyAccountChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -99,10 +99,21 @@ export const AddDormancy = ({
     )?.name;
     setProductType(productTypeName || null);
   };
+  React.useEffect(() => {
+    if (EditOperations.duration.length > 0) {
+      const monthOption = EditOperations.duration.find((option) =>
+        option.name.toLowerCase()
+      );
+      const defaultValue =
+        monthOption?.name || EditOperations.duration[0]?.name;
+      setSelectedDuration(defaultValue);
+    }
+  }, []);
 
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
   }
+
   return (
     <Box>
       <Box>
@@ -138,25 +149,42 @@ export const AddDormancy = ({
                           width: setWidth(isMobile ? '250px' : '120%')
                         }}
                         onChange={(e: any) => {
-                          setFieldValue('prodCode', e.target.value); // Update Formik state
-                          handleProductTypeChange(e); // Update local state
+                          setFieldValue('prodCode', e.target.value);
+                          handleProductTypeChange(e);
                         }}
                       />
                     </Grid>
+                    {/* Combine Timeframe and Duration Plan side by side */}
                     <Grid
                       item={isTablet}
                       mobile={12}
                       mr={{ mobile: 35, tablet: 0 }}
                       width={{ mobile: '100%', tablet: 0 }}
                     >
-                      <FormSelectField
-                        name="durations"
-                        options={EditOperations.duration}
-                        label="Duration Plan"
-                        customStyle={{
-                          width: setWidth(isMobile ? '250px' : '120%')
-                        }}
-                      />
+                      <Grid container spacing={2}>
+                        <Grid item mobile={6}>
+                          <FormTextInput
+                            name="durations"
+                            placeholder="Enter Timeframe"
+                            label="Duration Plan"
+                            customStyle={{
+                              width: setWidth(isMobile ? '100%' : '100%')
+                            }}
+                            disabled
+                            value={selectedDuration.toLowerCase()}
+                          />
+                        </Grid>
+                        <Grid item mobile={6}>
+                          <FormTextInput
+                            name="duration"
+                            placeholder="Enter Timeframe"
+                            label="Timeframe"
+                            customStyle={{
+                              width: setWidth(isMobile ? '100%' : '140%')
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
                     <Grid
                       item={isTablet}
@@ -188,21 +216,6 @@ export const AddDormancy = ({
                           width: setWidth(isMobile ? '250px' : '120%')
                         }}
                         disabled
-                      />
-                    </Grid>
-                    <Grid
-                      item={isTablet}
-                      mobile={12}
-                      mr={{ mobile: 35, tablet: 0 }}
-                      width={{ mobile: '100%', tablet: 0 }}
-                    >
-                      <FormTextInput
-                        name="duration"
-                        placeholder="Enter Timeframe"
-                        label="Timeframe"
-                        customStyle={{
-                          width: setWidth(isMobile ? '250px' : '120%')
-                        }}
                       />
                     </Grid>
                     <Grid
@@ -254,7 +267,7 @@ export const AddDormancy = ({
                     <GLAccountPreviewContent
                       accountDetails={accountData as any}
                     />
-                  )}{' '}
+                  )}
                 </Box>
               </Box>
               <button

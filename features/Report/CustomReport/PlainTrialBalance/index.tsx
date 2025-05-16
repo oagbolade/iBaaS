@@ -1,6 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
+import { DateRange } from '@mui/x-date-pickers-pro';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
 import { FilterSection } from './FilterSection';
 import { COLUMN, keys } from './Column';
 import { FormSkeleton } from '@/components/Loaders';
@@ -13,9 +16,6 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import { DateRange } from '@mui/x-date-pickers-pro';
-import dayjs, { Dayjs } from 'dayjs';
-import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const PlainTrialBalance = () => {
@@ -27,7 +27,6 @@ export const PlainTrialBalance = () => {
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
@@ -70,7 +69,6 @@ export const PlainTrialBalance = () => {
     }
   }, [getAllPlainTrialBalanceData, setExportData, setReportType]);
 
-
   return (
     <Box
       sx={{
@@ -78,7 +76,6 @@ export const PlainTrialBalance = () => {
         marginTop: '50px'
       }}
     >
-
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
@@ -92,8 +89,20 @@ export const PlainTrialBalance = () => {
               tableConfig={{
                 hasActions: false,
                 paintedColumns: ['dr', 'cr'],
-                totalRow: ['Total', '', '', `${formatCurrency(totalDr)}`, `${formatCurrency(totalCr)}`],
-                grandTotalRow: ['Balance in Book', '', '', '', `${formatCurrency(bkBalance)}`]
+                totalRow: [
+                  'Total',
+                  '',
+                  '',
+                  `${formatCurrency(totalDr)}`,
+                  `${formatCurrency(totalCr)}`
+                ],
+                grandTotalRow: [
+                  'Balance in Book',
+                  '',
+                  '',
+                  '',
+                  `${formatCurrency(bkBalance)}`
+                ]
               }}
               keys={keys as []}
               columns={COLUMN}

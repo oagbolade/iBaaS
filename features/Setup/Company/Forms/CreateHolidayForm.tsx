@@ -60,7 +60,7 @@ export const CreateHolidayForm = ({
       const today = values.holidaydate ? dayjs(values.holidaydate) : dayjs();
       const holidayDays = parseInt(values.holidaydays, 10);
       if (holidayDays && today.isValid()) {
-        const endDate = today.add(holidayDays, 'day').format('MM/DD/YYYY');
+        const endDate = today.add(holidayDays, 'day').format('DD/MM/YYYY');
         setFieldValue('holidayends', endDate);
       } else {
         setFieldValue('holidayends', ''); // Clear end date if input is invalid

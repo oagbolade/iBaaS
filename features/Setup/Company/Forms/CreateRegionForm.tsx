@@ -29,10 +29,10 @@ export const CreateRegionForm = ({
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const { mutate } = useCreateRegion(
     Boolean(isEditing),
-    decryptData(regionId ?? '') || null
+    encryptData(regionId ?? '') || null
   );
   const { region, isLoading } = useGetRegionById(
-    decryptData(regionId ?? '') || null
+    encryptData(regionId ?? '') || null
   );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     await mutate({
@@ -75,23 +75,25 @@ export const CreateRegionForm = ({
           <Form>
             <Box mt={4}>
               <Grid container>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="regionCode"
-                    placeholder="+234"
-                    label="Region Code"
-                    required
-                    disabled
-                  />{' '}
-                </Grid>
+                {isEditing && (
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%')
+                      }}
+                      name="regionCode"
+                      placeholder="enter region Code"
+                      label="Region Code"
+                      required
+                      disabled
+                    />{' '}
+                  </Grid>
+                )}
                 <Grid
                   item={isTablet}
                   mobile={12}
@@ -102,10 +104,9 @@ export const CreateRegionForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="regionName"
-                    placeholder="Nigeria"
+                    placeholder="Enter region Name"
                     label="Region Name"
                     required
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid
@@ -118,10 +119,9 @@ export const CreateRegionForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="regionmne"
-                    placeholder="LG"
+                    placeholder="Enter Region Mnemonic "
                     label="Region Mnemonic"
                     required
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid

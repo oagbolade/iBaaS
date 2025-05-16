@@ -8,25 +8,29 @@ import { exportData } from '../../AuditTrail/styles';
 import { inputFields } from './style';
 import {
   transactionVolumeStyle,
-  allBranchesStyle,
+  allBranchesStyle
 } from '@/features/Report/Overview/styles';
 import {
   FormSelectField,
   FormTextInput,
-  TextInput,
+  TextInput
 } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ChevronDown, ExportIcon } from '@/assets/svg';
 import { labelTypography } from '@/components/FormikFields/styles';
 import { dateFilter } from '@/features/Report/CustomReport/style';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
-import { IBranches, IProductType } from '@/api/ResponseTypes/general';
+import {
+  IBranches,
+  IIAReportType,
+  IProductType
+} from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISearchParams } from '@/app/api/search/route';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
@@ -47,7 +51,7 @@ export const branchOptions = [
   'ID-475748  Festac Branch',
   'ID-475749  Yaba Branch',
   'ID-475750  Coker Branch',
-  'ID-475751  Somolu Branch',
+  'ID-475751  Somolu Branch'
 ];
 
 export const selectButton = {
@@ -57,34 +61,38 @@ export const selectButton = {
   color: `${colors.neutral600}`,
   fontSize: '14px',
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: '20px'
 };
 
 type Props = {
   branches?: IBranches[];
   onSearch?: Function;
   productTypes?: IProductType[] | Array<any>;
+  iAReportType?: IIAReportType[] | Array<any>;
 };
-export const FilterSection = ({ branches, onSearch, productTypes }: Props) => {
+export const FilterSection = ({
+  branches,
+  onSearch,
+  productTypes,
+  iAReportType
+}: Props) => {
   const { setDirection } = useSetDirection();
   const { isMobile, setWidth } = useCurrentBreakpoint();
-  const { mappedBranches, mappedProductType } = useMapSelectOptions({
+  const { mappedBranches, mappedIAReportType } = useMapSelectOptions({
     branches,
     productTypes,
+    iAReportType
   });
+
   const onSubmit = async (values: any) => {
-    console.log('values', values);
     const params: ISearchParams = {
-      branchID:
-        values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-        pCode:
-        values.pCode?.toString().trim().length > 0 ? values.pCode : null,
-      search:
-        values.search?.toString().trim().length > 0 ? values.search : null,
+      branchID: values.branchID?.toString().length > 0 ? values.branchID : null,
+      reportType:
+        values.reportType?.toString().length > 0 ? values.reportType : null,
+      search: values.search?.toString().length > 0 ? values.search : null,
       startDate:
-        values.startDate.toString().trim().length > 0 ? values.startDate : null,
-      endDate:
-        values.endDate.toString().trim().length > 0 ? values.endDate : null,
+        values.startDate.toString().length > 0 ? values.startDate : null,
+      endDate: values.endDate.toString().length > 0 ? values.endDate : null
     };
     onSearch?.(params);
   };
@@ -100,7 +108,7 @@ export const FilterSection = ({ branches, onSearch, productTypes }: Props) => {
             sx={{
               borderBottom: '1px solid #E8E8E8',
               marginTop: '10px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
             direction={setDirection()}
             justifyContent="space-between"
@@ -132,7 +140,7 @@ export const FilterSection = ({ branches, onSearch, productTypes }: Props) => {
                   icon={
                     <CalendarTodayOutlinedIcon
                       sx={{
-                        color: `${colors.Heading}`,
+                        color: `${colors.Heading}`
                       }}
                     />
                   }
@@ -145,27 +153,38 @@ export const FilterSection = ({ branches, onSearch, productTypes }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Box>
               <Grid container spacing={2}>
-                <Grid item mobile={12} tablet={3} justifyContent="center">
+                {/* <Grid item mobile={12} tablet={3} justifyContent="center">
                   <FormSelectField
                     customStyle={{
                       ...inputFields,
-                      width: setWidth(),
+                      width: setWidth()
                     }}
                     name="productCode"
                     options={mappedProductType}
                     label="Product"
+                  />
+                </Grid> */}
+                <Grid item mobile={12} tablet={3} justifyContent="center">
+                  <FormSelectField
+                    customStyle={{
+                      ...inputFields,
+                      width: setWidth()
+                    }}
+                    name="reportType"
+                    options={mappedIAReportType}
+                    label="Report Type"
                   />
                 </Grid>
                 <Grid item mobile={12} tablet={3} justifyContent="center">
                   <FormSelectField
                     customStyle={{
                       ...inputFields,
-                      width: setWidth(),
+                      width: setWidth()
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -183,7 +202,7 @@ export const FilterSection = ({ branches, onSearch, productTypes }: Props) => {
                   <FormTextInput
                     customStyle={{
                       ...inputFields,
-                      width: setWidth(),
+                      width: setWidth()
                     }}
                     icon={<SearchIcon />}
                     name="search"
@@ -206,7 +225,7 @@ export const FilterSection = ({ branches, onSearch, productTypes }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

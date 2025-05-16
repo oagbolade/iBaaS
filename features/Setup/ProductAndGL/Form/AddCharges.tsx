@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
 import { useSearchParams } from 'next/navigation';
-import { addChargeType, chargeTypeStyle } from './style';
+import { addChargeType, chargeTypeStyle, frequencyType } from './style';
 import {
   FormTextInput,
   FormSelectField,
@@ -13,6 +13,7 @@ import {
   FormikRadioButton
 } from '@/components/FormikFields';
 import {
+  amortiseOption,
   applicationTaxOption,
   EditOperations
 } from '@/constants/OperationOptions';
@@ -59,6 +60,7 @@ export const CreateCharges = ({
   });
   const isEditing = searchParams.get('isEditing');
   const [chargeType, setChargeType] = useState();
+  const [liquidationMode, setLiquidationMode] = useState();
   const { mutate } = useCreateCharge(
     Boolean(isEditing),
     decryptData(chargeId as string)
@@ -67,6 +69,8 @@ export const CreateCharges = ({
     decryptData(chargeId as string) || null
   );
   const [applicationTax, setApplicationTax] = React.useState<boolean>(false);
+  const [willaccrual, setWillAccrual] = React.useState<boolean>(false);
+
   const rawMenuItems = getStoredUser()?.menuItems;
   const menuItems: MenuItemsType[] = Array.isArray(rawMenuItems)
     ? (rawMenuItems as MenuItemsType[])
@@ -119,7 +123,9 @@ export const CreateCharges = ({
   const handleSelected = (value: boolean) => {
     setApplicationTax(value);
   };
-
+  const handleRadioButton = (value: boolean) => {
+    setWillAccrual(value);
+  };
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
   }
@@ -228,7 +234,6 @@ export const CreateCharges = ({
                     }}
                   />
                 </Grid>
-
                 <Grid item={isTablet} mobile={12}>
                   <FormSelectField
                     name="liqMode"
@@ -237,8 +242,71 @@ export const CreateCharges = ({
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
+                    onChange={(e: any) => {
+                      setLiquidationMode(e.target.value);
+                    }}
                   />
                 </Grid>
+                {liquidationMode === '2' && (
+                  <Box sx={frequencyType}>
+                    <Grid item={isTablet} mobile={12}>
+                      <FormikRadioButton
+                        name="willaccrual"
+                        title="Will Accrual be Required?"
+                        options={amortiseOption}
+                        handleCheck={(e: boolean) => handleRadioButton(e)}
+                        value={willaccrual.toString()}
+                      />
+                    </Grid>
+                    {willaccrual && (
+                      <>
+                        <Grid item={isTablet} mobile={12}>
+                          <FormAmountInput
+                            name="chargeamt"
+                            placeholder="Enter Receivable GL (No Branch Code)"
+                            label="Receivable GL (No Branch Code)"
+                            customStyle={{
+                              width: setWidth(isMobile ? '250px' : '290%')
+                            }}
+                          />
+                        </Grid>
+                        <Grid item={isTablet} mobile={12}>
+                          <FormAmountInput
+                            name="chargeamt"
+                            placeholder="Enter Susp Chg GL (No Branch Code)"
+                            label="Susp Chg GL (No Branch Code)"
+                            customStyle={{
+                              width: setWidth(isMobile ? '250px' : '300%')
+                            }}
+                          />
+                        </Grid>
+                      </>
+                    )}
+
+                    <Grid item={isTablet} mobile={12}>
+                      <FormSelectField
+                        name="fre"
+                        options={EditOperations.frequencyMode}
+                        label="Select Frequency"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '550%')
+                        }}
+                      />
+                    </Grid>
+                  </Box>
+                )}
+                {liquidationMode === '3' && (
+                  <Grid item={isTablet} mobile={12}>
+                    <FormSelectField
+                      name="liq"
+                      options={EditOperations.frequencyMode}
+                      label="Select Frequency"
+                      customStyle={{
+                        width: setWidth(isMobile ? '250px' : '100%')
+                      }}
+                    />
+                  </Grid>
+                )}
                 {chargeType === '1' && (
                   <Grid item={isTablet} mobile={12}>
                     <FormAmountInput

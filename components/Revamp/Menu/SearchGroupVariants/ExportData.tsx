@@ -38,25 +38,42 @@ const CustomizedRadioLabel = styled(FormControlLabel)(
 export const ExportData = ({ handleClose }: Props) => {
   const [loading, setLoading] = React.useState(false);
   const [reportFormat, setReportformat] = React.useState<ReportFormat>('pdf');
-  const { exportData, reportType, reportQueryParams, setReadyDownload } = React.useContext(
-    DownloadReportContext
-  );
+  const { exportData, reportType, reportQueryParams, setReadyDownload } =
+    React.useContext(DownloadReportContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReportformat((event.target as HTMLInputElement).value as ReportFormat);
   };
 
-  const exportReport = () => {
-    setLoading(true);
-    setReadyDownload(true);
-    downloadReport({
-      exportData,
-      reportFormat,
-      reportType,
-      reportQueryParams
-    });
-    handleClose();
-    setLoading(false);
+  const exportReport = async () => {
+    try {
+      setLoading(true);
+      setReadyDownload(true);
+      await new Promise<void>((resolve) => {
+        setTimeout(resolve, 100);
+      });
+
+      const checkDataAvailable = () => {
+        if (exportData && exportData?.length > 0) {
+          downloadReport({
+            exportData,
+            reportFormat,
+            reportType,
+            reportQueryParams
+          });
+          handleClose();
+          setLoading(false);
+          setReadyDownload(false);
+        } else {
+          setTimeout(checkDataAvailable, 100);
+        }
+      };
+
+      checkDataAvailable();
+    } catch (error) {
+      setLoading(false);
+      setReadyDownload(false);
+    }
   };
 
   return (
@@ -73,9 +90,13 @@ export const ExportData = ({ handleClose }: Props) => {
         <Box mb={2.5}>
           <Typography sx={{ ...primaryTitle }}>Export Report</Typography>
         </Box>
-        <Divider sx={{ marginBottom: '30px' }} light />
+
+        <Divider sx={{ marginBottom: '30px' }} />
+
         <FormControl>
           <FormLabel
+            id="export-as-label"
+            htmlFor="export-as-radio-group"
             sx={{
               fontSize: '12px',
               fontWeight: 400,
@@ -86,7 +107,8 @@ export const ExportData = ({ handleClose }: Props) => {
             EXPORT AS
           </FormLabel>
           <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
+            id="export-as-radio-group"
+            aria-labelledby="export-as-label"
             defaultValue="pdf"
             name="radio-buttons-group"
             onChange={handleChange}
@@ -135,11 +157,9 @@ export const ExportData = ({ handleClose }: Props) => {
           onClick={exportReport}
           customStyle={{
             ...applyFilterButton,
-            width: { mobile: '260px', desktop: '352px' },
-            height: '52px',
-            marginTop: '40px'
+            width: { mobile: '400px', desktop: '352px' }
           }}
-          buttonTitle="Export Report"
+          buttonTitle={loading ? 'Preparing Export...' : 'Export Report'}
         />
       </Box>
     </ClickAwayListener>

@@ -1,6 +1,7 @@
 'use client';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { COLUMNS } from './COLUMNS';
 import { MuiTableContainer } from '@/components/Table';
@@ -12,18 +13,20 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchExceptionResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
+import { PrimaryIconButton } from '@/components/Buttons';
+import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 
 // ON HOld untill the product gives us go ahead
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
     {/* // ON HOld untill the product gives us go ahead */}
 
-    {/* <Link href="/setup/product-gl/add-exception">
+    <Link href="/setup/product-gl/add-exception">
       <PrimaryIconButton
         buttonTitle="Add New "
         customStyle={{ ...submitButton }}
       />
-    </Link> */}
+    </Link>
   </Box>
 ];
 

@@ -3,6 +3,8 @@ import { Box, Grid, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import { DateCalendar } from '@mui/x-date-pickers';
+import dayjs, { Dayjs } from 'dayjs';
 import { exportData, dateFilter, inputFields } from '../style';
 import {
   FormTextInput,
@@ -24,12 +26,7 @@ import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { plainTrailBalanceSchema } from '@/schemas/reports';
-import { getCurrentIsoDate } from '@/utils/getCurrentDate';
-import { DateCalendar } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
-
-
 
 type Props = {
   branches?: IBranches[];
@@ -43,8 +40,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     branches
   });
 
-const { currentDate } = useFormattedDates();
-const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
+  const { currentDate } = useFormattedDates();
+  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -57,7 +54,6 @@ const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
     onSearch?.(params);
   };
 
-
   return (
     <Box marginTop={10}>
       <Formik
@@ -66,7 +62,6 @@ const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
         validationSchema={plainTrailBalanceSchema}
       >
         <Form>
-
           <Stack
             sx={{
               borderBottom: '1px solid #E8E8E8',
@@ -87,7 +82,6 @@ const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
               spacing={2}
               justifyContent="space-between"
             >
-
               <Box>
                 <ActionButtonWithPopper
                   searchGroupVariant="ExportReport"
@@ -102,7 +96,10 @@ const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
                 <ActionButtonWithPopper
                   searchGroupVariant="DateRangePicker"
                   CustomDateRangePicker={
-                    <DateCalendar value={reportDate} onChange={(date) => setReportDate(date)} />
+                    <DateCalendar
+                      value={reportDate}
+                      onChange={(date) => setReportDate(date)}
+                    />
                   }
                   customStyle={{ ...dateFilter }}
                   icon={
@@ -118,7 +115,6 @@ const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
               </Box>
             </Stack>
           </Stack>
-
 
           <Box
             sx={{
@@ -137,12 +133,13 @@ const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
                 >
                   <FormikRadioButton
                     options={[
-                      { label: 'Balance Sheet', value: 'trailbalance' },
+                      { label: 'Balance Sheet', value: 'trialbalance' },
                       { label: 'Profit & Loss', value: 'pandl' }
                     ]}
                     title="Select Report Type"
                     name="reportType"
                     value="trailbalance"
+                    required
                   />
                 </Grid>
 
@@ -155,6 +152,7 @@ const [reportDate, setReportDate] = React.useState<Dayjs>( dayjs(currentDate));
                     name="branchID"
                     options={mappedBranches}
                     label="Branch Name"
+                    required
                   />{' '}
                 </Grid>
 

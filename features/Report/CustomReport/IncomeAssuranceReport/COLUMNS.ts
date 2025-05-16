@@ -5,6 +5,7 @@ export const COLUMN = [
   'Maturity Date',
   'Interest Rate',
   'Loan Amount',
+  'Product Name',
   'Accrued Int',
   'Branch',
   'Product Code'

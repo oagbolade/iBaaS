@@ -1,33 +1,20 @@
 import React from 'react';
-import { Box, Typography, Stack, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { allBranchesStyle } from '../../Overview/styles';
-import {
-  FormSelectField,
-  FormTextInput,
-  TextInput,
-} from '@/components/FormikFields';
+import { Formik, Form } from 'formik';
+import { inputFields } from '../style';
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
-  ActionButton,
+  ActionButton
 } from '@/components/Revamp/Buttons';
-import { ChevronDown } from '@/assets/svg';
-import { labelTypography } from '@/components/FormikFields/styles';
-import {
-  Wrapper,
-  branchOptions,
-  selectButton,
-} from '@/features/Report/CustomReport/IncomeAssuranceReport/FilterSection';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISearchParams } from '@/app/api/search/route';
-import { Formik, Form } from 'formik';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
-import { chequebookSchema, dormantAccountSchema } from '@/schemas/reports';
-import { inputFields } from '../style';
+import { dormantAccountSchema } from '@/schemas/reports';
 
 type Props = {
   branches?: IBranches[];
@@ -35,10 +22,9 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
-  const { setDirection } = useSetDirection();
-  const { isMobile, setWidth } = useCurrentBreakpoint();
+  const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const onSubmit = async (values: any) => {
@@ -50,7 +36,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           ? values.searchWith
           : null,
       getAll: false,
-      pageSize: '10',
+      pageSize: '10'
     };
     onSearch?.(params);
   };
@@ -65,7 +51,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         <Form>
           <Box
             sx={{
-              marginTop: '30px',
+              marginTop: '10px'
             }}
           >
             <Box>
@@ -74,7 +60,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -86,18 +72,18 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   mb={{ tablet: 6 }}
                   item
                   mobile={12}
-                  tablet={6}
+                  tablet={8}
                   justifyContent="center"
                   marginTop={3}
                 >
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
-                    placeholder="Search by Account Title or  Account number"
+                    placeholder=" Enter Account number"
                     label=""
                   />
                 </Grid>
@@ -115,7 +101,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

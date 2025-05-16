@@ -20,7 +20,6 @@ import { FormSkeleton } from '@/components/Loaders';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 
-
 const ActionMenuProps = ({
   accountNumber,
   status,
@@ -67,8 +66,6 @@ export const LoanDirectory = () => {
     ...searchParams,
     page
   });
-
-
 
   React.useEffect(() => {
     const shouldDisableLoanUnderWriting = !checkMultipleUserRoleAccess(

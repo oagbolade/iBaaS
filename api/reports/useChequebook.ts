@@ -17,7 +17,7 @@ export async function getChequebookStatus(
 ) {
   let result: ChequeBookStatusResponse = {} as ChequeBookStatusResponse;
   try {
-    const urlEndpoint = `/ReportServices/Chequebookstatus?status=${params?.status}&startDate=${params?.startDate}&endDate=${params?.endDate}&acctno=${params?.accountNumber}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/ReportServices/Chequebookstatus?status=${params?.status}&startDate=${params?.startDate}&endDate=${params?.endDate}&acctno=${params?.accountNumber || ''}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<ChequeBookStatusResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,
@@ -32,7 +32,7 @@ export async function getChequebookStatus(
     });
     toast(message, title, severity, toastActions);
     if (data.chequeBookList === null) {
-      data.chequeBookList = []
+      data.chequeBookList = [];
     }
     result = data;
   } catch (errorResponse) {
@@ -55,13 +55,19 @@ export function useGetCheckbookStatus(params: ISearchParams | null) {
       params?.accountNumber || '',
       params?.status?.toString || '',
       params?.branchID?.toString || '',
-      params?.page || 1
+      params?.startDate || '',
+      params?.endDate || '',
+      params?.page || 1,
+      params?.status
     ],
     queryFn: () => getChequebookStatus(toastActions, params || {}),
     enabled: Boolean(
       (params?.accountNumber || '').length > 0 ||
-      (params?.status?.toString || '').length > 0 ||
-      (params?.branchID?.toString || '').length > 0
+        (params?.status?.toString || '').length > 0 ||
+        (params?.branchID?.toString || '').length > 0 ||
+        (params?.startDate || '').length > 0 ||
+        (params?.endDate || '').length > 0 ||
+        (params?.status || 1).toString().length > 0
     )
   });
   return { ...data, isError, isLoading };

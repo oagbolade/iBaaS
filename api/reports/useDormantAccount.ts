@@ -1,10 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import {
-  GetAllDormantAccountResponse,
-  GetAllPortfolioAtRiskResponse,
-} from '../ResponseTypes/reports';
+import { GetAllDormantAccountResponse } from '../ResponseTypes/reports';
 import { axiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
@@ -16,20 +13,20 @@ import { ISearchParams } from '@/app/api/search/route';
 
 async function fetchAllDormantAccount(
   toastActions: IToastActions,
-  params: ISearchParams | null,
+  params: ISearchParams | null
 ) {
   let result: GetAllDormantAccountResponse = {} as GetAllDormantAccountResponse;
 
   try {
-    const urlEndpoint = `/ReportServices/DormantAccounts?pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&branchCode=${params?.branchID}`;
+    const urlEndpoint = `/ReportServices/DormantAccounts?pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&branchCode=${params?.branchID}&startDate=${params?.startDate}&endDate=${params?.endDate}&searchWith=${params?.searchWith || ''}`;
     const { data }: AxiosResponse<GetAllDormantAccountResponse> =
       await axiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getStoredUser()?.token}`,
-        },
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
       });
 
     const { message, title, severity } = globalErrorHandler({ ...data });
@@ -43,7 +40,7 @@ async function fetchAllDormantAccount(
 }
 
 export function useGetAllDormantAccount(
-  params: ISearchParams | null,
+  params: ISearchParams | null
 ): GetAllDormantAccountResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetAllDormantAccountResponse;
@@ -51,7 +48,7 @@ export function useGetAllDormantAccount(
   const {
     data = fallback,
     isError,
-    isLoading,
+    isLoading
   } = useQuery({
     queryKey: [
       queryKeys.dormantAccount,
@@ -60,15 +57,18 @@ export function useGetAllDormantAccount(
       params?.pageSize || 10,
       params?.page || 1,
       params?.searchWith || '',
+      params?.startDate || '',
+      params?.endDate || ''
     ],
     queryFn: () => fetchAllDormantAccount(toastActions, params || {}),
     enabled: Boolean(
       params?.page ||
-        '' ||
         params?.pageSize ||
         (params?.branchID || '').length > 0 ||
-        params?.searchWith,
-    ),
+        params?.searchWith ||
+        params?.startDate ||
+        params?.endDate
+    )
   });
 
   return { ...data, isError, isLoading };

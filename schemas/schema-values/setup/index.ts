@@ -356,12 +356,8 @@ export interface CreateDemandDepositFormValues {
   minAge: number;
   maxAge: number;
   ProdDocuments: [];
-  ProdCharges: [
-
-  ];
-  ProdException: [
-
-  ];
+  ProdCharges: [];
+  ProdException: [];
 }
 export interface CreateLoanAccountFormValues {
   productCode: string;
@@ -410,14 +406,12 @@ export interface CreateLoanAccountFormValues {
   chkHealthInsurance: 0;
   healthInsuranceAcct: string;
   healthInsuranceAmt: number;
-  securityDepType: number,
-  securityDepFigure: number,
-  guarantorFlg: number,
+  securityDepType: number;
+  securityDepFigure: number;
+  guarantorFlg: number;
   ProdDocuments: [];
-  ProdCharges: [
-  ];
-  ProdException: [
-  ];
+  ProdCharges: [];
+  ProdException: [];
 }
 export interface CreateChargeFormValues {
   chargeDesc: string;
@@ -683,8 +677,8 @@ export const createChequeBookInitialValues: CreateChequeBookFormValues = {
 
 export const createRelationshipInitialValues: CreateRelationShipFormValues = {
   relationname: '',
-  status: 0,
-  authid: 'string',
+  status: 1,
+  authid: `${getStoredUser()?.profiles.userid}`,
   relationid: ''
 };
 
@@ -706,20 +700,20 @@ export const createEducationInitialValues: CreateEducationFormValues = {
 };
 
 export const createTransactionTypeInitialValues: CreateTransactionTypeFormValues =
-{
-  tranName: '',
-  tranType: '',
-  tranShortname: '',
-  charged: 0,
-  reversal: 0,
-  module: 0,
-  status: 0,
-  clearing: 'string',
-  authid: 'string',
-  createdate: getCurrentIsoDate(),
-  sms: 0,
-  cashIndicator: 0
-};
+  {
+    tranName: '',
+    tranType: '',
+    tranShortname: '',
+    charged: 0,
+    reversal: 0,
+    module: 0,
+    status: 0,
+    clearing: 'string',
+    authid: 'string',
+    createdate: getCurrentIsoDate(),
+    sms: 0,
+    cashIndicator: 0
+  };
 export const createClearingBanksInitialValues: CreateClearingBankFormValues = {
   bankCode: '',
   chequeinClear: '',
@@ -730,13 +724,13 @@ export const createClearingBanksInitialValues: CreateClearingBankFormValues = {
 };
 
 export const createCommercialBankInitialValue: CreateCommercialBankFormValues =
-{
-  bankName: '',
-  bankshortname: '',
-  authorisedby: 'string',
-  authid: 'string',
-  cbnCode: 'string'
-};
+  {
+    bankName: '',
+    bankshortname: '',
+    authorisedby: 'string',
+    authid: 'string',
+    cbnCode: 'string'
+  };
 
 export const createProfessionInitialValue: CreateProfessionFormValues = {
   profname: '',
@@ -773,9 +767,9 @@ export const createInterestInitialValue: CreateInterestFormValues = {
   variance: 0
 };
 export const createSetupConditionInitialValue: CreateSetupConditionFormValues =
-{
-  description: ''
-};
+  {
+    description: ''
+  };
 
 export const createDormancyInitialValue: CreateDormancyFormValues = {
   prodCode: '',

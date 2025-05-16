@@ -102,8 +102,8 @@ export const CreateTownForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="townName"
-                    placeholder="+234"
-                    label="Town Code"
+                    placeholder="Enter Town Name"
+                    label="Town Name"
                     required
                     disabled
                   />{' '}
@@ -118,10 +118,9 @@ export const CreateTownForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="townshortname"
-                    placeholder="Nigeria"
+                    placeholder="Enter Town Name"
                     label="Town Name"
                     required
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid
@@ -137,7 +136,6 @@ export const CreateTownForm = ({
                     name="stateCode"
                     options={mappedState}
                     label="State"
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid

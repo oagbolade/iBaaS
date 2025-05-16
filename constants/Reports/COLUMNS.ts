@@ -14,6 +14,15 @@ export const loanOverdueColumns = [
   'Maturity Date',
   'Principal Outstanding'
 ];
+
+export const disbursedloanColumns = [
+  'Account Number',
+  'Account Name',
+  'Group Name',
+  'Officer Name',
+  'Facility Amount'
+];
+
 export const detailedPortfolioAtRiskColumn = [
   'Account Number',
   'Account Name',
@@ -38,6 +47,25 @@ export const drillDownReportGlColumns = [
   'GL Node Code',
   'Total'
 ];
+
+export const drillSubDownReportGlColumns = [
+  'Gl Class Name',
+  'Gl Class Code',
+  'total'
+];
+export const drillClassCodeDownReportGlColumns = [
+  'Branch Name',
+  'Gl Number',
+  'Account Name',
+  'total'
+];
+
+export const drillKeys = ['branchName', 'glNumber', 'acctName', 'bkbalance'];
+
+export const drilSubMainKey = ['gL_ClassName', 'gL_ClassCode', 'total'];
+
+export const drilMainKey = ['gl_NodeName', 'gL_NodeCode', 'total'];
+
 export const inflowOutflowReportColumn = [
   'Account Number',
   'Account Name',

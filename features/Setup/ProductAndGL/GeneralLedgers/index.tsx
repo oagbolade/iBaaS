@@ -211,6 +211,9 @@ const GLClassTable = ({ onSearch, searchParams, search }: ClassProps) => {
                     {dataItem.gl_ClassName}
                   </StyledTableCell>
                   <StyledTableCell align="right">
+                    {dataItem.nodeCode}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
                     <Status
                       label={
                         Number(dataItem.status) === 1 ? 'Active' : 'Inactive'

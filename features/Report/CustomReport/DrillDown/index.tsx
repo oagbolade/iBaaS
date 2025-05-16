@@ -1,108 +1,113 @@
 'use client';
 import React, { useState } from 'react';
-import { Box } from '@mui/material';
 import Link from 'next/link';
+import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
-import { TableSingleAction } from '@/components/Table';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { TableV2 } from '@/components/Revamp/TableV2';
+
+import { useGetGlMainGroupReport } from '@/api/reports/useGetSubGroupResponse';
 import {
-  IGlMainParams,
-  useGetGlMainGroupReport
-} from '@/api/reports/useGetGlMainGroupReport';
-import { useGetGlSubGroupReport } from '@/api/reports/useGetSubGroupResponse';
-import { useGetBranches } from '@/api/general/useBranches';
-import { drillDownReportGlColumns } from '@/constants/Reports/COLUMNS';
+  drillDownReportGlColumns,
+  drilMainKey
+} from '@/constants/Reports/COLUMNS';
 import { FormSkeleton } from '@/components/Loaders';
+import { ISearchParams } from '@/app/api/search/route';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import colors from '@/assets/colors';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+
+interface ActionMenuProps {
+  detail: string;
+}
+const ActionMenu = ({ detail }: ActionMenuProps) => {
+  return (
+    <Link
+      href={`/report/custom-report/view-report-drillgl/?stepOne=mainGroup&detail=${detail}`}
+      style={{ color: `${colors.activeBlue400}` }}
+    >
+      View Breakdown
+    </Link>
+  );
+};
 
 export const DrillDown = () => {
-  const [page, setPage] = useState<number>(1);
-  const { branches } = useGetBranches();
-  const [searchParams, setSearchParams] = useState<IGlMainParams | null>(null);
-  const [reportType, setReportType] = useState<string>('mainGroup');
+  const [search, setSearch] = useState<boolean>(true);
+  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
 
-  const { branchId, search } = searchParams || {};
+  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+    React.useContext(DownloadReportContext);
 
-  const pageSize = 10;
-
-  const { glMainGroupRptList = [], isLoading: isLoadingGlMainGroupList } =
+  const { isLoading, glMainGroupRptList, totalRecords } =
     useGetGlMainGroupReport({
-      pageSize,
-      pageNumber: page
+      ...searchParams,
+      page
     });
 
-  const { glSubGroupRptList = [], isLoading: isLoadingSubGroupList } =
-    useGetGlSubGroupReport({
-      nodeCode: 1, // example nodeCode, adjust based on use case
-      pageSize,
-      pageNumber: page
-    });
-
-  const handleSearch = (params: IGlMainParams | null) => {
+  const handleSearch = (params: ISearchParams | null) => {
+    setSearch(true);
+    setReadyDownload(false);
     setSearchParams(params);
-    setPage(1); // Reset to the first page on new search
+    setReportType('GLMainGroupReport');
   };
 
-  const isLoading = isLoadingGlMainGroupList || isLoadingSubGroupList;
-
-  if (isLoading) {
-    return (
-      <Box m={16}>
-        <FormSkeleton noOfLoaders={5} />
-      </Box>
-    );
-  }
-
-  const renderTableContent = () => {
-    if (reportType === 'mainGroup') {
-      return (
-        <TableV2
-          columns={drillDownReportGlColumns}
-          data={glMainGroupRptList}
-          showHeader={{
-            mainTitle: 'Drill Down GL',
-            secondaryTitle:
-              'See a directory of all Drill Down GL Report in this system.'
-          }}
-          keys={['gl_NodeName', 'gL_NodeCode', 'total']}
-          hideFilterSection
-          tableConfig={{
-            hasActions: false
-          }}
-        />
+  React.useEffect(() => {
+    setReportType('GLMainGroupReport');
+    if (readyDownload && glMainGroupRptList?.pagedMainGroupReports.length > 0) {
+      const reportData = glMainGroupRptList?.pagedMainGroupReports.map(
+        (item) => ({
+          GlName: item.gl_NodeName,
+          GlCode: item.gL_NodeCode,
+          total: item.total
+        })
       );
+      setExportData(reportData as []);
     }
-
-    return (
-      <TableV2
-        columns={drillDownReportGlColumns}
-        data={glSubGroupRptList}
-        showHeader={{
-          mainTitle: 'Drill Down GL',
-          secondaryTitle:
-            'See a directory of all Drill Down GL Report in this system.'
-        }}
-        keys={['gL_ClassName', 'gL_ClassCode', 'total']}
-        hideFilterSection
-        tableConfig={{
-          hasActions: false
-        }}
-      />
-    );
-  };
+  }, [
+    isLoading,
+    readyDownload,
+    setExportData,
+    glMainGroupRptList,
+    setReportType
+  ]);
 
   return (
-    <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <TopOverViewSection useBackButton />
-      <Box sx={{ marginTop: '30px', padding: '25px' }}>
-        <FilterSection
-          reportType={reportType}
-          setReportType={setReportType}
-          branches={branches}
-          onSearch={handleSearch}
-        />
+    <Box sx={{ width: '100%' }}>
+      <FilterSection onSearch={handleSearch} />
+
+      <Box sx={{ paddingX: '24px' }}>
+        {isLoading ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <TableV2
+            isSearched={search}
+            columns={drillDownReportGlColumns}
+            data={glMainGroupRptList?.pagedMainGroupReports}
+            showHeader={{
+              mainTitle: 'Drill Down GL',
+              secondaryTitle:
+                'See a directory of all Drill Down GL Report in this system.'
+            }}
+            keys={drilMainKey as []}
+            hideFilterSection
+            tableConfig={{
+              hasActions: true,
+              grandTotalRow: [
+                'Grand Total',
+                '',
+                `NGN ${formatCurrency(glMainGroupRptList?.total || 0)}`,
+                ''
+              ]
+            }}
+            setPage={setPage}
+            totalPages={Math.ceil(totalRecords / 10)}
+            page={page}
+            ActionMenuProps={(dataItem: any) => (
+              <ActionMenu detail={JSON.stringify(dataItem)} />
+            )}
+          />
+        )}
       </Box>
-      <Box sx={{ padding: '20px', width: '100%' }}>{renderTableContent()}</Box>
     </Box>
   );
 };

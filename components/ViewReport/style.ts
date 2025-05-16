@@ -142,3 +142,26 @@ export const AccountView = {
   height: '44px',
   marginLeft: '300px'
 };
+
+export const transactionVolumeStyle = {
+  width: '181px',
+  height: '31px',
+  borderRadius: '4px',
+  padding: '8px 16px',
+  border: `1px solid ${colors.neutral200}`,
+  backgroundColor: `${colors.neutral200}`,
+  color: `${colors.Heading}`,
+  fontSize: '12px',
+  fontWeight: 500
+};
+
+export const exportData = {
+  ...transactionVolumeStyle,
+  width: { mobile: '290px', desktop: '171px' },
+  height: '48px',
+  borderRadius: '8px',
+  border: `1px solid ${colors.neutral300}`,
+  backgroundColor: `${colors.white}`,
+  fontSize: '16px',
+  fontWeight: 600
+};

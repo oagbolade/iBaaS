@@ -301,7 +301,6 @@ export const BatchPosting = ({
         valueDate: systemDate
       }}
       onSubmit={onSubmit}
-      validationSchema={batchPosting}
     >
       {({ values, resetForm, setValues }) => (
         <Form>
