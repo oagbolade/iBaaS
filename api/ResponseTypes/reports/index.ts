@@ -18,6 +18,62 @@ export interface IChequeBookList {
   status: number;
 }
 
+export interface StatementRecord {
+  accountnumber: string;
+  trandate: string;
+  productName: string;
+  branchAddress: string;
+  branchName: string;
+  bkBalance: number | null;
+  narration: string;
+  fullname: string;
+  mobile: string;
+  address: string;
+  debit: number;
+  credit: number;
+  openBalance: number | null;
+  cot: number;
+  vat: number;
+  drLimit: number;
+  crLimit: number;
+  closeBalance: number | null;
+  startdate: string;
+  enddate: string;
+  unclearedBal: number;
+  sdate: string;
+  matdate: string;
+  principal: number;
+  tenor: number;
+  rate: number | null;
+  accruedInt: number;
+}
+
+export interface IAccountStatementList {
+  pagedRecords: StatementRecord[];
+  accountnumber: string;
+  cot: number;
+  fullname: string;
+  principal: number;
+  accruedInt: number;
+  startdate: string;
+  matdate: string;
+  tenor: number;
+  vat: number;
+  drLimit: number;
+  bkBalance: number | null;
+  openBalance: number | null;
+  unclearedBal: number;
+  address: string;
+  branchName: string;
+  crLimit: number;
+  closeBalance: number | null;
+}
+export interface StatementOfAccountResponse extends IFetchingState {
+  responseCode: string;
+  responseDescription: string;
+  rptStatementList: IAccountStatementList;
+}
+
 export interface ChequeBookStatusResponse extends IFetchingState {
   responseCode: string;
   responseDescription: string;

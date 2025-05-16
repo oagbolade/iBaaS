@@ -98,6 +98,7 @@ export interface ISearchParams {
   searchWith?: string | null;
   pCode?: string | null;
   till?: string | null;
+  accttype?: string | null;
   nodeCode?: string | null;
   Gl_ClassCode?: string | null;
 }

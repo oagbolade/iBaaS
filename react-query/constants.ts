@@ -216,6 +216,7 @@ interface IQueryKeys {
   getTrialBalanceByGroup: string;
   dormantAccount: string;
   maturityLoan: string;
+  statementOfAccount: string;
 }
 
 export const queryKeys: IQueryKeys = {
@@ -435,5 +436,7 @@ export const queryKeys: IQueryKeys = {
   geTransactionClearing: 'geTransactionClearing',
   generateProductCode: 'generateProductCode',
   dormantAccount: 'dormantAccount',
+  maturityLoan: 'maturityLoan',
+  statementOfAccount: 'statementOfAccount',
   maturityLoan: 'maturityLoan'
 };
