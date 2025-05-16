@@ -37,17 +37,17 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
     status
   });
 
-    const formattedDateRange = useMemo(() => {
-      const startMonthAndDay = `${dateValue?.[0]?.format('MMM') ?? ''} ${dateValue?.[0]?.format('DD') ?? ''}`;
-      const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
-  
-      return `${startMonthAndDay} - ${endMonthAndDay}`;
-    }, [dateValue]);
+  const formattedDateRange = useMemo(() => {
+    const startMonthAndDay = `${dateValue?.[0]?.format('MMM') ?? ''} ${dateValue?.[0]?.format('DD') ?? ''}`;
+    const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
+
+    return `${startMonthAndDay} - ${endMonthAndDay}`;
+  }, [dateValue]);
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
-      accountNumber: values.accountNumber ? values.accountNumber : null,
-      status: values.status.toString().length > 0 ? values.status : null,
+      accountNumber: values.accountNumber ? values.accountNumber : '',
+      status: values.status.toString().length > 0 ? values.status : '',
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
       getAll: false,
       pageSize: '10'
@@ -105,7 +105,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                   }
                   iconPosition="end"
                   // buttonTitle="Aug 22 - Sep 23"
-                  buttonTitle={formattedDateRange}  
+                  buttonTitle={formattedDateRange}
                 />
               </Box>
             </Stack>
@@ -128,6 +128,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                     name="branchID"
                     options={mappedBranches}
                     label="Branch Name"
+                    required
                   />{' '}
                 </Grid>
                 <Grid
@@ -145,6 +146,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                     name="status"
                     options={mappedStatus}
                     label="Status"
+                    required
                   />{' '}
                 </Grid>
                 <Grid
@@ -162,7 +164,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                     }}
                     icon={<SearchIcon />}
                     name="accountNumber"
-                    placeholder="Search by Serial Number or  Account number"
+                    placeholder="Search by Account number"
                     label=""
                   />{' '}
                 </Grid>

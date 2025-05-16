@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ILoanOverdueReportResponse } from '../ResponseTypes/reports';
 import { APIResponse } from '../RequestTypes/CommonTypes';
-import { axiosInstance } from '@/axiosInstance';
+import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -15,9 +15,12 @@ export interface LoanOverdueParams {
   branch?: string | null;
   search?: string | null;
   product?: string | null;
-  date1?: string | null;
+  reportDate?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
   pageSize?: number | null;
   pageNumber?: number | null;
+  getAll?: boolean | null;
 }
 
 async function fetchLoanOverdueReport(
@@ -25,20 +28,25 @@ async function fetchLoanOverdueReport(
   toastActions: IToastActions
 ): Promise<ILoanOverdueReportResponse | null> {
   try {
-    const urlEndpoint = `/ReportServices/LoanOverDueReport?pageSize=${params.pageSize}&pageNumber=${params.pageNumber}`;
-    const { data }: AxiosResponse<APIResponse> = await axiosInstance({
-      url: urlEndpoint,
-      method: 'POST',
-      data: {
-        date1: params.date1,
-        branchselect: params.branch
-      },
-
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${getStoredUser()?.token}`
+    const urlEndpoint = 'ReportServices/LoanOverDueReport';
+    const { data }: AxiosResponse<APIResponse> = await reportsAxiosInstance.get(
+      urlEndpoint,
+      {
+        params: {
+          pageSize: params.pageSize || 10,
+          pageNumber: params.pageNumber || 1,
+          searchWith: params.search?.trim(),
+          selectedDate: params.reportDate,
+          productCode: params?.product,
+          branchCode: params?.branch,
+          getAll: params.getAll || false
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
       }
-    });
+    );
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
@@ -66,8 +74,9 @@ export function useGetLoanOverdueReport(
       queryKeys.overloanDueReport,
       params?.branch || '',
       params?.product || '',
-      params?.date1 || '',
+      params?.reportDate || '',
       params?.search || '',
+      params?.getAll || false,
       params?.pageSize || 10,
       params?.pageNumber || 1
     ],

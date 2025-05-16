@@ -21,8 +21,6 @@ export const DocumentForm = () => {
     );
   }
 
-
-  
   const handleCheck = (docId: string) => {
     const currentDocIds = values.ProdDocuments || [];
     const updatedDocIds = currentDocIds.includes(docId)
@@ -37,7 +35,9 @@ export const DocumentForm = () => {
         <Grid item={isTablet} mobile={6} key={doc.docid}>
           <Box sx={{ display: 'flex', width: '50%' }}>
             <Checkbox
-              checked={values.ProdDocuments?.includes(String(doc.docid)) || false}
+              checked={
+                values.ProdDocuments?.includes(String(doc.docid)) || false
+              }
               onChange={() => handleCheck(String(doc.docid))}
             />
             <Typography

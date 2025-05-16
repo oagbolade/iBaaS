@@ -41,7 +41,7 @@ export const Company = () => {
       description: 'Setup bank holidays, public holidays, etc'
     },
     {
-      title: 'State Management',
+      title: 'State',
       link: '/setup/company/state-management',
       description: 'Manage the states in the available regions'
     },

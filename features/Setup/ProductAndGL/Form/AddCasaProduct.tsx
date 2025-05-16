@@ -49,56 +49,40 @@ export const AddCasaNewProduct = ({
       'minintbalance',
       'closeBalance',
       'shortname',
-      'statecode',
       'appType',
-      'productExpire',
-      'productstart',
-      'currencycode',
       'openbalance',
       'productName',
       'productclass'
     ],
 
     interestCharges: [
-      'interbr',
-      'currencycode',
       'interestIncome',
       'withallowed',
       'drType',
-      'crtype'
+      'crtype',
+      'ProdException'
     ],
 
     generalLedge: [
-      'acctClosegl',
-      'taxabsorbed1',
-      'interbr',
-      'interestPayable',
-      'suspendedIntIncome',
-      'interestIncome',
-      'interestExpense',
+      'accountNumber',
       'liabilityBal',
-      'unearnincome',
-      'interestReceivable',
-      'assetBalance',
       'suspendedAsset',
+      'assetBalance',
+      'interestReceivable',
+      'unearnincome',
+      'interestExpense',
+      'interestIncome',
+      'suspendedIntIncome',
+      'interestPayable',
+      'interbr',
+      'taxabsorbed1',
+      'acctClosegl',
       'liabilityBal'
     ],
 
-    otherDetails: [
-      'floor',
-      'penal',
-      'maxamt',
-      'maxAge',
-      'minAge',
-      'checkBook',
-      'sweepIn',
-      'si',
-      'od',
-      'lien',
-      'stateInactive'
-    ],
+    otherDetails: ['floor', 'minAge', 'maxAge'],
 
-    document: ['docId']
+    document: []
   };
   const isEditing = useGetParams('isEditing') || null;
   const { mutate } = useCreateDemandDepositProduct(

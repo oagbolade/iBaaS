@@ -39,6 +39,12 @@ export const EditOperations = {
     { name: 'Amortise', value: '2' },
     { name: 'Frequency', value: '3' }
   ],
+  frequencyMode: [
+    { name: 'Month', value: '1' },
+    { name: 'Quarter', value: '2' },
+    { name: 'Bi-annual', value: '3' },
+    { name: 'Annual', value: '4' }
+  ],
   takeCharge: [
     { name: 'Immediate', value: '1' },
     { name: 'EOD', value: '2' },
@@ -61,6 +67,11 @@ export const transactionTypeOption = [
 ];
 
 export const applicationTaxOption = [
+  { label: 'Yes', value: '1' },
+  { label: 'No', value: '2' }
+];
+
+export const amortiseOption = [
   { label: 'Yes', value: '1' },
   { label: 'No', value: '2' }
 ];

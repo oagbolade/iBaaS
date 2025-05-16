@@ -1,5 +1,4 @@
 import { JSX } from 'react';
-import { ITellerBalance } from '../../operation/useVaultManagement';
 import { IFetchingState } from '@/constants/types';
 
 interface IReportsResponse {
@@ -274,9 +273,38 @@ export interface IGetLoanOverdueReport {
   age: number;
   report: string;
 }
+
+export interface IGetDisbursedLoanReport {
+  id: number;
+  accountNumber: string;
+  customerID: string;
+  bkBalance: string;
+  branch: string;
+  productName: string;
+  productCode: string;
+  settlementAcct1: string;
+  fullName: string;
+  startDate: string;
+  matDate: string;
+  loanAmount: string;
+  currentbalance: number;
+  groupid: string;
+  bvn: string;
+  phone1: string;
+  address: string;
+  gender: string;
+  officerName: string;
+  groupname: string;
+  loanStageCycle: number;
+  riskRating: string;
+  remarks: string;
+}
 export interface IGlMainGroupReportList {
-  gl_NodeName: string;
-  gL_NodeCode: string;
+  pagedMainGroupReports: {
+    gl_NodeName: string;
+    gL_NodeCode: string;
+    total: string;
+  }[];
   total: number;
 }
 export interface IGlSubGroupReportList {
@@ -305,6 +333,12 @@ export interface ILoanOverdueReportResponse
   extends IFetchingState,
     IReportsResponse {
   loanOverDueList?: IGetLoanOverdueReport[];
+}
+
+export interface IDisbursedLoanReportResponse
+  extends IFetchingState,
+    IReportsResponse {
+  disbursedLoans?: IGetDisbursedLoanReport[];
 }
 
 export interface ITdMaturityReport {
@@ -393,8 +427,11 @@ export interface IIncomeAssurance {
   intrate: number;
   loanamount: number;
   accrued_Int: number;
-  branch: string;
+  branchCode: string;
+  branchName: string;
   productCode: string;
+  productcode: string;
+  productName: string;
 }
 export interface ITransactionClearing {
   id: string;
@@ -430,7 +467,7 @@ export interface GetAllStandingInstructionsResponse
 export interface GetAllIncomeAssuranceReportResponse
   extends IFetchingState,
     IReportsResponse {
-  actionCode1Model?: IIncomeAssurance[];
+  data?: IIncomeAssurance[];
 }
 export interface GetAllTransactionClearingReportResponse
   extends IFetchingState,
@@ -454,6 +491,9 @@ export interface ITrialBalance {
   debitacct: number;
   creditAcct: number;
   differ: string;
+  acctName: string;
+  debitAcct: string;
+  lastNightBalance: string;
   totalname: string;
 }
 
@@ -461,6 +501,8 @@ export interface ITrialBalanceGroup {
   balance: number;
   gl_classname: string;
   gl_classcode: string;
+  prodtypecode: string;
+  gl_nodecode: string;
 }
 export interface TrailBalanceGroupResponse
   extends IFetchingState,
@@ -470,7 +512,7 @@ export interface TrailBalanceGroupResponse
 export interface TrailBalanceResponse extends IFetchingState, IReportsResponse {
   trialBydateList: {
     map(
-      arg0: (dataItem: ITrialBalance) => JSX.Element,
+      arg0: (dataItem: ITrialBalance) => JSX.Element
     ): import('react').ReactNode;
     lastNightBalance: number;
     totalCrBal: number;
@@ -497,21 +539,56 @@ export interface GetTellerPostingReport
   tellerPostByDateList?: ITellerPostingReport[];
   pageNumber?: number;
 }
+
+// Drill Down Report
 export interface IGlMainGroupResponse extends IFetchingState {
-  responseCode?: string;
-  responseDescription?: string;
-  pageNumber?: number;
-  pageSize?: number;
-  totalRecords?: number;
-  glMainGroupRptList?: IGlMainGroupReportList[];
+  responseCode: string;
+  responseDescription: string;
+  glMainGroupRptList: {
+    pagedMainGroupReports: {
+      gl_NodeName: string;
+      gL_NodeCode: string;
+      total: string;
+    }[];
+    total: number;
+  };
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
 }
+
 export interface IGlSubGroupResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
   pageNumber?: number;
   pageSize?: number;
   totalRecords?: number;
-  glSubGroupRptList?: IGlSubGroupReportList[];
+  glSubGroupRptList?: {
+    pagedSubGroupReports: IGlSubGroupReportList[];
+    total: number;
+  };
+}
+
+interface GlAccount {
+  branchCode: string;
+  branchName: string;
+  glNumber: string;
+  acctName: string;
+  bkbalance: number;
+}
+
+interface GlClassCodeRptList {
+  pagedAccountsByClassCode: GlAccount[];
+  total: number;
+}
+
+export interface GLAccountsByClassCodeResponse extends IFetchingState {
+  responseCode: string;
+  responseDescription: string;
+  glClassCodeRptList: GlClassCodeRptList;
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
 }
 
 export interface InflowOutflowReportResponse
@@ -594,4 +671,27 @@ export interface IPostingJournalResponse
   extends IFetchingState,
     IReportsResponse {
   postingJournalList: IPostingJournal[];
+}
+
+interface HoldTrans {
+  accountnumber: string;
+  create_dt: string;
+  effective_dt: string;
+  amt: number;
+  end_dt: string;
+  holdreason: string | null;
+}
+
+interface Data {
+  pagedHoldTrans: HoldTrans[];
+  totalHolding: number;
+}
+
+export interface IHoldingTransactionReportResponse {
+  responseCode: string;
+  responseDescription: string;
+  data: Data;
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
 }

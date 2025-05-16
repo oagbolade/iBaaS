@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { stringRegex } from '../admin';
+import { stringRegex, numericRegex } from '../admin';
 
 export const searchFieldsSchema = Yup.object({
   search: Yup.string().matches(stringRegex, 'Invalid Search Input'),
@@ -20,6 +20,19 @@ export const dormantAccountSchema = Yup.object({
   accountNumber: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Branch Name is required'),
+  status: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Status is required')
+});
+
+export const dormantAccountSchema = Yup.object({
+  searchWith: Yup.string().matches(numericRegex, 'Invalid Search Input'),
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Branch is required')
 });
 
 export const customerBalanceSchema = Yup.object({
@@ -67,6 +80,9 @@ export const maturityLoanSchema = Yup.object({
 
 export const statementOfAccountSchema = Yup.object({
   accountNumber: Yup.string()
+    .required('Branch Name is required'),
+
+  prodCode: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
     .required('required'),
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
@@ -74,5 +90,19 @@ export const statementOfAccountSchema = Yup.object({
 });
 
 export const prostingJournalSchema = Yup.object({
-  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid branch name')
+    .required('Branch name is required')
+});
+
+export const holdingTransactionSchema = Yup.object({
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid branch name')
+    .required('Branch name is required')
+});
+
+export const drillDowndueSchema = Yup.object({
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid branch name')
+    .required('Branch name is required')
 });

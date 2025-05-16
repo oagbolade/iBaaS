@@ -64,12 +64,7 @@ export const SetupConditionTable = () => {
           <MuiTableContainer
             columns={COLUMNS}
             data={setupConditionData}
-            showHeader={{
-              hideFilterSection: true,
-              mainTitle: 'Condition precedent',
-              secondaryTitle:
-                'See a directory of all Condition precedent in this system.'
-            }}
+            showSearch
             ActionMenuProps={ActionMenu}
             totalPages={totalPages}
             setPage={setPage}

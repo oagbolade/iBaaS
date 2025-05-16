@@ -45,7 +45,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      searchWith: values.searchWith.toString().length > 0 ? values.searchWith : null,
+      searchWith:
+        values.searchWith.toString().length > 0 ? values.searchWith : null,
       getAll: false,
       pageSize: '10'
     };
@@ -142,7 +143,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
-                    placeholder="Search by  Account Number or Account Name"
+                    placeholder="Search by Account Number or Account Name"
                     label=""
                   />{' '}
                 </Grid>

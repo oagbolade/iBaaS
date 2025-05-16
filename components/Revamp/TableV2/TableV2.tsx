@@ -251,30 +251,30 @@ export const TableV2 = <T,>({
             {isSearched ? (
               data?.map((dataItem, index) => {
                 return (
-                  <StyledTableRow key={index}>
+                    <StyledTableRow key={index}>
                     {checkboxHeader && (
                       <StyledTableCell component="th" scope="row">
-                        <Checkbox />
+                      <Checkbox />
                       </StyledTableCell>
                     )}
                     {keys?.map((key) => (
                       <StyledTableCell
-                        isPainted={tableConfig?.paintedColumns?.includes(
-                          key as string
-                        )}
-                        colSpan={columns.length + actionsColumn}
-                        align="right"
-                        key={String(key)}
+                      isPainted={tableConfig?.paintedColumns?.includes(
+                        key as string
+                      )}
+                      colSpan={columns.length + actionsColumn}
+                      align="right"
+                      key={String(key)}
                       >
-                        {String(dataItem[key])}
+                      {String(dataItem[key])}
                       </StyledTableCell>
                     ))}
                     {tableConfig?.hasActions && (
-                      <StyledTableCell
-                        colSpan={columns.length + actionsColumn}
-                        align="right"
+                    <StyledTableCell
+                      colSpan={columns.length + actionsColumn}
+                      align="right"
                       >
-                        {ActionMenuProps ? <ActionMenuProps /> : <ActionMenu />}
+                      {ActionMenuProps ? <ActionMenuProps data={dataItem} /> : <ActionMenu />}
                       </StyledTableCell>
                     )}
                   </StyledTableRow>

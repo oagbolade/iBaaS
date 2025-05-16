@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
+import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './Column';
 import {
@@ -8,7 +9,6 @@ import {
   StyledTableRow,
   renderEmptyTableBody
 } from '@/components/Table/Table';
-import Link from 'next/link';
 
 import { StyledTableCell } from '@/components/Table/style';
 import { useGetPostingJournal } from '@/api/reports/usePostingJournal';
@@ -21,32 +21,32 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import colors from '@/assets/colors';
 
-
-
 interface ActionMenuProps {
   detail: string;
 }
 
-
 const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
   return (
-    <Link href={`/report/custom-report/view-report/?getPostingJournal=postingJournal&postingJournalDetail=${detail}`} style={{ color: `${colors.activeBlue400}`}}>
+    <Link
+      href={`/report/custom-report/view-report/?getPostingJournal=postingJournal&postingJournalDetail=${detail}`}
+      style={{ color: `${colors.activeBlue400}` }}
+    >
       View More
     </Link>
   );
 };
 
 export const PostingJournal = () => {
-  const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType, setReportQueryParams } = React.useContext(
-    DownloadReportContext
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
   );
+  const { setExportData, setReportType, setReportQueryParams } =
+    React.useContext(DownloadReportContext);
 
   const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null)
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
-
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
@@ -54,19 +54,16 @@ export const PostingJournal = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
 
     setReportType('PostingJournal');
   };
 
-  const {
-    postingJournalList,
-    isLoading
-  } = useGetPostingJournal({
+  const { postingJournalList, isLoading } = useGetPostingJournal({
     ...searchParams,
     page,
-    getAll: isDateFilterApplied
+    getAll: false
   });
 
   // Set export data when postingJournalList is retrieved
@@ -83,10 +80,7 @@ export const PostingJournal = () => {
       }}
     >
       {branches && (
-        <FilterSection
-          branches={branches}
-          onSearch={handleSearch}
-        />
+        <FilterSection branches={branches} onSearch={handleSearch} />
       )}
       <Box sx={{ paddingX: '24px' }}>
         {isLoading ? (
@@ -134,7 +128,9 @@ export const PostingJournal = () => {
                       </StyledTableCell>
 
                       <StyledTableCell component="th" scope="row">
-                        <ActionMenu detail={JSON.stringify(dataItem) as string} />
+                        <ActionMenu
+                          detail={JSON.stringify(dataItem) as string}
+                        />
                       </StyledTableCell>
                     </StyledTableRow>
                   );

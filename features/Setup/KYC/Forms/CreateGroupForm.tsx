@@ -317,6 +317,21 @@ export const CreateGroupForm = ({
                     customStyle={{
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
+                    name="groupEmail"
+                    placeholder="Enter Group Email"
+                    label="Group Email"
+                    required
+                  />{' '}
+                </Grid>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                >
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(isMobile ? '285px' : '100%')
+                    }}
                     name="grouplimit"
                     placeholder="Enter group limit"
                     label="Group Account Limit"

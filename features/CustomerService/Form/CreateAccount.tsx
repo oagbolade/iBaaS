@@ -518,7 +518,7 @@ export const CreateAccount = ({
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
-                  value={String(productInfos?.drrate)}
+                  value={String(productInfos?.drrate || '0')}
                 />
               </Grid>
 
@@ -530,7 +530,7 @@ export const CreateAccount = ({
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
-                  value={String(productInfos?.crrate)}
+                  value={String(productInfos?.crrate || '0')}
                 />
               </Grid>
 

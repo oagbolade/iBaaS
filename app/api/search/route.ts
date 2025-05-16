@@ -14,6 +14,8 @@ export interface ISearchParams {
   phoneNo?: string | null;
   status?: string | null;
   userID?: string | null;
+  glNodeCode?: string | null;
+  glTypeCode?: string | null;
   roleID?: string | null;
   accountNumber?: string | null;
   glAccountNumber?: string | null;
@@ -97,4 +99,6 @@ export interface ISearchParams {
   pCode?: string | null;
   till?: string | null;
   accttype?: string | null;
+  nodeCode?: string | null;
+  Gl_ClassCode?: string | null;
 }

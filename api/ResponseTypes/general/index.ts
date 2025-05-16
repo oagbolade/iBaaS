@@ -4,6 +4,11 @@ export interface IBranches {
   branchCode: string;
   branchName: string;
 }
+
+export interface IIAReportType {
+  name: string;
+  id: number;
+}
 export interface IBankLogo {
   logo: string;
 }
@@ -103,6 +108,11 @@ export interface UseBranches extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
   branches?: IBranches[] | Array<any>;
+}
+export interface UseIAReportType extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IIAReportType[] | Array<any>;
 }
 export interface UseBankLogo extends IFetchingState {
   responseCode?: string;

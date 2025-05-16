@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
-import { COLUMN, keys } from './Column';
+import { COLUMN , keys } from './Column';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { useGetAllProduct } from '@/api/setup/useProduct';
@@ -10,14 +10,9 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useGetCustomerBalance } from '@/api/reports/useCustomerbalance';
 import { ICustomerBalance } from '@/api/ResponseTypes/reports';
 import { TableV2 } from '@/components/Revamp/TableV2';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import { DateRange } from '@mui/x-date-pickers-pro';
-import dayjs, { Dayjs } from 'dayjs';
-import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
-
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -30,7 +25,6 @@ interface CustomerBalanceList {
   totalRecords: number;
 }
 
-
 export const CustomerBalances = () => {
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
@@ -38,12 +32,10 @@ export const CustomerBalances = () => {
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
 
+  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+    React.useContext(DownloadReportContext);
 
-  const { setReportType, setExportData, setReportQueryParams, readyDownload, setReadyDownload } = React.useContext(
-    DownloadReportContext
-  );
-
-  const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const {
     customerBalanceList = {
@@ -60,10 +52,28 @@ export const CustomerBalances = () => {
     page
   });
 
-  const { pagedCustomerBalances = [], grandTotal = 0, totalAvaiBal = 0, totalBkBal = 0 } = customerBalanceList || [];
+  const {
+    pagedCustomerBalances = [],
+    grandTotal = 0,
+    totalAvaiBal = 0,
+    totalBkBal = 0
+  } = customerBalanceList || [];
 
   React.useEffect(() => {
-    if (pagedCustomerBalances?.length > 0 && readyDownload) {
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
+
+  React.useEffect(() => {
+    if (
+      readyDownload &&
+      !isCustomerBalanceDataLoading &&
+      pagedCustomerBalances.length > 0
+    ) {
       const mapCustomerBalance = pagedCustomerBalances.map((item) => ({
         accountnumber: item.accountnumber,
         accounttitle: item.accounttitle,
@@ -76,12 +86,18 @@ export const CustomerBalances = () => {
       }));
       setExportData(mapCustomerBalance as []);
     }
-  }, [pagedCustomerBalances, setExportData, setReportType, readyDownload, setReadyDownload]);
-
-
+  }, [
+    pagedCustomerBalances,
+    isCustomerBalanceDataLoading,
+    readyDownload,
+    setExportData,
+    grandTotal,
+    totalAvaiBal,
+    totalBkBal
+  ]);
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setReadyDownload(false)
+    setReadyDownload(false);
     setSearch(true);
     setSearchParams({
       ...params,
@@ -91,29 +107,13 @@ export const CustomerBalances = () => {
     setReportType('CustomerBalance');
   };
 
-  const DateRangePicker = () => {
-    return (
-      <DateRangeCalendar
-        value={dateValue}
-        onChange={(newValue) => {
-          if (newValue[1] !== null) {
-            setDateValue(newValue);
-          }
-        }}
-      />
-    );
-  };
-
   return (
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px'
+        marginTop: '60px'
       }}
     >
-     
-
-      
       {branches && bankproducts && (
         <FilterSection
           branches={branches}

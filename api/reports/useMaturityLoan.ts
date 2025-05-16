@@ -29,32 +29,33 @@ export async function getMaturityLoan(
       searchWith: params?.searchWith || ''
     };
     const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/LoanMaturityReport?${new URLSearchParams(queryParams)}`;
-    const { data }: AxiosResponse<ILoanMaturityResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${getStoredUser()?.token}`
-        }
-      });
+    const { data }: AxiosResponse<ILoanMaturityResponse> = await axiosInstance({
+      url: urlEndpoint,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getStoredUser()?.token}`
+      }
+    });
     const { message, title, severity } = globalErrorHandler({
       ...data
     });
     toast(message, title, severity, toastActions);
     if (data.loanMaturityList === null) {
-      data.loanMaturityList = []
+      data.loanMaturityList = [];
     }
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+  }
+  if (
+    result?.loanMaturityList === null ||
+    result?.loanMaturityList === undefined
+  ) {
+    result.loanMaturityList = [];
+  }
 
-  }
-  if (result?.loanMaturityList === null||result?.loanMaturityList === undefined) {  
-    result.loanMaturityList = []
-  }
-  
   return result;
 }
 
@@ -70,10 +71,16 @@ export function useGetMaturityLoan(params: ISearchParams | null) {
       queryKeys.maturityLoan,
       params?.branchID,
       params?.prodCode,
+      params?.searchWith,
+      params?.pageNumber,
+      params?.pageSize,
+      params?.getAll,
+      params?.startDate,
+      params?.endDate
     ],
     queryFn: () => getMaturityLoan(toastActions, params || {}),
     enabled: Boolean(
-        (params?.branchID || '').length > 0 ||
+      (params?.branchID || '').length > 0 ||
         (params?.prodCode || '').length > 0 ||
         (params?.startDate || '').length > 0 ||
         (params?.endDate || '').length > 0 ||

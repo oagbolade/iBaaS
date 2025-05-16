@@ -115,7 +115,7 @@ export const Holidays = () => {
                         {formatDate(dataItem.holidayends) || 'NIL'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem.narration || 'NIL'}
+                        {formatDate(dataItem.holidaydate) || 'NIL'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         <Status

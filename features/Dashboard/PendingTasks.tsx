@@ -23,7 +23,6 @@ import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
 import { FormSkeleton } from '@/components/Loaders';
 import { IGetPendingRequest } from '@/api/ResponseTypes/loans';
 
-
 import {
   MuiTableContainer,
   StyledTableRow,
@@ -39,7 +38,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14
   }
 }));
-
 
 type Props = {
   id: string;
@@ -67,8 +65,6 @@ export const PendingTasks = () => {
   }
   return (
     <Box mt={2} sx={tableCard}>
-
-
       <Stack mb={2} direction="row">
         <Typography sx={primaryTitle}>Pending tasks </Typography>
         <Box
@@ -88,8 +84,6 @@ export const PendingTasks = () => {
           {pendingData}
         </Box>
       </Stack>
-
-
 
       <TableContainer component={Paper}>
         <Table>
@@ -115,23 +109,22 @@ export const PendingTasks = () => {
 
             {authsdetails?.length === 0 && (
               <StyledTableRow>
-              <StyledTableCell
-                colSpan={12}
-                component="th"
-                sx={{ verticalAlign: 'middle', textAlign: 'center', height: 80 }}
-              >
-                {renderEmptyTableBody(authsdetails ?? [])}
-              </StyledTableCell>
+                <StyledTableCell
+                  colSpan={12}
+                  component="th"
+                  sx={{
+                    verticalAlign: 'middle',
+                    textAlign: 'center',
+                    height: 80
+                  }}
+                >
+                  {renderEmptyTableBody(authsdetails ?? [])}
+                </StyledTableCell>
               </StyledTableRow>
             )}
-
-
           </TableBody>
         </Table>
       </TableContainer>
-
-
-      
     </Box>
   );
 };

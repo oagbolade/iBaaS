@@ -3,10 +3,10 @@ import React, { useContext } from 'react';
 import { Box, Stack } from '@mui/material';
 import { useSearchParams } from 'next/navigation';
 import { ViewReports } from './ViewReports';
+import { TopOverViewSection } from './TopOverViewSection';
 import { MuiTableContainer } from '@/components/Table';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
 
 export const ViewLoanReport = () => {

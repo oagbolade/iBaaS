@@ -1,7 +1,7 @@
 export const COLUMNS = [
-  'Holidays Code',
+  'No of Days',
   'Holidays Name',
   'End Date',
-  'Narration',
+  'Start Date',
   'Status'
 ];

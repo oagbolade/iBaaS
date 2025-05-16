@@ -75,7 +75,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 }}
                 icon={<SearchIcon />}
                 name="branchName"
-                placeholder="Search by branch name"
+                placeholder="Search by branch name or branch Code"
                 label="Search"
               />{' '}
             </Grid>

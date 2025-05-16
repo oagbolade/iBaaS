@@ -24,6 +24,21 @@ import { StyledTableCell } from '@/components/Table/style';
 import { Status } from '@/components/Labels';
 import { CountrySearchParams } from '@/schemas/schema-values/setup';
 
+const actionButtons: any = [
+  <Box ml={{ mobile: 12, desktop: 0 }}>
+    <Link href="/setup/company/country/create">
+      <PrimaryIconButton
+        buttonTitle="Add New"
+        customStyle={{
+          ...submitButton,
+          width: { mobile: '119px', desktop: '218px' },
+          height: { mobile: '30px', desktop: '40px' }
+        }}
+      />
+    </Link>
+  </Box>
+];
+
 export const Country = () => {
   const { status } = useGetStatus();
   const [page, setPage] = React.useState(1);
@@ -56,7 +71,10 @@ export const Country = () => {
 
   return (
     <>
-      <TopActionsArea customStyle={{ width: '100%' }} />{' '}
+      <TopActionsArea
+        customStyle={{ width: '100%' }}
+        actionButtons={actionButtons}
+      />{' '}
       <SetupContainer>
         {status !== undefined && (
           <FilterSection status={status} onSearch={handleSearch} />

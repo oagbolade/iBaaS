@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { numericRegex, phoneRegExp, stringRegex } from '../admin';
+import { emailRegex, numericRegex, phoneRegExp, stringRegex } from '../admin';
 
 export const createCompanySchema = Yup.object({
   bankName: Yup.string().required('Company Name is Required'),
@@ -44,7 +44,6 @@ export const createBranchSchema = Yup.object({
     .required('Email is required'),
   country: Yup.string().required('Country is Required'),
   state: Yup.string().required('State is Required'),
-  mBranchCode: Yup.string().required('Main Branch Code Required'),
   branchType: Yup.string().required('Branch Type Required'),
   city: Yup.string().required('City is Required')
 });
@@ -56,14 +55,16 @@ export const createCountrySchema = Yup.object({
   currencyName: Yup.string()
     .matches(stringRegex, 'Invalid currency name')
     .required('Currency Name is Required'),
-  currencyMne: Yup.string().required('Currency Mne is Required'),
-  countryCode: Yup.string().required('Country Code is Required')
+  currencyMne: Yup.string().required('Currency Mne is Required')
 });
 
 export const createTownSchema = Yup.object({
-  townName: Yup.string().required('Town Name is Required'),
+  townName: Yup.string()
+    .matches(stringRegex, 'Invalid Town name')
+    .required('Town Name is Required'),
   stateCode: Yup.string().required('State Code is Required'),
-  townshortname: Yup.string().required('Town Short Name is Required')
+  townshortname: Yup.string().required('Town Short Name is Required'),
+  townstatus: Yup.string().required('Town status is Required')
 });
 
 export const createRegionSchema = Yup.object({
@@ -129,7 +130,10 @@ export const createGroupSchema = Yup.object({
     .required('Required')
     .matches(phoneRegExp, 'Phone number is not valid')
     .min(11, 'must be 11 digits long')
-    .max(11, 'too long, must be excatly 11 digits')
+    .max(11, 'too long, must be excatly 11 digits'),
+  groupEmail: Yup.string()
+    .matches(emailRegex, 'Invalid group Email')
+    .required('group  Email is Required')
 });
 
 export const createSectorSchema = Yup.object({
@@ -346,11 +350,9 @@ export const createDormancySchema = Yup.object({
   prodCode: Yup.string().required('Pord Code is Required'),
   duration: Yup.string().required('duration is Required'),
   penalty: Yup.string()
-    .matches(numericRegex, 'Invalid Narration')
-    .required('Penalty is Required'),
-  narration: Yup.string()
-    .matches(stringRegex, 'Invalid Narration')
-    .required('narration is Required'),
+    .matches(numericRegex, 'Invalid Penalty Amount')
+    .required('Penalty Amount is Required'),
+
   penaltyGlAccount: Yup.string()
     .matches(numericRegex, 'Invalid penalty GL Account')
     .required('Required')
@@ -464,7 +466,6 @@ export const createChargeSchema = Yup.object({
   chargeDesc: Yup.string()
     .matches(stringRegex, 'Invalid charge description')
     .required('charge description is Required'),
-  liqMode: Yup.string().required('Liquidation Mode is Required'),
   branchMask: Yup.string().required('Branch Mask is Required'),
   freq: Yup.string().required(' When will charge take place is Required'),
   glCode: Yup.string()
