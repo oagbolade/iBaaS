@@ -4,7 +4,7 @@ import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import { exportData, topFilterStyle, dateFilter } from './styles';
 import {
   ActionButtonWithPopper,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ChevronDown, ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
@@ -21,7 +21,6 @@ export const TopOverViewSection = ({
   useBackButton,
   CustomDateRangePicker,
 }: Props) => {
-  
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const formattedDateRange = useMemo(() => {
@@ -36,8 +35,12 @@ export const TopOverViewSection = ({
   return (
     <Stack
       sx={{
-        borderBottom: `${useBackButton ? '1px solid #E8E8E8' : 'none'}`,
-        padding: '12px 20px'
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        backgroundColor: '#fff',
+        borderBottom: useBackButton ? '1px solid #E8E8E8' : 'none',
+        padding: '12px 20px',
       }}
       direction={setDirection()}
       justifyContent="space-between"
@@ -86,7 +89,7 @@ export const TopOverViewSection = ({
             icon={
               <CalendarTodayOutlinedIcon
                 sx={{
-                  color: `${colors.Heading}`
+                  color: `${colors.Heading}`,
                 }}
               />
             }

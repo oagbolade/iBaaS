@@ -13,6 +13,12 @@ import { ChevronDown } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { TextInput } from '@/components/FormikFields';
 import { AssetsTable, IData } from '@/components/Table/AssetsTable';
+import { useGetAllBalanceSheetByItemId } from '@/api/reports/useGetBalanceSheet';
+import { FormSkeleton } from '@/components/Loaders';
+import { ActionButton } from '@/components/Revamp/Buttons';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { renderEmptyTableBody } from '@/components/Table/Table';
+import { IBalanceSheetByItemIdList } from '@/api/ResponseTypes/reports';
 
 const Accordion = styled((props: AccordionProps) => {
   return <MuiAccordion {...props} />;
@@ -64,7 +70,7 @@ const Title = ({ title }: { title: string }) => {
   );
 };
 
-const Value = ({ title }: { title: string }) => {
+const Value = ({ title }: { title: any }) => {
   return (
     <Typography
       sx={{
@@ -119,16 +125,60 @@ export const GrandTotal = ({
 
 type Props = {
   column: Array<string>;
-  data: IData[];
+  defaultData: IData[];
+  itemcode: string;
+  title: string;
+  assetCount: number;
+  assetValue: string | number;
 };
 
-export const ShortCardWithAccordion = ({ column, data }: Props) => {
+export const ShortCardWithAccordion = ({
+  column,
+  defaultData,
+  itemcode,
+  title,
+  assetCount,
+  assetValue,
+}: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [activeSearchTerm, setActiveSearchTerm] = React.useState<string>('');
 
   const handleChange = () => {
     setExpanded(!expanded);
   };
+
+  const handleSearch = () => {
+    setActiveSearchTerm(searchTerm);
+  };
+
+  const { data: detailData, isLoading } = useGetAllBalanceSheetByItemId({
+    itemcode,
+    page: 1,
+    getAll: false,
+    searchWith: activeSearchTerm,
+  });
+
+  const tableData = React.useMemo(() => {
+    if (expanded && detailData?.length) {
+      return detailData.map((item) => ({
+        assets: item.itemDesc || '',
+        amount: `${formatCurrency(item.sumbalance)}`,
+        itemid: item.itemid,
+        groupname: item.itemDesc,
+        balance: item.sumbalance,
+      })) as IData[];
+    }
+    return defaultData;
+  }, [detailData, defaultData, expanded]);
+
+  const total = React.useMemo(() => {
+    if (!detailData) return 0;
+    return detailData
+      .reduce((sum, item) => sum + parseFloat(item.sumbalance || '0'), 0)
+      .toFixed(2);
+  }, [detailData]);
 
   return (
     <AccordionWrapper>
@@ -149,18 +199,18 @@ export const ShortCardWithAccordion = ({ column, data }: Props) => {
                 lineHeight: '32px',
               }}
             >
-              Assets
+              {title}
             </Typography>
             <Box mb={3}>
               <Stack>
                 <Title title="Number of Assets" />
-                <Value title="7,543" />
+                <Value title={assetCount} />
               </Stack>
             </Box>
             <Box>
               <Stack>
                 <Title title="Value" />
-                <Value title="N13,543,789.54" />
+                <Value title={assetValue} />
               </Stack>
             </Box>
             <Box
@@ -176,21 +226,55 @@ export const ShortCardWithAccordion = ({ column, data }: Props) => {
         </AccordionSummary>
         <Divider light />
         <AccordionDetails>
-          <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
-            <TextInput
-              name="Search"
-              placeholder="Search"
-              icon={<SearchIcon />}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              gap: '12px',
+              marginTop: '20px',
+              marginBottom: '30px',
+            }}
+          >
+            <Box sx={{ flexGrow: 1 }}>
+              <TextInput
+                name="Search"
+                placeholder="Search"
+                icon={<SearchIcon />}
+                onChange={(e: any) => setSearchTerm(e.target.value)}
+                value={searchTerm}
+              />
+            </Box>
+            <ActionButton
+              customStyle={{
+                backgroundColor: `${colors.activeBlue400}`,
+                border: `1px solid ${colors.activeBlue400}`,
+                color: `${colors.white}`,
+                height: '40px',
+              }}
+              type="button"
+              buttonTitle="Search"
+              onClick={handleSearch}
             />
           </Box>
-          <AssetsTable
-            tableConfig={{
-              paintedColumns: ['Assets', 'Amount'],
-              totalRow: ['Total', 'N12,563,090,587.65'],
-            }}
-            columns={column}
-            data={data}
-          />
+
+          {isLoading ? (
+            <Box sx={{ padding: '20px', textAlign: 'center' }}>
+              <FormSkeleton noOfLoaders={3} />
+            </Box>
+          ) : detailData?.length ? (
+            <AssetsTable
+              tableConfig={{
+                paintedColumns: ['Assets', 'Amount'],
+                totalRow: ['Total', `${formatCurrency(total)}`],
+              }}
+              columns={column}
+              data={tableData || []}
+            />
+          ) : (
+            <>
+              {renderEmptyTableBody(detailData as IBalanceSheetByItemIdList[])}
+            </>
+          )}
         </AccordionDetails>
       </Accordion>
     </AccordionWrapper>
