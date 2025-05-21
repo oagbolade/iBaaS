@@ -47,17 +47,15 @@ async function fetchGlMainGroupReport(
   }
 }
 
-export function useGetGlMainGroupReport(
-  params: IGlMainParams
-): IGlMainGroupResponse {
+export function useGetGlMainGroupReport(params: IGlMainParams): {
+  data: IGlMainGroupResponse;
+  isError: boolean;
+  isLoading: boolean;
+} {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as IGlMainGroupResponse;
 
-  const {
-    data = fallback,
-    isError,
-    isLoading
-  } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: [
       queryKeys.glMainGroupReport,
       params?.pageSize || 1,
@@ -67,5 +65,5 @@ export function useGetGlMainGroupReport(
     enabled: Boolean(params.pageNumber && params.pageSize)
   });
 
-  return { ...data, isError, isLoading };
+  return { data: data ?? fallback, isError, isLoading };
 }

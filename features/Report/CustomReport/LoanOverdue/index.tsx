@@ -20,6 +20,10 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { IGetLoanOverdueReport } from '@/api/ResponseTypes/reports';
 import { StyledTableCell } from '@/components/Table/style';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
+import { useGetAllProduct } from '@/api/setup/useProduct';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { FormSkeleton } from '@/components/Loaders';
 
 interface Props {
   data: IGetLoanOverdueReport;
@@ -28,35 +32,82 @@ interface Props {
 export const LoanOverdue = () => {
   const { branches } = useGetBranches();
   const [page, setPage] = useState<number>(1);
+  const { bankproducts } = useGetAllProduct();
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
+  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+    useContext(DownloadReportContext);
 
   const [searchParams, setSearchParams] = useState<LoanOverdueParams | null>(
     null
   );
 
-  const handleSearch = (params: LoanOverdueParams | null) => {
-    setSearchParams(params);
-    setPage(1); // Reset to the first page on new search
-  };
-
   const { branch, search, product } = searchParams || {};
 
-  const [value, setValue] = React.useState<DateRange<Dayjs>>([
-    dayjs('2023-11-17'),
-    dayjs('2023-12-21')
-  ]);
-
-  const { loanOverDueList: loanOverDueData = [] } = useGetLoanOverdueReport({
+  const {
+    loanOverDueList: loanOverDueData = [],
+    totalRecords,
+    isLoading
+  } = useGetLoanOverdueReport({
+    ...searchParams,
     branch,
     search,
     product,
-    date1: convertToISOString(String(value[0]?.toDate())),
-    pageSize: 20,
-    pageNumber: page
+    pageSize: 10,
+    pageNumber: page,
+    getAll: readyDownload
   });
 
+  React.useEffect(() => {
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
+
+  React.useEffect(() => {
+    if (loanOverDueData.length > 0 && !isLoading && readyDownload) {
+      const formattedExportData = loanOverDueData.map((item) => ({
+        'Acc No': item?.accountNumber || '',
+        'Prod Code': item?.productCode || '',
+        'Loan Amount': item?.loanamount || '',
+        'Start Date': item?.startdate?.split('T')[0] || '',
+        'Maturity Date': item?.matDate?.split('T')[0] || '',
+        'Principal Outstanding': item?.principal_Outstanding || '',
+        'Intrest Outstanding': item?.interest_Outstanding || '',
+        Age: item?.age || '',
+        'Last Date': item?.lastDate?.split('T')[0] || '',
+        'Group ID': item?.groupid || '',
+        'Settlement Account': item?.settlementAcct1 || '',
+        'Current Balance': item?.currentbalance || '',
+        'Penal Intrest Outstanding': item?.penalInterest_Outstanding || '',
+        'Group Name': item?.groupname || item?.groupName2 || '',
+        Report: item?.report?.split(' ')[0] || '',
+        'Acct Name': item?.fullname || '',
+        Branch: item?.branch || '',
+        'Officer Name': item?.officerName || item?.officerName2 || '',
+        'CASA Balance': item?.casa_Balance || ''
+      }));
+
+      // Ensure no blank row or misplaced headers
+      setExportData(formattedExportData);
+      setReportType('LoanOverdueReport');
+    }
+  }, [loanOverDueData, isLoading, readyDownload, setExportData, setReportType]);
+
   const rowsPerPage = 10;
-  const totalElements = loanOverDueData.length;
-  const totalPages = Math.ceil(totalElements / rowsPerPage);
+  const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
+
+  const handleSearch = (params: LoanOverdueParams | null) => {
+    setReadyDownload(false);
+    setSearchParams({
+      ...params
+    });
+    setPage(1); // Reset to the first page on new search
+  };
 
   const LoanOverdueAction = ({ data }: Props) => {
     const { setLoanOverduestatedata } = useContext(ReportModuleContext);
@@ -68,72 +119,88 @@ export const LoanOverdue = () => {
     };
 
     return (
-      <Link onClick={setData} href="/report/custom-report/view-report">
+      <Link
+        onClick={setData}
+        href="/report/custom-report/view-loanoverdue-report"
+      >
         <TableSingleAction actionName="View" />
       </Link>
     );
   };
+
   return (
     <Box sx={{ marginTop: '60px', width: '100%' }}>
-      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
-        <FilterSection branches={branches} onSearch={handleSearch} />
-      </Box>
-      <Box sx={{ padding: '25px', width: '100%' }}>
-        <MuiTableContainer
-          columns={loanOverdueColumns}
-          data={loanOverDueData}
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-          totalElements={totalElements}
-          showHeader={{
-            mainTitle: 'Loan Overdue',
-            secondaryTitle:
-              'See a directory of all Overdue Loans on this system.',
-            hideFilterSection: true
-          }}
-        >
-          {loanOverDueData.length > 0 ? (
-            loanOverDueData.map((accountData: IGetLoanOverdueReport, index) => {
-              return (
-                <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
-                    {accountData?.accountNumber || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell component="th" scope="row">
-                    {accountData?.productCode || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {accountData?.loanamount || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {accountData?.startdate || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {accountData?.matDate || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {accountData?.principal_Outstanding || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <LoanOverdueAction data={accountData} />
+        {branches && bankproducts && (
+          <FilterSection
+            branches={branches}
+            bankproducts={bankproducts}
+            onSearch={handleSearch}
+          />
+        )}
+
+        {isLoading ? (
+          <FormSkeleton noOfLoaders={5} />
+        ) : (
+          <Box sx={{ padding: '25px', width: '100%' }}>
+            <MuiTableContainer
+              columns={loanOverdueColumns}
+              data={loanOverDueData}
+              page={page}
+              setPage={setPage}
+              totalPages={totalPages}
+              totalElements={totalRecords}
+              showHeader={{
+                mainTitle: 'Loan Overdue',
+                secondaryTitle:
+                  'See a directory of all Overdue Loans on this system.',
+                hideFilterSection: true
+              }}
+            >
+              {loanOverDueData.length > 0 ? (
+                loanOverDueData.map(
+                  (accountData: IGetLoanOverdueReport, index) => {
+                    return (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell component="th" scope="row">
+                          {accountData?.accountNumber || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {accountData?.productCode || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {accountData?.loanamount || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {accountData?.startdate?.split('T')[0] || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {accountData?.matDate?.split('T')[0] || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {accountData?.principal_Outstanding || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          <LoanOverdueAction data={accountData} />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  }
+                )
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell
+                    colSpan={loanOverdueColumns.length + 1}
+                    component="th"
+                    scope="row"
+                  >
+                    {renderEmptyTableBody()}
                   </StyledTableCell>
                 </StyledTableRow>
-              );
-            })
-          ) : (
-            <StyledTableRow>
-              <StyledTableCell
-                colSpan={loanOverdueColumns.length + 1}
-                component="th"
-                scope="row"
-              >
-                {renderEmptyTableBody()}
-              </StyledTableCell>
-            </StyledTableRow>
-          )}
-        </MuiTableContainer>
+              )}
+            </MuiTableContainer>
+          </Box>
+        )}
       </Box>
     </Box>
   );

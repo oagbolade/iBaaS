@@ -19,13 +19,13 @@ import { useGetStatus } from '@/api/general/useStatus';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 
-
 export const ChequeBookStatus = () => {
-  const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType, setReportQueryParams } = React.useContext(
-    DownloadReportContext
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
   );
-  
+  const { setExportData, setReportType, setReportQueryParams } =
+    React.useContext(DownloadReportContext);
+
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
@@ -38,7 +38,7 @@ export const ChequeBookStatus = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
 
     setReportType('ChequeBookStatus');
@@ -53,12 +53,12 @@ export const ChequeBookStatus = () => {
     getAll: isDateFilterApplied
   });
 
-    // Set export data when getAllChequeBookStatusData is retrieved
-    React.useEffect(() => {
-      if (getAllChequeBookStatusData?.length > 0) {
-        setExportData(getAllChequeBookStatusData);
-      }
-    }, [getAllChequeBookStatusData, setExportData, setReportType]);
+  // Set export data when getAllChequeBookStatusData is retrieved
+  React.useEffect(() => {
+    if (getAllChequeBookStatusData?.length > 0) {
+      setExportData(getAllChequeBookStatusData);
+    }
+  }, [getAllChequeBookStatusData, setExportData, setReportType]);
 
   return (
     <Box

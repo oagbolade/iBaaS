@@ -1,11 +1,24 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateCalendar } from '@mui/x-date-pickers';
 import { buttonBackgroundColor } from '../AccountDebit/style';
+import { dateFilter } from '../../AuditTrail/styles';
 import { TextInput } from '@/components/FormikFields';
-import { ActionButton } from '@/components/Revamp/Buttons';
+import {
+  ActionButton,
+  ActionButtonWithPopper,
+  BackButton
+} from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Report/CustomReport/style';
 import { ITellerPostingParams } from '@/api/reports/useGetTellerPosting';
+import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import useFormattedDates from '@/utils/hooks/useFormattedDates';
+import { exportData } from '@/components/ViewReport/style';
+import { ExportIcon } from '@/assets/svg';
+import colors from '@/assets/colors';
 
 type Props = {
   onSearch: (params: ITellerPostingParams | null) => void;
@@ -13,10 +26,15 @@ type Props = {
 
 export const FilterSection = ({ onSearch }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { setDirection } = useSetDirection();
+
+  const { currentDate } = useFormattedDates();
+  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
 
   const handleSearchClick = () => {
     const searchParams = {
-      search: searchTerm || undefined
+      search: searchTerm || undefined,
+      reportDate: reportDate.format('YYYY-MM-DD')
     };
 
     onSearch(searchParams);
@@ -24,6 +42,59 @@ export const FilterSection = ({ onSearch }: Props) => {
 
   return (
     <Box>
+      <Stack
+        sx={{
+          borderBottom: '1px solid #E8E8E8',
+          marginTop: '10px',
+          paddingX: '24px'
+        }}
+        direction={setDirection()}
+        justifyContent="space-between"
+      >
+        <Box>
+          <Box mt={2.3}>
+            <BackButton />
+          </Box>
+        </Box>
+        <Stack
+          mt={1}
+          direction={setDirection()}
+          spacing={2}
+          justifyContent="space-between"
+        >
+          <Box>
+            <ActionButtonWithPopper
+              searchGroupVariant="ExportReport"
+              customStyle={{ ...exportData }}
+              icon={<ExportIcon />}
+              iconPosition="start"
+              buttonTitle="Export Data"
+            />
+          </Box>
+
+          <Box>
+            <ActionButtonWithPopper
+              searchGroupVariant="DateRangePicker"
+              CustomDateRangePicker={
+                <DateCalendar
+                  value={reportDate}
+                  onChange={(date) => setReportDate(date)}
+                />
+              }
+              customStyle={{ ...dateFilter }}
+              icon={
+                <CalendarTodayOutlinedIcon
+                  sx={{
+                    color: `${colors.Heading}`
+                  }}
+                />
+              }
+              iconPosition="end"
+              buttonTitle={reportDate.format('YYYY-MM-DD')}
+            />
+          </Box>
+        </Stack>
+      </Stack>
       <Box sx={{ height: '120px' }}>
         <Grid
           sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}

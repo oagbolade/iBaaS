@@ -1,8 +1,8 @@
 export const COLUMNS = [
   'Product Code',
-  'Product Type',
-  'Duration Plan',
-  'Timeframe',
+  'Penalty',
+  'Product Name',
+  'Duration Plan(Month)',
   'Narration',
   'Status'
 ];

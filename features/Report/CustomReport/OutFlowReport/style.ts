@@ -13,7 +13,6 @@ export const totalInflowContainerStyle = {
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '10px 20px',
-  paddingRight: '240px',
   height: '58px'
 };
 

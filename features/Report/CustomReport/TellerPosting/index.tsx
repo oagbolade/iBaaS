@@ -37,7 +37,8 @@ export const TellerPosting = () => {
     null
   );
   const [page, setPage] = useState(1);
-  const { setExportData, setReportType } = useContext(DownloadReportContext);
+  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+    useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
@@ -53,47 +54,60 @@ export const TellerPosting = () => {
     search,
     pageNumber: page,
     pageSize: 10,
-    getAll: isDateFilterApplied
+    getAll: readyDownload
   });
 
   React.useEffect(() => {
-    if (!tellerPostByDateList?.length) return;
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
 
-    const formattedExportData = tellerPostByDateList.map((item) => ({
-      'Account Number': item?.accountNumber || '',
-      'Account title': item?.accounttitle || '',
-      Narration: item?.narration || '',
-      'Value Date': item?.valuedate?.trim() || '',
-      Reference: item?.refNo || '',
-      'Transaction Amount': item?.tranAmount || '',
-      'Posting Mode': item?.postingMode || '',
-      'Credit Account': item?.creditAcct || '',
-      'Transaction Date': item?.tranDate || '',
-      'User ID': item?.userid || '',
-      'Debit Account': item?.debitacct || '',
-      'Post Sequence': item?.postseq || '',
-      'Previous Balance': item?.prevbal || '',
-      Deposit: item?.deposit || '',
-      'From Vault': item?.fromVault || '',
-      'Current Balance': item?.curbal || '',
-      Withdrawal: item?.withdrawal || '',
-      'To Vault': item?.toVault || ''
-    }));
+  React.useEffect(() => {
+    if (tellerPostByDateList?.length > 0 && readyDownload) {
+      const formattedExportData = tellerPostByDateList.map((item) => ({
+        'Account Number': item?.accountNumber || '',
+        'Account title': item?.accounttitle || '',
+        Narration: item?.narration || '',
+        'Value Date': item?.valuedate?.trim() || '',
+        Reference: item?.refNo || '',
+        'Transaction Amount': item?.tranAmount || '',
+        'Posting Mode': item?.postingMode || '',
+        'Credit Account': item?.creditAcct || '',
+        'Transaction Date': item?.tranDate || '',
+        'User ID': item?.userid || '',
+        'Debit Account': item?.debitacct || '',
+        'Post Sequence': item?.postseq || '',
+        'Previous Balance': item?.prevbal || '',
+        Deposit: item?.deposit || '',
+        'From Vault': item?.fromVault || '',
+        'Current Balance': item?.curbal || '',
+        Withdrawal: item?.withdrawal || '',
+        'To Vault': item?.toVault || ''
+      }));
 
-    // Ensure no blank row or misplaced headers
-    setExportData(formattedExportData);
-    setReportType('TellerPostingSummary');
-  }, [tellerPostByDateList]);
+      // Ensure no blank row or misplaced headers
+      setExportData(formattedExportData);
+      setReportType('TellerPostingSummary');
+    }
+  }, [
+    tellerPostByDateList,
+    setExportData,
+    setReportType,
+    readyDownload,
+    setReadyDownload
+  ]);
 
   const rowsPerPage = 10;
-  const totalElements = tellerPostByDateList.length;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   const handleSearch = (params: ITellerPostingParams | null) => {
+    setReadyDownload(false);
     setSearchParams({
-      ...params,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      ...params
     });
     setPage(1); // Reset to the first page on new search
   };
@@ -108,7 +122,6 @@ export const TellerPosting = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '30px', padding: '25px' }}>
         <FilterSection onSearch={handleSearch} />
       </Box>

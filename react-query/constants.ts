@@ -1,6 +1,7 @@
 interface IQueryKeys {
   user: string;
   branches: string;
+  iAReportType: string;
   accountOfficer: string;
   getAccountOfficerByCode: string;
   getAllCustomerAccountProducts: string;
@@ -155,6 +156,7 @@ interface IQueryKeys {
   customerBalance: string;
   getAllProductByCode: string;
   plainTrialBalance: string;
+  trialBalanceByDate: string;
   getTermDeporitMaturityReport: string;
   chartAccount: string;
   portfolioAtRisk: string;
@@ -287,6 +289,7 @@ export const queryKeys: IQueryKeys = {
   getAllSectors: 'getAllSectors',
   getMandateDetailsByAccountNumber: 'getMandateDetailsByAccountNumber',
   branches: 'branches',
+  iAReportType: 'iAReportType',
   accountOfficer: 'accountOfficer',
   getAccountOfficerByCode: 'getAccountOfficerByCode',
   getAllCustomerAccountProducts: 'getAllCustomerAccountProducts',
@@ -410,6 +413,7 @@ export const queryKeys: IQueryKeys = {
   customerBalance: 'customerBalance',
   getAuditTrails: 'getAuditTrails',
   plainTrialBalance: 'plainTrialBalance',
+  trialBalanceByDate: 'trialBalanceByDate',
   getAllProductByCode: 'getAllProductByCode',
   chartAccount: 'chartAccount',
   getMinMaxCreditInterest: 'getMinMaxCreditInterest',
@@ -438,5 +442,4 @@ export const queryKeys: IQueryKeys = {
   statementOfAccount: 'statementOfAccount',
   balanceSheet: 'balanceSheet',
   balanceSheetbyId: 'balanceSheetbyId',
-
 };

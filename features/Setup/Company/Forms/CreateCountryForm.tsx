@@ -81,23 +81,25 @@ export const CreateCountryForm = ({
           <Form>
             <Box mt={4}>
               <Grid container>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="countryCode"
-                    placeholder="+234"
-                    label="Country Code"
-                    required
-                    disabled
-                  />{' '}
-                </Grid>
+                {isEditing && (
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%')
+                      }}
+                      name="countryCode"
+                      placeholder="+234"
+                      label="Country Code"
+                      required
+                      disabled
+                    />{' '}
+                  </Grid>
+                )}
                 <Grid
                   item={isTablet}
                   mobile={12}
@@ -108,10 +110,9 @@ export const CreateCountryForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="countryName"
-                    placeholder="Nigeria"
+                    placeholder="Enter Country Name"
                     label="Country Name"
                     required
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid
@@ -124,10 +125,9 @@ export const CreateCountryForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="currencyMne"
-                    placeholder="NGN"
+                    placeholder="Enter Currency Mneumonic"
                     label="Currency Mneumonic"
                     required
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid
@@ -140,10 +140,9 @@ export const CreateCountryForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="currencyName"
-                    placeholder="NGN"
+                    placeholder="Enter Currency Name"
                     label="Currency Name"
                     required
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid

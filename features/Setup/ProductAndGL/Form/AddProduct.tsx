@@ -43,12 +43,10 @@ export const AddNewProduct = ({
 }: Props) => {
   const requiredFields: Record<string, string[]> = {
     personalDetails: [
-      'productCode',
+      'productclass',
       'productName',
       'minloan',
-      'currencycode',
-      'productstart',
-      'productExpire',
+      'maxLoan',
       'appType',
       'term',
       'shortname'
@@ -80,7 +78,7 @@ export const AddNewProduct = ({
       'penalSuspense'
     ],
     otherDetails: ['manageCollection', 'allowOD', 'postnodebit'],
-    document: ['ProdDocuments']
+    document: []
   };
   const isEditing = useGetParams('isEditing') || null;
   const { loanProducts, isLoading } = useGetLoanProductByCode(

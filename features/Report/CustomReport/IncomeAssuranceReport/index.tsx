@@ -1,4 +1,5 @@
 'use client';
+import { read } from 'fs';
 import * as React from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
@@ -13,38 +14,89 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { IIncomeAssurance } from '@/api/ResponseTypes/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { useGetIAReportType } from '@/api/general/useIAReportType';
 
 export const IncomeAssuranceReport = () => {
-    const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
+  const { productTypes } = useGetProductType();
+  const { branches } = useGetBranches();
+  const { data: IAreportType } = useGetIAReportType();
+
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
+
+  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+    React.useContext(DownloadReportContext);
 
   const [search, setSearch] = React.useState<boolean>(false);
   const [searchParams, setSearchParams] = React.useState<ISearchParams | null>(
     null
   );
-  const [page, setPage] = React.useState(1);
-  const { actionCode1Model, isLoading } = useGetIncomeAssuranceReport({
-    ...searchParams,
-    page
-  });
-  const { productTypes } = useGetProductType();
-  const { branches } = useGetBranches();
 
-  console.log('actionCode1Model', productTypes);
-  console.log('actionCode1Modefrerel', branches);
+  console.log(searchParams?.reportType, 'reportType');
+
+  const [page, setPage] = React.useState(1);
+  const {
+    data = [],
+    isLoading,
+    totalRecords
+  } = useGetIncomeAssuranceReport({
+    ...searchParams,
+    page,
+    getAll: readyDownload,
+    pageSize: '10'
+  });
+
+  React.useEffect(() => {
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
+
+  React.useEffect(() => {
+    if (data?.length > 0 && !isLoading && readyDownload) {
+      const formattedExportData = data?.map((item) => ({
+        'Acc No': item?.accountnumber || 'N/A',
+        'Account Name': item?.fullname || 'N/A',
+        'Start Date': item?.startdate?.split('T')[0] || 'N/A',
+        'Maturity Date': item?.matdate?.split('T')[0] || 'N/A',
+        'Intrest Rate': item?.intrate || 'N/A',
+        'Loan Amount': item?.loanamount?.toLocaleString() || 0,
+        'product Name': item?.productName || 'N/A',
+        'Accured Intrest': item?.accrued_Int?.toLocaleString() || 0,
+        Branch: item?.branchName || 'N/A',
+        'Product Code': item?.productCode || 'N/A'
+      }));
+
+      // Ensure no blank row or misplaced headers
+      setExportData(formattedExportData);
+      setReportType('IncomeAssuranceReport');
+    }
+  }, [data, isLoading, readyDownload, setExportData, setReportType]);
+
+  const rowsPerPage = 10;
+  const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
+
   const handleSearch = async (params: ISearchParams | null) => {
+    setReadyDownload(false);
     setSearch(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
   };
   return (
     <Box sx={{ width: '100%' }}>
-      {branches && productTypes && (
+      {branches && IAreportType && (
         <FilterSection
           branches={branches}
           onSearch={handleSearch}
+          iAReportType={IAreportType}
           productTypes={productTypes}
         />
       )}
@@ -54,7 +106,7 @@ export const IncomeAssuranceReport = () => {
         ) : (
           <MuiTableContainer
             columns={COLUMN}
-            data={actionCode1Model}
+            data={data}
             showHeader={{
               mainTitle: ' Income Assurance Report',
               secondaryTitle:
@@ -63,11 +115,13 @@ export const IncomeAssuranceReport = () => {
             }}
             setPage={setPage}
             page={page}
+            totalPages={totalPages}
+            totalElements={totalRecords}
           >
             {search ? (
-              actionCode1Model?.map((dataItem: IIncomeAssurance) => {
+              data?.map((dataItem: IIncomeAssurance, i) => {
                 return (
-                  <StyledTableRow key={dataItem.accountnumber}>
+                  <StyledTableRow key={i}>
                     <StyledTableCell component="th" scope="row">
                       {dataItem?.accountnumber || 'N/A'}
                     </StyledTableCell>
@@ -75,22 +129,28 @@ export const IncomeAssuranceReport = () => {
                       {dataItem?.fullname || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.startdate || 'N/A'}
+                      {dataItem?.startdate?.split('T')[0] || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.matdate || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem?.loanamount || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem?.accrued_Int || 'N/A'}
+                      {dataItem?.matdate?.split('T')[0] || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.intrate || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.productCode || 'N/A'}
+                      {dataItem?.loanamount?.toLocaleString() || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem?.productName || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem?.accrued_Int?.toLocaleString() || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem?.branchName || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem?.productCode || dataItem?.productcode || 'N/A'}
                     </StyledTableCell>
                   </StyledTableRow>
                 );
@@ -102,7 +162,7 @@ export const IncomeAssuranceReport = () => {
                   component="th"
                   scope="row"
                 >
-                  {renderEmptyTableBody(actionCode1Model)}
+                  {renderEmptyTableBody(data)}
                 </StyledTableCell>
               </StyledTableRow>
             )}

@@ -26,10 +26,11 @@ export const TrialBalance = () => {
   const [page] = React.useState(1);
   const { branches } = useGetBranches();
   const { glType } = useGetGLType();
-  const { setExportData, setReportType } = useContext(DownloadReportContext);
+  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+    useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
 
-  const { branchID, reportType } = searchParams || {};
+  const { branchID, reportType, customerID } = searchParams || {};
 
   const { trialBydateList = [], isLoading: isLoadingTrialBydategroupList } =
     useGetTrialBalanceGroup({
@@ -37,10 +38,11 @@ export const TrialBalance = () => {
       branchID,
       pageSize: '20',
       pageNumber: String(page),
-      getAll: isDateFilterApplied
+      getAll: readyDownload
     });
 
   const handleSearch = async (params: ISearchParams | null) => {
+    setReadyDownload(false);
     setSearch(true);
     setSearchParams({
       ...params,
@@ -48,19 +50,36 @@ export const TrialBalance = () => {
     });
   };
 
+  React.useEffect(() => {
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
+
   useEffect(() => {
-    if (!trialBydateList.length) return;
+    if (trialBydateList.length > 0 && readyDownload) {
+      const formattedExportData = trialBydateList.map((item) => ({
+        'GL Class Name': item?.gl_classname || '',
+        Balance: item?.balance || '',
+        'GL Code': item?.gl_classcode || '',
+        'Product Type Code': item?.prodtypecode || '',
+        'GL Nodecode': item?.gl_nodecode || ''
+      }));
 
-    const formattedExportData = trialBydateList.map((item) => ({
-      'GL Class Name': item?.gl_classname || '',
-      Balance: item?.balance || '',
-      'GL Code': item?.gl_classcode || ''
-    }));
-
-    // Ensure no blank row or misplaced headers
-    setExportData(formattedExportData);
-    setReportType('TrialBalanceByDate');
-  }, [trialBydateList]);
+      // Ensure no blank row or misplaced headers
+      setExportData(formattedExportData);
+      setReportType('TrialBalanceByDate');
+    }
+  }, [
+    readyDownload,
+    setExportData,
+    setReportType,
+    trialBydateList,
+    setReadyDownload
+  ]);
 
   const calculateTotalBalance = (accounts: ITrialBalanceGroup[]): number => {
     return accounts.reduce((total, account) => total + account.balance, 0);
@@ -93,7 +112,7 @@ export const TrialBalance = () => {
                       <ShortCards
                         title={item?.gl_classname}
                         numberOfAccounts={`Balance ₦ ${item.balance.toLocaleString()}`}
-                        link={`/report/custom-report/trial-balance/main-cash?name=${item?.gl_classname}&classCode=${item?.gl_classcode}&reportType=${reportType}`}
+                        link={`/report/custom-report/trial-balance/main-cash?name=${item?.gl_classname}&classCode=${item?.gl_classcode}&reportType=${reportType}&glNodeCode=${item?.gl_nodecode}&glTypeCode=${item?.prodtypecode}&branchID=${branchID}&customerID=${customerID}`}
                       />
                     </Box>
                   ))}

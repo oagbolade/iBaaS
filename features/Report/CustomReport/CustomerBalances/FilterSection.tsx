@@ -57,11 +57,10 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
         validationSchema={customerBalanceSchema}
       >
         <Form>
-
-        <Stack
+          <Stack
             sx={{
               borderBottom: '1px solid #E8E8E8',
-              marginTop: '10px',
+              marginTop: '24px',
               paddingX: '24px'
             }}
             direction={setDirection()}
@@ -87,6 +86,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                   buttonTitle="Export Data"
                 />
               </Box>
+
               <Box>
                 <ActionButtonWithPopper
                   searchGroupVariant="DateRangePicker"
@@ -105,7 +105,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
             </Stack>
           </Stack>
 
-          
           <Box
             sx={{
               marginTop: '20px',

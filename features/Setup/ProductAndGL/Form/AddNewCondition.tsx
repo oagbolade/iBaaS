@@ -21,6 +21,7 @@ import {
 import { createSetupConditionInitialValue } from '@/schemas/schema-values/setup';
 import { createSetupConditionSchema } from '@/schemas/setup';
 import { encryptData } from '@/utils/encryptData';
+import { decryptData } from '@/utils/decryptData';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -44,10 +45,10 @@ export const CreateConditionPrecedent = ({
   const isEditing = searchParams.get('isEditing');
   const { mutate } = useSetupCondition(
     Boolean(isEditing),
-    encryptData(conditionId)
+    decryptData(conditionId ?? '')
   );
   const { conditionPrecedence, isLoading } = useGetSetupConditionByCode(
-    encryptData(conditionId) as string
+    decryptData(conditionId as string) as string
   );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     await mutate({

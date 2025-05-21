@@ -13,7 +13,7 @@ import {
 import colors from '@/assets/colors';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { loanUnderWriteSchema } from '@/schemas/loan';
-import { useCurrentBreakpoint } from '@/utils';
+import { useCurrentBreakpoint , frequencyTermsDays} from '@/utils';
 import { options } from '@/constants/Loan/selectOptions';
 import {
   loanUnderwritingInitialValues,
@@ -37,7 +37,6 @@ import { getStoredUser } from '@/utils/user-storage';
 import { toast } from '@/utils/toast';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { encryptData } from '@/utils/encryptData';
-import {frequencyTermsDays} from '@/utils'
 
 type Props = {
   isSubmitting: boolean;
@@ -49,7 +48,6 @@ type Props = {
   loansources: any;
   collaterals: any;
 };
-
 
 export const CreateLoanUnderwritingForm = ({
   isSubmitting,
@@ -119,7 +117,6 @@ export const CreateLoanUnderwritingForm = ({
       if (typeof resp.loanProducts === 'object' && resp.loanProducts !== null) {
         setFormValue(resp.loanProducts);
         setProductDetail(resp.loanProducts);
-
 
         setLoanRate(
           (resp.loanProducts as { actualRAte?: string }).actualRAte || ''

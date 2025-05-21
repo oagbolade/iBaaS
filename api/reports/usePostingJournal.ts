@@ -43,13 +43,12 @@ export async function getPostingJournal(
     });
     toast(message, title, severity, toastActions);
     if (data.postingJournalList === null) {
-      data.postingJournalList = []
+      data.postingJournalList = [];
     }
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
-
   }
   return result;
 }
@@ -66,14 +65,20 @@ export function useGetPostingJournal(params: ISearchParams | null) {
       queryKeys.maturityLoan,
       params?.branchID,
       params?.prodCode,
+      params?.startDate,
+      params?.endDate,
+      params?.searchWith,
+      params?.pageNumber,
+      params?.pageSize,
+      params?.getAll
     ],
     queryFn: () => getPostingJournal(toastActions, params || {}),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
-      (params?.prodCode || '').length > 0 ||
-      (params?.startDate || '').length > 0 ||
-      (params?.endDate || '').length > 0 ||
-      (params?.searchWith || '').length > 0
+        (params?.prodCode || '').length > 0 ||
+        (params?.startDate || '').length > 0 ||
+        (params?.endDate || '').length > 0 ||
+        (params?.searchWith || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

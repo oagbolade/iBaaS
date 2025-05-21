@@ -10,8 +10,6 @@ import { asterix, labelTypography } from '@/components/FormikFields/styles';
 import colors from '@/assets/colors';
 import { TextError } from '@/components/Forms';
 
-// Note: Deprecated, use this instead: import { FormikDateTimePicker } from '@/components/FormikFields';
-
 type Props = {
   label: string;
   name?: string;
@@ -20,8 +18,8 @@ type Props = {
   required?: boolean;
   disabled?: boolean;
   handleDateChange?: Function;
-  value?: Dayjs;
-  defaultValue?: string | Dayjs;
+  value?: Dayjs | null;
+  defaultValue?: string | Dayjs | null;
 };
 
 const DateTimeWrapper = styled.section`
@@ -58,20 +56,26 @@ export default function DateTimePicker({
   disabled,
   defaultValue
 }: Props) {
+  // Parse value to Dayjs object
+  const parseToDayjs = (val: any): Dayjs | null => {
+    if (!val) return null;
+    if (dayjs.isDayjs(val)) return val;
+    if (typeof val === 'string') {
+      const parsed = dayjs(val);
+      return parsed.isValid() ? parsed : null;
+    }
+    return null;
+  };
+
   // Set default date to today if no defaultValue is provided
-  // To use a specific default date (e.g., 2023-01-01), replace dayjs() with dayjs('2023-01-01')
-  // eslint-disable-next-line no-nested-ternary
-  const defaultDate = defaultValue
-    ? typeof defaultValue === 'string'
-      ? dayjs(defaultValue)
-      : defaultValue
-    : dayjs(); // Default to current date
+  const defaultDate = parseToDayjs(defaultValue) || dayjs();
 
   return (
     <Box sx={{ marginBottom: '15px' }}>
       <Field name={name}>
         {({ field, form }: FieldProps) => {
           const { setFieldValue } = form;
+          const fieldValue = parseToDayjs(field.value);
 
           return (
             <DateTimeWrapper>
@@ -83,8 +87,8 @@ export default function DateTimePicker({
                   className={className}
                   defaultValue={defaultDate}
                   {...field}
-                  value={value || field.value || defaultDate} // Ensure initial value to avoid validation errors
-                  onChange={(newValue) => {
+                  value={parseToDayjs(value) || fieldValue || defaultDate}
+                  onChange={(newValue: Dayjs | null) => {
                     setFieldValue(name as string, newValue);
                   }}
                 />

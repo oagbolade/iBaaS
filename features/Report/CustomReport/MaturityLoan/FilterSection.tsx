@@ -2,13 +2,14 @@ import React, { useMemo } from 'react';
 import { Box, Typography, Stack, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Formik, Form } from 'formik';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import { exportData, dateFilter, inputFields } from '../style';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
   BackButton
 } from '@/components/Revamp/Buttons';
-import { exportData, dateFilter, inputFields } from '../style';
 import { ExportIcon } from '@/assets/svg';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { IBranches } from '@/api/ResponseTypes/general';
@@ -19,9 +20,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { maturityLoanSchema } from '@/schemas/reports';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-
 
 type Props = {
   branches?: IBranches[];
@@ -45,7 +44,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
     return `${startMonthAndDay} - ${endMonthAndDay}`;
   }, [dateValue]);
 
-
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: values.branchID?.toString().trim().length > 0 ? values.branchID : null,
@@ -55,7 +53,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
     };
     onSearch?.(params);
   };
-
 
   return (
     <Box marginTop={10}>

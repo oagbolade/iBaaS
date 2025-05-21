@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form, useFormikContext } from 'formik';
 import { useSearchParams } from 'next/navigation';
+import { number } from 'yup';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
@@ -226,7 +227,6 @@ export const CreateBranchForm = ({
     statecode: branchCode?.statecode || '',
     residentTown: branchCode?.residentTowncode || ''
   });
-
   const { states: allResidentNationStates, isLoading: isLoadingStates } =
     useGetStateByCountryCode(
       encryptData(residentDetails.nationality) as string,
@@ -260,6 +260,7 @@ export const CreateBranchForm = ({
     Boolean(isEditing),
     encryptData(branchId ?? '') || null
   );
+  const [showMainBranch, setShowMainBranch] = useState<number | null>(null);
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     await mutate({
@@ -299,6 +300,16 @@ export const CreateBranchForm = ({
     }
   }, [allResidentStateTowns, isLoadingTowns]);
 
+  const handleBranchType = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void
+  ) => {
+    const selectedBranchType = Number(e.target.value); // Convert to number
+    setShowMainBranch(selectedBranchType);
+    if (selectedBranchType === 1) {
+      setFieldValue('mBranchCode', ''); // Clear Main Branch value
+    }
+  };
   useEffect(() => {
     const submit = document.getElementById('submitButton');
 
@@ -321,7 +332,6 @@ export const CreateBranchForm = ({
       });
     }
   }, [branchCode]);
-
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
   }
@@ -345,106 +355,115 @@ export const CreateBranchForm = ({
           validationSchema={createBranchSchema}
           enableReinitialize
         >
-          <Form>
-            <Box mt={4}>
-              <Grid container>
-                <Grid
-                  item
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="branchName"
-                    placeholder="Enter branch name"
-                    label="Branch Name"
+          {({ setFieldValue }) => (
+            <Form>
+              <Box mt={4}>
+                <Grid container>
+                  <Grid
+                    item
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%')
+                      }}
+                      name="branchName"
+                      placeholder="Enter branch name"
+                      label="Branch Name"
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%')
+                      }}
+                      name="address"
+                      placeholder="Enter address"
+                      label="Address"
+                    />
+                  </Grid>
+                  <Grid mb={1} item mobile={12}>
+                    <FormSelectField
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%'),
+                        fontSize: '14px'
+                      }}
+                      name="branchType"
+                      options={mappedBranchTypes}
+                      label="Branch Type"
+                      onChange={(e: any) => handleBranchType(e, setFieldValue)}
+                    />
+                  </Grid>
+                  {showMainBranch === 2 && (
+                    <Grid mb={1} item mobile={12}>
+                      <FormSelectField
+                        customStyle={{
+                          width: setWidth(isMobile ? '285px' : '100%'),
+                          fontSize: '14px'
+                        }}
+                        name="mBranchCode"
+                        options={mappedBranches}
+                        label="Main Branch"
+                      />
+                    </Grid>
+                  )}
+                  <Grid
+                    item
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%')
+                      }}
+                      name="email"
+                      placeholder="Enter email address"
+                      label="Email Address"
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%')
+                      }}
+                      name="phone"
+                      placeholder="Enter Phone Number"
+                      label="Phone Number"
+                    />
+                  </Grid>
+                  <DynamicSelectFields
+                    mappedCountries={mappedCountries}
+                    mappedResidentStates={mappedState}
+                    mappedResidentTowns={mappedResidentTowns}
+                    isMobile={isMobile}
+                    setWidth={setWidth}
+                    residentDetails={residentDetails}
+                    setResidentDetails={setResidentDetails}
                   />
                 </Grid>
-                <Grid
-                  item
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="address"
-                    placeholder="Enter address"
-                    label="Address"
-                  />
-                </Grid>
-                <Grid mb={1} item mobile={12}>
-                  <FormSelectField
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%'),
-                      fontSize: '14px'
-                    }}
-                    name="branchType"
-                    options={mappedBranchTypes}
-                    label="Branch Type"
-                  />
-                </Grid>
-                <Grid mb={1} item mobile={12}>
-                  <FormSelectField
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%'),
-                      fontSize: '14px'
-                    }}
-                    name="mBranchCode"
-                    options={mappedBranches}
-                    label="Main Branch"
-                  />
-                </Grid>
-                <Grid
-                  item
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="email"
-                    placeholder="Enter email address"
-                    label="Email Address"
-                  />
-                </Grid>
-                <Grid
-                  item
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '285px' : '100%')
-                    }}
-                    name="phone"
-                    placeholder="Enter Phone Number"
-                    label="Phone Number"
-                  />
-                </Grid>
-                <DynamicSelectFields
-                  mappedCountries={mappedCountries}
-                  mappedResidentStates={mappedState}
-                  mappedResidentTowns={mappedCity}
-                  isMobile={isMobile}
-                  setWidth={setWidth}
-                  residentDetails={residentDetails}
-                  setResidentDetails={setResidentDetails}
-                />
-              </Grid>
-            </Box>
-            <button id="submitButton" type="submit" style={{ display: 'none' }}>
-              submit alias
-            </button>
-          </Form>
+              </Box>
+              <button
+                id="submitButton"
+                type="submit"
+                style={{ display: 'none' }}
+              >
+                submit alias
+              </button>
+            </Form>
+          )}
         </Formik>
       </Box>
     </Box>

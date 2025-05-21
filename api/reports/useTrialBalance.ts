@@ -29,7 +29,9 @@ export async function getTrialBalance(
           endDate: params?.endDate,
           reportType: Number(params?.reportType),
           glClassCode: params?.gl_ClassCode,
-          getAll: params?.getAll || false
+          getAll: params?.getAll || false,
+          glNodeCode: Number(params?.glNodeCode),
+          glTypeCode: Number(params?.glTypeCode)
         },
         headers: {
           'Content-Type': 'application/json',
@@ -56,11 +58,14 @@ export function useGetTrialBalance(params: ISearchParams | null) {
     isLoading
   } = useQuery({
     queryKey: [
-      queryKeys.plainTrialBalance,
+      queryKeys.trialBalanceByDate,
       params?.branchID,
       params?.reportDate,
       params?.startDate,
       params?.customerID,
+      params?.getAll,
+      params?.pageSize || 10,
+      params?.pageNumber || 1,
       params?.reportType
     ],
     queryFn: () => getTrialBalance(toastActions, params || {}),

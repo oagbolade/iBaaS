@@ -1,131 +1,138 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import React from 'react';
 import { Box, Stack, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { inputFields } from './style';
-import { FormSelectInput, TextInput } from '@/components/FormikFields';
+import { Formik, Form } from 'formik';
+import { exportData, inputFields } from '../style';
+import { FormTextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
-import { ActionButton } from '@/components/Revamp/Buttons';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
-import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
-import { IBranches } from '@/api/ResponseTypes/general';
-import { IEnquiryParams } from '@/api/reports/useGetAccountEnquiryBybranchId';
+import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { drillDowndueSchema } from '@/schemas/reports';
+import { useCurrentBreakpoint } from '@/utils';
+
+import {
+  ActionButtonWithPopper,
+  ActionButton,
+  BackButton
+} from '@/components/Revamp/Buttons';
+import { ExportIcon } from '@/assets/svg';
+import { ISearchParams } from '@/app/api/search/route';
 
 type Props = {
-  branches?: IBranches[];
-  onSearch: (params: IEnquiryParams | null) => void;
-  reportType: string;
-  setReportType: Dispatch<SetStateAction<string>>;
+  onSearch: (params: ISearchParams | null) => void;
 };
 
-export const RadioOption = [
-  { value: 'mainGroup', label: 'GL Main Group' },
-  { value: 'subGrop', label: 'GL Sub Group' }
-];
-
-export const FilterSection = ({
-  branches,
-  onSearch,
-  reportType,
-  setReportType
-}: Props) => {
+export const FilterSection = ({ onSearch }: Props) => {
   const { setDirection } = useSetDirection();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState('');
+  const { setWidth } = useCurrentBreakpoint();
 
-  const { mappedBranches } = useMapSelectOptions({
-    branches
-  });
-
-  const handleSearchClick = () => {
-    const searchParams = {
-      branchId: selectedBranch || undefined,
-      search: searchTerm || undefined,
-      reportType
+  const onSubmit = (values: any) => {
+    const searchParams: ISearchParams = {
+      branchCode:
+        values.branchCode?.toString().trim().length > 0
+          ? values.branchCode
+          : null,
+      gl_ClassCode:
+        values.gl_ClassCode?.toString().trim().length > 0
+          ? values.gl_ClassCode
+          : null
     };
 
-    onSearch(searchParams);
+    onSearch?.(searchParams);
   };
 
   return (
-    <Box>
-      <Stack gap={3} direction={setDirection()} ml={{ mobile: 4, tablet: 0 }}>
-        <Box>
-          <RadioButtons
-            options={RadioOption}
-            title="Select Report Type"
-            value={reportType}
-            name="reportType"
-            handleCheck={(event: any, value: any) => setReportType(value)}
-          />
-        </Box>
+    <Box marginTop={10}>
+      <Formik
+        initialValues={searchFilterInitialValues}
+        onSubmit={(values) => onSubmit(values)}
+        validationSchema={drillDowndueSchema}
+      >
+        <Form>
+          <Stack
+            sx={{
+              borderBottom: '1px solid #E8E8E8',
+              marginTop: '24px',
+              paddingX: '24px'
+            }}
+            direction={setDirection()}
+            justifyContent="space-between"
+          >
+            <Box>
+              <Box mt={2.3}>
+                <BackButton />
+              </Box>
+            </Box>
+            <Stack
+              mt={1}
+              direction={setDirection()}
+              spacing={2}
+              justifyContent="space-between"
+            >
+              <Box>
+                <ActionButtonWithPopper
+                  searchGroupVariant="ExportReport"
+                  customStyle={{ ...exportData }}
+                  icon={<ExportIcon />}
+                  iconPosition="start"
+                  buttonTitle="Export Data"
+                />
+              </Box>
+            </Stack>
+          </Stack>
 
-        <Grid
-          mb={{ tablet: 3 }}
-          item
-          mobile={12}
-          tablet={5}
-          justifyContent="center"
-        >
-          <FormSelectInput
-            customStyle={{
-              fontSize: '14px',
-              ...inputFields,
-              width: '200px'
+          <Box
+            sx={{
+              marginTop: '20px',
+              paddingX: '24px'
             }}
-            name="branchID"
-            options={mappedBranches}
-            label="Branch ID"
-            value={selectedBranch}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSelectedBranch(e.target.value)
-            }
-          />{' '}
-        </Grid>
-        <Grid
-          mb={{ tablet: 6 }}
-          item
-          mobile={12}
-          tablet={6}
-          justifyContent="center"
-        >
-          <TextInput
-            customStyle={{
-              fontSize: '14px',
-              ...inputFields,
-              width: '300px'
-            }}
-            icon={<SearchIcon />}
-            name="search"
-            value={searchTerm}
-            placeholder="Search by GL Node Name or code"
-            label="Customer ID"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchTerm(e.target.value)
-            }
-          />{' '}
-        </Grid>
-        <Grid
-          item
-          mobile={12}
-          tablet={1}
-          sx={{ display: 'flex' }}
-          justifyContent="flex-end"
-          mt={{ tablet: 3.2 }}
-          mr={{ mobile: 30, tablet: 0 }}
-          mb={{ mobile: 6, tablet: 0 }}
-        >
-          <ActionButton
-            onClick={handleSearchClick}
-            customStyle={{
-              backgroundColor: `${colors.activeBlue400}`,
-              border: `1px solid ${colors.activeBlue400}`,
-              color: `${colors.white}`
-            }}
-            buttonTitle="Search"
-          />
-        </Grid>
-      </Stack>
+          >
+            <Box>
+              <Grid container spacing={2}>
+                <Grid
+                  mb={{ tablet: 5 }}
+                  item
+                  mobile={12}
+                  tablet={11}
+                  justifyContent="center"
+                >
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(),
+                      ...inputFields
+                    }}
+                    icon={<SearchIcon />}
+                    name="gl_ClassCode"
+                    placeholder="Search by GL Node Name or code"
+                    label="Search"
+                  />{' '}
+                </Grid>
+
+                <Grid
+                  item
+                  mobile={12}
+                  tablet={1}
+                  sx={{ display: 'flex' }}
+                  justifyContent="flex-end"
+                  mt={{ tablet: 3.2 }}
+                  mr={{ mobile: 30, tablet: 0 }}
+                  mb={{ mobile: 6, tablet: 0 }}
+                >
+                  <ActionButton
+                    customStyle={{
+                      backgroundColor: `${colors.activeBlue400}`,
+                      border: `1px solid ${colors.activeBlue400}`,
+                      color: `${colors.white}`
+                    }}
+                    type="submit"
+                    buttonTitle="Search"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Form>
+      </Formik>
     </Box>
   );
 };

@@ -20,7 +20,13 @@ export type ReportType =
   | 'PlainTrialBalance'
   | 'MaturityLoan'
   | 'PostingJournal'
-  | 'TellerPostingSummary';
+  | 'LoanOverdueReport'
+  | 'TellerPostingSummary'
+  | 'IncomeAssuranceReport'
+  | 'HoldingTransaction'
+  | 'GLMainGroupReport'
+  | 'GLSubMainGroupReport'
+  | 'GLAccountClassReport';
 
 interface IFileNameMapper {
   AccountEnquiry: string;
@@ -31,6 +37,7 @@ export const FileNameMapper: IFileNameMapper = {
   AccountEnquiry: 'AccountEnquiryReport',
   StatementOfAccountCASA: 'StatementOfAccountCASA',
   StatementOfAccountTD: 'StatementOfAccountTD',
+  IncomeAssuranceReport: 'IncomeAssuranceReport',
   DormantAccount: 'DormantAccount',
   CheckBookStatus: 'CheckBookStatus',
   InflowOutflow: 'InflowOutflow',
@@ -45,5 +52,10 @@ export const FileNameMapper: IFileNameMapper = {
   TrialBalanceByDate: 'TrialBalanceByDate',
   MaturityLoan: 'MaturityLoan',
   PostingJournal: 'PostingJournal',
-  TellerPostingSummary: 'TellerPostingSummary'
+  TellerPostingSummary: 'TellerPostingSummary',
+  HoldingTransaction: 'HoldingTransaction',
+  LoanOverdueReport: 'LoanOverdueReport',
+  GLMainGroupReport: 'GLMainGroupReport',
+  GLSubMainGroupReport: 'GLSubMainGroupReport',
+  GLAccountClassReport: 'GLAccountClassReport'
 };

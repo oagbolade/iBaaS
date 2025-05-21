@@ -1,22 +1,28 @@
 'use client';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
-import { MuiTableContainer, StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import Link from 'next/link';
+import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
 import { FilterSection } from './FilterSection';
+import { COLUMN } from './Column';
+import {
+  MuiTableContainer,
+  StyledTableRow,
+  renderEmptyTableBody
+} from '@/components/Table/Table';
 import { useGetBranches } from '@/api/general/useBranches';
 import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
-import { COLUMN } from './Column';
 import { useGetMaturityLoan } from '@/api/reports/useMaturityLoan';
-import { ILoanMaturityResponse, ILoanMaturityReport } from '@/api/ResponseTypes/reports';
+import {
+  ILoanMaturityResponse,
+  ILoanMaturityReport
+} from '@/api/ResponseTypes/reports';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
 import { useGetAllProduct } from '@/api/setup/useProduct';
 import { StyledTableCell } from '@/components/Table/style';
 import colors from '@/assets/colors';
-
 
 interface ActionMenuProps {
   detail: string;
@@ -24,12 +30,14 @@ interface ActionMenuProps {
 
 const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
   return (
-    <Link href={`/report/custom-report/view-report/?getMaturityLoan=maturityLoan&loanDetail=${detail}`}  style={{ color: `${colors.activeBlue400}`}}>
+    <Link
+      href={`/report/custom-report/view-report/?getMaturityLoan=maturityLoan&loanDetail=${detail}`}
+      style={{ color: `${colors.activeBlue400}` }}
+    >
       View
     </Link>
   );
 };
-
 
 export const MaturityLoan = () => {
   const [search, setSearch] = useState<boolean>(false);
@@ -37,46 +45,35 @@ export const MaturityLoan = () => {
   const [pageNumber, setpageNumber] = React.useState(1);
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
-  const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
-
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
 
-
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
-    setSearchParams(
-      {
-        ...params,
-        startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-        endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
-        pageNumber: String(pageNumber),
-        pageSize: '10',
-      });
-    setReportType('MaturityLoan')
+    setSearchParams({
+      ...params,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      pageNumber: String(pageNumber),
+      pageSize: '10'
+    });
+    setReportType('MaturityLoan');
   };
 
+  const { loanMaturityList, pageSize, totalRecords, isLoading } =
+    useGetMaturityLoan({ ...searchParams });
 
-
-  const { loanMaturityList, pageSize, totalRecords,
-    isLoading
-  } = useGetMaturityLoan({ ...searchParams });
-
-
-
-  // Set export data when loanMaturityList is retrieved
   React.useEffect(() => {
     if (loanMaturityList?.length > 0) {
       setExportData(loanMaturityList);
     }
   }, [loanMaturityList, setExportData, setReportType]);
 
-
   return (
     <Box sx={{ width: '100%' }}>
-
       {branches && bankproducts && (
         <FilterSection
           branches={branches}
@@ -85,7 +82,7 @@ export const MaturityLoan = () => {
         />
       )}
 
-      <Box sx={{ paddingX: '24px', }}>
+      <Box sx={{ paddingX: '24px' }}>
         {isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
@@ -97,12 +94,12 @@ export const MaturityLoan = () => {
               hideFilterSection: true
             }}
             tableConfig={{
-              hasActions: true,
+              hasActions: true
             }}
             columns={COLUMN}
             data={loanMaturityList}
             totalPages={totalRecords}
-            totalElements={totalRecords}
+            totalElements={pageSize}
             setPage={setpageNumber}
             page={pageNumber}
             ActionMenuProps={ActionMenu}

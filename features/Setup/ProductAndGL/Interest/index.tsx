@@ -103,7 +103,8 @@ export const InterestTable = () => {
                     <StyledTableCell align="right">
                       {dataItem.targetBase}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    {/* on Hold */}
+                    {/* <StyledTableCell align="right">
                       <Status
                         label={
                           Number(dataItem.status) === 1 ? 'Active' : 'Inactive'
@@ -112,7 +113,7 @@ export const InterestTable = () => {
                           Number(dataItem.status) === 1 ? 'success' : 'warning'
                         }
                       />
-                    </StyledTableCell>
+                    </StyledTableCell> */}
                     <StyledTableCell>
                       <ActionMenu interestCode={dataItem.intcode} />
                     </StyledTableCell>

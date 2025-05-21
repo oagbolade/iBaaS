@@ -21,53 +21,84 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 
 export const MainCash = () => {
-  const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
-  const { setExportData, setReportType } = useContext(DownloadReportContext);
+  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+    useContext(DownloadReportContext);
   const glClassCode = useGetParams('classCode') || '';
   const selectedReport = useGetParams('name') || '';
   const reportType = useGetParams('reportType') || '';
+  const glNodeCode = useGetParams('glNodeCode') || '';
+  const glTypeCode = useGetParams('glTypeCode') || '';
+  const branchID = useGetParams('branchID') || '';
+  const customerID = useGetParams('customerID') || '';
 
-  const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
+  const { dateValue } = useContext(DateRangePickerContext);
 
-  const { trialBydateList, isLoading: isTrialBalanceDataLoading } =
-    useGetTrialBalance({
-      ...searchParams,
-      pageSize: '20',
-      pageNumber: String(page),
-      getAll: isDateFilterApplied
-    });
+  const {
+    trialBydateList,
+    isLoading: isTrialBalanceDataLoading,
+    totalRecords = 0
+  } = useGetTrialBalance({
+    ...searchParams,
+    pageSize: '10',
+    branchCode: searchParams?.branchID || branchID,
+    searchWith: searchParams?.customerID || customerID,
+    pageNumber: String(page),
+    getAll: readyDownload
+  });
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setReadyDownload(false);
     setSearchParams({
       ...params,
       gl_ClassCode: glClassCode,
+      glNodeCode,
+      glTypeCode,
       reportType,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || ''
     });
+    setPage(1); // Reset to the first page on new search
   };
 
+  React.useEffect(() => {
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
+
   useEffect(() => {
-    if (!trialBydateList?.pagedTrialBalances.length) return;
+    if (trialBydateList?.pagedTrialBalances.length > 0 && readyDownload) {
+      const formattedExportData = trialBydateList?.pagedTrialBalances.map(
+        (item) => ({
+          'GL Account Number': item?.acctno || 'N/A',
+          'Account Name': item?.acctname || item?.acctName || 'N/A',
+          'Last Night Balance':
+            item?.last_night_balance2 || item?.lastNightBalance || 0,
+          Debit: item?.debitacct || item?.debitAcct || 0,
+          Credit: item?.creditAcct || 0,
+          Balance: item?.totalname || item?.differ || 0
+        })
+      );
 
-    const formattedExportData = trialBydateList?.pagedTrialBalances.map(
-      (item) => ({
-        'GL Account Number': item?.acctno || '',
-        'Account Name': item?.acctname || '',
-        'Last Night Balance': item?.last_night_balance2 || 0,
-        Debit: item?.debitacct || 0,
-        Credit: item?.creditAcct || 0,
-        Balance: item?.totalname || 0
-      })
-    );
+      // Ensure no blank row or misplaced headers
+      setExportData(formattedExportData as []);
+      setReportType('TrialBalanceByDate');
+    }
+  }, [
+    setExportData,
+    setReportType,
+    trialBydateList?.pagedTrialBalances,
+    readyDownload,
+    setReadyDownload
+  ]);
 
-    // Ensure no blank row or misplaced headers
-    setExportData(formattedExportData);
-    setReportType('TrialBalanceByDate');
-  }, [trialBydateList?.pagedTrialBalances]);
+  const rowsPerPage = 10;
+  const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   return (
     <Box
@@ -96,26 +127,28 @@ export const MainCash = () => {
               data={trialBydateList?.pagedTrialBalances}
               setPage={setPage}
               page={page}
+              totalPages={totalPages}
+              totalElements={totalRecords}
             >
-              {search ? (
+              {trialBydateList?.pagedTrialBalances?.length > 0 ? (
                 trialBydateList?.pagedTrialBalances?.map(
-                  (dataItem: ITrialBalance) => {
+                  (dataItem: ITrialBalance, i) => {
                     return (
-                      <StyledTableRow key={dataItem.acctno}>
+                      <StyledTableRow key={i}>
                         <StyledTableCell component="th" scope="row">
                           {dataItem?.acctno || 'N/A'}
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
-                          {dataItem?.acctname || 'N/A'}
+                          {dataItem?.acctname || dataItem?.acctName || 'N/A'}
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
-                          {`NGN ${formatCurrency(dataItem?.last_night_balance2 || 0)}`}
+                          {`NGN ${formatCurrency(dataItem?.last_night_balance2?.toLocaleString() || dataItem?.lastNightBalance?.toLocaleString() || 0)}`}
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
-                          {dataItem?.debitacct || 0}
+                          {dataItem?.debitacct || dataItem?.debitAcct || 0}
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
@@ -123,7 +156,7 @@ export const MainCash = () => {
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
-                          {dataItem?.totalname || 0}
+                          {dataItem?.totalname || dataItem?.differ || 0}
                         </StyledTableCell>
                       </StyledTableRow>
                     );

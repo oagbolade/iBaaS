@@ -1,19 +1,14 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/axiosInstance';
+import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { IToastActions } from '@/constants/types';
 import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
-import {
-  ChequeBookStatusResponse,
-  GetAllGroupLoanReportResponse,
-  GetAllIncomeAssuranceReportResponse,
-  GetAllStandingInstructionsResponse
-} from '@/api/ResponseTypes/reports';
+import { GetAllIncomeAssuranceReportResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
 
 export async function getincomeAssurance(
@@ -23,9 +18,9 @@ export async function getincomeAssurance(
   let result: GetAllIncomeAssuranceReportResponse =
     {} as GetAllIncomeAssuranceReportResponse;
   try {
-    const urlEndpoint = `/ReportServices/IncomeAssuranceReport?actionCode=${params?.pCode}&Startdate=${params?.startDate}&enddate=${params?.endDate}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}`;
+    const urlEndpoint = `/ReportServices/IncomeAssuranceReport?branchCode=${params?.branchID}&reportType=${params?.reportType}&startDate=${params?.startDate}&endDate=${params?.endDate}&pageNumber=${params?.page || 1}&pageSize=${Number(params?.pageSize) || 10}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<GetAllIncomeAssuranceReportResponse> =
-      await axiosInstance({
+      await reportsAxiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {
@@ -55,16 +50,17 @@ export function useGetIncomeAssuranceReport(params: ISearchParams | null) {
   } = useQuery({
     queryKey: [
       queryKeys.getincomeAssurance,
-      params?.pCode || '',
-      // params?.branchID || '',
+      params?.branchID || '',
       params?.startDate || '',
+      params?.getAll || false,
+      params?.reportType || '',
       params?.endDate || '',
-      params?.page || 1
+      params?.page
     ],
     queryFn: () => getincomeAssurance(toastActions, params || {}),
     enabled: Boolean(
       (params?.startDate || '').length > 0 ||
-      (params?.pCode || '').length > 0 ||
+        (params?.pCode || '').length > 0 ||
         (params?.branchID || '').length > 0 ||
         (params?.endDate || '').length > 0
     )

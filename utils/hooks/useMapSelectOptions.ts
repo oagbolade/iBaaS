@@ -9,7 +9,8 @@ import {
   IRoles,
   IBranchTypes,
   ICity,
-  IProductType
+  IProductType,
+  IIAReportType
 } from '@/api/ResponseTypes/general';
 import {
   IAccountOfficers,
@@ -71,6 +72,7 @@ interface IGlDetailsOptions extends OptionsI {
 
 interface ISelect {
   branches?: IBranches[] | Array<any>;
+  iAReportType?: IIAReportType[] | Array<any>;
   departments?: IDepartments[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   glType?: IGLType[] | Array<any>;
@@ -124,6 +126,7 @@ interface ISelect {
 export const useMapSelectOptions = ({
   currencies,
   branches,
+  iAReportType,
   departments,
   glType,
   status,
@@ -194,6 +197,7 @@ export const useMapSelectOptions = ({
   const [mappedTowns, setTowns] = useState<OptionsI[]>([]);
   const [mappedIDCards, setIDCards] = useState<OptionsI[]>([]);
   const [mappedBranches, setBranches] = useState<OptionsI[]>([]);
+  const [mappedIAReportType, setMappedIAReportType] = useState<OptionsI[]>([]);
   const [mappedDepartments, setDepartments] = useState<OptionsI[]>([]);
   const [mappedGLType, setGLType] = useState<OptionsI[]>([]);
   const [mappedCurrency, setCurrency] = useState<OptionsI[]>([]);
@@ -480,6 +484,15 @@ export const useMapSelectOptions = ({
       });
     });
 
+    const iAReportTypeArray: OptionsI[] = [];
+
+    iAReportType?.forEach((reportType: IIAReportType) => {
+      iAReportTypeArray.push({
+        name: reportType.name,
+        value: String(reportType.id)
+      });
+    });
+
     const bankproductsArray: OptionsI[] = [];
 
     bankproducts?.forEach((bankproduct: IBankProducts) => {
@@ -692,6 +705,7 @@ export const useMapSelectOptions = ({
     setIDCards(idCardArray);
     setDepartments(departmentsArray);
     setBranches(branchArray);
+    setMappedIAReportType(iAReportTypeArray);
     setTitles(titleArray);
     setCurrency(currenciesArray);
     setGLType(glTypeArray);
@@ -729,6 +743,7 @@ export const useMapSelectOptions = ({
     bankproducts,
     branchTypes,
     branches,
+    iAReportType,
     charges,
     checkbooks,
     clearBanks,
@@ -794,6 +809,7 @@ export const useMapSelectOptions = ({
     mappedRelationships,
     mappedIDCards,
     mappedBranches,
+    mappedIAReportType,
     mappedDepartments,
     mappedGLType,
     mappedCurrency,
