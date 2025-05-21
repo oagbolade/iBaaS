@@ -36,9 +36,10 @@ export const TopOverViewSection = ({
     <Stack
       sx={{
         position: 'sticky',
-        top: 0,
-        zIndex: 10,
+        top: '60px',
+        zIndex: 3,
         backgroundColor: '#fff',
+        borderLeft: '1px solid #E8E8E8',
         borderBottom: useBackButton ? '1px solid #E8E8E8' : 'none',
         padding: '12px 20px',
       }}

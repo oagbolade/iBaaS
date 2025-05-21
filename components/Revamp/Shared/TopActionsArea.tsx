@@ -18,12 +18,13 @@ export const TopActionsArea = ({
     <Stack
       sx={{
         position: 'sticky',
-        top: 0,
-        zIndex: 1100,
+        top: '60px',
+        zIndex: 3,
         backgroundColor: '#fff',
+        borderLeft: '1px solid #E8E8E8',
         borderBottom: '1px solid #E8E8E8',
         padding: '8px 12px',
-        marginTop: '60px',
+        // marginBottom: '60px',
         ...customStyle,
       }}
       direction="row"

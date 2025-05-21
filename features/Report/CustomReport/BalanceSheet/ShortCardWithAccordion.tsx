@@ -6,7 +6,7 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import { Box, Stack, Divider } from '@mui/material';
+import { Box, Stack, Divider, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { AccordionWrapper } from '../GroupReport/ShortCardWithAccordion';
 import { ChevronDown } from '@/assets/svg';
@@ -184,45 +184,61 @@ export const ShortCardWithAccordion = ({
     <AccordionWrapper>
       <Accordion expanded={expanded} onChange={() => handleChange()}>
         <AccordionSummary>
-          <Stack
+          <Grid
+            container
             ref={expandRef}
+            spacing={2}
             direction="row"
             justifyContent="space-between"
-            mt={2.8}
+            my={2.8}
             sx={{ width: '100%' }}
           >
-            <Typography
-              sx={{
-                color: `${colors.neutral1000}`,
-                fontSize: '20px',
-                fontWeight: 700,
-                lineHeight: '32px',
-              }}
-            >
-              {title}
-            </Typography>
-            <Box mb={3}>
+            <Grid item mobile={12} tablet={3} justifyContent="center">
+              <Typography
+                sx={{
+                  color: colors.neutral1000,
+                  fontSize: '20px',
+                  fontWeight: 700,
+                  lineHeight: '32px',
+                }}
+              >
+                {title}
+              </Typography>
+            </Grid>
+
+            <Grid item mobile={6} tablet={2} desktop={2}>
               <Stack>
                 <Title title="Number of Assets" />
                 <Value title={assetCount} />
               </Stack>
-            </Box>
-            <Box>
+            </Grid>
+
+            <Grid item mobile={6} tablet={2} desktop={2}>
               <Stack>
                 <Title title="Value" />
                 <Value title={assetValue} />
               </Stack>
-            </Box>
-            <Box
-              sx={{
-                marginBottom: expanded ? '35px' : 0,
-                transform: `${expanded ? 'rotate(180deg)' : 'none'}`,
-              }}
-              mt={1.2}
+            </Grid>
+
+            <Grid
+              item
+              mobile={6}
+              tablet={2}
+              desktop={2}
+              sx={{ textAlign: 'right' }}
             >
-              <ChevronDown color={`${colors.neutral900}`} />
-            </Box>
-          </Stack>
+              <Box
+                sx={{
+                  marginBottom: expanded ? '35px' : 0,
+                  transform: expanded ? 'rotate(180deg)' : 'none',
+                  display: 'inline-block',
+                }}
+                mt={1.2}
+              >
+                <ChevronDown color={colors.neutral900} />
+              </Box>
+            </Grid>
+          </Grid>
         </AccordionSummary>
         <Divider light />
         <AccordionDetails>

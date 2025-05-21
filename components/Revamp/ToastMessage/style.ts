@@ -14,7 +14,7 @@ export const Toasts = {
   boxShadow:
     '0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)',
   position: 'absolute',
-  zIndex: 2,
+  zIndex: 3,
   top: '50px',
   left: { mobile: '2%', desktop: '30%' }
 };
