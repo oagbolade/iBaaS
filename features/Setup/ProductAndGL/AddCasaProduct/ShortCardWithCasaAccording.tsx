@@ -44,6 +44,7 @@ import {
   IFrequency,
   IInterests,
   IOccupation,
+  IProductClass,
   IProducts,
   ISector
 } from '@/api/ResponseTypes/setup';
@@ -53,6 +54,7 @@ import {
   useGetAllException,
   useGetAllLoanTerm,
   useGetInterestsRate,
+  useGetLoanProductCode,
   useGetMaxCreditInterest,
   useGetProductClass
 } from '@/api/setup/useProduct';
@@ -128,7 +130,7 @@ type Props = {
   currencies?: ICurrency[];
   creditInterests?: ICreditInterests[];
   interests?: IInterests[];
-  products?: IProducts[];
+  products?: IProducts[] | IProductClass[] | Array<any>;
   frequency?: IFrequency[];
   bankproducts?: IBankProducts[];
   exception?: IException[];
@@ -176,7 +178,7 @@ const FormSelector = ({
           professions={professions}
           productTypes={productTypes}
           currencies={currencies}
-          products={products}
+          products={products as IProducts[] | undefined}
           frequency={frequency}
         />
       );
@@ -247,6 +249,7 @@ export const ShortCardCasaWithAccordion = ({
   const handleChange = () => {
     setExpanded(!expanded);
   };
+  const productClassBYID = localStorage.getItem('addProduct');
   const { currencies: currency } = useGetCurrency();
   const { productTypes: productType } = useGetProductType();
   const { creditInterests: creditInterest } = useGetMaxCreditInterest();
@@ -257,6 +260,7 @@ export const ShortCardCasaWithAccordion = ({
   const { bankproducts: bankproduct } = useGetAllCustomerAccountProducts();
   const { exception: exceptions } = useGetAllException();
   const { charges: charge, isLoading } = useGetChargeConcession();
+  const { products: productClassBY } = useGetLoanProductCode(productClassBYID);
 
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
@@ -343,7 +347,7 @@ export const ShortCardCasaWithAccordion = ({
                 currencies={currency}
                 creditInterests={creditInterest}
                 interests={interest}
-                products={product}
+                products={productClassBY}
                 frequency={frequencys}
                 bankgl={bankgls as IGLAccount[] | undefined}
                 bankproducts={bankproduct}

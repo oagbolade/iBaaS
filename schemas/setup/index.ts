@@ -366,13 +366,9 @@ export const createChequeBokSchema = Yup.object({
   lastnumber: Yup.string()
     .matches(numericRegex, 'Invalid last Number')
     .required('last Number is Required'),
-  currentCost: Yup.string()
-    .matches(numericRegex, 'Invalid Current Cost')
-    .required('Current Cost  is Required'),
-  accountType: Yup.string()
-    .matches(numericRegex, 'Invalid Account Type')
-    .required('Account Type is Required'),
-  glAccount1: Yup.string().required('GL Acount is  Required'),
+  glAccount1: Yup.string()
+    .matches(numericRegex, 'Invalid GL Acount')
+    .required('GL Acount  is Required'),
   glAccount2: Yup.string()
     .matches(numericRegex, 'Invalid GL Acount')
     .required('GL Acount is Required'),
@@ -477,7 +473,8 @@ export const filterSectionSchema = Yup.object({
   exceptionDesc: Yup.string().matches(
     stringRegex,
     'Invalid Exception Description'
-  )
+  ),
+  behaviour: Yup.string().matches(numericRegex, 'Invalid behaviour')
 });
 export const filterSectionSetupConditionSchema = Yup.object({
   description: Yup.string().matches(

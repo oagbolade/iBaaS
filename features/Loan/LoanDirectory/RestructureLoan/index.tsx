@@ -29,9 +29,6 @@ const FormFields: React.FC<{
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
   loanAccDetails: any;
 }> = ({ isSubmitting, setIsSubmitting, loanAccDetails }) => {
-  const searchParams = useSearchParams();
-  const accountNumber = searchParams.get('accountNumber') || '';
-
   const { repaymentTypes } = useGetAllLoanRepaymentTypes();
   const { loansources } = useGetAllLoanSources();
   const { collaterals } = useGetAllLoanCollaterals();
@@ -44,8 +41,6 @@ const FormFields: React.FC<{
       isSubmitting={isSubmitting}
       customerID={loanAccDetails?.customerid || ''}
       setIsSubmitting={setIsSubmitting}
-      accountNumber={accountNumber}
-      settlementacct1={loanAccDetails?.settlementacct1 || ''}
       loanDetails={loanAccDetails}
     />
   );
@@ -53,7 +48,7 @@ const FormFields: React.FC<{
 
 export const RestructureLoan = () => {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(true);
   const { isLoading } = useGlobalLoadingState();
   const { setDirection } = useSetDirection();
   const { isTablet } = useCurrentBreakpoint();
@@ -62,7 +57,7 @@ export const RestructureLoan = () => {
   const accountNumber = searchParams.get('accountNumber') || '';
   const productCode = searchParams.get('productCode') || '';
 
-  const { data: loanAccDetails } = useGetLoanAccountByLoanAccountNumber(
+  const { data: loanAccDetails , isLoading: loadingData} = useGetLoanAccountByLoanAccountNumber(
     encryptData(accountNumber as string) || ''
   );
 
@@ -70,7 +65,7 @@ export const RestructureLoan = () => {
     encryptData(productCode as string) || ''
   );
 
-  if (accountNumber && isLoading) {
+  if (loadingData) {
     return (
       <Box>
         <FormSkeleton noOfLoaders={5} />

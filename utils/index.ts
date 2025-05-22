@@ -45,11 +45,6 @@ export const frequencyTermsDays = [
     name: 'Quarter'
   },
   {
-    value: '90',
-    label: '005',
-    name: 'Quarter'
-  },
-  {
     value: '182',
     label: '006',
     name: 'Bi-Annual'

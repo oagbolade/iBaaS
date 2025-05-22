@@ -1,46 +1,45 @@
 import React from 'react';
-import { Box, Typography, Stack, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { Formik, Form } from 'formik';
+import { inputFields } from '../style';
 import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import { ActionButton } from '@/components/Revamp/Buttons';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
-import { IBranches } from '@/api/ResponseTypes/general';
+import { IBranches, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISearchParams } from '@/app/api/search/route';
-import { Formik, Form } from 'formik';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { statementOfAccountSchema } from '@/schemas/reports';
-import { inputFields } from '../style';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
+import { IProducts } from '@/api/ResponseTypes/setup';
 
 type Props = {
   branches?: IBranches[];
   bankproducts: IBankProducts[];
   onSearch?: Function;
+  products: IProducts[] | Array<any>;
 };
 
-const AccountTypeOptions = [
-  { value: '1', name: 'Casa' },
-  { value: '2', name: 'Term Deposit' },
-  { value: '3', name: 'Loan' },
-  { value: '4', name: 'GL' },
-];
-
-export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
-  const { setDirection } = useSetDirection();
-  const { isMobile, setWidth } = useCurrentBreakpoint();
-  const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
+export const FilterSection = ({
+  branches,
+  onSearch,
+  bankproducts,
+  products
+}: Props) => {
+  const { setWidth } = useCurrentBreakpoint();
+  const { mappedBranches, mappedProductClass } = useMapSelectOptions({
     branches,
     bankproducts,
+    products
   });
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       accountNumber: values.accountNumber || values.searchWith,
-      ...(values.productcode && { accttype: values.productcode }),
-      ...(values.branchID && { branchID: values.branchID }),
+      ...(values.productCode && { accttype: values.productCode }),
+      ...(values.branchID && { branchID: values.branchID })
     };
     onSearch?.(params);
   };
@@ -55,27 +54,28 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
         <Form>
           <Box
             sx={{
-              marginTop: '10px',
+              marginTop: '10px'
             }}
           >
             <Box>
               <Grid container spacing={2}>
                 <Grid item mobile={12} tablet={3} justifyContent="center">
                   <FormSelectField
-                    name="productcode"
-                    options={AccountTypeOptions}
+                    name="productCode"
+                    options={mappedProductClass}
                     label="Account Type"
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                   />
                 </Grid>
+
                 <Grid item mobile={12} tablet={3} justifyContent="center">
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -94,7 +94,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="accountNumber"
@@ -118,7 +118,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
                       color: `${colors.white}`,
-                      width: '100%',
+                      width: '100%'
                     }}
                     type="submit"
                     buttonTitle="Search"

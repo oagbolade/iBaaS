@@ -48,7 +48,8 @@ export const LoanDirectory = () => {
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
-  const [shouldDisableLoanUnderwriting, setShouldDisableLoanUnderwriting] = React.useState(false);
+  const [shouldDisableLoanUnderwriting, setShouldDisableLoanUnderwriting] =
+    React.useState(false);
 
   const { branches } = useGetBranches();
 
@@ -95,11 +96,10 @@ export const LoanDirectory = () => {
           }}
           aria-disabled={shouldDisableLoanUnderwriting}
           tabIndex={shouldDisableLoanUnderwriting ? -1 : undefined}
-
           href="/loan/loan-directory/loan-underwriting"
-
         >
-          <PrimaryIconButton disabled={shouldDisableLoanUnderwriting}
+          <PrimaryIconButton
+            disabled={shouldDisableLoanUnderwriting}
             customStyle={{
               width: '245px',
               height: '48px',
@@ -110,82 +110,78 @@ export const LoanDirectory = () => {
         </Link>
       </Box>
 
-      {
-        branches && (
-          <FilterSection branches={branches} onSearch={handleSearch} />
-        )
-      }
+      {branches && (
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      )}
 
-      {
-        isLoanDataLoading ? (
-          <FormSkeleton noOfLoaders={3} />
-        ) : (
-          <Box sx={{ width: '100%' }}>
-            <MuiTableContainer
-              columns={COLUMNS}
-              tableConfig={{
-                hasActions: true
-              }}
-              data={getAllLoanData}
-              totalPages={totalPages}
-              totalElements={totalElements}
-              setPage={setPage}
-              page={page}
-            >
-              {search ? (
-                getAllLoanData?.map((dataItem: any) => {
-                  return (
-                    <StyledTableRow key={dataItem.userid}>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem.fullName}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {dataItem.accountNumber}
-                      </StyledTableCell>
+      {isLoanDataLoading ? (
+        <FormSkeleton noOfLoaders={3} />
+      ) : (
+        <Box sx={{ width: '100%' }}>
+          <MuiTableContainer
+            columns={COLUMNS}
+            tableConfig={{
+              hasActions: true
+            }}
+            data={getAllLoanData}
+            totalPages={totalPages}
+            totalElements={totalElements}
+            setPage={setPage}
+            page={page}
+          >
+            {search ? (
+              getAllLoanData?.map((dataItem: any, index: number) => {
+                return (
+                  <StyledTableRow key={index}>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem.fullName}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.accountNumber}
+                    </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem.productName}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {`NGN ${formatCurrency(dataItem?.loanAmount || 0) || 'N/A'}`}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        <Status
-                          label={
-                            dataItem?.loanStatus === '4' ? 'Active' : 'Matured'
-                          }
-                          status={
-                            dataItem?.loanStatus === '4' ? 'success' : 'matured'
-                          }
-                        />{' '}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        <ActionMenuProps
-                          accountNumber={dataItem.accountNumber || 'N/A'}
-                          status={dataItem.loanStatus || '2'}
-                          settlementAccount={dataItem?.settlementAcct1}
-                          productCode={dataItem?.productCode}
-                          customerId={dataItem?.customerID}
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })
-              ) : (
-                <StyledTableRow>
-                  <StyledTableCell
-                    colSpan={COLUMNS.length + 1}
-                    component="th"
-                    scope="row"
-                  >
-                    {renderEmptyTableBody(getAllLoanData)}
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
-            </MuiTableContainer>
-          </Box>
-        )
-      }
-    </Box >
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem.productName}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {`NGN ${formatCurrency(dataItem?.loanAmount || 0) || 'N/A'}`}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <Status
+                        label={
+                          dataItem?.loanStatus === '4' ? 'Active' : 'Matured'
+                        }
+                        status={
+                          dataItem?.loanStatus === '4' ? 'success' : 'matured'
+                        }
+                      />{' '}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <ActionMenuProps
+                        accountNumber={dataItem.accountNumber || 'N/A'}
+                        status={dataItem.loanStatus || '2'}
+                        settlementAccount={dataItem?.settlementAcct1}
+                        productCode={dataItem?.productCode}
+                        customerId={dataItem?.customerID}
+                      />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={COLUMNS.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody(getAllLoanData)}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
+        </Box>
+      )}
+    </Box>
   );
 };

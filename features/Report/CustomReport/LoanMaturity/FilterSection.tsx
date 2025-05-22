@@ -1,11 +1,10 @@
 import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import styled from 'styled-components';
 import {
-  transactionVolumeStyle,
   allBranchesStyle
 } from '../../Overview/styles';
+import { inputFields } from './style';
 import { TextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
@@ -13,9 +12,7 @@ import {
   ActionButton
 } from '@/components/Revamp/Buttons';
 import { ChevronDown } from '@/assets/svg';
-import { transactionVolumeOptions } from '@/constants/Reports/selectOptions';
 import { labelTypography } from '@/components/FormikFields/styles';
-import { inputFields } from './style';
 import {
   Wrapper,
   branchOptions,

@@ -210,6 +210,7 @@ export interface SearchDormancyResponse extends IFetchingState {
   penaltyGlAccount: string;
   duration: string;
   penalty: string;
+  productName: string;
 }
 export interface SearchChequeBookResponse extends IFetchingState {
   status: string;
@@ -237,6 +238,7 @@ export interface SearchInterestResponse extends IFetchingState {
   userId: string;
   intcode: string;
   maxRate: string;
+  minRate: string;
 }
 
 export interface SearchGLClassResponse extends IFetchingState {
@@ -584,6 +586,10 @@ export interface ICreditInterests {
 export interface IProducts {
   prodclass: string;
   moduledesc: string;
+}
+export interface IProductClass {
+  productCode: string;
+  productName: string;
 }
 export interface ILoanClass {
   code: string;
@@ -1001,7 +1007,7 @@ export interface UseGetAllLoanAccountResponse extends IFetchingState {
   creditInterests?: ICreditInterests[];
   loanClass?: ILoanClass[];
   interests?: IInterests[];
-  products?: IProducts[];
+  products?: IProducts[] | IProductClass[];
   exception?: IException[];
   bankproducts?: IBankProducts[];
   frequency?: IFrequency[];

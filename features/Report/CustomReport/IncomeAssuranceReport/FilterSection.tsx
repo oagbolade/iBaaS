@@ -178,6 +178,7 @@ export const FilterSection = ({
                     name="reportType"
                     options={mappedIAReportType}
                     label="Report Type"
+                    required
                   />
                 </Grid>
                 <Grid item mobile={12} tablet={3} justifyContent="center">
@@ -189,6 +190,7 @@ export const FilterSection = ({
                     name="branchID"
                     options={mappedBranches}
                     label="Branch Name"
+                    required
                   />
                 </Grid>
 

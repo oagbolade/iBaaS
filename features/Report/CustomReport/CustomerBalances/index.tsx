@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
-import { COLUMN , keys } from './Column';
+import { COLUMN, keys } from './Column';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { useGetAllProduct } from '@/api/setup/useProduct';

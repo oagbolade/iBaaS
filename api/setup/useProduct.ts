@@ -14,6 +14,7 @@ import {
   IProdDocs,
   IProductInfo,
   IProducts,
+  IProductClass,
   SearchLoanProductResponse,
   UseGetAllLoanAccountResponse,
   UseGetAllProductDocsResponse
@@ -483,6 +484,40 @@ async function getLoanProductByCode(
 
   return result;
 }
+async function getLoanProductCode(
+  toastActions: IToastActions,
+  productclass: string | null
+): Promise<UseGetAllLoanAccountResponse> {
+  let result: UseGetAllLoanAccountResponse = {
+    responseCode: '',
+    responseDescription: '',
+    products: [] as IProductClass[]
+  };
+
+  try {
+    const urlEndpoint = `/General/Product/GetProductByClass?productclass=${productclass}`;
+
+    const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
 
 async function getDemandDepositByProductCode(
   toastActions: IToastActions,
@@ -559,7 +594,8 @@ export function useGetAllProductByCode(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getAllProductByCode, prodcode],
-    queryFn: () => getAllProductByCode(toastActions, decryptData(prodcode as string)),
+    queryFn: () =>
+      getAllProductByCode(toastActions, decryptData(prodcode as string)),
     enabled: Boolean((prodcode || '').length > 0)
   });
 
@@ -598,6 +634,25 @@ export function useGetLoanProductByCode(
     queryKey: [queryKeys.getLoanProductByCode, productcode],
     queryFn: () => getLoanProductByCode(toastActions, productcode),
     enabled: Boolean((productcode || '').length > 0)
+  });
+
+  return { ...data, isError, isLoading };
+}
+export function useGetLoanProductCode(
+  productclass: string | null
+): UseGetAllLoanAccountResponse {
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = [] as UseGetAllLoanAccountResponse;
+
+  // get data from server via useQuery
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.getLoanProductCode, productclass],
+    queryFn: () => getLoanProductCode(toastActions, productclass),
+    enabled: Boolean((productclass || '').length > 0)
   });
 
   return { ...data, isError, isLoading };

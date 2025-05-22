@@ -2,7 +2,7 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary, {
-  AccordionSummaryProps,
+  AccordionSummaryProps
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -23,7 +23,7 @@ const Accordion = styled((props: AccordionProps) => {
     borderRadius: '12px',
     border: `1px solid ${colors.neutral300}`,
     boxShadow: 'none',
-    marginBottom: '20px',
+    marginBottom: '20px'
   };
 });
 
@@ -37,14 +37,14 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       height: '40px',
-      padding: '20px 24px 5px 16px',
-    },
+      padding: '20px 24px 5px 16px'
+    }
   };
 });
 
 const AccordionDetails = styled(MuiAccordionDetails)(() => {
   return {
-    padding: '20px 24px 30px 16px',
+    padding: '20px 24px 30px 16px'
   };
 });
 
@@ -56,7 +56,7 @@ const Title = ({ title }: { title: string }) => {
         fontSize: '12px',
         fontWeight: 400,
         lineHeight: '16px',
-        textAlign: 'right',
+        textAlign: 'right'
       }}
     >
       {title}
@@ -72,7 +72,7 @@ const Value = ({ title }: { title: string }) => {
         fontSize: '16px',
         fontWeight: 600,
         lineHeight: '24px',
-        textAlign: 'right',
+        textAlign: 'right'
       }}
     >
       {title}
@@ -82,7 +82,7 @@ const Value = ({ title }: { title: string }) => {
 
 export const GrandTotal = ({
   title,
-  amount,
+  amount
 }: {
   title: string;
   amount: string;
@@ -95,7 +95,7 @@ export const GrandTotal = ({
         justifyContent: 'space-between',
         backgroundColor: `${colors.primaryBlue500}`,
         color: `${colors.white}`,
-        padding: '20px 10px',
+        padding: '20px 10px'
       }}
     >
       <Typography
@@ -108,7 +108,7 @@ export const GrandTotal = ({
           fontSize: '20px',
           fontWeight: 600,
           lineHeight: '24px',
-          paddingRight: '6rem',
+          paddingRight: '6rem'
         }}
       >
         {amount}
@@ -146,7 +146,7 @@ export const ShortCardWithAccordion = ({ column, data }: Props) => {
                 color: `${colors.neutral1000}`,
                 fontSize: '20px',
                 fontWeight: 700,
-                lineHeight: '32px',
+                lineHeight: '32px'
               }}
             >
               Assets
@@ -166,7 +166,7 @@ export const ShortCardWithAccordion = ({ column, data }: Props) => {
             <Box
               sx={{
                 marginBottom: expanded ? '35px' : 0,
-                transform: `${expanded ? 'rotate(180deg)' : 'none'}`,
+                transform: `${expanded ? 'rotate(180deg)' : 'none'}`
               }}
               mt={1.2}
             >
@@ -186,7 +186,7 @@ export const ShortCardWithAccordion = ({ column, data }: Props) => {
           <AssetsTable
             tableConfig={{
               paintedColumns: ['Assets', 'Amount'],
-              totalRow: ['Total', 'N12,563,090,587.65'],
+              totalRow: ['Total', 'N12,563,090,587.65']
             }}
             columns={column}
             data={data}

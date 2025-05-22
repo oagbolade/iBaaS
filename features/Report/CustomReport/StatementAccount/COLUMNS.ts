@@ -5,5 +5,5 @@ export const COLUMN = [
   'Value Date',
   'DR',
   'CR',
-  'Balance',
+  'Balance'
 ];

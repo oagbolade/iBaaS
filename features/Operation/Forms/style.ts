@@ -240,6 +240,9 @@ export const chargeContentStyle = {
   marginTop: '-750%',
   marginLeft: '13px'
 };
+export const inputContentText = {
+  width: '660px'
+};
 export const clearContentStyle = {
   marginTop: '-950%',
   marginLeft: '23px'

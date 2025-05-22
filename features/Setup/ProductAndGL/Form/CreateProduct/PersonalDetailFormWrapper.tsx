@@ -14,20 +14,16 @@ import {
   IEducation,
   IFrequency,
   IOccupation,
+  IProductClass,
   IProducts,
   ISector
 } from '@/api/ResponseTypes/setup';
 import { CustomerCreationContext } from '@/context/CustomerCreationContext';
-import {
-  FormSelectField,
-  FormTextInput
-} from '@/components/FormikFields';
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
-import {
-  generateProductCode
-} from '@/api/setup/useProduct';
+import { generateProductCode } from '@/api/setup/useProduct';
 import { encryptData } from '@/utils/encryptData';
 
 type Props = {
@@ -41,7 +37,7 @@ type Props = {
   productTypes?: IProductType[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   bankproducts?: IBankProducts[];
-  products?: IProducts[];
+  products?: IProducts[] | IProductClass[] | Array<any>;
   frequency?: IFrequency[];
 };
 
@@ -83,7 +79,8 @@ export const PersonalDetailsForm = ({
     mappedCurrency,
     mappedBankproducts,
     mappedProductClass,
-    mappedFrequency
+    mappedFrequency,
+    mappedBankproductCode
   } = useMapSelectOptions({
     productTypes,
     currencies,
@@ -112,7 +109,7 @@ export const PersonalDetailsForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="productclass"
-          options={mappedProductClass}
+          options={mappedBankproductCode}
           label="Product Class"
           onChange={(e) => handleGenerateCode(e.target.value)}
           customStyle={{

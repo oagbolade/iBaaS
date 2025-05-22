@@ -47,6 +47,7 @@ import {
   IInterests,
   ILoanClass,
   IOccupation,
+  IProductClass,
   IProducts,
   IRegionByCode,
   ISector,
@@ -117,7 +118,7 @@ interface ISelect {
   creditInterests?: ICreditInterests[];
   loanClass?: ILoanClass[];
   interests?: IInterests[];
-  products?: IProducts[];
+  products?: IProducts[] | IProductClass[] | Array<any>;
   exception?: IException[];
   frequency?: IFrequency[];
   users?: IUsers[];
@@ -207,6 +208,7 @@ export const useMapSelectOptions = ({
   const [mappedGlClassType, setGlClassType] = useState<OptionsI[]>([]);
   const [mappedGlAccount, setGlAccount] = useState<OptionsI[]>([]);
   const [mappedBankproducts, setBankProducts] = useState<OptionsI[]>([]);
+  const [mappedBankproductCode, setBankProductCode] = useState<OptionsI[]>([]);
   const [mappedState, setState] = useState<OptionsI[]>([]);
   const [mappedBranchTypes, setBranchTypes] = useState<OptionsI[]>([]);
   const [mappedCity, setCity] = useState<OptionsI[]>([]);
@@ -271,6 +273,13 @@ export const useMapSelectOptions = ({
       productClassArray.push({
         value: product.prodclass.toString(),
         name: product.moduledesc
+      });
+    });
+    const productCodeArray: OptionsI[] = [];
+    products?.forEach((product: IProductClass) => {
+      productCodeArray.push({
+        value: product.productCode?.toString(),
+        name: product.productName
       });
     });
     const interestsArray: OptionsI[] = [];
@@ -738,6 +747,7 @@ export const useMapSelectOptions = ({
     setProductClass(productClassArray);
     setException(exceptionArray);
     setFrequency(frequencyArray);
+    setBankProductCode(productCodeArray);
   }, [
     bankgl,
     bankproducts,
@@ -844,6 +854,7 @@ export const useMapSelectOptions = ({
     mappedProductClass,
     mappedException,
     mappedFrequency,
-    mappedGLNodeType
+    mappedGLNodeType,
+    mappedBankproductCode
   };
 };

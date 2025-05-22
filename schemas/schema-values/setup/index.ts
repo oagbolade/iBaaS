@@ -785,7 +785,7 @@ export const createDormancyInitialValue: CreateDormancyFormValues = {
 export const createExceptionInitialValue: CreateExceptionFormValues = {
   exceptionDesc: '',
   behaviour: '',
-  authid: 'string'
+  authid: ''
 };
 export const createGlClassInitialValue: CreateGlClassFormValues = {
   gL_ClassCode: '',

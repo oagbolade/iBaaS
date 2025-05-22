@@ -22,9 +22,7 @@ export const IncomeAssuranceReport = () => {
   const { branches } = useGetBranches();
   const { data: IAreportType } = useGetIAReportType();
 
-  const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     React.useContext(DownloadReportContext);
@@ -33,8 +31,6 @@ export const IncomeAssuranceReport = () => {
   const [searchParams, setSearchParams] = React.useState<ISearchParams | null>(
     null
   );
-
-  console.log(searchParams?.reportType, 'reportType');
 
   const [page, setPage] = React.useState(1);
   const {

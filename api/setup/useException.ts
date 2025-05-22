@@ -128,6 +128,7 @@ async function getExceptionByCode(
 
   return result;
 }
+
 export function useFilterExceptionSearch(params: ISearchParams | null) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as SearchResultsGenericResponse;
@@ -171,8 +172,7 @@ export function useGetExceptionByCode(
       queryKeys.getExceptionByCode,
       decryptData(exceptioncode as string)
     ],
-    queryFn: () =>
-      getExceptionByCode(toastActions, decryptData(exceptioncode as string)),
+    queryFn: () => getExceptionByCode(toastActions, exceptioncode),
     enabled: Boolean((exceptioncode || '').length > 0)
   });
 
@@ -189,12 +189,7 @@ export function useCreateException(
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CreateExceptionFormValues) =>
-      createException(
-        toastActions,
-        body,
-        isUpdating,
-        decryptData(exceptioncode as string)
-      ),
+      createException(toastActions, body, isUpdating, exceptioncode),
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.getExceptionByCode],

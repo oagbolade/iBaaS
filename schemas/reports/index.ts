@@ -8,37 +8,26 @@ export const searchFieldsSchema = Yup.object({
     .min(0, 'Branch Debit must not be less than 0'),
   branchCredit: Yup.number()
     .typeError('Must be a numeric value')
-    .min(0, 'Branch Debit must not be less than 0'),
+    .min(0, 'Branch Debit must not be less than 0')
 });
 
 export const chequebookSchema = Yup.object({
   accountNumber: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
 export const dormantAccountSchema = Yup.object({
-  accountNumber: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  
   branchID: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
     .required('Branch Name is required'),
-  status: Yup.string()
-    .matches(stringRegex, 'Invalid Search Input')
-    .required('Status is required')
-});
-
-export const dormantAccountSchema = Yup.object({
-  searchWith: Yup.string().matches(numericRegex, 'Invalid Search Input'),
-  branchID: Yup.string()
-    .matches(stringRegex, 'Invalid Search Input')
-    .required('Branch is required')
+ 
 });
 
 export const customerBalanceSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  pCode: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  pCode: Yup.string().matches(stringRegex, 'Invalid Search Input')
   // TODO : Uncomment when the API payload is updated
   // status: Yup.string().matches(stringRegex, 'Invalid Search Input')
   // startDate : Yup.string().matches(stringRegex, 'Invalid Search Input'),
@@ -46,47 +35,41 @@ export const customerBalanceSchema = Yup.object({
 });
 
 export const plainTrailBalanceSchema = Yup.object({
-  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  reportType: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input').required('Branch name is required'),
+  reportType: Yup.string().matches(stringRegex, 'Invalid Search Input').required('Report type is required'),
 });
 
 export const chartOfAccountSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
 export const trialBalanceGroupSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   customerID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  reportType: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  reportType: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
 export const trialBalanceSchema = Yup.object({
   branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  customerID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  customerID: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
 export const maturityLoanSchema = Yup.object({
   branchID: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
     .required('Branch ID is required'),
-  searchWith: Yup.string()
-    .matches(stringRegex, 'Invalid Search Input')
-    .required('Search With is required'),
   prodCode: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
-    .required('Product is required'),
+    .required('Product is required')
 });
 
 export const statementOfAccountSchema = Yup.object({
-  accountNumber: Yup.string()
-    .required('Branch Name is required'),
-
-  prodCode: Yup.string()
+  accountNumber: Yup.string().required('Account number  is required'),
+  productCode: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
     .required('required'),
-  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-  accttype: Yup.string().matches(stringRegex, 'Invalid Search Input'),
+  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input')
 });
 
 export const prostingJournalSchema = Yup.object({

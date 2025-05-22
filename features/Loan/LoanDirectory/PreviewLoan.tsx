@@ -67,13 +67,13 @@ export const PreviewContentTwo: React.FC<{
       }}
     >
       <SubTitle title="Product Name" />
-      <Details title={productDetail.productName || 'N/A'} />
+      <Details title={productDetail?.productName || 'N/A'} />
 
       <SubTitle title="Product Start Date " />
       <Details
         title={
-          productDetail.productstart
-            ? moment(productDetail.productstart).format(
+          productDetail?.productstart
+            ? moment(productDetail?.productstart).format(
                 'MMMM Do YYYY, h:mm:ss a'
               )
             : 'N/A'
@@ -83,8 +83,8 @@ export const PreviewContentTwo: React.FC<{
       <SubTitle title="Product Expire Date " />
       <Details
         title={
-          productDetail.productExpire
-            ? moment(productDetail.productExpire).format(
+          productDetail?.productExpire
+            ? moment(productDetail?.productExpire).format(
                 'MMMM Do YYYY, h:mm:ss a'
               )
             : 'N/A'
@@ -92,7 +92,7 @@ export const PreviewContentTwo: React.FC<{
       />
 
       <SubTitle title="Product Currency " />
-      <Details title={productDetail.currencycode || 'N/A'} />
+      <Details title={productDetail?.currencycode || 'N/A'} />
 
       <SubTitle title="Minimum Loan Amount" />
       <Details
