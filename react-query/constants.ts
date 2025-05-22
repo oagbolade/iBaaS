@@ -218,6 +218,8 @@ interface IQueryKeys {
   maturityLoan: string;
   getLoanProductCode: string;
   statementOfAccount: string;
+  balanceSheet: string;
+  balanceSheetbyId: string;
 }
 
 export const queryKeys: IQueryKeys = {
@@ -438,6 +440,8 @@ export const queryKeys: IQueryKeys = {
   generateProductCode: 'generateProductCode',
   dormantAccount: 'dormantAccount',
   maturityLoan: 'maturityLoan',
+  balanceSheet: 'balanceSheet',
+  balanceSheetbyId: 'balanceSheetbyId',
   getLoanProductCode: 'getLoanProductCode',
   statementOfAccount: 'statementOfAccount'
 };

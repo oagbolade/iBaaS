@@ -12,15 +12,20 @@ type Props = {
 export const TopActionsArea = ({
   actionButtons,
   customStyle,
-  showBackButon = true
+  showBackButon = true,
 }: Props) => {
   return (
     <Stack
       sx={{
+        position: 'sticky',
+        top: '60px',
+        zIndex: 3,
+        backgroundColor: '#fff',
+        borderLeft: '1px solid #E8E8E8',
         borderBottom: '1px solid #E8E8E8',
         padding: '8px 12px',
-        marginTop: '60px',
-        ...customStyle
+        // marginBottom: '60px',
+        ...customStyle,
       }}
       direction="row"
       justifyContent={{ mobile: 'space-between', tablet: 'space-between' }}

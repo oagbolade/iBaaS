@@ -99,6 +99,7 @@ export interface ISearchParams {
   pCode?: string | null;
   till?: string | null;
   accttype?: string | null;
+  itemcode?: string | number;
   nodeCode?: string | null;
   Gl_ClassCode?: string | null;
 }

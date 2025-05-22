@@ -621,6 +621,41 @@ export interface GetAllDormantAccountResponse
   dormantAccountList?: IDormantAccountList[];
 }
 
+export interface IBalanceSheetList {
+  itemid: number;
+  prodTypeCode: string;
+  groupname: string;
+  sumbalance: number;
+  asset: number;
+  liability: number;
+  balance: number;
+  noOfItems: number;
+  status: number;
+}
+
+export interface GetAllBalanceSheetResponse extends IFetchingState {
+  data: IBalanceSheetList[];
+}
+
+export interface IBalanceSheetByItemIdList {
+  itemid: string;
+  balance: string;
+  itemrange: string;
+  itemDesc: string;
+  orderid: string;
+  groupid: string;
+  groupname: string;
+  createdate: string;
+  userid: string;
+  sumbalance: string;
+  asset: string;
+  liability: string;
+  status: string;
+}
+
+export interface GetAllBalanceSheetByItemIdResponse extends IFetchingState {
+  data: IBalanceSheetByItemIdList[];
+}
 export interface ILoanMaturityReport {
   id: number;
   accountNumber: string;
