@@ -273,24 +273,32 @@ export const ShortCardWithAccordion = ({
             />
           </Box>
 
-          {isLoading ? (
-            <Box sx={{ padding: '20px', textAlign: 'center' }}>
-              <FormSkeleton noOfLoaders={3} />
-            </Box>
-          ) : detailData?.length ? (
-            <AssetsTable
-              tableConfig={{
-                paintedColumns: ['Assets', 'Amount'],
-                totalRow: ['Total', `${formatCurrency(total)}`],
-              }}
-              columns={column}
-              data={tableData || []}
-            />
-          ) : (
-            <>
-              {renderEmptyTableBody(detailData as IBalanceSheetByItemIdList[])}
-            </>
-          )}
+          {(() => {
+            if (isLoading) {
+              return (
+                <Box sx={{ padding: '20px', textAlign: 'center' }}>
+                  <FormSkeleton noOfLoaders={3} />
+                </Box>
+              );
+            } if (detailData?.length) {
+              return (
+                <AssetsTable
+                  tableConfig={{
+                    paintedColumns: ['Assets', 'Amount'],
+                    totalRow: ['Total', `${formatCurrency(total)}`],
+                  }}
+                  columns={column}
+                  data={tableData || []}
+                />
+              );
+            } 
+              return (
+                <>
+                  {renderEmptyTableBody(detailData as IBalanceSheetByItemIdList[])}
+                </>
+              );
+            
+          })()}
         </AccordionDetails>
       </Accordion>
     </AccordionWrapper>

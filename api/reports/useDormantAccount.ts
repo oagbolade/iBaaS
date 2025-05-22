@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { GetAllDormantAccountResponse } from '../ResponseTypes/reports';
-import { axiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -20,7 +20,7 @@ async function fetchAllDormantAccount(
   try {
     const urlEndpoint = `/ReportServices/DormantAccounts?pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&branchCode=${params?.branchID}&startDate=${params?.startDate}&endDate=${params?.endDate}&searchWith=${params?.searchWith || ''}`;
     const { data }: AxiosResponse<GetAllDormantAccountResponse> =
-      await axiosInstance({
+      await reportsAxiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {

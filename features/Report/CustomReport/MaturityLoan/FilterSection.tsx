@@ -46,10 +46,15 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
-      branchID: values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      searchWith: values.searchWith?.toString().trim().length > 0 ? values.searchWith : null,
-      prodCode: values.prodCode?.toString().trim().length > 0 ? values.prodCode : null,
-      getAll: values.getAll,
+      branchID:
+        values.branchID?.toString().trim().length > 0 ? values.branchID : null,
+      searchWith:
+        values.searchWith?.toString().trim().length > 0
+          ? values.searchWith
+          : null,
+      prodCode:
+        values.prodCode?.toString().trim().length > 0 ? values.prodCode : null,
+      getAll: values.getAll
     };
     onSearch?.(params);
   };
@@ -62,7 +67,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
         validationSchema={maturityLoanSchema}
       >
         <Form>
-
           <Stack
             sx={{
               borderBottom: '1px solid #E8E8E8',
@@ -117,7 +121,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
             }}
           >
             <Grid container spacing={2}>
-
               <Grid
                 mb={{ tablet: 3 }}
                 item
@@ -156,7 +159,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                 mobile={12}
                 tablet={4}
                 justifyContent="center"
-
               >
                 <FormTextInput
                   customStyle={{
@@ -191,7 +193,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
               </Grid>
             </Grid>
           </Box>
-
         </Form>
       </Formik>
     </Box>

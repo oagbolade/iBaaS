@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
+import { useFormikContext } from 'formik';
 import { ContainerStyle } from './styles';
 import { FormTextInput , FormikRadioButton} from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import { useFormikContext } from 'formik';
-import { Stringifier } from 'postcss';
 
 interface InterestSectionProps {
   label: string;
@@ -49,7 +47,7 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
   const { setFieldValue } = useFormikContext();
 
   useEffect(() => {
-    if (restructureType === "1") {
+    if (restructureType === '1') {
       const fieldsToReset = [
         { name: sectionName, value: sectionValue || '' },
         { name: writeOffActionType, value: '' },
@@ -75,7 +73,7 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
             value={sectionValue?.toString()}
             placeholder={placeholder}
             label={label}
-            disabled={true}
+            disabled
           />
         </Grid>
 
@@ -85,7 +83,7 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
             title="Actions"
             name={writeOffActionType}
             value={writeOffActionType}
-            disable={restructureType === "1"}
+            disable={restructureType === '1'}
           />
         </Grid>
 
@@ -95,7 +93,8 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
             name={writeOffValue}
             placeholder=""
             label="Add Value"
-            disabled={restructureType === "1"}
+            disabled={restructureType === '1'}
+            required={false}
           />
         </Grid>
 
@@ -105,7 +104,8 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
             name={glAccountNumber}
             placeholder=""
             label="Enter GL Account"
-            disabled={restructureType === "1"}
+            disabled={restructureType === '1'}
+            required={false}
           />
         </Grid>
       </Grid>

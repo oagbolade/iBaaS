@@ -63,8 +63,9 @@ export const MaturityLoan = () => {
     setReportType('MaturityLoan');
   };
 
-  const { loanMaturityList, pageSize, totalRecords, isLoading } =
-    useGetMaturityLoan({ ...searchParams });
+  const { loanMaturityList, totalRecords, isLoading } = useGetMaturityLoan({
+    ...searchParams
+  });
 
   React.useEffect(() => {
     if (loanMaturityList?.length > 0) {
@@ -98,8 +99,6 @@ export const MaturityLoan = () => {
             }}
             columns={COLUMN}
             data={loanMaturityList}
-            totalPages={totalRecords}
-            totalElements={pageSize}
             setPage={setpageNumber}
             page={pageNumber}
             ActionMenuProps={ActionMenu}

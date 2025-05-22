@@ -98,10 +98,10 @@ export const InterestTable = () => {
                       {dataItem.intName}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.maxRate}
+                      {dataItem.minRate}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.targetBase}
+                      {dataItem.maxRate}
                     </StyledTableCell>
                     {/* on Hold */}
                     {/* <StyledTableCell align="right">

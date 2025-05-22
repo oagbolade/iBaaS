@@ -26,6 +26,7 @@ export type ReportType =
   | 'HoldingTransaction'
   | 'GLMainGroupReport'
   | 'GLSubMainGroupReport'
+  | 'StatementOfAccount'
   | 'GLAccountClassReport';
 
 interface IFileNameMapper {

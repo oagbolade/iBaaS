@@ -1,34 +1,37 @@
 'use client';
 import { Box, Grid, IconButton, Stack, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
-import { useGetBranches } from '@/api/general/useBranches';
+import AnimateHeight, { Height } from 'react-animate-height';
 import { FilterSection } from './FilterSection';
-import { ISearchParams } from '@/app/api/search/route';
-import { DownloadReportContext } from '@/context/DownloadReportContext';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import {
-  useGetAccountDetails,
-  useGetAllCustomerAccountProducts,
-} from '@/api/customer-service/useCustomer';
-import { MuiTableContainer } from '@/components/Table';
 import { COLUMN } from './COLUMNS';
-import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
-import { StyledTableCell } from '@/components/Table/style';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Details,
-  SubTitle,
+  SubTitle
 } from './AccountDetailsAccordion';
-import AnimateHeight, { Height } from 'react-animate-height';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { useGetBranches } from '@/api/general/useBranches';
+import { ISearchParams } from '@/app/api/search/route';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import {
+  useGetAccountDetails,
+  useGetAllCustomerAccountProducts
+} from '@/api/customer-service/useCustomer';
+import { MuiTableContainer } from '@/components/Table';
+import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { ChevronDown } from '@/assets/svg';
-import { useSearchParams } from 'next/navigation';
 import { encryptData } from '@/utils/encryptData';
 import { useGetStatementOfAccount } from '@/api/reports/useStatementOfAccount';
 import { FormSkeleton } from '@/components/Loaders';
+import { useGetProductType } from '@/api/general/useProductType';
+import { IProductType } from '@/api/ResponseTypes/general';
+import { useGetProductClass } from '@/api/setup/useProduct';
+import { IProducts } from '@/api/ResponseTypes/setup';
 
 export const StatementAccount = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,9 +41,10 @@ export const StatementAccount = () => {
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllCustomerAccountProducts();
   const { setDirection } = useSetDirection();
-
+  const { productTypes } = useGetProductType();
+  const { products } = useGetProductClass();
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
@@ -51,7 +55,7 @@ export const StatementAccount = () => {
   const [productCode, setProductCode] = useState('');
 
   const { accDetailsResults, isLoading: loadingDetails } = useGetAccountDetails(
-    accountNumber ? (encryptData(accountNumber) as string) : '',
+    accountNumber ? (encryptData(accountNumber) as string) : ''
   );
 
   const { rptStatementList, isLoading: loadingStatements } =
@@ -69,13 +73,7 @@ export const StatementAccount = () => {
       setExportData?.(rptStatementList?.pagedRecords);
       setReportType('StatementOfAccount');
     }
-  }, [
-    rptStatementList,
-    searchParams,
-    setExportData,
-    setReportType,
-    // setReportQueryParams,
-  ]);
+  }, [rptStatementList, searchParams, setExportData, setReportType]);
 
   const handleChange = () => {
     setExpanded(!expanded);
@@ -99,7 +97,7 @@ export const StatementAccount = () => {
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
       page,
-      getAll: false,
+      getAll: false
     };
 
     setSearchParams(queryParams);
@@ -110,149 +108,184 @@ export const StatementAccount = () => {
       <TopOverViewSection useBackButton />
 
       <Box sx={{ marginTop: '30px', padding: '0 25px' }}>
-        {branches && (
+        {branches && products && (
           <FilterSection
             branches={branches}
             bankproducts={bankproducts || []}
             onSearch={handleSearch}
+            products={products as IProducts[]}
           />
         )}
       </Box>
 
       {search && (
         <Box sx={{ margin: '20px 0' }}>
-          {loadingDetails ? (
-            <Box sx={{ padding: '20px', textAlign: 'center' }}>
-              <FormSkeleton noOfLoaders={3} />
-            </Box>
-          ) : accDetailsResults ? (
-            <Accordion
-              sx={{ width: { mobile: '100%', desktop: '100%' } }}
-              expanded={true}
-            >
-              <AccordionDetails>
-                <AnimateHeight
-                  id="account-details-panel"
-                  duration={350}
-                  height={height}
+          {(() => {
+            if (loadingDetails) {
+              return (
+                <Box sx={{ padding: '20px', textAlign: 'center' }}>
+                  <FormSkeleton noOfLoaders={3} />
+                </Box>
+              );
+            }
+            if (accDetailsResults) {
+              return (
+                <Accordion
+                  sx={{ width: { mobile: '100%', desktop: '100%' } }}
+                  expanded
                 >
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{
-                      padding: { mobile: '10px 17px', desktop: '20px 32px' },
-                    }}
-                  >
-                    <Grid item mobile={12} tablet={3} justifyContent="center">
-                      <SubTitle title="Account Name" />
-                      <Details
-                        title={accDetailsResults.accounttitle || 'N/A'}
-                      />
-                    </Grid>
-
-                    <Grid item mobile={12} tablet={3} justifyContent="center">
-                      <SubTitle title="Account Number" />
-                      <Details
-                        title={accDetailsResults.accountnumber || 'N/A'}
-                      />
-                    </Grid>
-
-                    <Grid item mobile={12} tablet={3} justifyContent="center">
-                      <SubTitle title="Opening Balance" />
-                      <Details title={'N/A'} />
-                    </Grid>
-
-                    <Grid item mobile={12} tablet={3} justifyContent="center">
-                      <SubTitle title="Closing Balance" />
-                      <Details title={'N/A'} />
-                    </Grid>
-
-                    {isOpen && (
-                      <>
-                        <Grid
-                          item
-                          mobile={12}
-                          tablet={3}
-                          justifyContent="center"
-                        >
-                          <SubTitle title="Uncleared Balance" />
-                          <Details title={accDetailsResults.holdBal || 'N/A'} />
-                        </Grid>
-
-                        <Grid
-                          item
-                          mobile={12}
-                          tablet={3}
-                          justifyContent="center"
-                        >
-                          <SubTitle title="Total COT" />
-                          <Details title={'N/A'} />
-                        </Grid>
-
-                        <Grid
-                          item
-                          mobile={12}
-                          tablet={3}
-                          justifyContent="center"
-                        >
-                          <SubTitle title="Total VAT" />
-                          <Details title={'N/A'} />
-                        </Grid>
-
-                        <Grid
-                          item
-                          mobile={12}
-                          tablet={3}
-                          justifyContent="center"
-                        >
-                          <SubTitle title="DR Rate" />
-                          <Details
-                            title={accDetailsResults.dintrate || 'N/A'}
-                          />
-                        </Grid>
-
-                        <Grid
-                          item
-                          mobile={12}
-                          tablet={3}
-                          justifyContent="center"
-                        >
-                          <SubTitle title="CR Rate" />
-                          <Details
-                            title={accDetailsResults.cintrate || 'N/A'}
-                          />
-                        </Grid>
-                      </>
-                    )}
-                  </Grid>
-                </AnimateHeight>
-
-                <AccordionSummary>
-                  <IconButton onClick={handleClick}>
-                    <Stack direction="row" justifyContent="space-between">
-                      <Typography mr={1} sx={{ textAlign: 'center' }}>
-                        Click to{' '}
-                        {isOpen ? 'close more details' : 'view more details'}
-                      </Typography>
-                      <Box
-                        mt={0}
+                  <AccordionDetails>
+                    <AnimateHeight
+                      id="account-details-panel"
+                      duration={350}
+                      height={height}
+                    >
+                      <Grid
+                        container
+                        spacing={2}
                         sx={{
-                          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                          transition: 'transform 0.3s ease',
+                          padding: { mobile: '10px 17px', desktop: '20px 32px' }
                         }}
                       >
-                        <ChevronDown />
-                      </Box>
-                    </Stack>
-                  </IconButton>
-                </AccordionSummary>
-              </AccordionDetails>
-            </Accordion>
-          ) : (
-            <Box sx={{ padding: '20px', textAlign: 'center' }}>
-              {renderEmptyTableBody(accDetailsResults)}
-            </Box>
-          )}
+                        <Grid
+                          item
+                          mobile={12}
+                          tablet={3}
+                          justifyContent="center"
+                        >
+                          <SubTitle title="Account Name" />
+                          <Details
+                            title={accDetailsResults.accounttitle || 'N/A'}
+                          />
+                        </Grid>
+
+                        <Grid
+                          item
+                          mobile={12}
+                          tablet={3}
+                          justifyContent="center"
+                        >
+                          <SubTitle title="Account Number" />
+                          <Details
+                            title={accDetailsResults.accountnumber || 'N/A'}
+                          />
+                        </Grid>
+
+                        <Grid
+                          item
+                          mobile={12}
+                          tablet={3}
+                          justifyContent="center"
+                        >
+                          <SubTitle title="Opening Balance" />
+                          <Details title="N/A" />
+                        </Grid>
+
+                        <Grid
+                          item
+                          mobile={12}
+                          tablet={3}
+                          justifyContent="center"
+                        >
+                          <SubTitle title="Closing Balance" />
+                          <Details title="N/A" />
+                        </Grid>
+
+                        {isOpen && (
+                          <>
+                            <Grid
+                              item
+                              mobile={12}
+                              tablet={3}
+                              justifyContent="center"
+                            >
+                              <SubTitle title="Uncleared Balance" />
+                              <Details
+                                title={accDetailsResults.holdBal || 'N/A'}
+                              />
+                            </Grid>
+
+                            <Grid
+                              item
+                              mobile={12}
+                              tablet={3}
+                              justifyContent="center"
+                            >
+                              <SubTitle title="Total COT" />
+                              <Details title="N/A" />
+                            </Grid>
+
+                            <Grid
+                              item
+                              mobile={12}
+                              tablet={3}
+                              justifyContent="center"
+                            >
+                              <SubTitle title="Total VAT" />
+                              <Details title="N/A" />
+                            </Grid>
+
+                            <Grid
+                              item
+                              mobile={12}
+                              tablet={3}
+                              justifyContent="center"
+                            >
+                              <SubTitle title="DR Rate" />
+                              <Details
+                                title={accDetailsResults.dintrate || 'N/A'}
+                              />
+                            </Grid>
+
+                            <Grid
+                              item
+                              mobile={12}
+                              tablet={3}
+                              justifyContent="center"
+                            >
+                              <SubTitle title="CR Rate" />
+                              <Details
+                                title={accDetailsResults.cintrate || 'N/A'}
+                              />
+                            </Grid>
+                          </>
+                        )}
+                      </Grid>
+                    </AnimateHeight>
+
+                    <AccordionSummary>
+                      <IconButton onClick={handleClick}>
+                        <Stack direction="row" justifyContent="space-between">
+                          <Typography mr={1} sx={{ textAlign: 'center' }}>
+                            Click to{' '}
+                            {isOpen
+                              ? 'close more details'
+                              : 'view more details'}
+                          </Typography>
+                          <Box
+                            mt={0}
+                            sx={{
+                              transform: isOpen
+                                ? 'rotate(180deg)'
+                                : 'rotate(0deg)',
+                              transition: 'transform 0.3s ease'
+                            }}
+                          >
+                            <ChevronDown />
+                          </Box>
+                        </Stack>
+                      </IconButton>
+                    </AccordionSummary>
+                  </AccordionDetails>
+                </Accordion>
+              );
+            }
+            return (
+              <Box sx={{ padding: '20px', textAlign: 'center' }}>
+                {renderEmptyTableBody(accDetailsResults)}
+              </Box>
+            );
+          })()}
         </Box>
       )}
 
@@ -271,25 +304,25 @@ export const StatementAccount = () => {
               rptStatementList?.pagedRecords?.map((statement, index) => (
                 <StyledTableRow key={`${statement.accountnumber || index}`}>
                   <StyledTableCell component="th" scope="row">
-                    {'N/A'}
+                    {statement.trandate}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {'N/A'}
+                    {statement.narration}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {'N/A'}
+                    {statement.refNo}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {'N/A'}
+                    {statement.enddate}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {'N/A'}
+                    {statement.debit}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {'N/A'}
+                    {statement?.credit || 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {'N/A'}
+                    {statement.bkBalance || '0.0'}
                   </StyledTableCell>
                 </StyledTableRow>
               ))

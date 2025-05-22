@@ -7,7 +7,7 @@ import {
   AccordionDetails as MuiAccordionDetails,
   Box,
   Typography,
-  styled,
+  styled
 } from '@mui/material';
 import colors from '@/assets/colors';
 
@@ -19,7 +19,7 @@ export const Accordion = styled((props: MuiAccordionProps) => {
     marginLeft: '20px',
     marginRight: '20px',
     border: `1px solid ${colors.neutral300}`,
-    boxShadow: 'none',
+    boxShadow: 'none'
   };
 });
 
@@ -32,14 +32,14 @@ export const AccordionSummary = styled((props: AccordionSummaryProps) => {
     '& .MuiAccordionSummary-content': {
       marginLeft: theme.spacing(1),
       display: 'flex',
-      justifyContent: 'center',
-    },
+      justifyContent: 'center'
+    }
   };
 });
 
 export const AccordionDetails = styled(MuiAccordionDetails)(() => {
   return {
-    padding: 0,
+    padding: 0
   };
 });
 
@@ -51,7 +51,7 @@ export const SubTitle = ({ title }: { title?: string }) => {
         fontSize: '12px',
         fontWeight: 400,
         lineHeight: '16px',
-        textTransform: 'uppercase',
+        textTransform: 'uppercase'
       }}
     >
       {title}
@@ -67,7 +67,7 @@ export const Details = ({ title }: { title?: string }) => {
         fontSize: { mobile: '12px', desktop: '16px' },
         fontWeight: 600,
         lineHeight: '24px',
-        marginBottom: '24px',
+        marginBottom: '24px'
       }}
     >
       {title}

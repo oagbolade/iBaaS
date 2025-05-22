@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { useQuery } from '@tanstack/react-query';
 import SearchIcon from '@mui/icons-material/Search';
+import dayjs, { Dayjs } from 'dayjs';
 import { PreviewContent } from '../LoanDirectory/PreviewLoan';
 import {
   FormTextInput,
@@ -13,7 +14,7 @@ import {
 import colors from '@/assets/colors';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { loanUnderWriteSchema } from '@/schemas/loan';
-import { useCurrentBreakpoint , frequencyTermsDays} from '@/utils';
+import { useCurrentBreakpoint, frequencyTermsDays, frequencyOptions } from '@/utils';
 import { options } from '@/constants/Loan/selectOptions';
 import {
   loanUnderwritingInitialValues,
@@ -63,21 +64,23 @@ export const CreateLoanUnderwritingForm = ({
   const { mutate } = useCreatLoanUnderwriting();
   const { setDirection } = useSetDirection();
   const [group, setGroup] = useState<number>(0);
-  const [formValues, setFormValue] = useState<any>({});
-  const [productDetail, setProductDetail] = useState({});
+  const [productDetail, setProductDetail] = useState<
+    IProductDetails | undefined
+  >(undefined);
 
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [customerAccount, setCustomerAccount] = useState('');
-
   const [filteredValues, setFilteredValues] = useState<[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-
   const [loanRate, setLoanRate] = useState('');
+  const [getCalcDays, setGetCalcDays] = useState<number>(0);
   const [loanTerm, setLoanTerm] = useState<string>('');
-
   const [penalRate, setPenalRate] = useState<string>('');
   const [penalrateCalcMethod, setPenalrateCalcMethod] = useState<string>('');
   const [moratorium, setMoratorium] = useState<string>('');
+  const [maturityDate, setMaturitDate] = useState<Dayjs>();
+  const [startDate, setStartDate] = useState<Dayjs>();
+  const [termFreq, setTermFrequency] = useState<string>('');
 
   const toastActions = React.useContext(ToastMessageContext);
   const {
@@ -108,46 +111,43 @@ export const CreateLoanUnderwritingForm = ({
       setIsSubmitting?.(false);
     };
   }, [isSubmitting, setIsSubmitting]);
-  
-  const GetLoanProductByCode = (productCode: string) => {
-    getLoanProductDetailByProductCode(
-      encryptData(productCode) as string,
-      toastActions
-    ).then((resp) => {
-      if (typeof resp.loanProducts === 'object' && resp.loanProducts !== null) {
-        setFormValue(resp.loanProducts);
-        setProductDetail(resp.loanProducts);
 
-        setLoanRate(
-          (resp.loanProducts as { actualRAte?: string }).actualRAte || ''
-        );
-        setPenalRate(
-          (resp.loanProducts as { penalrate?: string }).penalrate || ''
-        );
-        setPenalrateCalcMethod(
-          (resp.loanProducts as { penalrateCalcMethod?: string })
-            .penalrateCalcMethod || ''
-        );
-        setMoratorium(
-          (resp.loanProducts as { moratorium?: string }).moratorium || ''
-        );
-      }
-    });
-  };
+  // Fetch loan product details and update related fields
+  const GetLoanProductByCode = useCallback(
+    (productCode: string) => {
+      getLoanProductDetailByProductCode(
+        encryptData(productCode) as string,
+        toastActions
+      ).then((resp) => {
+        // Type guard for IProductDetails
+        const details = resp.loanProducts as IProductDetails;
+        if (details && typeof details === 'object') {
+          setProductDetail(details);
+          setLoanRate(details.maxintrate ? String(details.maxintrate) : '');
+          setPenalRate(details.penalrate ? String(details.penalrate) : '');
+          setPenalrateCalcMethod(
+            details.penalrateCalcMethod
+              ? String(details.penalrateCalcMethod)
+              : ''
+          );
+          setMoratorium(details.moratorium ? String(details.moratorium) : '');
+        }
+      });
+    },
+    [toastActions]
+  );
 
-  const handleSelectedValue = (value: any) => {
+  // Handle customer selection
+  const handleSelectedValue = useCallback((value: any) => {
     setSelectedCustomer(value);
     setCustomerAccount(value.customer.accountnumber);
     setSearchValue(value);
-  };
+  }, []);
 
-  const getGroup = (e: any) => {
-    if (e === false) {
-      setGroup(1);
-    } else {
-      setGroup(0);
-    }
-  };
+  // Handle group selection
+  const getGroup = useCallback((e: any) => {
+    setGroup(e === false ? 1 : 0);
+  }, []);
 
   const { data, isLoading: isSearchLoading } = useQuery({
     queryKey: [queryKeys.searchCustomer, searchValue],
@@ -155,66 +155,102 @@ export const CreateLoanUnderwritingForm = ({
     enabled: Boolean(searchValue.length > 0)
   });
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setSearchValue(value);
-
-    if (data) {
-      const { accountDetailsResults } = data;
-      const first20Customers = accountDetailsResults.slice(0, 20);
-      // TODO : optimize this to proper search customer ----> this only return the first 20 customers
-      const mappedSearchResults = mapCustomerSearchLoan(first20Customers);
-      setFilteredValues(mappedSearchResults as []);
-    }
-
-    if (value.trim().length === 0) {
+  // Update filtered customer values on search
+  useEffect(() => {
+    if (data && data.accountDetailsResults) {
+      const first20Customers = data.accountDetailsResults.slice(0, 20);
+      setFilteredValues(mapCustomerSearchLoan(first20Customers) as []);
+    } else if (!searchValue) {
       setFilteredValues([]);
     }
-  };
+  }, [data, searchValue]);
 
-  const checkMaxMinLoanRate = (value: string) => {
-    if (value > formValues.maxintrate) {
-      toast(
-        'Interest Rate is Higher than Maximum Interest Rate',
-        'Loan Rate',
-        'error',
-        toastActions
-      );
-    } else {
-      setLoanRate(value);
+  // Handle search input
+  const handleSearch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchValue(event.target.value);
+    },
+    []
+  );
+
+  // Validate and set loan rate
+  const checkMaxMinLoanRate = useCallback(
+    (value: string) => {
+      if (productDetail && Number(value) > Number(productDetail?.maxintrate)) {
+        toast(
+          'Interest Rate is Higher than Maximum Interest Rate',
+          'Loan Rate',
+          'error',
+          toastActions
+        );
+      } else {
+        setLoanRate(value);
+      }
+    },
+    [productDetail, toastActions]
+  );
+
+  // Validate and set loan term
+  const checkMaxMinLoanTerm = useCallback(
+    (value: string) => {
+      if (productDetail && Number(value) > Number(productDetail?.maxterm)) {
+        toast(
+          'Loan Term is Higher than Maximum Loan Term',
+          'Loan Term',
+          'error',
+          toastActions
+        );
+      } else {
+        setLoanTerm(value);
+      }
+    },
+    [productDetail, toastActions]
+  );
+
+  // Calculate number of days for loan
+  const calNumberOfDays = useCallback(() => {
+    const selectedTermFrequency = frequencyTermsDays.find(
+      (term) => term.label === termFreq
+    );
+    const calcLoanDays =
+      Number(loanTerm) * Number(selectedTermFrequency?.value);
+    setGetCalcDays(calcLoanDays);
+  }, [termFreq, loanTerm]);
+
+  const handleDateChange = useCallback(() => {
+    if (startDate) {
+      const matDate = dayjs(startDate).add(getCalcDays, 'day');
+      setMaturitDate(matDate);
     }
-  };
+  }, [getCalcDays, startDate]);
 
-  const checkMaxMinLoanTerm = (value: string) => {
-    if (value > formValues.maxterm) {
-      toast(
-        'Loan Term is Higher than Maximum Loan Term',
-        'Loan Term',
-        'error',
-        toastActions
-      );
-    } else {
-      setLoanTerm(value);
+  useEffect(() => {
+    if (termFreq) {
+      calNumberOfDays();
     }
-  };
+  }, [termFreq, calNumberOfDays]);
 
-  const user = getStoredUser();
-  const userLoanMenuid = Array.isArray(user?.menuItems)
-    ? user.menuItems.find((resp: any) => resp.menu_id === 69)
-    : null;
+  useEffect(() => {
+    if (startDate) {
+      handleDateChange();
+    }
+  }, [startDate, handleDateChange]);
+
+  // Get user info
+  const user = useMemo(() => getStoredUser(), []);
+  const userLoanMenuid = useMemo(
+    () =>
+      Array.isArray(user?.menuItems)
+        ? user.menuItems.find((resp: any) => resp.menu_id === 69)
+        : null,
+    [user]
+  );
 
   const onSubmit = (values: any) => {
     const { customer } = selectedCustomer;
     const selectcustomerID = String(customer?.customerid);
     const selectcustomerAccount = String(customer?.accountnumber);
     const loanPurposes = String(values.loanPurpose);
-
-    const selectedTermFrequency = frequencyTermsDays.find(
-      (term) => term.label === values.termFrequency
-    );
-    const calcLoanDays =
-      Number(values.loanTerm) * Number(selectedTermFrequency?.value);
-
     const {
       loanPurpose,
       customerId,
@@ -224,6 +260,8 @@ export const CreateLoanUnderwritingForm = ({
       menuId,
       loanAppNo,
       loanDays,
+      loanAmount,
+      matDate,
       ...restValues
     } = values;
 
@@ -235,7 +273,10 @@ export const CreateLoanUnderwritingForm = ({
       loanPurpose: loanPurposes,
       menuId: userLoanMenuid?.menu_id,
       loanAppNo: nextAppNo,
-      loanDays: calcLoanDays,
+      loanDays: getCalcDays,
+      loanAmount: values.approvedAmount,
+      matDate: maturityDate,
+      startDate,
       ...restValues
     };
     mutate(loanData);
@@ -369,7 +410,7 @@ export const CreateLoanUnderwritingForm = ({
                           width: setWidth(isMobile ? '300px' : '100%')
                         }}
                         name="settlementAcct1"
-                        placeholder="0902238455"
+                        placeholder="Enter Settlement account balance"
                         label="Settlement Account Balance"
                         value={customerAccount}
                         required
@@ -459,7 +500,6 @@ export const CreateLoanUnderwritingForm = ({
                             name="loanTerm"
                             placeholder="Enter Loan term"
                             label="Loan Term"
-                            
                             onChange={(e) =>
                               checkMaxMinLoanTerm(e.target.value)
                             }
@@ -473,17 +513,10 @@ export const CreateLoanUnderwritingForm = ({
                               width: setWidth(isMobile ? '350px' : '105%'),
                               fontSize: '14px'
                             }}
-                            options={[
-                              { name: 'Days', value: '001' },
-                              { name: 'Weeks', value: '002' },
-                              { name: 'Forthnight', value: '003' },
-                              { name: 'Month', value: '004' },
-                              { name: 'Quarter', value: '005' },
-                              { name: 'Bi-Annual', value: '006' },
-                              { name: 'Annual', value: '007' }
-                            ]}
+                            options={frequencyOptions}
                             name="termFrequency"
                             label=""
+                            onChange={(e) => setTermFrequency(e.target.value)}
                           />{' '}
                         </Grid>
                       </Grid>
@@ -515,9 +548,9 @@ export const CreateLoanUnderwritingForm = ({
                         customStyle={{
                           width: setWidth(isMobile ? '300px' : '100%')
                         }}
-                        name="loanAmount"
-                        placeholder="0.0"
-                        label="Request Amount"
+                        name="approvedAmount"
+                        placeholder="Approved Amount"
+                        label="Approved Amount"
                         required
                       />{' '}
                     </Grid>
@@ -533,7 +566,8 @@ export const CreateLoanUnderwritingForm = ({
                         }}
                         name="approvedAmount"
                         placeholder="0.0"
-                        label="Approved Amount"
+                        label="Request Amount"
+                        disabled
                         required
                       />{' '}
                     </Grid>
@@ -574,6 +608,10 @@ export const CreateLoanUnderwritingForm = ({
                       <FormikDateTimePicker
                         label="Start Date"
                         name="startDate"
+                        value={startDate}
+                        handleDateChange={(e: any) => {
+                          setStartDate(e);
+                        }}
                       />
                     </Grid>
 
@@ -596,6 +634,8 @@ export const CreateLoanUnderwritingForm = ({
                       <FormikDateTimePicker
                         label="Maturity Date"
                         name="matDate"
+                        disabled
+                        value={maturityDate}
                       />
                     </Grid>
 
