@@ -144,6 +144,7 @@ export const ShortCardWithAccordion = ({
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [activeSearchTerm, setActiveSearchTerm] = React.useState<string>('');
+  const [page, setPage] = React.useState(1);
 
   const handleChange = () => {
     setExpanded(!expanded);
@@ -156,6 +157,7 @@ export const ShortCardWithAccordion = ({
   const { data: detailData, isLoading } = useGetAllBalanceSheetByItemId({
     itemcode,
     page: 1,
+    pageSize: 10,
     getAll: false,
     searchWith: activeSearchTerm,
   });
@@ -285,6 +287,8 @@ export const ShortCardWithAccordion = ({
               }}
               columns={column}
               data={tableData || []}
+              setPage={setPage}
+              page={page}
             />
           ) : (
             <>

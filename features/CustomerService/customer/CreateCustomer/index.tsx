@@ -12,25 +12,25 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   corporateCustomerPersonalDetails,
   createCustomer,
-  individualCustomerPersonalDetails
+  individualCustomerPersonalDetails,
 } from '@/schemas/customer-service';
 import {
   CreateCorporateCustomerFormValues,
   createCorporateCustomerInitialValues,
   createCustomerInitialValues,
-  CreateIndividualCustomerFormValues
+  CreateIndividualCustomerFormValues,
 } from '@/schemas/schema-values/customer-service';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import {
   useCreateCorporateCustomer,
   useCreateIndividualCustomer,
   useGetAllIdTypes,
-  useGetCustomerByIdCodes
+  useGetCustomerByIdCodes,
 } from '@/api/customer-service/useCustomer';
 import {
   useGetAllCountries,
   useGetAllStates,
-  useGetAllTown
+  useGetAllTown,
 } from '@/api/general/useGeography';
 import { useGetAllTitles } from '@/api/general/useTitle';
 import { FormSkeleton } from '@/components/Loaders';
@@ -38,7 +38,7 @@ import { useGetAllRelationships } from '@/api/setup/useRelationship';
 import { useGetAccountOfficers } from '@/api/admin/useAccountOfficer';
 import {
   CustomerCreationContext,
-  progressCompletionInitialValues
+  progressCompletionInitialValues,
 } from '@/context/CustomerCreationContext';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
@@ -57,14 +57,14 @@ import { encryptData } from '@/utils/encryptData';
 
 const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
   const { customerType, setCompleted } = React.useContext(
-    CustomerCreationContext
+    CustomerCreationContext,
   );
   const individual = '1';
   const shouldRemoveCorporateDetails = Boolean(
-    isEditing && customerType === individual
+    isEditing && customerType === individual,
   );
   const { validationKeysMapper } = useCreateValidationKeysMapper(
-    shouldRemoveCorporateDetails
+    shouldRemoveCorporateDetails,
   );
   const { handleCompletedFields } = useHandleCompletedFields<
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
@@ -73,10 +73,10 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
   const useUpdateCompletion = <
     T extends
       | CreateIndividualCustomerFormValues
-      | CreateCorporateCustomerFormValues
+      | CreateCorporateCustomerFormValues,
   >(
     touched: Record<string, boolean | undefined>,
-    values: T
+    values: T,
   ) => {
     React.useEffect(() => {
       const atLeastOneFieldHasBeenVisited = Object.keys(touched).length > 0;
@@ -109,7 +109,7 @@ export const CreateCustomerContainer = () => {
     setCustomerType,
     setCompleted,
     setAccountOfficerValue,
-    setIntroducerIdValue
+    setIntroducerIdValue,
   } = React.useContext(CustomerCreationContext);
   const { countries, isLoading: areContriesLoading } = useGetAllCountries();
   const { towns, isLoading: areTownsLoading } = useGetAllTown();
@@ -133,11 +133,11 @@ export const CreateCustomerContainer = () => {
 
   const { mutate } = useCreateIndividualCustomer(
     Boolean(isEditing),
-    encryptData(customerId)
+    encryptData(customerId),
   );
   const { mutate: mutateCorporateCustomer } = useCreateCorporateCustomer(
     Boolean(isEditing),
-    encryptData(customerId) as string
+    encryptData(customerId) as string,
   );
   const { customerResult, isLoading: isCustomerResultLoading } =
     useGetCustomerByIdCodes(encryptData(customerId) as string);
@@ -160,19 +160,19 @@ export const CreateCustomerContainer = () => {
         buttonTitle="Submit"
         customStyle={{ ...submitButton }}
       />
-    </Box>
+    </Box>,
   ];
 
   const shouldRemoveCorporateDetails = Boolean(
-    isEditing && customerResult?.customerType === individual
+    isEditing && customerResult?.customerType === individual,
   );
   const { validationKeysMapper } = useCreateValidationKeysMapper(
-    shouldRemoveCorporateDetails
+    shouldRemoveCorporateDetails,
   );
 
   const { handleCompletedFields } = useHandleCompletedFields<ICustomerResult>(
     setCompleted,
-    validationKeysMapper
+    validationKeysMapper,
   );
 
   const onSubmit = async (values: any) => {
@@ -190,34 +190,12 @@ export const CreateCustomerContainer = () => {
       title: 'Validation error',
       severity: 'error',
       accountOfficerValue: {
-        message: 'Account Officer is required'
+        message: 'Account Officer is required',
       },
       introducerIdValue: {
-        message: 'Introducer ID is required'
-      }
+        message: 'Introducer ID is required',
+      },
     };
-
-    if (accountOfficerValue === '') {
-      toast(
-        toastMessage.accountOfficerValue.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-
-      return;
-    }
-
-    if (introducerIdValue === '') {
-      toast(
-        toastMessage.introducerIdValue.message,
-        toastMessage.title,
-        toastMessage.severity as AlertColor,
-        toastActions
-      );
-
-      return;
-    }
 
     const getAllValues = {
       ...values,
@@ -232,7 +210,7 @@ export const CreateCustomerContainer = () => {
         : extractIdFromDropdown(introducerIdValue),
       acctOfficer: isEditing
         ? accountOfficerValue
-        : extractIdFromDropdown(accountOfficerValue)
+        : extractIdFromDropdown(accountOfficerValue),
     };
 
     if (customerType === 'corporate') {
@@ -296,14 +274,14 @@ export const CreateCustomerContainer = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px'
+        marginTop: '50px',
       }}
     >
       <TopActionsArea actionButtons={actionButtons} />
       <Box
         sx={{
           padding: '25px',
-          width: '100%'
+          width: '100%',
         }}
       >
         <PageTitle
@@ -333,7 +311,7 @@ export const CreateCustomerContainer = () => {
                   sectorcode: customerResult?.sectorcode?.toString().trim(),
                   relationtype: 'string',
                   idIssueDate: dayjs(customerResult?.idIssueDate),
-                  idExpryDate: dayjs(customerResult?.idExpryDate)
+                  idExpryDate: dayjs(customerResult?.idExpryDate),
                 }
               : pickInitialValues
           }
@@ -354,6 +332,7 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Personal Details"
                 cardKey="personalDetails"
                 completed={completed}
+                showCompleted={true}
                 titles={title}
                 sectors={sectors}
                 education={education}
@@ -374,6 +353,7 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Business/Office/School Details"
                 cardKey="businessDetails"
                 completed={completed}
+                showCompleted={true}
                 countries={countries}
                 states={states}
                 towns={towns}
@@ -387,6 +367,7 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Next of Kin Details"
                 cardKey="nextOfKinDetails"
                 completed={completed}
+                showCompleted={true}
                 relationships={relationships}
                 states={states}
                 towns={towns}
@@ -400,6 +381,7 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Identification Details"
                 cardKey="identificationDetails"
                 completed={completed}
+                showCompleted={true}
                 idCards={idCards}
               />
             )}
@@ -410,7 +392,7 @@ export const CreateCustomerContainer = () => {
               <ShortCardWithAccordion
                 cardTitle="Referrer’s Details"
                 cardKey="referrerDetails"
-                completed={completed}
+                showCompleted={false}
                 officers={officers}
                 groups={groups}
                 branches={branches}

@@ -46,7 +46,6 @@ export const useCreateValidationKeysMapper = (
       'nextOfKinRel'
     ],
     identificationDetails: ['idType', 'idIssueDate', 'idExpryDate', 'iDno'],
-    referrerDetails: ['refname', 'introid', 'refphone', 'acctOfficer', 'introducerType']
   };
 
   if (!removeCorporateDetails) {

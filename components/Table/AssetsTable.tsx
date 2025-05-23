@@ -14,23 +14,24 @@ import Checkbox from '@mui/material/Checkbox';
 import {
   TablePaginationStyle,
   TablePaginationTitle,
-  TableTitle
+  TableTitle,
 } from './style';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
 import { TablePagination } from '@/components/Pagination';
 import { CustomTableHeader } from '@/components/Revamp/Shared/Table/CustomTableHeader';
 import { renderEmptyTableBody } from '@/components/Revamp/TableV2/TableV2';
+import { calculatePages } from '@/utils/calculatePages';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => {
   return {
     '&:nth-of-type(even):hover': {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     '&:nth-of-type(odd):hover': {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
-    borderRadius: '8px'
+    borderRadius: '8px',
   };
 });
 
@@ -63,6 +64,10 @@ type Props = {
   showHeader?: HeaderI;
   checkboxHeader?: any;
   tableConfig?: ITableConfig;
+  page?: number;
+  setPage?: Function;
+  totalPages?: number;
+  totalElements?: number;
 };
 
 export const AssetsTable = ({
@@ -70,19 +75,23 @@ export const AssetsTable = ({
   data,
   showHeader,
   checkboxHeader,
-  tableConfig
+  tableConfig,
+  page = 1,
+  setPage,
+  totalPages,
+  totalElements,
 }: Props) => {
   const actionsColumn = tableConfig?.hasActions ? 1 : 0;
   const StyledTableCell = styled(TableCell, {
     shouldForwardProp: (prop) =>
-      prop !== 'isHeader' && prop !== 'isPainted' && prop !== 'rowType'
+      prop !== 'isHeader' && prop !== 'isPainted' && prop !== 'rowType',
   })(({ rowType, isPainted, isHeader }: TableProps) => {
     const baseStyle = {
       fontWeight: 600,
       textAlign: 'left',
       fontSize: '16px',
       lineHeight: '24px',
-      padding: '20px 20px'
+      padding: '20px 20px',
     };
 
     return {
@@ -97,39 +106,48 @@ export const AssetsTable = ({
         backgroundColor: `${colors.neutral200}`,
         color: `${colors.neutral900}`,
         fontWeight: 600,
-        textAlign: 'left'
+        textAlign: 'left',
       },
 
       [`&.${tableCellClasses.body}`]: {
         fontWeight: 400,
-        textAlign: 'left'
+        textAlign: 'left',
       },
 
       ...(actionsColumn && {
-        padding: '0 20px'
+        padding: '0 20px',
       }),
 
       ...(isHeader && {
-        padding: '10px 20px'
+        padding: '10px 20px',
       }),
 
       ...(isPainted && {
-        backgroundColor: '#F4FBFE'
+        backgroundColor: '#F4FBFE',
       }),
 
       ...(rowType === 'total' && {
         ...baseStyle,
         backgroundColor: '#EBF8FE',
-        color: `${colors.activeBlue400}`
+        color: `${colors.activeBlue400}`,
       }),
 
       ...(rowType === 'grandTotal' && {
         ...baseStyle,
         backgroundColor: `${colors.primaryBlue500}`,
-        color: `${colors.white}`
-      })
+        color: `${colors.white}`,
+      }),
     };
   });
+
+  const paginationCount = totalPages || calculatePages(data?.length as number);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setPage?.(value);
+  };
 
   return (
     <>
@@ -138,7 +156,7 @@ export const AssetsTable = ({
           shadow: 2,
           display: 'inline-block',
           width: '100%',
-          borderRadius: '4px'
+          borderRadius: '4px',
         }}
         component={Paper}
       >
@@ -209,13 +227,20 @@ export const AssetsTable = ({
         </Table>
       </TableContainer>
       <Stack direction="row" justifyContent="space-between" spacing={3}>
-        <PageTitle title="276 results found" styles={{ ...TableTitle }} />
+        <PageTitle
+          title={`${totalElements || data?.length} result(s) found`}
+          styles={{ ...TableTitle }}
+        />
         <Box sx={TablePaginationStyle}>
           <PageTitle
             title="Rows per page: 10"
             styles={{ ...TablePaginationTitle }}
           />
-          <TablePagination />
+          <TablePagination
+            handlePageChange={handlePageChange}
+            page={page}
+            count={paginationCount}
+          />
         </Box>
       </Stack>
     </>
