@@ -27,6 +27,8 @@ export type ReportType =
   | 'GLMainGroupReport'
   | 'GLSubMainGroupReport'
   | 'StatementOfAccount'
+  | 'ProductSummary'
+  | 'ProductSummaryDetails'
   | 'GLAccountClassReport';
 
 interface IFileNameMapper {
@@ -56,6 +58,8 @@ export const FileNameMapper: IFileNameMapper = {
   TellerPostingSummary: 'TellerPostingSummary',
   HoldingTransaction: 'HoldingTransaction',
   LoanOverdueReport: 'LoanOverdueReport',
+  ProductSummary: 'ProductSummary',
+  ProductSummaryDetails: 'ProductSummaryDetails',
   GLMainGroupReport: 'GLMainGroupReport',
   GLSubMainGroupReport: 'GLSubMainGroupReport',
   GLAccountClassReport: 'GLAccountClassReport'

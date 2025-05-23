@@ -29,10 +29,10 @@ export const CreateRegionForm = ({
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const { mutate } = useCreateRegion(
     Boolean(isEditing),
-    encryptData(regionId ?? '') || null
+    decryptData(regionId ?? '') || null
   );
   const { region, isLoading } = useGetRegionById(
-    encryptData(regionId ?? '') || null
+    decryptData(regionId ?? '') || null
   );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     await mutate({
@@ -134,7 +134,7 @@ export const CreateRegionForm = ({
                     className="permissionOptions"
                     options={[
                       { label: 'Active', value: '1' },
-                      { label: 'Inactive', value: '3' }
+                      { label: 'Disabled', value: '3' }
                     ]}
                     title="Status"
                     name="regionStatus"

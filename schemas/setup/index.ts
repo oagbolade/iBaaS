@@ -63,8 +63,10 @@ export const createTownSchema = Yup.object({
     .matches(stringRegex, 'Invalid Town name')
     .required('Town Name is Required'),
   stateCode: Yup.string().required('State Code is Required'),
-  townshortname: Yup.string().required('Town Short Name is Required'),
-  townstatus: Yup.string().required('Town status is Required')
+  townshortname: Yup.string()
+    .matches(stringRegex, 'Invalid Town Short Name')
+    .required('Town Short Name is Required'),
+  status: Yup.string().required('Town status is Required')
 });
 
 export const createRegionSchema = Yup.object({

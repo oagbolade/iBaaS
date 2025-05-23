@@ -91,6 +91,25 @@ export const CreateTownForm = ({
           <Form>
             <Box mt={4}>
               <Grid container>
+                {isEditing && (
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '285px' : '100%')
+                      }}
+                      name="townCode"
+                      placeholder="Enter Town Code"
+                      label="Town Code"
+                      required
+                      disabled
+                    />{' '}
+                  </Grid>
+                )}
                 <Grid
                   item={isTablet}
                   mobile={12}
@@ -105,7 +124,6 @@ export const CreateTownForm = ({
                     placeholder="Enter Town Name"
                     label="Town Name"
                     required
-                    disabled
                   />{' '}
                 </Grid>
                 <Grid
@@ -118,8 +136,8 @@ export const CreateTownForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="townshortname"
-                    placeholder="Enter Town Name"
-                    label="Town Name"
+                    placeholder="Enter Town ShortName"
+                    label="Town ShortName"
                     required
                   />{' '}
                 </Grid>
@@ -148,11 +166,11 @@ export const CreateTownForm = ({
                     className="permissionOptions"
                     options={[
                       { label: 'Active', value: '1' },
-                      { label: 'Inactive', value: '3' }
+                      { label: 'Disabled', value: '3' }
                     ]}
                     title="Status"
-                    name="townstatus"
-                    value="townstatus"
+                    name="status"
+                    value="status"
                   />
                 </Grid>
               </Grid>

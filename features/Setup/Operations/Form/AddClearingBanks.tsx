@@ -105,6 +105,7 @@ export const AddClearingBank = ({
                     name="bankCode"
                     options={mappedCommercialBank}
                     label="Select a Commercial Bank"
+                    disabled={Boolean(isEditing)}
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
@@ -134,7 +135,7 @@ export const AddClearingBank = ({
                   <FormTextInput
                     name="chequeinClear"
                     placeholder="Enter Operating Account"
-                    label="Operating Account"
+                    label="Operating Account(Exclude Branch Code)"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
@@ -149,7 +150,7 @@ export const AddClearingBank = ({
                   <FormTextInput
                     name="nostro"
                     placeholder="Enter CMA Account"
-                    label="CMA Account"
+                    label="CMA Account(Exclude Branch Code)"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
@@ -164,7 +165,7 @@ export const AddClearingBank = ({
                   <FormTextInput
                     name="unclearedgl"
                     placeholder="Enter Cheque for Collection"
-                    label="Cheque for Collection"
+                    label="Cheque for Collection(Exclude Branch Code)"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
@@ -179,7 +180,7 @@ export const AddClearingBank = ({
                   <FormTextInput
                     name="collectiongl"
                     placeholder="Enter Uncleared Effect Account"
-                    label="Uncleared Effect Account"
+                    label="Uncleared Effect Account(Exclude Branch Code)"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}

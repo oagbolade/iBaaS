@@ -92,3 +92,12 @@ export const drillDowndueSchema = Yup.object({
     .matches(stringRegex, 'Invalid branch name')
     .required('Branch name is required')
 });
+
+export const weeklyLoanRepaySchema = Yup.object({
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Branch ID is required'),
+  prodCode: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Product is required')
+});

@@ -8,28 +8,39 @@ import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { IToastActions } from '@/constants/types';
 import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
-import { ChartOfAccountResponse } from '@/api/ResponseTypes/reports';
+import { LoanWeeklyRepaymentResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
+
 import { REPORT_BASE_URL } from '@/axiosInstance/constants';
 
-export async function getChartOfAccount(
+export async function geWeeklyLoanRepayment(
   toastActions: IToastActions,
   params: ISearchParams | null
 ) {
-  let result: ChartOfAccountResponse = {} as ChartOfAccountResponse;
+  let result: LoanWeeklyRepaymentResponse = {} as LoanWeeklyRepaymentResponse;
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/ChartsofAccounts?pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&branchCode=${params?.branchID}&searchWith=${params?.searchWith || ''}&getAll=${params?.getAll || false}`;
+    const queryParams = new URLSearchParams({
+      branchcode: params?.branchID || '',
+      productcode: params?.prodCode || '',
+      groupid: params?.groupId || '',
+      startDate: params?.startDate || '',
+      endDate: params?.endDate || '',
+      pageNumber: params?.pageNumber?.toString() || '1',
+      pageSize: params?.pageSize?.toString() || '10',
+      getAll: params?.getAll?.toString() || 'false',
+      searchWith: params?.searchWith || ''
+    }).toString();
 
-    const { data }: AxiosResponse<ChartOfAccountResponse> = await axiosInstance(
-      {
+    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/LoanWeeklyRepaymentReport?${queryParams}`;
+    const { data }: AxiosResponse<LoanWeeklyRepaymentResponse> =
+      await axiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
-      }
-    );
+      });
     const { message, title, severity } = globalErrorHandler({
       ...data
     });
@@ -42,30 +53,35 @@ export async function getChartOfAccount(
   return result;
 }
 
-export function useGetChartOfAccount(params: ISearchParams | null) {
+export function useGetWeeklyLoanRepayment(params: ISearchParams | null) {
   const toastActions = useContext(ToastMessageContext);
-  const fallback = {} as ChartOfAccountResponse;
+  const fallback = {} as LoanWeeklyRepaymentResponse;
   const {
     data = fallback,
     isError,
     isLoading
   } = useQuery({
     queryKey: [
-      queryKeys.chartAccount,
-      params?.pageNumber,
-      params?.pageSize,
+      queryKeys.weeklyLoanRepayment,
       params?.branchID,
+      params?.prodCode,
       params?.searchWith,
-      params?.getAll,
+      params?.startDate,
+      params?.endDate,
+      params?.prodCode,
       params?.pageNumber,
+      params?.groupId,
     ],
-    queryFn: () => getChartOfAccount(toastActions, params || {}),
+    queryFn: () => geWeeklyLoanRepayment(toastActions, params || {}),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
-      (params?.searchWith || '').length > 0  ||
-      params?.getAll ||
-      params?.pageNumber
-      
+        (params?.startDate || '').length > 0 ||
+        (params?.searchWith || '').length > 0 ||
+        (params?.endDate || '').length > 0 ||
+        (params?.prodCode || '').length > 0 ||
+        (params?.pageNumber || '').length > 0 ||
+        (params?.groupId || '').length > 0
+
     )
   });
   return { ...data, isError, isLoading };

@@ -194,6 +194,49 @@ export interface ITellerPostingReport {
   tranAmount: string;
 }
 
+export interface IpagedProductSummaries {
+  branchcode: string;
+  productcode: string;
+  productname: string;
+  branchname: string;
+  noofaccts: number;
+  crproductbalance: number;
+  drproductbalance: number;
+  totproductbalance: number;
+}
+export interface IpagedProductSummariesDetails {
+  branchcode: string;
+  branchname: string;
+  productcode: string;
+  productname: string;
+  accountnumber: string;
+  accounttitle: string;
+  lastdatepay: string;
+  address: string;
+  bkbalance: number;
+  suspbal: number;
+  dateopened: string;
+  holdbal: number;
+  odlimit: number;
+  todlimit: number;
+  pendingCC: number;
+  availBal: number;
+}
+
+export interface IproductSummaryReport {
+  pagedProductSummaries: IpagedProductSummaries[];
+  totalAccount: number;
+  totalCr: number;
+  totalDr: number;
+  totalProductBal: number;
+}
+export interface IproductSummaryDetailsReport {
+  pagedProductSummaries: IpagedProductSummariesDetails[];
+  totalAvailableBalance: number;
+  totalBookeBalance: number;
+  totalPendingBalance: number;
+}
+
 export interface IInflowOutflowList {
   accountnumber: string;
   accounttitle: string;
@@ -542,6 +585,19 @@ export interface GetTellerPostingReport
   pageNumber?: number;
 }
 
+export interface GetProductSummaryReport
+  extends IFetchingState,
+    IReportsResponse {
+  productSummaryList?: IproductSummaryReport;
+  pageNumber?: number;
+}
+export interface GetProductSummaryDetailsReport
+  extends IFetchingState,
+    IReportsResponse {
+  data?: IproductSummaryDetailsReport;
+  pageNumber?: number;
+}
+
 // Drill Down Report
 export interface IGlMainGroupResponse extends IFetchingState {
   responseCode: string;
@@ -731,4 +787,13 @@ export interface IHoldingTransactionReportResponse {
   pageNumber: number;
   pageSize: number;
   totalRecords: number;
+}
+
+export interface LoanWeeklyRepaymentResponse {
+    responseCode: string ;
+    responseDescription: string ;
+    loanWeeklyRepaymentList: any[] ;
+    pageNumber: number;
+    pageSize: number;
+    totalRecords: number;
 }

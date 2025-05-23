@@ -9,7 +9,6 @@ import { MuiTableContainer } from '@/components/Table';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
-import { getPostingJournal } from '@/api/reports/usePostingJournal';
 
 export const ViewAccountEnquiry = () => {
   const searchParams = useSearchParams();
@@ -18,28 +17,47 @@ export const ViewAccountEnquiry = () => {
     const actionMap = {
       getMaturityLoan: 'maturityLoan',
       getPostingJournal: 'postingJournal',
+      getLoanWeelyRepayment: 'weeklyLoan'
     };
-  
-    const actionKey = Object.keys(actionMap).find(key => searchParams.get(key));
-    setActionType(actionKey ? actionMap[actionKey as keyof typeof actionMap] : 'default');
+
+    const actionKey = Object.keys(actionMap).find((key) =>
+      searchParams.get(key)
+    );
+    setActionType(
+      actionKey ? actionMap[actionKey as keyof typeof actionMap] : 'default'
+    );
   }, [searchParams]);
 
   const showReportTable = searchParams.get('showTableReport');
   const getLoandetailReport = searchParams.get('loanDetail');
   const getPostingJournalDetail = searchParams.get('postingJournalDetail');
+  const getWeekLoanRepayment = searchParams.get('loanDetailWeekly');
 
   const renderContent = () => {
     switch (actionType) {
       case 'maturityLoan':
         return (
           <Box>
-            <ViewMaturityLoan detail={JSON.parse(getLoandetailReport || '{}')} />
+            <ViewMaturityLoan
+              detail={JSON.parse(getLoandetailReport || '{}')}
+            />
           </Box>
         );
       case 'postingJournal':
         return (
           <Box>
-            <ViewPostingJournal detail={JSON.parse(getPostingJournalDetail || '{}')} /> 
+            <ViewPostingJournal
+              detail={JSON.parse(getPostingJournalDetail || '{}')}
+            />
+          </Box>
+        );
+
+      case 'weeklyLoan':
+        return (
+          <Box>
+            <ViewMaturityLoan
+              detail={JSON.parse(getWeekLoanRepayment || '{}')}
+            />
           </Box>
         );
       default:
@@ -67,4 +85,4 @@ export const ViewAccountEnquiry = () => {
   };
 
   return renderContent();
-}
+};

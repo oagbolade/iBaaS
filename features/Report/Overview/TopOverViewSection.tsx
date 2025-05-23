@@ -19,7 +19,7 @@ type Props = {
 
 export const TopOverViewSection = ({
   useBackButton,
-  CustomDateRangePicker,
+  CustomDateRangePicker
 }: Props) => {
   const { dateValue } = React.useContext(DateRangePickerContext);
 
@@ -82,7 +82,7 @@ export const TopOverViewSection = ({
             buttonTitle="Export Data"
           />
         </Box>
-        <Box>
+        {/* <Box>
           <ActionButtonWithPopper
             CustomDateRangePicker={CustomDateRangePicker}
             searchGroupVariant="DateRangePicker"
@@ -97,7 +97,7 @@ export const TopOverViewSection = ({
             iconPosition="end"
             buttonTitle={formattedDateRange}
           />
-        </Box>
+        </Box> */}
       </Stack>
     </Stack>
   );

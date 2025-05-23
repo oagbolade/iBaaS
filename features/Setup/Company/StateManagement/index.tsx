@@ -79,7 +79,7 @@ export const StateManagement = () => {
               columns={COLUMNS}
               data={statementData}
               showHeader={{
-                mainTitle: 'State Management',
+                mainTitle: 'State',
                 secondaryTitle:
                   'See a directory of all state management in this system.',
                 hideFilterSection: true
