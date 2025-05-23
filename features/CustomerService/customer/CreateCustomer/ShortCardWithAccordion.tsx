@@ -88,7 +88,7 @@ type Props = {
   cardTitle?: string;
   cardKey: string;
   completed?: Record<string, ProgressType>;
-  showCompleted?: boolean;
+  hideCompleted?: boolean;
   titles?: ITitle[];
   countries?: ICountries[];
   states?: IStates[];
@@ -177,7 +177,7 @@ export const ShortCardWithAccordion = ({
   cardTitle,
   cardKey,
   completed,
-  showCompleted,
+  hideCompleted = false,
   titles,
   countries,
   states,
@@ -223,7 +223,7 @@ export const ShortCardWithAccordion = ({
               </Typography>
 
               <Stack direction="row" justifyContent="space-between">
-                {showCompleted && completed?.[cardKey] && (
+                {!hideCompleted && completed?.[cardKey] && (
                   <>
                     <Typography
                       sx={{

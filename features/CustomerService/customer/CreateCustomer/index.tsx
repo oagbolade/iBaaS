@@ -332,7 +332,6 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Personal Details"
                 cardKey="personalDetails"
                 completed={completed}
-                showCompleted={true}
                 titles={title}
                 sectors={sectors}
                 education={education}
@@ -353,7 +352,6 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Business/Office/School Details"
                 cardKey="businessDetails"
                 completed={completed}
-                showCompleted={true}
                 countries={countries}
                 states={states}
                 towns={towns}
@@ -367,7 +365,6 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Next of Kin Details"
                 cardKey="nextOfKinDetails"
                 completed={completed}
-                showCompleted={true}
                 relationships={relationships}
                 states={states}
                 towns={towns}
@@ -381,7 +378,6 @@ export const CreateCustomerContainer = () => {
                 cardTitle="Identification Details"
                 cardKey="identificationDetails"
                 completed={completed}
-                showCompleted={true}
                 idCards={idCards}
               />
             )}
@@ -392,7 +388,7 @@ export const CreateCustomerContainer = () => {
               <ShortCardWithAccordion
                 cardTitle="Referrer’s Details"
                 cardKey="referrerDetails"
-                showCompleted={false}
+                hideCompleted
                 officers={officers}
                 groups={groups}
                 branches={branches}
