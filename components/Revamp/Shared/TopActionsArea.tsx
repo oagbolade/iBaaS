@@ -24,6 +24,7 @@ export const TopActionsArea = ({
         borderLeft: '1px solid #E8E8E8',
         borderBottom: '1px solid #E8E8E8',
         padding: '8px 12px',
+        marginBottom: '60px',
         ...customStyle,
       }}
       direction="row"

@@ -269,7 +269,6 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
-              required
             />
           </Grid>
           <Grid item={isTablet} mobile={12}>
@@ -278,7 +277,6 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
                 handleSelectedValue={(value: string) =>
                   handleSelectedValue(value, 'introid')
                 }
-                required
                 label="Introducer"
                 name="introid"
                 searchGroupVariant="BasicSearchGroup"
@@ -300,7 +298,6 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
           <Grid item={isTablet} mobile={12}>
             <StyledSearchableDropdown>
               <ActionButtonWithPopper
-                required
                 handleSelectedValue={(value: string) =>
                   handleSelectedValue(value, 'acctOfficer')
                 }

@@ -3,7 +3,7 @@ import {
   numericRegex,
   phoneRegExp,
   stringRegex,
-  stringRegexNoNumberAllowed
+  stringRegexNoNumberAllowed,
 } from '../admin';
 
 export const closeCustomerAccount = Yup.object({
@@ -15,7 +15,7 @@ export const closeCustomerAccount = Yup.object({
     .required('Required'),
   closeBalance: Yup.number()
     .typeError('Must be a numeric value')
-    .required('Required')
+    .required('Required'),
 });
 
 export const createCustomerAccount = Yup.object({
@@ -29,23 +29,21 @@ export const createCustomerAccount = Yup.object({
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     ),
-  cintrate: Yup.number()
-    .typeError('Must be a numeric value'),
-  dintrate: Yup.number()
-    .typeError('Must be a numeric value')
+  cintrate: Yup.number().typeError('Must be a numeric value'),
+  dintrate: Yup.number().typeError('Must be a numeric value'),
 });
 
 export const editCheque = Yup.object({
   checktype: Yup.string().required('Required'),
   startSerialNo: Yup.number().typeError('Must be a numeric value'),
   endSerialNo: Yup.number().typeError('Must be a numeric value'),
-  valueDate: Yup.string().required('Required')
+  valueDate: Yup.string().required('Required'),
 });
 
 export const moveCASAAccount = Yup.object({
-  newBranch: Yup.string().required('Required')
+  newBranch: Yup.string().required('Required'),
 });
 
 export const createDirector = Yup.object({
@@ -53,17 +51,17 @@ export const createDirector = Yup.object({
   firstName: Yup.string()
     .matches(
       stringRegexNoNumberAllowed,
-      'Invalid first name, no numbers allowed'
+      'Invalid first name, no numbers allowed',
     )
     .required('Required'),
   othername: Yup.string().matches(
     stringRegexNoNumberAllowed,
-    'Invalid middle name, no numbers allowed'
+    'Invalid middle name, no numbers allowed',
   ),
   surName: Yup.string()
     .matches(
       stringRegexNoNumberAllowed,
-      'Invalid last name, no numbers allowed'
+      'Invalid last name, no numbers allowed',
     )
     .required('Required'),
   dob: Yup.string().required('Required'),
@@ -80,19 +78,19 @@ export const createDirector = Yup.object({
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 80;
-      }
+      },
     ),
   phone: Yup.string()
     .required('Required')
     .matches(phoneRegExp, 'Phone number is not valid')
     .min(10, 'too short')
-    .max(11, 'too long')
+    .max(11, 'too long'),
 });
 
 export const reactivateAccount = Yup.object({
   chargeDue: Yup.string().required('Required'),
   valuedate: Yup.string().required('Required'),
-  authid: Yup.string().required('Required')
+  authid: Yup.string().required('Required'),
 });
 
 export const rangeCheque = Yup.object({
@@ -105,12 +103,12 @@ export const rangeCheque = Yup.object({
   endSerialNo: Yup.string().required('Required'),
   narration: Yup.string().required('Required'),
   costtocustomer: Yup.string().required('Required'),
-  costofchequebk: Yup.string().required('Required')
+  costofchequebk: Yup.string().required('Required'),
 });
 
 export const createLien = Yup.object({
   holdAmount: Yup.string().matches(numericRegex, 'Invalid amount'),
-  reasoncode: Yup.string().required('Required')
+  reasoncode: Yup.string().required('Required'),
 });
 
 export const addGroup = Yup.object({
@@ -128,9 +126,9 @@ export const addGroup = Yup.object({
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     )
-    .required('Required')
+    .required('Required'),
 });
 
 export const individualCustomerPersonalDetails = {
@@ -138,7 +136,7 @@ export const individualCustomerPersonalDetails = {
   surName: Yup.string()
     .matches(
       stringRegexNoNumberAllowed,
-      'Invalid surname, no numbers or special character allowed'
+      'Invalid surname, no numbers or special character allowed',
     )
     .min(2, 'Surname must be at least 2 characters long')
     .max(50, 'Surname must be at most 50 characters long')
@@ -149,13 +147,13 @@ export const individualCustomerPersonalDetails = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     )
     .required('Required'),
   firstName: Yup.string()
     .matches(
       stringRegexNoNumberAllowed,
-      'Invalid first name,  no numbers or special character allowed'
+      'Invalid first name,  no numbers or special character allowed',
     )
     .min(2, 'First name must be at least 2 characters long')
     .max(50, 'First name must be at most 50 characters long')
@@ -166,7 +164,7 @@ export const individualCustomerPersonalDetails = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     )
     .required('Required'),
   dob: Yup.string().required('Required'),
@@ -174,7 +172,7 @@ export const individualCustomerPersonalDetails = {
   mothermdName: Yup.string()
     .matches(
       stringRegexNoNumberAllowed,
-      'Invalid maiden name,  no numbers or special character allowed'
+      'Invalid maiden name,  no numbers or special character allowed',
     )
     .required('Required'),
   bvn: Yup.string()
@@ -216,12 +214,12 @@ export const individualCustomerPersonalDetails = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 80;
-      }
+      },
     ),
   othername: Yup.string().matches(
     stringRegexNoNumberAllowed,
-    'Invalid middle name,  no numbers or special character allowed'
-  )
+    'Invalid middle name,  no numbers or special character allowed',
+  ),
 };
 
 export const corporateCustomerPersonalDetails = {
@@ -236,7 +234,7 @@ export const corporateCustomerPersonalDetails = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     )
     .required('Required'),
   regno: Yup.string()
@@ -255,7 +253,7 @@ export const corporateCustomerPersonalDetails = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 80;
-      }
+      },
     ),
   bvn: Yup.string()
     .matches(numericRegex, 'Invalid bvn')
@@ -278,7 +276,7 @@ export const corporateCustomerPersonalDetails = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     ),
   phone1: Yup.string()
     .required('Required')
@@ -294,7 +292,7 @@ export const corporateCustomerPersonalDetails = {
   email: Yup.string()
     .email('Please enter a valid email address')
     .required('Required'),
-  turnOver: Yup.string().required('Required')
+  turnOver: Yup.string().required('Required'),
 };
 
 export const createCustomer = {
@@ -311,7 +309,7 @@ export const createCustomer = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 80;
-      }
+      },
     ),
   bizPhone3: Yup.string()
     .required('Required')
@@ -325,7 +323,7 @@ export const createCustomer = {
   nextOfKin: Yup.string()
     .matches(
       stringRegexNoNumberAllowed,
-      'Invalid next of kin name, no numbers or special character allowed'
+      'Invalid next of kin name, no numbers or special character allowed',
     )
     .min(2, 'Next of kin name must be at least 2 characters long')
     .max(50, 'Next of kin name must be at most 50 characters long')
@@ -336,7 +334,7 @@ export const createCustomer = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     )
     .required('Required'),
   nextOfKinphone: Yup.string()
@@ -354,7 +352,7 @@ export const createCustomer = {
         if (!value) return false;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 80;
-      }
+      },
     ),
   nextOfKintown: Yup.string().required('Required'),
   nextOfKinState: Yup.string().required('Required'),
@@ -364,31 +362,24 @@ export const createCustomer = {
   iDno: Yup.string()
     .matches(
       numericRegex,
-      'Invalid Id number, no letters or special character allowed'
+      'Invalid Id number, no letters or special character allowed',
     )
     .required('Required'),
 
   // Referrer's Details start
   refname: Yup.string()
-    .matches(
-      stringRegexNoNumberAllowed,
-      'Invalid name, no numbers or special character allowed'
-    )
-    .min(2, 'Referrer\'s name must be at least 2 characters long')
-    .max(50, 'Referrer\'s name must be at most 50 characters long')
+    .notRequired()
+
     .test(
       'no-space-count',
       'Name must be at most 50 characters long',
       (value) => {
-        if (!value) return false;
+        if (!value) return true;
         const noSpaceValue = value.replace(/\s+/g, '');
         return noSpaceValue.length <= 50;
-      }
+      },
     ),
-  refphone: Yup.string()
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .min(10, 'too short')
-    .max(11, 'too long')
+  refphone: Yup.string().notRequired(),
 };
 
 export const classifyAccount = Yup.object({
@@ -397,9 +388,9 @@ export const classifyAccount = Yup.object({
     .required('Provision type is required'),
   classify: Yup.number()
     .integer('Classify must be a number')
-    .required('Classify is required')
+    .required('Classify is required'),
 });
 
 export const officerTransferSchema = Yup.object({
-  transferType: Yup.string().required('Transfer Type is Required')
+  transferType: Yup.string().required('Transfer Type is Required'),
 });
