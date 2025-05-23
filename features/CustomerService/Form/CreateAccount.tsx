@@ -176,20 +176,23 @@ export const CreateAccount = ({
   ) as string;
 
   const { productInfos, isLoading: isProductInfoLoading } =
-    useGetProductDetailsByPcode(isEditing ? customerIdForEditing : customerId, isEditing ? productCodeForEditing : productcode);
+    useGetProductDetailsByPcode(
+      isEditing ? customerIdForEditing : customerId,
+      isEditing ? productCodeForEditing : productcode
+    );
 
   const { documents: submitted, isLoading: isSubmittedLoading } =
     useGetDocuments(
       typeOne,
       (extractIdFromDropdown(selectedValue.customerid as string) as string) ||
-      customerIdForEditing,
+        customerIdForEditing,
       productcode || productCodeForEditing
     );
   const { documents: notSubmitted, isLoading: isNotSubmittedLoading } =
     useGetDocuments(
       typeTwo,
       (extractIdFromDropdown(selectedValue.customerid as string) as string) ||
-      customerIdForEditing,
+        customerIdForEditing,
       productcode || productCodeForEditing
     );
 
@@ -393,25 +396,25 @@ export const CreateAccount = ({
 
   const pickInitialValues = isEditing
     ? {
-      productcode: accDetailsResults?.productcode,
-      acctdesc: accDetailsResults?.accountdesc,
-      cintrate: Number(accDetailsResults?.cintrate),
-      dintrate: Number(accDetailsResults?.dintrate),
-      customerid: accDetailsResults?.customerid,
-      offc: accDetailsResults?.officercode,
-      sweep: 'string', // TODO: Hardcoded until we know what "sweep" is
-      stafid: `${getStoredUser()?.profiles.userid}`,
-      disv: 0,
-      eventlogid: 0,
-      userid: `${getStoredUser()?.profiles.userid}`,
-      authid: `${getStoredUser()?.profiles.userid}`,
-      oldacct: accDetailsResults?.oldacctno
-    }
+        productcode: accDetailsResults?.productcode,
+        acctdesc: accDetailsResults?.accountdesc,
+        cintrate: Number(accDetailsResults?.cintrate),
+        dintrate: Number(accDetailsResults?.dintrate),
+        customerid: accDetailsResults?.customerid,
+        offc: accDetailsResults?.officercode,
+        sweep: 'string', // TODO: Hardcoded until we know what "sweep" is
+        stafid: `${getStoredUser()?.profiles.userid}`,
+        disv: 0,
+        eventlogid: 0,
+        userid: `${getStoredUser()?.profiles.userid}`,
+        authid: `${getStoredUser()?.profiles.userid}`,
+        oldacct: accDetailsResults?.oldacctno
+      }
     : {
-      ...createCustomerAccountInitialValues,
-      cintrate: String(productInfos?.crrate),
-      dintrate: String(productInfos?.drrate),
-    };
+        ...createCustomerAccountInitialValues,
+        cintrate: String(productInfos?.crrate),
+        dintrate: String(productInfos?.drrate)
+      };
 
   return (
     <Formik

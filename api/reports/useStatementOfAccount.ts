@@ -13,7 +13,7 @@ import { toast } from '@/utils/toast';
 
 export async function getStatementOfAccount(
   toastActions: IToastActions,
-  params: ISearchParams | null,
+  params: ISearchParams | null
 ) {
   let result: StatementOfAccountResponse = {} as StatementOfAccountResponse;
   try {
@@ -24,11 +24,11 @@ export async function getStatementOfAccount(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getStoredUser()?.token}`,
-        },
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
       });
     const { message, title, severity } = globalErrorHandler({
-      ...data,
+      ...data
     });
     toast(message, title, severity, toastActions);
 
@@ -49,21 +49,21 @@ export function useGetStatementOfAccount(params: ISearchParams | null) {
   const {
     data = fallback,
     isError,
-    isLoading,
+    isLoading
   } = useQuery({
     queryKey: [
       queryKeys.statementOfAccount,
       params?.accountNumber || '',
       params?.status?.toString || '',
       params?.branchID?.toString || '',
-      params?.page || 1,
+      params?.page || 1
     ],
     queryFn: () => getStatementOfAccount(toastActions, params || {}),
     enabled: Boolean(
       (params?.accountNumber || '').length > 0 ||
         (params?.status?.toString || '').length > 0 ||
-        (params?.branchID?.toString || '').length > 0,
-    ),
+        (params?.branchID?.toString || '').length > 0
+    )
   });
   return { ...data, isError, isLoading };
 }

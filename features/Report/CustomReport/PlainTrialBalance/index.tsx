@@ -1,27 +1,20 @@
 'use client';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import { DateRange } from '@mui/x-date-pickers-pro';
-import dayjs, { Dayjs } from 'dayjs';
-import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
 import { FilterSection } from './FilterSection';
 import { COLUMN, keys } from './Column';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGetPlainTrialBalance } from '@/api/reports/usePlainTrialBalance';
-import { StyledTableCell } from '@/components/Table/style';
-import { IPlainTrialBalance } from '@/api/ResponseTypes/reports';
 import { TableV2 } from '@/components/Revamp/TableV2';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const PlainTrialBalance = () => {
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [pageNumber, setpageNumber] = React.useState(1);
+  const [page, setpage] = React.useState(1);
   const { branches } = useGetBranches();
 
   const { setReportType, setExportData } = React.useContext(
@@ -44,7 +37,7 @@ export const PlainTrialBalance = () => {
     totalRecords
   } = useGetPlainTrialBalance({
     ...searchParams,
-    pageNumber: pageNumber.toString()
+    pageNumber: page.toString(),
   });
 
   const {
@@ -113,9 +106,11 @@ export const PlainTrialBalance = () => {
                 secondaryTitle:
                   'See a directory of all Customer Balance Report in this system.'
               }}
-              setPage={setpageNumber}
+              setPage={setpage}
+              page={page}
+              totalPages={Math.ceil(totalRecords / 10)}
               totalElements={totalRecords}
-              page={pageNumber}
+            
             />
           </Box>
         )}

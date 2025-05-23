@@ -52,23 +52,22 @@ export const SideBarContainer = () => {
         sx={{
           borderRight: `1px solid ${colors.neutral300}`,
           display: { mobile: 'none', desktop: 'block' },
-          top: 0,
-          zIndex: 1,
-          paddingBottom: '10px',
+          marginTop: '2px',
+          zIndex: 2,
+          paddingBottom: '10px'
         }}
       >
         <Link href="/dashboard">
           {BankLogo ? (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Image
-              style={{height: '70px', width: 'auto'}}
-              src={BankLogo}
-              alt={bank?.bankName || 'Bank Logo'}
-              width={170} // Required prop: specify width in pixels
-              height={70} // Required prop: specify height in pixels (adjust as needed)
-            />
+              <Image
+                style={{ height: '70px', width: 'auto' }}
+                src={BankLogo}
+                alt={bank?.bankName || 'Bank Logo'}
+                width={170} // Required prop: specify width in pixels
+                height={70} // Required prop: specify height in pixels (adjust as needed)
+              />
             </Box>
-
           ) : (
             <PageTitle title={bank?.bankName} />
           )}

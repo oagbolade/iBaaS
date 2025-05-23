@@ -46,6 +46,7 @@ export interface StatementRecord {
   tenor: number;
   rate: number | null;
   accruedInt: number;
+  refNo: string;
 }
 
 export interface IAccountStatementList {
@@ -67,6 +68,7 @@ export interface IAccountStatementList {
   branchName: string;
   crLimit: number;
   closeBalance: number | null;
+  refNo: string;
 }
 export interface StatementOfAccountResponse extends IFetchingState {
   responseCode: string;

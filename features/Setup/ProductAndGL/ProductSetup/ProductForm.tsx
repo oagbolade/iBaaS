@@ -32,6 +32,7 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
   const router = useRouter();
   const [addValues, setAddValues] = useState<Boolean>(false);
   const handleChange = (event: any) => {
+    localStorage.setItem('addProduct', event);
     setAddValues(event);
   };
   const handleContinue = () => {
@@ -65,8 +66,8 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
           <RadioButtons
             className="permissionOptions"
             options={[
-              { label: 'Loan', value: '1' },
-              { label: 'CASA', value: '0' }
+              { label: 'Loan', value: '2' },
+              { label: 'CASA', value: '3' }
             ]}
             title="Kindly select which product you want to add"
             name="addProduct"

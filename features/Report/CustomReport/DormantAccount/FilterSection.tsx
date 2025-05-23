@@ -29,12 +29,12 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
-      accountNumber: values.accountNumber ? values.accountNumber : null,
-      branchID: values.branchID.toString().length > 0 ? values.branchID : null,
+      accountNumber: values.accountNumber ? values.accountNumber : '',
+      branchID: values.branchID.toString().length > 0 ? values.branchID : '',
       searchWith:
         values.searchWith?.toString().trim().length > 0
           ? values.searchWith
-          : null,
+          : '',
       getAll: false,
       pageSize: '10'
     };

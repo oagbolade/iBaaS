@@ -17,10 +17,16 @@ import { createChequeBokSchema, createDormancySchema } from '@/schemas/setup';
 import { useCreateCheque, useGetChequeById } from '@/api/setup/useCheque';
 import { IGLAccount } from '@/api/ResponseTypes/admin';
 import { MobilePreviewContent } from '@/features/CustomerService/Form/CreateAccount';
-import { chargeContentStyle } from '@/features/Operation/Forms/style';
+import {
+  BatchContainer,
+  chargeContentStyle,
+  inputContentText,
+  PostingContainer
+} from '@/features/Operation/Forms/style';
 import { useGetGLByGLNumber } from '@/api/admin/useCreateGLAccount';
 import { decryptData } from '@/utils/decryptData';
 import { encryptData } from '@/utils/encryptData';
+import { Tabs } from '@/components/Revamp/Tabs';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -54,13 +60,16 @@ export const AddCheque = ({
   const [commissionAccount, setCommissionAccount] = React.useState<
     string | null
   >(null);
-
+  const [costAmount, setCostAmount] = React.useState<string | null>(null);
   const { mappedGlAccount } = useMapSelectOptions({
     bankgl
   });
 
   const { bankgl: accountData } = useGetGLByGLNumber(
     encryptData(commissionAccount) || ''
+  );
+  const { bankgl: costAmountData } = useGetGLByGLNumber(
+    encryptData(costAmount) || ''
   );
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
@@ -84,6 +93,26 @@ export const AddCheque = ({
   ) => {
     setCommissionAccount(e.target.value);
   };
+  const handleCostAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCostAmount(e.target.value);
+  };
+  const tabTitle = ['Cost Account', 'Commission Account'];
+  const pageMenu = [
+    <GLAccountPreviewContent accountDetails={costAmountData} />,
+    <GLAccountPreviewContent accountDetails={accountData} />
+  ];
+  const PreviewContent: React.FC = () => {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <Tabs
+          tabTitle={tabTitle}
+          pageMenu={pageMenu}
+          customStyle={{ ...inputContentText }}
+        />
+      </Box>
+    );
+  };
+
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
   }
@@ -104,151 +133,120 @@ export const AddCheque = ({
           validationSchema={createChequeBokSchema}
         >
           <Form>
-            <Box sx={{ display: 'flex' }}>
-              <Box mt={4} sx={{ width: '960px', height: '100px' }}>
-                <Grid container>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormSelectField
-                      name="glAccount1"
-                      options={mappedGlAccount}
-                      label="Select GL Account"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="batchno"
-                      placeholder="Enter Cheque Book Code"
-                      label="Cheque Book Code"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="numberOfleaves"
-                      placeholder="Enter Product Code"
-                      label="No of Leaves"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="typeDesc"
-                      placeholder="Enter cheque book name"
-                      label="Cheque Book Name"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="lastnumber"
-                      placeholder="Enter Cost of cheque"
-                      label="Cost of Cheque Books (To Bank)"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="accountType"
-                      placeholder="Enter Commision Amount"
-                      label="Commision Amount"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                  >
-                    <FormTextInput
-                      name="currentCost"
-                      placeholder="Enter Cost Amount"
-                      label="Cost Amount"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                    mb={5}
-                  >
-                    <FormTextInput
-                      name="glAccount2"
-                      placeholder="Enter Commission Account"
-                      label="Commission Account"
-                      value={commissionAccount?.toString()}
-                      onChange={handleCommissionAccountChange}
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '120%')
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box ml={{ desktop: 20, mobile: 5 }}>
-                {isMobile ? (
-                  <MobilePreviewContent
-                    PreviewContent={
-                      <GLAccountPreviewContent
-                        accountDetails={accountData as any}
+            <Grid container spacing={2}>
+              <Box sx={{ display: 'flex' }}>
+                <Box mt={4} sx={BatchContainer}>
+                  <Grid container>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="batchno"
+                        placeholder="Enter Cheque Book Code"
+                        label="Cheque Book Code"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '100%')
+                        }}
                       />
-                    }
-                    customStyle={{ ...chargeContentStyle }}
-                  />
-                ) : (
-                  <GLAccountPreviewContent
-                    accountDetails={accountData as any}
-                  />
-                )}{' '}
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="numberOfleaves"
+                        placeholder="Enter Product Code"
+                        label="No of Leaves"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '100%')
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="typeDesc"
+                        placeholder="Enter cheque book name"
+                        label="Cheque Book Name"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '100%')
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                    >
+                      <FormTextInput
+                        name="lastnumber"
+                        placeholder="Enter Cost of cheque"
+                        label="Cost of Cheque Books (To Bank)"
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '100%')
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                      mb={5}
+                    >
+                      <FormTextInput
+                        name="glAccount1"
+                        placeholder="Enter Cost Account"
+                        label="Cost Account(Exclude branch code)"
+                        value={costAmount?.toString()}
+                        onChange={handleCostAmountChange}
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '100%')
+                        }}
+                      />
+                    </Grid>
+                    <Grid
+                      item={isTablet}
+                      mobile={12}
+                      mr={{ mobile: 35, tablet: 0 }}
+                      width={{ mobile: '100%', tablet: 0 }}
+                      mb={5}
+                    >
+                      <FormTextInput
+                        name="glAccount2"
+                        placeholder="Enter Commission Account"
+                        label="Commission Account(Exclude branch code)"
+                        value={commissionAccount?.toString()}
+                        onChange={handleCommissionAccountChange}
+                        customStyle={{
+                          width: setWidth(isMobile ? '250px' : '100%')
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Box sx={PostingContainer}>
+                  {isMobile ? (
+                    <MobilePreviewContent
+                      PreviewContent={<PreviewContent />}
+                      customStyle={{ ...chargeContentStyle }}
+                    />
+                  ) : (
+                    <PreviewContent />
+                  )}
+                </Box>
               </Box>
-            </Box>
+            </Grid>
 
             <button id="submitButton" type="submit" style={{ display: 'none' }}>
               submit alias

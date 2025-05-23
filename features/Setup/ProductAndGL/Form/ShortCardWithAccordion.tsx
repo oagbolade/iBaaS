@@ -46,6 +46,7 @@ import {
   IInterests,
   ILoanClass,
   IOccupation,
+  IProductClass,
   IProducts,
   ISector
 } from '@/api/ResponseTypes/setup';
@@ -58,6 +59,7 @@ import {
   useGetAllLoanTerm,
   useGetAllProduct,
   useGetLoanClass,
+  useGetLoanProductCode,
   useGetMaxCreditInterest,
   useGetProductClass
 } from '@/api/setup/useProduct';
@@ -135,7 +137,8 @@ type Props = {
   creditInterests?: ICreditInterests[];
   loanClass?: ILoanClass[];
   interests?: IInterests[];
-  products?: IProducts[];
+  // eslint-disable-next-line react/no-unused-prop-types
+  products?: IProducts[] | IProductClass[] | Array<any>;
   bankproducts?: IBankProducts[];
   exception?: IException[];
   frequency?: IFrequency[];
@@ -182,9 +185,9 @@ const FormSelector = ({
           states={states}
           towns={towns}
           professions={professions}
-          productTypes={productTypes}
+          productTypes={products as IProductClass[] | undefined}
           currencies={currencies}
-          products={products}
+          products={products as IProducts[] | undefined}
           frequency={frequency}
         />
       );
@@ -245,7 +248,6 @@ export const ShortCardWithAccordion = ({
   creditInterests,
   loanClass,
   interests,
-  products,
   bankproducts,
   exception,
   frequency,
@@ -258,6 +260,7 @@ export const ShortCardWithAccordion = ({
   const handleChange = () => {
     setExpanded(!expanded);
   };
+  const productClassBYID = localStorage.getItem('addProduct');
   const { currencies: Currency } = useGetCurrency();
   const { productTypes: product } = useGetProductType();
   const { repaymentTypes: repaymentType } = useGetAllLoanRepaymentTypes();
@@ -269,6 +272,7 @@ export const ShortCardWithAccordion = ({
   const { frequency: frequencys } = useGetAllLoanTerm();
   const { bankgl: bankgls } = useGetGLAccount();
   const { charges: charge } = useGetChargeConcession();
+  const { products: productClassBY } = useGetLoanProductCode(productClassBYID);
 
   return (
     <Box mb={2}>
@@ -354,7 +358,7 @@ export const ShortCardWithAccordion = ({
                 loanClass={loan}
                 bankproducts={bankproduct}
                 exception={exceptions}
-                products={productclass}
+                products={productClassBY}
                 frequency={frequencys}
                 bankgl={bankgls as IGLAccount[] | undefined}
                 charges={charge}

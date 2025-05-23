@@ -31,7 +31,8 @@ export async function geTransactionClearing(
           endDate: params?.endDate,
           pageSize: Number(params?.pageSize) || 20,
           pageNumber: Number(params?.pageNumber) || 1,
-          branchCode: params?.branchID
+          branchCode: params?.branchID,
+          searchWith: params?.customerID
         },
         headers: {
           'Content-Type': 'application/json',

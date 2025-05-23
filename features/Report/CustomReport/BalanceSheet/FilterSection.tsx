@@ -9,7 +9,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
@@ -30,7 +30,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const onSubmit = async (values: any) => {
@@ -42,7 +42,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           ? values.searchWith
           : null,
       pCode: values.pCode?.toString().trim().length > 0 ? values.pCode : null,
-      pageSize: '10',
+      pageSize: '10'
     };
     onSearch?.(params);
   };
@@ -58,7 +58,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '20px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Box>
@@ -67,7 +67,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}

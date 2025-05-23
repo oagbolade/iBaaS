@@ -113,20 +113,20 @@ export interface RestructureLoanValues {
   customerid: string;
   loanAccno: string;
   settlementAccno: string;
-  principalWriteOff_GL: string;
-  interestWriteOff_GL: string;
-  penalWriteOff_GL: string;
+  principalWriteOff_GL: string| null;
+  interestWriteOff_GL: string | null;
+  penalWriteOff_GL: string | null;
   prodcode: string;
   branchcode: string;
-  outstandingPrincipal: string;
-  outstandingInterest: string;
-  outstandingPenalInterest: string;
-  principal_To_WriteOff: string;
-  interest_To_WriteOff: string;
-  penal_To_WriteOff: string;
-  principalWriteOff_Type: string; // 1: Add all outstanding to restructure, 2: Write off all outstanding, 3: partial write-off
-  interestlWriteOff_Type: string;
-  penalWriteOff_Type: string;
+  outstandingPrincipal: number | null;
+  outstandingInterest: number | null;
+  outstandingPenalInterest: number | null;
+  principal_To_WriteOff: string | null;
+  interest_To_WriteOff: string | null;
+  penal_To_WriteOff: string | null;
+  principalWriteOff_Type: string | null; // 1: Add all outstanding to restructure, 2: Write off all outstanding, 3: partial write-off
+  interestlWriteOff_Type: string | null;
+  penalWriteOff_Type: string | null;
   amt_To_Liquidate: number;
   newPrincipal: number;
   refinancingAmt: number;
@@ -151,7 +151,7 @@ export interface RestructureLoanValues {
   paymode: number;
   paybank: string;
   takecharge: string;
-  menuId: number;
+  menuId: string | null;
 }
 
 export const SetRestructureLoanValues: RestructureLoanValues = {
@@ -159,16 +159,14 @@ export const SetRestructureLoanValues: RestructureLoanValues = {
   customerid: '',
   loanAccno: '',
   settlementAccno: '',
-
   principalWriteOff_GL: '',
   interestWriteOff_GL: '',
   penalWriteOff_GL: '',
-
   prodcode: '',
   branchcode: '',
-  outstandingPrincipal: '0',
-  outstandingInterest: '0',
-  outstandingPenalInterest: '0',
+  outstandingPrincipal: 0,
+  outstandingInterest: 0,
+  outstandingPenalInterest: 0,
   principal_To_WriteOff: '0',
   interest_To_WriteOff: '0',
   penal_To_WriteOff: '0',
@@ -199,7 +197,7 @@ export const SetRestructureLoanValues: RestructureLoanValues = {
   paymode: 0,
   paybank: '',
   takecharge: '',
-  menuId: 57
+  menuId: '57'
 };
 export interface ICustomerDetails {
   gender: string;

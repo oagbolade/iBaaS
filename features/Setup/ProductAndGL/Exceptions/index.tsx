@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { COLUMNS } from './COLUMNS';
-import { MuiTableContainer } from '@/components/Table';
+import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { useFilterExceptionSearch } from '@/api/setup/useException';
 import { ISearchParams } from '@/app/api/search/route';
@@ -44,6 +44,19 @@ export const ExceptionsTable = () => {
   const handleSearch = async (params: any) => {
     setSearchParams(params);
     setSearch(true);
+  };
+  const ActionMenu = ({
+    exceptionCode
+  }: {
+    exceptionCode: string;
+  }): React.ReactElement => {
+    return (
+      <Link
+        href={`/setup/product-gl/add-exception/?isEditing=true&id=${exceptionCode}`}
+      >
+        <TableSingleAction actionName="Edit" />
+      </Link>
+    );
   };
   return (
     <Box>
@@ -93,6 +106,9 @@ export const ExceptionsTable = () => {
                             : 'warning'
                         }
                       />
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <ActionMenu exceptionCode={dataItem.exceptioncode} />
                     </StyledTableCell>
                   </StyledTableRow>
                 );

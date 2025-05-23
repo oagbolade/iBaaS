@@ -164,7 +164,7 @@ export const AddDormancy = ({
                       <Grid container spacing={2}>
                         <Grid item mobile={6}>
                           <FormTextInput
-                            name="durations"
+                            name="duration"
                             placeholder="Enter Timeframe"
                             label="Duration Plan"
                             customStyle={{

@@ -356,7 +356,7 @@ export const CreateCharges = ({
                   <FormTextInput
                     name="glCode"
                     placeholder="Enter Income GL"
-                    label="Income GL Account"
+                    label="Income GL Account(Exclude Branch Code)"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}

@@ -18,7 +18,7 @@ export async function getincomeAssurance(
   let result: GetAllIncomeAssuranceReportResponse =
     {} as GetAllIncomeAssuranceReportResponse;
   try {
-    const urlEndpoint = `/ReportServices/IncomeAssuranceReport?branchCode=${params?.branchID}&reportType=${params?.reportType}&startDate=${params?.startDate}&endDate=${params?.endDate}&pageNumber=${params?.page || 1}&pageSize=${Number(params?.pageSize) || 10}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/ReportServices/IncomeAssuranceReport?branchCode=${params?.branchID}&reportType=${params?.reportType}&startDate=${params?.startDate}&endDate=${params?.endDate}&pageNumber=${params?.page || 1}&pageSize=${Number(params?.pageSize) || 10}&getAll=${params?.getAll || false}&searchWith=${params?.search || ''}`;
     const { data }: AxiosResponse<GetAllIncomeAssuranceReportResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,
@@ -52,6 +52,7 @@ export function useGetIncomeAssuranceReport(params: ISearchParams | null) {
       queryKeys.getincomeAssurance,
       params?.branchID || '',
       params?.startDate || '',
+      params?.search || '',
       params?.getAll || false,
       params?.reportType || '',
       params?.endDate || '',

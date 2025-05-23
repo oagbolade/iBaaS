@@ -101,7 +101,7 @@ export const DormancyCriteriaTable = () => {
                       {dataItem.penalty}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.penalty}
+                      {dataItem.productName || 'NIL'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem.duration}
