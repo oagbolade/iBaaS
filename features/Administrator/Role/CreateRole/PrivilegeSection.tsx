@@ -59,8 +59,8 @@ export const chunkArray = (
 
 const CheckBoxWrapper = styled.section`
   .MuiTypography-root {
-    font-size: 12px;
-    width: 126px;
+    font-size: 11px;
+    width: 130px;
   }
 `;
 
@@ -305,7 +305,7 @@ export const PrivilegeSection = ({
         {chunkedData?.map((chunk) => (
           <>
             {chunk.map((data: { menu_id: string; menu_name: string }) => (
-              <Grid my={1.5} key={data.menu_id} item mobile={12} desktop={4}>
+              <Grid my={1.5} key={data.menu_id} item mobile={12} desktop={6}>
                 <CheckBoxWrapper>
                   <CheckboxInput
                     checkList={checkList}

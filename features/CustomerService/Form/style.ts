@@ -119,7 +119,8 @@ export const mandateImageContainer = {
   alignItems: 'flex-start',
   gap: '24px',
   width: '100%',
-  height: '151px'
+  height: '100%',
+  overflow: 'scroll',
 };
 export const mandateStyle = {
   display: 'flex',

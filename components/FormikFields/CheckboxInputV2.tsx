@@ -52,7 +52,7 @@ export const CheckboxInputV2 = ({
 
   return (
     // so this checkbox has read only
-    <FormGroup sx={{ width: '140px', height: '20px' }}>
+    <FormGroup sx={{ height: '20px' }}>
       <FormControlLabel
         sx={{
           ...checkboxTypography,

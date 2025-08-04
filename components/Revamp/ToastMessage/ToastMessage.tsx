@@ -32,7 +32,7 @@ export const ToastMessage = ({ body, title, alertType = 'success' }: Props) => {
     if (open) {
       setTimeout(() => {
         toggleSnackbar();
-      }, 3000);
+      }, 7000);
     }
   }, [open]);
 

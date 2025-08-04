@@ -122,7 +122,7 @@ export const Dashboard = ({ branchData, glNodeData, chargeData, productTypes, de
           >
             <TrendCard
               customStyle={{
-                width: '98%'
+                width: '95%'
               }}
               isPositiveTrend={false}
               title="Till Balance"
@@ -130,7 +130,7 @@ export const Dashboard = ({ branchData, glNodeData, chargeData, productTypes, de
             />
             <TrendCard
               customStyle={{
-                width: '98%'
+                width: '95%'
               }}
               title="Pending Actions"
               amount={pendingData?.toString()}

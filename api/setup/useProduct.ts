@@ -17,7 +17,13 @@ import {
   IProductClass,
   SearchLoanProductResponse,
   UseGetAllLoanAccountResponse,
-  UseGetAllProductDocsResponse
+  UseGetAllProductDocsResponse,
+  UseGetProductTypeResponse,
+  IProdType,
+  UseGetProductClassByCategoryResponse,
+  IProdCodeType,
+  UseGetGLWithBranchCodeResponse,
+  IGLWithBranchCode
 } from '../ResponseTypes/setup';
 import { SearchResultsGenericResponse } from '../ResponseTypes/general';
 import { axiosInstance } from '@/axiosInstance';
@@ -70,6 +76,39 @@ async function createLoanAccountProduct(
     throw errorResponse;
   }
 }
+async function createTreasuryAccountProduct(
+  toastActions: IToastActions,
+  body: CreateLoanAccountFormValues,
+  isUpdating: boolean,
+  TranCode: string | null
+): Promise<void> {
+  try {
+    const urlEndpoint = `/General/Product/${
+      isUpdating
+        ? `UpdateTransactType?TranCode=${TranCode}`
+        : 'CreateTransactType'
+    }`;
+    const { data }: AxiosResponse<APIResponse> = await axiosInstance({
+      url: urlEndpoint,
+      method: isUpdating ? 'PUT' : 'POST',
+      data: { ...body },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getStoredUser()?.token}`
+      }
+    });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
+      throw new Error(message);
+    }
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+    throw errorResponse;
+  }
+}
 async function createDemandDepositProduct(
   toastActions: IToastActions,
   body: CreateDemandDepositFormValues,
@@ -94,7 +133,7 @@ async function createDemandDepositProduct(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
-    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
+    if (!SUCCESS_CODES.includes(data.responseCode || '')) {
       throw new Error(message);
     }
   } catch (errorResponse) {
@@ -103,6 +142,107 @@ async function createDemandDepositProduct(
   }
 }
 
+async function getProductType(
+  toastActions: IToastActions,
+  id: string | null
+): Promise<UseGetProductTypeResponse> {
+  let result: UseGetProductTypeResponse = {
+    responseCode: '',
+    responseDescription: '',
+    data: [] as IProdCodeType[]
+  };
+
+  try {
+    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductType?id=${id}`;
+
+    const { data }: AxiosResponse<UseGetProductTypeResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
+async function getProductClassByCategory(
+  toastActions: IToastActions,
+  id: string | null
+): Promise<UseGetProductClassByCategoryResponse> {
+  let result: UseGetProductClassByCategoryResponse = {
+    responseCode: '',
+    responseDescription: '',
+    data: [] as IProdType[]
+  };
+
+  try {
+    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductClassByCategory?id=${id}`;
+
+    const { data }: AxiosResponse<UseGetProductClassByCategoryResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
+async function getGLWithBranchCode(
+  toastActions: IToastActions
+): Promise<UseGetGLWithBranchCodeResponse> {
+  let result: UseGetGLWithBranchCodeResponse = {
+    responseCode: '',
+    responseDescription: '',
+    data: [] as IGLWithBranchCode[]
+  };
+
+  try {
+    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetAllGLWithBranchCode`;
+
+    const { data }: AxiosResponse<UseGetGLWithBranchCodeResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
 export async function filterAllProductSearch(
   toastActions: IToastActions,
   params: ISearchParams | null
@@ -484,6 +624,42 @@ async function getLoanProductByCode(
 
   return result;
 }
+
+async function getTreasuryProductByCode(
+  toastActions: IToastActions,
+  TranCode: string | null
+): Promise<UseGetAllLoanAccountResponse> {
+  let result: UseGetAllLoanAccountResponse = {
+    responseCode: '',
+    responseDescription: '',
+    loanProducts: {} as ILoanAccount
+  };
+
+  try {
+    const urlEndpoint = `/Configuration/TransactType/GetTransactTypeById?TranCode=${TranCode}`;
+
+    const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
+
 async function getLoanProductCode(
   toastActions: IToastActions,
   productclass: string | null
@@ -601,7 +777,44 @@ export function useGetAllProductByCode(
 
   return { ...data, isError, isLoading };
 }
+export function useGetProductTypeByid(
+  id: string | null
+): UseGetProductTypeResponse {
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = [] as UseGetProductTypeResponse;
 
+  // get data from server via useQuery
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.getProductTypeId, id],
+    queryFn: () => getProductType(toastActions, id),
+    enabled: Boolean((id || '').length > 0)
+  });
+
+  return { ...data, isError, isLoading };
+}
+export function useGetProductClassByCastegory(
+  id: string | null
+): UseGetProductClassByCategoryResponse {
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = [] as UseGetProductClassByCategoryResponse;
+
+  // get data from server via useQuery
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.getProductClassByCategory, id],
+    queryFn: () => getProductClassByCategory(toastActions, id),
+    enabled: Boolean((id || '').length > 0)
+  });
+
+  return { ...data, isError, isLoading };
+}
 export function useGetAllProductDocs(): UseGetAllProductDocsResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = [] as UseGetAllLoanAccountResponse;
@@ -614,6 +827,25 @@ export function useGetAllProductDocs(): UseGetAllProductDocsResponse {
   } = useQuery({
     queryKey: [queryKeys.getAllProductDocs],
     queryFn: () => getAllProductDocs(toastActions)
+  });
+
+  return { ...data, isError, isLoading };
+}
+export function useGetTreasuryProductByCode(
+  TranCode: string | null
+): UseGetAllLoanAccountResponse {
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = [] as UseGetAllLoanAccountResponse;
+
+  // get data from server via useQuery
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.getTreasuryProductByCode, TranCode],
+    queryFn: () => getTreasuryProductByCode(toastActions, TranCode),
+    enabled: Boolean((TranCode || '').length > 0)
   });
 
   return { ...data, isError, isLoading };
@@ -634,6 +866,22 @@ export function useGetLoanProductByCode(
     queryKey: [queryKeys.getLoanProductByCode, productcode],
     queryFn: () => getLoanProductByCode(toastActions, productcode),
     enabled: Boolean((productcode || '').length > 0)
+  });
+
+  return { ...data, isError, isLoading };
+}
+export function useGetAllGLWithBranchCode(): UseGetGLWithBranchCodeResponse {
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = {} as UseGetGLWithBranchCodeResponse;
+
+  // get data from server via useQuery
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.getGLWithBranchCode],
+    queryFn: () => getGLWithBranchCode(toastActions)
   });
 
   return { ...data, isError, isLoading };
@@ -804,6 +1052,38 @@ export function useCreateLoanAccountProduct(
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.getLoanProductByCode],
+        [queryKeys.filterLoanAccountSearch]
+      ];
+      keysToInvalidate.forEach((key) =>
+        queryClient.invalidateQueries({ queryKey: key })
+      );
+
+      handleRedirect(router, '/setup/product-gl/product-setup/');
+    }
+  });
+
+  return {
+    mutate,
+    isPending,
+    isError,
+    error
+  };
+}
+
+export function useCreateTreasuryAccountProduct(
+  isUpdating: boolean = false,
+  TranCode: string | null = null
+) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const toastActions = useContext(ToastMessageContext);
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: (body: CreateLoanAccountFormValues) =>
+      createTreasuryAccountProduct(toastActions, body, isUpdating, TranCode),
+    onSuccess: () => {
+      const keysToInvalidate = [
+        [queryKeys.getTreasuryProductByCode],
         [queryKeys.filterLoanAccountSearch]
       ];
       keysToInvalidate.forEach((key) =>

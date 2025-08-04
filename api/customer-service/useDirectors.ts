@@ -199,6 +199,13 @@ export async function getDirectorsByCustomerId(
     toast(message, title, severity, toastActions);
   }
 
+  if (
+    result?.directorDetails === null ||
+    result?.directorDetails === undefined
+  ) {
+    result.directorDetails = [];
+  }
+
   return result;
 }
 
@@ -322,7 +329,6 @@ export function useGetDirectorsByCustomerId(customerId: string) {
 export function useGetDirectorById(directorId: string) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetDirectorByIdResponse;
-
   const {
     data = fallback,
     isError,

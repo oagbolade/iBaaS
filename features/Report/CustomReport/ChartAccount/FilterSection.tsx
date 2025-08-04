@@ -49,8 +49,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         validationSchema={chartOfAccountSchema}
       >
         <Form>
-
-           <Stack
+          <Stack
             sx={{
               borderBottom: '1px solid #E8E8E8',
               marginTop: '24px',
@@ -79,7 +78,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   buttonTitle="Export Data"
                 />
               </Box>
-
             </Stack>
           </Stack>
           <Box

@@ -116,6 +116,30 @@ export interface CustomerBalanceResponse extends IFetchingState {
   pageSize: number;
   totalRecords: number;
 }
+
+export interface GroupMemberList {
+  groupID: string;
+  groupName: string;
+  customerId: string;
+  fullName: string;
+  status: string;
+  phone: string;
+  bvn: string;
+  address: string;
+  branchName: string;
+  officer: string;
+  gender: string;
+  createdate: string;
+}
+export interface GroupMembershipResponse extends IFetchingState {
+  responseCode: string;
+  responseDescription: string;
+  groupMembershipList: GroupMemberList[];
+  pageNummber: number;
+  pageSize: number;
+  totalRecords: number;
+}
+
 export interface IAuditTrail {
   id: number;
   action_performed: string;
@@ -271,12 +295,22 @@ export interface PlainTrialBalanceResponse {
 }
 
 export interface IGetAccountEnquiry {
-  accountnumber: string;
   accounttitle: string;
-  customerid: number;
-  accountOfficer: string;
-  bkBalance: number;
-  branchName: string;
+  dateOpened: string;
+  productName: string;
+  accountnumber: string;
+  phoneNo: string;
+  lienAmount: number;
+  unclearedBal: number;
+  officerName: string;
+  odLimit: number;
+  customerid: string;
+  nuban: string;
+  customerAddress: string;
+  useableBalance: number;
+  bookBalance: number;
+  customerName: string;
+  accountStatus: string;
 }
 
 export interface IAccountInDebitResponse extends IGetAccountEnquiry {}
@@ -361,7 +395,7 @@ export interface IGlSubGroupReportList {
 export interface IAccountEnquiryResponse
   extends IFetchingState,
     IReportsResponse {
-  accountsinDebitList?: IGetAccountEnquiry[];
+  data?: IGetAccountEnquiry[];
 }
 export interface IAccountInDebitResponseType
   extends IFetchingState,
@@ -567,6 +601,34 @@ export interface TrailBalanceResponse extends IFetchingState, IReportsResponse {
   };
 }
 
+export interface GroupItem {
+  itemid: string;
+  balance: number;
+  itemrange: string;
+  itemDesc: string;
+  orderid: string;
+  groupid: string;
+  groupname: string;
+  createdate: string;
+  userid: string | null;
+  sumbalance: string;
+  asset: string;
+  liability: string;
+  status: string;
+}
+
+export interface DataGroup {
+  totalBal: number;
+  groupName: string;
+  groupItem: GroupItem[];
+}
+
+export interface ProfitAndLossResponse
+  extends IFetchingState,
+    IReportsResponse {
+  data?: DataGroup[];
+}
+
 export interface GetAllPortfolioAtRiskResponse
   extends IFetchingState,
     IReportsResponse {
@@ -742,6 +804,30 @@ export interface ILoanMaturityResponse {
   totalRecords: number;
 }
 
+export interface IOverdraftReport {
+  accountnumber: string;
+  reportDate: string;
+  branchcode: string;
+  productcode: string;
+  accounttitle: string;
+  oD_Date: string;
+  authorized: string;
+  expiry_Date: string;
+  unauthorized: number;
+  age: number;
+  branchname: number;
+  productname: number;
+}
+
+export interface IOverdraftReportResponse {
+  responseCode: string;
+  responseDescription: string;
+  overDraftReport: IOverdraftReport[];
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
+}
+
 export interface IPostingJournal {
   accountNumber: string;
   accounttitle: string;
@@ -790,10 +876,10 @@ export interface IHoldingTransactionReportResponse {
 }
 
 export interface LoanWeeklyRepaymentResponse {
-    responseCode: string ;
-    responseDescription: string ;
-    loanWeeklyRepaymentList: any[] ;
-    pageNumber: number;
-    pageSize: number;
-    totalRecords: number;
+  responseCode: string;
+  responseDescription: string;
+  loanWeeklyRepaymentList: any[];
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
 }

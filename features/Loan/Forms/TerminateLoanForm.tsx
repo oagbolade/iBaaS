@@ -159,7 +159,7 @@ export const TerminateLoanForm = ({
                     placeholder="Enter text"
                     label="Reason"
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '560px')
+                      width: setWidth(isMobile ? '250px' : '100%')
                     }}
                   />
                 </Grid>

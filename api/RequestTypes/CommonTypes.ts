@@ -6,6 +6,7 @@ export interface IProfiles {
   roleid: number;
   rolelevel: number;
   dmb: 0;
+  branchCode: string;
 }
 
 export interface APIResponse extends IFetchingState {

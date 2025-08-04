@@ -101,13 +101,13 @@ export const AccountDebit = () => {
                       {accountData?.customerid || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {`NGN ${formatCurrency(accountData?.bkBalance || 0) || 'N/A'}`}
+                      {`NGN ${formatCurrency(accountData?.bookBalance || 0) || 'N/A'}`}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {accountData?.accountOfficer || 'N/A'}
+                      {accountData?.officerName || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {accountData?.branchName || 'N/A'}
+                      {accountData?.productName || 'N/A'}
                     </StyledTableCell>
                   </StyledTableRow>
                 );

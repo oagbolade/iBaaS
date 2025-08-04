@@ -12,7 +12,14 @@ import {
   IStates,
   ITown
 } from '@/api/ResponseTypes/customer-service';
-import { IEducation, IOccupation, ISector } from '@/api/ResponseTypes/setup';
+import {
+  IEducation,
+  IGLWithBranchCode,
+  IOccupation,
+  IProdCodeType,
+  IProdType,
+  ISector
+} from '@/api/ResponseTypes/setup';
 import { CustomerCreationContext } from '@/context/CustomerCreationContext';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import {
@@ -52,6 +59,11 @@ type Props = {
   productTypes?: IProductType[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   bankgl?: IGLAccount[] | Array<any>;
+  dataWithCode?:
+    | IProdType[]
+    | IProdCodeType[]
+    | IGLWithBranchCode[]
+    | Array<any>;
 };
 type SearchFilters = {
   accountNumber: string | OptionsI[];
@@ -67,7 +79,8 @@ export const GeneralCasaLedgerForm = ({
   professions,
   productTypes,
   currencies,
-  bankgl
+  bankgl,
+  dataWithCode
 }: Props) => {
   const { customerType, setCustomerType } = React.useContext(
     CustomerCreationContext
@@ -77,12 +90,17 @@ export const GeneralCasaLedgerForm = ({
   const handleCheck = (booleanValue: string, value: string) => {
     setCustomerType(value);
   };
-  const { mappedProductType, mappedCurrency, mappedGlAccount } =
-    useMapSelectOptions({
-      productTypes,
-      currencies,
-      bankgl
-    });
+  const {
+    mappedProductType,
+    mappedCurrency,
+    mappedGlAccount,
+    mappedWithBranchCode
+  } = useMapSelectOptions({
+    productTypes,
+    currencies,
+    bankgl,
+    dataWithCode
+  });
   const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
   const { setFieldValue, values } = useFormikContext<any>();
@@ -153,7 +171,7 @@ export const GeneralCasaLedgerForm = ({
       [name]: value
     }));
     const filteredGLItems = filterGeneralLedgerDropdownSearch(
-      mappedGlAccount,
+      mappedWithBranchCode,
       value
     );
 
@@ -164,19 +182,19 @@ export const GeneralCasaLedgerForm = ({
 
     if (value.trim().length === 0) {
       setFilteredValues({
-        accountNumber: mappedGlAccount,
-        liabilityBal: mappedGlAccount,
-        suspendedAsset: mappedGlAccount,
-        assetBalance: mappedGlAccount,
-        interestReceivable: mappedGlAccount,
-        unearnincome: mappedGlAccount,
-        interestExpense: mappedGlAccount,
-        interestIncome: mappedGlAccount,
-        suspendedIntIncome: mappedGlAccount,
-        interestPayable: mappedGlAccount,
-        interbr: mappedGlAccount,
-        taxabsorbed1: mappedGlAccount,
-        acctClosegl: mappedGlAccount
+        accountNumber: mappedWithBranchCode,
+        liabilityBal: mappedWithBranchCode,
+        suspendedAsset: mappedWithBranchCode,
+        assetBalance: mappedWithBranchCode,
+        interestReceivable: mappedWithBranchCode,
+        unearnincome: mappedWithBranchCode,
+        interestExpense: mappedWithBranchCode,
+        interestIncome: mappedWithBranchCode,
+        suspendedIntIncome: mappedWithBranchCode,
+        interestPayable: mappedWithBranchCode,
+        interbr: mappedWithBranchCode,
+        taxabsorbed1: mappedWithBranchCode,
+        acctClosegl: mappedWithBranchCode
       });
     }
   };

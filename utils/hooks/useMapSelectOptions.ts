@@ -44,9 +44,12 @@ import {
   IGetNibbsCommercialBank,
   IGLNode,
   IGLTypeClass,
+  IGLWithBranchCode,
   IInterests,
   ILoanClass,
   IOccupation,
+  IProdCodeType,
+  IProdType,
   IProductClass,
   IProducts,
   IRegionByCode,
@@ -122,6 +125,13 @@ interface ISelect {
   exception?: IException[];
   frequency?: IFrequency[];
   users?: IUsers[];
+  data?: IProdType[] | IProdCodeType[] | IGLWithBranchCode[] | Array<any>;
+  dataType?: IProdCodeType[] | IProdType[] | Array<any>;
+  dataWithCode?:
+    | IProdType[]
+    | IProdCodeType[]
+    | IGLWithBranchCode[]
+    | Array<any>;
 }
 
 export const useMapSelectOptions = ({
@@ -174,7 +184,10 @@ export const useMapSelectOptions = ({
   interests,
   products,
   exception,
-  frequency
+  frequency,
+  data,
+  dataType,
+  dataWithCode
 }: ISelect) => {
   const [mappedNationStates, setMappedNationStates] = useState<OptionsI[]>([]);
   const [mappedStateTowns, setMappedStateTowns] = useState<OptionsI[]>([]);
@@ -238,6 +251,11 @@ export const useMapSelectOptions = ({
   const [mappedException, setException] = useState<OptionsI[]>([]);
   const [mappedFrequency, setFrequency] = useState<OptionsI[]>([]);
   const [mappedGLNodeType, setGLNodeType] = useState<OptionsI[]>([]);
+  const [mappedProductTypeId, setProductTypeId] = useState<OptionsI[]>([]);
+  const [mappedProductClassTypeId, setProductClassTypeId] = useState<
+    OptionsI[]
+  >([]);
+  const [mappedWithBranchCode, setWithBranchCode] = useState<OptionsI[]>([]);
 
   useEffect(() => {
     const checkbooksArray: OptionsI[] = [];
@@ -245,6 +263,27 @@ export const useMapSelectOptions = ({
       checkbooksArray.push({
         value: books.typeId.toString(),
         name: books.typeDesc
+      });
+    });
+    const ProductTypeIdArray: OptionsI[] = [];
+    dataType?.forEach((prodCodeType: IProdCodeType) => {
+      ProductTypeIdArray.push({
+        value: prodCodeType?.PCode?.toString(),
+        name: prodCodeType.PName
+      });
+    });
+    const GlWithBranchCodeArray: OptionsI[] = [];
+    dataWithCode?.forEach((prodCodeType: IGLWithBranchCode) => {
+      GlWithBranchCodeArray.push({
+        value: prodCodeType?.glnumber,
+        name: prodCodeType.acctName
+      });
+    });
+    const ProductTypeClassArray: OptionsI[] = [];
+    data?.forEach((prodType: IProdType) => {
+      ProductTypeClassArray.push({
+        value: prodType?.PCode?.toString(),
+        name: prodType.PName
       });
     });
     const GlTypeArray: OptionsI[] = [];
@@ -271,7 +310,7 @@ export const useMapSelectOptions = ({
     const productClassArray: OptionsI[] = [];
     products?.forEach((product: IProducts) => {
       productClassArray.push({
-        value: product.prodclass.toString(),
+        value: product.prodclass?.toString(),
         name: product.moduledesc
       });
     });
@@ -748,6 +787,9 @@ export const useMapSelectOptions = ({
     setException(exceptionArray);
     setFrequency(frequencyArray);
     setBankProductCode(productCodeArray);
+    setProductTypeId(ProductTypeIdArray);
+    setProductClassTypeId(ProductTypeClassArray);
+    setWithBranchCode(GlWithBranchCodeArray);
   }, [
     bankgl,
     bankproducts,
@@ -798,7 +840,10 @@ export const useMapSelectOptions = ({
     interests,
     products,
     exception,
-    frequency
+    frequency,
+    data,
+    dataType,
+    dataWithCode
   ]);
 
   return {
@@ -855,6 +900,9 @@ export const useMapSelectOptions = ({
     mappedException,
     mappedFrequency,
     mappedGLNodeType,
-    mappedBankproductCode
+    mappedBankproductCode,
+    mappedProductTypeId,
+    mappedProductClassTypeId,
+    mappedWithBranchCode
   };
 };

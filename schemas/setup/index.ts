@@ -361,13 +361,12 @@ export const createDormancySchema = Yup.object({
 });
 
 export const createChequeBokSchema = Yup.object({
-  batchno: Yup.string().required('Batch Number is Required'),
   numberOfleaves: Yup.string()
     .matches(numericRegex, ' Invalid Number of leaves')
     .required('Number of leaves   is Required'),
-  lastnumber: Yup.string()
-    .matches(numericRegex, 'Invalid last Number')
-    .required('last Number is Required'),
+  currentCost: Yup.string()
+    .matches(numericRegex, 'Invalid current Cost')
+    .required('current Cost is Required'),
   glAccount1: Yup.string()
     .matches(numericRegex, 'Invalid GL Acount')
     .required('GL Acount  is Required'),

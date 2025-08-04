@@ -113,8 +113,14 @@ export const ChargeConcession = ({
       validationSchema={chargeConcession}
     >
       <Form>
-        <Grid container spacing={2}>
-          <Box sx={{ display: 'flex' }}>
+        <Grid>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap'
+            }}
+          >
             <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
               <PageTitle title="Charge Concession" styles={BatchTitle} />
               <Grid container>

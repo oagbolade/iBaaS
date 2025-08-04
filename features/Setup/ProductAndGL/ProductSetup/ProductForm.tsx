@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation';
+import { string } from 'yup';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
@@ -22,6 +23,7 @@ import {
 } from '@/components/Revamp/Modal/style';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { handleRedirect, useCurrentBreakpoint } from '@/utils';
+import { RadioButtons2 } from '@/components/Revamp/Radio/RadioButton2';
 
 type Props = {
   handleClose: Function;
@@ -30,17 +32,19 @@ type Props = {
 export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const router = useRouter();
-  const [addValues, setAddValues] = useState<Boolean>(false);
-  const handleChange = (event: any) => {
-    localStorage.setItem('addProduct', event);
-    setAddValues(event);
+  const [addValues, setAddValues] = useState<String>('');
+  const handleChange = (value: string) => {
+    localStorage.setItem('addProduct', value);
+    setAddValues(value);
   };
   const handleContinue = () => {
-    const path = addValues
-      ? '/setup/product-gl/add-product'
-      : '/setup/product-gl/add-casa-product';
-
-    router.push(path);
+    if (addValues === '1') {
+      router.push('/setup/product-gl/add-casa-product');
+    } else if (addValues === '3') {
+      router.push('/setup/product-gl/add-product');
+    } else if (addValues === '4') {
+      router.push('/setup/product-gl/add-treasury-product');
+    }
   };
   return (
     <Box sx={AccountPasswordContainer}>
@@ -63,11 +67,12 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
             flexDirection: 'column'
           }}
         >
-          <RadioButtons
+          <RadioButtons2
             className="permissionOptions"
             options={[
-              { label: 'Loan', value: '2' },
-              { label: 'CASA', value: '3' }
+              { label: 'Loan', value: '3' },
+              { label: 'CASA', value: '1' },
+              { label: 'Treasury', value: '4' }
             ]}
             title="Kindly select which product you want to add"
             name="addProduct"
@@ -75,7 +80,7 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
               display: 'flex'
             }}
             value={addValues.toString()}
-            handleCheck={(event: any) => handleChange(event)}
+            handleCheck={(value: string) => handleChange(value)}
           />
         </Box>
       </Box>

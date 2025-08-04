@@ -58,6 +58,7 @@ export function LoginForm() {
   const [loginCredentials, setLoginCredentials] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutate: check2fa } = useAuth2faCheck();
+  const SESSION_KEY = 'active_session_id';
 
   const handleFirstTimeLogin = (oldPasscode: string, useridLogin: string) => {
     setIsFirstTimeUser(true);
@@ -82,6 +83,8 @@ export function LoginForm() {
     try {
       login(companyCode, username, encryptedPassword || '', () => {
         handleFirstTimeLogin(password, username);
+        localStorage.setItem(SESSION_KEY, newSessionId);
+
         setSessionActive(username, newSessionId);
         setOldPassword(password);
       });
@@ -108,9 +111,10 @@ export function LoginForm() {
     setIsSubmitting(true);
 
     const encryptedPassword = encryptData(values.password);
-    const newSessionId = generateSessionId();
+    const newSessionId = '80hjsismdd832hj';
 
     const handleSuccessfulLogin = () => {
+      localStorage.setItem(SESSION_KEY, newSessionId);
       setOldPassword(values.password);
       setSessionActive(values.username, newSessionId);
       getBroadcastChannel()?.postMessage({
@@ -125,14 +129,17 @@ export function LoginForm() {
       toast('Login successful, redirecting please wait...', 'success');
     };
 
-    if (!is2FARequired) {
+    if (is2FARequired) {
       // Global config disables 2FA, login directly
+
       login(
         values.companyCode,
         values.username,
         encryptedPassword || '',
         loginCallback
       );
+      localStorage.setItem(SESSION_KEY, newSessionId);
+
       setIsSubmitting(false);
     } else {
       // Global config enables 2FA, check backend status
@@ -154,6 +161,8 @@ export function LoginForm() {
                 loginCallback
               );
             }
+            localStorage.setItem(SESSION_KEY, newSessionId);
+
             setIsSubmitting(false);
           },
           onError: () => {

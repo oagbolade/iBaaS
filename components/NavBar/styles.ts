@@ -13,16 +13,15 @@ export const navbarStyle = {
   borderBottom: `1px solid ${colors.neutral300}`,
   zIndex: 2
 };
+
 export const systemDetails = {
-  borderRadius: '5px',
-  border: `1px solid ${colors.neutral300} `,
-  background: `${colors.white}`,
-  boxShadow: '0px 0px 2px 0px rgba(0, 0, 0, 0.25)',
-  width: '307px',
-  padding: '20px 24px',
+  width: '100%',
+  padding: '10px',
   gap: '24px'
 };
+
 export const systemDateCont = {
+  fontFamily: 'Averta Regular',
   display: 'flex',
   padding: '8px 16px',
   flexDirection: 'column',
@@ -33,8 +32,9 @@ export const systemDateCont = {
   boxShadow: '0px 0px 2px 0px rgba(0, 0, 0, 0.25)',
   marginRight: '60px',
   width: '150px',
-  height: '32px'
+  height: '40px'
 };
+
 export const systemDateTitle = {
   color: '#353F50',
   fontFamily: 'Averta Regular',
@@ -43,6 +43,7 @@ export const systemDateTitle = {
   fontWeight: 600,
   lineHeight: '16px' /* 133.333% */
 };
+
 export const greetingStyle = {
   color: `${colors.neutral900}`,
   fontFamily: 'Averta Regular',
@@ -81,19 +82,22 @@ export const profileTitle = {
 
 export const navSettings = {
   display: 'flex',
-  width: '136px',
-  height: '48px',
+  width: '100%',
+  height: '30px',
   alignItems: 'center',
-  color: `${colors.neutral900}`
+  color: `${colors.neutral900}`,
+  padding: '16px',
+  borderRadius: '5px'
 };
 
 export const NavTypography = {
   color: `${colors.neutral900}`,
   fontFamily: 'Averta Regular',
-  fontSize: '16px',
+  fontSize: '12px',
   fontStyle: 'normal',
   fontWeight: 400,
-  lineHeight: '24px'
+  lineHeight: '10px',
+  whiteSpace: 'nowrap'
 };
 export const NavChangePasswordTypography = {
   color: `${colors.neutral900}`,

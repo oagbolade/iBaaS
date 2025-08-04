@@ -29,6 +29,13 @@ import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { encryptData } from '@/utils/encryptData';
 
+interface PermissionData {
+  pointing: number;
+  typeP: number | string;
+  swing: number;
+  populate: number;
+  post: number;
+}
 type Props = {
   isSubmitting: boolean;
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,6 +43,7 @@ type Props = {
   glType?: IGLType[] | Array<any>;
   status: IStatus[] | Array<any>;
   bankgl: IGLAccount[] | Array<any>;
+  premisionData: PermissionData;
 };
 
 interface IGLData {
@@ -51,7 +59,8 @@ export const CreateGLAccount = ({
   currencies,
   glType,
   status,
-  bankgl
+  bankgl,
+  premisionData
 }: Props) => {
   const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
@@ -126,18 +135,6 @@ export const CreateGLAccount = ({
   });
 
   const onSubmit = async (values: any) => {
-    const permissionsCheckbox = document.getElementsByClassName(
-      'permissionsCheckbox'
-    ) as HTMLCollectionOf<HTMLInputElement>;
-    const permissionsRadioButton = document.getElementById(
-      'createPostingLimitPermission'
-    ) as HTMLInputElement | null;
-    const permissionsRadio = document.getElementById(
-      'createPostingLimit'
-    ) as HTMLInputElement | null;
-    const swing = Number(permissionsCheckbox[0]?.value) || 0;
-    const post = Number(permissionsCheckbox[1]?.value) || 0;
-    const populate = Number(permissionsCheckbox[2]?.value) || 0;
     const glNumberElement = document.getElementsByName(
       'glNumber'
     )[0] as HTMLInputElement;
@@ -173,17 +170,23 @@ export const CreateGLAccount = ({
       return;
     }
 
+    const updatedPremisionData = { ...premisionData };
+    if (isEditing && premisionData.pointing === 0) {
+      updatedPremisionData.typeP = '';
+    }
+
     const data = {
       ...values,
-      gl_ClassCode: glData.glClassCode,
-      pointing: permissionsRadioButton?.value,
-      swing,
-      post,
-      populate,
+      gl_ClassCode: '11002',
       glNumber: getGlNumber,
-      prodType: glData.glTypeCode,
+      prodType: '1',
       currencyCode,
-      typeP: permissionsRadio?.value
+      pointing: updatedPremisionData.pointing,
+      swing: updatedPremisionData.swing,
+      post: updatedPremisionData.post,
+      populate: updatedPremisionData.populate,
+      typeP: updatedPremisionData.typeP,
+      oldGLno: '213213213213'
     };
     await mutate(data);
   };
@@ -228,7 +231,7 @@ export const CreateGLAccount = ({
           validationSchema={createGLAccountSchema}
         >
           <Form>
-            <Grid mb={2} item={isTablet} mobile={12}>
+            <Grid mt={2} item={isTablet} mobile={12}>
               <FormSelectInput
                 customStyle={{
                   width: setWidth(isMobile ? '300px' : '100%'),
@@ -247,7 +250,7 @@ export const CreateGLAccount = ({
                 value={currencyCodeValue()}
               />{' '}
             </Grid>
-            <Box mt={{ mobile: 2, tablet: 4 }}>
+            <Box mt={2}>
               {!isEditing && (
                 <>
                   <Grid mb={2} item={isTablet} mobile={12}>

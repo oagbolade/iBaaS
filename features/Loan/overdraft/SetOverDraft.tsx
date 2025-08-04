@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Stack, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
+import dayjs from 'dayjs';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import {
   FormTextInput,
@@ -13,15 +14,17 @@ import {
 import { AccountInformation } from '@/features/CustomerService/Customer/CASAAccount/PreviewAccountInfo';
 import { loanOverDraftSchema } from '@/schemas/loan/index';
 import { setOverdraftInitialValues } from '@/schemas/schema-values/loan/';
-import { useCurrentBreakpoint } from '@/utils';
+import {
+  useCurrentBreakpoint,
+  frequencyOptions,
+  fetchFrequencyOptions
+} from '@/utils';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import colors from '@/assets/colors';
 import { useSetOverdraft } from '@/api/loans/useCreditFacility';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { getStoredUser } from '@/utils/user-storage';
-import dayjs from 'dayjs';
-import { frequencyOptions, fetchFrequencyOptions } from '@/utils';
 
 type Props = {
   isSubmitting: boolean;
@@ -113,186 +116,176 @@ export const SetOverDraft = ({
   };
 
   return (
-    <Box>
-      <Box>
-        <Stack direction={setDirection()}>
+    <Stack direction={setDirection()}>
+      <Box
+        sx={{
+          width: { mobile: '100%', desktop: '624px' },
+          padding: '32px'
+        }}
+      >
+        <LargeTitle title={getTitle(actionType)} />
+
+        <Formik
+          initialValues={
+            actionType === 'update'
+              ? {
+                  ...setOverdraftInitialValues,
+                  ...odAccDetails,
+                  branch,
+                  term,
+                  facilityType: facilityType === 'OD' ? '1' : '2',
+                  frequency: fetchFrequencyOptions(frequency)
+                }
+              : setOverdraftInitialValues
+          }
+          validationSchema={loanOverDraftSchema}
+          onSubmit={(values) => onSubmit(values)}
+        >
+          <Form>
+            <Box mt={4}>
+              <Grid>
+                <Grid mb={2} item={isTablet} mobile={12}>
+                  <FormSelectField
+                    name="branch"
+                    options={mappedBranches}
+                    label="Branch"
+                    customStyle={{
+                      width: setWidth(isMobile ? '300px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid mb={2} item={isTablet} mobile={12}>
+                  <FormSelectField
+                    name="facilityType"
+                    options={[
+                      {
+                        name: 'OD',
+                        value: '1'
+                      },
+                      {
+                        name: 'TOD',
+                        value: '2'
+                      }
+                    ]}
+                    label="Facility Type"
+                    customStyle={{
+                      width: setWidth(isMobile ? '300px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                >
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(isMobile ? '300px' : '100%')
+                    }}
+                    name="interestRate"
+                    placeholder="0"
+                    label="Facilty Rate (% per month)"
+                    required
+                  />{' '}
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormAmountInput
+                    customStyle={{
+                      width: setWidth(isMobile ? '300px' : '100%')
+                    }}
+                    name="amount"
+                    placeholder="0.0"
+                    label="Facility Amount"
+                    required
+                  />{' '}
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(isMobile ? '300px' : '100%')
+                    }}
+                    name="penaltyRate"
+                    placeholder="0"
+                    label="Penal Rate"
+                    required
+                  />{' '}
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(isMobile ? '300px' : '100%')
+                    }}
+                    name="term"
+                    placeholder=""
+                    label="Facility Terms"
+                    required
+                  />{' '}
+                </Grid>
+                <FormSelectField
+                  customStyle={{
+                    width: setWidth(isMobile ? '350px' : '100%'),
+                    fontSize: '14px'
+                  }}
+                  options={frequencyOptions}
+                  name="frequency"
+                  label="Frequency"
+                />{' '}
+                <Grid item={isTablet} mobile={12}>
+                  <FormikDateTimePicker
+                    label="Posting Date"
+                    name="effectiveDate"
+                    value={dayjs(odAccDetails.reportDate)}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormikDateTimePicker
+                    label="Start Date"
+                    name="effectiveDate"
+                    value={dayjs(odAccDetails.effectiveDate)}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormikDateTimePicker
+                    label="Expiry Date"
+                    name="expiryDate"
+                    value={dayjs(odAccDetails.expiryDate)}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+            <button id="submitButton" type="submit" style={{ display: 'none' }}>
+              submit alias
+            </button>
+          </Form>
+        </Formik>
+      </Box>
+      {isTablet && (
+        <Box
+          sx={{
+            width: '477px',
+            padding: '32px',
+            gap: '24px',
+            borderLeft: `1px solid ${colors.neutral300}`,
+            background: `${colors.neutral100}`,
+            display: {
+              tablet: 'block',
+              mobile: 'none'
+            }
+          }}
+        >
+          <LargeTitle title="Preview" />
+          <Box mt={3} />
           <Box
+            mt={{ mobile: 3 }}
             sx={{
-              width: { mobile: '100%', desktop: '624px' },
-              padding: '32px'
+              padding: { mobile: 6, tablet: 0 },
+              alignItems: { mobile: 'center' }
             }}
           >
-            <Box>
-              <LargeTitle title={getTitle(actionType)} />
-            </Box>
-
-            <Formik
-              initialValues={
-                actionType === 'update'
-                  ? {
-                      ...setOverdraftInitialValues,
-                      ...odAccDetails,
-                      branch,
-                      term,
-                      facilityType: facilityType === 'OD' ? '1' : '2',
-                      frequency: fetchFrequencyOptions(frequency)
-                    }
-                  : setOverdraftInitialValues
-              }
-              validationSchema={loanOverDraftSchema}
-              onSubmit={(values) => onSubmit(values)}
-            >
-              <Form>
-                <Box mt={4}>
-                  <Grid>
-                    <Grid mb={2} item={isTablet} mobile={12}>
-                      <FormSelectField
-                        name="branch"
-                        options={mappedBranches}
-                        label="Branch"
-                        customStyle={{
-                          width: setWidth(isMobile ? '300px' : '100%')
-                        }}
-                      />
-                    </Grid>
-                    <Grid mb={2} item={isTablet} mobile={12}>
-                      <FormSelectField
-                        name="facilityType"
-                        options={[
-                          {
-                            name: 'OD',
-                            value: '1'
-                          },
-                          {
-                            name: 'TOD',
-                            value: '2'
-                          }
-                        ]}
-                        label="Facility Type"
-                        customStyle={{
-                          width: setWidth(isMobile ? '300px' : '100%')
-                        }}
-                      />
-                    </Grid>
-                    <Grid
-                      item={isTablet}
-                      mobile={12}
-                      mr={{ mobile: 35, tablet: 0 }}
-                    >
-                      <FormTextInput
-                        customStyle={{
-                          width: setWidth(isMobile ? '300px' : '100%')
-                        }}
-                        name="interestRate"
-                        placeholder="0"
-                        label="Facilty Rate (% per month)"
-                        required
-                      />{' '}
-                    </Grid>
-                    <Grid item={isTablet} mobile={12}>
-                      <FormAmountInput
-                        customStyle={{
-                          width: setWidth(isMobile ? '300px' : '100%')
-                        }}
-                        name="amount"
-                        placeholder="0.0"
-                        label="Facility Amount"
-                        required
-                      />{' '}
-                    </Grid>
-                    <Grid item={isTablet} mobile={12}>
-                      <FormTextInput
-                        customStyle={{
-                          width: setWidth(isMobile ? '300px' : '100%')
-                        }}
-                        name="penaltyRate"
-                        placeholder="0"
-                        label="Penal Rate"
-                        required
-                      />{' '}
-                    </Grid>
-                    <Grid item={isTablet} mobile={12}>
-                      <FormTextInput
-                        customStyle={{
-                          width: setWidth(isMobile ? '300px' : '100%')
-                        }}
-                        name="term"
-                        placeholder=""
-                        label="Facility Terms"
-                        required
-                      />{' '}
-                    </Grid>
-                    <FormSelectField
-                      customStyle={{
-                        width: setWidth(isMobile ? '350px' : '100%'),
-                        fontSize: '14px'
-                      }}
-                      options={frequencyOptions}
-                      name="frequency"
-                      label="Frequency"
-                    />{' '}
-                    <Grid item={isTablet} mobile={12}>
-                      <FormikDateTimePicker
-                        label="Posting Date"
-                        name="effectiveDate"
-                        value={dayjs(odAccDetails.reportDate)}
-                      />
-                    </Grid>
-                    <Grid item={isTablet} mobile={12}>
-                      <FormikDateTimePicker
-                        label="Start Date"
-                        name="effectiveDate"
-                        value={dayjs(odAccDetails.effectiveDate)}
-                      />
-                    </Grid>
-                    <Grid item={isTablet} mobile={12}>
-                      <FormikDateTimePicker
-                        label="Expiry Date"
-                        name="expiryDate"
-                        value={dayjs(odAccDetails.expiryDate)}
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
-                <button
-                  id="submitButton"
-                  type="submit"
-                  style={{ display: 'none' }}
-                >
-                  submit alias
-                </button>
-              </Form>
-            </Formik>
+            <PreviewContent accDetailsResults={accDetailsResults} />
           </Box>
-          {isTablet && (
-            <Box
-              sx={{
-                width: '477px',
-                padding: '32px',
-                gap: '24px',
-                borderLeft: `1px solid ${colors.neutral300}`,
-                background: `${colors.neutral100}`,
-                display: {
-                  tablet: 'block',
-                  mobile: 'none'
-                }
-              }}
-            >
-              <LargeTitle title="Preview" />
-              <Box mt={3} />
-              <Box
-                mt={{ mobile: 3 }}
-                sx={{
-                  padding: { mobile: 6, tablet: 0 },
-                  alignItems: { mobile: 'center' }
-                }}
-              >
-                <PreviewContent accDetailsResults={accDetailsResults} />
-              </Box>
-            </Box>
-          )}
-        </Stack>
-      </Box>
-    </Box>
+        </Box>
+      )}
+    </Stack>
   );
 };

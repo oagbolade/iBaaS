@@ -1,5 +1,7 @@
 export const formatCurrency = (amount: any) => {
-  if (!amount) {
+  const num = parseFloat(amount);
+
+  if (Number.isNaN(num) || num === 0) {
     return '0.00';
   }
 

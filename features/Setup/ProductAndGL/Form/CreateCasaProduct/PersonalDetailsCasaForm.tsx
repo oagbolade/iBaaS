@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -14,6 +15,9 @@ import {
   IEducation,
   IFrequency,
   IOccupation,
+  IProdCodeType,
+  IProdType,
+  IProductClass,
   IProducts,
   ISector
 } from '@/api/ResponseTypes/setup';
@@ -43,7 +47,10 @@ type Props = {
   productTypes?: IProductType[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   frequency?: IFrequency[];
-  products?: IProducts[];
+  products?: IProducts[] | IProductClass[] | Array<any>;
+  setProductCode: React.Dispatch<React.SetStateAction<string>>;
+  data?: IProdType[] | IProdCodeType[] | Array<any>;
+  dataType?: IProdCodeType[] | IProdType[] | Array<any>;
 };
 
 export const PersonalCasaDetailsForm = ({
@@ -57,7 +64,10 @@ export const PersonalCasaDetailsForm = ({
   productTypes,
   currencies,
   frequency,
-  products
+  products,
+  setProductCode,
+  data,
+  dataType
 }: Props) => {
   const { customerType, setCustomerType } = React.useContext(
     CustomerCreationContext
@@ -69,26 +79,35 @@ export const PersonalCasaDetailsForm = ({
 
   const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
   const handleGenerateCode = async (code: string) => {
+    setProductCode(values.productclass);
     generateProductCode(encryptData(code) as string).then((resp) => {
       setProductCodeGenarate(resp.productCode);
       setFieldValue('productCode', resp.productCode);
     });
   };
-
+  if (setProductCode) {
+    setProductCode(values.productclass);
+  }
   const handleCheck = (booleanValue: string, value: string) => {
     setCustomerType(value);
   };
-
+  const datatype: IProdCodeType[] | undefined = dataType;
+  const dataName: IProdType[] | undefined = data;
   const {
     mappedProductType,
     mappedCurrency,
     mappedFrequency,
-    mappedProductClass
+    mappedProductClass,
+    mappedBankproductCode,
+    mappedProductTypeId,
+    mappedProductClassTypeId
   } = useMapSelectOptions({
     productTypes,
     currencies,
     frequency,
-    products
+    products,
+    data: dataName,
+    dataType: datatype
   });
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
@@ -112,7 +131,7 @@ export const PersonalCasaDetailsForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="productclass"
-          options={mappedProductClass}
+          options={mappedProductClassTypeId}
           label="Product Class"
           onChange={(e) => handleGenerateCode(e.target.value)}
           customStyle={{
@@ -194,7 +213,7 @@ export const PersonalCasaDetailsForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="appType"
-          options={mappedProductType}
+          options={mappedProductTypeId}
           label="Product Type"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')

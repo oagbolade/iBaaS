@@ -11,6 +11,7 @@ import { CustomCardsReports } from '@/components/CustomCardsReports/CustomCardsR
 import { TextInput } from '@/components/FormikFields';
 import { reportsData } from '@/constants/Reports/CustomReport';
 import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
+import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 
 export const CustomReports = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,6 +50,7 @@ export const CustomReports = () => {
             filteredReports.map((report, index) => (
               <Box key={index} mb={{ mobile: 2, desktop: 0 }}>
                 <CustomCardsReports
+                  disable={!checkMultipleUserRoleAccess('Custom Report', report?.menu_name)}
                   title={report.title}
                   link={report.link}
                   description={report.description}

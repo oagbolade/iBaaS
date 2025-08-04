@@ -91,6 +91,7 @@ export const AccessRules: { [key: string]: string[] } = {
     'CHEQUE WITHDRAWAL',
     'CLEARING'
   ],
+  'End of Day': ['End of Day'],
   'Vault Management': ['VAULT MANAGEMENT'],
   // Loans
   'Loan Directory': [
@@ -112,7 +113,7 @@ export const AccessRules: { [key: string]: string[] } = {
     'GUARANTOR S MANDATE',
     'LOAN OFFER LETTER'
   ],
-  Overdrafts:['OVERDRAFT'],
+  Overdrafts: ['OVERDRAFT'],
   // Reports
   Overview: ['allow', 'allow'],
   'Custom Report': [
@@ -155,7 +156,8 @@ export const AccessRules: { [key: string]: string[] } = {
     'ICAD REPORT',
     'SCV REPORT',
     'Takings Report',
-    'Placements Reports'
+    'Placements Reports',
+    'OVERDRAFT REPORT'
   ],
   'Audit Trail': ['AUDIT TRAIL REPORT']
 };

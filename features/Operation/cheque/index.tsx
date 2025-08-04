@@ -12,9 +12,14 @@ import { TextInput } from '@/components/FormikFields';
 export const ChequeContainer = () => {
   return (
     <Box sx={{ margin: '90px 0', padding: '0 25px 45px 0' }}>
-      <Box sx={{ marginTop: '10px', marginBottom: '30px', marginLeft: '20px' }}>
-        <TextInput name="Search" placeholder="Search" icon={<SearchIcon />} />
-      </Box>
+      {/* <Box sx={{ marginTop: '10px', marginBottom: '30px', marginLeft: '20px' }}>
+        <TextInput
+          name="Search"
+          placeholder="Search"
+          icon={<SearchIcon />}
+          customStyle={{ width: '90%' }}
+        />
+      </Box> */}
       <Box sx={customReportContainer}>
         <Box sx={cardsDetailsContainer}>
           <Box mb={{ mobile: 2, desktop: 0 }}>

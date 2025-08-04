@@ -277,10 +277,9 @@ export async function getAccountDetails(
     responseDescription: '',
     accDetailsResults: {} as IAccountDetailsResults
   };
-  const userId = getStoredUser()?.profiles?.userid;
-  const authId = getStoredUser()?.companyCode;
+
   try {
-    const urlEndpoint = `/AccountServices/GetAccountDetails?Accountno=${sanitize(Accountno)}&userid=${sanitize(userId ?? '')}&authid=${sanitize(authId ?? '')}`;
+    const urlEndpoint = `/AccountServices/GetAccountDetails?Accountno=${sanitize(Accountno)}`;
 
     const { data }: AxiosResponse<GetAccountDetailsResponse> =
       await axiosInstance({
@@ -605,7 +604,8 @@ export function useSearchCustomer(customerName: string) {
     isLoading
   } = useQuery({
     queryKey: [queryKeys.searchCustomer, customerName],
-    queryFn: () => searchCustomer(toastActions, decryptData(customerName) as string),
+    queryFn: () =>
+      searchCustomer(toastActions, decryptData(customerName) as string),
     enabled: Boolean(customerName.length > 0)
   });
 
@@ -652,7 +652,7 @@ async function createIndividualCustomer(
   try {
     const urlEndpoint = `/CustomerServices/${
       isUpdating
-        ? `UpdateIndividualCustomer?customerId=${sanitize((customerId) ?? '')}`
+        ? `UpdateIndividualCustomer?customerId=${sanitize(customerId ?? '')}`
         : 'CreateIndividualCustomer'
     }`;
     const { data }: AxiosResponse<CreateCustomerAccountResponse> =
@@ -839,9 +839,13 @@ async function closeCustomerAccount(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
+    if (data.responseCode !== '00') {
+      throw new Error(message);
+    }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+    throw errorResponse;
   }
 }
 
@@ -964,7 +968,12 @@ export function useCreateIndividualCustomer(
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CreateIndividualCustomerFormValues) =>
-      createIndividualCustomer(toastActions, body, isUpdating, decryptData(customerId as string)),
+      createIndividualCustomer(
+        toastActions,
+        body,
+        isUpdating,
+        decryptData(customerId as string)
+      ),
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.searchCustomer],
@@ -996,7 +1005,12 @@ export function useCreateCorporateCustomer(
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CreateCorporateCustomerFormValues) =>
-      createCorporateCustomer(toastActions, body, isUpdating, decryptData(customerId as string)),
+      createCorporateCustomer(
+        toastActions,
+        body,
+        isUpdating,
+        decryptData(customerId as string)
+      ),
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.searchCustomer],
@@ -1113,7 +1127,7 @@ export function useMoveCASA() {
   return { mutate, isPending, isError, error };
 }
 
-export function useCloseCustomerAccount() {
+export function useCloseCustomerAccount(urlState: string) {
   const queryClient = useQueryClient();
   const toastActions = useContext(ToastMessageContext);
   const router = useRouter();
@@ -1126,16 +1140,21 @@ export function useCloseCustomerAccount() {
         queryKey: [queryKeys.getCustomerById]
       });
 
-      handleRedirect(router, '/customer-service/customer/');
+      if (urlState === 'financeMgt') {
+        handleRedirect(router, '/finance/account/');
+      } else {
+        handleRedirect(router, '/customer-service/customer/');
+      }
     }
   });
 
   return { mutate, isPending, isError, error };
 }
 
-export function useReactivateCustomerAccount() {
+export function useReactivateCustomerAccount(urlState: string) {
   const queryClient = useQueryClient();
   const toastActions = useContext(ToastMessageContext);
+  const router = useRouter();
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: ReactivateCustomerAccountFormValues) =>
@@ -1144,6 +1163,12 @@ export function useReactivateCustomerAccount() {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.getCustomerById]
       });
+
+      if (urlState === 'financeMgt') {
+        handleRedirect(router, '/finance/account/');
+      } else {
+        handleRedirect(router, '/customer-service/customer/');
+      }
     }
   });
 
@@ -1211,7 +1236,10 @@ export function useGetProductDetailsByPcode(
   return { ...data, isError, isLoading };
 }
 
-export function useGetAccountDetails(Accountno: string) {
+export function useGetAccountDetails(
+  Accountno: string,
+  p0?: { enabled: boolean }
+) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = [] as GetAccountDetailsResponse;
 

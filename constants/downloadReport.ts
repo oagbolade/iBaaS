@@ -29,7 +29,12 @@ export type ReportType =
   | 'StatementOfAccount'
   | 'ProductSummary'
   | 'ProductSummaryDetails'
-  | 'GLAccountClassReport';
+  | 'GLAccountClassReport'
+  | 'GroupMembership'
+  | 'StandingInstructionReport'
+  | 'ProfitAndLoss'
+  | 'AuditTrail'
+  | 'OverdraftReport';
 
 interface IFileNameMapper {
   AccountEnquiry: string;
@@ -37,6 +42,7 @@ interface IFileNameMapper {
 }
 
 export const FileNameMapper: IFileNameMapper = {
+  ProfitAndLoss: 'ProfitAndLossReport',
   AccountEnquiry: 'AccountEnquiryReport',
   StatementOfAccountCASA: 'StatementOfAccountCASA',
   StatementOfAccountTD: 'StatementOfAccountTD',
@@ -62,5 +68,10 @@ export const FileNameMapper: IFileNameMapper = {
   ProductSummaryDetails: 'ProductSummaryDetails',
   GLMainGroupReport: 'GLMainGroupReport',
   GLSubMainGroupReport: 'GLSubMainGroupReport',
-  GLAccountClassReport: 'GLAccountClassReport'
+  GLAccountClassReport: 'GLAccountClassReport',
+  ChartOfAccount: 'ChartOfAccount',
+  GroupMembership: 'GroupMembership',
+  StandingInstructionReport: 'StandingInstructionReport',
+  AuditTrail: 'AuditTrailReport',
+  OverdraftReport: 'OverdraftReport'
 };

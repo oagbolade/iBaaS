@@ -6,13 +6,25 @@ import { TableSingleAction } from '@/components/Revamp/TableV2';
 
 type Props = {
   glNumber: string;
+  pointing?: number;
+  populate?: number;
+  swing?: number;
+  typeP?: string;
+  post?: number;
 };
 
-export const TableActionMenu = ({ glNumber }: Props) => {
+export const TableActionMenu = ({
+  glNumber,
+  pointing,
+  populate,
+  swing,
+  typeP,
+  post
+}: Props) => {
   return (
     <Box>
       <Link
-        href={`/admin/gl-account/create/?glNumber=${sanitize(glNumber)}&isEditing=true`}
+        href={`/admin/gl-account/create/?glNumber=${sanitize(glNumber)}&isEditing=true&pointing=${pointing}&post=${post}&populate=${populate}&swing=${swing}&typeP=${typeP}&post=${post}`}
       >
         <TableSingleAction actionName="Edit" />
       </Link>

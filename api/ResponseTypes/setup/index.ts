@@ -211,6 +211,7 @@ export interface SearchDormancyResponse extends IFetchingState {
   duration: string;
   penalty: string;
   productName: string;
+  productCode: string;
 }
 export interface SearchChequeBookResponse extends IFetchingState {
   status: string;
@@ -991,13 +992,72 @@ export interface IProdDocs {
   docid?: string;
   docName?: string;
 }
-
+export interface IProdType {
+  PCode: string;
+  PName: string;
+}
+export interface IGLWithBranchCode {
+  currencyCode: string;
+  closed: string;
+  status: number;
+  branchCode: string;
+  glnumber: string;
+  acctName: string;
+  dateOpened: string;
+  gl_ClassCode: string;
+  dt_Lst_Month: string;
+  last_Month_Balance: string;
+  last_Night_Balance: number;
+  bkbalance: number;
+  tpostDebit: string;
+  tpostCredit: string;
+  blocked: string;
+  bbf: string;
+  prodType: string;
+  pointing: string;
+  controlflag: string;
+  controlGlag: string;
+  reconLen: string;
+  post: string;
+  typeP: string;
+  populate: string;
+  oldGLno: string;
+  last_night_balance2: number;
+  swing: string;
+  last_month_balance2: string;
+  last_month_balance1: string;
+  last_eom2: string;
+  last_eom1: string;
+  currmondiff: string;
+  lastmondiff: string;
+  userid: string;
+  createdate: string;
+  authid: number;
+}
+export interface IProdCodeType {
+  PCode: string;
+  PName: string;
+}
 export interface UseGetAllProductDocsResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
   prodDocs?: IProdDocs[];
 }
-
+export interface UseGetProductTypeResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IProdCodeType[];
+}
+export interface UseGetProductClassByCategoryResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IProdType[];
+}
+export interface UseGetGLWithBranchCodeResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IGLWithBranchCode[];
+}
 export interface UseGetAllLoanAccountResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;

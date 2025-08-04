@@ -292,6 +292,8 @@ export interface CreateIndividualCustomerFormValues {
   customerSign: string;
   signImage_Type: string;
   [key: string]: string | number | Dayjs;
+  introType: number;
+  userid: string;
 }
 
 export interface CloseCustomerAccountFormValues {
@@ -370,7 +372,7 @@ export const createCorporateCustomerInitialValues: CreateCorporateCustomerFormVa
     compObjective: '',
     userid: '',
     authid: '',
-    acctOfficer: ''
+    acctOfficer: `${getStoredUser()?.profiles?.userid}`
   };
 
 export const createCustomerInitialValues: CreateIndividualCustomerFormValues = {
@@ -383,7 +385,7 @@ export const createCustomerInitialValues: CreateIndividualCustomerFormValues = {
   residentCountry: '',
   bizState: '',
   bizAddress: '',
-  dob: dayjs(),
+  dob: '',
   sex: '',
   nationality: '',
   eduLevel: '',
@@ -413,7 +415,7 @@ export const createCustomerInitialValues: CreateIndividualCustomerFormValues = {
   introid: '',
   refname: '',
   refphone: '',
-  acctOfficer: '',
+  acctOfficer: `${getStoredUser()?.profiles?.userid}`,
   signacct: '',
   smsalert: 0,
   emailalert: 0,
@@ -446,7 +448,9 @@ export const createCustomerInitialValues: CreateIndividualCustomerFormValues = {
   customerPict: '',
   pictImage_Type: '',
   customerSign: '',
-  signImage_Type: ''
+  signImage_Type: '',
+  introType: 1,
+  userid: `${getStoredUser()?.profiles?.userid}`
 };
 
 export const addGroupMemberInitialValues: AddGroupMemberFormValues = {

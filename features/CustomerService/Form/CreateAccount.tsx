@@ -53,6 +53,7 @@ import {
   IBankProducts,
   IDocuments
 } from '@/api/ResponseTypes/customer-service';
+import { useGetAllProductByCode } from '@/api/setup/useProduct';
 import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
@@ -62,7 +63,6 @@ import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { FormSkeleton } from '@/components/Loaders';
 import { encryptData } from '@/utils/encryptData';
 import { getStoredUser } from '@/utils/user-storage';
-import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 
 export const StyledSearchableDropdown = styled.div`
   .MuiButtonBase-root {
@@ -181,6 +181,21 @@ export const CreateAccount = ({
       isEditing ? productCodeForEditing : productcode
     );
 
+  const { productInfos: prodData } = useGetAllProductByCode(
+    encryptData(productcode)
+  );
+
+  const SetInterestRatesEffect = () => {
+    const { setFieldValue } = useFormikContext();
+    React.useEffect(() => {
+      if (prodData) {
+        setFieldValue('cintrate', Number(prodData?.crRate ?? ''));
+        setFieldValue('dintrate', Number(prodData?.drRate ?? ''));
+      }
+    }, [setFieldValue]);
+    return null;
+  };
+
   const { documents: submitted, isLoading: isSubmittedLoading } =
     useGetDocuments(
       typeOne,
@@ -290,7 +305,7 @@ export const CreateAccount = ({
       branchcode: accDetailsResults?.branch || '',
       customerid: constructCustomerIDForExtraction || ''
     });
-  }, [accDetailsResults]);
+  }, [accDetailsResults, isEditing]);
 
   const handleSelectedValue = (value: string, name: string) => {
     setSelectedValue((prev) => ({
@@ -342,6 +357,8 @@ export const CreateAccount = ({
 
     await mutate({
       ...values,
+      cintrate: values.cintrate,
+      dintrate: values.dintrate,
       branchcode: extractIdFromDropdown(selectedValue?.branchcode as string),
       customerid: extractIdFromDropdown(selectedValue?.customerid as string),
       channel: channelSelect?.value,
@@ -359,7 +376,7 @@ export const CreateAccount = ({
       ...prev,
       customerid: mappedSearchResults
     }));
-  }, [isSearchLoading]);
+  }, [isSearchLoading, accountDetailsResults]);
 
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -424,9 +441,9 @@ export const CreateAccount = ({
     >
       <Form>
         <TrackProductCodeAndCustomerIdFields setProductCode={setProductCode} />
-        <Box sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        <SetInterestRatesEffect />
+        <TopActionsArea actionButtons={actionButtons} />
+
         <Stack
           sx={{ minHeight: '150vh' }}
           direction="row"
@@ -434,14 +451,14 @@ export const CreateAccount = ({
           spacing={3}
         >
           <Box
-            sx={{ ...BatchContainer, width: '700px' }}
+            sx={{ ...BatchContainer, width: '500px' }}
             ml={{ desktop: 1, mobile: 5 }}
           >
             <PageTitle
               title={`${isEditing ? 'Edit Account' : 'Create Account'}`}
               styles={BatchTitle}
             />
-            <Grid container>
+            <Grid>
               <Grid item={isTablet} mobile={12}>
                 <StyledSearchableDropdown>
                   <ActionButtonWithPopper
@@ -452,7 +469,7 @@ export const CreateAccount = ({
                     name="branchcode"
                     searchGroupVariant="BasicSearchGroup"
                     dropDownOptions={filteredValues.branchcode as OptionsI[]}
-                    customStyle={{ ...dropDownWithSearch, width: '635px' }}
+                    customStyle={{ ...dropDownWithSearch, width: '450px' }}
                     icon={<SearchIcon />}
                     iconPosition="end"
                     buttonTitle={
@@ -475,7 +492,7 @@ export const CreateAccount = ({
                     name="customerid"
                     searchGroupVariant="BasicSearchGroup"
                     dropDownOptions={filteredValues.customerid as OptionsI[]}
-                    customStyle={{ ...dropDownWithSearch, width: '635px' }}
+                    customStyle={{ ...dropDownWithSearch, width: '450px' }}
                     icon={<SearchIcon />}
                     iconPosition="end"
                     buttonTitle={
@@ -496,6 +513,7 @@ export const CreateAccount = ({
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  onChange={(e) => setProductCode(e.target.value)}
                 />
               </Grid>
 
@@ -518,10 +536,10 @@ export const CreateAccount = ({
                   name="dintrate"
                   placeholder="Debit Interest"
                   label="Debit Interest (Per Annum)"
+                  type="number"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
-                  value={String(productInfos?.drrate || '0')}
                 />
               </Grid>
 
@@ -529,11 +547,11 @@ export const CreateAccount = ({
                 <FormTextInput
                   name="cintrate"
                   placeholder="Credit interest"
+                  type="number"
                   label="Credit Interest (Per Annum)"
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
-                  value={String(productInfos?.crrate || '0')}
                 />
               </Grid>
 

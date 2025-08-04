@@ -304,7 +304,8 @@ export const AccountPasswordContainer = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  gap: '36px'
+  gap: '36px',
+  padding: '2px'
 };
 export const AccountPasswordTitleContainer = {
   display: 'flex',

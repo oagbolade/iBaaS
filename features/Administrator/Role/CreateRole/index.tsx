@@ -84,7 +84,7 @@ export const CreateRole = () => {
           <Box
             mr={3}
             sx={{
-              width: { mobile: '100%', desktop: '50%' },
+              width: { mobile: '100%', desktop: '70%' },
               padding: { mobile: 0, tablet: '30px 0' }
             }}
           >

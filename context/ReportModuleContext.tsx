@@ -12,22 +12,42 @@ import {
 } from '@/api/ResponseTypes/reports';
 
 export type AccountEnquiryDataType = {
-  accountnumber: string;
   accounttitle: string;
-  customerid: number;
-  accountOfficer: string;
-  bkBalance: number;
-  branchName: string;
+  dateOpened: string;
+  productName: string;
+  accountnumber: string;
+  phoneNo: string;
+  lienAmount: number;
+  unclearedBal: number;
+  officerName: string;
+  odLimit: number;
+  customerid: string;
+  nuban: string;
+  customerAddress: string;
+  useableBalance: number;
+  bookBalance: number;
+  customerName: string;
+  accountStatus: string;
 };
 
 const initialReportModuleContext = {
   accountEnquiryData: {
-    accountnumber: '',
     accounttitle: '',
-    customerid: 0,
-    accountOfficer: '',
-    bkBalance: 0,
-    branchName: ''
+    dateOpened: '',
+    productName: '',
+    accountnumber: '',
+    phoneNo: '',
+    lienAmount: 0.0,
+    unclearedBal: 0.0,
+    officerName: '',
+    odLimit: 0,
+    customerid: '',
+    nuban: '',
+    customerAddress: '',
+    useableBalance: 0,
+    bookBalance: 0,
+    customerName: '',
+    accountStatus: ''
   },
 
   loanOverdueStateData: {
@@ -105,12 +125,22 @@ export default function ReportModuleContextProvider({ children }: any) {
 
   const [accountEnquiryData, setAccountEnquiryData] =
     useState<AccountEnquiryDataType>({
-      accountnumber: '',
       accounttitle: '',
-      customerid: 0,
-      accountOfficer: '',
-      bkBalance: 0,
-      branchName: ''
+      dateOpened: '',
+      productName: '',
+      accountnumber: '',
+      phoneNo: '',
+      lienAmount: 0.0,
+      unclearedBal: 0.0,
+      officerName: '',
+      odLimit: 0,
+      customerid: '',
+      nuban: '',
+      customerAddress: '',
+      useableBalance: 0,
+      bookBalance: 0,
+      customerName: '',
+      accountStatus: ''
     });
 
   const [loanOverdueStateData, setLoanOverduestatedata] =

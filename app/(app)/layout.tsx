@@ -5,7 +5,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { ThemeProvider } from '@mui/material/styles';
 import { Stack } from '@mui/material';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Head from 'next/head';
 import { theme } from '../MuiTheme';
 import { RenderChildren } from '../RenderChildren';
 import { ContextProviders } from '../Providers';
@@ -28,8 +28,14 @@ export default function RootLayout({
     <QueryClientProvider client={queryClient}>
       <ContextProviders>
         <ThemeProvider theme={theme}>
+          <Head>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            />
+          </Head>
           <NextTopLoader />{' '}
-          <Stack direction="row">
+          <Stack  direction="row">
             <NavBarSideBarWrapper />
             <RenderChildren>{children}</RenderChildren>
             <MuiSnackbar />

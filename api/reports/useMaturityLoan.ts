@@ -18,11 +18,11 @@ export async function getMaturityLoan(
 ) {
   let result: ILoanMaturityResponse = {} as ILoanMaturityResponse;
   try {
-    const queryParams = {
+    const queryParams: Record<string, string> = {
       branchcode: params?.branchID || '',
       productcode: params?.prodCode || '',
-      pageNumber: params?.pageNumber || '1',
-      pageSize: params?.pageSize || '10',
+      pageNumber: params?.pageNumber ? String(params.pageNumber) : '1',
+      pageSize: params?.pageSize ? String(params.pageSize) : '10',
       getAll: String(params?.getAll || 'false'),
       startdate: params?.startDate || '',
       enddate: params?.endDate || '',
@@ -49,6 +49,7 @@ export async function getMaturityLoan(
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
   }
+  
   if (
     result?.loanMaturityList === null ||
     result?.loanMaturityList === undefined

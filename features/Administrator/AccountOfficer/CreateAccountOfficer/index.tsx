@@ -57,7 +57,7 @@ export const CreateAccountOfficer = () => {
           <Box
             mr={3}
             sx={{
-              width: '100%',
+              width: '60%',
               padding: { mobile: 0, tablet: '30px 0' }
             }}
           >

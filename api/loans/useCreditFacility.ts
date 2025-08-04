@@ -998,7 +998,9 @@ export function useGetOverdraftDetails(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getOverdraftDetail],
-    queryFn: () => getOverdraftDetails(toastActions, decryptData(accountnumber) as string)
+    queryFn: () =>
+      getOverdraftDetails(toastActions, decryptData(accountnumber) as string),
+    staleTime: 0 
   });
 
   return { ...data, isError, isLoading };

@@ -41,6 +41,7 @@ export interface ILoanAccountDetails {
   calculationName: string;
   productName: string;
   collvalue: string;
+  loanPurpose: string
 }
 
 export interface IFetchAllUserRequest {

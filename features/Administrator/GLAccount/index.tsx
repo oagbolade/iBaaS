@@ -49,14 +49,34 @@ export const GLAccount = () => {
     setSearch(true);
   };
 
+  const { branches } = useGetBranches();
+
   const ActionMenuProps = ({
-    glNumber
+    glNumber,
+    pointing,
+    post,
+    populate,
+    swing,
+    typeP
   }: {
     glNumber: string;
+    pointing?: number;
+    post?: number;
+    populate?: number;
+    swing?: number;
+    typeP?: string;
   }): React.ReactElement => {
-    return <TableActionMenu glNumber={glNumber} />;
+    return (
+      <TableActionMenu
+        glNumber={glNumber}
+        pointing={pointing}
+        post={post}
+        populate={populate}
+        swing={swing}
+        typeP={typeP}
+      />
+    );
   };
-  const { branches } = useGetBranches();
 
   return (
     <>
@@ -108,7 +128,14 @@ export const GLAccount = () => {
                           {formatCurrency(dataItem.bkbalance)}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          <ActionMenuProps glNumber={dataItem.glnumber} />
+                          <ActionMenuProps
+                            glNumber={dataItem.glnumber}
+                            pointing={dataItem.pointing}
+                            typeP={dataItem.typeP}
+                            post={dataItem.post}
+                            populate={dataItem.populate}
+                            swing={dataItem.swing}
+                          />
                         </StyledTableCell>
                       </StyledTableRow>
                     );

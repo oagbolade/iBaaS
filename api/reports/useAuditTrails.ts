@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -16,17 +16,17 @@ export async function getAllAuditTrailReports(
   params: ISearchParams | null
 ) {
   let result: AuditTrailsResponse = {} as AuditTrailsResponse;
-  const userId = getStoredUser()?.profiles.userid;
   try {
-    const urlEndpoint = `/ReportServices/AUDITTRAILREPORT?userId=${userId}&startdate=${params?.startDate}&Enddate=${params?.endDate}`;
-    const { data }: AxiosResponse<AuditTrailsResponse> = await axiosInstance({
-      url: urlEndpoint,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${getStoredUser()?.token}`
-      }
-    });
+    const urlEndpoint = `/ReportServices/AUDITTRAILREPORT?userId=${params?.userID}&startdate=${params?.startDate}&Enddate=${params?.endDate}`;
+    const { data }: AxiosResponse<AuditTrailsResponse> =
+      await reportsAxiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
 
     const { message, title, severity } = globalErrorHandler({
       ...data
@@ -36,6 +36,10 @@ export async function getAllAuditTrailReports(
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+  }
+
+  if (result?.auditTrailList === null || result?.auditTrailList === undefined) {
+    result.auditTrailList = [];
   }
   return result;
 }
@@ -51,6 +55,7 @@ export function useGetAllAuditTrailReports(params: ISearchParams | null) {
       queryKeys.getAuditTrails,
       params?.startDate || '',
       params?.endDate || '',
+      params?.userID || '',
       params?.page || 1
     ],
     queryFn: () => getAllAuditTrailReports(toastActions, params || {}),

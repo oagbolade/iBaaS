@@ -25,7 +25,7 @@ export async function getTrialBalanceGroup(
           searchWith: params?.customerID,
           pageSize: Number(params?.pageSize) || 10,
           pageNumber: Number(params?.pageNumber) || 1,
-          startDate: params?.startDate,
+          startDate: params?.reportDate,
           endDate: params?.endDate,
           reportType: Number(params?.reportType),
           getAll: params?.getAll || false
@@ -57,7 +57,7 @@ export function useGetTrialBalanceGroup(params: ISearchParams | null) {
       params?.branchID || '',
       params?.customerID || '',
       params?.pageNumber || 1,
-      params?.startDate || '',
+      params?.reportDate || '',
       params?.reportType || '',
       params?.endDate || ''
     ],

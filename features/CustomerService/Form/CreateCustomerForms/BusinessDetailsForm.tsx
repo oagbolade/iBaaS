@@ -38,6 +38,7 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
   const { customerResult } = useGetCustomerByIdCodes(
     encryptData(customerId) as string
   );
+
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [locationDetails, setLocationDetails] =
     React.useState<ILocationDetails>({
@@ -45,6 +46,7 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
       state: customerResult?.bizState || '',
       town: customerResult?.bizTowncode || ''
     });
+
   const { states: allNationStates } = useGetStateByCountryCode(
     encryptData(locationDetails.country) as string,
     formType
@@ -61,7 +63,7 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
       states,
       towns,
       allNationStates,
-      allStateTowns: allStateTowns || []
+      allStateTowns
     });
 
   return (

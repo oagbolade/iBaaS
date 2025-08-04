@@ -22,7 +22,7 @@ type Props = {
 
 export const ViewAccount = ({ open, toggleModal }: Props) => {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', width: '100%' }}>
       {open && (
         <Box>
           <Button sx={{ marginLeft: '190px' }} onClick={toggleModal}>

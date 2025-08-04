@@ -204,10 +204,18 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
       validationSchema={FundTransferSchema}
     >
       <Form>
-        <Box sx={{ marginTop: '70px' }}>
+        <Box
+          sx={{
+            marginTop: '60px',
+            position: 'fixed',
+            top: 0,
+            width: 'calc(100vw - 300px)',
+            zIndex: 1
+          }}
+        >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ marginTop: '90px', width: '100%' }}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Funds Transfer" styles={BatchTitle} />
             <Grid container>
@@ -265,8 +273,8 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
               >
                 <FormTextInput
                   name="debitAcct"
-                  placeholder="Enter Debit Account Name"
-                  label="Debit Account Name"
+                  placeholder="Enter Debit Account Number"
+                  label="Debit Account Number"
                   value={debitAccount?.toString()}
                   onChange={handleDebitAccount}
                   customStyle={{
@@ -283,8 +291,8 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
               >
                 <FormTextInput
                   name="creditAcct"
-                  placeholder="Enter Credit Account Name"
-                  label="Credit Account Name"
+                  placeholder="Enter Credit Account Number"
+                  label="Credit Account Number"
                   value={creditAccount?.toString()}
                   onChange={handleCreditAccount}
                   customStyle={{

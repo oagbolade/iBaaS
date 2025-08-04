@@ -42,8 +42,11 @@ import {
   IEducationByCode,
   IException,
   IFrequency,
+  IGLWithBranchCode,
   IInterests,
   IOccupation,
+  IProdCodeType,
+  IProdType,
   IProductClass,
   IProducts,
   ISector
@@ -52,11 +55,14 @@ import { useGetCurrency } from '@/api/general/useCurrency';
 import { useGetProductType } from '@/api/general/useProductType';
 import {
   useGetAllException,
+  useGetAllGLWithBranchCode,
   useGetAllLoanTerm,
   useGetInterestsRate,
   useGetLoanProductCode,
   useGetMaxCreditInterest,
-  useGetProductClass
+  useGetProductClass,
+  useGetProductClassByCastegory,
+  useGetProductTypeByid
 } from '@/api/setup/useProduct';
 import { useGetGLAccount } from '@/api/admin/useCreateGLAccount';
 import { useGetAllCustomerAccountProducts } from '@/api/customer-service/useCustomer';
@@ -137,6 +143,18 @@ type Props = {
   // eslint-disable-next-line react/no-unused-prop-types
   bankgl?: IGLAccount[] | Array<any>;
   charges?: IChargeConcessionType[] | Array<any>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  setProductCode?: React.Dispatch<React.SetStateAction<string>>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  data?: IProdType[] | IProdCodeType[] | Array<any>;
+  dataType?: IProdCodeType[] | IProdType[] | Array<any>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  dataWithCode?:
+    | IProdType[]
+    | IProdCodeType[]
+    | IGLWithBranchCode[]
+    | Array<any>;
 };
 
 const FormSelector = ({
@@ -162,7 +180,11 @@ const FormSelector = ({
   bankgl,
   bankproducts,
   exception,
-  charges
+  charges,
+  setProductCode,
+  data,
+  dataType,
+  dataWithCode
 }: Props) => {
   let selectedForm;
   switch (cardKey) {
@@ -175,11 +197,18 @@ const FormSelector = ({
           countries={countries}
           states={states}
           towns={towns}
+          setProductCode={
+            setProductCode as unknown as React.Dispatch<
+              React.SetStateAction<string>
+            >
+          }
           professions={professions}
-          productTypes={productTypes}
+          productTypes={productTypes as IProductType[] | undefined}
           currencies={currencies}
           products={products as IProducts[] | undefined}
           frequency={frequency}
+          data={data as IProdType[] | undefined}
+          dataType={dataType as IProdCodeType[] | undefined}
         />
       );
       break;
@@ -201,7 +230,12 @@ const FormSelector = ({
       break;
     case 'generalLedge':
       selectedForm = (
-        <GeneralCasaLedgerForm states={states} towns={towns} bankgl={bankgl} />
+        <GeneralCasaLedgerForm
+          states={states}
+          towns={towns}
+          bankgl={bankgl}
+          dataWithCode={dataWithCode as IGLWithBranchCode[]}
+        />
       );
       break;
     case 'document':
@@ -241,7 +275,10 @@ export const ShortCardCasaWithAccordion = ({
   products,
   frequency,
   bankproducts,
-  exception
+  exception,
+  setProductCode,
+  data,
+  dataType
 }: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -250,6 +287,8 @@ export const ShortCardCasaWithAccordion = ({
     setExpanded(!expanded);
   };
   const productClassBYID = localStorage.getItem('addProduct');
+  const [productCodeType, setproductType] = React.useState('');
+
   const { currencies: currency } = useGetCurrency();
   const { productTypes: productType } = useGetProductType();
   const { creditInterests: creditInterest } = useGetMaxCreditInterest();
@@ -260,7 +299,16 @@ export const ShortCardCasaWithAccordion = ({
   const { bankproducts: bankproduct } = useGetAllCustomerAccountProducts();
   const { exception: exceptions } = useGetAllException();
   const { charges: charge, isLoading } = useGetChargeConcession();
+  const { data: glwithCode } = useGetAllGLWithBranchCode();
   const { products: productClassBY } = useGetLoanProductCode(productClassBYID);
+  if (setProductCode) {
+    setProductCode(productCodeType);
+  }
+  const { data: producttypeId } = useGetProductTypeByid(
+    productCodeType as unknown as string
+  );
+  const { data: productCategory } =
+    useGetProductClassByCastegory(productClassBYID);
 
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
@@ -343,16 +391,20 @@ export const ShortCardCasaWithAccordion = ({
                 sectors={sectors}
                 education={education}
                 professions={professions}
-                productTypes={productType}
+                productTypes={productType as IProductType[] | undefined}
                 currencies={currency}
+                setProductCode={setproductType}
                 creditInterests={creditInterest}
                 interests={interest}
                 products={productClassBY}
                 frequency={frequencys}
+                data={productCategory as IProdType[]}
+                dataType={producttypeId as IProdCodeType[]}
                 bankgl={bankgls as IGLAccount[] | undefined}
                 bankproducts={bankproduct}
                 exception={exceptions}
                 charges={charge}
+                dataWithCode={glwithCode as IGLWithBranchCode[]}
               />
             </Grid>
           </AccordionDetails>

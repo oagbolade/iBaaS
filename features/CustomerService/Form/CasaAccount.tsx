@@ -143,9 +143,8 @@ export const CasaAccount = ({ officers, branches }: Props) => {
       validationSchema={moveCASAAccount}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        <TopActionsArea actionButtons={actionButtons} />
+
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Move CASA Account" styles={BatchTitle} />

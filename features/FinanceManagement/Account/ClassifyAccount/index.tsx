@@ -36,12 +36,12 @@ export const ClassifyAccount = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%', padding: '0 13px' }}>
+      
         <TopActionsArea
           customStyle={{ width: '100%' }}
           actionButtons={actionButtons}
         />
-      </Box>
+      
       <Box sx={{ padding: '0 25px' }}>
         <Box
           mr={{ mobile: 0, desktop: 3 }}

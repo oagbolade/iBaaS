@@ -46,6 +46,10 @@ export const ExportData = ({ handleClose }: Props) => {
   };
 
   const exportReport = async () => {
+    if (!exportData || exportData?.length === 0) {
+      return;
+    }
+
     try {
       setLoading(true);
       setReadyDownload(true);

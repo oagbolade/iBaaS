@@ -84,7 +84,7 @@ export const TableActionMenu = ({
             }}
           >
             <Link
-              href={`/finance/account/classify?accountNumber=${DOMPurify.sanitize(accountNumber)}}&urlState=${urlState}`}
+              href={`/finance/account/classify?accountNumber=${DOMPurify.sanitize(accountNumber)}&urlState=${urlState}`}
             >
               <TableMenuButton buttonTitle="Classify Account" />
             </Link>

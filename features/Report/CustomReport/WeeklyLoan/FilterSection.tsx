@@ -63,7 +63,8 @@ export const FilterSection = ({
       prodCode:
         values.prodCode?.toString().trim().length > 0 ? values.prodCode : null,
       getAll: values.getAll,
-      groupId: values.groupId?.toString().trim().length > 0 ? values.groupId : null,
+      groupId:
+        values.groupId?.toString().trim().length > 0 ? values.groupId : null
     };
     onSearch?.(params);
   };
@@ -177,7 +178,6 @@ export const FilterSection = ({
                   name="groupId"
                   options={mappedGroups}
                   label="Group"
-                  required
                 />{' '}
               </Grid>
 

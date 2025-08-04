@@ -54,6 +54,23 @@ export const AddDirectorMandate = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromEvent = event.target.files?.[0];
     if (!fileFromEvent) return;
+
+    // Check file size (70KB = 70000 bytes)
+    if (fileFromEvent.size > 70000) {
+      const message = {
+        message: 'File size must not exceed 70KB.',
+        title: 'Image Upload Error',
+        severity: 'error'
+      };
+      toast(
+        message.message,
+        message.title,
+        message.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
+
     if (!isImageValid(fileFromEvent, toastActions)) return;
 
     convertImageToBase64(fileFromEvent)
@@ -109,14 +126,13 @@ export const AddDirectorMandate = () => {
   return (
     <Formik initialValues={{}} onSubmit={onSubmit}>
       <Form>
-        <Box ml={4} sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        <TopActionsArea actionButtons={actionButtons} />
+
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 3, mobile: 5 }}>
             <PageTitle title="Add Mandate" styles={BatchTitle} />
             <Grid container>
-              <Grid item={isTablet} mb={3} mobile={12} spacing={3}>
+              <Grid item mb={3} mobile={12} spacing={3}>
                 <PageTitle styles={labelStyle} title="Passport Photograph" />
                 {currentPhoto === null ? (
                   <Box sx={templateUploadContainer}>
@@ -128,7 +144,7 @@ export const AddDirectorMandate = () => {
                     </Button>
                     <PageTitle title="Tap here to upload your document" />
                     <PageTitle
-                      title="JPG or PNG. File size, no more than 100KB"
+                      title="JPG or PNG. File size, no more than 70KB"
                       styles={{ ...templateTitle }}
                     />
                   </Box>
@@ -140,7 +156,7 @@ export const AddDirectorMandate = () => {
                 )}
               </Grid>
 
-              <Grid item={isTablet} mobile={12} mb={3}>
+              <Grid item mb={3} mobile={12}>
                 <TextInput
                   disabled
                   value={customerId}
@@ -152,7 +168,7 @@ export const AddDirectorMandate = () => {
                 />
               </Grid>
 
-              <Grid item={isTablet} mobile={12} mb={3}>
+              <Grid item mb={3} mobile={12}>
                 <TextInput
                   disabled
                   value={directorId}
@@ -164,7 +180,7 @@ export const AddDirectorMandate = () => {
                 />
               </Grid>
 
-              <Grid item={isTablet} mobile={12} mb={3}>
+              <Grid item mb={3} mobile={12}>
                 <TextInput
                   disabled
                   value={directorName}

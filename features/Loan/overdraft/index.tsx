@@ -69,13 +69,11 @@ export const SetOverDraft = () => {
 
   return (
     <Box>
-      <Box sx={{ width: '100%', padding: '0 13px' }}>
         <TopActionsArea
-          customStyle={{ width: '100%' }}
+          customStyle={{ width: '100%', }}
           actionButtons={actionButtons}
         />
-      </Box>
-      <Box sx={{ padding: '0 25px' }}>
+     
         <Box>
           {branches && (
             <SetOverDraftForm
@@ -87,7 +85,7 @@ export const SetOverDraft = () => {
             />
           )}
         </Box>
-      </Box>
+     
     </Box>
   );
 };

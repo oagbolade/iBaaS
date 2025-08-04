@@ -69,25 +69,20 @@ export const Terminate = () => {
 
   return (
     <Box>
-      <Box sx={{ width: '100%', padding: '0 13px' }}>
-        <TopActionsArea
-          customStyle={{ width: '100%' }}
-          actionButtons={actionButtons}
+      <TopActionsArea
+        customStyle={{ width: '100%' }}
+        actionButtons={actionButtons}
+      />
+
+      {branches && (
+        <TermianteOverdraftForm
+          branches={branches}
+          setIsSubmitting={setIsSubmitting}
+          accountNumber={accountNumber}
+          isSubmitting={isSubmitting}
+          accDetailsResults={accDetailsResults}
         />
-      </Box>
-      <Box sx={{ padding: '0 25px' }}>
-        <Box>
-          {branches && (
-            <TermianteOverdraftForm
-              branches={branches}
-              setIsSubmitting={setIsSubmitting}
-              accountNumber={accountNumber}
-              isSubmitting={isSubmitting}
-              accDetailsResults={accDetailsResults}
-            />
-          )}
-        </Box>
-      </Box>
+      )}
     </Box>
   );
 };

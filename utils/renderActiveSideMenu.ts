@@ -2,7 +2,7 @@ export const renderAsActive = (isActive?: boolean) => {
   if (isActive) {
     return {
       display: 'flex',
-      padding: '8px 12px',
+      padding: '6px 10px',
       alignItems: 'center',
       gap: '8px',
       flex: '1 0 0',

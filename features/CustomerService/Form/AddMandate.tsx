@@ -182,9 +182,9 @@ export const AddMandate = () => {
   return (
     <Formik initialValues={{}} onSubmit={onSubmit}>
       <Form>
-        <Box ml={4} sx={{ marginTop: '60px' }}>
+        {/* <Box ml={4} sx={{ marginTop: '60px' }}> */}
           <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        {/* </Box> */}
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 3, mobile: 5 }}>
             <PageTitle title="Add Mandate" styles={BatchTitle} />
@@ -197,7 +197,7 @@ export const AddMandate = () => {
                   label="Mandate Description"
                   onChange={onTextChange}
                   customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
+                    width: '560px',
                   }}
                 />
               </Grid>

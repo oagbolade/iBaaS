@@ -50,13 +50,13 @@ export const DormancyCriteriaTable = () => {
   };
 
   const ActionMenu = ({
-    prodCode
+    productCode
   }: {
-    prodCode: string;
+    productCode: string;
   }): React.ReactElement => {
     return (
       <Link
-        href={`/setup/operations/add-dormancy?isEditing=true&id=${sanitize(prodCode)}`}
+        href={`/setup/operations/add-dormancy?isEditing=true&id=${sanitize(productCode)}`}
       >
         <TableSingleAction actionName="Edit" />
       </Link>
@@ -95,7 +95,7 @@ export const DormancyCriteriaTable = () => {
                 return (
                   <StyledTableRow key={dataItem.userId}>
                     <StyledTableCell component="th" scope="row">
-                      {dataItem.prodCode}
+                      {dataItem.productCode}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem.penalty}
@@ -120,7 +120,7 @@ export const DormancyCriteriaTable = () => {
                       />
                     </StyledTableCell>
                     <StyledTableCell>
-                      <ActionMenu prodCode={dataItem.prodCode} />
+                      <ActionMenu productCode={dataItem.productCode} />
                     </StyledTableCell>
                   </StyledTableRow>
                 );

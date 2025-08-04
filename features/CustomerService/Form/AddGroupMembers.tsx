@@ -178,9 +178,8 @@ export const AddGroupMembersForm = () => {
 
   return (
     <StyledContainer>
-      <Box sx={{ marginTop: '25px' }}>
-        <TopActionsArea actionButtons={actionButtons} />
-      </Box>
+      <TopActionsArea actionButtons={actionButtons} />
+
       <Stack direction={setDirection()} justifyContent="space-between">
         <Grid container spacing={2} sx={{ width: '700px' }}>
           <Formik

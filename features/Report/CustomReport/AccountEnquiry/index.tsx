@@ -22,43 +22,44 @@ import {
   DownloadReportContext,
   IReportQueryParams
 } from '@/context/DownloadReportContext';
+import { ISearchParams } from '@/app/api/search/route';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { FormSkeleton } from '@/components/Loaders';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 interface Props {
   data: IGetAccountEnquiry;
 }
 
 export const AccountEnquiry = () => {
-  const [searchParams, setSearchParams] = useState<IEnquiryParams | null>(null);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = useState<number>(1);
-  const { setExportData, setReportQueryParams } = useContext(
-    DownloadReportContext
-  );
+  const [search, setSearch] = useState<boolean>(false);
+  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+    React.useContext(DownloadReportContext);
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { branches } = useGetBranches();
 
-  const { branchId, customerId } = searchParams || {};
-
-  const [value, setValue] = React.useState<DateRange<Dayjs>>([
-    dayjs('2023-11-17'),
-    dayjs('2023-12-21')
-  ]);
-
-  const { accountsinDebitList: accountEnquiryData = [] } =
+  const { data: accountEnquiryData = [], isLoading } =
     useGetAccountEnquiryByBranchId({
-      branchId,
-      customerId,
-      pageSize: 20,
-      pageNumber: page
+      ...searchParams,
+      getAll: readyDownload,
+      page
     });
 
   const rowsPerPage = 10;
   const totalElements = accountEnquiryData.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
-  const handleSearch = (params: IEnquiryParams | null) => {
+  const handleSearch = (params: ISearchParams | null) => {
     setSearchParams(params);
-    setReportQueryParams(params as IReportQueryParams); // TODO: need to pass accept just required fields here
-    setPage(1); // Reset to the first page on new search
+    setSearch(true);
+    setSearchParams({
+      ...params,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+    });
   };
 
   const AccountEnquiryActions = ({ data }: Props) => {
@@ -66,12 +67,22 @@ export const AccountEnquiry = () => {
 
     const setData = () => {
       setAccountEnquiryData({
-        accountnumber: data.accountnumber,
         accounttitle: data.accounttitle,
+        dateOpened: data.dateOpened,
+        productName: data.productName,
+        accountnumber: data.accountnumber,
+        phoneNo: data.phoneNo,
+        lienAmount: data.lienAmount,
+        unclearedBal: data.unclearedBal,
+        officerName: data.officerName,
+        odLimit: data.odLimit,
         customerid: data.customerid,
-        accountOfficer: data.accountOfficer,
-        bkBalance: data.bkBalance,
-        branchName: data.branchName
+        nuban: data.nuban,
+        customerAddress: data.customerAddress,
+        useableBalance: data.useableBalance,
+        bookBalance: data.bookBalance,
+        customerName: data.customerName,
+        accountStatus: data.accountStatus
       });
     };
 
@@ -95,60 +106,71 @@ export const AccountEnquiry = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
-      <FilterSection branches={branches} onSearch={handleSearch} />
+      {branches && (
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      )}
+
       <Box sx={{ padding: '25px', width: '100%' }}>
-        <MuiTableContainer
-          columns={accountEnquiryColumns}
-          data={accountEnquiryData}
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-          totalElements={totalElements}
-          showHeader={{
-            mainTitle: 'Account Enquiry',
-            secondaryTitle:
-              'See a directory of all account enquiry on this system.',
-            hideFilterSection: true
-          }}
-        >
-          {accountEnquiryData.length > 0 ? (
-            accountEnquiryData.map((accountData: IGetAccountEnquiry, index) => {
-              return (
-                <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
-                    {accountData?.accounttitle || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell component="th" scope="row">
-                    {accountData?.accountnumber || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {accountData?.bkBalance || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">N/A</StyledTableCell>
-                  <StyledTableCell align="right">
-                    {accountData?.accountOfficer || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {accountData?.bkBalance || 'N/A'}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <AccountEnquiryActions data={accountData} />
-                  </StyledTableCell>
-                </StyledTableRow>
-              );
-            })
-          ) : (
-            <StyledTableRow>
-              <StyledTableCell
-                colSpan={accountEnquiryColumns.length + 1}
-                component="th"
-                scope="row"
-              >
-                {renderEmptyTableBody()}
-              </StyledTableCell>
-            </StyledTableRow>
-          )}
-        </MuiTableContainer>
+        {isLoading ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <MuiTableContainer
+            columns={accountEnquiryColumns}
+            data={accountEnquiryData}
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
+            totalElements={totalElements}
+            showHeader={{
+              mainTitle: 'Account Enquiry',
+              secondaryTitle:
+                'See a directory of all account enquiry on this system.',
+              hideFilterSection: true
+            }}
+          >
+            {search ? (
+              accountEnquiryData.map(
+                (accountData: IGetAccountEnquiry, index) => {
+                  return (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell component="th" scope="row">
+                        {accountData?.accounttitle || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {accountData?.accountnumber || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {`NGN ${formatCurrency(accountData?.bookBalance || 0) || 'N/A'}`}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {accountData?.phoneNo || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {accountData?.officerName || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {`NGN ${formatCurrency(accountData?.useableBalance || 0) || 'N/A'}`}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <AccountEnquiryActions data={accountData} />
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                }
+              )
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={accountEnquiryColumns.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody()}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
+        )}
       </Box>
     </Box>
   );

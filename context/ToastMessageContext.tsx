@@ -45,7 +45,7 @@ export default function ToastMessageContextProvider({ children }: any) {
   useEffect(() => {
     if (title === 'Unauthorised user') {
       setTimeout(() => {
-        window.location.href = `/login?auth=false`;
+        window.location.href = '/login?auth=false';
       }, 3000);
     }
   }, [title]);

@@ -42,6 +42,12 @@ export interface SearchGLAccountResponse extends IFetchingState {
   dateOpened: string;
   bkbalance: string;
   oldGLno: string;
+
+  typeP: string;
+  pointing: number;
+  post: number;
+  swing: number;
+  populate: number;
 }
 
 export interface SearchRoleResponse extends IFetchingState {
@@ -132,6 +138,7 @@ export interface IUsers {
   globalAuth?: number;
   enable2FA?: string;
   loginStatus?: string;
+  VirtualUser?: string;
 }
 
 export interface ISupervisors {

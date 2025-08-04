@@ -51,7 +51,7 @@ export const LoanDirectory = () => {
   const [shouldDisableLoanUnderwriting, setShouldDisableLoanUnderwriting] =
     React.useState(false);
 
-  const { branches } = useGetBranches();
+  const { branches, isLoading: isBranchLoading } = useGetBranches();
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
@@ -110,14 +110,18 @@ export const LoanDirectory = () => {
         </Link>
       </Box>
 
-      {branches && (
+      {isBranchLoading ? (
+        <div style={{ marginBottom: '24px' }}>
+          <FormSkeleton noOfLoaders={1} />
+        </div>
+      ) : (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
 
       {isLoanDataLoading ? (
         <FormSkeleton noOfLoaders={3} />
       ) : (
-        <Box sx={{ width: '100%' }}>
+      
           <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
@@ -180,7 +184,7 @@ export const LoanDirectory = () => {
               </StyledTableRow>
             )}
           </MuiTableContainer>
-        </Box>
+      
       )}
     </Box>
   );

@@ -10,7 +10,7 @@ export const isImageValid = (
   const fileType = uploadedFile.type;
 
   // Maximum file size in KB (e.g., 100 KB)
-  const maxFileSizeInKB = 100; // 10 MB in KB
+  const maxFileSizeInKB = 10000; // 10 MB in KB
 
   // Accepted file types
   const acceptedFileTypes = ['image/jpeg', 'image/png'];

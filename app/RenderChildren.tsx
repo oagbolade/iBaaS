@@ -18,7 +18,7 @@ import { decryptData } from '@/utils/decryptData';
 import { useNipAuthprovider } from '@/utils/hooks/NipAuthProvider/useNipAuthprovider';
 import { useAuth } from '@/api/auth/useAuth';
 import useIdleTimer from '@/utils/hooks/useIdleTimer';
-import useSingleTabSession from '@/utils/useSessionTimeout';
+import { useSingleTabSession } from '@/utils/useSessionTimeout';
 
 type Props = {
   children: React.ReactNode;
@@ -31,10 +31,7 @@ export const RenderChildren = ({ children }: Props) => {
     TrackRecentlyVisitedModulesContext
   );
   const { marginLeft, width } = useRemoveSideBar();
-  const { setOpenMenu } = useContext(SideBarContext);
   const { pageTitle } = usePageTitle();
-  const handleClick = () => setOpenMenu(false);
-  const onKeyPressHandler = () => {};
 
   // Check Auth Status every minute
   const ONE_MINUTE = 1 * 60 * 1000;
@@ -46,8 +43,7 @@ export const RenderChildren = ({ children }: Props) => {
   useTrackRecentlyVisitedModules();
 
   const { signout } = useAuth();
-
-  useIdleTimer(10 * 60 * 1000, signout, toastActions); // 10 minutes in milliseconds
+  useIdleTimer(10 * 60 * 1000, signout, toastActions);
 
   useEffect(() => {
     if (
@@ -72,20 +68,26 @@ export const RenderChildren = ({ children }: Props) => {
         }
       });
     }
-  }, []);
+  }, [setRecentlyVisitedModules]);
 
   useNipAuthprovider();
-  useSingleTabSession();
+  useSingleTabSession(toastActions);
   return (
     <div
-      tabIndex={0}
-      role="button"
-      onKeyUp={onKeyPressHandler}
-      onClick={handleClick}
-      style={{ marginLeft, width }}
+      style={{
+        marginLeft,
+        width,
+        minWidth: 0,
+        overflowX: 'auto',
+        boxSizing: 'border-box',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
     >
       <Helmet>
         <title>{pageTitle}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="IBaaS" content="IBaaS" />
       </Helmet>
       {children}

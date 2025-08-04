@@ -14,6 +14,22 @@ export const CreateGLAccount = () => {
   const { status } = useGetStatus();
   const { bankgl } = useGetGLAccount();
 
+  interface PermissionData {
+    pointing: number;
+    typeP: number | string;
+    swing: number;
+    populate: number;
+    post: number;
+  }
+
+  const [permisionData, setPermissiondata] = React.useState<PermissionData>({
+    pointing: 1,
+    typeP: '0',
+    swing: 0,
+    populate: 0,
+    post: 0
+  });
+
   return (
     <>
       <TopActionsArea customStyle={{ width: '100%' }} />
@@ -36,6 +52,7 @@ export const CreateGLAccount = () => {
                 currencies={currencies}
                 status={status}
                 bankgl={Array.isArray(bankgl) ? bankgl : []}
+                premisionData={permisionData}
               />
             )}
         </Box>

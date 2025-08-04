@@ -12,10 +12,11 @@ import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IEnquiryParams } from '@/api/reports/useGetAccountEnquiryBybranchId';
+import { ISearchParams } from '@/app/api/search/route';
 
 type Props = {
   branches?: IBranches[];
-  onSearch: (params: IEnquiryParams | null) => void;
+  onSearch: (params: ISearchParams | null) => void;
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
@@ -27,12 +28,12 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   });
 
   const handleSearchClick = () => {
-    const searchParams = {
-      branchId: selectedBranch || undefined,
-      customerId: searchTerm || undefined
+    const searchParams: ISearchParams = {
+      branchID: selectedBranch || undefined,
+      customerID: searchTerm || undefined
     };
 
-    onSearch(searchParams);
+    onSearch?.(searchParams);
   };
 
   return (

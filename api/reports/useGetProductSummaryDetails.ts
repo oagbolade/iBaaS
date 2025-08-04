@@ -40,9 +40,6 @@ async function getProductSummaryDetails(
         }
       });
 
-    // const { message, title, severity } = globalErrorHandler(data);
-    // toast(message, title, severity, toastActions);
-
     return data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);

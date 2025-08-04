@@ -84,6 +84,7 @@ export interface CreateUserFormValues {
   comments: string;
   authListID: number;
   enable2FA: string;
+  VirtualUser: number;
 }
 
 export const accountOfficerInitialValues: CreateAccountOfficerFormValues = {
@@ -197,7 +198,8 @@ export const createUserInitialValues: CreateUserFormValues = {
   rolelevel: getStoredUser()?.profiles.rolelevel || 0,
   comments: '',
   authListID: 0,
-  enable2FA: ''
+  enable2FA: '',
+  VirtualUser: 0
 };
 
 export interface CreateGlAccountFormValues {
@@ -235,6 +237,7 @@ export interface CreateGlAccountFormValues {
   controlflag: number;
   controlGlag: number;
   currencyCode: string;
+  status: number;
 }
 
 export const createGlAccountInitialValues: CreateGlAccountFormValues = {
@@ -249,18 +252,19 @@ export const createGlAccountInitialValues: CreateGlAccountFormValues = {
   last_Night_Balance: 0,
   tpostDebit: 0,
   tpostCredit: 0,
-  blocked: 's',
-  closed: 's',
+  blocked: '0',
+  closed: '0',
   reconLen: 0,
-  post: 0,
   bbf: 0,
   prodType: '',
   pointing: 0,
-  typeP: '',
+  typeP: 'c', // c  ===> credit /  d ===> debit
+  swing: 0,
   populate: 0,
+  post: 0, // 0 or 1  for system posting
+
   oldGLno: '',
   last_night_balance2: 0,
-  swing: 0,
   last_month_balance2: 0,
   last_month_balance1: 0,
   dateOpened: getCurrentIsoDate(),
@@ -271,5 +275,6 @@ export const createGlAccountInitialValues: CreateGlAccountFormValues = {
   lastmondiff: 0,
   controlflag: 0,
   controlGlag: 0,
-  currencyCode: ''
+  currencyCode: '',
+  status: 0
 };

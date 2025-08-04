@@ -1,38 +1,70 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, FormLabel, Grid, Stack } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import colors from '@/assets/colors';
 import { useCurrentBreakpoint } from '@/utils';
-import { CheckboxInput } from '@/components/FormikFields';
 import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import { queryKeys } from '@/react-query/constants';
 import { FormSkeleton } from '@/components/Loaders';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { CheckboxInputV2 } from '@/components/FormikFields/CheckboxInputV2';
 
-interface PostingLimitData {
-  limit?: {
-    pointing?: number;
-    checkBox?: number;
-  };
+interface PermissionData {
+  pointing: number;
+  typeP: number | string;
+  swing: number;
+  populate: number;
+  post: number;
 }
 
-export const PermissionsSection = () => {
+interface PermissionsSectionProps {
+  data: PermissionData;
+  setData?: React.Dispatch<React.SetStateAction<PermissionData>>;
+}
+
+export const PermissionsSection: React.FC<PermissionsSectionProps> = ({
+  data,
+  setData
+}) => {
+  const searchParams = useSearchParams();
   const { isTablet } = useCurrentBreakpoint();
   const { isLoading } = useGlobalLoadingState();
-  const queryClient = useQueryClient();
-  const queryCache = queryClient.getQueryCache();
-  const query = queryCache.findAll({
-    queryKey: [queryKeys.getPostinglimitByCode]
-  }) as { state: { data?: PostingLimitData } }[];
-  const searchParams = useSearchParams();
-  const isEditing = searchParams.get('isEditing');
-  const pointing = (query && query[0]?.state?.data?.limit?.pointing) || 0;
-  const checkBox = (query && query[0]?.state?.data?.limit?.checkBox) || 0;
   const { setDirection } = useSetDirection();
+  const isEditing = searchParams.get('isEditing');
+
+  const queryPointing = searchParams.get('pointing');
+  const querytypeP = searchParams.get('typeP');
+  const querySwing = searchParams.get('swing');
+  const queryPopulate = searchParams.get('populate');
+  const queryPost = searchParams.get('post');
+
+  useEffect(() => {
+    if (isEditing) {
+      let typePValue: any;
+      if (querytypeP === 'd') {
+        typePValue = 0;
+      } else {
+        typePValue = 1;
+      }
+      setData?.({
+        pointing: Number(queryPointing),
+        typeP: typePValue,
+        swing: Number(querySwing),
+        populate: Number(queryPopulate),
+        post: Number(queryPost)
+      });
+    }
+  }, [
+    isEditing,
+    queryPointing,
+    querytypeP,
+    querySwing,
+    queryPopulate,
+    queryPost,
+    setData
+  ]);
 
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={1} />;
@@ -53,53 +85,83 @@ export const PermissionsSection = () => {
           <Box mt={2}>
             <RadioButtons
               options={[
-                { label: 'Yes', value: '1' },
-                { label: 'No', value: '0' }
+                { label: 'Yes', value: 1 },
+                { label: 'No', value: 0 }
               ]}
               id="createPostingLimitPermission"
               title="Pointing?"
-              name="auth"
-              value={`${isEditing ? pointing : 0}`}
+              name="pointing"
+              value={data.pointing.toString()}
+              handleCheck={(value: boolean) => {
+                if (setData) setData({ ...data, pointing: value ? 1 : 0 });
+              }}
             />
           </Box>
         </Grid>
+
         <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }}>
           <Box mt={2}>
             <RadioButtons
+              disabled={data.pointing === 0}
               options={[
-                { label: 'Debit', value: '1' },
-                { label: 'Credit', value: '0' }
+                { label: 'Credit', value: 1 },
+                { label: 'Debit', value: 0 }
               ]}
               id="createPostingLimit"
               title="Pointing Type?"
-              name="status"
-              value={`${isEditing ? pointing : 1}`}
+              name="typeP"
+              value={data.typeP.toString()}
+              handleCheck={(value: boolean) => {
+                if (setData) setData({ ...data, typeP: value ? 'c' : 'd' });
+              }}
             />
           </Box>
         </Grid>
-        <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }} mb={2}>
-          <FormLabel sx={RadioButtonTitle}>Actions?</FormLabel>
-          <Stack mt={1} direction={setDirection()}>
-            <CheckboxInput
+
+        <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }} mt={2}>
+          <FormLabel aria-label="" aria-controls="" sx={RadioButtonTitle}>
+            Actions?
+          </FormLabel>
+
+          <Stack
+            mt={1}
+            direction={setDirection()}
+            flexWrap="wrap"
+            gap={2}
+            alignItems="flex-start"
+          >
+            <CheckboxInputV2
               className="permissionsCheckbox"
               label="Swing"
               name="swing"
-              value={isEditing ? checkBox : 0}
+              isChecked={!!data.swing}
+              handleCheck={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (setData)
+                  setData({ ...data, swing: e.target.checked ? 1 : 0 });
+              }}
             />
-            <CheckboxInput
+
+            <CheckboxInputV2
+              className="permissionsCheckbox"
+              label="Is System Posting?"
+              name="post"
+              isChecked={!!data.post}
+              handleCheck={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (setData)
+                  setData({ ...data, post: e.target.checked ? 1 : 0 });
+              }}
+            />
+
+            <CheckboxInputV2
               className="permissionsCheckbox"
               label="Populate General Ledger"
-              name="ledger"
-              value={isEditing ? checkBox : 1}
+              name="populate"
+              isChecked={!!data.populate}
+              handleCheck={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (setData)
+                  setData({ ...data, populate: e.target.checked ? 1 : 0 });
+              }}
             />
-            <Box mr={{ mobile: 0, desktop: 3 }} ml={{ mobile: 0, desktop: 15 }}>
-              <CheckboxInput
-                className="permissionsCheckbox"
-                label="Is System Posting?"
-                name="posting"
-                value={isEditing ? checkBox : 2}
-              />
-            </Box>
           </Stack>
         </Grid>
       </Box>

@@ -43,9 +43,12 @@ import {
   IEducationByCode,
   IException,
   IFrequency,
+  IGLWithBranchCode,
   IInterests,
   ILoanClass,
   IOccupation,
+  IProdCodeType,
+  IProdType,
   IProductClass,
   IProducts,
   ISector
@@ -55,13 +58,17 @@ import { useGetProductType } from '@/api/general/useProductType';
 import { IProductLoanRepayment } from '@/api/ResponseTypes/loans';
 import { useGetAllLoanRepaymentTypes } from '@/api/loans/useCreditFacility';
 import {
+  generateProductCode,
   useGetAllException,
+  useGetAllGLWithBranchCode,
   useGetAllLoanTerm,
   useGetAllProduct,
   useGetLoanClass,
   useGetLoanProductCode,
   useGetMaxCreditInterest,
-  useGetProductClass
+  useGetProductClass,
+  useGetProductClassByCastegory,
+  useGetProductTypeByid
 } from '@/api/setup/useProduct';
 import { useGetAllCustomerAccountProducts } from '@/api/customer-service/useCustomer';
 import { useGetGLAccount } from '@/api/admin/useCreateGLAccount';
@@ -69,6 +76,7 @@ import { useGetChargeConcession } from '@/api/operation/useChargeConcession';
 import { IChargeConcessionType } from '@/api/ResponseTypes/operation';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { FormSkeleton } from '@/components/Loaders';
+import { encryptData } from '@/utils/encryptData';
 
 const Accordion = muistyled((props: AccordionProps) => {
   return <MuiAccordion {...props} />;
@@ -144,6 +152,21 @@ type Props = {
   frequency?: IFrequency[];
   bankgl?: IGLAccount[] | Array<any>;
   charges?: IChargeConcessionType[] | Array<any>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  data?: IProdType[] | IProdCodeType[] | Array<any>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  dataType?: IProdCodeType[] | IProdType[] | Array<any>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  productCodeGenarate?: string | undefined;
+  // eslint-disable-next-line react/no-unused-prop-types
+  setProductCodeGenarate?: React.Dispatch<React.SetStateAction<string>>;
+  setProductCode?: React.Dispatch<React.SetStateAction<string>>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  dataWithCode?:
+    | IProdType[]
+    | IProdCodeType[]
+    | IGLWithBranchCode[]
+    | Array<any>;
 };
 
 const FormSelector = ({
@@ -171,7 +194,13 @@ const FormSelector = ({
   exception,
   frequency,
   bankgl,
-  charges
+  charges,
+  data,
+  productCodeGenarate,
+  setProductCodeGenarate,
+  dataType,
+  setProductCode,
+  dataWithCode
 }: Props) => {
   let selectedForm;
   switch (cardKey) {
@@ -185,9 +214,20 @@ const FormSelector = ({
           states={states}
           towns={towns}
           professions={professions}
-          productTypes={products as IProductClass[] | undefined}
+          productCodeGenarate={productCodeGenarate as string}
+          setProductCode={
+            setProductCode as unknown as React.Dispatch<
+              React.SetStateAction<string>
+            >
+          }
+          setProductCodeGenarate={
+            setProductCodeGenarate as unknown as React.Dispatch<
+              React.SetStateAction<string>
+            >
+          }
+          dataType={dataType as IProdCodeType[]}
           currencies={currencies}
-          products={products as IProducts[] | undefined}
+          data={data as IProdType[] | undefined}
           frequency={frequency}
         />
       );
@@ -209,7 +249,12 @@ const FormSelector = ({
       break;
     case 'generalLedge':
       selectedForm = (
-        <GeneralLedgerForm states={states} towns={towns} bankgl={bankgl} />
+        <GeneralLedgerForm
+          states={states}
+          towns={towns}
+          bankgl={bankgl}
+          dataWithCode={dataWithCode as IGLWithBranchCode[]}
+        />
       );
       break;
     case 'document':
@@ -251,7 +296,13 @@ export const ShortCardWithAccordion = ({
   bankproducts,
   exception,
   frequency,
-  bankgl
+  bankgl,
+  data,
+  dataType,
+  productCodeGenarate,
+  setProductCodeGenarate,
+  setProductCode,
+  dataWithCode
 }: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -261,6 +312,8 @@ export const ShortCardWithAccordion = ({
     setExpanded(!expanded);
   };
   const productClassBYID = localStorage.getItem('addProduct');
+  const [productType, setproductType] = React.useState('');
+
   const { currencies: Currency } = useGetCurrency();
   const { productTypes: product } = useGetProductType();
   const { repaymentTypes: repaymentType } = useGetAllLoanRepaymentTypes();
@@ -272,8 +325,15 @@ export const ShortCardWithAccordion = ({
   const { frequency: frequencys } = useGetAllLoanTerm();
   const { bankgl: bankgls } = useGetGLAccount();
   const { charges: charge } = useGetChargeConcession();
-  const { products: productClassBY } = useGetLoanProductCode(productClassBYID);
-
+  const { data: glwithCode } = useGetAllGLWithBranchCode();
+  if (setProductCode) {
+    setProductCode(productType);
+  }
+  const { data: producttypeId } = useGetProductTypeByid(
+    productType as unknown as string
+  );
+  const { data: productCategory } =
+    useGetProductClassByCastegory(productClassBYID);
   return (
     <Box mb={2}>
       <AccordionWrapper>
@@ -351,17 +411,21 @@ export const ShortCardWithAccordion = ({
                 sectors={sectors}
                 education={education}
                 professions={professions}
-                productTypes={product}
+                setProductCodeGenarate={setProductCodeGenarate}
+                productCodeGenarate={productCodeGenarate}
+                setProductCode={setproductType}
                 currencies={Currency}
                 repaymentTypes={repaymentType}
                 creditInterests={creditInterest}
                 loanClass={loan}
                 bankproducts={bankproduct}
                 exception={exceptions}
-                products={productClassBY}
+                data={productCategory as IProdType[]}
                 frequency={frequencys}
                 bankgl={bankgls as IGLAccount[] | undefined}
+                dataType={producttypeId as IProdCodeType[]}
                 charges={charge}
+                dataWithCode={glwithCode as IGLWithBranchCode[]}
               />
             </Grid>
           </AccordionDetails>

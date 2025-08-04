@@ -65,13 +65,15 @@ export const OfficeTransferTable = () => {
   };
 
   return (
-    <Box mt={6}>
+    <Box mt={4}>
       <TopActionsArea actionButtons={actionButtons} />
-      <Box sx={{ padding: '25px' }}>
-        {branches && (
+      
+       <div className='mx-8'>
+         {branches && (
           <FilterSection branches={branches} onSearch={handleSearch} />
         )}
-      </Box>
+       </div>
+      {/* </Box> */}  
       <Box sx={{ padding: '25px', width: '100%' }}>
         {areAccountOfficersDataLoading ? (
           <FormSkeleton noOfLoaders={3} />

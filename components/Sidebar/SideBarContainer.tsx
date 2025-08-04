@@ -33,39 +33,59 @@ export const SideBarContainer = () => {
 
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
-  function getSidebarHeight() {
-    if (pathname === customReportPage) {
-      return isAccordionOpen ? '500px' : '300px'; // Adjust heights as needed
-    }
-    return '100%'; // Default height for other pages
-  }
-
-  const setHeight = {
-    height: `${getSidebarHeight()}`
-  };
-
   return (
-    <>
+    <Box
+      sx={{
+        ...sideBarContainer,
+        height: '95vh',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
       <Box
-        py={1.5}
-        ml={5}
         sx={{
-          borderRight: `1px solid ${colors.neutral300}`,
-          display: { mobile: 'none', desktop: 'block' },
-          marginTop: '2px',
+          position: 'sticky',
+          top: 0,
           zIndex: 2,
-          paddingBottom: '10px'
+          background: '#fff',
+          flexShrink: 0,
+          height: '60px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'start',
+          alignContent: 'center',
+          padding: '0 25px',
+          borderBottom: `1px solid ${colors.neutral300}`,
+          overflow: 'hidden'
         }}
       >
-        <Link href="/dashboard">
+        <Link
+          href="/dashboard"
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
           {BankLogo ? (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
               <Image
-                style={{ height: '70px', width: 'auto' }}
+                className="object-contain"
                 src={BankLogo}
                 alt={bank?.bankName || 'Bank Logo'}
-                width={170} // Required prop: specify width in pixels
-                height={70} // Required prop: specify height in pixels (adjust as needed)
+                width={130}
+                height={80}
+                style={{ objectFit: 'contain' }}
               />
             </Box>
           ) : (
@@ -73,12 +93,30 @@ export const SideBarContainer = () => {
           )}
         </Link>
       </Box>
+
       <Box
         sx={{
-          ...sideBarContainer,
-          ...setHeight,
-          overflowY: 'hidden',
-          position: 'relative'
+          flexGrow: 1,
+          minHeight: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          marginTop: '10px',
+          padding: '0 15px',
+          overflowY: 'auto',
+          scrollbarWidth: 'thin',
+          scrollbarColor: `${colors.neutral300} ${colors.neutral100}`,
+          '&::-webkit-scrollbar': {
+            width: '3px',
+            backgroundColor: colors.neutral100
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: colors.neutral300,
+            borderRadius: '5px'
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: colors.neutral100
+          }
         }}
       >
         <Box
@@ -94,11 +132,25 @@ export const SideBarContainer = () => {
           sideBarMenu={sideBarMenu}
           setIsAccordionOpen={setIsAccordionOpen}
         />
+      </Box>
+
+      <Box
+        sx={{
+          position: 'sticky',
+          bottom: 0,
+          zIndex: 2,
+          background: '#fff',
+          flexShrink: 0,
+          width: '100%',
+          marginBottom: 0.5,
+          padding: '0 10px'
+        }}
+      >
         <Box sx={companyContainer}>
           <PageTitle title={bank?.bankName} styles={companyNameTitle} />
           <PageTitle title={bank?.address} styles={{ ...companyAddress }} />
         </Box>
       </Box>
-    </>
+    </Box>
   );
 };

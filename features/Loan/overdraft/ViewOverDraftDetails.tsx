@@ -13,7 +13,6 @@ import { Status } from '@/components/Labels';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { FormSkeleton } from '@/components/Loaders';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
-
 import {
   MuiTableContainer,
   StyledTableRow,
@@ -51,10 +50,13 @@ const ViewOverDraftDetails = () => {
   const accountNumber = searchParams.get('accountNumber') || '';
   const accountName = searchParams.get('accountName') || '';
   const customerId = searchParams.get('customerId') || '';
-  const { odAccDetails, isLoading } = useGetOverdraftDetails(encryptData(accountNumber) as string);
+  const { odAccDetails, isLoading } = useGetOverdraftDetails(
+    encryptData(accountNumber) as string
+  );
   const [search, setSearch] = useState<boolean>(true);
   const overdraftData = Array.isArray(odAccDetails) ? odAccDetails : [];
-  const [shouldDisableOverdraft, setshouldDisableOverdraft] = React.useState(false);
+  const [shouldDisableOverdraft, setshouldDisableOverdraft] =
+    React.useState(false);
 
   React.useEffect(() => {
     const disableOverDreaft = !checkMultipleUserRoleAccess(
@@ -64,6 +66,7 @@ const ViewOverDraftDetails = () => {
 
     setshouldDisableOverdraft(disableOverDreaft);
   }, []);
+
   const actionButtons: any = [
     <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
       <Button
@@ -76,12 +79,10 @@ const ViewOverDraftDetails = () => {
           width: '136px',
           border: '1px solid rgb(48, 115, 153)',
           height: '40px',
-          marginTop: '40px',
           alignItems: 'center'
         }}
       >
         <Link
-
           style={{
             pointerEvents: shouldDisableOverdraft ? 'none' : 'auto'
           }}
@@ -102,7 +103,9 @@ const ViewOverDraftDetails = () => {
       <TopActionsArea actionButtons={actionButtons} />
 
       {isLoading ? (
-        <FormSkeleton noOfLoaders={3} />
+        <Box sx={{ padding: '25px', width: '100%' }}>
+          <FormSkeleton noOfLoaders={3} />
+        </Box>
       ) : (
         <Box
           sx={{
@@ -166,7 +169,7 @@ const ViewOverDraftDetails = () => {
                         {`NGN ${formatCurrency(dataItem?.amount || 0) || 'N/A'}`}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {moment(odAccDetails.effective_dt).format(
+                        {moment(odAccDetails.reportDate).format(
                           'MMMM Do YYYY, h:mm:ss a'
                         ) || 'N/A'}
                       </StyledTableCell>

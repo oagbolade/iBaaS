@@ -1,9 +1,10 @@
 export const COLUMN = [
-    'Account Number',
+    'Account No.',
     'Customer ID',
-    'full Name',
-    'Branch',
-    'Product Code',
-    'Settlement Account',
+    'Group ID',
+    'Settlement Acccount',
+    'Loan Amount',
+    'Due Date',
+    'Expected Amount',
 ];
 

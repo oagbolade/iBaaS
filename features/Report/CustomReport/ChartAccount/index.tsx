@@ -29,6 +29,7 @@ export const ChartAccount = () => {
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
     setSearchParams(params);
+    setReportType('ChartOfAccount');
   };
 
   const {
@@ -37,7 +38,7 @@ export const ChartAccount = () => {
     totalRecords
   } = useGetChartOfAccount({
     ...searchParams,
-    pageNumber: String(page),
+    pageNumber: String(page)
   });
 
   React.useEffect(() => {
@@ -65,7 +66,7 @@ export const ChartAccount = () => {
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
-     
+
       <Box sx={{ paddingX: '24px' }}>
         {isChartOfAccountLoading ? (
           <FormSkeleton noOfLoaders={3} />
@@ -74,13 +75,13 @@ export const ChartAccount = () => {
             <MuiTableContainer
               columns={COLUMN}
               tableConfig={{
-              hasActions: false
+                hasActions: false
               }}
               showHeader={{
-              hideFilterSection: true,
-              mainTitle: 'Chart Of Account ',
-              secondaryTitle:
-                'See a directory of all Chart of Account in this system.'
+                hideFilterSection: true,
+                mainTitle: 'Chart Of Account ',
+                secondaryTitle:
+                  'See a directory of all Chart of Account in this system.'
               }}
               data={getAllChartOfAccountData}
               totalElements={totalRecords}
@@ -89,29 +90,29 @@ export const ChartAccount = () => {
               page={page}
             >
               {search ? (
-              getAllChartOfAccountData?.map((dataItem: IChartOfAccount) => {
-                return (
-                <StyledTableRow key={dataItem.glnumber}>
-                  <StyledTableCell component="th" scope="row">
-                  {dataItem?.glnumber || 'N/A'}
-                  </StyledTableCell>
+                getAllChartOfAccountData?.map((dataItem: IChartOfAccount) => {
+                  return (
+                    <StyledTableRow key={dataItem.glnumber}>
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem?.glnumber || 'N/A'}
+                      </StyledTableCell>
 
-                  <StyledTableCell align="right">
-                  {dataItem?.acctname || 'N/A'}
+                      <StyledTableCell align="right">
+                        {dataItem?.acctname || 'N/A'}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                })
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell
+                    colSpan={COLUMN.length + 1}
+                    component="th"
+                    scope="row"
+                  >
+                    {renderEmptyTableBody(getAllChartOfAccountData || null)}
                   </StyledTableCell>
                 </StyledTableRow>
-                );
-              })
-              ) : (
-              <StyledTableRow>
-                <StyledTableCell
-                colSpan={COLUMN.length + 1}
-                component="th"
-                scope="row"
-                >
-                {renderEmptyTableBody(getAllChartOfAccountData || null)}
-                </StyledTableCell>
-              </StyledTableRow>
               )}
             </MuiTableContainer>
           </Box>

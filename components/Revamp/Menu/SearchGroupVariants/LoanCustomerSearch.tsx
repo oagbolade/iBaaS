@@ -41,7 +41,7 @@ export const LoanCustomerSearch = ({
     <ClickAwayListener onClickAway={handleClose}>
       <Box
         sx={{
-          ...searchgroupContainer
+          ...searchgroupContainer,
         }}
       >
         <Grid container spacing={2}>

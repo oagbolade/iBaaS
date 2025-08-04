@@ -111,7 +111,7 @@ export const RestructureLoan = () => {
         <Stack direction={setDirection()}>
           <Box
             sx={{
-              width: { mobile: '100%', desktop: '624px' },
+              width: { mobile: '100%', desktop: '500px' },
               padding: '32px'
             }}
           >

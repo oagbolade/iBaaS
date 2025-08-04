@@ -18,7 +18,8 @@ import {
   saveBatches,
   saveBatchesDetails,
   savePosting,
-  viewSavedBatches
+  viewSavedBatches,
+  saveTitles
 } from './style';
 import { PageTitle } from '@/components/Typography';
 import {
@@ -69,6 +70,9 @@ import { getStoredUser } from '@/utils/user-storage';
 import { MenuItemsType } from '@/api/ResponseTypes/login';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import { useGetGLByGLNumber } from '@/api/admin/useCreateGLAccount';
+import { IAccountDetailsResults } from '@/api/ResponseTypes/customer-service';
+import { IGLAccount } from '@/api/ResponseTypes/admin';
 
 // Define type for saved batch data
 interface BatchData {
@@ -141,6 +145,47 @@ export const BatchPosting = ({
     currencies,
     details
   });
+  const mapGLAccountToAccountDetails = (
+    glAccount: IGLAccount | null
+  ): IAccountDetailsResults | undefined => {
+    if (!glAccount) return undefined;
+    return {
+      accountnumber: glAccount.glNumber,
+      accounttitle: glAccount.acctName,
+      source: '',
+      odProd: '',
+      allowSI: '',
+      oldacctno: '',
+      siFloor: '',
+      allowLien: '',
+      od: '',
+      pendingc: '',
+      cintrate: '',
+      dintrate: '',
+      apptype: '',
+      customerid: '',
+      acctty: '',
+      bkbal: '',
+      effbal: '',
+      usebal: '',
+      prodname: '',
+      branch: '',
+      status: '',
+      acctstatus: '',
+      prodstatus: '',
+      totalCharge: '',
+      proddesc: '',
+      productcode: '',
+      closingCharge: '',
+      officercode: '',
+      accountdesc: '',
+      disableview: '',
+      holdBal: '',
+      bvn: '',
+      phoneNumber: '',
+      email: ''
+    };
+  };
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
   const { mutate } = useCreateBatchPosting();
@@ -148,9 +193,19 @@ export const BatchPosting = ({
   const [savedBatchData, setSavedBatchData] = useState<BatchData[]>([]);
   const batchPostingNo = batchno ? batchno.toString() : '';
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
-
+  const isAccountNumber11Digits = accountNumber?.length === 10;
   const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
-    useGetAccountDetails(encryptData(accountNumber) || '');
+    useGetAccountDetails(encryptData(accountNumber) || '', {
+      enabled: isAccountNumber11Digits && !!accountNumber
+    });
+  const { bankgl: costAmountData } = useGetGLByGLNumber(
+    encryptData(accountNumber) || '',
+    { enabled: !isAccountNumber11Digits && !!accountNumber }
+  );
+  const normalizedAccountDetails: IAccountDetailsResults | undefined =
+    isAccountNumber11Digits
+      ? accountData ?? undefined
+      : mapGLAccountToAccountDetails(costAmountData as IGLAccount | null);
 
   const handleViewPosting = (
     index: number,
@@ -305,7 +360,7 @@ export const BatchPosting = ({
       {({ values, resetForm, setValues }) => (
         <Form>
           <Grid container spacing={2}>
-            <Box sx={{ display: 'flex' }}>
+            <Box>
               <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
                 <PageTitle title="Batch Posting" styles={BatchTitle} />
                 <Grid container>
@@ -461,20 +516,44 @@ export const BatchPosting = ({
                             }}
                           >
                             <Box>
-                              <PageTitle title={batch.chequeno} />
-                              <PageTitle title={batch.accountNumber} />
+                              <PageTitle title="Teller / Cheque No" />
+                              <PageTitle
+                                title={batch.chequeno}
+                                styles={{ ...saveTitles }}
+                              />
                             </Box>
+
                             <Box>
-                              <PageTitle title={batch.trancode} />
-                              <PageTitle title={batch.tellerno} />
+                              <PageTitle title="Account Number" />
+                              <PageTitle
+                                title={batch.accountNumber}
+                                styles={{ ...saveTitles }}
+                              />
                             </Box>
+                            {batch.trancode === '523' && (
+                              <Box>
+                                <PageTitle title="DR" />
+                                <PageTitle
+                                  title={batch.trancode}
+                                  styles={{ ...saveTitles }}
+                                />
+                              </Box>
+                            )}
+                            {batch.trancode === '002' && (
+                              <Box>
+                                <PageTitle title="CR" />
+                                <PageTitle
+                                  title={batch.trancode}
+                                  styles={{ ...saveTitles }}
+                                />
+                              </Box>
+                            )}
                             <Box>
-                              <PageTitle title={batch.narration} />
-                              <PageTitle title={batch.currency} />
-                            </Box>
-                            <Box>
-                              <PageTitle title={batch.computedAmount} />
-                              <PageTitle title={batch.batchno} />
+                              <PageTitle title="Transaction Amount" />
+                              <PageTitle
+                                title={batch.computedAmount}
+                                styles={{ ...saveTitles }}
+                              />
                             </Box>
                           </Box>
                           <Box
@@ -506,13 +585,14 @@ export const BatchPosting = ({
                                     }
                                   />
                                 </Box>
-                                <Box>
+                                <Box sx={{ marginRight: '50px' }}>
                                   <ActionButton
                                     buttonTitle="Delete"
                                     customStyle={{
                                       ...viewSavedBatches,
                                       border: 'none',
-                                      backgroundColor: `${colors.white}`
+                                      backgroundColor: `${colors.white}`,
+                                      marginRight: '90px'
                                     }}
                                     onClick={() => handleDeletePosting(index)}
                                   />
@@ -532,14 +612,14 @@ export const BatchPosting = ({
                     <MobilePreviewContent
                       PreviewContent={
                         <PreviewContentOne
-                          accountDetails={accountData}
+                          accountDetails={normalizedAccountDetails}
                           loading={isAccountDetailsLoading}
                         />
                       }
                     />
                   ) : (
                     <PreviewContentOne
-                      accountDetails={accountData}
+                      accountDetails={normalizedAccountDetails}
                       loading={isAccountDetailsLoading}
                     />
                   )}

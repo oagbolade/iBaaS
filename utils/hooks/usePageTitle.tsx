@@ -35,7 +35,7 @@ export const usePageTitle = () => {
         setPageTitle(items[0].name);
       }
     });
-  }, [pathname]);
+  }, [pathname, mapped]);
 
   return {
     pageTitle,

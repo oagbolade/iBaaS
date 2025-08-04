@@ -1,6 +1,10 @@
 'use client';
 import React, { ReactElement } from 'react';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import { Formik, Form } from 'formik';
+import { downloadDocument, accountUpload } from './style';
 import { PreviewContentOne } from '@/features/Operation/Forms/CashDeposit';
 import { PageTitle } from '@/components/Typography';
 import {
@@ -13,11 +17,8 @@ import {
   templateTitle,
   documentUpload
 } from '@/features/Operation/Forms/style';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { EditOperations } from '@/constants/OperationOptions';
-import { Formik, Form } from 'formik';
 import { user as userSchema } from '@/schemas/auth';
 import { CustomStyleI, userInitialValues } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
@@ -32,7 +33,6 @@ import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalCont
 import { FileUploadPath, UploadDocument } from '@/assets/svg';
 import { VisuallyHiddenInput } from '@/features/Operation/Forms/BulkUpload';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import { downloadDocument, accountUpload } from './style';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>

@@ -3,6 +3,8 @@ import { Box, Grid, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import { DateCalendar } from '@mui/x-date-pickers';
+import dayjs, { Dayjs } from 'dayjs';
 import { exportData, dateFilter, inputFields } from '../style';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import colors from '@/assets/colors';
@@ -20,18 +22,27 @@ import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { customerBalanceSchema, trialBalanceSchema } from '@/schemas/reports';
+import useFormattedDates from '@/utils/hooks/useFormattedDates';
 
 type Props = {
   branches?: IBranches[];
   onSearch?: Function;
+  selectedBranch?: string;
 };
 
-export const FilterSection = ({ branches, onSearch }: Props) => {
+export const FilterSection = ({
+  branches,
+  onSearch,
+  selectedBranch
+}: Props) => {
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
+
+  const { currentDate } = useFormattedDates();
+  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -39,7 +50,9 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
 
       customerID:
-        values.customerID?.toString().length > 0 ? values.customerID : null
+        values.customerID?.toString().length > 0 ? values.customerID : null,
+
+      reportDate: reportDate.format('YYYY-MM-DD')
     };
     onSearch?.(params);
   };
@@ -47,7 +60,10 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   return (
     <Box marginTop={10}>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={{
+          ...searchFilterInitialValues,
+          branchID: selectedBranch || ''
+        }}
         onSubmit={(values) => onSubmit(values)}
         validationSchema={trialBalanceSchema}
       >
@@ -84,6 +100,12 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
               <Box>
                 <ActionButtonWithPopper
                   searchGroupVariant="DateRangePicker"
+                  CustomDateRangePicker={
+                    <DateCalendar
+                      value={reportDate}
+                      onChange={(date) => setReportDate(date)}
+                    />
+                  }
                   customStyle={{ ...dateFilter }}
                   icon={
                     <CalendarTodayOutlinedIcon
@@ -93,7 +115,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     />
                   }
                   iconPosition="end"
-                  buttonTitle="Aug 22 - Sep 23"
+                  buttonTitle={reportDate.format('YYYY-MM-DD')}
                 />
               </Box>
             </Stack>

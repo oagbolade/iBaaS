@@ -1,10 +1,10 @@
 'use client';
+import { Box } from '@mui/material';
+import { useState } from 'react';
 import { useGetCurrency } from '@/api/general/useCurrency';
 import { useGetCommercialBank } from '@/api/setup/useClearingBank';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { ActionButton } from '@/components/Revamp/Buttons';
-import { Box } from '@mui/material';
-import { useState } from 'react';
 import {
   submitButton,
   cancelButton
@@ -31,25 +31,26 @@ export const ReturnChequesContainer = () => {
   ];
   return (
     <>
-      <TopActionsArea actionButtons={actionButtons} />
-      <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
-        <Box
-          mr={3}
-          sx={{
-            width: '50%',
-            padding: { mobile: 0, tablet: '30px 0' }
-          }}
-        >
-          {commBanks !== undefined && currencies !== undefined && (
-            <ReturnCheque
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-              commBanks={commBanks}
-              currencies={currencies}
-            />
-          )}
-        </Box>
+      <Box
+        sx={{
+          marginTop: '60px',
+          position: 'fixed',
+          top: 0,
+          width: 'calc(100vw - 300px)',
+          zIndex: 1
+        }}
+      >
+        <TopActionsArea actionButtons={actionButtons} />
       </Box>
+
+      {commBanks !== undefined && currencies !== undefined && (
+        <ReturnCheque
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+          commBanks={commBanks}
+          currencies={currencies}
+        />
+      )}
     </>
   );
 };

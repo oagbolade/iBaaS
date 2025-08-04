@@ -1,18 +1,14 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/axiosInstance';
+import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { IToastActions } from '@/constants/types';
 import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
-import {
-  ChequeBookStatusResponse,
-  GetAllGroupLoanReportResponse,
-  GetAllStandingInstructionsResponse
-} from '@/api/ResponseTypes/reports';
+import { GetAllStandingInstructionsResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
 
 export async function getStandingInstruction(
@@ -21,10 +17,12 @@ export async function getStandingInstruction(
 ) {
   let result: GetAllStandingInstructionsResponse =
     {} as GetAllStandingInstructionsResponse;
+
+  // curl https://isw-reportsapi.qa.interswitchng.com/api/ReportServices/SITransactionReport
   try {
-    const urlEndpoint = `/ReportServices/SITransactionReport?pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/ReportServices/SITransactionReport?branchCode=${params?.branchID}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&startDate=${params?.startDate}&endDate=${params?.endDate}&searchWith=${params?.searchWith}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<GetAllStandingInstructionsResponse> =
-      await axiosInstance({
+      await reportsAxiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {
@@ -57,12 +55,14 @@ export function useGetStandingIntruction(params: ISearchParams | null) {
       params?.branchID || '',
       params?.startDate || '',
       params?.endDate || '',
+      params?.searchWith || '',
       params?.page || 1
     ],
     queryFn: () => getStandingInstruction(toastActions, params || {}),
     enabled: Boolean(
       (params?.startDate || '').length > 0 ||
         (params?.branchID || '').length > 0 ||
+        (params?.searchWith || '').length > 0 ||
         (params?.endDate || '').length > 0
     )
   });

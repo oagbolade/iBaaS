@@ -2,11 +2,10 @@ import React from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateCalendar } from '@mui/x-date-pickers';
 import { exportData, dateFilter, inputFields } from '../style';
-import {
-  FormSelectField,
-  FormikRadioButton
-} from '@/components/FormikFields';
+import { FormSelectField, FormikRadioButton } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
@@ -23,6 +22,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { trialBalanceGroupSchema } from '@/schemas/reports';
 import { IGLType } from '@/api/ResponseTypes/admin';
+import useFormattedDates from '@/utils/hooks/useFormattedDates';
 
 type Props = {
   branches?: IBranches[];
@@ -38,6 +38,9 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
     glType
   });
 
+  const { currentDate } = useFormattedDates();
+  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
+
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
@@ -49,7 +52,8 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
       reportType:
         values.reportType?.toString().trim().length > 0
           ? values.reportType
-          : null
+          : null,
+      reportDate: reportDate.format('YYYY-MM-DD')
     };
     onSearch?.(params);
   };
@@ -94,6 +98,12 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
               <Box>
                 <ActionButtonWithPopper
                   searchGroupVariant="DateRangePicker"
+                  CustomDateRangePicker={
+                    <DateCalendar
+                      value={reportDate}
+                      onChange={(date) => setReportDate(date)}
+                    />
+                  }
                   customStyle={{ ...dateFilter }}
                   icon={
                     <CalendarTodayOutlinedIcon
@@ -103,7 +113,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                     />
                   }
                   iconPosition="end"
-                  buttonTitle="Aug 22 - Sep 23"
+                  buttonTitle={reportDate.format('YYYY-MM-DD')}
                 />
               </Box>
             </Stack>

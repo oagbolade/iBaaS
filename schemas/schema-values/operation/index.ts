@@ -85,14 +85,14 @@ export const ReturnChequeInitialValues: CreateReturnChequesFormValues = {
   payAmount: 0,
   valueDate: '',
   narration: '',
-  rate: 0,
+  rate: 1,
   dueDate: '',
   currencycode: ''
 };
 export const CashDepositInitialValues: CreateCashDepositFormValues = {
   accountNumber: '',
   transAmount: 0,
-  rate: 0,
+  rate: 1,
   valueDate: '',
   narration: '',
   currencyCode: '',

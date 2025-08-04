@@ -85,7 +85,7 @@ export const GroupTable = () => {
   };
 
   return (
-    <Box mt={6}>
+    <Box mt={1}>
       <TopActionsArea actionButtons={actionButtons} />
       <Box sx={{ padding: '25px', width: '100%' }}>
         <Box>

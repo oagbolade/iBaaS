@@ -36,20 +36,21 @@ type Props = {
 };
 export const FilterSection = ({ branches, onSearch }: Props) => {
   const { setDirection } = useSetDirection();
-  const { isMobile, setWidth } = useCurrentBreakpoint();
+  const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
-        values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      search:
-        values.search?.toString().trim().length > 0 ? values.search : null,
+        values.branchID?.toString().trim().length > 0 ? values.branchID : '',
+      searchWith:
+        values.searchWith?.toString().trim().length > 0
+          ? values.searchWith
+          : '',
       startDate:
-        values.startDate.toString().trim().length > 0 ? values.startDate : null,
-      endDate:
-        values.endDate.toString().trim().length > 0 ? values.endDate : null
+        values.startDate.toString().trim().length > 0 ? values.startDate : '',
+      endDate: values.endDate.toString().trim().length > 0 ? values.endDate : ''
     };
     onSearch?.(params);
   };
@@ -107,6 +108,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
               </Box>
             </Stack>
           </Stack>
+
           <Box
             sx={{
               marginTop: '30px',
@@ -131,7 +133,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   mb={{ tablet: 6 }}
                   item
                   mobile={12}
-                  tablet={7}
+                  tablet={6}
                   justifyContent="center"
                 >
                   <FormTextInput
@@ -140,8 +142,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                       ...inputFields
                     }}
                     icon={<SearchIcon />}
-                    name="search"
-                    placeholder="Search by Product Name or code"
+                    name="searchWith"
+                    placeholder="Search by accountnumber or account title"
                     label="Search"
                   />{' '}
                 </Grid>

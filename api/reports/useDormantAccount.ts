@@ -62,8 +62,7 @@ export function useGetAllDormantAccount(
     ],
     queryFn: () => fetchAllDormantAccount(toastActions, params || {}),
     enabled: Boolean(
-      params?.page ||
-        params?.pageSize ||
+      params?.pageSize ||
         (params?.branchID || '').length > 0 ||
         params?.searchWith ||
         params?.startDate ||

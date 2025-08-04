@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM repo.isw.la/node:18-alpine AS build
+FROM iswprodacr.azurecr.io/node:18-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY .env .env ./
@@ -9,7 +9,8 @@ COPY . .
 RUN npm run build
 
 # Stage 2: NGINX Build Stage
-FROM repo.isw.la/nginx:1.12-alpine
+FROM iswprodacr.azurecr.io/nginx:1.12-alpine
+WORKDIR /app
 # (FOR M1 CHIPS)
 # FROM arm64v8/nginx:stable-alpine
 COPY nginx.conf /etc/nginx/nginx.conf

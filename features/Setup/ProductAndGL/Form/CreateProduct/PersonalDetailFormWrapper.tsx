@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -14,6 +15,8 @@ import {
   IEducation,
   IFrequency,
   IOccupation,
+  IProdCodeType,
+  IProdType,
   IProductClass,
   IProducts,
   ISector
@@ -23,7 +26,11 @@ import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
-import { generateProductCode } from '@/api/setup/useProduct';
+import {
+  generateProductCode,
+  useGetProductClassByCastegory,
+  useGetProductTypeByid
+} from '@/api/setup/useProduct';
 import { encryptData } from '@/utils/encryptData';
 
 type Props = {
@@ -39,6 +46,13 @@ type Props = {
   bankproducts?: IBankProducts[];
   products?: IProducts[] | IProductClass[] | Array<any>;
   frequency?: IFrequency[];
+  data?: IProdType[] | IProdCodeType[] | Array<any>;
+  dataType?: IProdCodeType[] | IProdType[] | Array<any>;
+  productTypeCode?: string;
+  productCodeGenarate: string;
+  setProductCodeGenarate: React.Dispatch<React.SetStateAction<string>>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  setProductCode: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const PersonalDetailsForm = ({
@@ -53,26 +67,45 @@ export const PersonalDetailsForm = ({
   currencies,
   bankproducts,
   products,
-  frequency
+  frequency,
+  data,
+  productTypeCode,
+  productCodeGenarate,
+  setProductCodeGenarate,
+  dataType,
+  setProductCode
 }: Props) => {
   const { customerType, setCustomerType } = React.useContext(
     CustomerCreationContext
   );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
-  const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const { setFieldValue, values } = useFormikContext<any>();
+  const [productType, setproductType] = React.useState('');
 
   const handleCheck = (booleanValue: string, value: string) => {
     setCustomerType(value);
   };
 
   const handleGenerateCode = async (code: string) => {
-    generateProductCode(encryptData(code) as string).then((resp) => {
-      setProductCodeGenarate(resp.productCode);
+    setProductCode(values.productclass);
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const resp = await generateProductCode(encryptData(code) as string);
+      if (setProductCodeGenarate) {
+        // Check if setProductCodeGenarate is defined
+        setProductCodeGenarate(resp.productCode);
+      }
       setFieldValue('productCode', resp.productCode);
-    });
+    } catch (error) {
+      throw error;
+    }
   };
+  if (setProductCode) {
+    setProductCode(values.productclass);
+  }
+  const datatype: IProdCodeType[] | undefined = dataType;
+  const dataName: IProdType[] | undefined = data;
 
   const {
     mappedProductType,
@@ -80,13 +113,17 @@ export const PersonalDetailsForm = ({
     mappedBankproducts,
     mappedProductClass,
     mappedFrequency,
-    mappedBankproductCode
+    mappedBankproductCode,
+    mappedProductTypeId,
+    mappedProductClassTypeId
   } = useMapSelectOptions({
     productTypes,
     currencies,
     bankproducts,
     products,
-    frequency
+    frequency,
+    data: dataName,
+    dataType: datatype
   });
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
@@ -104,12 +141,13 @@ export const PersonalDetailsForm = ({
       setSelectedCurrency(defaultCurrency);
     }
   }, [mappedCurrency]);
+
   return (
     <>
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="productclass"
-          options={mappedBankproductCode}
+          options={mappedProductClassTypeId}
           label="Product Class"
           onChange={(e) => handleGenerateCode(e.target.value)}
           customStyle={{
@@ -199,7 +237,7 @@ export const PersonalDetailsForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
           name="appType"
-          options={mappedProductType}
+          options={mappedProductTypeId}
           label="Product Type"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')

@@ -15,7 +15,7 @@ export const basicSetupContainer = {
 };
 
 export const recetntModulesCard = {
-  width: '40%',
+  width: '55%',
   maxHeight: '302px',
   padding: '24px',
   borderRadius: '12px',

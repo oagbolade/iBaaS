@@ -31,27 +31,25 @@ export const ChequeWithdrawalContainer = () => {
   ];
   return (
     <>
-      <TopActionsArea
-        customStyle={{ width: '100%' }}
-        actionButtons={actionButtons}
-      />
-      <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
-        <Box
-          mr={3}
-          sx={{
-            width: '50%',
-            padding: { mobile: 0, tablet: '30px 0' }
-          }}
-        >
-          {currencies !== undefined && (
-            <ChequeWithdrawal
-              currencies={currencies}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-            />
-          )}
-        </Box>
+      <Box
+        sx={{
+          marginTop: '60px',
+          position: 'fixed',
+          top: 0,
+          width: 'calc(100vw - 300px)',
+          zIndex: 1
+        }}
+      >
+        <TopActionsArea actionButtons={actionButtons} />
       </Box>
+
+      {currencies !== undefined && (
+        <ChequeWithdrawal
+          currencies={currencies}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+        />
+      )}
     </>
   );
 };

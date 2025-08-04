@@ -30,6 +30,22 @@ export const CreateGLAccount = () => {
     setIsSubmitting(true);
   };
 
+  interface PermissionData {
+    pointing: number;
+    typeP: number | string;
+    swing: number;
+    populate: number;
+    post: number;
+  }
+
+  const [permisionData, setPermissiondata] = React.useState<PermissionData>({
+    pointing: 1,
+    typeP: '0',
+    swing: 0,
+    populate: 0,
+    post: 0
+  });
+
   const actionButtons: Array<React.ReactNode> = [
     <Box ml={{ mobile: 12, desktop: 0 }}>
       <PrimaryIconButton
@@ -51,12 +67,12 @@ export const CreateGLAccount = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%', padding: '0 13px' }}>
+     
         <TopActionsArea
           customStyle={{ width: '100%' }}
           actionButtons={actionButtons}
         />
-      </Box>
+ 
       <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
         <Stack direction={setDirection()}>
           <Box
@@ -79,10 +95,14 @@ export const CreateGLAccount = () => {
                   currencies={currencies}
                   status={status}
                   bankgl={Array.isArray(bankgl) ? bankgl : []}
+                  premisionData={permisionData}
                 />
               )}
           </Box>
-          <PermissionsSection />
+          <PermissionsSection
+            data={permisionData}
+            setData={setPermissiondata}
+          />
         </Stack>
       </Box>
     </>

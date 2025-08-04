@@ -45,13 +45,23 @@ export const GeneralLedger = () => {
   const { branches } = useGetBranches();
 
   const ActionMenuProps = ({
-    glNumber
+    glNumber,
+    pointing,
+    post,
+    populate,
+    swing,
+    typeP
   }: {
     glNumber: string;
+    pointing?: number;
+    post?: number;
+    populate?: number;
+    swing?: number;
+    typeP?: string;
   }): React.ReactElement => {
     return (
       <Link
-        href={`/finance/general-ledger/create?isEditing=true&glNumber=${glNumber}`}
+        href={`/finance/general-ledger/create?isEditing=true&glNumber=${glNumber}&pointing=${pointing}&post=${post}&populate=${populate}&swing=${swing}&typeP=${typeP}&post=${post}`}
       >
         {' '}
         <TableSingleAction actionName="Edit" />
@@ -75,12 +85,11 @@ export const GeneralLedger = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%', padding: '0 13px' }}>
-        <TopActionsArea
-          customStyle={{ width: '100%' }}
-          actionButtons={actionButtons}
-        />
-      </Box>
+      <TopActionsArea
+        customStyle={{ width: '100%' }}
+        actionButtons={actionButtons}
+      />
+
       <AdminContainer>
         {branches && (
           <FilterSection branches={branches} onSearch={handleSearch} />
@@ -134,7 +143,14 @@ export const GeneralLedger = () => {
                           {dataItem.bkbalance}
                         </StyledTableCell>
                         <StyledTableCell component="th" scope="row">
-                          <ActionMenuProps glNumber={dataItem.glnumber} />
+                          <ActionMenuProps
+                            glNumber={dataItem.glnumber}
+                            pointing={dataItem.pointing}
+                            typeP={dataItem.typeP}
+                            post={dataItem.post}
+                            populate={dataItem.populate}
+                            swing={dataItem.swing}
+                          />
                         </StyledTableCell>
                       </StyledTableRow>
                     );

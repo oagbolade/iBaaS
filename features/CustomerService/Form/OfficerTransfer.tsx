@@ -34,13 +34,20 @@ import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
 import { IAccountOfficers, IMParam } from '@/api/ResponseTypes/admin';
-import { extractIdFromDropdown, extractNameFromDropdown } from '@/utils/extractIdFromDropdown';
+import {
+  extractIdFromDropdown,
+  extractNameFromDropdown
+} from '@/utils/extractIdFromDropdown';
 import { getCurrentIsoDate } from '@/utils/getCurrentDate';
 import { encryptData } from '@/utils/encryptData';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
-    <PrimaryIconButton type='submit' buttonTitle="Submit" customStyle={{ ...submitButton }} />
+    <PrimaryIconButton
+      type="submit"
+      buttonTitle="Submit"
+      customStyle={{ ...submitButton }}
+    />
   </Box>
 ];
 
@@ -79,7 +86,7 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
 
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
     transferToAcctOfficer: [],
-    transferFromAcctOfficer: [],
+    transferFromAcctOfficer: []
   });
 
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
@@ -87,20 +94,33 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
     transferToAcctOfficer: ''
   });
 
-  const [customerAccountsCheckList, setCustomerAccountsCheckList] = React.useState<IMParam[]>(
-    []
-  );
+  const [customerAccountsCheckList, setCustomerAccountsCheckList] =
+    React.useState<IMParam[]>([]);
 
   const { officer: officerFromInformation, isLoading: isOfficerFromLoading } =
-    useGetAccountOfficerByCode(encryptData(transferFromId || extractIdFromDropdown(selectedValue.transferFromAcctOfficer as string) as string) || '');
+    useGetAccountOfficerByCode(
+      encryptData(
+        transferFromId ||
+          (extractIdFromDropdown(
+            selectedValue.transferFromAcctOfficer as string
+          ) as string)
+      ) || ''
+    );
   const { officer: officerToInformation, isLoading: isOfficerToLoading } =
-    useGetAccountOfficerByCode(encryptData(extractIdFromDropdown(selectedValue.transferToAcctOfficer as string) as string) || '');
-  const { mappedAccountOfficers } =
-    useMapSelectOptions({
-      officers,
-    });
+    useGetAccountOfficerByCode(
+      encryptData(
+        extractIdFromDropdown(
+          selectedValue.transferToAcctOfficer as string
+        ) as string
+      ) || ''
+    );
+  const { mappedAccountOfficers } = useMapSelectOptions({
+    officers
+  });
 
-  const populateOfficerNameOrCode = (type: 'officerCode' | 'officerName'): string => {
+  const populateOfficerNameOrCode = (
+    type: 'officerCode' | 'officerName'
+  ): string => {
     if (transferFromId && type === 'officerName') {
       return officerFromInformation?.officerName || 'N/A';
     }
@@ -110,11 +130,19 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
     }
 
     if (type === 'officerCode') {
-      return extractIdFromDropdown(selectedValue.transferFromAcctOfficer as string) || '';
+      return (
+        extractIdFromDropdown(
+          selectedValue.transferFromAcctOfficer as string
+        ) || ''
+      );
     }
 
     if (type === 'officerName') {
-      return extractNameFromDropdown(selectedValue.transferFromAcctOfficer as string) || '';
+      return (
+        extractNameFromDropdown(
+          selectedValue.transferFromAcctOfficer as string
+        ) || ''
+      );
     }
 
     return 'N/A';
@@ -123,7 +151,12 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
   const onSubmit = async () => {
     const submissionValues = {
       mParam: customerAccountsCheckList,
-      fromAcctofficer: transferFromId || extractIdFromDropdown(selectedValue.transferFromAcctOfficer as string) || '',
+      fromAcctofficer:
+        transferFromId ||
+        extractIdFromDropdown(
+          selectedValue.transferFromAcctOfficer as string
+        ) ||
+        '',
       mParam2: [
         {
           id: 0,
@@ -133,7 +166,7 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
         }
       ],
       toAcctofficer: `${extractIdFromDropdown(selectedValue.transferToAcctOfficer as string)}`,
-      userId: `${getStoredUser()?.profiles.userid}`,
+      userId: `${getStoredUser()?.profiles.userid}`
     };
 
     mutate(submissionValues);
@@ -169,7 +202,7 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
 
     if (name === 'transferToAcctOfficer' && value.trim().length === 0) {
       setFilteredValues({
-        transferToAcctOfficer: mappedAccountOfficers,
+        transferToAcctOfficer: mappedAccountOfficers
       });
     }
   };
@@ -181,13 +214,17 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
       validationSchema={officerTransferSchema}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        <TopActionsArea actionButtons={actionButtons} />
+
         <Grid container spacing={2}>
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+          <Box
+            sx={{
+              ...BatchContainer,
+            }}
+            ml={{ desktop: 1, mobile: 5 }}
+          >
             <PageTitle title="Officer Transfer" styles={BatchTitle} />
-            <Grid container>
+            <Grid>
               <Grid item={isTablet} mobile={12}>
                 <FormikRadioButton
                   options={[
@@ -199,19 +236,21 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
                   value="individual"
                 />
               </Grid>
-              
-              {transferFromId ? <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="name"
-                  placeholder="Enter Transfer From"
-                  label="Transfer From"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                  value={`ID ${officerFromInformation?.officercode?.trim()}: ${officerFromInformation?.officerName}`}
-                  disabled
-                />
-              </Grid> :
+
+              {transferFromId ? (
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="name"
+                    placeholder="Enter Transfer From"
+                    label="Transfer From"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    value={`ID ${officerFromInformation?.officercode?.trim()}: ${officerFromInformation?.officerName}`}
+                    disabled
+                  />
+                </Grid>
+              ) : (
                 <Grid item={isTablet} mobile={12}>
                   <StyledSearchableDropdown>
                     <ActionButtonWithPopper
@@ -221,17 +260,24 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
                       label="Transfer From"
                       name="transferFromAcctOfficer"
                       searchGroupVariant="BasicSearchGroup"
-                      dropDownOptions={filteredValues.transferFromAcctOfficer as OptionsI[]}
+                      dropDownOptions={
+                        filteredValues.transferFromAcctOfficer as OptionsI[]
+                      }
                       customStyle={dropDownWithSearch}
                       icon={<SearchIcon />}
                       iconPosition="end"
-                      buttonTitle={(selectedValue.transferFromAcctOfficer as string) || 'Search Account Officer'}
+                      buttonTitle={
+                        (selectedValue.transferFromAcctOfficer as string) ||
+                        'Search Account Officer'
+                      }
                       onChange={handleSearch}
-                      searchValue={searchValue.transferFromAcctOfficer as string}
+                      searchValue={
+                        searchValue.transferFromAcctOfficer as string
+                      }
                     />
                   </StyledSearchableDropdown>
                 </Grid>
-              }
+              )}
 
               <Grid item={isTablet} mobile={12}>
                 <FormTextInput
@@ -257,7 +303,7 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
                   disabled
                 />
               </Grid>
-    
+
               <Grid item={isTablet} mobile={12}>
                 <StyledSearchableDropdown>
                   <ActionButtonWithPopper
@@ -267,30 +313,56 @@ export const TransferOfficer = ({ officers }: TransferOfficerProps) => {
                     label="Transfer to"
                     name="transferToAcctOfficer"
                     searchGroupVariant="BasicSearchGroup"
-                    dropDownOptions={filteredValues.transferToAcctOfficer as OptionsI[]}
+                    dropDownOptions={
+                      filteredValues.transferToAcctOfficer as OptionsI[]
+                    }
                     customStyle={dropDownWithSearch}
                     icon={<SearchIcon />}
                     iconPosition="end"
-                    buttonTitle={(selectedValue.transferToAcctOfficer as string) || 'Search Account Officer'}
+                    buttonTitle={
+                      (selectedValue.transferToAcctOfficer as string) ||
+                      'Search Account Officer'
+                    }
                     onChange={handleSearch}
                     searchValue={searchValue.transferToAcctOfficer as string}
                   />
                 </StyledSearchableDropdown>
               </Grid>
-              {(transferFromId || (extractIdFromDropdown(selectedValue.transferFromAcctOfficer as string)?.length ?? 0) > 0) &&
+              {(transferFromId ||
+                (extractIdFromDropdown(
+                  selectedValue.transferFromAcctOfficer as string
+                )?.length ?? 0) > 0) && (
                 <AssignedCustomersSection
-                  title='Customers'
+                  title="Customers"
                   setSumbissionCheckList={setCustomerAccountsCheckList}
-                  transferFromId={transferFromId || extractIdFromDropdown(selectedValue.transferFromAcctOfficer as string) || ''}
+                  transferFromId={
+                    transferFromId ||
+                    extractIdFromDropdown(
+                      selectedValue.transferFromAcctOfficer as string
+                    ) ||
+                    ''
+                  }
                 />
-              }
+              )}
             </Grid>
           </Box>
-          <Box sx={{ ...PostingContainer, marginTop: '16px', right: 0, position: 'fixed' }}>
+          <Box sx={{ ...PostingContainer }}>
             {isMobile ? (
-              <MobilePreviewContent PreviewContent={<PreviewAccountOfficerTransferSection isOfficerToLoading={isOfficerToLoading} officerToInformation={officerToInformation} officerFromInformation={officerFromInformation} />} />
+              <MobilePreviewContent
+                PreviewContent={
+                  <PreviewAccountOfficerTransferSection
+                    isOfficerToLoading={isOfficerToLoading}
+                    officerToInformation={officerToInformation}
+                    officerFromInformation={officerFromInformation}
+                  />
+                }
+              />
             ) : (
-              <PreviewAccountOfficerTransferSection isOfficerToLoading={isOfficerToLoading} officerToInformation={officerToInformation} officerFromInformation={officerFromInformation} />
+              <PreviewAccountOfficerTransferSection
+                isOfficerToLoading={isOfficerToLoading}
+                officerToInformation={officerToInformation}
+                officerFromInformation={officerFromInformation}
+              />
             )}
           </Box>
         </Grid>

@@ -19,12 +19,7 @@ export const chequebookSchema = Yup.object({
 export const dormantAccountSchema = Yup.object({
   accountNumber: Yup.string().matches(stringRegex, 'Invalid Search Input'),
   searchWith: Yup.string().matches(stringRegex, 'Invalid Search Input'),
-   branchID: Yup.string()
-    .matches(stringRegex, 'Invalid Search Input')
-    .required('Branch is required'),
-  status: Yup.string()
-    .matches(stringRegex, 'Invalid Search Input')
-    .required('Status is required')
+  branchID: Yup.string().required('Branch is required'),
 });
 
 export const customerBalanceSchema = Yup.object({
@@ -38,8 +33,12 @@ export const customerBalanceSchema = Yup.object({
 });
 
 export const plainTrailBalanceSchema = Yup.object({
-  branchID: Yup.string().matches(stringRegex, 'Invalid Search Input').required('Branch name is required'),
-  reportType: Yup.string().matches(stringRegex, 'Invalid Search Input').required('Report type is required'),
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Branch name is required'),
+  reportType: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Report type is required')
 });
 
 export const chartOfAccountSchema = Yup.object({
@@ -65,6 +64,12 @@ export const maturityLoanSchema = Yup.object({
   prodCode: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
     .required('Product is required')
+});
+
+export const overdraftSchema = Yup.object({
+  branchID: Yup.string()
+    .matches(stringRegex, 'Invalid Search Input')
+    .required('Branch ID is required')
 });
 
 export const statementOfAccountSchema = Yup.object({
@@ -96,8 +101,11 @@ export const drillDowndueSchema = Yup.object({
 export const weeklyLoanRepaySchema = Yup.object({
   branchID: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
-    .required('Branch ID is required'),
-  prodCode: Yup.string()
+    .required('Branch ID is required')
+});
+
+export const groupMembershipSchema = Yup.object({
+  branchID: Yup.string()
     .matches(stringRegex, 'Invalid Search Input')
-    .required('Product is required')
+    .required('Branch ID is required')
 });

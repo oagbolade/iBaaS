@@ -47,6 +47,11 @@ export const sideBarMenu: SidebarMenuItem[] = [
       //   hideSubMenuItem: false
       // },
       {
+        name: 'End of Day',
+        link: '/operation/endOfDay/',
+        hideSubMenuItem: false
+      },
+      {
         name: 'Vault Management',
         link: '/operation/management/',
         hideSubMenuItem: false

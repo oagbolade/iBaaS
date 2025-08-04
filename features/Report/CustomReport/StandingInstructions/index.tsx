@@ -5,9 +5,6 @@ import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './COLUMNS';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetStandingIntruction } from '@/api/reports/useStandingInstructions';
 import { useGetBranches } from '@/api/general/useBranches';
 import { ISearchParams } from '@/app/api/search/route';
@@ -15,6 +12,8 @@ import { FormSkeleton } from '@/components/Loaders';
 import { StyledTableCell } from '@/components/Table/style';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { IStandingInstruction } from '@/api/ResponseTypes/reports';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
 
 export const ActionMenu: React.FC = () => {
   return (
@@ -29,13 +28,41 @@ export const StandingInstructions = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
+  const { dateValue } = React.useContext(DateRangePickerContext);
+
   const { siTransactions, isLoading } = useGetStandingIntruction({
-    ...searchParams,
-    page
+    ...searchParams
   });
+
+  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+    React.useContext(DownloadReportContext);
+
+  React.useEffect(() => {
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
+
+  React.useEffect(() => {
+    if ((siTransactions ?? []).length > 0) {
+      setExportData(siTransactions as []);
+    }
+  }, [siTransactions, isLoading, readyDownload, setExportData]);
+
   const handleSearch = async (params: ISearchParams | null) => {
+    setReadyDownload(false);
     setSearch(true);
-    setSearchParams(params);
+    setSearchParams({
+      ...params,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      getAll: readyDownload,
+      page
+    });
+    setReportType('StandingInstructionReport');
   };
 
   return (
@@ -64,10 +91,10 @@ export const StandingInstructions = () => {
                 return (
                   <StyledTableRow key={dataItem.sinumber}>
                     <StyledTableCell component="th" scope="row">
-                      {dataItem?.sinumber || 'N/A'}
+                      {dataItem?.fromaccountnumber || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.fromaccountnumber || 'N/A'}
+                      {dataItem?.toaccountnumber || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.create_dt || 'N/A'}

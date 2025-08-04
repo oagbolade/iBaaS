@@ -27,6 +27,8 @@ import { useGetGLByGLNumber } from '@/api/admin/useCreateGLAccount';
 import { decryptData } from '@/utils/decryptData';
 import { encryptData } from '@/utils/encryptData';
 import { Tabs } from '@/components/Revamp/Tabs';
+import { getStoredUser } from '@/utils/user-storage';
+import { useGetAllUsers, useGetUserByID } from '@/api/admin/useAdminUsers';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -57,24 +59,30 @@ export const AddCheque = ({
   const { checkbooks, isLoading } = useGetChequeById(
     encryptData(chequeId ?? '') || null
   );
+  const userId = `${getStoredUser()?.profiles?.userid}`;
+  const { userDetails } = useGetUserByID(encryptData(userId as string));
+  const branchCodeId = userDetails?.branchcode;
   const [commissionAccount, setCommissionAccount] = React.useState<
     string | null
   >(null);
   const [costAmount, setCostAmount] = React.useState<string | null>(null);
-  const { mappedGlAccount } = useMapSelectOptions({
-    bankgl
-  });
+  // const branchCode = `${getStoredUser()?.profiles?.branchCode}` On hold;
+  const costAmountDataCode = `${branchCodeId}${commissionAccount}`;
 
   const { bankgl: accountData } = useGetGLByGLNumber(
-    encryptData(commissionAccount) || ''
+    encryptData(costAmountDataCode) || ''
   );
+  const accountDataCode = `${branchCodeId}${costAmount}`;
   const { bankgl: costAmountData } = useGetGLByGLNumber(
-    encryptData(costAmount) || ''
+    encryptData(accountDataCode) || ''
   );
-
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
+    const lastNumber = values.numberOfleaves;
     await mutate({
-      ...values
+      ...values,
+      glAccount1: costAmount,
+      glAccount2: commissionAccount,
+      lastnumber: lastNumber
     });
   };
   useEffect(() => {
@@ -137,21 +145,23 @@ export const AddCheque = ({
               <Box sx={{ display: 'flex' }}>
                 <Box mt={4} sx={BatchContainer}>
                   <Grid container>
-                    <Grid
-                      item={isTablet}
-                      mobile={12}
-                      mr={{ mobile: 35, tablet: 0 }}
-                      width={{ mobile: '100%', tablet: 0 }}
-                    >
-                      <FormTextInput
-                        name="batchno"
-                        placeholder="Enter Cheque Book Code"
-                        label="Cheque Book Code"
-                        customStyle={{
-                          width: setWidth(isMobile ? '250px' : '100%')
-                        }}
-                      />
-                    </Grid>
+                    {isEditing && (
+                      <Grid
+                        item={isTablet}
+                        mobile={12}
+                        mr={{ mobile: 35, tablet: 0 }}
+                        width={{ mobile: '100%', tablet: 0 }}
+                      >
+                        <FormTextInput
+                          name="batchno"
+                          placeholder="Enter Cheque Book Code"
+                          label="Cheque Book Code"
+                          customStyle={{
+                            width: setWidth(isMobile ? '250px' : '100%')
+                          }}
+                        />
+                      </Grid>
+                    )}
                     <Grid
                       item={isTablet}
                       mobile={12}
@@ -160,7 +170,7 @@ export const AddCheque = ({
                     >
                       <FormTextInput
                         name="numberOfleaves"
-                        placeholder="Enter Product Code"
+                        placeholder="Enter No of Leaves"
                         label="No of Leaves"
                         customStyle={{
                           width: setWidth(isMobile ? '250px' : '100%')
@@ -189,7 +199,7 @@ export const AddCheque = ({
                       width={{ mobile: '100%', tablet: 0 }}
                     >
                       <FormTextInput
-                        name="lastnumber"
+                        name="currentCost"
                         placeholder="Enter Cost of cheque"
                         label="Cost of Cheque Books (To Bank)"
                         customStyle={{

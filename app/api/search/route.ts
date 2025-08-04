@@ -102,4 +102,6 @@ export interface ISearchParams {
   itemcode?: string | number;
   nodeCode?: string | null;
   Gl_ClassCode?: string | null;
+  officerCode?: string | null;
+  accountNo?: string | null;
 }

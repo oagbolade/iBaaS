@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Box, Stack } from '@mui/material';
 import { ActionButton } from '@/components/Revamp/Buttons';
@@ -20,13 +20,14 @@ import LoanPreviewContent from '@/features/Loan/LoanDirectory/LoanPreviewContent
 import { useGetLoanAccountByLoanAccountNumber } from '@/api/loans/useCreditFacility';
 import { encryptData } from '@/utils/encryptData';
 
-const MobilePreviewContent: React.FC<{ data?: any }> = ({ data }) => {
-  const searchParams = useSearchParams();
-  const accountNumber = searchParams.get('accountNumber') || '';
+const MobilePreviewContent: React.FC<{
+  data?: any;
+  isLoadingLoanData: boolean;
+}> = ({ data, isLoadingLoanData }) => {
   return (
     <MobileModalContainer
       ShowPreview={
-        <LoanPreviewContent accountNumber={accountNumber} data={data} />
+        <LoanPreviewContent isLoadingLoanData={isLoadingLoanData} data={data} />
       }
     />
   );
@@ -66,9 +67,10 @@ export const PartialPay = () => {
     setIsSubmitting(true);
   };
 
-  const { data } = useGetLoanAccountByLoanAccountNumber(
-    encryptData(accountNumber as string) || ''
-  );
+  const { data, isLoading: isLoadingLoanData } =
+    useGetLoanAccountByLoanAccountNumber(
+      encryptData(accountNumber as string) || ''
+    );
 
   const cancelAction = () => {
     handleRedirect(router, '/loan/loan-directory/');
@@ -81,14 +83,14 @@ export const PartialPay = () => {
         customStyle={{ ...cancelButton }}
         buttonTitle="Cancel"
       />
-      ,
+      
       <PrimaryIconButton
         isLoading={isLoading}
         onClick={triggerSubmission}
         buttonTitle="Submit"
         customStyle={{ ...submitButton }}
       />
-      ,
+      
     </Box>
   ];
 
@@ -101,11 +103,14 @@ export const PartialPay = () => {
           width: '100%'
         }}
       >
-        <MobilePreviewContent data={data} />
+        <MobilePreviewContent
+          isLoadingLoanData={isLoadingLoanData || false}
+          data={data}
+        />
         <Stack direction={setDirection()}>
           <Box
             sx={{
-              width: { mobile: '100%', desktop: '624px' },
+              width: { mobile: '100%', desktop: '500px' },
               padding: '32px'
             }}
           >
@@ -131,7 +136,10 @@ export const PartialPay = () => {
             >
               <LargeTitle title="Preview" />
               <Box mt={3} />
-              <LoanPreviewContent accountNumber={accountNumber} data={data} />
+              <LoanPreviewContent
+                isLoadingLoanData={isLoadingLoanData}
+                data={data}
+              />
             </Box>
           )}
         </Stack>

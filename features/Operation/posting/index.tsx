@@ -117,10 +117,17 @@ export const PostingContainer = ({ accountDetails }: Props) => {
 
   return (
     <>
-      <TopActionsArea
-        customStyle={{ width: '100%' }}
-        actionButtons={actionButtons}
-      />
+      <Box
+        sx={{
+          marginTop: '60px',
+          position: 'fixed',
+          top: 0,
+          width: 'calc(100vw - 300px)',
+          zIndex: 1
+        }}
+      >
+        <TopActionsArea actionButtons={actionButtons} />
+      </Box>
       <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
         <Box
           mr={3}

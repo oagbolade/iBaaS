@@ -28,10 +28,10 @@ export async function getTrialBalance(
           startDate: params?.startDate,
           endDate: params?.endDate,
           reportType: Number(params?.reportType),
-          glClassCode: params?.gl_ClassCode,
+          classCode: params?.gl_ClassCode,
           getAll: params?.getAll || false,
-          glNodeCode: Number(params?.glNodeCode),
-          glTypeCode: Number(params?.glTypeCode)
+          nodeCode: Number(params?.glNodeCode),
+          prodtypecode: Number(params?.glTypeCode)
         },
         headers: {
           'Content-Type': 'application/json',

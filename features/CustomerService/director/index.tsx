@@ -74,7 +74,7 @@ export const DirectorTable = () => {
   };
 
   return (
-    <Box mt={6}>
+    <Box>
       <TopActionsArea actionButtons={actionButtons} />
       <Box sx={{ padding: '25px' }}>
         <FilterSection onSearch={handleSearch} />

@@ -34,27 +34,28 @@ export const ClearContainer = () => {
   ];
   return (
     <>
-      <TopActionsArea actionButtons={actionButtons} />
-      <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
-        <Box
-          mr={3}
-          sx={{
-            width: '50%',
-            padding: { mobile: 0, tablet: '30px 0' }
-          }}
-        >
-          {commBanks !== undefined && currencies !== undefined && (
-            <InWard
-              commBanks={commBanks}
-              currencies={currencies}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-              setIsSubmittingForward={setIsSubmittingForward}
-              isSubmittingForward={isSubmittingForward}
-            />
-          )}
-        </Box>
+      <Box
+        sx={{
+          marginTop: '60px',
+          position: 'fixed',
+          top: 0,
+          width: 'calc(100vw - 300px)',
+          zIndex: 1
+        }}
+      >
+        <TopActionsArea actionButtons={actionButtons} />
       </Box>
+
+      {commBanks !== undefined && currencies !== undefined && (
+        <InWard
+          commBanks={commBanks}
+          currencies={currencies}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+          setIsSubmittingForward={setIsSubmittingForward}
+          isSubmittingForward={isSubmittingForward}
+        />
+      )}
     </>
   );
 };

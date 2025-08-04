@@ -126,7 +126,8 @@ export const ChequeWithdrawal = ({
 
     const getAllValues = {
       ...values,
-      currencyCode: selectedCurrency
+      currencyCode: selectedCurrency,
+      cheqNumber: nextCounterCheqNo
     };
     await mutate(getAllValues);
   };
@@ -177,16 +178,16 @@ export const ChequeWithdrawal = ({
       validationSchema={chequeWithdraw}
     >
       <Form>
-        <Grid container spacing={2}>
-          <Box sx={{ display: 'flex' }}>
+        <Grid container spacing={2} sx={{ marginTop: '80px', width: '100%' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
               <PageTitle title="Cheque Withdrawal" styles={BatchTitle} />
               <Grid container>
                 <Grid item={isTablet} mobile={12}>
                   <FormikRadioButton
                     options={[
-                      { label: 'Bank Cheques', value: '0' },
-                      { label: 'Counter Cheques', value: '1' }
+                      { label: 'Bank Cheques', value: '1' },
+                      { label: 'Counter Cheques', value: '2' }
                     ]}
                     title="Select In-house Cheque Type"
                     name="action"

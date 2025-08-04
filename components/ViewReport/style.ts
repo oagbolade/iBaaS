@@ -43,7 +43,7 @@ export const ViewAccountContainer = {
   background: `${colors.white}`,
   width: '1000px',
   height: 'fixed',
-  marginTop: '60px',
+  marginTop: '80px',
   marginLeft: '50px'
 };
 

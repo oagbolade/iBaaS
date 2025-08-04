@@ -105,7 +105,7 @@ export const CreateCharges = ({
       authid: '',
       menuid: Number(menuId),
       userid: '',
-      firedCharges: ''
+      firedCharges: values.firedCharges
     });
   };
 
@@ -251,7 +251,7 @@ export const CreateCharges = ({
                   <Box sx={frequencyType}>
                     <Grid item={isTablet} mobile={12}>
                       <FormikRadioButton
-                        name="willaccrual"
+                        name="accrualRequired"
                         title="Will Accrual be Required?"
                         options={amortiseOption}
                         handleCheck={(e: boolean) => handleRadioButton(e)}
@@ -285,7 +285,7 @@ export const CreateCharges = ({
 
                     <Grid item={isTablet} mobile={12}>
                       <FormSelectField
-                        name="fre"
+                        name="freq"
                         options={EditOperations.frequencyMode}
                         label="Select Frequency"
                         customStyle={{
@@ -298,7 +298,7 @@ export const CreateCharges = ({
                 {liquidationMode === '3' && (
                   <Grid item={isTablet} mobile={12}>
                     <FormSelectField
-                      name="liq"
+                      name="freq"
                       options={EditOperations.frequencyMode}
                       label="Select Frequency"
                       customStyle={{
@@ -344,7 +344,7 @@ export const CreateCharges = ({
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <FormSelectField
-                    name="freq"
+                    name="liqperiod"
                     options={EditOperations.takeCharge}
                     label="When will charge take place?"
                     customStyle={{
@@ -364,7 +364,7 @@ export const CreateCharges = ({
                 </Grid>
                 <Grid sx={{ marginTop: 2 }} item={isTablet} mobile={12}>
                   <FormikRadioButton
-                    name="accrualRequired"
+                    name="firedCharges"
                     title="Does this have Applicable Taxes?"
                     options={applicationTaxOption}
                     value={applicationTax?.toString()}
@@ -377,7 +377,7 @@ export const CreateCharges = ({
                       <CheckboxInput
                         className="checkboxPermissions"
                         label="Value Added Taxes(VAT)"
-                        name="freq"
+                        name="firedCharges"
                       />
                     </Grid>
                     <Box sx={{ marginTop: 3 }}>
@@ -385,7 +385,7 @@ export const CreateCharges = ({
                         <CheckboxInput
                           className="checkboxPermissions"
                           label="Withholding Tax(WHT)"
-                          name="freq"
+                          name="firedCharges"
                         />
                       </Grid>
                     </Box>

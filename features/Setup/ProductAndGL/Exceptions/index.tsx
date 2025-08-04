@@ -34,6 +34,7 @@ export const ExceptionsTable = () => {
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [search, setSearch] = useState<boolean>(false);
+  const [exceptionl, setexceptionl] = useState();
 
   const {
     totalPages,
@@ -41,8 +42,10 @@ export const ExceptionsTable = () => {
     data: exceptionlData,
     isLoading
   } = useFilterExceptionSearch({ ...searchParams, page });
-  const handleSearch = async (params: any) => {
-    setSearchParams(params);
+  const handleSearch = async (params: ISearchParams) => {
+    setSearchParams({
+      ...params
+    });
     setSearch(true);
   };
   const ActionMenu = ({

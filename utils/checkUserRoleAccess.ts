@@ -12,7 +12,7 @@ export const checkMultipleUserRoleAccess = (
 
   Object.keys(AccessRules).forEach((key) => {
     if (key === menuName) {
-      const foundRole = AccessRules[key].some((role) => role === userRole);
+      const foundRole = AccessRules[key].some((role) => role.toLocaleLowerCase() === userRole.toLocaleLowerCase());
       userRoleIsContainedInRule = foundRole;
     }
   });
@@ -26,7 +26,7 @@ export const checkMultipleUserRoleAccess = (
   );
 };
 
-export const checkUserRoleAccess = (roleNames: string[]): boolean => {
+const checkUserRoleAccess = (roleNames: string[]): boolean => {
   if (roleNames.length > 1) {
     return true;
   }

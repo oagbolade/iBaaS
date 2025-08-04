@@ -221,9 +221,16 @@ interface IQueryKeys {
   weeklyLoanRepayment: string;
   balanceSheet: string;
   balanceSheetbyId: string;
+  groupMembership: string;
+  getProductClassByCategory: string;
+  getProductTypeId: string;
+  profitAndLoss: string;
+  getTreasuryProductByCode: string;
+  getGLWithBranchCode: string;
 }
 
 export const queryKeys: IQueryKeys = {
+  profitAndLoss: 'profitAndLoss',
   getAllTermDepositMaturityReports: 'getAllTermDepositMaturityReports',
   getTrialBalanceByGroup: 'getTrialBalanceByGroup',
   getAllProductDocs: 'getAllTermDepositMaturityReports',
@@ -446,4 +453,9 @@ export const queryKeys: IQueryKeys = {
   getLoanProductCode: 'getLoanProductCode',
   statementOfAccount: 'statementOfAccount',
   weeklyLoanRepayment: 'weeklyLoanRepayment',
+  groupMembership: 'groupMembership',
+  getProductClassByCategory: 'getProductClassByCategory',
+  getProductTypeId: 'getProductTypeId',
+  getTreasuryProductByCode: 'getTreasuryProductByCode',
+  getGLWithBranchCode: 'getGLWithBranchCode'
 };

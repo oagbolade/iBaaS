@@ -16,8 +16,8 @@ import { FormSkeleton } from '@/components/Loaders';
 import { Status } from '@/components/Labels';
 import { useGetBranches } from '@/api/general/useBranches';
 import { useFilterCustomerAccountSearch } from '@/api/customer-service/useCustomer';
-import { TableMenuButton } from '@/components/Buttons';
 import { useGetStatus } from '@/api/general/useStatus';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 type Props = {
   customerId: string;
@@ -73,7 +73,7 @@ export const OverDrafts = () => {
     >
       <Box
         sx={{
-          marginBottom: '60px'
+          marginBottom: '25px'
         }}
       />
 
@@ -125,7 +125,7 @@ export const OverDrafts = () => {
                   </StyledTableCell>
 
                   <StyledTableCell component="th" scope="row">
-                    {dataItem.bkbalance || 'N/A'}
+                    {`NGN ${formatCurrency(dataItem?.bkbalance || 0) || 'N/A'}`}
                   </StyledTableCell>
 
                   <StyledTableCell component="th" scope="row">

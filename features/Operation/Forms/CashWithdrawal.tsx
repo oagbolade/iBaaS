@@ -218,10 +218,18 @@ export const CashWithDrawal = ({ currencies }: Props) => {
       validationSchema={cashWithdrawalSchema}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
+        <Box
+          sx={{
+            marginTop: '60px',
+            position: 'fixed',
+            top: 0,
+            width: 'calc(100vw - 300px)',
+            zIndex: 1
+          }}
+        >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ marginTop: '70px', width: '100%' }}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Cash Withdrawal" styles={BatchTitle} />
             <Grid container>

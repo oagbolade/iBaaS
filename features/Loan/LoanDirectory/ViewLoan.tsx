@@ -39,7 +39,7 @@ const actionButtons = ({
   productCode
 }: Props) => {
   const options: any =
-    status === '4'
+    status === 'Running'
       ? [
           <Link
             href={`/loan/loan-directory/cancel-loan/?accountNumber=${sanitize(accountNumber)}&action=${sanitize(action)}&customerId=${sanitize(customerId)}`}
@@ -47,17 +47,17 @@ const actionButtons = ({
             Cancel Loan
           </Link>,
           <Link
-            href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
+            href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
           >
             Loan Restructure
           </Link>,
           <Link
-            href={`/loan/loan-directory/partial-pay/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}`}
+            href={`/loan/loan-directory/partial-pay/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`}
           >
             Partial Pay
           </Link>,
           <Link
-            href={`/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}`}
+            href={`/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`}
           >
             Terminate Loan
           </Link>
@@ -96,6 +96,7 @@ export const ViewLoan = () => {
       encryptData(accountNumber) || '',
       encryptData(action) || ''
     );
+
   const { accDetailsResults, isLoading: areAccoutDetailsLoading } =
     useGetAccountDetails(encryptData(settlementAccount || '') || '');
 
@@ -113,35 +114,32 @@ export const ViewLoan = () => {
 
   return (
     <Box>
-      <Box
-        sx={{
-          padding: { mobile: '0 5px', desktop: '0 25px' },
-          width: '100%'
-        }}
-      >
-        <TopActionsArea
-          actionButtons={[
-            actionButtons({
-              accountNumber,
-              action,
-              status: loanAccDetails?.status || '',
-              customerId: accDetailsResults?.customerid || '',
-              settlementAccount,
-              productCode: loanAccDetails?.productCode || ''
-            })
-          ]}
-        />
+      <TopActionsArea
+        actionButtons={
+          loanAccDetails?.status === 'Running'
+            ? [
+                actionButtons({
+                  accountNumber,
+                  action,
+                  status: loanAccDetails?.status || '',
+                  customerId: accDetailsResults?.customerid || '',
+                  settlementAccount,
+                  productCode: loanAccDetails?.productCode || ''
+                })
+              ]
+            : []
+        }
+      />
 
-        <Box pl={{ mobile: 2, desktop: 0 }}>
-          {loanAccDetails && accDetailsResults && (
-            <LoanDetails
-              loanAccDetails={loanAccDetails as unknown as ILoanAccountDetails}
-              customerDetails={accDetailsResults as unknown as ICustomerDetails}
-              loanAccountNumber={accountNumber}
-              loanProducts={loanProducts as unknown as IProductDetails}
-            />
-          )}
-        </Box>
+      <Box sx={{ padding: '20px', width: '100%' }}>
+        {loanAccDetails && accDetailsResults && (
+          <LoanDetails
+            loanAccDetails={loanAccDetails as unknown as ILoanAccountDetails}
+            customerDetails={accDetailsResults as unknown as ICustomerDetails}
+            loanAccountNumber={accountNumber}
+            loanProducts={loanProducts as unknown as IProductDetails}
+          />
+        )}
       </Box>
     </Box>
   );

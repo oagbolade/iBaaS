@@ -43,12 +43,25 @@ export const BulkUploadContainer = () => {
   ];
   return (
     <>
-      <TopActionsArea
-        customStyle={{ width: '100%' }}
-        actionButtons={actionButtons}
-      />
-      <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
-        <Stack direction={setDirection()}>
+      <Box
+        sx={{
+          marginTop: '60px',
+          position: 'fixed',
+          top: 0,
+          width: 'calc(100vw - 300px)',
+          zIndex: 5
+        }}
+      >
+        <TopActionsArea actionButtons={actionButtons} />
+      </Box>
+      <Box sx={{ marginTop: '70px', width: 'calc(100vw - 300px)' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap'
+          }}
+        >
           <Box
             mr={3}
             sx={{
@@ -61,7 +74,7 @@ export const BulkUploadContainer = () => {
               isSubmitting={isSubmitting}
             />
           </Box>
-          <Box sx={{ marginTop: '60px' }}>
+          <Box sx={{ marginTop: '60px', marginLeft: '40px' }}>
             {isMobile ? (
               <MobilePreviewContent
                 PreviewContent={<PreviewBulkUpload />}
@@ -71,7 +84,7 @@ export const BulkUploadContainer = () => {
               <PreviewBulkUpload />
             )}
           </Box>
-        </Stack>
+        </Box>
       </Box>
     </>
   );

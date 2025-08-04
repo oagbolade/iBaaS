@@ -107,6 +107,27 @@ export const CreateGroupForm = ({
     groupHead: []
   });
 
+  useEffect(() => {
+    if (isEditing && group) {
+      setSelectedValue({
+        acctOfficer: group.acctOfficer || '',
+        groupHead: group.groupHead || '',
+        secretary: group.secretary || ''
+      });
+      setSearchValue({
+        acctOfficer: group.acctOfficer || '',
+        groupHead: group.groupHead || '',
+        secretary: group.secretary || ''
+      });
+      setFilteredValues({
+        acctOfficer: mappedAccountOfficers,
+        secretary: mappedAccountOfficers,
+        groupHead: mappedAccountOfficers
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditing, group, mappedAccountOfficers]);
+
   const onSubmit = async (values: any) => {
     const toastMessage = {
       title: 'Validation error',
@@ -256,7 +277,7 @@ export const CreateGroupForm = ({
                       name="acctOfficer"
                       searchGroupVariant="BasicSearchGroup"
                       dropDownOptions={filteredValues.acctOfficer as OptionsI[]}
-                      customStyle={{ ...dropDownWithSearch, width: '778px' }}
+                      customStyle={{ ...dropDownWithSearch, width: '440px' }}
                       icon={<SearchIcon />}
                       iconPosition="end"
                       buttonTitle={
@@ -367,7 +388,7 @@ export const CreateGroupForm = ({
                       name="groupHead"
                       searchGroupVariant="BasicSearchGroup"
                       dropDownOptions={filteredValues.groupHead as OptionsI[]}
-                      customStyle={{ ...dropDownWithSearch, width: '778px' }}
+                      customStyle={{ ...dropDownWithSearch, width: '440px' }}
                       icon={<SearchIcon />}
                       iconPosition="end"
                       buttonTitle={
@@ -407,7 +428,7 @@ export const CreateGroupForm = ({
                       name="secretary"
                       searchGroupVariant="BasicSearchGroup"
                       dropDownOptions={filteredValues.secretary as OptionsI[]}
-                      customStyle={{ ...dropDownWithSearch, width: '778px' }}
+                      customStyle={{ ...dropDownWithSearch, width: '440px' }}
                       icon={<SearchIcon />}
                       iconPosition="end"
                       buttonTitle={

@@ -45,49 +45,43 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
     >
       <Form>
         <Box>
-          <Grid container spacing={2}>
-            <Grid item mobile={12} tablet={2} justifyContent="center">
+          <Grid
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '50px',
+              gap: '20px'
+            }}
+          >
+            <Grid>
               <RadioButtons
                 className="statusOption"
                 options={[
                   { label: 'Active', value: '1' },
-                  { label: 'In Active', value: '3' }
+                  { label: 'Disabled', value: '3' }
                 ]}
                 title="User Status"
                 name="status"
                 value=""
               />
             </Grid>
-            <Grid
-              mb={{ tablet: 6 }}
-              item
-              mobile={12}
-              tablet={2}
-              justifyContent="center"
-            >
+            <Grid>
               <FormSelectField
                 customStyle={{
-                  width: setWidth(),
-                  fontSize: '14px',
-                  ...inputFields
+                  width: '200px',
+                  fontSize: '14px'
                 }}
                 name="branchID"
                 options={mappedBranches}
                 label="Branch ID"
               />{' '}
             </Grid>
-            <Grid
-              mb={{ tablet: 6 }}
-              item
-              mobile={12}
-              tablet={7}
-              justifyContent="center"
-            >
+            <Grid>
               <FormTextInput
                 customStyle={{
-                  width: setWidth(),
+                  width: '250px',
                   fontSize: '14px',
-                  ...inputFields
+                  marginTop: '5px'
                 }}
                 icon={<SearchIcon />}
                 name="search"
@@ -95,16 +89,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 label="Search By User Name"
               />{' '}
             </Grid>
-            <Grid
-              item
-              mobile={12}
-              tablet={1}
-              sx={{ display: 'flex' }}
-              justifyContent="flex-end"
-              mt={{ tablet: 3.2 }}
-              mr={{ mobile: 30, tablet: 0 }}
-              mb={{ mobile: 6, tablet: 0 }}
-            >
+            <Grid sx={{ marginTop: '18px' }}>
               <ActionButton type="submit" buttonTitle="Search" />
             </Grid>
           </Grid>

@@ -201,16 +201,15 @@ export const CreateDirector = ({
       validationSchema={createDirector}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        <TopActionsArea actionButtons={actionButtons} />
+
         <Stack
           sx={{ minHeight: '150vh' }}
           direction="row"
           justifyContent="space-between"
           spacing={3}
         >
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+          <Box sx={{ ...BatchContainer, width: { tablet: '500px', mobile: '500px' } }} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Create Director" styles={BatchTitle} />
             <Grid container>
               <Grid item={isTablet} mobile={12}>
@@ -224,7 +223,7 @@ export const CreateDirector = ({
                     name="customerId"
                     searchGroupVariant="BasicSearchGroup"
                     dropDownOptions={filteredValues.customerId as OptionsI[]}
-                    customStyle={{ ...dropDownWithSearch, width: '500px' }}
+                    customStyle={{ ...dropDownWithSearch, width: '450px' }}
                     icon={<SearchIcon />}
                     iconPosition="end"
                     buttonTitle={
@@ -288,7 +287,7 @@ export const CreateDirector = ({
                 />
               </Grid>
               <Grid item={isTablet} mobile={12}>
-                <Box sx={{ width: { mobile: '250px', tablet: '560px' } }}>
+                <Box sx={{ width: { mobile: '250px', tablet: '450px' } }}>
                   <FormikDateTimePicker
                     label="Date of Birth"
                     name="dob"
@@ -390,7 +389,7 @@ export const CreateDirector = ({
                 PreviewContent={
                   <PreviewDirectorInformation
                     customerResult={customerResult}
-                    directorDetails={directorDetails}
+                    directorDetails={directorDetails || []}
                     loading={areDirectorsLoading || isCustomerInfoLoading}
                     customerId={customerId}
                   />
@@ -399,7 +398,7 @@ export const CreateDirector = ({
             ) : (
               <PreviewDirectorInformation
                 customerResult={customerResult}
-                directorDetails={directorDetails}
+                directorDetails={directorDetails || []}
                 loading={areDirectorsLoading || isCustomerInfoLoading}
                 customerId={customerId}
               />

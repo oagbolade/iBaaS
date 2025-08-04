@@ -41,7 +41,6 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
       validationSchema={overDraftSearchSchema}
     >
       <Form>
-        <Box>
           <Grid container spacing={2}>
             <Grid item mobile={12} tablet={3} justifyContent="center">
               <FormSelectField
@@ -107,7 +106,6 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               <ActionButton type="submit" buttonTitle="Search" />
             </Grid>
           </Grid>
-        </Box>
       </Form>
     </Formik>
   );

@@ -14,13 +14,13 @@ import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGetMaturityLoan } from '@/api/reports/useMaturityLoan';
 import {
-  ILoanMaturityResponse,
   ILoanMaturityReport
 } from '@/api/ResponseTypes/reports';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { useGetAllProduct } from '@/api/setup/useProduct';
 import { StyledTableCell } from '@/components/Table/style';
+
 import colors from '@/assets/colors';
 
 interface ActionMenuProps {

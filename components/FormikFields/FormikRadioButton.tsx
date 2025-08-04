@@ -28,6 +28,7 @@ type Props = {
   required?: boolean;
   handleCheck?: (value: boolean) => void;
   disable?: boolean;
+  customStyle?: object;
 };
 
 function BpRadio(props: RadioProps) {
@@ -73,7 +74,8 @@ export const FormikRadioButton = ({
   options,
   handleCheck,
   required,
-  disable
+  disable,
+  customStyle
 }: Props) => {
   const [selectedValue, setValue] = React.useState(value);
 
@@ -110,19 +112,21 @@ export const FormikRadioButton = ({
                 defaultValue={value || selectedValue}
                 onChange={handleChange}
                 name={name}
+                style={{ ...customStyle }}
               >
                 <Box sx={RadioButtonStyle}>
                   {options.map((option) => {
                     return (
                       <FormControlLabel
                         key={option.value}
-                        control={<BpRadio />}
+                        control={<BpRadio style={{ ...customStyle }} />}
                         label={option.label}
                         id={String(option.value)}
                         {...field}
                         value={option.value}
                         checked={field.value === option.value}
                         disabled={disable}
+                        style={{ ...customStyle }}
                       />
                     );
                   })}

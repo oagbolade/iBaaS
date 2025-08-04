@@ -56,8 +56,6 @@ export const TableActionMenu = ({
   };
   const [shouldDisableOverdraft, setshouldDisableOverdraft] = React.useState(false);
 
-
-
   React.useEffect(() => {
     const disableOverDreaft = !checkMultipleUserRoleAccess(
       'Overdrafts',
@@ -112,7 +110,6 @@ export const TableActionMenu = ({
                     }}
                     aria-disabled={shouldDisableOverdraft}
                     tabIndex={shouldDisableOverdraft ? -1 : undefined}
-
 
                     href={`/loan/overdrafts/set-overdraft?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(
                       customerId

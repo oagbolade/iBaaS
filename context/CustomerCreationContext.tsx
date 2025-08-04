@@ -32,10 +32,6 @@ export const progressCompletionInitialValues: Record<string, ProgressType> = {
   identificationDetails: {
     total: 4,
     progress: 0
-  },
-  referrerDetails: {
-    total: 3,
-    progress: 0
   }
 };
 
@@ -45,11 +41,11 @@ const initialCustomerCreationContext = {
   introducerTypeValue: '',
   customerType: '',
   completed: progressCompletionInitialValues,
-  setAccountOfficerValue: (() => { }) as Dispatch<SetStateAction<string>>,
-  setIntroducerIdValue: (() => { }) as Dispatch<SetStateAction<string>>,
-  setIntroducerTypeValue: (() => { }) as Dispatch<SetStateAction<string>>,
-  setCustomerType: (() => { }) as Dispatch<SetStateAction<string>>,
-  setCompleted: (() => { }) as Dispatch<
+  setAccountOfficerValue: (() => {}) as Dispatch<SetStateAction<string>>,
+  setIntroducerIdValue: (() => {}) as Dispatch<SetStateAction<string>>,
+  setIntroducerTypeValue: (() => {}) as Dispatch<SetStateAction<string>>,
+  setCustomerType: (() => {}) as Dispatch<SetStateAction<string>>,
+  setCompleted: (() => {}) as Dispatch<
     SetStateAction<Record<string, ProgressType>>
   >
 };
@@ -81,7 +77,13 @@ export default function CustomerCreationContextProvider({ children }: any) {
       completed,
       setCompleted
     };
-  }, [accountOfficerValue, introducerIdValue, customerType, completed, introducerTypeValue]);
+  }, [
+    accountOfficerValue,
+    introducerIdValue,
+    customerType,
+    completed,
+    introducerTypeValue
+  ]);
 
   return (
     <CustomerCreationContext.Provider value={value}>

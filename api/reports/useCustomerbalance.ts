@@ -22,8 +22,8 @@ export async function getCustomerBalance(
     const queryParams = {
       BranchCode: params?.branchID || '',
       pCode: params?.pCode || '',
-      pageNumber: params?.pageNumber || '1',
-      pageSize: params?.pageSize || '10',
+      pageNumber: params?.pageNumber ? String(params.pageNumber) : '1',
+      pageSize: params?.pageSize ? String(params.pageSize) : '10',
       getAll: String(params?.getAll || 'false'),
       startdate: params?.startDate || '',
       enddate: params?.endDate || '',

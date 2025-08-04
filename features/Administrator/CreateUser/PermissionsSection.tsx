@@ -18,6 +18,7 @@ export interface UserData {
     canauth?: number;
     isoperation?: number;
     enable2FA?: string;
+    VirtualUser?: string;
   };
 }
 
@@ -64,6 +65,18 @@ export const PermissionsSection = () => {
           title="Can print statement?"
           name="status"
           value={`${isEditing ? userDetails?.statement : 0}`}
+        />
+      </Box>
+      <Box mt={2}>
+        <RadioButtons
+          className="permissionOptions"
+          options={[
+            { label: 'Yes', value: 1 },
+            { label: 'No', value: 0 }
+          ]}
+          title="Virtual User?"
+          name="VirtualUser"
+          value={`${isEditing ? userDetails?.VirtualUser : 0}`}
         />
       </Box>
       <Box mt={2}>

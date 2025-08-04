@@ -41,7 +41,7 @@ export const DrillDown = () => {
   const { isLoading, glMainGroupRptList, totalRecords } =
     useGetGlMainGroupReport({
       ...searchParams,
-      page
+      pageNumber: String(page),
     });
 
   const handleSearch = (params: ISearchParams | null) => {

@@ -135,9 +135,9 @@ export const CreateAccountOfficer = ({
       officercode: `${extractIdFromDropdown(selectedValue.accountOfficers as string)}`,
       auth: Number(createOfficerPermission?.value || '0'),
       officerName: userId?.fullname || '',
-      dept: userId?.deptcode?.trim() || '',
-      phone: userId?.phoneno || '',
-      email: userId?.email || ''
+      dept: userId?.deptcode?.trim() || values.dept,
+      phone: userId?.phoneno || officer?.phone || '',
+      email: userId?.email || officer?.email || ''
     };
 
     await mutate(data);
@@ -238,7 +238,7 @@ export const CreateAccountOfficer = ({
                       }
                       customStyle={{
                         ...dropDownWithSearch,
-                        width: setWidth(isMobile ? '300px' : '900px')
+                        width: setWidth(isMobile ? '300px' : '460px')
                       }}
                       icon={<SearchIcon />}
                       iconPosition="end"
@@ -251,6 +251,7 @@ export const CreateAccountOfficer = ({
                     />
                   </StyledSearchableDropdown>
                 </Grid>
+
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectField
                     customStyle={{
@@ -263,6 +264,7 @@ export const CreateAccountOfficer = ({
                     required
                   />{' '}
                 </Grid>
+
                 <Grid
                   item={isTablet}
                   mobile={12}
@@ -280,6 +282,7 @@ export const CreateAccountOfficer = ({
                     disabled
                   />{' '}
                 </Grid>
+
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectField
                     customStyle={{
@@ -293,6 +296,7 @@ export const CreateAccountOfficer = ({
                     disabled
                   />{' '}
                 </Grid>
+
                 <Grid
                   item={isTablet}
                   mobile={12}
@@ -310,6 +314,7 @@ export const CreateAccountOfficer = ({
                     disabled
                   />{' '}
                 </Grid>
+
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormTextInput
                     customStyle={{
@@ -322,6 +327,7 @@ export const CreateAccountOfficer = ({
                     disabled
                   />{' '}
                 </Grid>
+
                 <Grid mb={1} item={isTablet} mobile={12}>
                   <FormSelectField
                     customStyle={{

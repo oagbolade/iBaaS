@@ -54,7 +54,7 @@ export const ListofDirectorsPreview = ({
 
   return (
     <Box>
-      {!directorDetails && (
+      {(!directorDetails || directorDetails.length === 0) && (
         <Box mb={3} sx={{ width: '200px', height: '200px' }}>
           <NoDataAvailable
             message="No data available, please select a customer with a director"
@@ -63,12 +63,13 @@ export const ListofDirectorsPreview = ({
           />
         </Box>
       )}
-      {directorDetails?.map((directorDetail: IDirectorDetails) => (
-        <DirectorsInfoSection
-          directorDetail={directorDetail}
-          deleteDirector={deleteDirector}
-        />
-      ))}
+      {Array.isArray(directorDetails) &&
+        directorDetails.map((directorDetail: IDirectorDetails) => (
+          <DirectorsInfoSection
+            directorDetail={directorDetail}
+            deleteDirector={deleteDirector}
+          />
+        ))}
     </Box>
   );
 };

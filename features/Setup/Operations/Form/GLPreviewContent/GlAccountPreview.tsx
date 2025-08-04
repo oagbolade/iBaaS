@@ -13,7 +13,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 interface Props {
   // eslint-disable-next-line react/no-unused-prop-types
   loading?: boolean;
-  accountDetails?: IGLAccount | undefined;
+  accountDetails?: IGLAccount;
 }
 export const GLAccountPreviewContent = ({ accountDetails, loading }: Props) => {
   if (!accountDetails) {
@@ -33,7 +33,7 @@ export const GLAccountPreviewContent = ({ accountDetails, loading }: Props) => {
       <PageTitle title="GL Information" styles={title} />
 
       <SubTitle title="Account Name" />
-      <Details title={accountDetails.acctName || 'NIL'} />
+      <Details title={accountDetails.acctName || ('NIL' as string)} />
 
       <SubTitle title="Gl Number" />
       <Details title={accountDetails.glNumber || 'NIL'} />

@@ -27,13 +27,16 @@ import { FormSkeleton } from '@/components/Loaders';
 import { reactivateAccount } from '@/schemas/customer-service';
 import { reactivateCustomerAccountInitialValues } from '@/schemas/schema-values/customer-service';
 import { getCurrentDate } from '@/utils/getCurrentDate';
+import { encryptData } from '@/utils/encryptData';
 
 export const ReactivateAccount = () => {
   const accountnumber = useGetParams('accountNumber') || '';
+  const urlState = useGetParams('urlState');
+
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const { accDetailsResults, isLoading: isAccountDetailsLoading } =
-    useGetAccountDetails(accountnumber);
-  const { mutate } = useReactivateCustomerAccount();
+    useGetAccountDetails(encryptData(accountnumber) as string);
+  const { mutate } = useReactivateCustomerAccount(urlState as string);
   const currentDate = dayjs(getCurrentDate());
 
   const onSubmit = (values: any) => {
@@ -63,13 +66,24 @@ export const ReactivateAccount = () => {
       validationSchema={reactivateAccount}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        <TopActionsArea actionButtons={actionButtons} />
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Reactivate Account" styles={BatchTitle} />
+
             <Grid container>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="accountnumber"
+                  placeholder="Enter settlement account number"
+                  label="Account Number"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={accountnumber}
+                  disabled
+                />
+              </Grid>
               <Grid item={isTablet} mobile={12}>
                 <Box>
                   <DemoContainer components={['DatePicker']}>

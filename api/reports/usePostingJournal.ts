@@ -21,8 +21,8 @@ export async function getPostingJournal(
     const queryParams = {
       branchCode: params?.branchID || '',
       till: params?.till || '001110010010002',
-      pageNumber: params?.pageNumber || '1',
-      pageSize: params?.pageSize || '10',
+      pageNumber: params?.pageNumber ? String(params.pageNumber) : '1',
+      pageSize: params?.pageSize ? String(params.pageSize) : '10',
       getAll: String(params?.getAll || false),
       startDate: params?.startDate || '',
       endDate: params?.endDate || '',

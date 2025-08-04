@@ -20,6 +20,7 @@ interface ISearchFilter {
   pageSize?: string | null;
   prodCode?: string | null;
   reportType?: string | null;
+  accountNo?: string | null;
 }
 
 export const searchFilterInitialValues: ISearchFilter = {
@@ -43,5 +44,6 @@ export const searchFilterInitialValues: ISearchFilter = {
   reportType: '',
   pageNumber: '1',
   pageSize: '10',
-  prodCode: ''
+  prodCode: '',
+  accountNo: ''
 };

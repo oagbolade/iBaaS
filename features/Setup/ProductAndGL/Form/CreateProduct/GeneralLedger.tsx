@@ -12,7 +12,14 @@ import {
   IStates,
   ITown
 } from '@/api/ResponseTypes/customer-service';
-import { IEducation, IOccupation, ISector } from '@/api/ResponseTypes/setup';
+import {
+  IEducation,
+  IGLWithBranchCode,
+  IOccupation,
+  IProdCodeType,
+  IProdType,
+  ISector
+} from '@/api/ResponseTypes/setup';
 import { CustomerCreationContext } from '@/context/CustomerCreationContext';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import {
@@ -52,6 +59,11 @@ type Props = {
   productTypes?: IProductType[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   bankgl?: IGLAccount[] | Array<any>;
+  dataWithCode?:
+    | IProdType[]
+    | IProdCodeType[]
+    | IGLWithBranchCode[]
+    | Array<any>;
 };
 type SearchFilters = {
   accountNumber: string | OptionsI[];
@@ -67,18 +79,24 @@ export const GeneralLedgerForm = ({
   professions,
   productTypes,
   currencies,
-  bankgl
+  bankgl,
+  dataWithCode
 }: Props) => {
   const { customerType, setCustomerType } = React.useContext(
     CustomerCreationContext
   );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
-  const { mappedProductType, mappedCurrency, mappedGlAccount } =
-    useMapSelectOptions({
-      productTypes,
-      currencies,
-      bankgl
-    });
+  const {
+    mappedProductType,
+    mappedCurrency,
+    mappedGlAccount,
+    mappedWithBranchCode
+  } = useMapSelectOptions({
+    productTypes,
+    currencies,
+    bankgl,
+    dataWithCode
+  });
   const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
 
@@ -150,7 +168,7 @@ export const GeneralLedgerForm = ({
     }));
 
     const filteredGlItems = filterGeneralLedgerDropdownSearch(
-      mappedGlAccount,
+      mappedWithBranchCode,
       value
     );
     setFilteredValues((prev) => ({
@@ -160,19 +178,19 @@ export const GeneralLedgerForm = ({
 
     if (value.trim().length === 0) {
       setFilteredValues({
-        accountNumber: mappedGlAccount,
-        princbalBalance: mappedGlAccount,
-        susinterest: mappedGlAccount,
-        intaccrual: mappedGlAccount,
-        interestincome: mappedGlAccount,
-        interbr: mappedGlAccount,
-        penalIntAccrual: mappedGlAccount,
-        interestReceivable: mappedGlAccount,
-        susprinc: mappedGlAccount,
-        uid: mappedGlAccount,
-        micincome: mappedGlAccount,
-        penalInterest: mappedGlAccount,
-        penalSuspense: mappedGlAccount
+        accountNumber: mappedWithBranchCode,
+        princbalBalance: mappedWithBranchCode,
+        susinterest: mappedWithBranchCode,
+        intaccrual: mappedWithBranchCode,
+        interestincome: mappedWithBranchCode,
+        interbr: mappedWithBranchCode,
+        penalIntAccrual: mappedWithBranchCode,
+        interestReceivable: mappedWithBranchCode,
+        susprinc: mappedWithBranchCode,
+        uid: mappedWithBranchCode,
+        micincome: mappedWithBranchCode,
+        penalInterest: mappedWithBranchCode,
+        penalSuspense: mappedWithBranchCode
       });
     }
   };

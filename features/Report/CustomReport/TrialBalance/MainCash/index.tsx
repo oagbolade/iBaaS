@@ -1,6 +1,7 @@
 'use client';
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
 import { COLUMN } from '../COLUMN';
 import { FilterSection } from '../SubFilterSection';
 import {
@@ -19,6 +20,7 @@ import { useGetParams } from '@/utils/hooks/useGetParams';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import useFormattedDates from '@/utils/hooks/useFormattedDates';
 
 export const MainCash = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
@@ -34,7 +36,8 @@ export const MainCash = () => {
   const branchID = useGetParams('branchID') || '';
   const customerID = useGetParams('customerID') || '';
 
-  const { dateValue } = useContext(DateRangePickerContext);
+  const { currentDate } = useFormattedDates();
+  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
 
   const {
     trialBydateList,
@@ -43,9 +46,14 @@ export const MainCash = () => {
   } = useGetTrialBalance({
     ...searchParams,
     pageSize: '10',
-    branchCode: searchParams?.branchID || branchID,
+    branchID,
     searchWith: searchParams?.customerID || customerID,
     pageNumber: String(page),
+    gl_ClassCode: glClassCode,
+    glNodeCode,
+    glTypeCode,
+    reportType,
+    startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD'),
     getAll: readyDownload
   });
 
@@ -57,7 +65,7 @@ export const MainCash = () => {
       glNodeCode,
       glTypeCode,
       reportType,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || ''
+      startDate: searchParams?.reportDate
     });
     setPage(1); // Reset to the first page on new search
   };
@@ -107,7 +115,11 @@ export const MainCash = () => {
       }}
     >
       {branches && (
-        <FilterSection branches={branches} onSearch={handleSearch} />
+        <FilterSection
+          selectedBranch={branchID}
+          branches={branches}
+          onSearch={handleSearch}
+        />
       )}
       <Box sx={{ paddingX: '24px' }}>
         {isTrialBalanceDataLoading ? (

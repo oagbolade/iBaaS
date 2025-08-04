@@ -21,13 +21,24 @@ type Props = {
   title: string;
   description: string;
   link?: string;
+  disable?: boolean;
 };
 
 export const CustomCardsReports = ({
   title,
   description,
-  link = ''
+  link = '',
+  disable = false
 }: Props) => {
+  const [shouldDisable, setShouldDisable] = React.useState(false);
+  React.useEffect(() => {
+    setShouldDisable(disable);
+  }, []);
+  
+  if (shouldDisable) {
+    return null;
+  }
+
   return (
     <Box sx={{ marginLeft: '16px' }}>
       <Card sx={detailsCards}>

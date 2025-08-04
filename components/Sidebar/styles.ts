@@ -17,7 +17,8 @@ export const companyContainer = {
   zIndex: 1,
   width: '243px',
   minHeight: '124px',
-  marginTop: 1
+  marginTop: 1,
+  marginBottom: 1,
 };
 
 export const companyNameTitle = {
@@ -65,11 +66,9 @@ export const companyAddress = {
 
 export const sideBarContainer = {
   width: '278px',
-  height: '100vh',
-  padding: '0 20px',
   backgroundColor: `${colors.white}`,
   border: `1px solid ${colors.neutral300}`,
-  borderTop: 'none'
+  borderTop: 'none',
 };
 
 export const sideBarItem = {
@@ -78,17 +77,17 @@ export const sideBarItem = {
   lineHeight: '24px',
   fontWeight: 400,
   width: '200px',
-  height: '40px',
+  height: '35px',
   padding: '8px',
   borderRadius: '8px',
   color: `${colors.neutral700}`,
   textTransform: 'none',
-  justifyContent: 'left'
+  justifyContent: 'left',
 };
 
 export const mainMenu = {
   backgroundColor: `${colors.white}`,
   padding: '8px',
   width: '238px',
-  height: '40px'
+  height: '35px'
 };

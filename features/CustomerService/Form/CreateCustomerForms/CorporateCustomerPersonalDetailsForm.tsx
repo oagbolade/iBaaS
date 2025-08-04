@@ -4,6 +4,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useFormikContext } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
+import dayjs, { Dayjs } from 'dayjs';
 import { Introducer, SearchFilters } from './ReferrerDetailsForm';
 import {
   FormTextInput,
@@ -47,6 +48,7 @@ import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
 import { useHandleCompletedFields } from '@/utils/hooks/useHandleCompletedFields';
 import { useCreateValidationKeysMapper } from '@/utils/hooks/useCreateValidationKeysMapper';
 import { mapCustomerSearch, mapStaffSearch } from '@/utils/mapCustomerSearch';
+import { formatDateOfBirth } from '@/utils/formatDateOfBirth';
 
 type Props = {
   titles?: ITitle[];
@@ -79,6 +81,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
   const { customerResult: customerResultCodes } = useGetCustomerByIdCodes(
     encryptData(customerId) as string
   );
+  const isEditing = useGetParams('isEditing') || null;
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
     introid: customerResultCodes?.introducer || '',
     acctOfficer: customerResultCodes?.acctOfficer || ''
@@ -171,6 +174,10 @@ export const CorporateCustomerPersonalDetailsForm = ({
     }
   };
 
+  const [dob, setDob] = React.useState(
+    isEditing ? dayjs(formatDateOfBirth(customerResultCodes?.dob)) : ''
+  );
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
@@ -213,7 +220,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
   const { accountDetailsResults, isLoading: isCustomerSearchLoading } =
     useSearchCustomer(
       introducerType?.customer && introducerType.customer?.length > 0
-        ? encryptData(debouncedSearchValue as string) as string
+        ? (encryptData(debouncedSearchValue as string) as string)
         : ''
     );
 
@@ -276,7 +283,10 @@ export const CorporateCustomerPersonalDetailsForm = ({
             <FormikDateTimePicker
               required
               label="Date of Registration"
+              handleDateChange={(newValue: Dayjs) => setDob(dayjs(newValue))}
+              value={dob}
               name="dob"
+              defaultValue=""
             />
           </DemoContainer>
         </Box>
@@ -556,6 +566,18 @@ export const CorporateCustomerPersonalDetailsForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <FormSelectField
+          name="branchCode"
+          options={mappedBranches}
+          label="Branch"
+          customStyle={{
+            width: setWidth(isMobile ? '250px' : '100%')
+          }}
+        />
+      </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <RadioButtons
           options={[
@@ -568,29 +590,18 @@ export const CorporateCustomerPersonalDetailsForm = ({
           handleCheck={handleCheck}
         />
       </Grid>
+
       {isGroupMember === 'true' && (
-        <>
-          <Grid item={isTablet} mobile={12}>
-            <FormSelectField
-              name="branchCode"
-              options={mappedBranches}
-              label="Branch"
-              customStyle={{
-                width: setWidth(isMobile ? '250px' : '100%')
-              }}
-            />
-          </Grid>
-          <Grid item={isTablet} mobile={12}>
-            <FormSelectField
-              name="groupcode"
-              options={mappedGroups}
-              label="Group"
-              customStyle={{
-                width: setWidth(isMobile ? '250px' : '100%')
-              }}
-            />
-          </Grid>
-        </>
+        <Grid item={isTablet} mobile={12}>
+          <FormSelectField
+            name="groupcode"
+            options={mappedGroups}
+            label="Group"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+          />
+        </Grid>
       )}
     </>
   );

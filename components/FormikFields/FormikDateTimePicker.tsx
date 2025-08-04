@@ -23,6 +23,7 @@ type Props = {
   value?: string | Dayjs;
   defaultValue?: string | Dayjs;
   minDate?: Dayjs;
+  maxDate?: Dayjs;
 };
 
 const DateTimeWrapper = styled.section`
@@ -61,9 +62,10 @@ export const FormikDateTimePicker = ({
   defaultValue,
   handleDateChange,
   disableFuture,
-  minDate
+  minDate,
+  maxDate
 }: Props) => {
-  const today = value || dayjs();
+  const today = value ?? defaultValue ?? dayjs();
 
   return (
     <Box sx={{ marginBottom: '15px' }}>
@@ -85,6 +87,7 @@ export const FormikDateTimePicker = ({
                     disabled={disabled}
                     disableFuture={disableFuture}
                     minDate={minDate}
+                    maxDate={maxDate}
                     className={className}
                     {...field}
                     defaultValue={today || defaultValue}
@@ -94,9 +97,6 @@ export const FormikDateTimePicker = ({
                         handleDateChange(newValue);
                       }
                       return setFieldValue(name as string, newValue);
-                    }}
-                    slotProps={{
-                      field: { clearable: true }
                     }}
                   />
                 </StyledTextInput>

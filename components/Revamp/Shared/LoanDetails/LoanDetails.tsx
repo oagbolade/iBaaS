@@ -173,11 +173,7 @@ export const LoanDetails = ({
   }, [isOpen, height]);
 
   return (
-    <Box
-      sx={{
-        margin: '20px 0'
-      }}
-    >
+    <Box>
       <Accordion
         sx={{ width: { mobile: '100%', desktop: '100%' } }}
         expanded={expanded}
@@ -493,7 +489,6 @@ export const LoanDetails = ({
       <Box
         mt={4}
         sx={{
-          width: { mobile: '100%', desktop: '1037px' },
           display: 'flex',
           flexDirection: 'column',
           padding: '32px 40px',
@@ -506,7 +501,7 @@ export const LoanDetails = ({
       >
         <Box
           sx={{
-            width: { mobile: '100%', desktop: '967px' },
+            width: { mobile: '100%', desktop: '100%' },
             borderBottom: `1px solid ${colors.neutral300}`
           }}
         >
@@ -584,7 +579,7 @@ export const LoanDetails = ({
 
             {/*  TODO: remove empty titles once API returns the responses */}
             <SubTitle title="Loan Purpose" />
-            <Details title="N/A" />
+            <Details title={loanAccDetails?.loanPurpose || 'N/A'} />
 
             <SubTitle title="Repayment Mode" />
             <Details title={loanAccDetails?.repaymentType || 'N/A'} />
@@ -595,8 +590,8 @@ export const LoanDetails = ({
             <SubTitle title="Total No. of Installment" />
             <Details title="N/A" />
 
-            <SubTitle title="Account Status" />
-            <Status label="Active" status="success" />
+            <SubTitle title="Status" />
+            <Details title={loanAccDetails?.status || 'N/A'} />
           </Box>
         </Stack>
       </Box>

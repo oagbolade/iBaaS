@@ -272,7 +272,7 @@ export function useGetStateByCountryCode(countryCode: string, formType?: FormTyp
 export function useGetTownByStateCode(stateCode: string, formType?: FormType) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetAllTownsResponse;
-  
+
   const {
     data = fallback,
     isError,
@@ -281,7 +281,7 @@ export function useGetTownByStateCode(stateCode: string, formType?: FormType) {
     queryKey: [queryKeys.getTownByStateCode, decryptData(stateCode), formType],
     queryFn: () =>
       getTownByStateCode(toastActions, decryptData(stateCode) as string),
-    enabled: Boolean(stateCode.length > 0)
+    enabled: (stateCode.toString().trim() || '').length > 0 || Boolean(stateCode)
   });
 
   return { ...data, isError, isLoading };

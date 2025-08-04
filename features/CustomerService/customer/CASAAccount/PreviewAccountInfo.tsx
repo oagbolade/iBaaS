@@ -23,7 +23,7 @@ export const AccountInformation = ({
 }: AccountInformationProp) => {
   return (
     <Box
-      mb={{ mobile: 30, tablet: 0 }}
+     
       sx={{
         padding: { mobile: 6, tablet: 0 },
         alignItems: { mobile: 'center', tablet: 'normal' }

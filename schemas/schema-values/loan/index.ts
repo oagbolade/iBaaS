@@ -105,7 +105,7 @@ export const setPartialPayOffvalues: SetPartialPayOffValues = {
   newtenor: 0.0,
   startdate: '',
   totalDays: 0,
-  menuid: 96
+  menuid: 96  // have to confirm this with infosigth
 };
 
 export interface RestructureLoanValues {

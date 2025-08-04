@@ -110,9 +110,7 @@ export const AddLien = () => {
       validationSchema={createLien}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
-          <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        <TopActionsArea actionButtons={actionButtons} />
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Add Lien" styles={BatchTitle} />

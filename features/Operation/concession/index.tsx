@@ -1,13 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 // eslint-disable-next-line import/no-cycle
+import { useSearchParams } from 'next/navigation';
+import { Box, Stack } from '@mui/material';
+import { title } from '../Forms/style';
 import { ChargeConcession } from '@/features/Operation/Forms/ChargeConcession';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
-import { useSearchParams } from 'next/navigation';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { Box, Stack } from '@mui/material';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { IAccountDetailsResults } from '@/api/ResponseTypes/customer-service';
@@ -17,7 +18,6 @@ import {
   SubTitle
 } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { Status } from '@/components/Labels';
-import { title } from '../Forms/style';
 import { PageTitle } from '@/components/Typography';
 import { useGetChargeConcession } from '@/api/operation/useChargeConcession';
 
@@ -103,15 +103,22 @@ export const ChargeConcessionContainer = () => {
 
   return (
     <>
-      <TopActionsArea
-        actionButtons={actionButtons}
-        customStyle={{ width: '100%' }}
-      />
-      <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
+      <Box
+        sx={{
+          marginTop: '60px',
+          position: 'fixed',
+          top: 0,
+          width: 'calc(100vw - 300px)',
+          zIndex: 1
+        }}
+      >
+        <TopActionsArea actionButtons={actionButtons} />
+      </Box>
+
+      <Box sx={{ marginTop: '70px' }}>
         <Box
           mr={3}
           sx={{
-            width: '50%',
             padding: { mobile: 0, tablet: '30px 0' }
           }}
         >

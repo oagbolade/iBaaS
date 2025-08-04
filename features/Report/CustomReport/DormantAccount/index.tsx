@@ -63,9 +63,7 @@ export const DormantAccount = () => {
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
       <Box sx={{ marginTop: '10px', padding: '25px' }}>
-        {branches && (
-          <FilterSection branches={branches} onSearch={handleSearch} />
-        )}
+        <FilterSection branches={branches} onSearch={handleSearch} />
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
         {isDormantAccountDataLoading ? (
@@ -82,7 +80,7 @@ export const DormantAccount = () => {
             showHeader={{
               mainTitle: 'Dormant Account',
               secondaryTitle:
-                'See a directory of all account enquiry on this system.',
+                'See a directory of all dormant account on this system.',
               hideFilterSection: true
             }}
             ActionMenuProps={ActionMenu}

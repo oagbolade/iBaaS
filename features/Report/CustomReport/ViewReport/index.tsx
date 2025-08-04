@@ -17,7 +17,8 @@ export const ViewAccountEnquiry = () => {
     const actionMap = {
       getMaturityLoan: 'maturityLoan',
       getPostingJournal: 'postingJournal',
-      getLoanWeelyRepayment: 'weeklyLoan'
+      getLoanWeelyRepayment: 'weeklyLoan',
+      getGroupMembership: 'groupMembership'
     };
 
     const actionKey = Object.keys(actionMap).find((key) =>
@@ -32,6 +33,7 @@ export const ViewAccountEnquiry = () => {
   const getLoandetailReport = searchParams.get('loanDetail');
   const getPostingJournalDetail = searchParams.get('postingJournalDetail');
   const getWeekLoanRepayment = searchParams.get('loanDetailWeekly');
+  const getGroupMembershipDetail = searchParams.get('groupDetail');
 
   const renderContent = () => {
     switch (actionType) {
@@ -57,6 +59,15 @@ export const ViewAccountEnquiry = () => {
           <Box>
             <ViewMaturityLoan
               detail={JSON.parse(getWeekLoanRepayment || '{}')}
+            />
+          </Box>
+        );
+
+      case 'groupMembership':
+        return (
+          <Box>
+            <ViewMaturityLoan
+              detail={JSON.parse(getGroupMembershipDetail || '{}')}
             />
           </Box>
         );

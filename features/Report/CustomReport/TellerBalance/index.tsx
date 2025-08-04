@@ -14,9 +14,10 @@ import { ITellerBalanceReportResponse } from '@/api/ResponseTypes/reports';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { ISearchParams } from '@/app/api/search/route';
 
 export const TellerBalance = () => {
-  const [searchParams, setSearchParams] = useState<IEnquiryParams | null>(null);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = useState<number>(1);
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
@@ -25,13 +26,9 @@ export const TellerBalance = () => {
 
   const { branches, isLoading: isLoadingBranches } = useGetBranches();
 
-  const { branchId, customerId } = searchParams || {};
-
   const { tellerBalanceList = [], isLoading: isLoadingAccountInDebit } =
     useGetTellerBalanceReport({
       ...searchParams,
-      branchId,
-      customerId,
       pageSize: 20,
       pageNumber: page,
       getAll: isDateFilterApplied
@@ -58,7 +55,7 @@ export const TellerBalance = () => {
   const totalElements = tellerBalanceList.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
-  const handleSearch = (params: IEnquiryParams | null) => {
+  const handleSearch = (params: ISearchParams | null) => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',

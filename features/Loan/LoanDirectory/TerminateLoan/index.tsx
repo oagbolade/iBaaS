@@ -17,17 +17,17 @@ import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import colors from '@/assets/colors';
 import { useCurrentBreakpoint, handleRedirect } from '@/utils';
 import LoanPreviewContent from '@/features/Loan/LoanDirectory/LoanPreviewContent';
-
 import { useGetLoanAccountByLoanAccountNumber } from '@/api/loans/useCreditFacility';
 import { encryptData } from '@/utils/encryptData';
 
-const MobilePreviewContent: React.FC<{ data?: any }> = ({ data }) => {
-  const searchParams = useSearchParams();
-  const accountNumber = searchParams.get('accountNumber') || '';
+const MobilePreviewContent: React.FC<{
+  data?: any;
+  isLoadingLoanData: boolean;
+}> = ({ data, isLoadingLoanData }) => {
   return (
     <MobileModalContainer
       ShowPreview={
-        <LoanPreviewContent accountNumber={accountNumber} data={data} />
+        <LoanPreviewContent isLoadingLoanData={isLoadingLoanData} data={data} />
       }
     />
   );
@@ -72,11 +72,12 @@ export const TerminateLoan = () => {
     handleRedirect(router, '/loan/loan-directory/');
   };
 
-  const { data } = useGetLoanAccountByLoanAccountNumber(
-    encryptData(accountNumber as string) || ''
-  );
+  const { data, isLoading: isLoadingLoanData } =
+    useGetLoanAccountByLoanAccountNumber(
+      encryptData(accountNumber as string) || ''
+    );
 
-  const actionButtons: any = [
+  const actionButtons:  React.ReactNode[] = [
     <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
       <ActionButton
         onClick={cancelAction}
@@ -105,11 +106,14 @@ export const TerminateLoan = () => {
           width: '100%'
         }}
       >
-        <MobilePreviewContent data={data} />
+        <MobilePreviewContent
+          isLoadingLoanData={isLoadingLoanData || false}
+          data={data}
+        />
         <Stack direction={setDirection()}>
           <Box
             sx={{
-              width: { mobile: '100%', desktop: '624px' },
+              width: { mobile: '100%', desktop: '500px' },
               padding: '32px'
             }}
           >
@@ -119,25 +123,27 @@ export const TerminateLoan = () => {
               loanDetails={data}
             />
           </Box>
-          {isTablet && (
-            <Box
-              sx={{
-                width: '477px',
-                padding: '32px',
-                gap: '24px',
-                borderLeft: `1px solid ${colors.neutral300}`,
-                background: `${colors.neutral100}`,
-                display: {
-                  tablet: 'block',
-                  mobile: 'none'
-                }
-              }}
-            >
-              <LargeTitle title="Preview" />
-              <Box mt={3} />
-              <LoanPreviewContent accountNumber={accountNumber} data={data} />
-            </Box>
-          )}
+
+          <Box
+            sx={{
+              width: '477px',
+              padding: '32px',
+              gap: '24px',
+              borderLeft: `1px solid ${colors.neutral300}`,
+              background: `${colors.neutral100}`,
+              display: {
+                tablet: 'block',
+                mobile: 'none'
+              }
+            }}
+          >
+            <LargeTitle title="Preview" />
+            <Box mt={3} />
+            <LoanPreviewContent
+              isLoadingLoanData={isLoadingLoanData || false}
+              data={data}
+            />
+          </Box>
         </Stack>
       </Box>
     </Box>

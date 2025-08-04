@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import dayjs, {Dayjs} from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import {
   FormTextInput,
   FormSelectField,
@@ -63,15 +63,11 @@ export const IndividualCustomerPersonalDetailsForm = ({
   const formType = 'personal';
   const residentFormType = 'personal-resident';
 
-  const { customerResult } = useGetCustomerById(
-    encryptData(customerId) as string
-  );
-
   const { customerResult: customerResultCodes, isLoading } =
     useGetCustomerByIdCodes(encryptData(customerId) as string);
 
   const [dob, setDob] = React.useState(
-    isEditing ? dayjs(formatDateOfBirth(customerResult?.dob)) : dayjs()
+    isEditing ? dayjs(formatDateOfBirth(customerResultCodes?.dob)) : ''
   );
 
   const [mappedResidentStates, setMappedResidentStates] = React.useState<
@@ -239,6 +235,7 @@ export const IndividualCustomerPersonalDetailsForm = ({
           required
         />
       </Grid>
+
       <Grid item={isTablet} mobile={12}>
         <Box sx={{ width: '100%' }}>
           <DemoContainer components={['DatePicker']}>

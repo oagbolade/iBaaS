@@ -176,7 +176,8 @@ export const MuiTableContainer = ({
           display: 'inline-block',
           width: '100%',
           borderRadius: '8px',
-          border: `1px solid ${colors.neutral300}`
+          border: `1px solid ${colors.neutral300}`,
+          overflowX: 'auto',
         }}
         component={Paper}
       >

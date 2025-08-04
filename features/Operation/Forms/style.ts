@@ -450,7 +450,7 @@ export const postingDetails = {
 };
 export const saveBatches = {
   display: 'flex',
-  width: '660px',
+  width: '840px',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'flex-start',
@@ -458,6 +458,14 @@ export const saveBatches = {
   border: `1px solid ${colors.neutral300}`,
   backgroundColor: `${colors.white}`,
   height: '83px'
+};
+export const saveTitles = {
+  color: `${colors.neutral700}`,
+  fontFamily: 'Averta',
+  fontSize: '16px',
+  fontStyle: 'normal',
+  fontWeight: 400,
+  lineHeight: '24px'
 };
 export const saveBatchesDetails = {
   display: 'flex',
@@ -473,6 +481,7 @@ export const viewSavedBatches = {
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 600,
+  marginRight: '20px',
   lineHeight: '20px' /* 142.857% */
 };
 export const DeleteSavedBatches = {

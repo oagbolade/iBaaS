@@ -3,7 +3,7 @@ export const COLUMN = [
   'Beneficiary Account',
   'Create Date',
   'Matured Date',
-  'Fequency',
+  'Frequency',
   'SI Account',
   'Reason'
 ];

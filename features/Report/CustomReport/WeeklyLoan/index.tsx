@@ -19,6 +19,8 @@ import { FormSkeleton } from '@/components/Loaders';
 import { StyledTableCell } from '@/components/Table/style';
 import colors from '@/assets/colors';
 import { useGetAllGroups } from '@/api/general/useGroup';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 
 interface ActionMenuProps {
   detail: string;
@@ -41,7 +43,7 @@ export const WeeklyLoan = () => {
   const [pageNumber, setpageNumber] = React.useState(1);
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
-   const { groups } = useGetAllGroups();
+  const { groups } = useGetAllGroups();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { setReportType, setExportData } = React.useContext(
@@ -111,19 +113,22 @@ export const WeeklyLoan = () => {
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">
-                      {dataItem?.fullName || 'N/A'}
-                    </StyledTableCell>
-
-                    <StyledTableCell component="th" scope="row">
-                      {dataItem?.branch || 'N/A'}
-                    </StyledTableCell>
-
-                    <StyledTableCell component="th" scope="row">
-                      {dataItem?.productCode || 'N/A'}
+                      {dataItem?.groupid || 'N/A'}
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">
                       {dataItem?.settlementAcct1 || 'N/A'}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      {formatCurrency(dataItem?.loanamount) || 'N/A'}
+                    </StyledTableCell>
+
+                    <StyledTableCell component="th" scope="row">
+                      {formatDateAndTime(dataItem?.matDate) || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {formatCurrency(dataItem?.expectedAmt) || 'N/A'}
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">

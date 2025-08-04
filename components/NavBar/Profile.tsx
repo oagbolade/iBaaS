@@ -4,11 +4,13 @@ import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
-import { Box, Tooltip } from '@mui/material';
+import { Box } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import dynamic from 'next/dynamic';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
+import { styled } from '@mui/material/styles';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import {
   NavTypography,
   navSettings,
@@ -28,6 +30,17 @@ import { getStoredUser } from '@/utils/user-storage';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 const NavBarButton = dynamic(() => import('./NavBarButton'), { ssr: false });
+
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} arrow />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11
+  }
+}));
 
 export const Profile = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -75,33 +88,75 @@ export const Profile = () => {
       sx={navbarCont}
     >
       <Box sx={systemDateCont}>
-        <Tooltip
+        <LightTooltip
           title={
-            <Box sx={systemDetails}>
-              <div style={{ color: 'black' }}>
-                <strong style={profileTitle}>System Date:</strong>{' '}
-                {formattedDate}
+            <Box
+              sx={{
+                ...systemDetails,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1
+              }}
+            >
+              <div
+                style={{
+                  color: 'black',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <strong style={profileTitle}>System Date:</strong>
+                <span>{formattedDate}</span>
               </div>
-              <div style={{ color: 'black' }}>
-                <strong style={profileTitle}>Username:</strong>{' '}
-                {sysmodel?.userName}
+              <div
+                style={{
+                  color: 'black',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <strong style={profileTitle}>Username:</strong>
+                <span>{sysmodel?.userName}</span>
               </div>
-              <div style={{ color: 'black' }}>
-                <strong style={profileTitle}>Role:</strong> {sysmodel?.role}
+              <div
+                style={{
+                  color: 'black',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <strong style={profileTitle}>Role:</strong>
+                <span>{sysmodel?.role}</span>
               </div>
-              <div style={{ color: 'black' }}>
-                <strong style={profileTitle}>Approval Officer:</strong>{' '}
-                {sysmodel?.approvingOfficer}
+              <div
+                style={{
+                  color: 'black',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <strong style={profileTitle}>Approval Officer:</strong>
+                <span>{sysmodel?.approvingOfficer}</span>
               </div>
-              <div style={{ color: 'black' }}>
-                <strong style={profileTitle}>System Phase:</strong>{' '}
-                {sysmodel?.systemPhase}
+              <div
+                style={{
+                  color: 'black',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <strong style={profileTitle}>System Phase:</strong>
+                <span>{sysmodel?.systemPhase}</span>
               </div>
             </Box>
           }
-          arrow
         >
-          <Box
+          <Button
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -114,15 +169,17 @@ export const Profile = () => {
               styles={{ ...systemDateTitle }}
               title={formattedDate || 'No Date'}
             />
-          </Box>
-        </Tooltip>
+          </Button>
+        </LightTooltip>
       </Box>
+
       <NavBarButton
         greeting={`Hi, ${getStoredUser()?.fullName || 'Oops!. Cannot find user name'}`}
         name={
           getStoredUser()?.profiles.userid || 'Oops!. Cannot find user name'
         }
       />
+
       <Box ml={3} sx={navbarTitle}>
         <NavBarTitle title={avatarInitials as string} />
       </Box>
@@ -159,7 +216,7 @@ export const Profile = () => {
               onClick={() => handleRedirect()}
               sx={NavChangePasswordTypography}
             >
-              Change <br /> Password <br />
+              Change Password
             </ListItemText>
           </MenuItem>
         )}

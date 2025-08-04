@@ -1,6 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Box } from '@mui/material';
+import { FilterSection } from './FilterSection';
+import { ShortCardWithAccordion } from './ShortCardWithAccordion';
 import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import {
@@ -8,43 +10,101 @@ import {
   totalTitle
 } from '@/components/CustomCardsReports/style';
 import { PageTitle } from '@/components/Typography';
-import { FilterSection } from '@/features/Report/CustomReport/TrialBalance/FilterSection';
+import { FormSkeleton } from '@/components/Loaders';
+import { ISearchParams } from '@/app/api/search/route';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { useGetBranches } from '@/api/general/useBranches';
+import { useGetGLType } from '@/api/setup/useGeneralNode';
+import { useGetProfitAndLossGroup } from '@/api/reports/useGetProfitAndLossGroup';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { renderEmptyTableBody } from '@/components/Table/Table';
+import { DataGroup } from '@/api/ResponseTypes/reports';
+import { column, profitAndLossColumn } from '@/constants/Reports/ASSETS_DATA';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const ProfitLoss = () => {
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [page] = React.useState(1);
+  const { branches } = useGetBranches();
+  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+    useContext(DownloadReportContext);
+  const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
+
+  const { branchID } = searchParams || {};
+
+  const { data = [], isLoading: isLoadingProfitAndLoss } =
+    useGetProfitAndLossGroup({
+      ...searchParams,
+      branchID,
+      pageSize: '20',
+      pageNumber: String(page),
+      getAll: readyDownload
+    });
+
+  React.useEffect(() => {
+    if (readyDownload) {
+      setSearchParams((prev) => ({
+        ...prev,
+        getAll: true
+      }));
+    }
+  }, [readyDownload]);
+
+  React.useEffect(() => {
+    if (data?.length > 0 && readyDownload) {
+      const formattedExportData = data.flatMap((group) =>
+        group.groupItem.map((item) => ({
+          'Group Name': group.groupName || '',
+          Balance: item.balance || 0,
+          'Item Description': item.itemDesc || ''
+        }))
+      );
+
+      setExportData(formattedExportData || []);
+      setReportType('ProfitAndLoss');
+    }
+  }, [data, readyDownload, setExportData, setReportType, setReadyDownload]);
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setReadyDownload(true);
+    setSearchParams({
+      ...params
+    });
+  };
+
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <TopOverViewSection useBackButton />
+      {/* <TopOverViewSection useBackButton /> */}
       <Box sx={{ marginTop: '40px', marginBottom: '30px', marginLeft: '50px' }}>
-        <FilterSection />
+        {branches && (
+          <FilterSection branches={branches} onSearch={handleSearch} />
+        )}
       </Box>
+
       <Box>
-        <Box>
-          <ShortCards
-            title="Interest Income - Loans"
-            numberOfAccounts="₦321,654.65 Balance"
-            link="/report/custom-report/profit-loss/interest-income"
-          />
-        </Box>
-        <Box>
-          <ShortCards
-            link="/report/custom-report/profit-loss/interest-income"
-            title="Penalty Income"
-            numberOfAccounts="₦321,654.65 Balance"
-          />
-        </Box>
-        <Box>
-          <ShortCards
-            title="Fee Income - Loans"
-            numberOfAccounts="₦321,654.65 Balance"
-            link="/report/custom-report/profit-loss/fee-income"
-          />
-        </Box>
-        <Box sx={totalContainer}>
-          <PageTitle title="Total Asset" styles={{ ...totalTitle }} />
-          <Box sx={{ paddingLeft: '74%' }}>
-            <PageTitle title="₦405,321.54" styles={{ ...totalTitle }} />
+        {isLoadingProfitAndLoss ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <Box>
+            {data && data?.length > 0 ? (
+              <Box>
+                {data?.map((item: DataGroup, i: number) => (
+                  <ShortCardWithAccordion
+                    key={i}
+                    column={profitAndLossColumn}
+                    defaultData={item?.groupItem}
+                    itemcode={i.toString()}
+                    title={item?.groupName}
+                    assetCount={item.groupItem?.length || 0}
+                    assetValue={`${formatCurrency(item?.totalBal)}` || 0}
+                  />
+                ))}
+              </Box>
+            ) : (
+              renderEmptyTableBody(data as DataGroup[] | undefined)
+            )}
           </Box>
-        </Box>
+        )}
       </Box>
     </Box>
   );

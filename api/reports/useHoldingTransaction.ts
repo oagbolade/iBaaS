@@ -20,8 +20,8 @@ export async function getHoldingTransactionReport(
   try {
     const queryParams = {
       BranchCode: params?.branchID || '',
-      pageNumber: params?.pageNumber || '1',
-      pageSize: params?.pageSize || '10',
+      pageNumber: String(params?.pageNumber || '1'),
+      pageSize: String(params?.pageSize || '10'),
       getAll: String(params?.getAll || 'false'),
       startDate: params?.startDate || '',
       endDate: params?.endDate || '',
@@ -75,8 +75,7 @@ export function useGetHoldingTransactionReport(params: ISearchParams | null) {
         (params?.searchWith || '').length > 0 ||
         (params?.startDate || '').length > 0 ||
         (params?.endDate || '').length > 0 ||
-        (params?.pageNumber || '').length > 0 ||
-        (params?.pageSize || '').length > 0
+        (params?.pageNumber || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

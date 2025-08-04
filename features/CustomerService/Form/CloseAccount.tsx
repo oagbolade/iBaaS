@@ -36,7 +36,9 @@ export const CloseAccount = () => {
   const searchParams = useSearchParams();
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const accountnumber = searchParams.get('accountNumber') || '';
-  const { mutate } = useCloseCustomerAccount();
+  const urlState = searchParams.get('urlState');
+
+  const { mutate } = useCloseCustomerAccount(urlState as string);
   const { accDetailsResults, isLoading: isAccountDetailsLoading } =
     useGetAccountDetails(encryptData(accountnumber) as string);
   const currentDate = dayjs(getCurrentDate());
@@ -62,14 +64,17 @@ export const CloseAccount = () => {
 
   return (
     <Formik
-      initialValues={closeCustomerAccountInitialValues}
+      initialValues={{
+        ...closeCustomerAccountInitialValues,
+        settlementAcct: accountnumber
+      }}
       onSubmit={(values) => onSubmit(values)}
       validationSchema={closeCustomerAccount}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
+        {/* <Box sx={{ marginTop: '60px' }}> */}
           <TopActionsArea actionButtons={actionButtons} />
-        </Box>
+        {/* </Box> */}
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Close Account" styles={BatchTitle} />
@@ -82,6 +87,7 @@ export const CloseAccount = () => {
                   customStyle={{
                     width: setWidth(isMobile ? '250px' : '100%')
                   }}
+                  disabled
                   required
                 />
               </Grid>

@@ -178,8 +178,8 @@ export const InWard = ({
       validationSchema={inwardClearing}
     >
       <Form>
-        <Grid container spacing={2}>
-          <Box sx={{ display: 'flex' }}>
+        <Grid container spacing={2} sx={{ marginTop: '90px', width: '100%' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
               <PageTitle title="Inward Clearing" styles={BatchTitle} />
               <Grid container>

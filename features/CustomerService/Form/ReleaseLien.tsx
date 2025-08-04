@@ -122,9 +122,8 @@ export const ReleaseLien = () => {
       validationSchema={createLien}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
+
           <TopActionsArea actionButtons={actionButtons} />
-        </Box>
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Release Lien" styles={BatchTitle} />

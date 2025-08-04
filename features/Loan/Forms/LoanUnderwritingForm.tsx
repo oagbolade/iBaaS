@@ -14,7 +14,11 @@ import {
 import colors from '@/assets/colors';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { loanUnderWriteSchema } from '@/schemas/loan';
-import { useCurrentBreakpoint, frequencyTermsDays, frequencyOptions } from '@/utils';
+import {
+  useCurrentBreakpoint,
+  frequencyTermsDays,
+  frequencyOptions
+} from '@/utils';
 import { options } from '@/constants/Loan/selectOptions';
 import {
   loanUnderwritingInitialValues,
@@ -74,12 +78,16 @@ export const CreateLoanUnderwritingForm = ({
   const [searchValue, setSearchValue] = useState<string>('');
   const [loanRate, setLoanRate] = useState('');
   const [getCalcDays, setGetCalcDays] = useState<number>(0);
+  const [getFirstPayCycle, setGetFirstPayCycle] = useState<number>(0);
   const [loanTerm, setLoanTerm] = useState<string>('');
   const [penalRate, setPenalRate] = useState<string>('');
   const [penalrateCalcMethod, setPenalrateCalcMethod] = useState<string>('');
   const [moratorium, setMoratorium] = useState<string>('');
   const [maturityDate, setMaturitDate] = useState<Dayjs>();
-  const [startDate, setStartDate] = useState<Dayjs>();
+  const [firstpayCycle, setFirstPayCycle] = useState<Dayjs>();
+
+  const [startDate, setStartDate] = useState<Dayjs>(dayjs());
+
   const [termFreq, setTermFrequency] = useState<string>('');
 
   const toastActions = React.useContext(ToastMessageContext);
@@ -207,6 +215,15 @@ export const CreateLoanUnderwritingForm = ({
     [productDetail, toastActions]
   );
 
+  const handleDateChange = useCallback(() => {
+    if (startDate) {
+      const matDate = dayjs(startDate).add(getCalcDays, 'day');
+      const calfirstpayCycle = dayjs(startDate).add(getFirstPayCycle, 'day');
+      setMaturitDate(matDate);
+      setFirstPayCycle(calfirstpayCycle);
+    }
+  }, [getCalcDays, startDate, getFirstPayCycle]);
+
   // Calculate number of days for loan
   const calNumberOfDays = useCallback(() => {
     const selectedTermFrequency = frequencyTermsDays.find(
@@ -214,21 +231,18 @@ export const CreateLoanUnderwritingForm = ({
     );
     const calcLoanDays =
       Number(loanTerm) * Number(selectedTermFrequency?.value);
+    const calccFirstPayCycle = Number(selectedTermFrequency?.value);
     setGetCalcDays(calcLoanDays);
-  }, [termFreq, loanTerm]);
-
-  const handleDateChange = useCallback(() => {
-    if (startDate) {
-      const matDate = dayjs(startDate).add(getCalcDays, 'day');
-      setMaturitDate(matDate);
-    }
-  }, [getCalcDays, startDate]);
+    setGetFirstPayCycle(calccFirstPayCycle);
+    handleDateChange();
+  }, [termFreq, loanTerm, handleDateChange]);
 
   useEffect(() => {
-    if (termFreq) {
+    if (termFreq || loanTerm) {
       calNumberOfDays();
+      handleDateChange();
     }
-  }, [termFreq, calNumberOfDays]);
+  }, [termFreq, calNumberOfDays, handleDateChange, loanTerm]);
 
   useEffect(() => {
     if (startDate) {
@@ -262,6 +276,7 @@ export const CreateLoanUnderwritingForm = ({
       loanDays,
       loanAmount,
       matDate,
+      firstPay,
       ...restValues
     } = values;
 
@@ -276,6 +291,7 @@ export const CreateLoanUnderwritingForm = ({
       loanDays: getCalcDays,
       loanAmount: values.approvedAmount,
       matDate: maturityDate,
+      firstPay: firstpayCycle,
       startDate,
       ...restValues
     };
@@ -287,7 +303,7 @@ export const CreateLoanUnderwritingForm = ({
     <Stack direction={setDirection()}>
       <Box
         sx={{
-          width: { mobile: '100%', desktop: '624px' },
+          width: { mobile: '100%', desktop: '800px' },
           padding: '32px'
         }}
       >
@@ -352,28 +368,31 @@ export const CreateLoanUnderwritingForm = ({
                       item={isTablet}
                       mobile={12}
                       mr={{ mobile: 35, tablet: 0 }}
-                      width={{ mobile: '300px', tablet: 0 }}
                       sx={{ marginBottom: '10px' }}
                     >
-                      <StyledSearchableDropdown>
+                      <StyledSearchableDropdown style={{ width: '100%' }}>
                         <ActionButtonWithPopper
                           loading={isSearchLoading}
-                          handleSelectedValue={(value: any) =>
-                            handleSelectedValue(value)
-                          }
+                          handleSelectedValue={(value: any) => handleSelectedValue(value)}
                           label="Customer Name"
                           name="customerId"
                           searchGroupVariant="LoanCustomerSearch"
                           loanDropDownOptions={filteredValues || []}
                           customStyle={{
-                            ...dropDownWithSearch,
-                            width: '560px'
+                            width: '100%',
+                            height: '54px',
+                            borderRadius: '4px',
+                            padding: '12px',
+                            border: `1px solid ${colors.neutral200}`,
+                            backgroundColor: `${colors.neutral200}`,
+                            color: `${colors.neutral600}`,
+                            fontSize: '16px',
+                            fontWeight: 400
                           }}
                           icon={<SearchIcon />}
                           iconPosition="end"
                           buttonTitle={
-                            (selectedCustomer?.customer
-                              ?.accounttitle as string) ||
+                            (selectedCustomer?.customer?.accounttitle as string) ||
                             'Search Customer Name'
                           }
                           onChange={handleSearch}
@@ -410,9 +429,10 @@ export const CreateLoanUnderwritingForm = ({
                           width: setWidth(isMobile ? '300px' : '100%')
                         }}
                         name="settlementAcct1"
-                        placeholder="Enter Settlement account balance"
-                        label="Settlement Account Balance"
+                        placeholder="Enter Settlement account"
+                        label="Settlement Account"
                         value={customerAccount}
+                        disabled
                         required
                       />{' '}
                     </Grid>
@@ -609,6 +629,8 @@ export const CreateLoanUnderwritingForm = ({
                         label="Start Date"
                         name="startDate"
                         value={startDate}
+                        minDate={dayjs().startOf('month')}
+                        maxDate={dayjs()}
                         handleDateChange={(e: any) => {
                           setStartDate(e);
                         }}
@@ -647,6 +669,8 @@ export const CreateLoanUnderwritingForm = ({
                       <FormikDateTimePicker
                         name="firstPay"
                         label="First Payment Date"
+                        disabled
+                        value={firstpayCycle}
                       />
                     </Grid>
 

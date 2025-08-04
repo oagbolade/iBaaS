@@ -1,6 +1,3 @@
-/* We may use this container for other modules as well
-  Still under observation
-*/
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';

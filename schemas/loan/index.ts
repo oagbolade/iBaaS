@@ -116,14 +116,12 @@ export const loanOverDraftSchema = Yup.object({
 });
 
 export const partialPayOffSchema = Yup.object({
-  matdate: Yup.date().required('Required'),
   princpayout: Yup.number().required('Required'),
   intpayout: Yup.number().required('Required'),
   penintpayout: Yup.number().required('Required'),
   princoutst: Yup.number().required('Required'),
   intoutst: Yup.number().required('Required'),
   penintoutst: Yup.number().required('Required'),
-  startdate: Yup.date().required('Required')
 });
 
 export const restructuredLoanSchema = Yup.object({

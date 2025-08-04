@@ -223,10 +223,18 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
       validationSchema={cashJournalSchema}
     >
       <Form>
-        <Box sx={{ marginTop: '60px' }}>
+        <Box
+          sx={{
+            marginTop: '60px',
+            position: 'fixed',
+            top: 0,
+            width: 'calc(100vw - 300px)',
+            zIndex: 1
+          }}
+        >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ marginTop: '70px', width: '100%' }}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Cash Journal Posting" styles={BatchTitle} />
             <Grid container>
@@ -261,7 +269,7 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
                 <FormTextInput
                   name="debitAcct"
                   placeholder="Enter gl Account"
-                  label="GL  Account Name"
+                  label="GL  Account Number"
                   value={glAccount?.toString()}
                   onChange={handleGlAccountChange}
                   customStyle={{

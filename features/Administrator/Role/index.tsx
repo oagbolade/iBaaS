@@ -65,9 +65,10 @@ export const Roles = () => {
     }
   }, [deleteStep]);
 
-  const [search, setSearch] = useState<boolean>(false);
+  const [search, setSearch] = useState<boolean>(true);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
+ 
   const {
     totalPages,
     totalElements,
@@ -171,7 +172,9 @@ export const Roles = () => {
                       <StyledTableCell component="th" scope="row">
                         {dataItem.roledesc || 'N/A'}
                       </StyledTableCell>
-                      <StyledTableCell align="right">{dataItem.noOfMembers || 'N/A'}</StyledTableCell>
+                      <StyledTableCell align="right">
+                        {dataItem.noOfMembers || 'N/A'}
+                      </StyledTableCell>
                       <StyledTableCell align="right">
                         <ActionMenuProps
                           roleid={dataItem.role_id || 'N/A'}
@@ -207,10 +210,12 @@ export const Roles = () => {
             handleClose={handleDelete}
             form={
               <DeleteConfirmationModal
-                modalTitle={`${modalTitleDescriptionMapper[deleteStep]?.title || ''
-                  }`}
-                modalDescription={`${modalTitleDescriptionMapper[deleteStep]?.body || ''
-                  }`}
+                modalTitle={`${
+                  modalTitleDescriptionMapper[deleteStep]?.title || ''
+                }`}
+                modalDescription={`${
+                  modalTitleDescriptionMapper[deleteStep]?.body || ''
+                }`}
                 deleteStep={deleteStep}
                 handleClose={handleDelete}
               />

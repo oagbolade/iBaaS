@@ -21,8 +21,8 @@ export async function geWeeklyLoanRepayment(
   try {
     const queryParams = new URLSearchParams({
       branchcode: params?.branchID || '',
-      productcode: params?.prodCode || '',
-      groupid: params?.groupId || '',
+      productcode: params?.prodCode || '000',
+      groupid: params?.groupId || '000',
       startDate: params?.startDate || '',
       endDate: params?.endDate || '',
       pageNumber: params?.pageNumber?.toString() || '1',

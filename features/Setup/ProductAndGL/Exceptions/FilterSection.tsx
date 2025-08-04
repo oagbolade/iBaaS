@@ -23,15 +23,11 @@ export const FilterSection = ({ onSearch }: Props) => {
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       behaviour:
-        values.behaviour?.toString().length > 0 ? values.behaviour : null,
+        values.behaviour?.toString().length > 0 ? values.behaviour : '',
       exceptionDesc:
-        values.exceptionDesc?.toString().length > 0
-          ? values.exceptionDesc
-          : null,
+        values.exceptionDesc?.toString().length > 0 ? values.exceptionDesc : '',
       exceptioncode:
-        values.exceptioncode?.toString().length > 0
-          ? values.exceptioncode
-          : null
+        values.exceptioncode?.toString().length > 0 ? values.exceptioncode : ''
     };
     onSearch?.(params);
   };
