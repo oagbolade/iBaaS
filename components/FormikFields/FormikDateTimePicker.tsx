@@ -10,18 +10,16 @@ import { StyledTextInput } from './FormTextInput';
 import { asterix, labelTypography } from '@/components/FormikFields/styles';
 import colors from '@/assets/colors';
 import { TextError } from '@/components/Forms';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type Props = {
   label: string;
   name?: string;
   className?: string;
-  handledValue?: Dayjs | string | null;
   required?: boolean;
   disabled?: boolean;
   disableFuture?: boolean;
-  handleDateChange?: Function;
-  value?: string | Dayjs;
-  defaultValue?: string | Dayjs;
+  handleDateChange?: (value: Dayjs | null) => void;
   minDate?: Dayjs;
   maxDate?: Dayjs;
 };
@@ -57,21 +55,27 @@ export const FormikDateTimePicker = ({
   label,
   required,
   className,
-  value,
   disabled,
-  defaultValue,
   handleDateChange,
   disableFuture,
   minDate,
-  maxDate
+  maxDate,
 }: Props) => {
-  const today = value ?? defaultValue ?? dayjs();
+  const { sysmodel, isLoading } = useGetSystemDate();
+  const systemDate = sysmodel?.systemDate;
 
   return (
     <Box sx={{ marginBottom: '15px' }}>
-      <Field>
+      <Field name={name}>
         {({ field, form }: FieldProps) => {
           const { setFieldValue } = form;
+
+          React.useEffect(() => {
+            if (!field.value && systemDate && !isLoading) {
+              setFieldValue(name, dayjs(systemDate));
+            }
+          }, [systemDate, field.value, setFieldValue, name, isLoading]);
+
           return (
             <DateTimeWrapper>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -83,20 +87,15 @@ export const FormikDateTimePicker = ({
                   </InputLabel>
                   <DatePicker
                     data-testid={name}
-                    label={label}
                     disabled={disabled}
                     disableFuture={disableFuture}
                     minDate={minDate}
                     maxDate={maxDate}
                     className={className}
-                    {...field}
-                    defaultValue={today || defaultValue}
-                    value={today || field.value}
+                    value={field.value ? dayjs(field.value) : null}
                     onChange={(newValue) => {
-                      if (handleDateChange) {
-                        handleDateChange(newValue);
-                      }
-                      return setFieldValue(name as string, newValue);
+                      handleDateChange?.(newValue);
+                      setFieldValue(name, newValue);
                     }}
                   />
                 </StyledTextInput>
