@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Formik, Form } from 'formik';
@@ -12,6 +12,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { searchFieldsSchema } from '@/schemas/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch: Function;
@@ -19,19 +20,25 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, branches }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('admin-users');
   const { mappedBranches } = useMapSelectOptions({ branches });
   const { setWidth } = useCurrentBreakpoint();
 
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    status: searchParams?.status ?? '',
+    fullName: searchParams?.fullName ?? '',
+  };
   const onSubmit = async (values: any) => {
     const statusOption = document.getElementsByClassName(
-      'statusOption'
+      'statusOption',
     ) as HTMLCollectionOf<HTMLInputElement>;
     const status = statusOption[0].value || '';
 
     const params: ISearchParams = {
       status: status?.trim().length > 0 ? status : null,
-      branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      fullName: values.search.toString().length > 0 ? values.search : null
+      branchID: values.branchID?.toString().length > 0 ? values.branchID : null,
+      fullName: values.search?.toString().length > 0 ? values.search : null,
     };
 
     onSearch(params);
@@ -39,7 +46,8 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      enableReinitialize
+      initialValues={initialValues}
       onSubmit={(values) => onSubmit(values)}
       validationSchema={searchFieldsSchema}
     >
@@ -50,7 +58,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               display: 'flex',
               alignItems: 'center',
               marginBottom: '50px',
-              gap: '20px'
+              gap: '20px',
             }}
           >
             <Grid>
@@ -58,36 +66,33 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 className="statusOption"
                 options={[
                   { label: 'Active', value: '1' },
-                  { label: 'Disabled', value: '3' }
+                  { label: 'Disabled', value: '3' },
                 ]}
                 title="User Status"
                 name="status"
-                value=""
+                value={initialValues.status ?? ''}
               />
             </Grid>
             <Grid>
               <FormSelectField
-                customStyle={{
-                  width: '200px',
-                  fontSize: '14px'
-                }}
+                customStyle={{ width: '200px', fontSize: '14px' }}
                 name="branchID"
                 options={mappedBranches}
                 label="Branch ID"
-              />{' '}
+              />
             </Grid>
             <Grid>
               <FormTextInput
                 customStyle={{
                   width: '960px',
                   fontSize: '14px',
-                  marginTop: '5px'
+                  marginTop: '5px',
                 }}
                 icon={<SearchIcon />}
                 name="search"
                 placeholder="Enter name"
                 label="Search By User Name"
-              />{' '}
+              />
             </Grid>
             <Grid sx={{ marginTop: '18px' }}>
               <ActionButton type="submit" buttonTitle="Search" />

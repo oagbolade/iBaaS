@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
@@ -17,14 +17,14 @@ import { ToastMessage } from '@/components/Revamp/ToastMessage';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import {
   IAccountOfficers,
-  SearchAccountOfficersResponse
+  SearchAccountOfficersResponse,
 } from '@/api/ResponseTypes/admin';
 import { useGetBranches } from '@/api/general/useBranches';
 import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
 import {
   useDeleteAccountOfficer,
-  useFilterAccountOfficerSearch
+  useFilterAccountOfficerSearch,
 } from '@/api/admin/useAccountOfficer';
 import { ModalTitleDescriptionMapper } from '@/features/Administrator/Users';
 import { DeleteActionSteps } from '@/constants/Steps';
@@ -32,6 +32,7 @@ import { useValidatePassword } from '@/api/admin/useAdminUsers';
 import { getStoredUser } from '@/utils/user-storage';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
 import { useGetStatus } from '@/api/general/useStatus';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -41,46 +42,53 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const AccountOfficers = () => {
   const [deleteStep, setDeleteStep] = useState<DeleteActionSteps>(null);
-  const { mutate: validatePassword } = useValidatePassword();
   const [currentOfficer, setCurrentOfficer] = useState<IAccountOfficers>();
+  const { mutate: validatePassword } = useValidatePassword();
   const { mutate } = useDeleteAccountOfficer();
   const toastMessageMapper = {
     officerDelete: {
       title: 'Officer Deleted',
-      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.'
-    }
+      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.',
+    },
   };
 
   const modalTitleDescriptionMapper: ModalTitleDescriptionMapper = {
     isDeleteConfirmation: {
       title: 'Delete Officer',
-      body: 'When you delete an officer, the officer wont’t be able to access this platform, would you like to proceed?'
+      body: 'When you delete an officer, the officer wont’t be able to access this platform, would you like to proceed?',
     },
-    isPassword: { title: 'Delete User', body: '' }
+    isPassword: { title: 'Delete User', body: '' },
   };
 
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('account-officers');
+
   const { branches } = useGetBranches();
   const { status } = useGetStatus();
-  const [page, setPage] = React.useState(1);
+
   const {
     totalPages,
     totalElements,
     data: accountOfficerData,
-    isLoading: areAccountOfficersDataLoading
+    isLoading: areAccountOfficersDataLoading,
   } = useFilterAccountOfficerSearch({
     ...searchParams,
-    page
+    page,
   });
 
   useEffect(() => {
@@ -93,7 +101,7 @@ export const AccountOfficers = () => {
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const refetch = () => {
@@ -103,7 +111,7 @@ export const AccountOfficers = () => {
   const handleDelete = async (
     currentStep: DeleteActionSteps = null,
     officer: IAccountOfficers | null = null,
-    password: string | null = null
+    password: string | null = null,
   ) => {
     if (officer) {
       setCurrentOfficer(officer);
@@ -113,14 +121,12 @@ export const AccountOfficers = () => {
       const body: ValidatePasswordRequest = {
         oldpassword: password as string,
         tenantid: getStoredUser()?.companyCode as string,
-        userid: getStoredUser()?.profiles.userid as string
+        userid: getStoredUser()?.profiles.userid as string,
       };
 
       await validatePassword?.(body);
       await mutate?.(currentOfficer?.officercode);
       setDeleteStep(null);
-
-      // do a refetch here
       refetch();
       return;
     }
@@ -130,7 +136,7 @@ export const AccountOfficers = () => {
 
   const ActionMenuProps = ({
     officercode,
-    officer
+    officer,
   }: {
     officercode: string;
     officer: IAccountOfficers;
@@ -143,6 +149,7 @@ export const AccountOfficers = () => {
       />
     );
   };
+
   return (
     <>
       <TopActionsArea
@@ -162,7 +169,7 @@ export const AccountOfficers = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {areAccountOfficersDataLoading ? (
@@ -170,41 +177,37 @@ export const AccountOfficers = () => {
           ) : (
             <MuiTableContainer
               columns={COLUMNS}
-              tableConfig={{
-                hasActions: true
-              }}
+              tableConfig={{ hasActions: true }}
               data={accountOfficerData}
               setPage={setPage}
               page={page}
               totalPages={totalPages}
               totalElements={totalElements}
             >
-              {search ? (
+              {searchActive ? (
                 accountOfficerData?.map(
-                  (dataItem: SearchAccountOfficersResponse) => {
-                    return (
-                      <StyledTableRow key={dataItem.officercode}>
-                        <StyledTableCell component="th" scope="row">
-                          {dataItem.officercode}
-                        </StyledTableCell>
-                        <StyledTableCell component="th" scope="row">
-                          {dataItem.staffID}
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                          {dataItem.officerName}
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                          {dataItem.deptName || 'N/A'}
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                          <ActionMenuProps
-                            officercode={dataItem.officercode || 'N/A'}
-                            officer={dataItem}
-                          />
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    );
-                  }
+                  (dataItem: SearchAccountOfficersResponse) => (
+                    <StyledTableRow key={dataItem.officercode}>
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem.officercode}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {dataItem.staffID}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {dataItem.officerName}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {dataItem.deptName || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <ActionMenuProps
+                          officercode={dataItem.officercode || 'N/A'}
+                          officer={dataItem}
+                        />
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ),
                 )
               ) : (
                 <StyledTableRow>
@@ -220,7 +223,6 @@ export const AccountOfficers = () => {
             </MuiTableContainer>
           )}
         </Box>
-        <Box />
         {deleteStep === 'showToast' && (
           <ToastMessage
             title={toastMessageMapper.officerDelete.title}
