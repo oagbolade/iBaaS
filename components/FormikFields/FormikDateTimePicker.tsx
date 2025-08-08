@@ -19,7 +19,9 @@ type Props = {
   required?: boolean;
   disabled?: boolean;
   disableFuture?: boolean;
-  handleDateChange?: (value: Dayjs | null) => void;
+  value?: string | Dayjs;
+  defaultValue?: string | Dayjs;
+  handleDateChange?: Function;
   minDate?: Dayjs;
   maxDate?: Dayjs;
 };
@@ -55,7 +57,9 @@ export const FormikDateTimePicker = ({
   label,
   required,
   className,
+  value,
   disabled,
+  defaultValue,
   handleDateChange,
   disableFuture,
   minDate,
@@ -70,11 +74,9 @@ export const FormikDateTimePicker = ({
         {({ field, form }: FieldProps) => {
           const { setFieldValue } = form;
 
-          React.useEffect(() => {
-            if (!field.value && systemDate && !isLoading) {
-              setFieldValue(name, dayjs(systemDate));
-            }
-          }, [systemDate, field.value, setFieldValue, name, isLoading]);
+          if (!field.value && systemDate && !isLoading) {
+            setFieldValue(name, dayjs(systemDate));
+          }
 
           return (
             <DateTimeWrapper>
@@ -92,7 +94,10 @@ export const FormikDateTimePicker = ({
                     minDate={minDate}
                     maxDate={maxDate}
                     className={className}
-                    value={field.value ? dayjs(field.value) : null}
+                    {...field}
+                    label={label}
+                    defaultValue={field.value || defaultValue}
+                    value={field.value ? value || dayjs(field.value) : null}
                     onChange={(newValue) => {
                       handleDateChange?.(newValue);
                       setFieldValue(name, newValue);

@@ -41,12 +41,14 @@ export const FilterSection = ({ onSearch }: Props) => {
   };
 
   return (
-    <Box>
+    <>
       <Stack
         sx={{
-          borderBottom: '1px solid #E8E8E8',
+        
+          borderBottom: `1px solid ${colors.loanTitleColor}`,
           marginTop: '10px',
-          paddingX: '24px'
+          paddingX: '24px',
+          position: 'sticky'
         }}
         direction={setDirection()}
         justifyContent="space-between"
@@ -95,22 +97,22 @@ export const FilterSection = ({ onSearch }: Props) => {
           </Box>
         </Stack>
       </Stack>
+
       <Box sx={{ height: '120px' }}>
         <Grid
           sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
           spacing={2}
         >
           <Grid
-            mb={{ tablet: 6 }}
+            mb={{ tablet: 22 }}
             item
-            mobile={12}
-            tablet={6}
+            mobile={22}
+            tablet={22}
             justifyContent="center"
           >
             <TextInput
               customStyle={{
-                width: '600px',
-                fontSize: '14px',
+                width: '100%',
                 ...inputFields
               }}
               icon={<SearchIcon />}
@@ -141,6 +143,6 @@ export const FilterSection = ({ onSearch }: Props) => {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </>
   );
 };

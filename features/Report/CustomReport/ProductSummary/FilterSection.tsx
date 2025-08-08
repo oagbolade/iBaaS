@@ -35,7 +35,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     <Box>
       <Box sx={{ height: '120px' }}>
         <Grid
-          sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
+          sx={{ padding: '5px 5px', display: 'flex', gap: '35px' }}
           spacing={2}
         >
           <Grid
@@ -46,11 +46,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
             justifyContent="center"
           >
             <FormSelectInput
-              customStyle={{
-                width: '400px',
-                fontSize: '14px',
-                ...inputFields
-              }}
+             
               name="branchID"
               options={mappedBranches}
               label="Branch ID"
@@ -61,18 +57,14 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
             />{' '}
           </Grid>
           <Grid
-            mb={{ tablet: 6 }}
+            mb={{ tablet: 10}}
             item
             mobile={12}
-            tablet={6}
+            tablet={10}
             justifyContent="center"
           >
             <TextInput
-              customStyle={{
-                width: '500px',
-                fontSize: '14px',
-                ...inputFields
-              }}
+             
               icon={<SearchIcon />}
               name="search"
               value={searchTerm}

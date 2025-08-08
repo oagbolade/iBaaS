@@ -121,9 +121,9 @@ export const ProductSummary = () => {
         marginTop: '50px'
       }}
     >
-      <Box sx={{ width: '1300px' }}>
+    
         <TopOverViewSection useBackButton />
-      </Box>{' '}
+     
       <Box
         sx={{
           padding: '25px',

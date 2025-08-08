@@ -38,6 +38,7 @@ export const GroupLoanReport = () => {
       }}
     >
       <TopOverViewSection useBackButton />
+      
       <Box
         sx={{
           padding: '25px',
@@ -47,7 +48,7 @@ export const GroupLoanReport = () => {
         {branches && (
           <FilterSection branches={branches} onSearch={handleSearch} />
         )}
-        <Box sx={{ padding: '24px' }}>
+        <Box>
           {isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (

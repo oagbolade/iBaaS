@@ -37,7 +37,7 @@ export const PlainTrialBalance = () => {
     totalRecords
   } = useGetPlainTrialBalance({
     ...searchParams,
-    pageNumber: page.toString(),
+    pageNumber: page.toString()
   });
 
   const {
@@ -110,7 +110,6 @@ export const PlainTrialBalance = () => {
               page={page}
               totalPages={Math.ceil(totalRecords / 10)}
               totalElements={totalRecords}
-            
             />
           </Box>
         )}

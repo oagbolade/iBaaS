@@ -42,44 +42,13 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     onSearch?.(params);
   };
   return (
-    <Box marginTop={10}>
+    <Box marginTop={3}>
       <Formik
         initialValues={searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
         validationSchema={chartOfAccountSchema}
       >
         <Form>
-          <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '24px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box>
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-            </Box>
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-            </Stack>
-          </Stack>
           <Box
             sx={{
               marginTop: '20px',

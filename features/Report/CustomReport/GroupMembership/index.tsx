@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
+import { TopOverViewSection } from '../../Overview/TopOverViewSection';
 import { FilterSection } from './FilterSection';
 import { Column } from './Column';
 import { MuiTableContainer } from '@/components/Table';
@@ -83,16 +84,20 @@ export const GroupMembership = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      {branches && bankproducts && (
-        <FilterSection
-          branches={branches}
-          officers={officers}
-          groups={groups || []}
-          onSearch={handleSearch}
-        />
-      )}
+      <TopOverViewSection useBackButton />
 
-      <Box sx={{ padding: '25px', width: '100%' }}>
+      <div className="mt-8">
+        {branches && bankproducts && (
+          <FilterSection
+            branches={branches}
+            officers={officers}
+            groups={groups || []}
+            onSearch={handleSearch}
+          />
+        )}
+      </div>
+
+      <div className="mx-5">
         {isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
@@ -158,7 +163,7 @@ export const GroupMembership = () => {
             )}
           </MuiTableContainer>
         )}
-      </Box>
+      </div>
     </Box>
   );
 };

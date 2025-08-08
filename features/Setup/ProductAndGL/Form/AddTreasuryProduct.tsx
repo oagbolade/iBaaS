@@ -14,7 +14,10 @@ import {
   useGetDemandDepositByCode,
   useGetTreasuryProductByCode
 } from '@/api/setup/useProduct';
-import { createDemandDepositInitialValues } from '@/schemas/schema-values/setup';
+import {
+  createDemandDepositInitialValues,
+  createTreasuryccountInitialValues
+} from '@/schemas/schema-values/setup';
 import {
   createCasaProductSchema,
   createDepartmentSchema
@@ -45,67 +48,46 @@ export const AddTreasuryNewProduct = ({
   setIsSubmitting
 }: Props) => {
   const requiredFields: Record<string, string[]> = {
-    personalDetails: [
-      'dayint',
-      'taxabsorbed1',
-      'maxamt',
-      'minintbalance',
-      'closeBalance',
-      'shortname',
-      'appType',
-      'openbalance',
-      'productName',
-      'productclass'
-    ],
+    personalDetails: ['shortname', 'appType', 'productName', 'productclass'],
 
     interestCharges: [
-      'interestIncome',
-      'withallowed',
-      'drType',
       'crtype',
-      'ProdException'
+      'penalrate',
+      'minterm',
+      'maxterm',
+      'repaymeth',
+      'term',
+      'discounted'
     ],
 
     generalLedge: [
-      'accountNumber',
-      'liabilityBal',
-      'suspendedAsset',
-      'assetBalance',
-      'interestReceivable',
-      'unearnincome',
-      'interestExpense',
-      'interestIncome',
-      'suspendedIntIncome',
-      'interestPayable',
+      'intaccrual',
+      'InterestExpense',
+      'intIncome',
+      'maturedGL',
+      'principal',
       'interbr',
-      'taxabsorbed1',
-      'acctClosegl',
-      'liabilityBal'
+      'upfront',
+      'PaymentGL',
+      'suspint',
+      'susprinc',
+      'ttax',
+      'ttax2'
     ],
 
-    otherDetails: ['floor', 'minAge', 'maxAge'],
+    otherDetails: []
 
-    document: []
+    // document: []
   };
   const isEditing = useGetParams('isEditing') || null;
   const { mutate } = useCreateTreasuryAccountProduct(
     Boolean(isEditing),
     decryptData(productCode as string)
   );
-  const { loanProducts, isLoading } = useGetTreasuryProductByCode(
+  const { termDeposit, isLoading } = useGetTreasuryProductByCode(
     decryptData(productCode as string)
   );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    values.ProdException = values.ProdException.map((resp: string) => ({
-      exceptioncode: resp
-    }));
-    values.ProdCharges = values.ProdCharges.map((resp: string) => ({
-      chargecode: resp
-    }));
-    values.ProdDocuments = values.ProdDocuments.map((resp: string) => ({
-      docId: resp.trim()
-    }));
-
     await mutate({
       ...values
     });
@@ -147,7 +129,7 @@ export const AddTreasuryNewProduct = ({
         </Box>
 
         <Formik
-          initialValues={loanProducts || createDemandDepositInitialValues}
+          initialValues={termDeposit || createTreasuryccountInitialValues}
           onSubmit={(values, actions) => onSubmit(values, actions)}
         >
           {({ values }) => {
@@ -175,11 +157,7 @@ export const AddTreasuryNewProduct = ({
                   cardKey="otherDetails"
                   completed={completed}
                 />
-                <ShortCardTreasuryWithAccordion
-                  cardTitle="Documents"
-                  cardKey="document"
-                  completed={completed}
-                />
+
                 <button
                   id="submitButton"
                   type="submit"

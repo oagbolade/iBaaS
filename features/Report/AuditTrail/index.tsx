@@ -65,7 +65,7 @@ const ViewAuditDetails: React.FC<{
                 fontWeight: 400,
                 lineHeight: '20px',
                 textTransform: 'uppercase',
-                fontFeatureSettings: "'liga' off, 'clig' off"
+                fontFeatureSettings: '\'liga\' off, \'clig\' off'
               }}
             >
               {key.replace(/_/g, ' ').toUpperCase()}
@@ -73,7 +73,7 @@ const ViewAuditDetails: React.FC<{
             <h2
               style={{
                 color: `${colors.neutral1000}`,
-                fontFeatureSettings: "'liga' off, 'clig' off",
+                fontFeatureSettings: '\'liga\' off, \'clig\' off',
                 fontSize: '16px',
                 fontStyle: 'normal',
                 fontWeight: 600,

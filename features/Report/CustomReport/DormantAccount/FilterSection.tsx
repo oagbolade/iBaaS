@@ -42,7 +42,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   };
 
   return (
-    <Box>
+
       <Formik
         initialValues={searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
@@ -112,6 +112,5 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           </Box>
         </Form>
       </Formik>
-    </Box>
   );
 };

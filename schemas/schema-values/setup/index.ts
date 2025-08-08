@@ -35,6 +35,21 @@ export interface CreateCompanyFormValues {
   webSite: string;
   bankLogo: string;
   loginImage: string;
+  promoURL: string;
+  kyc: number;
+  moratoriumByDays: number;
+  notifyAllPhones: number;
+  epaymentUserid: string;
+  esbUser: string;
+  processNIP: number;
+  bin: string;
+  turnOnErrLog: number;
+  lgaCode: string;
+  mdPhoneNo: string;
+  mdName: string;
+  compOffPhoneNo: string;
+  compOffName: string;
+  bulkOverdrawFlg: number;
 }
 
 export interface CreateBranchTestCaseFormValues {
@@ -360,6 +375,37 @@ export interface CreateDemandDepositFormValues {
   ProdCharges: [];
   ProdException: [];
 }
+export interface CreateTreasuryFormValues {
+  productCode: string;
+  productName: string;
+  productclass: string;
+  appType: string;
+  productstart: string;
+  productExpire: string;
+  currencycode: string;
+  intaccrual: string;
+  crtype: string;
+  minIntrate: number;
+  maxIntRate: number;
+  minterm: number;
+  maxterm: number;
+  repaymeth: string;
+  term: string;
+  interestExpense: string;
+  shortname: string;
+  intIncome: string;
+  principal: string;
+  ttax: string;
+  ttax2: string;
+  upfront: string;
+  paymentGL: string;
+  maturedGL: string;
+  suspint: string;
+  susprinc: string;
+  closeTDAtMature: number;
+  penalrate: number;
+  discounted: number;
+}
 export interface CreateLoanAccountFormValues {
   productCode: string;
   productName: string;
@@ -508,6 +554,38 @@ export interface UpdateStateFromValue {
   region: string;
   authid: string;
 }
+
+export const createTreasuryccountInitialValues: CreateTreasuryFormValues = {
+  productCode: '',
+  productName: '',
+  productclass: '',
+  appType: '',
+  productstart: '',
+  productExpire: '',
+  currencycode: '',
+  intaccrual: '',
+  crtype: '',
+  minIntrate: 0,
+  maxIntRate: 0,
+  minterm: 0,
+  maxterm: 0,
+  repaymeth: '',
+  term: '',
+  interestExpense: '',
+  shortname: '',
+  intIncome: '',
+  principal: '',
+  ttax: '',
+  ttax2: '',
+  upfront: '',
+  paymentGL: '',
+  maturedGL: '',
+  suspint: '',
+  susprinc: '',
+  closeTDAtMature: 0,
+  penalrate: 0,
+  discounted: 0
+};
 export const createLoanAccountInitialValues: CreateLoanAccountFormValues = {
   productCode: '',
   productName: '',
@@ -875,11 +953,26 @@ export const createCompanyInitialValues: CreateCompanyFormValues = {
   notice: 0,
   dmb: 0,
   non_dmb: 0,
-  interbrabch: 'string',
+  interbrabch: '',
   cbncode: '',
   webSite: '',
   bankLogo: '',
-  loginImage: 'string'
+  loginImage: '',
+  promoURL: '',
+  kyc: 0,
+  moratoriumByDays: 0,
+  notifyAllPhones: 0,
+  epaymentUserid: '',
+  esbUser: '',
+  processNIP: 0,
+  bin: '',
+  turnOnErrLog: 0,
+  lgaCode: '',
+  mdPhoneNo: '',
+  mdName: '',
+  compOffPhoneNo: '',
+  compOffName: '',
+  bulkOverdrawFlg: 0
 };
 
 export const createBranchInitialValues: CreateBranchFormValues = {

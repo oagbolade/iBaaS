@@ -36,7 +36,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   };
 
   return (
-    <Box>
+    
       <Formik
         initialValues={searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
@@ -44,7 +44,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         <Form>
           <Box sx={{ height: '120px' }}>
             <Grid
-              sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
+              sx={{ padding: '5px 5px', display: 'flex', gap: '35px' }}
               spacing={2}
             >
               <Grid
@@ -74,7 +74,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
               >
                 <TextInput
                   customStyle={{
-                    width: '930px',
                     fontSize: '14px',
                     ...inputFields
                   }}
@@ -104,6 +103,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           </Box>
         </Form>
       </Formik>
-    </Box>
+   
   );
 };

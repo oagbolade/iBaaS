@@ -49,7 +49,7 @@ export const FilterSection = ({ onSearch }: Props) => {
         validationSchema={drillDowndueSchema}
       >
         <Form>
-          <Stack
+          {/* <Stack
             sx={{
               borderBottom: '1px solid #E8E8E8',
               marginTop: '24px',
@@ -79,7 +79,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 />
               </Box>
             </Stack>
-          </Stack>
+          </Stack> */}
 
           <Box
             sx={{

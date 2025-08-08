@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { COLUMNS } from './COLUMNS';
 import { FilterSection } from './FilterSection';
 import { EndOfDayForm } from './EndOfDayForm';
+import { RunEndOfDayForm } from './RunEndOfDay';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
@@ -18,6 +19,9 @@ import { ISearchParams } from '@/app/api/search/route';
 export const EndOfDaySetupTable = () => {
   const [openModel, setopenModel] = useState(Boolean);
   const [search, setSearch] = useState<boolean>(false);
+  const [openRunModel, setopenRunModel] = useState(Boolean);
+  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const [page, setPage] = React.useState(1);
 
   const ActionMenu = ({
     exceptionCode
@@ -34,14 +38,18 @@ export const EndOfDaySetupTable = () => {
   };
   const handleClose = () => {
     setopenModel(false);
+    setopenRunModel(false);
   };
   const handleOpen = () => {
     setopenModel(true);
   };
+  const handleRunOpen = () => {
+    setopenRunModel(true);
+  };
   const handleSearch = async (params: ISearchParams) => {
-    //   setSearchParams({
-    //     ...params
-    //   });
+    setSearchParams({
+      ...params
+    });
     setSearch(true);
   };
   const actionButtons = [
@@ -54,10 +62,15 @@ export const EndOfDaySetupTable = () => {
       <PrimaryIconButton
         buttonTitle="Run End of Day"
         customStyle={{ ...submitButton }}
-        onClick={handleOpen}
+        onClick={handleRunOpen}
       />
       {openModel && (
         <ModalContainerV2 form={<EndOfDayForm handleClose={handleClose} />} />
+      )}
+      {openRunModel && (
+        <ModalContainerV2
+          form={<RunEndOfDayForm handleClose={handleClose} />}
+        />
       )}
     </Box>
   ];

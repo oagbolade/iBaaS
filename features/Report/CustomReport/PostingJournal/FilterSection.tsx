@@ -61,53 +61,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         validationSchema={prostingJournalSchema}
       >
         <Form>
-          <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '10px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box>
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-            </Box>
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="DateRangePicker"
-                  customStyle={{ ...dateFilter }}
-                  icon={
-                    <CalendarTodayOutlinedIcon
-                      sx={{
-                        color: `${colors.Heading}`
-                      }}
-                    />
-                  }
-                  iconPosition="end"
-                  buttonTitle={formattedDateRange}
-                />
-              </Box>
-            </Stack>
-          </Stack>
-
+         
           <Box
             sx={{
               marginTop: '30px',

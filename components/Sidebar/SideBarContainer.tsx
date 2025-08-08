@@ -24,12 +24,13 @@ export const SideBarContainer = () => {
   const pathname: string | null = usePathname();
   const customReportPage = '/report/custom-report';
   const { bank } = useGetCompanyByCode();
-  const { logo } = useGetBankLogo();
-  const BankLogo = logo?.toString()
-    ? `data:image/png;image/jpg;base64,${logo}`
-    : null;
+  // ON hold
+  // const { logo } = useGetBankLogo();
+  // const BankLogo = logo?.toString()
+  //   ? `data:image/png;image/jpg;base64,${logo}`
+  //   : null;
 
-  saveBankLogoToLocalStorage(BankLogo || '');
+  // saveBankLogoToLocalStorage(BankLogo || '');
 
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
@@ -70,7 +71,7 @@ export const SideBarContainer = () => {
             alignItems: 'center'
           }}
         >
-          {BankLogo ? (
+          {/* {BankLogo ? (
             <Box
               sx={{
                 width: '100%',
@@ -90,7 +91,7 @@ export const SideBarContainer = () => {
             </Box>
           ) : (
             <PageTitle title={bank?.bankName} />
-          )}
+          )} */}
         </Link>
       </Box>
 

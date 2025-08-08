@@ -62,10 +62,10 @@ export const DormantAccount = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
-      <Box sx={{ marginTop: '10px', padding: '25px' }}>
+      <div className="mx-5 mt-8">
         <FilterSection branches={branches} onSearch={handleSearch} />
-      </Box>
-      <Box sx={{ padding: '25px', width: '100%' }}>
+      </div>
+      <div className="mx-5">
         {isDormantAccountDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
@@ -127,7 +127,7 @@ export const DormantAccount = () => {
             )}
           </MuiTableContainer>
         )}
-      </Box>
+      </div>
     </Box>
   );
 };

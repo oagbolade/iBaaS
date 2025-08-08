@@ -57,58 +57,10 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
         validationSchema={customerBalanceSchema}
       >
         <Form>
-          <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '24px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box>
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-            </Box>
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="DateRangePicker"
-                  customStyle={{ ...dateFilter }}
-                  icon={
-                    <CalendarTodayOutlinedIcon
-                      sx={{
-                        color: `${colors.Heading}`
-                      }}
-                    />
-                  }
-                  iconPosition="end"
-                  buttonTitle="Aug 22 - Sep 23"
-                />
-              </Box>
-            </Stack>
-          </Stack>
-
           <Box
             sx={{
               marginTop: '20px',
-              paddingX: '24px'
+              paddingX: '20px'
             }}
           >
             <Box>

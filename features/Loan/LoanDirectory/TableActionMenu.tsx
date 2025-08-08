@@ -66,7 +66,6 @@ export const TableActionMenu = ({
     handleMenuClose();
   };
 
-
   React.useEffect(() => {
     const shouldDisableView = !checkMultipleUserRoleAccess(
       'Loan Directory',
@@ -82,20 +81,15 @@ export const TableActionMenu = ({
       'LOAN CLOSURE_WRITEOFF'
     );
 
-
     const shouldDisablePartailPayOff = !checkMultipleUserRoleAccess(
       'Loan Directory',
       'PARTIAL PAYOFF'
     );
 
-
-
     const shouldDisableRestructure = !checkMultipleUserRoleAccess(
       'Loan Directory',
       'LOAN RESTRUCTURE'
     );
-
-
 
     setShouldDisable((prev) => ({
       ...prev,
@@ -106,9 +100,6 @@ export const TableActionMenu = ({
       restructLaon: shouldDisableRestructure
 
     }));
-
-
-
 
   }, []);
 

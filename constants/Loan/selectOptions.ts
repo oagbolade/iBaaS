@@ -10,9 +10,11 @@ export const Loan = {
   ],
   status: [
     { name: 'All Loans', value: '5' }, 
-    // { name: 'Rejected Loans', value: '1' }, // verrified this later
-    { name: 'Matured Loans', value: '3' }, // close loan  
-    { name: 'Active Loans', value: '4' } //  Runining Loanand matured loan
+
+    // { name: 'Rejected Loans', value: '1' },
+    { name: 'Matured Loans', value: '3' }, // Mature loan loan  
+    { name: 'Active Loans', value: '4' } //  Runinng Loan
+    
   ]
 };
 

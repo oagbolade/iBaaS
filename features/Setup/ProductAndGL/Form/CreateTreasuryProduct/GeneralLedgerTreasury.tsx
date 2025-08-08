@@ -66,7 +66,18 @@ type Props = {
     | Array<any>;
 };
 type SearchFilters = {
-  accountNumber: string | OptionsI[];
+  intaccrual: string | OptionsI[];
+  InterestExpense: string | OptionsI[];
+  intIncome: string | OptionsI[];
+  maturedGL: string | OptionsI[];
+  principal: string | OptionsI[];
+  interbr: string | OptionsI[];
+  upfront: string | OptionsI[];
+  PaymentGL: string | OptionsI[];
+  suspint: string | OptionsI[];
+  susprinc: string | OptionsI[];
+  ttax: string | OptionsI[];
+  ttax2: string | OptionsI[];
   [key: string]: any;
 };
 export const GeneralLedgerTreasuryForm = ({
@@ -103,51 +114,48 @@ export const GeneralLedgerTreasuryForm = ({
   const { setFieldValue, values } = useFormikContext<any>();
 
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
-    accountNumber: '',
-    princbalBalance: '',
-    susinterest: '',
     intaccrual: '',
-    interestincome: '',
+    InterestExpense: '',
+    intIncome: '',
+    maturedGL: '',
+    principal: '',
     interbr: '',
-    penalIntAccrual: '',
-    interestReceivable: '',
+    upfront: '',
+    PaymentGL: '',
+    suspint: '',
     susprinc: '',
-    uid: '',
-    micincome: '',
-    penalInterest: '',
-    penalSuspense: ''
+    ttax: '',
+    ttax2: ''
   });
 
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
-    accountNumber: [],
-    princbalBalance: [],
-    susinterest: [],
     intaccrual: [],
-    interestincome: [],
+    InterestExpense: [],
+    intIncome: [],
+    maturedGL: [],
+    principal: [],
     interbr: [],
-    penalIntAccrual: [],
-    interestReceivable: [],
+    upfront: [],
+    PaymentGL: [],
+    suspint: [],
     susprinc: [],
-    uid: [],
-    micincome: [],
-    penalInterest: [],
-    penalSuspense: []
+    ttax: [],
+    ttax2: []
   });
 
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
-    accountNumber: '',
-    princbalBalance: '',
-    susinterest: '',
     intaccrual: '',
-    interestincome: '',
+    InterestExpense: '',
+    intIncome: '',
+    maturedGL: '',
+    principal: '',
     interbr: '',
-    penalIntAccrual: '',
-    interestReceivable: '',
+    upfront: '',
+    PaymentGL: '',
+    suspint: '',
     susprinc: '',
-    uid: '',
-    micincome: '',
-    penalInterest: '',
-    penalSuspense: ''
+    ttax: '',
+    ttax2: ''
   });
 
   const handleSelectedValue = (value: string, name: string) => {
@@ -178,19 +186,18 @@ export const GeneralLedgerTreasuryForm = ({
 
     if (value.trim().length === 0) {
       setFilteredValues({
-        accountNumber: mappedWithBranchCode,
-        princbalBalance: mappedWithBranchCode,
-        susinterest: mappedWithBranchCode,
         intaccrual: mappedWithBranchCode,
-        interestincome: mappedWithBranchCode,
+        InterestExpense: mappedWithBranchCode,
+        intIncome: mappedWithBranchCode,
+        maturedGL: mappedWithBranchCode,
+        principal: mappedWithBranchCode,
         interbr: mappedWithBranchCode,
-        penalIntAccrual: mappedWithBranchCode,
-        interestReceivable: mappedWithBranchCode,
+        upfront: mappedWithBranchCode,
+        PaymentGL: mappedWithBranchCode,
+        suspint: mappedWithBranchCode,
         susprinc: mappedWithBranchCode,
-        uid: mappedWithBranchCode,
-        micincome: mappedWithBranchCode,
-        penalInterest: mappedWithBranchCode,
-        penalSuspense: mappedWithBranchCode
+        ttax: mappedWithBranchCode,
+        ttax2: mappedWithBranchCode
       });
     }
   };
@@ -201,76 +208,9 @@ export const GeneralLedgerTreasuryForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'accountNumber')
-            }
-            label="GL Account Number"
-            name="accountNumber"
-            searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.accountNumber as OptionsI[]}
-            customStyle={{ ...dropDownWithSearch, width: '960px' }}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={
-              (selectedValue.accountNumber as string) || 'Search Account Number'
-            }
-            onChange={handleSearch}
-            searchValue={searchValue.accountNumber as string}
-          />
-        </StyledSearchableDropdown>
-      </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
-            handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'princbalBalance')
-            }
-            label="Principal Balance"
-            name="princbalBalance"
-            searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.princbalBalance as OptionsI[]}
-            customStyle={{ ...dropDownWithSearch, width: '960px' }}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={
-              (selectedValue.princbalBalance as string) ||
-              'Search Principal Balance'
-            }
-            onChange={handleSearch}
-            searchValue={searchValue.princbalBalance as string}
-          />
-        </StyledSearchableDropdown>
-      </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
-            handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'susinterest')
-            }
-            label="Suspended Asset"
-            name="susinterest"
-            searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.susinterest as OptionsI[]}
-            customStyle={{ ...dropDownWithSearch, width: '960px' }}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={
-              (selectedValue.susinterest as string) || 'Search Suspended Asset'
-            }
-            onChange={handleSearch}
-            searchValue={searchValue.susinterest as string}
-          />
-        </StyledSearchableDropdown>
-      </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
-            handleSelectedValue={(value: string) =>
               handleSelectedValue(value, 'intaccrual')
             }
-            label="Interest Accrual"
+            label="GL Account Number"
             name="intaccrual"
             searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.intaccrual as OptionsI[]}
@@ -278,7 +218,7 @@ export const GeneralLedgerTreasuryForm = ({
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.intaccrual as string) || 'Search Interest Accrual'
+              (selectedValue.intaccrual as string) || 'Search Account Number'
             }
             onChange={handleSearch}
             searchValue={searchValue.intaccrual as string}
@@ -290,21 +230,87 @@ export const GeneralLedgerTreasuryForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'interestincome')
+              handleSelectedValue(value, 'InterestExpense')
             }
-            label="Interest Income"
-            name="interestincome"
+            label="Principal Balance"
+            name="InterestExpense"
             searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.interestincome as OptionsI[]}
+            dropDownOptions={filteredValues.InterestExpense as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.interestincome as string) ||
-              'Search Interest Income'
+              (selectedValue.InterestExpense as string) ||
+              'Search Principal Balance'
             }
             onChange={handleSearch}
-            searchValue={searchValue.interestincome as string}
+            searchValue={searchValue.InterestExpense as string}
+          />
+        </StyledSearchableDropdown>
+      </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <StyledSearchableDropdown>
+          <ActionButtonWithPopper
+            handleSelectedValue={(value: string) =>
+              handleSelectedValue(value, 'intIncome')
+            }
+            label="Suspended Asset"
+            name="intIncome"
+            searchGroupVariant="GLSearchGroup"
+            dropDownOptions={filteredValues.intIncome as OptionsI[]}
+            customStyle={{ ...dropDownWithSearch, width: '960px' }}
+            icon={<SearchIcon />}
+            iconPosition="end"
+            buttonTitle={
+              (selectedValue.intIncome as string) || 'Search Suspended Asset'
+            }
+            onChange={handleSearch}
+            searchValue={searchValue.intIncome as string}
+          />
+        </StyledSearchableDropdown>
+      </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <StyledSearchableDropdown>
+          <ActionButtonWithPopper
+            handleSelectedValue={(value: string) =>
+              handleSelectedValue(value, 'maturedGL')
+            }
+            label="Interest Accrual"
+            name="maturedGL"
+            searchGroupVariant="GLSearchGroup"
+            dropDownOptions={filteredValues.maturedGL as OptionsI[]}
+            customStyle={{ ...dropDownWithSearch, width: '960px' }}
+            icon={<SearchIcon />}
+            iconPosition="end"
+            buttonTitle={
+              (selectedValue.maturedGL as string) || 'Search Interest Accrual'
+            }
+            onChange={handleSearch}
+            searchValue={searchValue.maturedGL as string}
+          />
+        </StyledSearchableDropdown>
+      </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <StyledSearchableDropdown>
+          <ActionButtonWithPopper
+            handleSelectedValue={(value: string) =>
+              handleSelectedValue(value, 'principal')
+            }
+            label="Interest Income"
+            name="principal"
+            searchGroupVariant="GLSearchGroup"
+            dropDownOptions={filteredValues.principal as OptionsI[]}
+            customStyle={{ ...dropDownWithSearch, width: '960px' }}
+            icon={<SearchIcon />}
+            iconPosition="end"
+            buttonTitle={
+              (selectedValue.principal as string) || 'Search Interest Income'
+            }
+            onChange={handleSearch}
+            searchValue={searchValue.principal as string}
           />
         </StyledSearchableDropdown>
       </Grid>
@@ -335,21 +341,20 @@ export const GeneralLedgerTreasuryForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'penalIntAccrual')
+              handleSelectedValue(value, 'upfront')
             }
             label="Penal Accrual"
-            name="penalIntAccrual"
+            name="upfront"
             searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.penalIntAccrual as OptionsI[]}
+            dropDownOptions={filteredValues.upfront as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.penalIntAccrual as string) ||
-              'Search Penal Accrual'
+              (selectedValue.upfront as string) || 'Search Penal Accrual'
             }
             onChange={handleSearch}
-            searchValue={searchValue.penalIntAccrual as string}
+            searchValue={searchValue.upfront as string}
           />
         </StyledSearchableDropdown>
       </Grid>
@@ -358,21 +363,43 @@ export const GeneralLedgerTreasuryForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'interestReceivable')
+              handleSelectedValue(value, 'PaymentGL')
             }
             label="Interest Receivable"
-            name="interestReceivable"
+            name="PaymentGL"
             searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.interestReceivable as OptionsI[]}
+            dropDownOptions={filteredValues.PaymentGL as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.interestReceivable as string) ||
+              (selectedValue.PaymentGL as string) ||
               'Search Interest Receivable'
             }
             onChange={handleSearch}
-            searchValue={searchValue.interestReceivable as string}
+            searchValue={searchValue.PaymentGL as string}
+          />
+        </StyledSearchableDropdown>
+      </Grid>
+
+      <Grid item={isTablet} mobile={12}>
+        <StyledSearchableDropdown>
+          <ActionButtonWithPopper
+            handleSelectedValue={(value: string) =>
+              handleSelectedValue(value, 'suspint')
+            }
+            label="Suspended Principal"
+            name="suspint"
+            searchGroupVariant="GLSearchGroup"
+            dropDownOptions={filteredValues.suspint as OptionsI[]}
+            customStyle={{ ...dropDownWithSearch, width: '960px' }}
+            icon={<SearchIcon />}
+            iconPosition="end"
+            buttonTitle={
+              (selectedValue.suspint as string) || 'Search Suspended Principal'
+            }
+            onChange={handleSearch}
+            searchValue={searchValue.suspint as string}
           />
         </StyledSearchableDropdown>
       </Grid>
@@ -383,7 +410,7 @@ export const GeneralLedgerTreasuryForm = ({
             handleSelectedValue={(value: string) =>
               handleSelectedValue(value, 'susprinc')
             }
-            label="Suspended Principal"
+            label="Unearned Income GL"
             name="susprinc"
             searchGroupVariant="GLSearchGroup"
             dropDownOptions={filteredValues.susprinc as OptionsI[]}
@@ -391,7 +418,7 @@ export const GeneralLedgerTreasuryForm = ({
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.susprinc as string) || 'Search Suspended Principal'
+              (selectedValue.susprinc as string) || 'Search Unearned Income GL'
             }
             onChange={handleSearch}
             searchValue={searchValue.susprinc as string}
@@ -403,43 +430,20 @@ export const GeneralLedgerTreasuryForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'uid')
-            }
-            label="Unearned Income GL"
-            name="uid"
-            searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.uid as OptionsI[]}
-            customStyle={{ ...dropDownWithSearch, width: '960px' }}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={
-              (selectedValue.uid as string) || 'Search Unearned Income GL'
-            }
-            onChange={handleSearch}
-            searchValue={searchValue.uid as string}
-          />
-        </StyledSearchableDropdown>
-      </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
-            handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'micincome')
+              handleSelectedValue(value, 'ttax')
             }
             label="Miscellaneous income"
-            name="micincome"
+            name="ttax"
             searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.micincome as OptionsI[]}
+            dropDownOptions={filteredValues.ttax as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.micincome as string) ||
-              'Search Miscellaneous income'
+              (selectedValue.ttax as string) || 'Search Miscellaneous income'
             }
             onChange={handleSearch}
-            searchValue={searchValue.micincome as string}
+            searchValue={searchValue.ttax as string}
           />
         </StyledSearchableDropdown>
       </Grid>
@@ -448,42 +452,20 @@ export const GeneralLedgerTreasuryForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'penalInterest')
+              handleSelectedValue(value, 'ttax2')
             }
             label="Penal Interest"
-            name="penalInterest"
+            name="ttax2"
             searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.penalInterest as OptionsI[]}
+            dropDownOptions={filteredValues.ttax2 as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.penalInterest as string) || 'Search Penal Interest'
+              (selectedValue.ttax2 as string) || 'Search Penal Interest'
             }
             onChange={handleSearch}
-            searchValue={searchValue.penalInterest as string}
-          />
-        </StyledSearchableDropdown>
-      </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
-            handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'penalSuspense')
-            }
-            label="Penal Suspense"
-            name="penalSuspense"
-            searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.penalSuspense as OptionsI[]}
-            customStyle={{ ...dropDownWithSearch, width: '960px' }}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={
-              (selectedValue.penalSuspense as string) || 'Search Penal Suspense'
-            }
-            onChange={handleSearch}
-            searchValue={searchValue.penalSuspense as string}
+            searchValue={searchValue.ttax2 as string}
           />
         </StyledSearchableDropdown>
       </Grid>

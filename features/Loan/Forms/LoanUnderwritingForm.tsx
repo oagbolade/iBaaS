@@ -42,6 +42,7 @@ import { getStoredUser } from '@/utils/user-storage';
 import { toast } from '@/utils/toast';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { encryptData } from '@/utils/encryptData';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type Props = {
   isSubmitting: boolean;
@@ -65,12 +66,15 @@ export const CreateLoanUnderwritingForm = ({
   collaterals
 }: Props) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { sysmodel } = useGetSystemDate();
   const { mutate } = useCreatLoanUnderwriting();
   const { setDirection } = useSetDirection();
   const [group, setGroup] = useState<number>(0);
   const [productDetail, setProductDetail] = useState<
     IProductDetails | undefined
   >(undefined);
+  const [startDate, setStartDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
+  const [postDate, setPostDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
 
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [customerAccount, setCustomerAccount] = useState('');
@@ -83,11 +87,8 @@ export const CreateLoanUnderwritingForm = ({
   const [penalRate, setPenalRate] = useState<string>('');
   const [penalrateCalcMethod, setPenalrateCalcMethod] = useState<string>('');
   const [moratorium, setMoratorium] = useState<string>('');
-  const [maturityDate, setMaturitDate] = useState<Dayjs>();
-  const [firstpayCycle, setFirstPayCycle] = useState<Dayjs>();
-
-  const [startDate, setStartDate] = useState<Dayjs>(dayjs());
-
+  const [maturityDate, setMaturitDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
+  const [firstpayCycle, setFirstPayCycle] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
   const [termFreq, setTermFrequency] = useState<string>('');
 
   const toastActions = React.useContext(ToastMessageContext);
@@ -293,6 +294,7 @@ export const CreateLoanUnderwritingForm = ({
       matDate: maturityDate,
       firstPay: firstpayCycle,
       startDate,
+      postDate,
       ...restValues
     };
     mutate(loanData);
@@ -370,7 +372,7 @@ export const CreateLoanUnderwritingForm = ({
                       mr={{ mobile: 35, tablet: 0 }}
                       sx={{ marginBottom: '10px' }}
                     >
-                      <StyledSearchableDropdown style={{ width: '100%' }}>
+                      <StyledSearchableDropdown style={{ width: '460%' }}>
                         <ActionButtonWithPopper
                           loading={isSearchLoading}
                           handleSelectedValue={(value: any) => handleSelectedValue(value)}
@@ -379,7 +381,7 @@ export const CreateLoanUnderwritingForm = ({
                           searchGroupVariant="LoanCustomerSearch"
                           loanDropDownOptions={filteredValues || []}
                           customStyle={{
-                            width: '100%',
+                            width: '460px',
                             height: '54px',
                             borderRadius: '4px',
                             padding: '12px',
@@ -599,7 +601,13 @@ export const CreateLoanUnderwritingForm = ({
                     >
                       <FormikDateTimePicker
                         label="Posting Date"
+                        value={postDate}
                         name="postDate"
+                        minDate={dayjs(sysmodel?.systemDate).startOf('month')}
+                        maxDate={dayjs(sysmodel?.systemDate)}
+                         handleDateChange={(e: any) => {
+                          setPostDate(e);
+                        }}
                       />
                     </Grid>
 
@@ -629,8 +637,8 @@ export const CreateLoanUnderwritingForm = ({
                         label="Start Date"
                         name="startDate"
                         value={startDate}
-                        minDate={dayjs().startOf('month')}
-                        maxDate={dayjs()}
+                        minDate={dayjs(sysmodel?.systemDate).startOf('month')}
+                        maxDate={dayjs(sysmodel?.systemDate)}
                         handleDateChange={(e: any) => {
                           setStartDate(e);
                         }}

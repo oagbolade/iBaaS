@@ -278,9 +278,9 @@ const PreviewTable = () => {
     />
   ];
   return (
-    <Box>
+    <div>
       {value === 0 && (
-        <Box>
+        <div>
           {status !== undefined && (
             <FilterSection
               status={status}
@@ -288,10 +288,10 @@ const PreviewTable = () => {
               placeholderProp="search GL Node"
             />
           )}
-        </Box>
+        </div>
       )}
       {value === 1 && (
-        <Box>
+        <div>
           {status !== undefined && (
             <GLClassFilterSection
               status={status}
@@ -299,7 +299,7 @@ const PreviewTable = () => {
               placeholderProp="search GL Class"
             />
           )}
-        </Box>
+        </div>
       )}
       <TabsV2
         tabTitle={tabTitle}
@@ -308,13 +308,13 @@ const PreviewTable = () => {
         values={value}
         customStyle={{ ...tabStyle }}
       />
-    </Box>
+    </div>
   );
 };
 
 export const GlAndClassContainer = () => {
   return (
-    <Box sx={{ marginTop: '60px' }}>
+    <Box>
       <TopActionsArea actionButtons={actionButtons} />
       <Box sx={{ padding: '20px' }}>
         <PreviewTable />

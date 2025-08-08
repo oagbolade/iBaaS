@@ -43,7 +43,20 @@ export const FilterSection = ({ onSearch }: Props) => {
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
-        <Stack direction={setDirection()} justifyContent="end">
+        <Stack
+          sx={{
+            position: 'sticky',
+            top: '60px',
+            zIndex: 3,
+            backgroundColor: `${colors.white}`,
+            borderLeft: `1px solid ${colors.loanTitleColor}`,
+            borderBottom: `1px solid ${colors.loanTitleColor}`,
+            paddingLeft: '10px',
+            paddingRight: '10px'
+          }}
+          direction={setDirection()}
+          justifyContent="end"
+        >
           <Stack
             mt={1}
             direction={setDirection()}
@@ -83,47 +96,46 @@ export const FilterSection = ({ onSearch }: Props) => {
             paddingX: '24px'
           }}
         >
-          <Box>
-            <Grid container spacing={2}>
-              <Grid
-                mb={{ tablet: 11 }}
-                item
-                mobile={12}
-                tablet={11}
-                justifyContent="center"
-              >
-                <FormTextInput
-                  customStyle={{
-                    width: setWidth()
-                  }}
-                  icon={<SearchIcon />}
-                  name="userID"
-                  placeholder="Search User id"
-                  label="Search"
-                />{' '}
-              </Grid>
-              <Grid
-                item
-                mobile={12}
-                tablet={1}
-                sx={{ display: 'flex' }}
-                justifyContent="flex-end"
-                mt={{ tablet: 3.2 }}
-                mr={{ mobile: 30, tablet: 0 }}
-                mb={{ mobile: 6, tablet: 0 }}
-              >
-                <ActionButton
-                  customStyle={{
-                    backgroundColor: `${colors.activeBlue400}`,
-                    border: `1px solid ${colors.activeBlue400}`,
-                    color: `${colors.white}`
-                  }}
-                  type="submit"
-                  buttonTitle="Search"
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid
+              mb={{ tablet: 10 }}
+              item
+              mobile={12}
+              tablet={10}
+              justifyContent="center"
+            >
+              <FormTextInput
+                customStyle={{
+                  width: setWidth()
+                }}
+                icon={<SearchIcon />}
+                name="userID"
+                placeholder="Search User id"
+                label="Search"
+              />
             </Grid>
-          </Box>
+
+            <Grid
+              item
+              mobile={12}
+              tablet={2}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton
+                customStyle={{
+                  backgroundColor: `${colors.activeBlue400}`,
+                  border: `1px solid ${colors.activeBlue400}`,
+                  color: `${colors.white}`
+                }}
+                type="submit"
+                buttonTitle="Search"
+              />
+            </Grid>
+          </Grid>
         </Box>
       </Form>
     </Formik>

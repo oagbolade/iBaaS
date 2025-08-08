@@ -147,8 +147,8 @@ export const CreateUserForm = ({
     const authtype = Number(permissionOptions[0]?.value) || 0;
     const statement = Number(permissionOptions[1]?.value) || 0;
     const globalAuth = Number(permissionOptions[2]?.value) || 0;
-    const enable2FA = String(permissionOptions[2]?.value) || '1';
-    const VirtualUser = Number(permissionOptions[2]?.value) || 0;
+    const enable2FA = String(permissionOptions[3]?.value) || '0';
+    const VirtualUser = Number(permissionOptions[4]?.value) || 0;
     await mutate({
       ...values,
       authtype,
@@ -209,7 +209,8 @@ export const CreateUserForm = ({
                   authListID: null,
                   authid: getStoredUser()?.profiles.userid,
                   menuid: 1,
-                  branchcode: userDetails?.branchcode?.trim()
+                  branchcode: userDetails?.branchcode?.trim(),
+                  enable2FA: userDetails?.enable2FA
                 }
               : unitTestInitialValues || createUserInitialValues
           }

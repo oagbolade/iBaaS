@@ -74,7 +74,7 @@ export const TransactionClearing = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
-      <Box sx={{ marginTop: '30px', padding: '25px' }}>
+      <Box sx={{ marginTop: '20px', padding: '25px' }}>
         {branches && status && (
           <FilterSection
             branches={branches}

@@ -168,7 +168,7 @@ export const InterestTreasuryChargesForm = ({
     <>
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
-          name="maxintrate"
+          name="crtype"
           options={mappedCreditInterests}
           label="Interest Type"
           customStyle={{
@@ -215,7 +215,7 @@ export const InterestTreasuryChargesForm = ({
 
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
-          name="schtype"
+          name="repaymeth"
           options={mappedLoanRepayment}
           label="Repayment Type"
           customStyle={{
@@ -226,7 +226,7 @@ export const InterestTreasuryChargesForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
-          name="schtype"
+          name="discounted"
           options={[
             { value: '0', name: 'Non-Discounted' },
             { value: '1', name: 'Discounted' }
@@ -240,7 +240,7 @@ export const InterestTreasuryChargesForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <FormSelectField
-          name="loanclass"
+          name="term"
           options={mappedFrequency}
           label="Term"
           customStyle={{
@@ -252,7 +252,7 @@ export const InterestTreasuryChargesForm = ({
 
       <Grid item={isTablet} mobile={12}>
         <RadioButtons
-          name="allowOD"
+          name="CloseTDAtMature"
           options={[
             { label: 'Yes', value: '1' },
             { label: 'No', value: '0' }
@@ -261,41 +261,6 @@ export const InterestTreasuryChargesForm = ({
           value="0"
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <Field
-          name="ProdCharges"
-          component={MultiSelectWithCheckboxes}
-          options={mappedChargeConcessionType}
-          label="Product Charges"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
-          }}
-        />
-      </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <Field
-          name="ProdException"
-          component={MultiSelectWithCheckboxes}
-          options={mappedException}
-          label="Product Exceptions"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
-          }}
-        />
-      </Grid>
-
-      {/* <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="shortName"
-          placeholder="Enter short name"
-          label="Short Name"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
-          }}
-          required
-        />
-      </Grid> */}
     </>
   );
 };

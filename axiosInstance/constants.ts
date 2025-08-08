@@ -11,7 +11,7 @@ const AuthFaBaseUrl =
     : 'https://ibaas-2fa-generator-service.k8.isw.la/api';
 const baseUrl =
   env === 'development'
-    ? 'https://iswcbaapi.qa.interswitchng.com/api'
+    ? 'https://ibaas-api.k8.isw.la/api'
     : 'https://ibaas-api.k8.isw.la/api';
 
 const nipBaseUrl =

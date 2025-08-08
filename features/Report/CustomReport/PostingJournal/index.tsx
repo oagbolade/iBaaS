@@ -20,6 +20,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import colors from '@/assets/colors';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 interface ActionMenuProps {
   detail: string;
@@ -79,6 +80,7 @@ export const PostingJournal = () => {
         width: '100%'
       }}
     >
+      <TopOverViewSection useBackButton />
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
@@ -86,68 +88,64 @@ export const PostingJournal = () => {
         {isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
-          <Box sx={{ width: '100%' }}>
-            <MuiTableContainer
-              columns={COLUMN}
-              tableConfig={{
-                hasActions: true
-              }}
-              showHeader={{
-                hideFilterSection: true,
-                mainTitle: 'Posting Journal',
-                secondaryTitle:
-                  'See a directory of all posting journal in this system.'
-              }}
-              data={postingJournalList}
-              setPage={setPage}
-              page={page}
-            >
-              {search ? (
-                postingJournalList?.map((dataItem: IPostingJournal) => {
-                  return (
-                    <StyledTableRow key={dataItem.accountNumber}>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.accountNumber || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {dataItem?.accounttitle || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.tranname || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {formatDateAndTime(dataItem?.tranDate)}
-                      </StyledTableCell>
+          <MuiTableContainer
+            columns={COLUMN}
+            tableConfig={{
+              hasActions: true
+            }}
+            showHeader={{
+              hideFilterSection: true,
+              mainTitle: 'Posting Journal',
+              secondaryTitle:
+                'See a directory of all posting journal in this system.'
+            }}
+            data={postingJournalList}
+            setPage={setPage}
+            page={page}
+          >
+            {search ? (
+              postingJournalList?.map((dataItem: IPostingJournal) => {
+                return (
+                  <StyledTableRow key={dataItem.accountNumber}>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.accountNumber || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem?.accounttitle || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.tranname || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {formatDateAndTime(dataItem?.tranDate)}
+                    </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.creditAcct || 'N/A'}
-                      </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.creditAcct || 'N/A'}
+                    </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem?.debitacct || 'N/A'}
-                      </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem?.debitacct || 'N/A'}
+                    </StyledTableCell>
 
-                      <StyledTableCell component="th" scope="row">
-                        <ActionMenu
-                          detail={JSON.stringify(dataItem) as string}
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })
-              ) : (
-                <StyledTableRow>
-                  <StyledTableCell
-                    colSpan={COLUMN.length + 1}
-                    component="th"
-                    scope="row"
-                  >
-                    {renderEmptyTableBody(postingJournalList)}
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
-            </MuiTableContainer>
-          </Box>
+                    <StyledTableCell component="th" scope="row">
+                      <ActionMenu detail={JSON.stringify(dataItem) as string} />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={COLUMN.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody(postingJournalList)}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
         )}
       </Box>
     </Box>

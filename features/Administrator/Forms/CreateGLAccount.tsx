@@ -26,7 +26,6 @@ import { FormSkeleton } from '@/components/Loaders';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
-import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { encryptData } from '@/utils/encryptData';
 
 interface PermissionData {
@@ -177,16 +176,16 @@ export const CreateGLAccount = ({
 
     const data = {
       ...values,
-      gl_ClassCode: '11002',
+      gl_ClassCode: editingGlClassCode,
       glNumber: getGlNumber,
-      prodType: '1',
+      prodType: editingProdType,
       currencyCode,
       pointing: updatedPremisionData.pointing,
       swing: updatedPremisionData.swing,
       post: updatedPremisionData.post,
       populate: updatedPremisionData.populate,
       typeP: updatedPremisionData.typeP,
-      oldGLno: '213213213213'
+      oldGLno: Array.isArray(glDetails) ? glDetails[0].lastnumber : undefined
     };
     await mutate(data);
   };
@@ -339,23 +338,6 @@ export const CreateGLAccount = ({
                   required
                 />{' '}
               </Grid>
-              <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }}>
-                <FormAmountInput
-                  customStyle={{
-                    width: setWidth(isMobile ? '300px' : '100%')
-                  }}
-                  name="bkBalance"
-                  placeholder="0.0"
-                  label="Book Balance"
-                  value={
-                    bankgls?.bkBalance ||
-                    String(mappedGlDetails[0]?.bkBalance || 0)
-                  }
-                  required
-                  disabled
-                />{' '}
-              </Grid>
-
               <Grid mb={2} item={isTablet} mobile={12}>
                 <FormSelectField
                   customStyle={{

@@ -10,6 +10,7 @@ import { useGetHoldingTransactionReport } from '@/api/reports/useHoldingTransact
 import { TableV2 } from '@/components/Revamp/TableV2';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import {TopOverViewSection} from '@/features/Report/Overview/TopOverViewSection';
 
 export const HoldingTransactions = () => {
   const [search, setSearch] = useState<boolean>(false);
@@ -54,6 +55,8 @@ export const HoldingTransactions = () => {
         marginTop: '50px'
       }}
     >
+
+      <TopOverViewSection  useBackButton/>
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}

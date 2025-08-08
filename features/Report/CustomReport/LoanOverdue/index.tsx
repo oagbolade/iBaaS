@@ -130,7 +130,7 @@ export const LoanOverdue = () => {
 
   return (
     <Box sx={{ marginTop: '60px', width: '100%' }}>
-      <Box sx={{ marginTop: '30px', padding: '25px' }}>
+      <Box>
         {branches && bankproducts && (
           <FilterSection
             branches={branches}

@@ -38,7 +38,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
 
   return (
     <Box>
-      <Box sx={{ height: '120px' }}>
+      <Box sx={{ height: '120px', marginTop: '20px' }}>
         <Grid
           sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
           spacing={2}

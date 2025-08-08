@@ -74,6 +74,8 @@ import { useGetChargeConcession } from '@/api/operation/useChargeConcession';
 import { IChargeConcessionType } from '@/api/ResponseTypes/operation';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetParams } from '@/utils/hooks/useGetParams';
+import { IProductLoanRepayment } from '@/api/ResponseTypes/loans';
+import { useGetAllLoanRepaymentTypes } from '@/api/loans/useCreditFacility';
 
 const Accordion = muistyled((props: AccordionProps) => {
   return <MuiAccordion {...props} />;
@@ -145,6 +147,8 @@ type Props = {
   bankproducts?: IBankProducts[];
   exception?: IException[];
   // eslint-disable-next-line react/no-unused-prop-types
+  repaymentTypes?: IProductLoanRepayment[] | Array<any>;
+  // eslint-disable-next-line react/no-unused-prop-types
   bankgl?: IGLAccount[] | Array<any>;
   charges?: IChargeConcessionType[] | Array<any>;
   // eslint-disable-next-line react/no-unused-prop-types
@@ -188,7 +192,8 @@ const FormSelector = ({
   setProductCode,
   data,
   dataType,
-  dataWithCode
+  dataWithCode,
+  repaymentTypes
 }: Props) => {
   let selectedForm;
   switch (cardKey) {
@@ -229,6 +234,7 @@ const FormSelector = ({
           exception={exception}
           charges={charges}
           frequency={frequency}
+          repaymentTypes={repaymentTypes}
         />
       );
       break;
@@ -241,9 +247,6 @@ const FormSelector = ({
           dataWithCode={dataWithCode as IGLWithBranchCode[]}
         />
       );
-      break;
-    case 'document':
-      selectedForm = <DocumentForm />;
       break;
     case 'otherDetails':
       selectedForm = <OtherTreasuryDetailsForm />;
@@ -300,6 +303,7 @@ export const ShortCardTreasuryWithAccordion = ({
   const { products: product } = useGetProductClass();
   const { frequency: frequencys } = useGetAllLoanTerm();
   const { bankgl: bankgls } = useGetGLAccount();
+  const { repaymentTypes: repaymentType } = useGetAllLoanRepaymentTypes();
   const { bankproducts: bankproduct } = useGetAllCustomerAccountProducts();
   const { exception: exceptions } = useGetAllException();
   const { charges: charge, isLoading } = useGetChargeConcession();
@@ -357,12 +361,12 @@ export const ShortCardTreasuryWithAccordion = ({
                   mr={1}
                 >
                   {completed && completed[cardKey]
-                    ? `${completed[cardKey].progress} of ${completed[cardKey].total} completed`
+                    ? `${completed[cardKey]?.progress} of ${completed[cardKey]?.total} completed`
                     : '0 of 0 completed'}
                 </Typography>
                 <Box mr={2} mt={0.8}>
                   {completed &&
-                  completed[cardKey]?.progress === completed[cardKey].total ? (
+                  completed[cardKey]?.progress === completed[cardKey]?.total ? (
                     <CompletedStepIcon />
                   ) : (
                     <UnCompletedStepIcon />
@@ -410,6 +414,7 @@ export const ShortCardTreasuryWithAccordion = ({
                 bankproducts={bankproduct}
                 exception={exceptions}
                 charges={charge}
+                repaymentTypes={repaymentType}
                 dataWithCode={glwithCode as IGLWithBranchCode[]}
               />
             </Grid>
