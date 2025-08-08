@@ -14,6 +14,7 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { IStandingInstruction } from '@/api/ResponseTypes/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 export const ActionMenu: React.FC = () => {
   return (
@@ -67,10 +68,14 @@ export const StandingInstructions = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <TopOverViewSection useBackButton />
+
       {branches && (
-        <FilterSection branches={branches} onSearch={handleSearch} />
+        <div className="mx-5 mt-20">
+          <FilterSection branches={branches} onSearch={handleSearch} />
+        </div>
       )}
-      <Box sx={{ padding: '25px', width: '100%' }}>
+      <div className="mx-5">
         {isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
@@ -127,7 +132,7 @@ export const StandingInstructions = () => {
             )}
           </MuiTableContainer>
         )}
-      </Box>
+      </div>
     </Box>
   );
 };

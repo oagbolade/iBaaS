@@ -74,14 +74,14 @@ export const ProfitLoss = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      {/* <TopOverViewSection useBackButton /> */}
-      <Box sx={{ marginTop: '40px', marginBottom: '30px', marginLeft: '50px' }}>
+      
+      <Box>
         {branches && (
           <FilterSection branches={branches} onSearch={handleSearch} />
         )}
       </Box>
 
-      <Box>
+      <div className="mx-5">
         {isLoadingProfitAndLoss ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
@@ -105,7 +105,7 @@ export const ProfitLoss = () => {
             )}
           </Box>
         )}
-      </Box>
+      </div>
     </Box>
   );
 };

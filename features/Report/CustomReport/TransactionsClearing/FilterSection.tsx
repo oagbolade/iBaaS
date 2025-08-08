@@ -41,10 +41,10 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
-        <Box>
+       
           <Grid container spacing={2}>
             <Grid
-              mb={{ tablet: 3 }}
+            
               item
               mobile={12}
               tablet={2.5}
@@ -63,7 +63,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               />{' '}
             </Grid>
             <Grid
-              mb={{ tablet: 3 }}
+            
               item
               mobile={12}
               tablet={2.5}
@@ -82,7 +82,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               />{' '}
             </Grid>
             <Grid
-              mb={{ tablet: 6 }}
+             
               item
               mobile={12}
               tablet={6}
@@ -121,7 +121,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               />
             </Grid>
           </Grid>
-        </Box>
+    
       </Form>
     </Formik>
   );

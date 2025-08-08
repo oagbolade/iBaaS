@@ -104,52 +104,6 @@ export const FilterSection = ({
         onSubmit={(values) => onSubmit(values)}
       >
         <Form>
-          <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '10px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box>
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-            </Box>
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="DateRangePicker"
-                  customStyle={{ ...dateFilter }}
-                  icon={
-                    <CalendarTodayOutlinedIcon
-                      sx={{
-                        color: `${colors.Heading}`
-                      }}
-                    />
-                  }
-                  iconPosition="end"
-                  buttonTitle="Aug 22 - Sep 23"
-                />
-              </Box>
-            </Stack>
-          </Stack>
           <Box
             sx={{
               marginTop: '30px',
@@ -158,17 +112,6 @@ export const FilterSection = ({
           >
             <Box>
               <Grid container spacing={2}>
-                {/* <Grid item mobile={12} tablet={3} justifyContent="center">
-                  <FormSelectField
-                    customStyle={{
-                      ...inputFields,
-                      width: setWidth()
-                    }}
-                    name="productCode"
-                    options={mappedProductType}
-                    label="Product"
-                  />
-                </Grid> */}
                 <Grid item mobile={12} tablet={3} justifyContent="center">
                   <FormSelectField
                     customStyle={{
@@ -198,7 +141,7 @@ export const FilterSection = ({
                   mb={{ tablet: 6 }}
                   item
                   mobile={12}
-                  tablet={4}
+                  tablet={5}
                   justifyContent="center"
                 >
                   <FormTextInput

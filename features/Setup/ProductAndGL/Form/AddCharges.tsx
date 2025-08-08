@@ -89,22 +89,22 @@ export const CreateCharges = ({
         {
           chargeType: values.chargeType,
           rule1: 0,
-          startRange: 0,
-          endRange: 0,
-          rate: 0,
+          startRange: values.startRange,
+          endRange: values.endRange,
+          rate: values.rate,
           amount: 0
         }
       ],
       chargeBasis: 0,
-      chargeamt: 0,
-      liqperiod: 0,
-      targetBase: '',
+      chargeamt: values.chargeamt,
+      liqperiod: values.liqperiod,
+      targetBase: values.targetBase,
       drgl: '',
       crgl: '',
-      accrualRequired: 0,
+      accrualRequired: values.accrualRequired,
       authid: '',
       menuid: Number(menuId),
-      userid: '',
+      userid: `${getStoredUser()?.profiles.userid}`,
       firedCharges: values.firedCharges
     });
   };
@@ -289,7 +289,7 @@ export const CreateCharges = ({
                         options={EditOperations.frequencyMode}
                         label="Select Frequency"
                         customStyle={{
-                          width: setWidth(isMobile ? '250px' : '550%')
+                          width: setWidth(isMobile ? '250px' : '310%')
                         }}
                       />
                     </Grid>

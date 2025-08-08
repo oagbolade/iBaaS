@@ -70,7 +70,9 @@ export const AccountDebit = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
-      <FilterSection branches={branches} onSearch={handleSearch} />
+     <div className='mt-8'>
+       <FilterSection branches={branches} onSearch={handleSearch} />
+     </div>
       <Box sx={{ padding: '25px', width: '100%' }}>
         <MuiTableContainer
           columns={accountDebitInReportColumns}

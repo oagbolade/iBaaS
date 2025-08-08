@@ -18,6 +18,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { useGetStatus } from '@/api/general/useStatus';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 export const ChequeBookStatus = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(
@@ -66,6 +67,8 @@ export const ChequeBookStatus = () => {
         width: '100%'
       }}
     >
+      <TopOverViewSection useBackButton />
+
       {branches && status && (
         <FilterSection
           branches={branches}

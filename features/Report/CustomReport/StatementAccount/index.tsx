@@ -107,7 +107,7 @@ export const StatementAccount = () => {
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
 
-      <Box sx={{ marginTop: '30px', padding: '0 25px' }}>
+      <div className="mx-5 mt-8">
         {branches && products && (
           <FilterSection
             branches={branches}
@@ -116,16 +116,16 @@ export const StatementAccount = () => {
             products={products as IProducts[]}
           />
         )}
-      </Box>
+      </div>
 
       {search && (
-        <Box sx={{ margin: '20px 0' }}>
+        <div>
           {(() => {
             if (loadingDetails) {
               return (
-                <Box sx={{ padding: '20px', textAlign: 'center' }}>
+                <div className="mx-5">
                   <FormSkeleton noOfLoaders={3} />
-                </Box>
+                </div>
               );
             }
             if (accDetailsResults) {
@@ -281,15 +281,15 @@ export const StatementAccount = () => {
               );
             }
             return (
-              <Box sx={{ padding: '20px', textAlign: 'center' }}>
+              <div className="mx-5">
                 {renderEmptyTableBody(accDetailsResults)}
-              </Box>
+              </div>
             );
           })()}
-        </Box>
+        </div>
       )}
 
-      <Box sx={{ padding: '25px', width: '100%' }}>
+      <div className="mx-5">
         {loadingStatements ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
@@ -339,7 +339,7 @@ export const StatementAccount = () => {
             )}
           </MuiTableContainer>
         )}
-      </Box>
+      </div>
     </Box>
   );
 };

@@ -63,7 +63,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
         validationSchema={chequebookSchema}
       >
         <Form>
-          <Stack
+          {/* <Stack
             sx={{
               borderBottom: '1px solid #E8E8E8',
               marginTop: '10px',
@@ -109,7 +109,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                 />
               </Box>
             </Stack>
-          </Stack>
+          </Stack> */}
 
           <Box
             sx={{

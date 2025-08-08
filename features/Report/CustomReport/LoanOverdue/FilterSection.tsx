@@ -24,6 +24,7 @@ import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
+import { useCurrentBreakpoint } from '@/utils';
 
 type Props = {
   branches?: IBranches[];
@@ -38,6 +39,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
   const { setDirection } = useSetDirection();
   const { currentDate } = useFormattedDates();
   const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
+  const { setWidth } = useCurrentBreakpoint();
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
@@ -59,9 +61,14 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
     <Box>
       <Stack
         sx={{
-          borderBottom: '1px solid #E8E8E8',
-          marginTop: '10px',
-          paddingX: '24px'
+          position: 'sticky',
+          top: '60px',
+          zIndex: 3,
+          backgroundColor: `${colors.white}`,
+          borderLeft: `1px solid ${colors.loanTitleColor}`,
+          borderBottom: `1px solid ${colors.loanTitleColor}`,
+          paddingLeft: '10px',
+          paddingRight: '10px'
         }}
         direction={setDirection()}
         justifyContent="space-between"
@@ -110,88 +117,83 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
           </Box>
         </Stack>
       </Stack>
-      <Box sx={{ height: '120px' }}>
-        <Grid
-          sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
-          spacing={2}
-        >
-          <Grid
-            mb={{ tablet: 3 }}
-            item
-            mobile={12}
-            tablet={5}
-            sx={{ display: 'flex', alignItems: 'center', gap: 5 }}
-          >
-            <FormSelectInput
-              customStyle={{
-                width: '300px',
-                fontSize: '14px',
-                ...inputFields
-              }}
-              name="branchID"
-              options={mappedBranches}
-              label="Branch Name"
-              required
-              value={selectedBranch}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setSelectedBranch(e.target.value)
-              }
-            />{' '}
-            <FormSelectInput
-              customStyle={{
-                width: '300px',
-                fontSize: '14px',
-                ...inputFields
-              }}
-              name="Product"
-              options={mappedBankproducts}
-              label="Product"
-              value={selectedProduct}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setSelectedproduct(e.target.value)
-              }
-            />{' '}
+
+      <Box
+        sx={{
+          marginTop: '30px',
+          paddingX: '24px'
+        }}
+      >
+        <Box>
+          <Grid container spacing={2}>
+            <Grid item mobile={12} tablet={3}>
+              <FormSelectInput
+                customStyle={{
+                  width: setWidth(),
+                  ...inputFields
+                }}
+                name="branchID"
+                options={mappedBranches}
+                label="Branch Name"
+                required
+                value={selectedBranch}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSelectedBranch(e.target.value)
+                }
+              />
+            </Grid>
+
+            <Grid item mobile={12} tablet={3}>
+              <FormSelectInput
+                customStyle={{
+                  width: setWidth(),
+                  ...inputFields
+                }}
+                name="Product"
+                options={mappedBankproducts}
+                label="Product"
+                value={selectedProduct}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSelectedproduct(e.target.value)
+                }
+              />
+            </Grid>
+
+            <Grid item mobile={12} tablet={4}>
+              <TextInput
+                customStyle={{
+                  width: setWidth(),
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="search"
+                value={searchTerm}
+                placeholder="Search for Account Number"
+                label="Search for Account Number"
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSearchTerm(e.target.value)
+                }
+              />{' '}
+            </Grid>
+
+            <Grid
+              item
+              mobile={12}
+              tablet={2}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton
+                onClick={handleSearchClick}
+                customStyle={buttonBackgroundColor}
+                buttonTitle="Search"
+              />
+            </Grid>
           </Grid>
-          <Grid
-            mb={{ tablet: 6 }}
-            item
-            mobile={12}
-            tablet={6}
-            justifyContent="center"
-          >
-            <TextInput
-              customStyle={{
-                width: '300px',
-                fontSize: '14px',
-                ...inputFields
-              }}
-              icon={<SearchIcon />}
-              name="search"
-              value={searchTerm}
-              placeholder="Search for Account Number"
-              label="Search for Account Number"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setSearchTerm(e.target.value)
-              }
-            />{' '}
-          </Grid>
-          <Grid
-            item
-            mobile={12}
-            tablet={1}
-            sx={{ display: 'flex' }}
-            justifyContent="flex-end"
-            mt={{ tablet: 3.2 }}
-            mr={{ mobile: 30, tablet: 0 }}
-            mb={{ mobile: 6, tablet: 0 }}
-          >
-            <ActionButton
-              onClick={handleSearchClick}
-              customStyle={buttonBackgroundColor}
-              buttonTitle="Search"
-            />
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
     </Box>
   );

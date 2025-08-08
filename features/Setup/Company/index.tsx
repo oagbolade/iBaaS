@@ -57,7 +57,7 @@ export const Company = () => {
       <Box sx={customReportContainer}>
         <Box sx={cardsDetailsContainer}>
           {MenuConfig.map((menus) => (
-            <Box mb={{ mobile: 2, desktop: 0 }}>
+            <Box key={menus.link} mb={{ mobile: 2, desktop: 0 }}>
               <CustomCardsReports
                 title={menus.title}
                 link={menus.link}

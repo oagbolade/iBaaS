@@ -51,7 +51,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
   };
 
   return (
-    <Box marginTop={10}>
+   
       <Formik
         initialValues={searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
@@ -120,10 +120,10 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
             <Box>
               <Grid container spacing={2}>
                 <Grid
-                  mb={{ tablet: 6 }}
+                  mb={{ tablet: 10 }}
                   item
                   mobile={12}
-                  tablet={3}
+                  tablet={10}
                   justifyContent="center"
                 >
                   <FormSelectField
@@ -157,6 +157,5 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
           </Box>
         </Form>
       </Formik>
-    </Box>
   );
 };

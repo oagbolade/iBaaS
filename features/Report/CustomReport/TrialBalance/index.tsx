@@ -19,6 +19,7 @@ import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
 import { ITrialBalanceGroup } from '@/api/ResponseTypes/reports';
 import { useGetGLType } from '@/api/admin/useCreateGLAccount';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 export const TrialBalance = () => {
   const [, setSearch] = useState<boolean>(false);
@@ -91,6 +92,8 @@ export const TrialBalance = () => {
         width: '100%'
       }}
     >
+
+      <TopOverViewSection useBackButton />
       {branches && glType && (
         <FilterSection
           branches={branches}

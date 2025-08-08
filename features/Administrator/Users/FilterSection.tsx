@@ -84,7 +84,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
             <Grid>
               <FormTextInput
                 customStyle={{
-                  width: '250px',
+                  width: '960px',
                   fontSize: '14px',
                   marginTop: '5px',
                 }}

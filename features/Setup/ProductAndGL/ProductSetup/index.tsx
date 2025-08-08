@@ -6,6 +6,7 @@ import { COLUMNS } from './COLUMNS';
 import { TableActionMenu } from './TableActionMenu';
 import { ProductForm } from './ProductForm';
 import { CasaTableActionMenu } from './CasaTableAction';
+import { TreasuryTableActionMenu } from './TreasuryTableAction';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MuiTableContainer } from '@/components/Table';
@@ -68,6 +69,18 @@ export const ProductSetupTable = () => {
         )}
         {moduleCode === '2' && (
           <CasaTableActionMenu
+            productClass={moduleCode.toString()}
+            productCode={productCode}
+          />
+        )}
+        {moduleCode === '5' && (
+          <TreasuryTableActionMenu
+            productClass={moduleCode.toString()}
+            productCode={productCode}
+          />
+        )}
+        {moduleCode === '4' && (
+          <TreasuryTableActionMenu
             productClass={moduleCode.toString()}
             productCode={productCode}
           />

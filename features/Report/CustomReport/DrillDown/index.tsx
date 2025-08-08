@@ -15,6 +15,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import colors from '@/assets/colors';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 interface ActionMenuProps {
   detail: string;
@@ -41,7 +42,7 @@ export const DrillDown = () => {
   const { isLoading, glMainGroupRptList, totalRecords } =
     useGetGlMainGroupReport({
       ...searchParams,
-      pageNumber: String(page),
+      pageNumber: String(page)
     });
 
   const handleSearch = (params: ISearchParams | null) => {
@@ -73,6 +74,8 @@ export const DrillDown = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <TopOverViewSection useBackButton showDatePicker={false} />
+
       <FilterSection onSearch={handleSearch} />
 
       <Box sx={{ paddingX: '24px' }}>

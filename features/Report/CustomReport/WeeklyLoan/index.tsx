@@ -21,6 +21,7 @@ import colors from '@/assets/colors';
 import { useGetAllGroups } from '@/api/general/useGroup';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 interface ActionMenuProps {
   detail: string;
@@ -73,6 +74,8 @@ export const WeeklyLoan = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
+
+      <TopOverViewSection useBackButton />
       <Box sx={{ padding: '13px' }}>
         {branches && bankproducts && (
           <FilterSection

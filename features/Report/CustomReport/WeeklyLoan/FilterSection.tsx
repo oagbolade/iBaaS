@@ -70,159 +70,110 @@ export const FilterSection = ({
   };
 
   return (
-    <Box>
-      <Formik
-        initialValues={searchFilterInitialValues}
-        onSubmit={(values) => onSubmit(values)}
-        validationSchema={weeklyLoanRepaySchema}
-      >
-        <Form>
-          <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '10px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box>
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-            </Box>
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="DateRangePicker"
-                  customStyle={{ ...dateFilter }}
-                  icon={
-                    <CalendarTodayOutlinedIcon
-                      sx={{
-                        color: `${colors.Heading}`
-                      }}
-                    />
-                  }
-                  iconPosition="end"
-                  buttonTitle={formattedDateRange}
-                />
-              </Box>
-            </Stack>
-          </Stack>
-
-          <Box
-            sx={{
-              marginTop: '30px',
-              paddingX: '24px'
-            }}
-          >
-            <Grid container spacing={2.5}>
-              <Grid item mobile={12} tablet={2.5} justifyContent="center">
-                <FormSelectField
-                  customStyle={{
-                    width: setWidth(),
-                    ...inputFields
-                  }}
-                  name="branchID"
-                  options={mappedBranches}
-                  label="Branch Name"
-                  required
-                />{' '}
-              </Grid>
-
-              <Grid
-                mb={{ tablet: 2.5 }}
-                item
-                mobile={12}
-                tablet={2.5}
-                justifyContent="center"
-              >
-                <FormSelectField
-                  customStyle={{
-                    width: setWidth(),
-                    ...inputFields
-                  }}
-                  name="prodCode"
-                  options={mappedBankproducts}
-                  label="Product"
-                  required
-                />{' '}
-              </Grid>
-
-              <Grid
-                mb={{ tablet: 2.5 }}
-                item
-                mobile={12}
-                tablet={2.5}
-                justifyContent="center"
-              >
-                <FormSelectField
-                  customStyle={{
-                    width: setWidth(),
-                    ...inputFields
-                  }}
-                  name="groupId"
-                  options={mappedGroups}
-                  label="Group"
-                />{' '}
-              </Grid>
-
-              <Grid
-                mb={{ tablet: 3.5 }}
-                item
-                mobile={12}
-                tablet={3.5}
-                justifyContent="center"
-              >
-                <FormTextInput
-                  customStyle={{
-                    width: setWidth(),
-                    ...inputFields
-                  }}
-                  icon={<SearchIcon />}
-                  name="searchWith"
-                  placeholder="Search by Account number"
-                  label="Search"
-                />{' '}
-              </Grid>
-              <Grid
-                item
-                mobile={12}
-                tablet={1}
-                sx={{ display: 'flex' }}
-                justifyContent="flex-end"
-                mt={{ tablet: 3.2 }}
-                mr={{ mobile: 30, tablet: 0 }}
-                mb={{ mobile: 6, tablet: 0 }}
-              >
-                <ActionButton
-                  customStyle={{
-                    backgroundColor: `${colors.activeBlue400}`,
-                    border: `1px solid ${colors.activeBlue400}`,
-                    color: `${colors.white}`
-                  }}
-                  type="submit"
-                  buttonTitle="Search"
-                />
-              </Grid>
+    <Formik
+      initialValues={searchFilterInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={weeklyLoanRepaySchema}
+    >
+      <Form>
+        <Box
+          sx={{
+            marginTop: '30px',
+            paddingX: '24px'
+          }}
+        >
+          <Grid container spacing={2.5}>
+            <Grid item mobile={12} tablet={2.5} justifyContent="center">
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  ...inputFields
+                }}
+                name="branchID"
+                options={mappedBranches}
+                label="Branch Name"
+                required
+              />{' '}
             </Grid>
-          </Box>
-        </Form>
-      </Formik>
-    </Box>
+
+            <Grid
+              mb={{ tablet: 2.5 }}
+              item
+              mobile={12}
+              tablet={2.5}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  ...inputFields
+                }}
+                name="prodCode"
+                options={mappedBankproducts}
+                label="Product"
+                required
+              />{' '}
+            </Grid>
+
+            <Grid
+              mb={{ tablet: 2.5 }}
+              item
+              mobile={12}
+              tablet={2.5}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  ...inputFields
+                }}
+                name="groupId"
+                options={mappedGroups}
+                label="Group"
+              />{' '}
+            </Grid>
+
+            <Grid
+              mb={{ tablet: 3.5 }}
+              item
+              mobile={12}
+              tablet={3.5}
+              justifyContent="center"
+            >
+              <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="searchWith"
+                placeholder="Search by Account number"
+                label="Search"
+              />{' '}
+            </Grid>
+            <Grid
+              item
+              mobile={12}
+              tablet={1}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton
+                customStyle={{
+                  backgroundColor: `${colors.activeBlue400}`,
+                  border: `1px solid ${colors.activeBlue400}`,
+                  color: `${colors.white}`
+                }}
+                type="submit"
+                buttonTitle="Search"
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      </Form>
+    </Formik>
   );
 };

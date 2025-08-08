@@ -63,45 +63,13 @@ export const FilterSection = ({
   };
 
   return (
-    <Box>
+   
       <Formik
         initialValues={searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
         validationSchema={groupMembershipSchema}
       >
         <Form>
-          <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '24px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box>
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-            </Box>
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-            </Stack>
-          </Stack>
-
           <Box
             sx={{
               marginTop: '20px',
@@ -203,6 +171,6 @@ export const FilterSection = ({
           </Box>
         </Form>
       </Formik>
-    </Box>
+    
   );
 };

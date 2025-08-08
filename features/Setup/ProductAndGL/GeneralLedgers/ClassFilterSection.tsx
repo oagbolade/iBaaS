@@ -43,59 +43,57 @@ export const GLClassFilterSection = ({
   return (
     <Formik initialValues={searchFilterInitialValues} onSubmit={onSubmit}>
       <Form>
-        <Box>
-          <Grid container spacing={2}>
-            <Grid
-              mb={{ tablet: 3 }}
-              item
-              mobile={12}
-              tablet={2}
-              justifyContent="center"
-            >
-              <FormSelectField
-                customStyle={{
-                  width: setWidth(),
-                  fontSize: '14px',
-                  ...inputFields
-                }}
-                name="status"
-                options={mappedStatus}
-                label="Status"
-              />{' '}
-            </Grid>
-            <Grid
-              mb={{ tablet: 6 }}
-              item
-              mobile={12}
-              tablet={9}
-              justifyContent="center"
-            >
-              <FormTextInput
-                customStyle={{
-                  width: setWidth(),
-                  fontSize: '14px',
-                  ...inputFields
-                }}
-                icon={<SearchIcon />}
-                name="gl_ClassName"
-                placeholder={placeholderProp}
-                label="Search"
-              />{' '}
-            </Grid>
-            <Grid
-              item
-              mobile={12}
-              tablet={1}
-              sx={{ display: 'flex' }}
-              justifyContent="flex-end"
-              mt={{ tablet: 3.2 }}
-              mr={{ mobile: 30, tablet: 0 }}
-              mb={{ mobile: 6, tablet: 0 }}
-            >
-              <ActionButton type="submit" buttonTitle="Search" />
-            </Grid>
+        <Grid container spacing={2}>
+          <Grid
+            mb={{ tablet: 3 }}
+            item
+            mobile={12}
+            tablet={2}
+            justifyContent="center"
+          >
+            <FormSelectField
+              customStyle={{
+                width: setWidth(),
+                fontSize: '14px',
+                ...inputFields
+              }}
+              name="status"
+              options={mappedStatus}
+              label="Status"
+            />{' '}
           </Grid>
-        </Box>
+          <Grid
+            mb={{ tablet: 6 }}
+            item
+            mobile={12}
+            tablet={9}
+            justifyContent="center"
+          >
+            <FormTextInput
+              customStyle={{
+                width: setWidth(),
+                fontSize: '14px',
+                ...inputFields
+              }}
+              icon={<SearchIcon />}
+              name="gl_ClassName"
+              placeholder={placeholderProp}
+              label="Search"
+            />{' '}
+          </Grid>
+          <Grid
+            item
+            mobile={12}
+            tablet={1}
+            sx={{ display: 'flex' }}
+            justifyContent="flex-end"
+            mt={{ tablet: 3.2 }}
+            mr={{ mobile: 30, tablet: 0 }}
+            mb={{ mobile: 6, tablet: 0 }}
+          >
+            <ActionButton type="submit" buttonTitle="Search" />
+          </Grid>
+        </Grid>
       </Form>
     </Formik>
   );

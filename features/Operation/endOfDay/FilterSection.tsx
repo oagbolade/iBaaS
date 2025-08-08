@@ -2,7 +2,11 @@ import React from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Form, Formik } from 'formik';
-import { FormSelectField, FormTextInput } from '@/components/FormikFields';
+import {
+  FormikDateTimePicker,
+  FormSelectField,
+  FormTextInput
+} from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { useCurrentBreakpoint } from '@/utils';
 import { ISearchParams } from '@/app/api/search/route';
@@ -41,23 +45,8 @@ export const FilterSection = ({ onSearch }: Props) => {
       <Form>
         <Box>
           <Grid container spacing={2}>
-            <Grid
-              mb={{ tablet: 3 }}
-              item
-              mobile={12}
-              tablet={2}
-              justifyContent="center"
-            >
-              <FormSelectField
-                customStyle={{
-                  width: setWidth(),
-                  fontSize: '14px',
-                  ...inputFields
-                }}
-                name="behaviour"
-                options={EditOperations.behaviour}
-                label="Behaviour"
-              />{' '}
+            <Grid mb={{ tablet: 3 }} item mobile={5} tablet={2}>
+              <FormikDateTimePicker label="Date" name="date" value="date" />
             </Grid>
             <Grid
               mb={{ tablet: 6 }}

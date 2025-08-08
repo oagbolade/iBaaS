@@ -16,6 +16,7 @@ import { IIncomeAssurance } from '@/api/ResponseTypes/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { useGetIAReportType } from '@/api/general/useIAReportType';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 export const IncomeAssuranceReport = () => {
   const { productTypes } = useGetProductType();
@@ -88,6 +89,7 @@ export const IncomeAssuranceReport = () => {
   };
   return (
     <Box sx={{ width: '100%' }}>
+      <TopOverViewSection useBackButton />
       {branches && IAreportType && (
         <FilterSection
           branches={branches}

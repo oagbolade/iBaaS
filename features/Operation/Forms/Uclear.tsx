@@ -95,7 +95,7 @@ export const OutWard = ({
     zones
   });
   const [searchParams, setSearchParams] = useState<IClearingParams>({
-    bankcode: ''
+    cleartype: ''
   });
 
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
@@ -108,7 +108,8 @@ export const OutWard = ({
     useGetAccountDetails(encryptData(accountNumber) || '');
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     const params: IClearingParams = {
-      bankcode: values.bankcode?.toString().length > 0 ? values.bankcode : null
+      cleartype:
+        values.cleartype?.toString().length > 0 ? values.cleartype : null
     };
     const toastMessage = {
       title: 'Validation error',

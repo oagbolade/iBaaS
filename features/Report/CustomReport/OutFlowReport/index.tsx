@@ -78,28 +78,18 @@ export const InflowOutflowReport = () => {
 
   return (
     <Box sx={{ width: '100%', marginTop: '50px' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>
+      <TopOverViewSection useBackButton />
 
-      <Box sx={{ padding: '25px', width: '100%' }}>
-        <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
-          <FilterSection branches={branches} onSearch={handleSearch} />
-        </Box>
+      <div className="mt-8">
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      </div>
 
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-        >
-          <CustomTableHeader
-            mainTitle="Inflow/Outflow Report"
-            secondaryTitle="See a directory of all inflow/outflow reports in this system."
-            hideFilterSection
-          />
-        </Box>
+      <div className="mx-5">
+        <CustomTableHeader
+          mainTitle="Inflow/Outflow Report"
+          secondaryTitle="See a directory of all inflow/outflow reports in this system."
+          hideFilterSection
+        />
 
         {isLoading ? (
           <FormSkeleton noOfLoaders={5} />
@@ -137,7 +127,7 @@ export const InflowOutflowReport = () => {
             )}
           </Box>
         )}
-      </Box>
+      </div>
     </Box>
   );
 };

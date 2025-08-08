@@ -42,7 +42,7 @@ export const FilterSection = ({ onSearch, status, placeholderProp }: Props) => {
   return (
     <Formik initialValues={searchFilterInitialValues} onSubmit={onSubmit}>
       <Form>
-        <Box>
+       
           <Grid container spacing={2}>
             <Grid
               mb={{ tablet: 3 }}
@@ -94,7 +94,7 @@ export const FilterSection = ({ onSearch, status, placeholderProp }: Props) => {
               <ActionButton type="submit" buttonTitle="Search" />
             </Grid>
           </Grid>
-        </Box>
+       
       </Form>
     </Formik>
   );

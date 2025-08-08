@@ -159,7 +159,7 @@ export const templateUploadContainer = {
   borderRadius: '4px',
   border: `1px dashed ${colors.neutral300}`,
   background: `${colors.neutral200}`,
-  width: { tablet: '560px', mobile: '400px' },
+  width: { tablet: '450px', mobile: '400px' },
   height: '132px',
   boxShadow: 'none'
 };
@@ -492,4 +492,60 @@ export const DeleteSavedBatches = {
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '20px' /* 142.857% */
+};
+
+export const EndofDayContainerForm = {
+  display: 'flex',
+  width: '1141px',
+  padding: '0 24px',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '24px',
+  marginTop: '90px'
+};
+export const processPassingStyle = {
+  display: 'flex',
+  width: '1117px',
+  alignItems: 'flex-start',
+  gap: '24px',
+  marginTop: '90px'
+};
+export const processRunningStyle = {
+  display: 'flex',
+  height: '465px',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '30px',
+  alignSelf: 'stretch'
+};
+export const processNumber = {
+  display: 'flex',
+  // height: '108px',
+  padding: '32px 40px',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: '32px',
+  flex: '1 0 0',
+  borderRadius: '5px',
+  border: `1px solid ${colors.neutral300}`,
+  background: `${colors.white}`
+};
+export const totalProcesTitle = {
+  color: `${colors.secondaryText}`,
+  fontFamily: 'Averta',
+  fontSize: '12px',
+  fontStyle: 'normal',
+  fontWeight: 400,
+  lineHeight: '16px' /* 133.333% */,
+  textTransform: 'uppercase'
+};
+export const totalTitle = {
+  color: `${colors.neutral900}`,
+
+  /* header/H4 */
+  fontFamily: 'Averta',
+  fontSize: '32px',
+  fontStyle: 'normal',
+  fontWeight: 700,
+  lineHeight: '40px' /* 125% */
 };

@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
 import { GrandTotal, ShortCardWithAccordion } from './ShortCardWithAccordion';
+import { FilterSection } from './FilterSection';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { column } from '@/constants/Reports/ASSETS_DATA';
-import { FilterSection } from './FilterSection';
 import { useGetBranches } from '@/api/general/useBranches';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { useGetAllBalanceSheet } from '@/api/reports/useGetBalanceSheet';
@@ -22,14 +22,14 @@ export const BalanceSheet = () => {
     pageSize: pageSize.toString(),
     page,
     searchWith: searchTerm,
-    getAll: false,
+    getAll: false
   });
 
   const grandTotal = React.useMemo(() => {
     if (!balanceSheetData) return 0;
     return balanceSheetData?.reduce(
       (sum, item) => sum + parseFloat(String(item.sumbalance)),
-      0,
+      0
     );
   }, [balanceSheetData]);
 
@@ -74,7 +74,7 @@ export const BalanceSheet = () => {
               </>
             ) : (
               renderEmptyTableBody(
-                balanceSheetData as IBalanceSheetList[] | undefined,
+                balanceSheetData as IBalanceSheetList[] | undefined
               )
             )}
           </>

@@ -17,7 +17,9 @@ export const TermDepositMaturityReport = () => {
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { dateValue, isDateFilterApplied } = React.useContext(DateRangePickerContext);
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
 
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
@@ -97,26 +99,24 @@ export const TermDepositMaturityReport = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px'
+        marginTop: '60px'
       }}
     >
-      <Box sx={{ width: '100%' }}>
-        <TopOverViewSection
-          useBackButton
-        />
-      </Box>{' '}
+      <TopOverViewSection useBackButton />
+
       <Box
         sx={{
           padding: '25px',
           width: '100%'
         }}
       >
-        <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
+        <Box sx={{ marginTop: '10px', marginBottom: '30px' }}>
           <FilterSection
             branches={branches}
             onSearch={(params: ISearchParams) => handleSearch(params)}
           />
         </Box>
+       
         {isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (

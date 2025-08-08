@@ -15,6 +15,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { IChartOfAccount } from '@/api/ResponseTypes/reports';
 import { useGetBranches } from '@/api/general/useBranches';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 export const ChartAccount = () => {
   const [search, setSearch] = useState<boolean>(false);
@@ -63,6 +64,8 @@ export const ChartAccount = () => {
         marginTop: '50px'
       }}
     >
+      <TopOverViewSection useBackButton showDatePicker={false} />
+
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}

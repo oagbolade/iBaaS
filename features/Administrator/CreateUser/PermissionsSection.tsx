@@ -100,7 +100,7 @@ export const PermissionsSection = () => {
           ]}
           title="Enable 2FA"
           name="enable2FA"
-          value={`${isEditing ? userDetails?.enable2FA : '1'}`}
+          value={`${isEditing ? userDetails?.enable2FA : '0'}`}
         />
       </Box>
     </Box>

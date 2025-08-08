@@ -464,10 +464,10 @@ export const createChargeSchema = Yup.object({
     .matches(stringRegex, 'Invalid charge description')
     .required('charge description is Required'),
   branchMask: Yup.string().required('Branch Mask is Required'),
-  freq: Yup.string().required(' When will charge take place is Required'),
   glCode: Yup.string()
     .matches(numericRegex, 'Invalid GL Number')
-    .required('Income GL Account is Required')
+    .required('Income GL Account is Required'),
+  liqperiod: Yup.string().required('charge take place is Required')
 });
 
 export const filterSectionSchema = Yup.object({

@@ -13,6 +13,7 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -114,6 +115,8 @@ export const CustomerBalances = () => {
         marginTop: '60px'
       }}
     >
+      <TopOverViewSection useBackButton />
+
       {branches && bankproducts && (
         <FilterSection
           branches={branches}
@@ -121,7 +124,7 @@ export const CustomerBalances = () => {
           onSearch={handleSearch}
         />
       )}
-      <Box sx={{ paddingX: '24px' }}>
+      <Box sx={{ paddingX: '20px' }}>
         {isCustomerBalanceDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (

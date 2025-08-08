@@ -4,6 +4,13 @@ import { Box, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation';
 import { string } from 'yup';
+import {
+  automaticContainer,
+  numberOfDays,
+  runEndofdayStyle,
+  endOfdayTitle,
+  timeEndofdayStyle
+} from './style';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
@@ -24,6 +31,7 @@ import {
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { handleRedirect, useCurrentBreakpoint } from '@/utils';
 import { RadioButtons2 } from '@/components/Revamp/Radio/RadioButton2';
+import { cancelButton } from '@/features/Requests/styles';
 
 type Props = {
   handleClose: Function;
@@ -34,7 +42,6 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
   const router = useRouter();
   const [addValues, setAddValues] = useState<String>('');
   const handleChange = (value: string) => {
-    localStorage.setItem('addProduct', value);
     setAddValues(value);
   };
   const handleContinue = () => {
@@ -71,19 +78,11 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
         >
           <RadioButtons2
             className="permissionOptions"
-            options={[{ label: 'Manual', value: '1' }]}
-            title="You get to run end of day at your own convenience "
-            name="addProduct"
-            customStyle={{
-              display: 'flex'
-            }}
-            value={addValues.toString()}
-            handleCheck={(value: string) => handleChange(value)}
-          />
-          <RadioButtons2
-            className="permissionOptions"
-            options={[{ label: 'Automatic', value: '2' }]}
-            title="Your system runs end of day at a specific date and time you configure on the application"
+            options={[
+              { label: 'Manual', value: '1' },
+              { label: 'Automatic', value: '2' }
+            ]}
+            // title="You get to run end of day at your own convenience"
             name="addProduct"
             customStyle={{
               display: 'flex'
@@ -93,7 +92,98 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
           />
         </Box>
       </Box>
-
+      {addValues === '2' && (
+        <Box sx={automaticContainer}>
+          <Box sx={runEndofdayStyle}>
+            <PageTitle
+              title="Select preferred days to run End of Day"
+              styles={{ ...endOfdayTitle }}
+            />
+            <Box sx={numberOfDays}>
+              <PrimaryIconButton
+                buttonTitle="Monday"
+                customStyle={{ ...cancelButton }}
+                // onClick={handleOpen}
+              />
+              <PrimaryIconButton
+                buttonTitle="Tuesday"
+                customStyle={{ ...cancelButton }}
+                // onClick={handleOpen}
+              />
+              <PrimaryIconButton
+                buttonTitle="Wednesday"
+                customStyle={{ ...cancelButton }}
+                // onClick={handleOpen}
+              />
+              <PrimaryIconButton
+                buttonTitle="Thursday"
+                customStyle={{ ...cancelButton }}
+                // onClick={handleOpen}
+              />
+              <PrimaryIconButton
+                buttonTitle="Friday"
+                customStyle={{ ...cancelButton }}
+                // onClick={handleOpen}
+              />
+              <PrimaryIconButton
+                buttonTitle="Saturday"
+                customStyle={{ ...cancelButton }}
+                // onClick={handleOpen}
+              />
+              <PrimaryIconButton
+                buttonTitle="Sunday"
+                customStyle={{ ...cancelButton }}
+                // onClick={handleOpen}
+              />
+            </Box>
+          </Box>
+        </Box>
+      )}
+      {addValues === '2' && (
+        <Box sx={timeEndofdayStyle}>
+          <PageTitle
+            title="Select preferred time to run End of Day"
+            styles={{ ...endOfdayTitle }}
+          />
+          <Box sx={numberOfDays}>
+            <PrimaryIconButton
+              buttonTitle="5:00PM"
+              customStyle={{ ...cancelButton }}
+              // onClick={handleOpen}
+            />
+            <PrimaryIconButton
+              buttonTitle="6:00PM"
+              customStyle={{ ...cancelButton }}
+              // onClick={handleOpen}
+            />
+            <PrimaryIconButton
+              buttonTitle="7:00PM"
+              customStyle={{ ...cancelButton }}
+              // onClick={handleOpen}
+            />
+            <PrimaryIconButton
+              buttonTitle="8:00PM"
+              customStyle={{ ...cancelButton }}
+              // onClick={handleOpen}
+            />
+            <PrimaryIconButton
+              buttonTitle="9:00PM"
+              customStyle={{ ...cancelButton }}
+              // onClick={handleOpen}
+            />
+            <PrimaryIconButton
+              buttonTitle="10:00PM"
+              customStyle={{ ...cancelButton }}
+              // onClick={handleOpen}
+            />
+            <PrimaryIconButton
+              buttonTitle="11:00PM"
+              customStyle={{ ...cancelButton }}
+              // onClick={handleOpen}
+            />
+          </Box>
+        </Box>
+      )}
       <Box sx={ButtonContainer}>
         <Box sx={ButtonColorStyle}>
           <Box sx={ButtonText}>
@@ -121,7 +211,7 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
                   padding: { mobile: '8px 50px', desktop: '16px 78px' },
                   marginRight: { mobile: '70px', desktop: 0 }
                 }}
-                onClick={handleContinue}
+                // onClick={handleContinue}
               />
             </Box>
           </Box>

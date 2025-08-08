@@ -15,11 +15,13 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 type Props = {
   useBackButton?: boolean;
   CustomDateRangePicker?: React.ReactNode;
+  showDatePicker?: boolean;
 };
 
 export const TopOverViewSection = ({
   useBackButton,
-  CustomDateRangePicker
+  CustomDateRangePicker,
+  showDatePicker = true
 }: Props) => {
   const { dateValue } = React.useContext(DateRangePickerContext);
 
@@ -38,10 +40,11 @@ export const TopOverViewSection = ({
         position: 'sticky',
         top: '60px',
         zIndex: 3,
-        backgroundColor: '#fff',
-        borderLeft: '1px solid #E8E8E8',
-        borderBottom: useBackButton ? '1px solid #E8E8E8' : 'none',
-        padding: '12px 20px'
+        backgroundColor: `${colors.white}`,
+        borderLeft: `1px solid ${colors.loanTitleColor}`,
+        borderBottom: useBackButton ? `1px solid ${colors.loanTitleColor}` : 'none',
+        paddingLeft: '10px',
+        paddingRight: '10px'
       }}
       direction={setDirection()}
       justifyContent="space-between"
@@ -82,8 +85,11 @@ export const TopOverViewSection = ({
             buttonTitle="Export Data"
           />
         </Box>
-        <Box>
-          <ActionButtonWithPopper
+        <Box >
+
+          {
+            showDatePicker ? (
+              <ActionButtonWithPopper
             CustomDateRangePicker={CustomDateRangePicker}
             searchGroupVariant="DateRangePicker"
             customStyle={{ ...dateFilter }}
@@ -97,6 +103,9 @@ export const TopOverViewSection = ({
             iconPosition="end"
             buttonTitle={formattedDateRange}
           />
+            ) : null
+          }
+         
         </Box>
       </Stack>
     </Stack>

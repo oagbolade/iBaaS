@@ -199,8 +199,7 @@ export const BatchPosting = ({
       enabled: isAccountNumber11Digits && !!accountNumber
     });
   const { bankgl: costAmountData } = useGetGLByGLNumber(
-    encryptData(accountNumber) || '',
-    { enabled: !isAccountNumber11Digits && !!accountNumber }
+    encryptData(accountNumber) || ''
   );
   const normalizedAccountDetails: IAccountDetailsResults | undefined =
     isAccountNumber11Digits
