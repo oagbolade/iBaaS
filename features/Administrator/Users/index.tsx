@@ -14,7 +14,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody
+  renderEmptyTableBody,
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ToastMessage } from '@/components/Revamp/ToastMessage';
@@ -23,7 +23,7 @@ import {
   useDeleteUser,
   useFilterUserSearch,
   useLockOrUnlockUser,
-  useValidatePassword
+  useValidatePassword,
 } from '@/api/admin/useAdminUsers';
 import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
@@ -32,16 +32,17 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { DeleteActionSteps } from '@/constants/Steps';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
 import { getStoredUser } from '@/utils/user-storage';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
-  <Box ml={{ mobile: 12, desktop: 0 }}>
+  <Box ml={{ mobile: 12, desktop: 0 }} key="create-user">
     <Link href="/admin/users/create">
       <PrimaryIconButton
         buttonTitle="Create User"
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export type ModalTitleDescriptionMapper = {
@@ -50,53 +51,34 @@ export type ModalTitleDescriptionMapper = {
 
 export const Users = () => {
   const [deleteStep, setDeleteStep] = useState<DeleteActionSteps>(null);
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [currentUser, setCurrentUser] = useState<IUsers>();
-  const [page, setPage] = React.useState(1);
+
   const { branches } = useGetBranches();
   const currentUserID = currentUser?.userId as string;
   const lockStatus = currentUser?.lockcount ? 0 : 1;
   const { mutate } = useLockOrUnlockUser(currentUserID, lockStatus);
   const { mutate: validatePassword } = useValidatePassword();
   const { mutate: deleteUser } = useDeleteUser();
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('admin-users');
+
   const excludeSteps = ['proceedToLockOrUnlockUser'];
+
   const {
     totalPages,
     totalElements,
     data: userData,
-    isLoading: isUserDataLoading
+    isLoading: isUserDataLoading,
   } = useFilterUserSearch({
     ...searchParams,
-    page
+    page,
   });
-
-  const toastMessageMapper = {
-    userDelete: {
-      title: 'User Deleted',
-      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.'
-    },
-    userCreated: { title: '', body: '' },
-    userReset: { title: '', body: '' },
-    userLocked: {
-      title: 'Confirmation!',
-      body: 'Are you sure you cant to proceed?'
-    }
-  };
-
-  const modalTitleDescriptionMapper: ModalTitleDescriptionMapper = {
-    isDeleteConfirmation: {
-      title: 'User Delete',
-      body: 'When you delete a user, the user wont’t be able to access this platform any longer, would you like to proceed'
-    },
-    userCreated: { title: '', body: '' },
-    userReset: { title: '', body: '' },
-    isPassword: { title: 'Delete User', body: '' },
-    isLockConfirmation: {
-      title: 'Please Confirmation',
-      body: 'Are you sure you want to proceed with this action?'
-    }
-  };
 
   useEffect(() => {
     if (deleteStep === 'showToast') {
@@ -108,7 +90,12 @@ export const Users = () => {
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
+  };
+
+  const handleSetPage = (newPage: number) => {
+    setPage(newPage);
+    sessionStorage.setItem('admin-user-searchPage', String(newPage));
   };
 
   const refetch = () => {
@@ -118,7 +105,7 @@ export const Users = () => {
   const handleDelete = async (
     currentStep: DeleteActionSteps = null,
     user: IUsers | null = null,
-    password: string | null = null
+    password: string | null = null,
   ) => {
     if (user) {
       setCurrentUser(user);
@@ -133,13 +120,12 @@ export const Users = () => {
       const body: ValidatePasswordRequest = {
         oldpassword: password as string,
         tenantid: `${getStoredUser()?.companyCode}`,
-        userid: getStoredUser()?.profiles.userid as string
+        userid: getStoredUser()?.profiles.userid as string,
       };
 
       await validatePassword?.(body);
       await deleteUser?.(currentUser?.userId);
       setDeleteStep(null);
-
       refetch();
       return;
     }
@@ -149,7 +135,7 @@ export const Users = () => {
 
   const ActionMenuProps = ({
     userid,
-    user
+    user,
   }: {
     userid: string;
     user: IUsers;
@@ -161,6 +147,25 @@ export const Users = () => {
         handleDelete={handleDelete}
       />
     );
+  };
+
+  const toastMessageMapper = {
+    userDelete: {
+      title: 'User Deleted',
+      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.',
+    },
+  };
+
+  const modalTitleDescriptionMapper: ModalTitleDescriptionMapper = {
+    isDeleteConfirmation: {
+      title: 'User Delete',
+      body: 'When you delete a user, the user won’t be able to access this platform any longer. Would you like to proceed?',
+    },
+    isPassword: { title: 'Delete User', body: '' },
+    isLockConfirmation: {
+      title: 'Please Confirm',
+      body: 'Are you sure you want to proceed with this action?',
+    },
   };
 
   return (
@@ -178,7 +183,7 @@ export const Users = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isUserDataLoading ? (
@@ -186,54 +191,44 @@ export const Users = () => {
           ) : (
             <MuiTableContainer
               columns={COLUMNS}
-              tableConfig={{
-                hasActions: true
-              }}
+              tableConfig={{ hasActions: true }}
               data={userData}
               totalPages={totalPages}
               totalElements={totalElements}
-              setPage={setPage}
+              setPage={handleSetPage}
               page={page}
             >
-              {search ? (
-                userData?.map((dataItem: SearchUserResponse & IUsers) => {
-                  return (
-                    <StyledTableRow key={dataItem.userId}>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem.userId}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {dataItem.fullname}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {dataItem.deptName || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {dataItem.role_name || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {dataItem.create_date
-                          ? moment(dataItem.create_date).format(
-                              'MMMM Do YYYY, h:mm:ss a'
-                            )
-                          : 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <ActionMenuProps
-                          userid={dataItem.userId || 'N/A'}
-                          user={dataItem}
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })
+              {searchActive ? (
+                userData?.map((dataItem: SearchUserResponse & IUsers) => (
+                  <StyledTableRow key={dataItem.userId}>
+                    <StyledTableCell>{dataItem.userId}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.fullname}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.deptName || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.role_name || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.create_date
+                        ? moment(dataItem.create_date).format(
+                            'MMMM Do YYYY, h:mm:ss a',
+                          )
+                        : 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <ActionMenuProps
+                        userid={dataItem.userId || 'N/A'}
+                        user={dataItem}
+                      />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
               ) : (
                 <StyledTableRow>
-                  <StyledTableCell
-                    colSpan={COLUMNS.length + 1}
-                    component="th"
-                    scope="row"
-                  >
+                  <StyledTableCell colSpan={COLUMNS.length + 1}>
                     {renderEmptyTableBody(userData)}
                   </StyledTableCell>
                 </StyledTableRow>
@@ -241,13 +236,14 @@ export const Users = () => {
             </MuiTableContainer>
           )}
         </Box>
-        <Box />
+
         {deleteStep === 'showToast' && (
           <ToastMessage
             title={toastMessageMapper.userDelete.title}
             body={toastMessageMapper.userDelete.body}
           />
         )}
+
         {deleteStep !== null &&
           deleteStep !== 'showToast' &&
           !excludeSteps.includes(deleteStep) && (
@@ -255,12 +251,12 @@ export const Users = () => {
               handleClose={handleDelete}
               form={
                 <DeleteConfirmationModal
-                  modalTitle={`${
+                  modalTitle={
                     modalTitleDescriptionMapper[deleteStep]?.title || ''
-                  }`}
-                  modalDescription={`${
+                  }
+                  modalDescription={
                     modalTitleDescriptionMapper[deleteStep]?.body || ''
-                  }`}
+                  }
                   deleteStep={deleteStep}
                   handleClose={handleDelete}
                 />

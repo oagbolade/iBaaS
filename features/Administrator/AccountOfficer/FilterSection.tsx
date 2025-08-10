@@ -11,6 +11,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IBranches, IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { searchFieldsSchema } from '@/schemas/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch: Function;
@@ -18,22 +19,26 @@ type Props = {
   status: IStatus[];
 };
 
-export const FilterSection = ({
-  onSearch,
-  branches,
-  status,
-}: Props) => {
+export const FilterSection = ({ onSearch, branches, status }: Props) => {
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('account-officers');
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    status: searchParams?.status ?? '',
+    search: searchParams?.fullName ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status.toString().length > 0 ? values.status : null,
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      fullName: values.search.length > 0 ? values.search : null
+      fullName: values.search.length > 0 ? values.search : null,
     };
 
     onSearch(params);
@@ -41,7 +46,8 @@ export const FilterSection = ({
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={searchFieldsSchema}
     >
@@ -60,7 +66,7 @@ export const FilterSection = ({
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields
+                    ...inputFields,
                   }}
                   name="branchID"
                   options={mappedBranches}
@@ -78,7 +84,7 @@ export const FilterSection = ({
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields
+                    ...inputFields,
                   }}
                   name="status"
                   options={mappedStatus}
@@ -96,7 +102,7 @@ export const FilterSection = ({
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields
+                    ...inputFields,
                   }}
                   icon={<SearchIcon />}
                   name="search"
