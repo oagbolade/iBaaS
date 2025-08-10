@@ -101,7 +101,7 @@ async function createOutwardClearing(
   params: IClearingParams | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/Operations/Operations/OutwardClearing?clrbank=${params?.bankcode}`;
+    const urlEndpoint = `/Operations/Operations/OutwardClearing?clrbank=${params?.cleartype}`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: 'POST',

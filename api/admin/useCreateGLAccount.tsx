@@ -381,8 +381,7 @@ async function getGLByGLNumber(
 }
 
 export function useGetGLByGLNumber(
-  glNumber: string | null,
-  p0?: { enabled: boolean }
+  glNumber: string | null
 ): UseGetGLByGlNumber {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as UseGetGLByGlNumber;

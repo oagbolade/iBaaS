@@ -651,6 +651,38 @@ export interface IDemandDeposit {
   penal: number;
   userid: string;
 }
+export interface ITreasuryDeposit {
+  productCode: string;
+  productName: string;
+  productclass: number;
+  appType: string;
+  productstart: string;
+  productExpire: string;
+  currencycode: string;
+  intaccrual: string;
+  crtype: string;
+  minIntrate: number;
+  maxIntRate: number;
+  minterm: number;
+  maxterm: number;
+  repaymeth: string;
+  term: string;
+  interestExpense: string;
+  shortname: string;
+  intIncome: string;
+  principal: string;
+  ttax: string;
+  ttax2: string;
+  upfront: string;
+  paymentGL: string;
+  maturedGL: string;
+  suspint: string;
+  susprinc: string;
+  closeTDAtMature: number;
+  penalrate: number;
+  discounted: number;
+  userid: string;
+}
 export interface ILoanAccount {
   productCode: string;
   productName: string;
@@ -1058,6 +1090,7 @@ export interface UseGetGLWithBranchCodeResponse extends IFetchingState {
   responseDescription?: string;
   data?: IGLWithBranchCode[];
 }
+
 export interface UseGetAllLoanAccountResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
@@ -1071,6 +1104,7 @@ export interface UseGetAllLoanAccountResponse extends IFetchingState {
   exception?: IException[];
   bankproducts?: IBankProducts[];
   frequency?: IFrequency[];
+  termDeposit?: ITreasuryDeposit;
 }
 
 export interface UseGetAllCompanyResponse extends IFetchingState {

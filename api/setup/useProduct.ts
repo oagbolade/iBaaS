@@ -23,7 +23,8 @@ import {
   UseGetProductClassByCategoryResponse,
   IProdCodeType,
   UseGetGLWithBranchCodeResponse,
-  IGLWithBranchCode
+  IGLWithBranchCode,
+  ITreasuryDeposit
 } from '../ResponseTypes/setup';
 import { SearchResultsGenericResponse } from '../ResponseTypes/general';
 import { axiosInstance } from '@/axiosInstance';
@@ -36,7 +37,8 @@ import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import {
   CreateDemandDepositFormValues,
-  CreateLoanAccountFormValues
+  CreateLoanAccountFormValues,
+  CreateTreasuryFormValues
 } from '@/schemas/schema-values/setup';
 import { ISearchParams } from '@/app/api/search/route';
 import { SEARCH_BASE_URL } from '@/axiosInstance/constants';
@@ -78,15 +80,15 @@ async function createLoanAccountProduct(
 }
 async function createTreasuryAccountProduct(
   toastActions: IToastActions,
-  body: CreateLoanAccountFormValues,
+  body: CreateTreasuryFormValues,
   isUpdating: boolean,
-  TranCode: string | null
+  productcode: string | null
 ): Promise<void> {
   try {
     const urlEndpoint = `/General/Product/${
       isUpdating
-        ? `UpdateTransactType?TranCode=${TranCode}`
-        : 'CreateTransactType'
+        ? `UpdateTermDepositProduct?productcode=${productcode}`
+        : 'CreateTermDepositProduct'
     }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
@@ -627,16 +629,16 @@ async function getLoanProductByCode(
 
 async function getTreasuryProductByCode(
   toastActions: IToastActions,
-  TranCode: string | null
+  productcode: string | null
 ): Promise<UseGetAllLoanAccountResponse> {
   let result: UseGetAllLoanAccountResponse = {
     responseCode: '',
     responseDescription: '',
-    loanProducts: {} as ILoanAccount
+    termDeposit: {} as ITreasuryDeposit
   };
 
   try {
-    const urlEndpoint = `/Configuration/TransactType/GetTransactTypeById?TranCode=${TranCode}`;
+    const urlEndpoint = `/General/Product/GetTermDepByPcode?productcode=${productcode}`;
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
       await axiosInstance({
@@ -832,7 +834,7 @@ export function useGetAllProductDocs(): UseGetAllProductDocsResponse {
   return { ...data, isError, isLoading };
 }
 export function useGetTreasuryProductByCode(
-  TranCode: string | null
+  productcode: string | null
 ): UseGetAllLoanAccountResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = [] as UseGetAllLoanAccountResponse;
@@ -843,9 +845,9 @@ export function useGetTreasuryProductByCode(
     isError,
     isLoading
   } = useQuery({
-    queryKey: [queryKeys.getTreasuryProductByCode, TranCode],
-    queryFn: () => getTreasuryProductByCode(toastActions, TranCode),
-    enabled: Boolean((TranCode || '').length > 0)
+    queryKey: [queryKeys.getTreasuryProductByCode, productcode],
+    queryFn: () => getTreasuryProductByCode(toastActions, productcode),
+    enabled: Boolean((productcode || '').length > 0)
   });
 
   return { ...data, isError, isLoading };
@@ -1072,15 +1074,15 @@ export function useCreateLoanAccountProduct(
 
 export function useCreateTreasuryAccountProduct(
   isUpdating: boolean = false,
-  TranCode: string | null = null
+  productcode: string | null = null
 ) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const toastActions = useContext(ToastMessageContext);
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (body: CreateLoanAccountFormValues) =>
-      createTreasuryAccountProduct(toastActions, body, isUpdating, TranCode),
+    mutationFn: (body: CreateTreasuryFormValues) =>
+      createTreasuryAccountProduct(toastActions, body, isUpdating, productcode),
     onSuccess: () => {
       const keysToInvalidate = [
         [queryKeys.getTreasuryProductByCode],
