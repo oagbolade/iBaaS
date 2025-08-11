@@ -19,6 +19,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Link href="/admin/gl-account/create">
@@ -26,27 +27,32 @@ const actionButtons: any = [
       buttonTitle="Create General Ledger"
       customStyle={{ ...submitButton, width: '236px', height: '40px' }}
     />
-  </Link>
+  </Link>,
 ];
 
 export const GLAccount = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('gl-account');
 
   const {
     totalPages,
     totalElements,
     data: glData,
-    isLoading: isGLDataLoading
+    isLoading: isGLDataLoading,
   } = useFilterGLAccountSearch({
     ...searchParams,
-    page
+    page,
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const { branches } = useGetBranches();
@@ -57,7 +63,7 @@ export const GLAccount = () => {
     post,
     populate,
     swing,
-    typeP
+    typeP,
   }: {
     glNumber: string;
     pointing?: number;
@@ -93,7 +99,7 @@ export const GLAccount = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isGLDataLoading ? (
@@ -102,7 +108,7 @@ export const GLAccount = () => {
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{
-                hasActions: true
+                hasActions: true,
               }}
               data={glData}
               setPage={setPage}
@@ -110,7 +116,7 @@ export const GLAccount = () => {
               totalPages={totalPages}
               totalElements={totalElements}
             >
-              {search ? (
+              {searchActive ? (
                 glData?.map(
                   (dataItem: SearchGLAccountResponse, index: number) => {
                     return (
@@ -139,7 +145,7 @@ export const GLAccount = () => {
                         </StyledTableCell>
                       </StyledTableRow>
                     );
-                  }
+                  },
                 )
               ) : (
                 <StyledTableRow>
