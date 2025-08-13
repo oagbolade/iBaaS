@@ -8,16 +8,23 @@ import { ISearchParams } from '@/app/api/search/route';
 import { FormTextInput } from '@/components/FormikFields';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch: Function;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('directors');
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    search: searchParams?.fullName ?? '',
+  };
+
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
-      fullName: values.search.toString().length > 0 ? values.search : null
+      fullName: values.search.toString().length > 0 ? values.search : null,
     };
 
     onSearch(params);
@@ -25,7 +32,8 @@ export const FilterSection = ({ onSearch }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -42,7 +50,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="search"

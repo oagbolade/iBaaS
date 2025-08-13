@@ -15,7 +15,7 @@ import { useFilterAccountOfficerSearch } from '@/api/admin/useAccountOfficer';
 import { useGetBranches } from '@/api/general/useBranches';
 import { FormSkeleton } from '@/components/Loaders';
 import { SearchAccountOfficersResponse } from '@/api/ResponseTypes/admin';
-
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 export interface IOptions {
   buttonTitle: string;
   link?: string;
@@ -30,7 +30,7 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>{' '}
-  </Box>
+  </Box>,
 ];
 
 const ActionMenuProps = ({ officercode }: { officercode: string }) => {
@@ -44,36 +44,41 @@ const ActionMenuProps = ({ officercode }: { officercode: string }) => {
 };
 
 export const OfficeTransferTable = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const { branches } = useGetBranches();
-  const [page, setPage] = React.useState(1);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('transfer-officers');
 
   const {
     totalPages,
     totalElements,
     data: accountOfficerData,
-    isLoading: areAccountOfficersDataLoading
+    isLoading: areAccountOfficersDataLoading,
   } = useFilterAccountOfficerSearch({
     ...searchParams,
-    page
+    page,
   });
 
   const handleSearch = (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   return (
     <Box mt={4}>
       <TopActionsArea actionButtons={actionButtons} />
-      
-       <div className='mx-8'>
-         {branches && (
+
+      <div className="mx-8">
+        {branches && (
           <FilterSection branches={branches} onSearch={handleSearch} />
         )}
-       </div>
-      {/* </Box> */}  
+      </div>
       <Box sx={{ padding: '25px', width: '100%' }}>
         {areAccountOfficersDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
@@ -81,12 +86,12 @@ export const OfficeTransferTable = () => {
           <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
-              hasActions: true
+              hasActions: true,
             }}
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Officer’s Overview',
-              secondaryTitle: 'See a directory of all Officers on this system.'
+              secondaryTitle: 'See a directory of all Officers on this system.',
             }}
             data={accountOfficerData}
             setPage={setPage}
@@ -94,7 +99,7 @@ export const OfficeTransferTable = () => {
             totalPages={totalPages}
             totalElements={totalElements}
           >
-            {search ? (
+            {searchActive ? (
               accountOfficerData?.map(
                 (dataItem: SearchAccountOfficersResponse) => {
                   return (
@@ -125,7 +130,7 @@ export const OfficeTransferTable = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                }
+                },
               )
             ) : (
               <StyledTableRow>

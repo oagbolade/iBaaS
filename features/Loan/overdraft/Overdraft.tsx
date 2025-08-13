@@ -8,7 +8,7 @@ import { FilterSection } from './FilterSection';
 import {
   MuiTableContainer,
   renderEmptyTableBody,
-  StyledTableRow
+  StyledTableRow,
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ISearchParams } from '@/app/api/search/route';
@@ -18,6 +18,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { useFilterCustomerAccountSearch } from '@/api/customer-service/useCustomer';
 import { useGetStatus } from '@/api/general/useStatus';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   customerId: string;
@@ -28,12 +29,12 @@ type Props = {
 const ActionMenuProps: React.FC<Props> = ({
   accountNumber,
   customerId,
-  accountName
+  accountName,
 }: Props) => {
   return (
     <Link
       href={`/loan/overdrafts/view-overdraft?accountNumber=${DOMPurify.sanitize(accountNumber)}&accountName=${DOMPurify.sanitize(accountName)}&custmerId=${DOMPurify.sanitize(
-        customerId
+        customerId,
       )}`}
     >
       View Details
@@ -42,25 +43,31 @@ const ActionMenuProps: React.FC<Props> = ({
 };
 
 export const OverDrafts = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('overdraft');
 
   const { status } = useGetStatus();
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const {
     totalPages,
     totalElements,
     data: customerAccountData,
-    isLoading: isOverdraftDataLoading
+    isLoading: isOverdraftDataLoading,
   } = useFilterCustomerAccountSearch({
     ...searchParams,
-    page
+    page,
   });
 
   return (
@@ -68,12 +75,12 @@ export const OverDrafts = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '60px'
+        marginTop: '60px',
       }}
     >
       <Box
         sx={{
-          marginBottom: '25px'
+          marginBottom: '25px',
         }}
       />
 
@@ -91,7 +98,7 @@ export const OverDrafts = () => {
         <MuiTableContainer
           columns={COLUMN}
           tableConfig={{
-            hasActions: true
+            hasActions: true,
           }}
           data={customerAccountData}
           totalPages={totalPages}
@@ -101,10 +108,10 @@ export const OverDrafts = () => {
           showHeader={{
             mainTitle: 'Overdrafts',
             secondaryTitle: 'Set overdraft limit for all your customers.',
-            hideFilterSection: true
+            hideFilterSection: true,
           }}
         >
-          {search ? (
+          {searchActive ? (
             customerAccountData?.map((dataItem: any) => {
               return (
                 <StyledTableRow key={dataItem.userid}>

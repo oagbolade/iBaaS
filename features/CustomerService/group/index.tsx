@@ -14,12 +14,13 @@ import { useGetBranches } from '@/api/general/useBranches';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody
+  renderEmptyTableBody,
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchGroupResponse } from '@/api/ResponseTypes/customer-service';
 import { FormSkeleton } from '@/components/Loaders';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export interface IOptions {
   buttonTitle: string;
@@ -28,10 +29,14 @@ export interface IOptions {
 }
 
 export const GroupTable = () => {
-  const [shouldDisableCreation, setShouldDisableCreation] = React.useState<boolean>(false);
+  const [shouldDisableCreation, setShouldDisableCreation] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const shouldDisable = !checkMultipleUserRoleAccess('Groups', 'MANAGE GROUPS');
+    const shouldDisable = !checkMultipleUserRoleAccess(
+      'Groups',
+      'MANAGE GROUPS',
+    );
 
     setShouldDisableCreation(shouldDisable);
   }, []);
@@ -40,44 +45,47 @@ export const GroupTable = () => {
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <Link
         style={{
-          pointerEvents: (shouldDisableCreation) ? 'none' : 'auto',
+          pointerEvents: shouldDisableCreation ? 'none' : 'auto',
         }}
         aria-disabled={shouldDisableCreation}
         tabIndex={shouldDisableCreation ? -1 : undefined}
-        href="/setup/kyc/group/create">
+        href="/setup/kyc/group/create"
+      >
         <PrimaryIconButton
           disabled={shouldDisableCreation}
           buttonTitle="Create Group"
           customStyle={{ ...submitButton }}
         />
       </Link>{' '}
-    </Box>
+    </Box>,
   ];
 
-  const [search, setSearch] = React.useState<boolean>(false);
-  const [searchParams, setSearchParams] = React.useState<ISearchParams | null>(
-    null
-  );
-  const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
-
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('groups');
   const {
     totalPages,
     totalElements,
     data: groupData,
-    isLoading: isGroupDataLoading
+    isLoading: isGroupDataLoading,
   } = useFilterGroupSearch({
     ...searchParams,
-    page
+    page,
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenuProps = ({
-    groupId
+    groupId,
   }: {
     groupId: string;
   }): React.ReactElement => {
@@ -99,12 +107,12 @@ export const GroupTable = () => {
           <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
-              hasActions: true
+              hasActions: true,
             }}
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Group’s Overview',
-              secondaryTitle: 'See a directory of all Groups on this system.'
+              secondaryTitle: 'See a directory of all Groups on this system.',
             }}
             data={groupData}
             totalPages={totalPages}
@@ -112,7 +120,7 @@ export const GroupTable = () => {
             setPage={setPage}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               groupData?.map((dataItem: SearchGroupResponse) => {
                 return (
                   <StyledTableRow key={dataItem.groupID}>

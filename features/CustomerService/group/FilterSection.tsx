@@ -10,6 +10,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: Function;
@@ -17,16 +18,22 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, branches }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('groups');
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    search: searchParams?.groupName ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       // If no value input, return null
       branchID: `${values.branchID.trim().length > 0 ? values.branchID : null}`,
-      groupName: `${values.search.trim().length > 0 ? values.search : null}`
+      groupName: `${values.search.trim().length > 0 ? values.search : null}`,
     };
 
     onSearch?.(params);
@@ -34,7 +41,8 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -51,7 +59,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -69,7 +77,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="search"
