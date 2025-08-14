@@ -74,7 +74,6 @@ export const WeeklyLoan = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-
       <TopOverViewSection useBackButton />
       <Box sx={{ padding: '13px' }}>
         {branches && bankproducts && (

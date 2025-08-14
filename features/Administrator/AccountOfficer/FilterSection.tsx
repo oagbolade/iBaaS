@@ -24,21 +24,21 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
     usePersistedSearch<ISearchParams>('account-officers');
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
-    status,
+    status
   });
   const { setWidth } = useCurrentBreakpoint();
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     status: searchParams?.status ?? '',
-    search: searchParams?.fullName ?? '',
+    search: searchParams?.fullName ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status.toString().length > 0 ? values.status : null,
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      fullName: values.search.length > 0 ? values.search : null,
+      fullName: values.search.length > 0 ? values.search : null
     };
 
     onSearch(params);
@@ -66,7 +66,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="branchID"
                   options={mappedBranches}
@@ -84,7 +84,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="status"
                   options={mappedStatus}
@@ -102,7 +102,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields,
+                    ...inputFields
                   }}
                   icon={<SearchIcon />}
                   name="search"

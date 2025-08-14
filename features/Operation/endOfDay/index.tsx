@@ -15,6 +15,13 @@ import {
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { ISearchParams } from '@/app/api/search/route';
+import { useGetEODLogs } from '@/api/operation/useEndOfDay';
+import { FormSkeleton } from '@/components/Loaders';
+import { IEODLogs } from '@/api/ResponseTypes/operation';
+import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
+import { StyledTableCell } from '@/components/Table/style';
+import { SearchIEODLogsResponse } from '@/api/ResponseTypes/setup';
+import { Status } from '@/components/Labels';
 
 export const EndOfDaySetupTable = () => {
   const [openModel, setopenModel] = useState(Boolean);
@@ -22,15 +29,11 @@ export const EndOfDaySetupTable = () => {
   const [openRunModel, setopenRunModel] = useState(Boolean);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
-
-  const ActionMenu = ({
-    exceptionCode
-  }: {
-    exceptionCode: string;
-  }): React.ReactElement => {
+  const { data: logs, isLoading } = useGetEODLogs({ ...searchParams, page });
+  const ActionMenu = ({ id }: { id: number }): React.ReactElement => {
     return (
       <Link
-        href={`/setup/product-gl/add-exception/?isEditing=true&id=${exceptionCode}`}
+        href={`/setup/product-gl/view-eod-process/?isEditing=true&id=${id}`}
       >
         <TableSingleAction actionName="View Details" />
       </Link>
@@ -46,6 +49,7 @@ export const EndOfDaySetupTable = () => {
   const handleRunOpen = () => {
     setopenRunModel(true);
   };
+  // eslint-disable-next-line no-shadow
   const handleSearch = async (params: ISearchParams) => {
     setSearchParams({
       ...params
@@ -74,7 +78,6 @@ export const EndOfDaySetupTable = () => {
       )}
     </Box>
   ];
-
   return (
     <Box>
       <TopActionsArea actionButtons={actionButtons} />
@@ -82,17 +85,73 @@ export const EndOfDaySetupTable = () => {
         <FilterSection onSearch={handleSearch} />
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        <MuiTableContainer
-          columns={COLUMNS}
-          data={[]}
-          showHeader={{
-            hideFilterSection: true,
-            mainTitle: 'End of Day Overview',
-            secondaryTitle:
-              'See a directory of all End of Day ran on this system.'
-          }}
-          ActionMenuProps={ActionMenu}
-        />
+        {isLoading ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <MuiTableContainer
+            columns={COLUMNS}
+            data={logs}
+            showHeader={{
+              hideFilterSection: true,
+              mainTitle: 'End of Day Overview',
+              secondaryTitle:
+                'See a directory of all End of Day ran on this system.'
+            }}
+            ActionMenuProps={ActionMenu}
+            setPage={setPage}
+          >
+            {search ? (
+              logs?.map((dataItem: SearchIEODLogsResponse) => {
+                return (
+                  <StyledTableRow key={dataItem.id}>
+                    <StyledTableCell component="th" scope="row">
+                      {dataItem.fullName}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.createdOn}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.startTime}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.lastRunDate}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <Status
+                        label={
+                          Number(dataItem.status) === 1
+                            ? 'Completed'
+                            : 'Not Completed'
+                        }
+                        status={
+                          Number(dataItem.status) === 1
+                            ? 'Completed'
+                            : 'Not Completed'
+                        }
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {dataItem.totalCompletedPercetage}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <ActionMenu id={dataItem.id} />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={COLUMNS.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody(logs)}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
+        )}
       </Box>
     </Box>
   );

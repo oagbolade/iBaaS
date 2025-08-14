@@ -38,7 +38,7 @@ export const GroupLoanReport = () => {
       }}
     >
       <TopOverViewSection useBackButton />
-      
+
       <Box
         sx={{
           padding: '25px',

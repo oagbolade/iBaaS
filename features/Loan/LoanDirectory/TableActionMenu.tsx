@@ -55,7 +55,6 @@ export const TableActionMenu = ({
     terminate: false,
     partialPayOff: false,
     restructLaon: false
-
   });
 
   const handleClose = (link: string | null = null) => {
@@ -98,9 +97,7 @@ export const TableActionMenu = ({
       terminate: shouldDisableTerminate,
       partialPayOff: shouldDisablePartailPayOff,
       restructLaon: shouldDisableRestructure
-
     }));
-
   }, []);
 
   return (
@@ -131,25 +128,18 @@ export const TableActionMenu = ({
             </Link>
           </MenuItem>
 
-          {status !== '3' && (
-            <>
-              <MenuItem
-                onClick={() => {
-                  return handleClose(null);
-                }}
-              >
-                <Link
-                  style={{
-                    pointerEvents: shouldDisable.cancel ? 'none' : 'auto'
-                  }}
-                  aria-disabled={shouldDisable.cancel}
-                  tabIndex={shouldDisable.cancel ? -1 : undefined}
-                  href={`/loan/loan-directory/cancel-loan/?accountNumber=${accountNumber as string}&action=${sanitize(status)}&customerId=${sanitize(customerId)}`}
-                >
-                  <TableMenuButton buttonTitle="Cancel Loan" />
-                </Link>
-              </MenuItem>
+          {status === '1' && (
+            <MenuItem
+              onClick={() => {
+                return handleClose(null);
+              }}
+            >
+              <TableMenuButton buttonTitle="Disburse Loan" />
+            </MenuItem>
+          )}
 
+          {status === '4' && (
+            <>
               <MenuItem
                 onClick={() => {
                   return handleClose(null);

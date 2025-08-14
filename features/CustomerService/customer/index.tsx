@@ -54,15 +54,18 @@ const CustomerAccountActionMenuProps = ({
   accountNumber,
   status,
   productType,
+  branchCode
 }: {
   customerId: string;
   accountNumber: string;
   productType: string;
+  branchCode: string;
   status: number;
 }): React.ReactElement => {
   return (
     <CustomerAccountTableActionMenu
       productType={productType}
+      branchCode={branchCode}
       customerId={customerId}
       accountNumber={accountNumber}
       status={status}
@@ -225,6 +228,7 @@ const AccountOverviewTable = ({
                       customerId={dataItem?.customerid || 'N/A'}
                       status={dataItem?.status}
                       accountNumber={dataItem?.accountnumber || 'N/A'}
+                      branchCode={dataItem?.branchcode || 'N/A'}
                     />
                   </StyledTableCell>
                 </StyledTableRow>

@@ -43,7 +43,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
   return (
     <Grid sx={{ padding: '5px 5px', display: 'flex', gap: '35px' }} spacing={2}>
       <Grid
-        mb={{ tablet: 3}}
+        mb={{ tablet: 3 }}
         item
         mobile={12}
         tablet={3}

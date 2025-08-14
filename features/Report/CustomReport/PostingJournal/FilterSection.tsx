@@ -61,7 +61,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         validationSchema={prostingJournalSchema}
       >
         <Form>
-         
           <Box
             sx={{
               marginTop: '30px',

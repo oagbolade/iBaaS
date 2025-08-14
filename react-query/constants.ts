@@ -227,6 +227,9 @@ interface IQueryKeys {
   profitAndLoss: string;
   getTreasuryProductByCode: string;
   getGLWithBranchCode: string;
+  getEODLogs: string;
+  getEODResult: string;
+  getEODProcesslog: string;
 }
 
 export const queryKeys: IQueryKeys = {
@@ -457,5 +460,8 @@ export const queryKeys: IQueryKeys = {
   getProductClassByCategory: 'getProductClassByCategory',
   getProductTypeId: 'getProductTypeId',
   getTreasuryProductByCode: 'getTreasuryProductByCode',
-  getGLWithBranchCode: 'getGLWithBranchCode'
+  getGLWithBranchCode: 'getGLWithBranchCode',
+  getEODLogs: 'getEODLogs',
+  getEODResult: 'getEODResult',
+  getEODProcesslog: 'getEODProcesslog'
 };

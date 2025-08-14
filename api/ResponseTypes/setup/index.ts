@@ -170,6 +170,31 @@ export interface SearchLoanProductResponse extends IFetchingState {
   moduleCode: string;
   productcode: string;
 }
+export interface SearchIEODLogsResponse extends IFetchingState {
+  id: number;
+  lastRunDate: string;
+  startTime: string;
+  endTime: string;
+  totalUncompletedPercetage: number;
+  totalCompletedPercetage: number;
+  userId: string;
+  fullName: string;
+  status: number;
+  createdOn: string;
+}
+export interface SearchProcessEODLogsResponse extends IFetchingState {
+  taskid: number;
+  taskname: string;
+  startTime: string;
+  endTime: string;
+  procDate: string;
+  taskStatus: string;
+  eoddate: string;
+  status: string;
+  retMsg: string;
+  createDate: string;
+  actionCode: number;
+}
 export interface SearchSetupConditionResponse extends IFetchingState {
   description: string;
   code: string;

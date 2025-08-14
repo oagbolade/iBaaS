@@ -31,8 +31,7 @@ import {
 } from '@/components/Revamp/Modal/style';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { handleRedirect, useCurrentBreakpoint } from '@/utils';
-import { RadioButtons2 } from '@/components/Revamp/Radio/RadioButton2';
-import { cancelButton } from '@/features/Requests/styles';
+import { useCreateRunEOD } from '@/api/operation/useEndOfDay';
 
 type Props = {
   handleClose: Function;
@@ -45,9 +44,9 @@ export const RunEndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
   const handleChange = (value: string) => {
     setAddValues(value);
   };
+  const { mutate } = useCreateRunEOD();
   const handleContinue = () => {
-    const path = '/operation/createEndofday/';
-    router.push(path);
+    mutate();
   };
   return (
     <Box sx={AccountPasswordContainer}>

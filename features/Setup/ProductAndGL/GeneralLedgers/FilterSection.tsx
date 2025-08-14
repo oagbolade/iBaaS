@@ -69,7 +69,7 @@ export const FilterSection = ({ onSearch, status, placeholderProp }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields,
+                ...inputFields
               }}
               name="status"
               options={mappedStatus}
@@ -87,7 +87,7 @@ export const FilterSection = ({ onSearch, status, placeholderProp }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields,
+                ...inputFields
               }}
               icon={<SearchIcon />}
               name="gl_NodeName"

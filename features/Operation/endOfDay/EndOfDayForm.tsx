@@ -32,6 +32,7 @@ import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { handleRedirect, useCurrentBreakpoint } from '@/utils';
 import { RadioButtons2 } from '@/components/Revamp/Radio/RadioButton2';
 import { cancelButton } from '@/features/Requests/styles';
+import { useCreateRunEOD } from '@/api/operation/useEndOfDay';
 
 type Props = {
   handleClose: Function;
@@ -44,6 +45,7 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
   const handleChange = (value: string) => {
     setAddValues(value);
   };
+  const { mutate } = useCreateRunEOD();
   const handleContinue = () => {
     const path =
       addValues === '2'

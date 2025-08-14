@@ -105,9 +105,8 @@ export const AccountEnquiry = () => {
 
   return (
     <Box sx={{ marginTop: '60px', width: '100%' }}>
-
       <TopOverViewSection useBackButton />
-     
+
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}

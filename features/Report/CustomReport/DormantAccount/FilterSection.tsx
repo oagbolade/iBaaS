@@ -42,75 +42,74 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   };
 
   return (
-
-      <Formik
-        initialValues={searchFilterInitialValues}
-        onSubmit={(values) => onSubmit(values)}
-        validationSchema={dormantAccountSchema}
-      >
-        <Form>
-          <Box
-            sx={{
-              marginTop: '10px'
-            }}
-          >
-            <Box>
-              <Grid container spacing={2}>
-                <Grid item mobile={12} tablet={3} justifyContent="center">
-                  <FormSelectField
-                    customStyle={{
-                      width: setWidth(),
-                      ...inputFields
-                    }}
-                    name="branchID"
-                    options={mappedBranches}
-                    label="Branch Name"
-                  />{' '}
-                </Grid>
-
-                <Grid
-                  mb={{ tablet: 6 }}
-                  item
-                  mobile={12}
-                  tablet={8}
-                  justifyContent="center"
-                  marginTop={3}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(),
-                      ...inputFields
-                    }}
-                    icon={<SearchIcon />}
-                    name="searchWith"
-                    placeholder=" Enter Account number"
-                    label=""
-                  />
-                </Grid>
-                <Grid
-                  item
-                  mobile={12}
-                  tablet={1}
-                  sx={{ display: 'flex' }}
-                  justifyContent="flex-end"
-                  mt={{ tablet: 3.2 }}
-                  mr={{ mobile: 30, tablet: 0 }}
-                  mb={{ mobile: 6, tablet: 0 }}
-                >
-                  <ActionButton
-                    customStyle={{
-                      backgroundColor: `${colors.activeBlue400}`,
-                      border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`
-                    }}
-                    type="submit"
-                    buttonTitle="Search"
-                  />
-                </Grid>
+    <Formik
+      initialValues={searchFilterInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={dormantAccountSchema}
+    >
+      <Form>
+        <Box
+          sx={{
+            marginTop: '10px'
+          }}
+        >
+          <Box>
+            <Grid container spacing={2}>
+              <Grid item mobile={12} tablet={3} justifyContent="center">
+                <FormSelectField
+                  customStyle={{
+                    width: setWidth(),
+                    ...inputFields
+                  }}
+                  name="branchID"
+                  options={mappedBranches}
+                  label="Branch Name"
+                />{' '}
               </Grid>
-            </Box>
+
+              <Grid
+                mb={{ tablet: 6 }}
+                item
+                mobile={12}
+                tablet={8}
+                justifyContent="center"
+                marginTop={3}
+              >
+                <FormTextInput
+                  customStyle={{
+                    width: setWidth(),
+                    ...inputFields
+                  }}
+                  icon={<SearchIcon />}
+                  name="searchWith"
+                  placeholder=" Enter Account number"
+                  label=""
+                />
+              </Grid>
+              <Grid
+                item
+                mobile={12}
+                tablet={1}
+                sx={{ display: 'flex' }}
+                justifyContent="flex-end"
+                mt={{ tablet: 3.2 }}
+                mr={{ mobile: 30, tablet: 0 }}
+                mb={{ mobile: 6, tablet: 0 }}
+              >
+                <ActionButton
+                  customStyle={{
+                    backgroundColor: `${colors.activeBlue400}`,
+                    border: `1px solid ${colors.activeBlue400}`,
+                    color: `${colors.white}`
+                  }}
+                  type="submit"
+                  buttonTitle="Search"
+                />
+              </Grid>
+            </Grid>
           </Box>
-        </Form>
-      </Formik>
+        </Box>
+      </Form>
+    </Formik>
   );
 };

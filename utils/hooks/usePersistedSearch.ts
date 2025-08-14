@@ -10,7 +10,9 @@ type PersistedSearchState<T> = {
   resetSearchState: () => void;
 };
 
-export function usePersistedSearch<T>(storageKeyPrefix: string): PersistedSearchState<T> {
+export function usePersistedSearch<T>(
+  storageKeyPrefix: string
+): PersistedSearchState<T> {
   const [searchParams, setSearchParamsState] = useState<T | null>(null);
   const [searchActive, setSearchActiveState] = useState(false);
   const [page, setPageState] = useState(1);

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -131,7 +132,7 @@ export const LoanDirectory = () => {
         <MuiTableContainer
           columns={COLUMNS}
           tableConfig={{
-            hasActions: true,
+            hasActions: true
           }}
           data={getAllLoanData}
           totalPages={totalPages}

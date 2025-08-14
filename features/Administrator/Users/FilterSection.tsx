@@ -27,18 +27,18 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     status: searchParams?.status ?? '',
-    fullName: searchParams?.fullName ?? '',
+    fullName: searchParams?.fullName ?? ''
   };
   const onSubmit = async (values: any) => {
     const statusOption = document.getElementsByClassName(
-      'statusOption',
+      'statusOption'
     ) as HTMLCollectionOf<HTMLInputElement>;
     const status = statusOption[0].value || '';
 
     const params: ISearchParams = {
       status: status?.trim().length > 0 ? status : null,
       branchID: values.branchID?.toString().length > 0 ? values.branchID : null,
-      fullName: values.search?.toString().length > 0 ? values.search : null,
+      fullName: values.search?.toString().length > 0 ? values.search : null
     };
 
     onSearch(params);
@@ -58,7 +58,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               display: 'flex',
               alignItems: 'center',
               marginBottom: '50px',
-              gap: '20px',
+              gap: '20px'
             }}
           >
             <Grid>
@@ -66,7 +66,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 className="statusOption"
                 options={[
                   { label: 'Active', value: '1' },
-                  { label: 'Disabled', value: '3' },
+                  { label: 'Disabled', value: '3' }
                 ]}
                 title="User Status"
                 name="status"
@@ -75,7 +75,9 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
             </Grid>
             <Grid>
               <FormSelectField
-                customStyle={{ width: '200px', fontSize: '14px' }}
+                customStyle={{
+                  width: '200px'
+                }}
                 name="branchID"
                 options={mappedBranches}
                 label="Branch ID"
@@ -85,8 +87,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               <FormTextInput
                 customStyle={{
                   width: '960px',
-                  fontSize: '14px',
-                  marginTop: '5px',
+                  marginTop: '5px'
                 }}
                 icon={<SearchIcon />}
                 name="search"

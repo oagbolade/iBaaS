@@ -59,6 +59,7 @@ export const AddCheque = ({
   const { checkbooks, isLoading } = useGetChequeById(
     encryptData(chequeId ?? '') || null
   );
+  // const branchCode = `${getStoredUser()?.profiles?.branchCode}` On hold;
   const userId = `${getStoredUser()?.profiles?.userid}`;
   const { userDetails } = useGetUserByID(encryptData(userId as string));
   const branchCodeId = userDetails?.branchcode;

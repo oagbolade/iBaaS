@@ -371,6 +371,7 @@ export interface CreateDemandDepositFormValues {
   minAge: number;
   maxAge: number;
   micincome: number;
+  phoneNo4AcctNumber: number;
   ProdDocuments: [];
   ProdCharges: [];
   ProdException: [];
@@ -682,6 +683,7 @@ export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   minAge: 0,
   maxAge: 0,
   micincome: 0,
+  phoneNo4AcctNumber: 0,
   ProdDocuments: [],
   ProdCharges: [],
   ProdException: []

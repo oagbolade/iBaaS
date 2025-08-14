@@ -42,7 +42,9 @@ export const TopOverViewSection = ({
         zIndex: 3,
         backgroundColor: `${colors.white}`,
         borderLeft: `1px solid ${colors.loanTitleColor}`,
-        borderBottom: useBackButton ? `1px solid ${colors.loanTitleColor}` : 'none',
+        borderBottom: useBackButton
+          ? `1px solid ${colors.loanTitleColor}`
+          : 'none',
         paddingLeft: '10px',
         paddingRight: '10px'
       }}
@@ -85,27 +87,23 @@ export const TopOverViewSection = ({
             buttonTitle="Export Data"
           />
         </Box>
-        <Box >
-
-          {
-            showDatePicker ? (
-              <ActionButtonWithPopper
-            CustomDateRangePicker={CustomDateRangePicker}
-            searchGroupVariant="DateRangePicker"
-            customStyle={{ ...dateFilter }}
-            icon={
-              <CalendarTodayOutlinedIcon
-                sx={{
-                  color: `${colors.Heading}`
-                }}
-              />
-            }
-            iconPosition="end"
-            buttonTitle={formattedDateRange}
-          />
-            ) : null
-          }
-         
+        <Box>
+          {showDatePicker ? (
+            <ActionButtonWithPopper
+              CustomDateRangePicker={CustomDateRangePicker}
+              searchGroupVariant="DateRangePicker"
+              customStyle={{ ...dateFilter }}
+              icon={
+                <CalendarTodayOutlinedIcon
+                  sx={{
+                    color: `${colors.Heading}`
+                  }}
+                />
+              }
+              iconPosition="end"
+              buttonTitle={formattedDateRange}
+            />
+          ) : null}
         </Box>
       </Stack>
     </Stack>

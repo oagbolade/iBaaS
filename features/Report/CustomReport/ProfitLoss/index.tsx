@@ -74,7 +74,6 @@ export const ProfitLoss = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      
       <Box>
         {branches && (
           <FilterSection branches={branches} onSearch={handleSearch} />

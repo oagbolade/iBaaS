@@ -4,6 +4,41 @@ export interface ITransactionType {
   trancode: string;
   tranname: string;
 }
+
+export interface IEODLogs {
+  id: number;
+  lastRunDate: string;
+  startTime: string;
+  endTime: string;
+  totalUncompletedPercetage: number;
+  totalCompletedPercetage: number;
+  userId: string;
+  fullName: string;
+  status: number;
+  createdOn: string;
+}
+export interface IEODViewLogs {
+  taskid: number;
+  taskname: string;
+  procName: string;
+  startTime: string;
+  endTime: string;
+  procDate: string;
+  taskStatus: string;
+}
+export interface IEODProcess {
+  taskid: number;
+  taskname: string;
+  startTime: string;
+  endTime: string;
+  procDate: string;
+  taskStatus: string;
+  eoddate: string;
+  status: string;
+  retMsg: string;
+  createDate: string;
+  actionCode: number;
+}
 export interface IGetZone {
   zoneid: string;
   zoneName: string;
@@ -72,6 +107,22 @@ export interface GetAllTransactionTypeResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
   details?: ITransactionType[] | Array<any>;
+}
+
+export interface GetAllEODDAYResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IEODViewLogs[] | Array<any>;
+}
+export interface GetProcessEODDAYResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IEODProcess[] | Array<any>;
+}
+export interface GetEODDAYResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IEODLogs[] | Array<any>;
 }
 
 export interface GetGenerateBatchNoResponse extends IFetchingState {

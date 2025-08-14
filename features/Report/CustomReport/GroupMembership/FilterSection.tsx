@@ -63,114 +63,112 @@ export const FilterSection = ({
   };
 
   return (
-   
-      <Formik
-        initialValues={searchFilterInitialValues}
-        onSubmit={(values) => onSubmit(values)}
-        validationSchema={groupMembershipSchema}
-      >
-        <Form>
-          <Box
-            sx={{
-              marginTop: '20px',
-              paddingX: '24px'
-            }}
-          >
-            <Box>
-              <Grid container spacing={2}>
-                <Grid item mobile={12} tablet={3} justifyContent="center">
-                  <FormSelectField
-                    customStyle={{
-                      width: setWidth(),
-                      ...inputFields
-                    }}
-                    name="branchID"
-                    options={mappedBranches}
-                    label="Branch Name"
-                    required
-                  />{' '}
-                </Grid>
-
-                <Grid
-                  mb={{ tablet: 2.5 }}
-                  item
-                  mobile={12}
-                  tablet={2.5}
-                  justifyContent="center"
-                >
-                  <FormSelectField
-                    customStyle={{
-                      width: setWidth(),
-                      ...inputFields
-                    }}
-                    name="officerCode"
-                    options={mappedAccountOfficers}
-                    label="Officer ID"
-                  />{' '}
-                </Grid>
-
-                <Grid
-                  mb={{ tablet: 2.5 }}
-                  item
-                  mobile={12}
-                  tablet={2.5}
-                  justifyContent="center"
-                >
-                  <FormSelectField
-                    customStyle={{
-                      width: setWidth(),
-                      ...inputFields
-                    }}
-                    name="groupId"
-                    options={mappedGroups}
-                    label="Group Name"
-                  />{' '}
-                </Grid>
-
-                <Grid
-                  mb={{ tablet: 4 }}
-                  item
-                  mobile={12}
-                  tablet={3}
-                  justifyContent="center"
-                  marginTop={3}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(),
-                      ...inputFields
-                    }}
-                    icon={<SearchIcon />}
-                    name="searchWith"
-                    placeholder="Search by group name or group id"
-                    label=""
-                  />{' '}
-                </Grid>
-                <Grid
-                  item
-                  mobile={12}
-                  tablet={1}
-                  sx={{ display: 'flex' }}
-                  justifyContent="flex-end"
-                  mt={{ tablet: 3.2 }}
-                  mr={{ mobile: 30, tablet: 0 }}
-                  mb={{ mobile: 6, tablet: 0 }}
-                >
-                  <ActionButton
-                    customStyle={{
-                      backgroundColor: `${colors.activeBlue400}`,
-                      border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`
-                    }}
-                    type="submit"
-                    buttonTitle="Search"
-                  />
-                </Grid>
+    <Formik
+      initialValues={searchFilterInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={groupMembershipSchema}
+    >
+      <Form>
+        <Box
+          sx={{
+            marginTop: '20px',
+            paddingX: '24px'
+          }}
+        >
+          <Box>
+            <Grid container spacing={2}>
+              <Grid item mobile={12} tablet={3} justifyContent="center">
+                <FormSelectField
+                  customStyle={{
+                    width: setWidth(),
+                    ...inputFields
+                  }}
+                  name="branchID"
+                  options={mappedBranches}
+                  label="Branch Name"
+                  required
+                />{' '}
               </Grid>
-            </Box>
+
+              <Grid
+                mb={{ tablet: 2.5 }}
+                item
+                mobile={12}
+                tablet={2.5}
+                justifyContent="center"
+              >
+                <FormSelectField
+                  customStyle={{
+                    width: setWidth(),
+                    ...inputFields
+                  }}
+                  name="officerCode"
+                  options={mappedAccountOfficers}
+                  label="Officer ID"
+                />{' '}
+              </Grid>
+
+              <Grid
+                mb={{ tablet: 2.5 }}
+                item
+                mobile={12}
+                tablet={2.5}
+                justifyContent="center"
+              >
+                <FormSelectField
+                  customStyle={{
+                    width: setWidth(),
+                    ...inputFields
+                  }}
+                  name="groupId"
+                  options={mappedGroups}
+                  label="Group Name"
+                />{' '}
+              </Grid>
+
+              <Grid
+                mb={{ tablet: 4 }}
+                item
+                mobile={12}
+                tablet={3}
+                justifyContent="center"
+                marginTop={3}
+              >
+                <FormTextInput
+                  customStyle={{
+                    width: setWidth(),
+                    ...inputFields
+                  }}
+                  icon={<SearchIcon />}
+                  name="searchWith"
+                  placeholder="Search by group name or group id"
+                  label=""
+                />{' '}
+              </Grid>
+              <Grid
+                item
+                mobile={12}
+                tablet={1}
+                sx={{ display: 'flex' }}
+                justifyContent="flex-end"
+                mt={{ tablet: 3.2 }}
+                mr={{ mobile: 30, tablet: 0 }}
+                mb={{ mobile: 6, tablet: 0 }}
+              >
+                <ActionButton
+                  customStyle={{
+                    backgroundColor: `${colors.activeBlue400}`,
+                    border: `1px solid ${colors.activeBlue400}`,
+                    color: `${colors.white}`
+                  }}
+                  type="submit"
+                  buttonTitle="Search"
+                />
+              </Grid>
+            </Grid>
           </Box>
-        </Form>
-      </Formik>
-    
+        </Box>
+      </Form>
+    </Formik>
   );
 };
