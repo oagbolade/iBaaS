@@ -12,6 +12,7 @@ import { IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IStates } from '@/api/ResponseTypes/customer-service';
 import { IRegionByCode } from '@/api/ResponseTypes/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -21,12 +22,20 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status, states, region }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('company-states');
   const { mappedStatus, mappedState, mappedRegion } = useMapSelectOptions({
     status,
     states,
-    region
+    region,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    stateName: searchParams?.stateName ?? '',
+    status: searchParams?.status ?? '',
+    stateCode: searchParams?.stateCode ?? '',
+    region: searchParams?.region ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -35,14 +44,15 @@ export const FilterSection = ({ onSearch, status, states, region }: Props) => {
         values.stateName?.toString().length > 0 ? values.stateName : null,
       stateCode:
         values.stateCode?.toString().length > 0 ? values.stateCode : null,
-      region: values.region?.toString().length > 0 ? values.region : null
+      region: values.region?.toString().length > 0 ? values.region : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -59,7 +69,7 @@ export const FilterSection = ({ onSearch, status, states, region }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -77,7 +87,7 @@ export const FilterSection = ({ onSearch, status, states, region }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="region"
                 options={mappedRegion}
@@ -95,7 +105,7 @@ export const FilterSection = ({ onSearch, status, states, region }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="stateCode"
                 options={mappedState}
@@ -113,7 +123,7 @@ export const FilterSection = ({ onSearch, status, states, region }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="stateName"

@@ -7,7 +7,7 @@ import { COLUMNS } from './COLUMNS';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
   submitButton,
-  cancelButton
+  cancelButton,
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MuiTableContainer } from '@/components/Table';
 
@@ -22,6 +22,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { SearchDepartmentResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { DepartmentSearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -32,23 +33,28 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const DepartmentTable = () => {
-  const [page, setPage] = useState(1);
   const { status } = useGetStatus();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('company-departments');
   const {
     totalPages,
     totalElements,
     data: departmentData,
-    isLoading
+    isLoading,
   } = useFilterDepartmentSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenu = ({ deptid }: { deptid: string }): React.ReactElement => {
     return (
@@ -76,7 +82,7 @@ export const DepartmentTable = () => {
               hideFilterSection: true,
               mainTitle: 'Department',
               secondaryTitle:
-                'See a directory of all departments setup in this system.'
+                'See a directory of all departments setup in this system.',
             }}
             ActionMenuProps={ActionMenu}
             totalPages={totalPages}
@@ -84,7 +90,7 @@ export const DepartmentTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               departmentData?.map((dataItem: SearchDepartmentResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>

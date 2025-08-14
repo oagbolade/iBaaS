@@ -13,12 +13,12 @@ import { ActionButton } from '@/components/Revamp/Buttons';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import {
   submitButton,
-  cancelButton
+  cancelButton,
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody
+  renderEmptyTableBody,
 } from '@/components/Table/Table';
 import { TabsV2 } from '@/components/Revamp/TabsV2';
 import { useGetBranches } from '@/api/general/useBranches';
@@ -26,13 +26,14 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useGetStatus } from '@/api/general/useStatus';
 import {
   useFilterCustomerAccountSearch,
-  useFilterCustomerSearch
+  useFilterCustomerSearch,
 } from '@/api/customer-service/useCustomer';
 import { FormSkeleton } from '@/components/Loaders';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchCustomerAccountResponse } from '@/api/ResponseTypes/customer-service';
 import { Status } from '@/components/Labels';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export interface IOptions {
   buttonTitle: string;
@@ -41,7 +42,7 @@ export interface IOptions {
 }
 
 const CustomerActionMenuProps = ({
-  customerId
+  customerId,
 }: {
   customerId: string;
 }): React.ReactElement => {
@@ -52,7 +53,7 @@ const CustomerAccountActionMenuProps = ({
   customerId,
   accountNumber,
   status,
-  productType
+  productType,
 }: {
   customerId: string;
   accountNumber: string;
@@ -86,13 +87,13 @@ const CustomerOverviewTable = ({
   page,
   search,
   totalPages,
-  totalElements
+  totalElements,
 }: CustomerOverviewTableProps) => {
   return (
     <Box
       sx={{
         position: { mobile: 'relative' },
-        width: '100%'
+        width: '100%',
       }}
     >
       {isLoading ? (
@@ -101,7 +102,7 @@ const CustomerOverviewTable = ({
         <MuiTableContainer
           columns={COLUMNS}
           tableConfig={{
-            hasActions: true
+            hasActions: true,
           }}
           setPage={setPage}
           page={page}
@@ -111,7 +112,7 @@ const CustomerOverviewTable = ({
           showHeader={{
             hideFilterSection: true,
             mainTitle: 'Customer Overview',
-            secondaryTitle: 'See a directory of all customers on this system.'
+            secondaryTitle: 'See a directory of all customers on this system.',
           }}
         >
           {search ? (
@@ -169,13 +170,13 @@ const AccountOverviewTable = ({
   page,
   search,
   totalPages,
-  totalElements
+  totalElements,
 }: CustomerOverviewTableProps) => {
   return (
     <Box
       sx={{
         position: { mobile: 'relative' },
-        width: '100%'
+        width: '100%',
       }}
     >
       {isLoading ? (
@@ -184,7 +185,7 @@ const AccountOverviewTable = ({
         <MuiTableContainer
           columns={CUSTOMER_ACCOUNT_COLUMNS}
           tableConfig={{
-            hasActions: true
+            hasActions: true,
           }}
           setPage={setPage}
           page={page}
@@ -194,7 +195,7 @@ const AccountOverviewTable = ({
           showHeader={{
             mainTitle: 'Account Overview',
             secondaryTitle: 'See a directory of all accounts on this system.',
-            hideFilterSection: true
+            hideFilterSection: true,
           }}
         >
           {search ? (
@@ -254,35 +255,50 @@ interface IHasUserSearchedProps {
 }
 
 const PreviewTable = () => {
-  const [page, setPage] = React.useState(1);
-  const [accountSearchpage, setAccountSearchPage] = React.useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [accountSearchParams, setAccountSearchParams] =
     useState<ISearchParams | null>(null);
   const [hasUserSearched, setHasUserSearched] = useState<IHasUserSearchedProps>(
-    { customer: false, account: false }
+    { customer: false, account: false },
   );
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('customer-overview');
+
+  const {
+    searchParams: searchParamsAccount,
+    setSearchParams: setSearchParamsAccount,
+    searchActive: searchActiveAccount,
+    setSearchActive: setSearchActiveAccount,
+    page: pageAccount,
+    setPage: setPageAccount,
+  } = usePersistedSearch<ISearchParams>('account-overview');
   const {
     totalPages,
     totalElements,
     data: customerData,
     isLoading: isCustomerDataLoading,
-    isFetching
+    isFetching,
   } = useFilterCustomerSearch({ ...searchParams, page });
 
   const {
     totalPages: totalAccountPages,
     totalElements: totalAccountElements,
     data: customerAccountData,
-    isLoading: isCustomerAccountDataLoading
+    isLoading: isCustomerAccountDataLoading,
   } = useFilterCustomerAccountSearch({
-    ...accountSearchParams,
-    page: accountSearchpage
+    ...searchParamsAccount,
+    page: pageAccount,
   });
 
   const pageMenu = [
     <CustomerOverviewTable
-      search={hasUserSearched.customer}
+      search={searchActive}
       setPage={setPage}
       page={page}
       totalPages={totalPages}
@@ -291,14 +307,14 @@ const PreviewTable = () => {
       isLoading={isCustomerDataLoading || isFetching}
     />,
     <AccountOverviewTable
-      search={hasUserSearched.account}
-      setPage={setAccountSearchPage}
-      page={accountSearchpage}
+      search={searchActiveAccount}
+      setPage={setPageAccount}
+      page={pageAccount}
       totalPages={totalAccountPages}
       totalElements={totalAccountElements}
       customerData={customerAccountData}
       isLoading={isCustomerAccountDataLoading}
-    />
+    />,
   ];
 
   const [value, setValue] = useState(0);
@@ -314,14 +330,16 @@ const PreviewTable = () => {
   const handleSearch = async (params: ISearchParams | null, name: string) => {
     setHasUserSearched((prev) => ({
       ...prev,
-      [name]: true
+      [name]: true,
     }));
 
     if (name === 'account') {
-      setAccountSearchParams(params);
+      setSearchParamsAccount(params);
+      setSearchActiveAccount(true);
       return;
     }
     setSearchParams(params);
+    setSearchActive(true);
   };
 
   return (
@@ -366,23 +384,23 @@ const PreviewTable = () => {
 export const CustomerContainer = () => {
   const [shouldDisableCreation, setShouldDisableCreation] = React.useState({
     customer: false,
-    account: false
+    account: false,
   });
 
   React.useEffect(() => {
     const shouldDisableCustomerCreation = !checkMultipleUserRoleAccess(
       'Customer',
-      'CUSTOMER CREATION'
+      'CUSTOMER CREATION',
     );
     const shouldDisableAccountCreation = !checkMultipleUserRoleAccess(
       'Customer',
-      'ACCOUNT CREATION'
+      'ACCOUNT CREATION',
     );
 
     setShouldDisableCreation((prev) => ({
       ...prev,
       customer: shouldDisableCustomerCreation,
-      account: shouldDisableAccountCreation
+      account: shouldDisableAccountCreation,
     }));
   }, []);
 
@@ -390,7 +408,7 @@ export const CustomerContainer = () => {
     <Box ml={{ mobile: 2, desktop: 0 }}>
       <Link
         style={{
-          pointerEvents: shouldDisableCreation.account ? 'none' : 'auto'
+          pointerEvents: shouldDisableCreation.account ? 'none' : 'auto',
         }}
         aria-disabled={shouldDisableCreation.account}
         tabIndex={shouldDisableCreation.account ? -1 : undefined}
@@ -406,7 +424,7 @@ export const CustomerContainer = () => {
     <Box ml={{ mobile: 2, desktop: 0 }}>
       <Link
         style={{
-          pointerEvents: shouldDisableCreation.customer ? 'none' : 'auto'
+          pointerEvents: shouldDisableCreation.customer ? 'none' : 'auto',
         }}
         aria-disabled={shouldDisableCreation.customer}
         tabIndex={shouldDisableCreation.customer ? -1 : undefined}
@@ -418,7 +436,7 @@ export const CustomerContainer = () => {
           customStyle={{ ...submitButton }}
         />
       </Link>
-    </Box>
+    </Box>,
   ];
 
   return (

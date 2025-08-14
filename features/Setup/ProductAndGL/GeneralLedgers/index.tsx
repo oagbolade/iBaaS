@@ -12,7 +12,7 @@ import { ActionButton } from '@/components/Revamp/Buttons';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import {
   submitButton,
-  cancelButton
+  cancelButton,
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MuiTableContainer } from '@/components/Table';
 import { tabStyle } from '@/features/Setup/ProductAndGL/style';
@@ -26,10 +26,11 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import {
   SearchGLClassResponse,
-  SearchGLNodeResponse
+  SearchGLNodeResponse,
 } from '@/api/ResponseTypes/setup';
 import { useFilterGLClassSearch } from '@/api/setup/useGeneralClass';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -46,31 +47,40 @@ export const actionButtons: any = [
         buttonTitle="Add GL Class"
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 type ClassProps = {
   onSearch: (params: ISearchParams) => Promise<void>;
   searchParams: ISearchParams | null;
   search: boolean;
+  page: number;
+  setPage: any;
 };
 type NodeProps = {
   onSearch: (params: ISearchParams) => Promise<void>;
   searchParams: ISearchParams | null;
   search: boolean;
+  page: number;
+  setPage: any;
 };
 
-const GLNodeTable = ({ onSearch, search, searchParams }: NodeProps) => {
-  const [page, setPage] = useState(1);
+const GLNodeTable = ({
+  onSearch,
+  search,
+  searchParams,
+  page,
+  setPage,
+}: NodeProps) => {
   const {
     totalPages,
     totalElements,
     data: glNodeData,
-    isLoading
+    isLoading,
   } = useFilterGLNodeSearch({ ...searchParams, page });
   const ActionMenu = ({
     glNodeCode,
-    prodCode
+    prodCode,
   }: {
     glNodeCode: string;
     prodCode: string;
@@ -96,7 +106,7 @@ const GLNodeTable = ({ onSearch, search, searchParams }: NodeProps) => {
             hideFilterSection: true,
             mainTitle: 'GL Node',
             secondaryTitle:
-              'See a directory of all GL Node setup in this system.'
+              'See a directory of all GL Node setup in this system.',
           }}
           ActionMenuProps={ActionMenu}
           totalPages={totalPages}
@@ -157,17 +167,22 @@ const GLNodeTable = ({ onSearch, search, searchParams }: NodeProps) => {
   );
 };
 
-const GLClassTable = ({ onSearch, searchParams, search }: ClassProps) => {
-  const [page, setPage] = useState(1);
+const GLClassTable = ({
+  onSearch,
+  searchParams,
+  search,
+  page,
+  setPage,
+}: ClassProps) => {
   const {
     totalPages,
     totalElements,
     data: glClassData,
-    isLoading
+    isLoading,
   } = useFilterGLClassSearch({ ...searchParams, page });
 
   const ActionMenu = ({
-    glClassCode
+    glClassCode,
   }: {
     glClassCode: string;
   }): React.ReactElement => {
@@ -192,7 +207,7 @@ const GLClassTable = ({ onSearch, searchParams, search }: ClassProps) => {
             mainTitle: 'GL Class',
             secondaryTitle:
               'See a directory of all GL Class setup in this system.',
-            hideFilterSection: true
+            hideFilterSection: true,
           }}
           ActionMenuProps={ActionMenu}
           totalPages={totalPages}
@@ -250,32 +265,50 @@ const tabTitle = ['GL Node', 'GL Class'];
 const PreviewTable = () => {
   const [value, setValue] = useState(0);
   const { status } = useGetStatus();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
-  const [nodeSearch, setNodeSearch] = useState<boolean>(false);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('general-ledgers-class');
+  const {
+    searchParams: searchParamsNode,
+    setSearchParams: setSearchParamsNode,
+    searchActive: searchActiveNode,
+    setSearchActive: setSearchActiveNode,
+    page: pageNode,
+    setPage: setPageNode,
+  } = usePersistedSearch<ISearchParams>('general-ledgers-node');
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   const handleNodeSearch = async (params: any) => {
-    setSearchParams(params);
-    setNodeSearch(true);
+    setSearchParamsNode(params);
+    setSearchActiveNode(true);
   };
 
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const pageMenu = [
     <GLNodeTable
       onSearch={handleNodeSearch}
-      searchParams={searchParams}
-      search={nodeSearch}
+      searchParams={searchParamsNode}
+      search={searchActiveNode}
+      page={pageNode}
+      setPage={setPageNode}
     />,
     <GLClassTable
       onSearch={handleSearch}
       searchParams={searchParams}
-      search={search}
-    />
+      search={searchActive}
+      page={page}
+      setPage={setPage}
+    />,
   ];
   return (
     <div>

@@ -28,6 +28,12 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
   });
   const { setWidth } = useCurrentBreakpoint();
 
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    status: searchParams?.status ?? '',
+    search: searchParams?.accountNumber ?? '',
+  };
+
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status.toString().length > 0 ? values.status : null,
@@ -40,7 +46,8 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={searchFieldsSchema}
     >

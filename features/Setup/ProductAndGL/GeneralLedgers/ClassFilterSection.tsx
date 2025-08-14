@@ -12,6 +12,7 @@ import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { GlClassSearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -22,26 +23,40 @@ type Props = {
 export const GLClassFilterSection = ({
   onSearch,
   status,
-  placeholderProp
+  placeholderProp,
 }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>(
+    'general-ledgers-class',
+  );
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
+
+  const initialValues = {
+    gl_ClassName: searchParams?.gl_ClassName ?? '',
+    status: searchParams?.status ?? '',
+    gl_ClassCode: searchParams?.gl_ClassCode ?? '',
+  };
+
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status?.toString().length > 0 ? values.status : null,
       gl_ClassName:
         values.gl_ClassName?.toString().length > 0 ? values.gl_ClassName : null,
       gl_ClassCode:
-        values.gl_ClassCode?.toString().length > 0 ? values.gl_ClassCode : null
+        values.gl_ClassCode?.toString().length > 0 ? values.gl_ClassCode : null,
     };
 
     onSearch?.(params);
   };
 
   return (
-    <Formik initialValues={searchFilterInitialValues} onSubmit={onSubmit}>
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={onSubmit}
+    >
       <Form>
         <Grid container spacing={2}>
           <Grid
@@ -55,7 +70,7 @@ export const GLClassFilterSection = ({
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields
+                ...inputFields,
               }}
               name="status"
               options={mappedStatus}
@@ -73,7 +88,7 @@ export const GLClassFilterSection = ({
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields
+                ...inputFields,
               }}
               icon={<SearchIcon />}
               name="gl_ClassName"

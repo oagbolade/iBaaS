@@ -7,7 +7,7 @@ import { COLUMNS } from './COLUMNS';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
   submitButton,
-  cancelButton
+  cancelButton,
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MuiTableContainer } from '@/components/Table';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -20,6 +20,7 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchChargeResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -29,28 +30,33 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const ChargesTable = () => {
   const { status } = useGetStatus();
 
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('setup-charges');
 
-  const [search, setSearch] = useState<boolean>(false);
   const {
     totalPages,
     totalElements,
     data: chargeData,
-    isLoading
+    isLoading,
   } = useFilterChargeSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenu = ({
-    chargeCode
+    chargeCode,
   }: {
     chargeCode: string;
   }): React.ReactElement => {
@@ -80,7 +86,7 @@ export const ChargesTable = () => {
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Charges',
-              secondaryTitle: 'See a directory of all Charges in this system.'
+              secondaryTitle: 'See a directory of all Charges in this system.',
             }}
             ActionMenuProps={ActionMenu}
             totalPages={totalPages}
@@ -88,7 +94,7 @@ export const ChargesTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               chargeData?.map((dataItem: SearchChargeResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>

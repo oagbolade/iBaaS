@@ -19,6 +19,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { Status } from '@/components/Labels';
 import { BranchSearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -28,32 +29,36 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Branch = () => {
-  const [page, setPage] = React.useState(1);
   const { status } = useGetStatus();
 
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('company-branches');
   const {
     totalPages,
     totalElements,
     data: branchData,
-    isLoading
+    isLoading,
   } = useFilterBranchSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenu = ({
-    branchCode
+    branchCode,
   }: {
     branchCode: string;
   }): React.ReactElement => {
@@ -80,7 +85,7 @@ export const Branch = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -93,7 +98,7 @@ export const Branch = () => {
                 mainTitle: 'Manage Branch',
                 secondaryTitle:
                   'See a directory of all branches in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -101,7 +106,7 @@ export const Branch = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 branchData?.map((dataItem: SearchBranchResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userId}>

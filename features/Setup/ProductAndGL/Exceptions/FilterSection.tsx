@@ -12,13 +12,21 @@ import { IProductType, IStatus } from '@/api/ResponseTypes/general';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { filterSectionSchema } from '@/schemas/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('exceptions');
   const { isMobile, setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    behaviour: searchParams?.behaviour ?? '',
+    exceptionDesc: searchParams?.exceptionDesc ?? '',
+    exceptioncode: searchParams?.exceptioncode ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -27,14 +35,15 @@ export const FilterSection = ({ onSearch }: Props) => {
       exceptionDesc:
         values.exceptionDesc?.toString().length > 0 ? values.exceptionDesc : '',
       exceptioncode:
-        values.exceptioncode?.toString().length > 0 ? values.exceptioncode : ''
+        values.exceptioncode?.toString().length > 0 ? values.exceptioncode : '',
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={filterSectionSchema}
     >
@@ -52,7 +61,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="behaviour"
                 options={EditOperations.behaviour}
@@ -70,7 +79,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="exceptionDesc"

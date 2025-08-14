@@ -9,19 +9,26 @@ import { ISearchParams } from '@/app/api/search/route';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { filterSectionSetupConditionSchema } from '@/schemas/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('setup-condition');
   const { isMobile, setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    description: searchParams?.description ?? '',
+    code: searchParams?.code ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       description:
         values.description?.toString().length > 0 ? values.description : null,
-      code: values.code?.toString().length > 0 ? values.code : null
+      code: values.code?.toString().length > 0 ? values.code : null,
     };
 
     onSearch?.(params);
@@ -29,7 +36,8 @@ export const FilterSection = ({ onSearch }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={filterSectionSetupConditionSchema}
     >
@@ -47,7 +55,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="description"

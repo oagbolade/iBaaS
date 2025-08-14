@@ -15,6 +15,7 @@ import { SearchExceptionResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 // ON HOld untill the product gives us go ahead
 export const actionButtons: any = [
@@ -27,29 +28,35 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const ExceptionsTable = () => {
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
   const [exceptionl, setexceptionl] = useState();
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('exceptions');
 
   const {
     totalPages,
     totalElements,
     data: exceptionlData,
-    isLoading
+    isLoading,
   } = useFilterExceptionSearch({ ...searchParams, page });
   const handleSearch = async (params: ISearchParams) => {
     setSearchParams({
-      ...params
+      ...params,
     });
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenu = ({
-    exceptionCode
+    exceptionCode,
   }: {
     exceptionCode: string;
   }): React.ReactElement => {
@@ -79,14 +86,14 @@ export const ExceptionsTable = () => {
               hideFilterSection: true,
               mainTitle: 'Exceptions',
               secondaryTitle:
-                'See a directory of all Exceptions in this system.'
+                'See a directory of all Exceptions in this system.',
             }}
             totalPages={totalPages}
             setPage={setPage}
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               exceptionlData?.map((dataItem: SearchExceptionResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>

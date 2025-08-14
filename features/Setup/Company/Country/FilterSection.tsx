@@ -11,6 +11,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { CountrySearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -18,10 +19,17 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('company-country');
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    countryName: searchParams?.countryName ?? '',
+    status: searchParams?.status ?? '',
+    countryCode: searchParams?.countryCode ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -30,14 +38,15 @@ export const FilterSection = ({ onSearch, status }: Props) => {
       countryName:
         values.countryName?.toString().length > 0 ? values.countryName : null,
       countryCode:
-        values.countryCode?.toString().length > 0 ? values.countryCode : null
+        values.countryCode?.toString().length > 0 ? values.countryCode : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -54,7 +63,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -72,7 +81,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="countryName"
