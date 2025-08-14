@@ -63,7 +63,7 @@ export const FormikDateTimePicker = ({
   handleDateChange,
   disableFuture,
   minDate,
-  maxDate,
+  maxDate
 }: Props) => {
   const { sysmodel, isLoading } = useGetSystemDate();
   const systemDate = sysmodel?.systemDate;

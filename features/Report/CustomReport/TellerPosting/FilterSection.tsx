@@ -44,7 +44,6 @@ export const FilterSection = ({ onSearch }: Props) => {
     <>
       <Stack
         sx={{
-        
           borderBottom: `1px solid ${colors.loanTitleColor}`,
           marginTop: '10px',
           paddingX: '24px',

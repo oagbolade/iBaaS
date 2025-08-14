@@ -122,9 +122,8 @@ export const TellerPosting = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-     
-        <FilterSection onSearch={handleSearch} />
-    
+      <FilterSection onSearch={handleSearch} />
+
       <Box sx={{ width: '100%', padding: '25px' }}>
         <MuiTableContainer
           tableConfig={{ hasActions: false }}

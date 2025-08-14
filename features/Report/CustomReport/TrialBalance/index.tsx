@@ -92,7 +92,6 @@ export const TrialBalance = () => {
         width: '100%'
       }}
     >
-
       <TopOverViewSection useBackButton />
       {branches && glType && (
         <FilterSection

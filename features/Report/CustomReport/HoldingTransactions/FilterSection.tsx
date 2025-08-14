@@ -59,8 +59,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         validationSchema={holdingTransactionSchema}
       >
         <Form>
-         
-
           <Box
             sx={{
               paddingX: '24px'

@@ -518,6 +518,7 @@ export interface SearchCustomerAccountResponse extends IFetchingState {
   productName: string;
   status: number;
   productcode: string;
+  branchcode: string;
 }
 
 export interface SearchStaffResponse extends IFetchingState {

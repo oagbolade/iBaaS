@@ -225,8 +225,8 @@ export const ChequeDeposit = ({
                 >
                   <FormTextInput
                     name="accountNumber2"
-                    placeholder="Enter Account Desination Number"
-                    label="Account Desination Number"
+                    placeholder="Enter Account Destination Number"
+                    label="Account Destination Number"
                     value={destinationAccountNumber?.toString()}
                     onChange={handleAccountDesination}
                     customStyle={{

@@ -1,4 +1,4 @@
-import { CasaAccountContainer } from "@/features/CustomerService/customer/CASAAccount";
+import { CasaAccountContainer } from '@/features/CustomerService/Customer/CASAAccount';
 
 export default function CasaAccount() {
   return <CasaAccountContainer />;

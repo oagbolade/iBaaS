@@ -56,7 +56,6 @@ export const OverDraft = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-
       <TopOverViewSection useBackButton />
       {branches && bankproducts && (
         <FilterSection branches={branches} onSearch={handleSearch} />

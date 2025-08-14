@@ -61,62 +61,59 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
-     
-            <Grid container spacing={2}>
-              <Grid item mobile={12} tablet={4} justifyContent="center">
-                <FormSelectField
-                  customStyle={{
-                    width: setWidth(),
-                    ...inputFields
-                  }}
-                  name="branchID"
-                  options={mappedBranches}
-                  label="Branch Name"
-                />{' '}
-              </Grid>
+        <Grid container spacing={2}>
+          <Grid item mobile={12} tablet={4} justifyContent="center">
+            <FormSelectField
+              customStyle={{
+                width: setWidth(),
+                ...inputFields
+              }}
+              name="branchID"
+              options={mappedBranches}
+              label="Branch Name"
+            />{' '}
+          </Grid>
 
-              <Grid
-                mb={{ tablet: 7 }}
-                item
-                mobile={12}
-                tablet={7}
-                justifyContent="center"
-              >
-                <FormTextInput
-                  customStyle={{
-                    width: setWidth(),
-                    ...inputFields
-                  }}
-                  icon={<SearchIcon />}
-                  name="searchWith"
-                  placeholder="Search by accountnumber or account title"
-                  label="Search"
-                />{' '}
-              </Grid>
+          <Grid
+            mb={{ tablet: 7 }}
+            item
+            mobile={12}
+            tablet={7}
+            justifyContent="center"
+          >
+            <FormTextInput
+              customStyle={{
+                width: setWidth(),
+                ...inputFields
+              }}
+              icon={<SearchIcon />}
+              name="searchWith"
+              placeholder="Search by accountnumber or account title"
+              label="Search"
+            />{' '}
+          </Grid>
 
-              <Grid
-                item
-                mobile={12}
-                tablet={1}
-                sx={{ display: 'flex' }}
-                justifyContent="flex-end"
-                mt={{ tablet: 3.2 }}
-                mr={{ mobile: 30, tablet: 0 }}
-                mb={{ mobile: 6, tablet: 0 }}
-              >
-                <ActionButton
-                  customStyle={{
-                    backgroundColor: `${colors.activeBlue400}`,
-                    border: `1px solid ${colors.activeBlue400}`,
-                    color: `${colors.white}`
-                  }}
-                  type="submit"
-                  buttonTitle="Search"
-                />
-              </Grid>
-            </Grid>
-       
-   
+          <Grid
+            item
+            mobile={12}
+            tablet={1}
+            sx={{ display: 'flex' }}
+            justifyContent="flex-end"
+            mt={{ tablet: 3.2 }}
+            mr={{ mobile: 30, tablet: 0 }}
+            mb={{ mobile: 6, tablet: 0 }}
+          >
+            <ActionButton
+              customStyle={{
+                backgroundColor: `${colors.activeBlue400}`,
+                border: `1px solid ${colors.activeBlue400}`,
+                color: `${colors.white}`
+              }}
+              type="submit"
+              buttonTitle="Search"
+            />
+          </Grid>
+        </Grid>
       </Form>
     </Formik>
   );

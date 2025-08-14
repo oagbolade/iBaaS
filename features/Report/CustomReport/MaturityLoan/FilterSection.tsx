@@ -67,7 +67,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
         validationSchema={maturityLoanSchema}
       >
         <Form>
-
           <Box
             sx={{
               marginTop: '30px',

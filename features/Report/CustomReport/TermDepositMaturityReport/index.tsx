@@ -116,7 +116,7 @@ export const TermDepositMaturityReport = () => {
             onSearch={(params: ISearchParams) => handleSearch(params)}
           />
         </Box>
-       
+
         {isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (

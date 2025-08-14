@@ -11,10 +11,12 @@ import {
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { ReturnCheque } from '@/features/Operation/Forms/ReturnCheques';
+import { useClearingBank } from '@/api/operation/useClearing';
 
 export const ReturnChequesContainer = () => {
   const { currencies } = useGetCurrency();
   const { commBanks } = useGetCommercialBank();
+  const { clearBanks } = useClearingBank();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const triggerSubmission = () => {
@@ -43,14 +45,17 @@ export const ReturnChequesContainer = () => {
         <TopActionsArea actionButtons={actionButtons} />
       </Box>
 
-      {commBanks !== undefined && currencies !== undefined && (
-        <ReturnCheque
-          isSubmitting={isSubmitting}
-          setIsSubmitting={setIsSubmitting}
-          commBanks={commBanks}
-          currencies={currencies}
-        />
-      )}
+      {clearBanks !== undefined &&
+        commBanks !== undefined &&
+        currencies !== undefined && (
+          <ReturnCheque
+            isSubmitting={isSubmitting}
+            setIsSubmitting={setIsSubmitting}
+            clearBanks={clearBanks}
+            currencies={currencies}
+            commBanks={commBanks}
+          />
+        )}
     </>
   );
 };

@@ -36,73 +36,71 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   };
 
   return (
-    
-      <Formik
-        initialValues={searchFilterInitialValues}
-        onSubmit={(values) => onSubmit(values)}
-      >
-        <Form>
-          <Box sx={{ height: '120px' }}>
+    <Formik
+      initialValues={searchFilterInitialValues}
+      onSubmit={(values) => onSubmit(values)}
+    >
+      <Form>
+        <Box sx={{ height: '120px' }}>
+          <Grid
+            sx={{ padding: '5px 5px', display: 'flex', gap: '35px' }}
+            spacing={2}
+          >
             <Grid
-              sx={{ padding: '5px 5px', display: 'flex', gap: '35px' }}
-              spacing={2}
+              mb={{ tablet: 3 }}
+              item
+              mobile={12}
+              tablet={5}
+              justifyContent="center"
             >
-              <Grid
-                mb={{ tablet: 3 }}
-                item
-                mobile={12}
-                tablet={5}
-                justifyContent="center"
-              >
-                <FormSelectField
-                  customStyle={{
-                    width: '400px',
-                    fontSize: '14px',
-                    ...inputFields
-                  }}
-                  name="branchID"
-                  options={mappedBranches}
-                  label="Branch ID"
-                />
-              </Grid>
-              <Grid
-                mb={{ tablet: 6 }}
-                item
-                mobile={12}
-                tablet={6}
-                justifyContent="center"
-              >
-                <TextInput
-                  customStyle={{
-                    fontSize: '14px',
-                    ...inputFields
-                  }}
-                  icon={<SearchIcon />}
-                  name="search"
-                  placeholder="Search by teller ID"
-                  label="Teller ID"
-                />{' '}
-              </Grid>
-              <Grid
-                item
-                mobile={12}
-                tablet={1}
-                sx={{ display: 'flex' }}
-                justifyContent="flex-end"
-                mt={{ tablet: 3.2 }}
-                mr={{ mobile: 30, tablet: 0 }}
-                mb={{ mobile: 6, tablet: 0 }}
-              >
-                <ActionButton
-                  customStyle={buttonBackgroundColor}
-                  type="submit"
-                  buttonTitle="Search"
-                />
-              </Grid>
+              <FormSelectField
+                customStyle={{
+                  width: '400px',
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                name="branchID"
+                options={mappedBranches}
+                label="Branch ID"
+              />
             </Grid>
-          </Box>
-        </Form>
-      </Formik>
-   
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={6}
+              justifyContent="center"
+            >
+              <TextInput
+                customStyle={{
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="search"
+                placeholder="Search by teller ID"
+                label="Teller ID"
+              />{' '}
+            </Grid>
+            <Grid
+              item
+              mobile={12}
+              tablet={1}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton
+                customStyle={buttonBackgroundColor}
+                type="submit"
+                buttonTitle="Search"
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      </Form>
+    </Formik>
   );
 };

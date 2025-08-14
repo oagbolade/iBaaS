@@ -73,7 +73,9 @@ export const CreateLoanUnderwritingForm = ({
   const [productDetail, setProductDetail] = useState<
     IProductDetails | undefined
   >(undefined);
-  const [startDate, setStartDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
+  const [startDate, setStartDate] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
   const [postDate, setPostDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
 
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
@@ -87,8 +89,12 @@ export const CreateLoanUnderwritingForm = ({
   const [penalRate, setPenalRate] = useState<string>('');
   const [penalrateCalcMethod, setPenalrateCalcMethod] = useState<string>('');
   const [moratorium, setMoratorium] = useState<string>('');
-  const [maturityDate, setMaturitDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
-  const [firstpayCycle, setFirstPayCycle] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
+  const [maturityDate, setMaturitDate] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
+  const [firstpayCycle, setFirstPayCycle] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
   const [termFreq, setTermFrequency] = useState<string>('');
 
   const toastActions = React.useContext(ToastMessageContext);
@@ -375,7 +381,9 @@ export const CreateLoanUnderwritingForm = ({
                       <StyledSearchableDropdown style={{ width: '460%' }}>
                         <ActionButtonWithPopper
                           loading={isSearchLoading}
-                          handleSelectedValue={(value: any) => handleSelectedValue(value)}
+                          handleSelectedValue={(value: any) =>
+                            handleSelectedValue(value)
+                          }
                           label="Customer Name"
                           name="customerId"
                           searchGroupVariant="LoanCustomerSearch"
@@ -394,7 +402,8 @@ export const CreateLoanUnderwritingForm = ({
                           icon={<SearchIcon />}
                           iconPosition="end"
                           buttonTitle={
-                            (selectedCustomer?.customer?.accounttitle as string) ||
+                            (selectedCustomer?.customer
+                              ?.accounttitle as string) ||
                             'Search Customer Name'
                           }
                           onChange={handleSearch}
@@ -605,7 +614,7 @@ export const CreateLoanUnderwritingForm = ({
                         name="postDate"
                         minDate={dayjs(sysmodel?.systemDate).startOf('month')}
                         maxDate={dayjs(sysmodel?.systemDate)}
-                         handleDateChange={(e: any) => {
+                        handleDateChange={(e: any) => {
                           setPostDate(e);
                         }}
                       />

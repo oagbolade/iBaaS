@@ -50,6 +50,7 @@ import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import { IGetClearingBank } from '@/api/ResponseTypes/operation';
 
 type SearchFilters = {
   accountNumber: string | OptionsI[];
@@ -60,21 +61,25 @@ type Props = {
   currencies: ICurrency[] | Array<any>;
   isSubmitting?: boolean;
   setIsSubmitting?: (submit: boolean) => void;
-  commBanks: IGetCommercialBank[] | Array<any>;
+  clearBanks: IGetClearingBank[] | Array<any>;
+  commBanks?: IGetCommercialBank[];
 };
 
 export const ReturnCheque = ({
-  commBanks,
+  clearBanks,
   currencies,
   isSubmitting,
-  setIsSubmitting
+  setIsSubmitting,
+  commBanks
 }: Props) => {
   const toastActions = React.useContext(ToastMessageContext);
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-  const { mappedCurrency, mappedCommercialBank } = useMapSelectOptions({
-    currencies,
-    commBanks
-  });
+  const { mappedCurrency, mappedCommercialBank, mappedClearingBank } =
+    useMapSelectOptions({
+      currencies,
+      clearBanks,
+      commBanks
+    });
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
 
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
@@ -105,7 +110,7 @@ export const ReturnCheque = ({
     }
     const getAllValues = {
       ...values,
-      currencyCode: selectedCurrency
+      currencycode: selectedCurrency
     };
     await mutate(getAllValues);
   };
@@ -148,7 +153,8 @@ export const ReturnCheque = ({
     <Formik
       initialValues={{
         ...ReturnChequeInitialValues,
-        valueDate: sysmodel?.systemDate
+        valueDate: sysmodel?.systemDate,
+        dueDate: sysmodel?.systemDate
       }}
       onSubmit={(values, actions) => onSubmit(values, actions)}
       validationSchema={returnCheque}
@@ -199,7 +205,7 @@ export const ReturnCheque = ({
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <FormSelectInput
-                    name="currencyCode"
+                    name="currencycode"
                     options={mappedCurrency}
                     label="Currency"
                     customStyle={{

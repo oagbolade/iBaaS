@@ -10,7 +10,7 @@ import { statusCodes } from '@/api/ResponseTypes/StatusCodes';
 import {
   clearStoredUser,
   getLastPage,
-  getStoredUser,
+  getStoredUser
 } from '@/utils/user-storage';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 
@@ -20,12 +20,12 @@ interface UseAuth {
     companyCode: string,
     username: string,
     password: string,
-    onFirstTimeUser?: () => void,
+    onFirstTimeUser?: () => void
   ) => Promise<void>;
   signup: (
     companyCode: string,
     username: string,
-    password: string,
+    password: string
   ) => Promise<void>;
   signout: () => void;
 }
@@ -55,7 +55,7 @@ export function useAuth(): UseAuth {
     tenantid: string,
     userid: string,
     password: string,
-    onFirstTimeUser?: () => void,
+    onFirstTimeUser?: () => void
   ): Promise<void> {
     try {
       setLoading(true);
@@ -63,7 +63,7 @@ export function useAuth(): UseAuth {
         url: urlEndpoint,
         method: 'POST',
         data: { tenantid, userid, password },
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' }
       });
 
       if (data.responseCode === statusCodes.UNAUTHORIZED) {
@@ -81,7 +81,7 @@ export function useAuth(): UseAuth {
           }, 3500);
           toast(
             'Login successful, redirecting to last visited page...',
-            'success',
+            'success'
           );
         } else {
           setTimeout(() => {
@@ -121,7 +121,7 @@ export function useAuth(): UseAuth {
         toast(
           (axiosError?.response?.data as ErrorResponseData)
             ?.responseDescription as string,
-          'error',
+          'error'
         );
         return;
       }
@@ -134,21 +134,21 @@ export function useAuth(): UseAuth {
     companyCode: string,
     username: string,
     password: string,
-    onFirstTimeUser?: () => void,
+    onFirstTimeUser?: () => void
   ): Promise<void> {
     authServerCall(
       '/login/login',
       companyCode,
       username,
       password,
-      onFirstTimeUser,
+      onFirstTimeUser
     );
   }
 
   async function signup(
     companyCode: string,
     username: string,
-    password: string,
+    password: string
   ): Promise<void> {
     authServerCall('/user', companyCode, username, password);
   }
@@ -162,8 +162,8 @@ export function useAuth(): UseAuth {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getStoredUser()?.token}`,
-        },
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
       });
       sessionStorage.clear(); // clears all keys in sessionStorage
 
@@ -189,6 +189,6 @@ export function useAuth(): UseAuth {
     isLoading,
     login,
     signup,
-    signout,
+    signout
   };
 }

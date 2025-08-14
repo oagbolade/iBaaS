@@ -104,4 +104,5 @@ export interface ISearchParams {
   Gl_ClassCode?: string | null;
   officerCode?: string | null;
   accountNo?: string | null;
+  searchDate?: string | null;
 }

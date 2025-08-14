@@ -140,6 +140,7 @@ export const CreateAccount = ({
   const isEditing = searchParams.get('isEditing');
   const urlState = searchParams.get('urlState');
   const Accountno = searchParams.get('accountNumber');
+  const branchCode = searchParams.get('branchCode');
   const { isLoading } = useGlobalLoadingState();
   const { accDetailsResults, isLoading: isAccountDetailsLoading } =
     useGetAccountDetails(encryptData(Accountno) as string);
@@ -359,9 +360,10 @@ export const CreateAccount = ({
       ...values,
       cintrate: values.cintrate,
       dintrate: values.dintrate,
-      branchcode: extractIdFromDropdown(selectedValue?.branchcode as string),
+      branchcode: isEditing ? branchCode : extractIdFromDropdown(selectedValue?.branchcode as string),
       customerid: extractIdFromDropdown(selectedValue?.customerid as string),
       channel: channelSelect?.value,
+      accttitle: accDetailsResults?.accounttitle,
       json: formattedReqIds
     });
   };

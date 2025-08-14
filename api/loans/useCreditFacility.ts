@@ -712,7 +712,8 @@ async function getLoanAccountByLoanAccountNumber(
   };
 
   try {
-    const urlEndpoint = `/CreditManagement/LoanDetails?loanAcct=${loanAccount}`;
+    // const urlEndpoint = `/CreditManagement/LoanDetails?loanAcct=${loanAccount}`;
+    const urlEndpoint = `/creditmanagement/GetloanAccDetails?accountnumber=${loanAccount}&action=1`;
 
     const { data }: AxiosResponse<GetLoanByAccountDetailsResponse> =
       await axiosInstance({
@@ -1000,7 +1001,7 @@ export function useGetOverdraftDetails(
     queryKey: [queryKeys.getOverdraftDetail],
     queryFn: () =>
       getOverdraftDetails(toastActions, decryptData(accountnumber) as string),
-    staleTime: 0 
+    staleTime: 0
   });
 
   return { ...data, isError, isLoading };

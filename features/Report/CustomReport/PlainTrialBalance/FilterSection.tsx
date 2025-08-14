@@ -71,11 +71,10 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
             direction={setDirection()}
             justifyContent="space-between"
           >
-           
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-           
+            <Box mt={2.3}>
+              <BackButton />
+            </Box>
+
             <Stack
               mt={1}
               direction={setDirection()}

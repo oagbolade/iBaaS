@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Form, Formik } from 'formik';
+import dayjs from 'dayjs';
 import {
   FormikDateTimePicker,
   FormSelectField,
@@ -16,6 +17,7 @@ import { IProductType, IStatus } from '@/api/ResponseTypes/general';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { filterSectionSchema } from '@/schemas/setup';
+import { formatFormikDatePickerToISO } from '@/utils/convertDateToISOFormat';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -26,12 +28,11 @@ export const FilterSection = ({ onSearch }: Props) => {
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
-      behaviour:
-        values.behaviour?.toString().length > 0 ? values.behaviour : '',
-      exceptionDesc:
-        values.exceptionDesc?.toString().length > 0 ? values.exceptionDesc : '',
-      exceptioncode:
-        values.exceptioncode?.toString().length > 0 ? values.exceptioncode : ''
+      searchDate: formatFormikDatePickerToISO(
+        dayjs(values.searchDate?.toString().length > 0 ? values.searchDate : '')
+      ),
+      searchWith:
+        values.searchWith?.toString().length > 0 ? values.searchWith : ''
     };
     onSearch?.(params);
   };
@@ -40,13 +41,16 @@ export const FilterSection = ({ onSearch }: Props) => {
     <Formik
       initialValues={searchFilterInitialValues}
       onSubmit={(values) => onSubmit(values)}
-      validationSchema={filterSectionSchema}
     >
       <Form>
         <Box>
           <Grid container spacing={2}>
             <Grid mb={{ tablet: 3 }} item mobile={5} tablet={2}>
-              <FormikDateTimePicker label="Date" name="date" value="date" />
+              <FormikDateTimePicker
+                label="Date"
+                name="searchDate"
+                value="searchDate"
+              />
             </Grid>
             <Grid
               mb={{ tablet: 6 }}
@@ -62,7 +66,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                   ...inputFields
                 }}
                 icon={<SearchIcon />}
-                name="exceptionDesc"
+                name="searchWith"
                 placeholder="Search"
                 label="Search"
               />{' '}

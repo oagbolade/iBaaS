@@ -13,9 +13,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGetMaturityLoan } from '@/api/reports/useMaturityLoan';
-import {
-  ILoanMaturityReport
-} from '@/api/ResponseTypes/reports';
+import { ILoanMaturityReport } from '@/api/ResponseTypes/reports';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { useGetAllProduct } from '@/api/setup/useProduct';
@@ -75,8 +73,7 @@ export const MaturityLoan = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-
-      <TopOverViewSection  useBackButton />
+      <TopOverViewSection useBackButton />
 
       {branches && bankproducts && (
         <FilterSection

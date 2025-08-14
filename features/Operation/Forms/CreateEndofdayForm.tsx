@@ -10,8 +10,14 @@ import {
   totalTitle
 } from './style';
 import { PageTitle } from '@/components/Typography';
+import { useGetEODResult } from '@/api/operation/useEndOfDay';
+import { FormSkeleton } from '@/components/Loaders';
 
 export const CreateEndOfDayForm = () => {
+  const { data, isLoading } = useGetEODResult();
+  if (isLoading) {
+    return <FormSkeleton noOfLoaders={3} />;
+  }
   return (
     <Box sx={EndofDayContainerForm}>
       <Box sx={processPassingStyle}>

@@ -13,7 +13,10 @@ const baseUrl =
   env === 'development'
     ? 'https://ibaas-api.k8.isw.la/api'
     : 'https://ibaas-api.k8.isw.la/api';
-
+const endOfdayUrl =
+  env === 'development'
+    ? 'https://ibaas-endofbusinessprocess.k8.isw.la/api'
+    : 'https://ibaas-endofbusinessprocess.k8.isw.la/api';
 const nipBaseUrl =
   env === 'development'
     ? 'https://nip-core-banking-interface.k8.isw.la/api/v1'
@@ -24,4 +27,4 @@ const reportsBaseUrl =
     ? 'https://isw-reportsapi.qa.interswitchng.com/api'
     : 'https://isw-reportsapi.qa.interswitchng.com/api';
 
-export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl };
+export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl, endOfdayUrl };

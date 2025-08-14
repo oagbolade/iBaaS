@@ -23,6 +23,7 @@ type Props = {
   customerId: string;
   accountNumber: string;
   productType: string;
+  branchCode: string;
   status: number;
 };
 
@@ -30,7 +31,8 @@ export const CustomerAccountTableActionMenu = ({
   customerId,
   accountNumber,
   status,
-  productType
+  productType,
+  branchCode
 }: Props) => {
   const shouldDisableEditAccount = !checkMultipleUserRoleAccess('Customer', 'EDIT ACCOUNT');
   const shouldDisableManageMandate = !checkMultipleUserRoleAccess('Customer', 'MANAGE MANDATE');
@@ -87,7 +89,7 @@ export const CustomerAccountTableActionMenu = ({
               }}
               aria-disabled={shouldDisableEditAccount}
               tabIndex={shouldDisableEditAccount ? -1 : undefined}
-              href={`/customer-service/customer/create-account?isEditing=true&accountNumber=${sanitize(accountNumber)}`}
+              href={`/customer-service/customer/create-account?isEditing=true&accountNumber=${sanitize(accountNumber)}&branchCode=${sanitize(branchCode)}`}
             >
               <TableMenuButton disabled={shouldDisableEditAccount} buttonTitle="Edit Account" />
             </Link>

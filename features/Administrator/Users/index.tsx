@@ -14,7 +14,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ToastMessage } from '@/components/Revamp/ToastMessage';
@@ -23,7 +23,7 @@ import {
   useDeleteUser,
   useFilterUserSearch,
   useLockOrUnlockUser,
-  useValidatePassword,
+  useValidatePassword
 } from '@/api/admin/useAdminUsers';
 import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
@@ -42,7 +42,7 @@ const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export type ModalTitleDescriptionMapper = {
@@ -65,7 +65,7 @@ export const Users = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('admin-users');
 
   const excludeSteps = ['proceedToLockOrUnlockUser'];
@@ -74,10 +74,10 @@ export const Users = () => {
     totalPages,
     totalElements,
     data: userData,
-    isLoading: isUserDataLoading,
+    isLoading: isUserDataLoading
   } = useFilterUserSearch({
     ...searchParams,
-    page,
+    page
   });
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export const Users = () => {
   const handleDelete = async (
     currentStep: DeleteActionSteps = null,
     user: IUsers | null = null,
-    password: string | null = null,
+    password: string | null = null
   ) => {
     if (user) {
       setCurrentUser(user);
@@ -120,7 +120,7 @@ export const Users = () => {
       const body: ValidatePasswordRequest = {
         oldpassword: password as string,
         tenantid: `${getStoredUser()?.companyCode}`,
-        userid: getStoredUser()?.profiles.userid as string,
+        userid: getStoredUser()?.profiles.userid as string
       };
 
       await validatePassword?.(body);
@@ -135,7 +135,7 @@ export const Users = () => {
 
   const ActionMenuProps = ({
     userid,
-    user,
+    user
   }: {
     userid: string;
     user: IUsers;
@@ -152,20 +152,20 @@ export const Users = () => {
   const toastMessageMapper = {
     userDelete: {
       title: 'User Deleted',
-      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.',
-    },
+      body: '[User-Name] has been successfully deleted and will no longer be able to access the platform.'
+    }
   };
 
   const modalTitleDescriptionMapper: ModalTitleDescriptionMapper = {
     isDeleteConfirmation: {
       title: 'User Delete',
-      body: 'When you delete a user, the user won’t be able to access this platform any longer. Would you like to proceed?',
+      body: 'When you delete a user, the user won’t be able to access this platform any longer. Would you like to proceed?'
     },
     isPassword: { title: 'Delete User', body: '' },
     isLockConfirmation: {
       title: 'Please Confirm',
-      body: 'Are you sure you want to proceed with this action?',
-    },
+      body: 'Are you sure you want to proceed with this action?'
+    }
   };
 
   return (
@@ -183,7 +183,7 @@ export const Users = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
           {isUserDataLoading ? (
@@ -214,7 +214,7 @@ export const Users = () => {
                     <StyledTableCell align="right">
                       {dataItem.create_date
                         ? moment(dataItem.create_date).format(
-                            'MMMM Do YYYY, h:mm:ss a',
+                            'MMMM Do YYYY, h:mm:ss a'
                           )
                         : 'N/A'}
                     </StyledTableCell>
