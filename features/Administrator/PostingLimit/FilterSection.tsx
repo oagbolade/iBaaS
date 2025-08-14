@@ -11,6 +11,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { searchFieldsSchema } from '@/schemas/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch: Function;
@@ -18,8 +19,15 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, branches }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('posting-limit');
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({ branches });
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    branchCredit: searchParams?.branchCredit ?? '',
+    branchDebit: searchParams?.branchDebit ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -27,7 +35,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
         values.branchCredit.toString().length > 0 ? values.branchCredit : null,
       branchDebit:
         values.branchDebit.toString().length > 0 ? values.branchDebit : null,
-      branchID: values.branchID.toString().length > 0 ? values.branchID : null
+      branchID: values.branchID.toString().length > 0 ? values.branchID : null,
     };
 
     onSearch(params);
@@ -35,7 +43,8 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={searchFieldsSchema}
     >
@@ -53,7 +62,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -71,7 +80,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="branchCredit"
@@ -90,7 +99,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="branchDebit"

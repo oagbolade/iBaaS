@@ -11,6 +11,7 @@ import { IBranches } from '@/api/ResponseTypes/general';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { searchFieldsSchema } from '@/schemas/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch: Function;
@@ -18,8 +19,15 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, branches }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('gl-account');
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({ branches });
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    accountName: searchParams?.accountName ?? '',
+    glAccountNumber: searchParams?.glAccountNumber ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -29,7 +37,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
         values.glAccountNumber.toString().length > 0
           ? values.glAccountNumber
           : null,
-      branchID: values.branchID.toString().length > 0 ? values.branchID : null
+      branchID: values.branchID.toString().length > 0 ? values.branchID : null,
     };
 
     onSearch(params);
@@ -38,7 +46,8 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
   return (
     <Formik
       onSubmit={(values) => onSubmit(values)}
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       validationSchema={searchFieldsSchema}
     >
       <Form>
@@ -55,7 +64,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -73,7 +82,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="glAccountNumber"
@@ -92,7 +101,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="accountName"

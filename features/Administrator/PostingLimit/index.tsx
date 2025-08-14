@@ -18,6 +18,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { useFilterPostingLimitSearch } from '@/api/admin/usePostingLimit';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Link href="/admin/posting-limit/create">
@@ -25,31 +26,36 @@ const actionButtons: any = [
       buttonTitle="Create New Limit"
       customStyle={{ ...submitButton }}
     />
-  </Link>
+  </Link>,
 ];
 
 export const PostingLimit = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('posting-limit');
   const {
     totalPages,
     totalElements,
     data: postingData,
-    isLoading: isPostingDataLoading
+    isLoading: isPostingDataLoading,
   } = useFilterPostingLimitSearch({
     ...searchParams,
-    page
+    page,
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenuProps = ({
     roleId,
-    branchId
+    branchId,
   }: {
     roleId: string;
     branchId: string;
@@ -73,7 +79,7 @@ export const PostingLimit = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isPostingDataLoading ? (
@@ -82,7 +88,7 @@ export const PostingLimit = () => {
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{
-                hasActions: true
+                hasActions: true,
               }}
               setPage={setPage}
               page={page}
@@ -90,7 +96,7 @@ export const PostingLimit = () => {
               totalPages={totalPages}
               totalElements={totalElements}
             >
-              {search ? (
+              {searchActive ? (
                 postingData?.map(
                   (dataItem: SearchPostingLimitResponse, index: number) => {
                     return (
@@ -112,7 +118,7 @@ export const PostingLimit = () => {
                         </StyledTableCell>
                       </StyledTableRow>
                     );
-                  }
+                  },
                 )
               ) : (
                 <StyledTableRow>

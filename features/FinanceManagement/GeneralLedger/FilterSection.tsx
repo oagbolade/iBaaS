@@ -11,6 +11,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { searchFieldsSchema } from '@/schemas/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: Function;
@@ -18,10 +19,17 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, branches }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('general-ledger');
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    glNumber: searchParams?.glNumber ?? '',
+    search: searchParams?.accountName ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -29,7 +37,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
       accountName:
         values.search?.toString().trim().length > 0 ? values.search : null,
-      glNumber: null
+      glNumber: null,
     };
 
     onSearch?.(params);
@@ -37,7 +45,8 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={searchFieldsSchema}
     >
@@ -55,7 +64,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -73,7 +82,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="search"

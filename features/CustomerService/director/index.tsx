@@ -16,6 +16,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useFilterDirectorsSearch } from '@/api/customer-service/useDirectors';
 import { FormSkeleton } from '@/components/Loaders';
 import { SearchDirectorResponse } from '@/api/ResponseTypes/customer-service';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export interface IOptions {
   buttonTitle: string;
@@ -31,34 +32,38 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>{' '}
-  </Box>
+  </Box>,
 ];
 
 export const DirectorTable = () => {
-  const [search, setSearch] = React.useState<boolean>(false);
-  const [searchParams, setSearchParams] = React.useState<ISearchParams | null>(
-    null
-  );
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('directors');
+
   const {
     totalPages,
     totalElements,
     data: directorData,
-    isLoading: areDirectorsDataLoading
+    isLoading: areDirectorsDataLoading,
   } = useFilterDirectorsSearch({
     ...searchParams,
-    page
+    page,
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenuProps = ({
     directorId,
     customerId,
-    directorName
+    directorName,
   }: {
     directorId: string;
     customerId: string;
@@ -87,11 +92,12 @@ export const DirectorTable = () => {
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Director’s Overview',
-              secondaryTitle: 'See a directory of all Directors on this system.'
+              secondaryTitle:
+                'See a directory of all Directors on this system.',
             }}
             columns={COLUMNS}
             tableConfig={{
-              hasActions: true
+              hasActions: true,
             }}
             data={directorData}
             setPage={setPage}
@@ -99,7 +105,7 @@ export const DirectorTable = () => {
             totalPages={totalPages}
             totalElements={totalElements}
           >
-            {search ? (
+            {searchActive ? (
               directorData?.map((dataItem: SearchDirectorResponse) => {
                 return (
                   <StyledTableRow key={dataItem?.id}>

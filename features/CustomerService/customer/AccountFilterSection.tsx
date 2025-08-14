@@ -11,6 +11,7 @@ import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { searchFieldsSchema } from '@/schemas/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch: Function;
@@ -19,9 +20,11 @@ type Props = {
 };
 
 export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('account-overview');
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
 
@@ -29,7 +32,7 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
     const params: ISearchParams = {
       status: values.status.toString().length > 0 ? values.status : null,
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      accountNumber: values.search.toString().length > 0 ? values.search : null
+      accountNumber: values.search.toString().length > 0 ? values.search : null,
     };
 
     onSearch(params);
@@ -55,7 +58,7 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -73,7 +76,7 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -91,7 +94,7 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="search"

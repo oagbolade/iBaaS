@@ -14,13 +14,14 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   MuiTableContainer,
   renderEmptyTableBody,
-  StyledTableRow
+  StyledTableRow,
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { useGetBranches } from '@/api/general/useBranches';
 import { ISearchParams } from '@/app/api/search/route';
 import { useFilterCustomerAccountSearch } from '@/api/customer-service/useCustomer';
 import { FormSkeleton } from '@/components/Loaders';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -30,31 +31,36 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '116px', desktop: '236px' },
-          height: '40px'
+          height: '40px',
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Account = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('finance-account');
 
   const currentUrl = 'financeMgt';
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenuProps = ({
     customerId,
     accountNumber,
     status,
-    productType
+    productType,
   }: {
     customerId: string;
     status: number;
@@ -76,10 +82,10 @@ export const Account = () => {
     totalPages,
     totalElements,
     data: financeAccountData,
-    isLoading: isFinanceAccountDataLoading
+    isLoading: isFinanceAccountDataLoading,
   } = useFilterCustomerAccountSearch({
     ...searchParams,
-    page
+    page,
   });
 
   return (
@@ -96,7 +102,7 @@ export const Account = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isFinanceAccountDataLoading ? (
@@ -106,7 +112,7 @@ export const Account = () => {
               <MuiTableContainer
                 columns={FINANCE_ACCOUNT_COLUMNS}
                 tableConfig={{
-                  hasActions: true
+                  hasActions: true,
                 }}
                 data={financeAccountData}
                 totalPages={totalPages}
@@ -117,10 +123,10 @@ export const Account = () => {
                   mainTitle: 'Account Overview',
                   secondaryTitle:
                     'See a directory of all accounts on this system.',
-                  hideFilterSection: true
+                  hideFilterSection: true,
                 }}
               >
-                {search ? (
+                {searchActive ? (
                   financeAccountData?.map((dataItem: any) => {
                     return (
                       <StyledTableRow key={dataItem?.userid}>
@@ -133,15 +139,15 @@ export const Account = () => {
                         <StyledTableCell align="right">
                           {dataItem?.dateOpened
                             ? moment(dataItem?.dateOpened).format(
-                              'MMMM Do YYYY, h:mm:ss a'
-                            )
+                                'MMMM Do YYYY, h:mm:ss a',
+                              )
                             : 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           {dataItem?.dateOpened
                             ? moment(dataItem.dateOpened).format(
-                              'MMMM Do YYYY, h:mm:ss a'
-                            )
+                                'MMMM Do YYYY, h:mm:ss a',
+                              )
                             : 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell component="th" scope="row">
