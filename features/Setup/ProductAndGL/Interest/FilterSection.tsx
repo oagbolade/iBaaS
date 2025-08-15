@@ -10,6 +10,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -17,16 +18,23 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('interests');
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    intcode: searchParams?.intcode ?? '',
+    status: searchParams?.status ?? '',
+    intName: searchParams?.intName ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status?.toString().length > 0 ? values.status : null,
       intcode: values.intcode?.toString().length > 0 ? values.intcode : null,
-      intName: values.intName?.toString().length > 0 ? values.intName : null
+      intName: values.intName?.toString().length > 0 ? values.intName : null,
     };
 
     onSearch?.(params);
@@ -34,7 +42,8 @@ export const FilterSection = ({ onSearch, status }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -51,7 +60,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -69,7 +78,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="intName"

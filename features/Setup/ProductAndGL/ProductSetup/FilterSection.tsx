@@ -5,7 +5,7 @@ import { Form, Formik } from 'formik';
 import {
   FormSelectField,
   FormTextInput,
-  TextInput
+  TextInput,
 } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -16,6 +16,7 @@ import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IProducts } from '@/api/ResponseTypes/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -23,11 +24,19 @@ type Props = {
   products?: IProducts[] | Array<any>;
 };
 export const FilterSection = ({ productTypes, onSearch, products }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('product-setup');
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const { mappedProductType, mappedProductClass } = useMapSelectOptions({
     productTypes,
-    products
+    products,
   });
+
+  const initialValues = {
+    productClass: searchParams?.productClass ?? '',
+    productName: searchParams?.productName ?? '',
+    productCode: searchParams?.productCode ?? '',
+  };
+
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       productClass:
@@ -35,14 +44,15 @@ export const FilterSection = ({ productTypes, onSearch, products }: Props) => {
       productName:
         values.productName?.toString().length > 0 ? values.productName : null,
       productCode:
-        values.productCode?.toString().length > 0 ? values.productCode : null
+        values.productCode?.toString().length > 0 ? values.productCode : null,
     };
 
     onSearch?.(params);
   };
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -59,7 +69,7 @@ export const FilterSection = ({ productTypes, onSearch, products }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="productClass"
                 options={mappedProductClass}
@@ -77,7 +87,7 @@ export const FilterSection = ({ productTypes, onSearch, products }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="productName"

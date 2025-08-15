@@ -15,13 +15,14 @@ import { useGetProductType } from '@/api/general/useProductType';
 import { ISearchParams } from '@/app/api/search/route';
 import {
   useFilterLoanProductSearch,
-  useGetProductClass
+  useGetProductClass,
 } from '@/api/setup/useProduct';
 import { FormSkeleton } from '@/components/Loaders';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchLoanProductResponse } from '@/api/ResponseTypes/setup';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export interface IOptions {
   buttonTitle: string;
@@ -32,23 +33,28 @@ export interface IOptions {
 export const ProductSetupTable = () => {
   const { productTypes } = useGetProductType();
   const { products } = useGetProductClass();
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [openModel, setopenModel] = useState(Boolean);
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('product-setup');
   const {
     totalPages,
     totalElements,
     data: productData,
-    isLoading
+    isLoading,
   } = useFilterLoanProductSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ProductActionMenuProps = ({
     moduleCode,
-    productCode
+    productCode,
   }: {
     moduleCode: string;
     productCode: string;
@@ -104,7 +110,7 @@ export const ProductSetupTable = () => {
       {openModel && (
         <ModalContainerV2 form={<ProductForm handleClose={handleClose} />} />
       )}
-    </Box>
+    </Box>,
   ];
 
   return (
@@ -130,7 +136,7 @@ export const ProductSetupTable = () => {
               hideFilterSection: true,
               mainTitle: 'Products',
               secondaryTitle:
-                'See a directory of all products setup in this system.'
+                'See a directory of all products setup in this system.',
             }}
             ActionMenuProps={ProductActionMenuProps}
             totalPages={totalPages}
@@ -138,7 +144,7 @@ export const ProductSetupTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               productData?.map((dataItem: SearchLoanProductResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>

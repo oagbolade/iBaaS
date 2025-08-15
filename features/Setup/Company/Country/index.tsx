@@ -23,6 +23,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { Status } from '@/components/Labels';
 import { CountrySearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -32,31 +33,38 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Country = () => {
   const { status } = useGetStatus();
-  const [page, setPage] = React.useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('company-country');
+
   const {
     totalElements,
     totalPages,
     data: countryData,
-    isLoading
+    isLoading,
   } = useFilterCountrySearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({
-    countryCode
+    countryCode,
   }: {
     countryCode: string;
   }): React.ReactElement => {
@@ -84,7 +92,7 @@ export const Country = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -97,7 +105,7 @@ export const Country = () => {
                 mainTitle: 'Country',
                 secondaryTitle:
                   'See a directory of all countries in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalElements={totalElements}
@@ -105,7 +113,7 @@ export const Country = () => {
               page={page}
               totalPages={totalPages}
             >
-              {search ? (
+              {searchActive ? (
                 countryData?.map((dataItem: SearchCountryResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userid}>

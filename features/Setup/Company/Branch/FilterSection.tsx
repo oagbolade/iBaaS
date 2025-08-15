@@ -11,6 +11,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { BranchSearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -18,10 +19,18 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status }: Props) => {
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('company-branches');
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    branchName: searchParams?.branchName ?? '',
+    status: searchParams?.status ?? '',
+    branchCode: searchParams?.branchCode ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -29,14 +38,15 @@ export const FilterSection = ({ onSearch, status }: Props) => {
       branchName:
         values.branchName?.toString().length > 0 ? values.branchName : null,
       branchCode:
-        values.branchCode?.toString().length > 0 ? values.branchCode : null
+        values.branchCode?.toString().length > 0 ? values.branchCode : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -53,7 +63,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -71,7 +81,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="branchName"

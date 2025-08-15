@@ -7,7 +7,7 @@ import { COLUMNS } from './COLUMNS';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
   submitButton,
-  cancelButton
+  cancelButton,
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MuiTableContainer } from '@/components/Table';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -20,6 +20,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchInterestResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -29,27 +30,31 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const InterestTable = () => {
-  const [page, setPage] = useState(1);
   const { status } = useGetStatus();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('interests');
   const {
     totalPages,
     totalElements,
     data: interestData,
-    isLoading
+    isLoading,
   } = useFilterInterestSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenu = ({
-    interestCode
+    interestCode,
   }: {
     interestCode: string;
   }): React.ReactElement => {
@@ -79,7 +84,7 @@ export const InterestTable = () => {
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Interest',
-              secondaryTitle: 'See a directory of all Interest in this system.'
+              secondaryTitle: 'See a directory of all Interest in this system.',
             }}
             ActionMenuProps={ActionMenu}
             totalPages={totalPages}
@@ -87,7 +92,7 @@ export const InterestTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               interestData?.map((dataItem: SearchInterestResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>

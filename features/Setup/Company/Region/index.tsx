@@ -18,6 +18,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { SearchRegionResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { decryptData } from '@/utils/decryptData';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -27,31 +28,37 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Region = () => {
-  const [page, setPage] = useState(1);
   const { status } = useGetStatus();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('company-regions');
   const {
     totalPages,
     totalElements,
     data: regionData,
-    isLoading
+    isLoading,
   } = useFilterRegionSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({
-    regionCode
+    regionCode,
   }: {
     regionCode: string;
   }): React.ReactElement => {
@@ -79,7 +86,7 @@ export const Region = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -92,7 +99,7 @@ export const Region = () => {
                 mainTitle: 'Region',
                 secondaryTitle:
                   'See a directory of all regions in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -100,7 +107,7 @@ export const Region = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 regionData?.map((dataItem: SearchRegionResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userId}>

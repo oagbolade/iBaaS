@@ -10,6 +10,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -17,10 +18,18 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status }: Props) => {
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('company-holidays');
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    holidayDesc: searchParams?.holidayDesc ?? '',
+    status: searchParams?.status ?? '',
+    holidaydays: searchParams?.holidaydays ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -28,14 +37,15 @@ export const FilterSection = ({ onSearch, status }: Props) => {
       holidayDesc:
         values.holidayDesc?.toString().length > 0 ? values.holidayDesc : null,
       holidaydays:
-        values.holidaydays?.toString().length > 0 ? values.holidaydays : null
+        values.holidaydays?.toString().length > 0 ? values.holidaydays : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -52,7 +62,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -70,7 +80,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="holidayDesc"

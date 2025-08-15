@@ -22,6 +22,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { Status } from '@/components/Labels';
 import { TownSearchParams } from '@/schemas/schema-values/setup';
 import { useGetAllStates } from '@/api/general/useGeography';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -31,33 +32,38 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Town = () => {
-  const [page, setPage] = React.useState(1);
   const { status } = useGetStatus();
   const { states } = useGetAllStates();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
 
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('company-town');
   const {
     totalElements,
     totalPages,
     isLoading,
-    data: townData
+    data: townData,
   } = useFilterTownSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({
-    townCode
+    townCode,
   }: {
     townCode: string;
   }): React.ReactElement => {
@@ -82,7 +88,7 @@ export const Town = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -94,7 +100,7 @@ export const Town = () => {
               showHeader={{
                 mainTitle: 'Town',
                 secondaryTitle: 'See a directory of all towns in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -102,7 +108,7 @@ export const Town = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 townData?.map((dataItem: SearchTownResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userid}>

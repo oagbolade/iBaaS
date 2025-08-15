@@ -15,6 +15,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchSetupConditionResponse } from '@/api/ResponseTypes/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 // ON HOld untill the product gives us go ahead
 export const actionButtons: any = [
@@ -25,23 +26,28 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const SetupConditionTable = () => {
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('setup-condition');
 
   const {
     totalPages,
     totalElements,
     data: setupConditionData,
-    isLoading
+    isLoading,
   } = useFilterSetupConditionSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenu = ({ code }: { code: string }): React.ReactElement => {
     return (
@@ -71,7 +77,7 @@ export const SetupConditionTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               setupConditionData?.map(
                 (dataItem: SearchSetupConditionResponse) => {
                   return (
@@ -87,7 +93,7 @@ export const SetupConditionTable = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                }
+                },
               )
             ) : (
               <StyledTableRow>

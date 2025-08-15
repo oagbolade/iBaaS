@@ -18,27 +18,34 @@ import { SearchStateResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { useGetRegion } from '@/api/setup/useCreateRegion';
 import { useFilterStateSearch } from '@/api/setup/useCreateState';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const StateManagement = () => {
-  const [page, setPage] = useState(1);
   const { status } = useGetStatus();
   const { states } = useGetAllStates();
   const { region } = useGetRegion();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('company-states');
   const {
     totalPages,
     totalElements,
     data: statementData,
-    isLoading
+    isLoading,
   } = useFilterStateSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({
-    stateCode
+    stateCode,
   }: {
     stateCode: string;
   }): React.ReactElement => {
@@ -69,7 +76,7 @@ export const StateManagement = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -82,7 +89,7 @@ export const StateManagement = () => {
                 mainTitle: 'State',
                 secondaryTitle:
                   'See a directory of all state management in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -90,7 +97,7 @@ export const StateManagement = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 statementData?.map((dataItem: SearchStateResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userId}>
