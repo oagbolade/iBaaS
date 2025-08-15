@@ -18,6 +18,7 @@ import { SearchDormancyResponse } from '@/api/ResponseTypes/setup';
 import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -32,11 +33,14 @@ export const actionButtons: any = [
 
 export const DormancyCriteriaTable = () => {
   const { status } = useGetStatus();
-
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-
-  const [search, setSearch] = useState<boolean>(false);
+    const {
+      searchParams,
+      setSearchParams,
+      searchActive,
+      setSearchActive,
+      page,
+      setPage
+    } = usePersistedSearch<ISearchParams>('dormancy-criteria');
   const {
     totalPages,
     totalElements,
@@ -46,7 +50,7 @@ export const DormancyCriteriaTable = () => {
 
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({
@@ -90,7 +94,7 @@ export const DormancyCriteriaTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               dormancyData?.map((dataItem: SearchDormancyResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>

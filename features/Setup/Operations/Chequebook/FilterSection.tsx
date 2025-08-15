@@ -11,6 +11,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { ICheckBooks } from '@/api/ResponseTypes/customer-service';
 import { filterChequeSchema } from '@/schemas/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -18,15 +19,21 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, checkbooks }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('cheque-book');
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const { mappedCheckBooks } = useMapSelectOptions({
-    checkbooks
+    checkbooks,
   });
+
+  const initialValues = {
+    typeDesc: searchParams?.typeDesc ?? '',
+    typeId: searchParams?.typeId ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       typeDesc: values.typeDesc?.toString().length > 0 ? values.typeDesc : null,
-      typeId: values.typeId?.toString().length > 0 ? values.typeId : null
+      typeId: values.typeId?.toString().length > 0 ? values.typeId : null,
     };
 
     onSearch?.(params);
@@ -34,7 +41,8 @@ export const FilterSection = ({ onSearch, checkbooks }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -51,7 +59,7 @@ export const FilterSection = ({ onSearch, checkbooks }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="typeId"
                 options={mappedCheckBooks}
@@ -69,7 +77,7 @@ export const FilterSection = ({ onSearch, checkbooks }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="typeDesc"

@@ -17,6 +17,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchZoneResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -26,27 +27,33 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const ZoneSetup = () => {
-  const [page, setPage] = useState(1);
   const { status } = useGetStatus();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('zone-setup');
   const {
     totalPages,
     totalElements,
     data: zoneData,
-    isLoading
+    isLoading,
   } = useFilterZoneSearch({ ...searchParams, page });
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({ zoneid }: { zoneid: string }): React.ReactElement => {
@@ -71,7 +78,7 @@ export const ZoneSetup = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -84,7 +91,7 @@ export const ZoneSetup = () => {
                 mainTitle: 'Zone Setup',
                 secondaryTitle:
                   'See a directory of all zone setups in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -92,7 +99,7 @@ export const ZoneSetup = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 zoneData?.map((dataItem: SearchZoneResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userId}>

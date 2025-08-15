@@ -17,6 +17,7 @@ import { SearchClearingBankResponse } from '@/api/ResponseTypes/setup';
 import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -26,28 +27,32 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const ClearingBanksTable = () => {
   const { status } = useGetStatus();
 
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('clearing-bank');
   const {
     totalPages,
     totalElements,
     data: clearingBankData,
-    isLoading
+    isLoading,
   } = useFilterClearingBankSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenuComponent = ({
-    bankCode
+    bankCode,
   }: {
     bankCode: string;
   }): React.ReactElement => {
@@ -79,7 +84,7 @@ export const ClearingBanksTable = () => {
               hideFilterSection: true,
               mainTitle: 'Clearing Banks',
               secondaryTitle:
-                'See a directory of all Clearing Banks in this system.'
+                'See a directory of all Clearing Banks in this system.',
             }}
             ActionMenuProps={ActionMenuComponent}
             totalPages={totalPages}
@@ -87,7 +92,7 @@ export const ClearingBanksTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               clearingBankData?.map((dataItem: SearchClearingBankResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>

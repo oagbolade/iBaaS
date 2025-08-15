@@ -10,6 +10,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -17,15 +18,21 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('document-kyc');
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    docName: searchParams?.docName ?? '',
+    status: searchParams?.status ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status?.toString().length > 0 ? values.status : null,
-      docName: values.docName?.toString().length > 0 ? values.docName : null
+      docName: values.docName?.toString().length > 0 ? values.docName : null,
     };
 
     onSearch?.(params);
@@ -33,7 +40,8 @@ export const FilterSection = ({ onSearch, status }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -50,7 +58,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -68,7 +76,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="docName"

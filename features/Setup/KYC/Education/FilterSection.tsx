@@ -8,20 +8,27 @@ import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('education');
+
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    educationname: searchParams?.educationname ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       educationname:
         values.educationname?.toString().length > 0
           ? values.educationname
-          : null
+          : null,
     };
 
     onSearch?.(params);
@@ -29,7 +36,8 @@ export const FilterSection = ({ onSearch }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -46,7 +54,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="educationname"

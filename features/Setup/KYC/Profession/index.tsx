@@ -17,6 +17,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchProfessionResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -26,31 +27,36 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Profession = () => {
-  const [page, setPage] = useState(1);
   const { status } = useGetStatus();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('profession');
   const {
     totalPages,
     totalElements,
     data: professionData,
-    isLoading
+    isLoading,
   } = useFilterProfessionSearch({ ...searchParams, page });
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({
-    profcode
+    profcode,
   }: {
     profcode: string;
   }): React.ReactElement => {
@@ -75,7 +81,7 @@ export const Profession = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -88,7 +94,7 @@ export const Profession = () => {
                 mainTitle: 'Profession',
                 secondaryTitle:
                   'See a directory of all professions in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -96,7 +102,7 @@ export const Profession = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 professionData?.map((dataItem: SearchProfessionResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userId}>
