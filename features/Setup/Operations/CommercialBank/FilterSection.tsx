@@ -10,6 +10,7 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IProductType, IStatus } from '@/api/ResponseTypes/general';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -17,10 +18,18 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('commercial-bank');
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
+
+  const initialValues = {
+    bankName: searchParams?.bankName ?? '',
+    status: searchParams?.status ?? '',
+    bankCode: searchParams?.bankCode ?? '',
+    bankshortname: searchParams?.bankshortname ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -30,7 +39,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
       bankshortname:
         values.bankshortname?.toString().length > 0
           ? values.bankshortname
-          : null
+          : null,
     };
 
     onSearch?.(params);
@@ -38,7 +47,8 @@ export const FilterSection = ({ onSearch, status }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -55,7 +65,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -73,7 +83,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="bankName"

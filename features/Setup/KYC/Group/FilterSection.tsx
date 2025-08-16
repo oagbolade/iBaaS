@@ -11,6 +11,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IBranches, IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { GroupSearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -19,11 +20,19 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status, branches }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('kyc-group');
   const { mappedStatus, mappedBranches } = useMapSelectOptions({
     status,
-    branches
+    branches,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    branchCode: searchParams?.branchCode ?? '',
+    status: searchParams?.status ?? '',
+    groupId: searchParams?.groupId ?? '',
+    groupName: searchParams?.groupName ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -32,14 +41,15 @@ export const FilterSection = ({ onSearch, status, branches }: Props) => {
         values.groupName?.toString().length > 0 ? values.groupName : null,
       branchCode:
         values.branchCode?.toString().length > 0 ? values.branchCode : null,
-      groupId: values.groupId?.toString().length > 0 ? values.groupId : null
+      groupId: values.groupId?.toString().length > 0 ? values.groupId : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -56,7 +66,7 @@ export const FilterSection = ({ onSearch, status, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -74,7 +84,7 @@ export const FilterSection = ({ onSearch, status, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchCode"
                 options={mappedBranches}
@@ -92,7 +102,7 @@ export const FilterSection = ({ onSearch, status, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="groupName"

@@ -19,6 +19,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchGroupsResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -28,28 +29,34 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Group = () => {
-  const [page, setPage] = useState(1);
   const { status } = useGetStatus();
   const { branches } = useGetBranches();
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('kyc-group');
   const {
     totalPages,
     totalElements,
     data: groupData,
-    isLoading
+    isLoading,
   } = useFilterGroupSearch({ ...searchParams, page });
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
   const ActionMenu = ({ groupId }: { groupId: string }): React.ReactElement => {
     return (
@@ -79,7 +86,7 @@ export const Group = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -91,7 +98,7 @@ export const Group = () => {
               showHeader={{
                 mainTitle: 'Group',
                 secondaryTitle: 'See a directory of all groups in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -99,7 +106,7 @@ export const Group = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 groupData?.map((dataItem: SearchGroupsResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userId}>

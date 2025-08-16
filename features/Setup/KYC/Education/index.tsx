@@ -15,6 +15,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchEducationResponse } from '@/api/ResponseTypes/setup';
 import { FormSkeleton } from '@/components/Loaders';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -24,30 +25,35 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' }
+          height: { mobile: '30px', desktop: '40px' },
         }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const Education = () => {
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('education');
   const {
     totalPages,
     totalElements,
     data: educationData,
-    isLoading
+    isLoading,
   } = useFilterEducationSearch({ ...searchParams, page });
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({
-    educationCode
+    educationCode,
   }: {
     educationCode: string;
   }): React.ReactElement => {
@@ -71,7 +77,7 @@ export const Education = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%'
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -84,7 +90,7 @@ export const Education = () => {
                 mainTitle: 'Education',
                 secondaryTitle:
                   'See a directory of all educations in this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -92,7 +98,7 @@ export const Education = () => {
               totalElements={totalElements}
               page={page}
             >
-              {search ? (
+              {searchActive ? (
                 educationData?.map((dataItem: SearchEducationResponse) => {
                   return (
                     <StyledTableRow key={dataItem.userId}>

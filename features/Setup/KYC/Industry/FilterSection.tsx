@@ -11,6 +11,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISector } from '@/api/ResponseTypes/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -19,11 +20,19 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status, sectors }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('industry');
+
   const { mappedStatus, mappedSectors } = useMapSelectOptions({
     status,
-    sectors
+    sectors,
   });
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    industryCode: searchParams?.industryCode ?? '',
+    status: searchParams?.status ?? '',
+    industryName: searchParams?.industryName ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -31,14 +40,15 @@ export const FilterSection = ({ onSearch, status, sectors }: Props) => {
       industryCode:
         values.industryCode?.toString().length > 0 ? values.industryCode : null,
       industryName:
-        values.industryName?.toString().length > 0 ? values.industryName : null
+        values.industryName?.toString().length > 0 ? values.industryName : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -55,7 +65,7 @@ export const FilterSection = ({ onSearch, status, sectors }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="status"
                 options={mappedStatus}
@@ -73,7 +83,7 @@ export const FilterSection = ({ onSearch, status, sectors }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="industryCode"
                 options={mappedSectors}
@@ -90,7 +100,7 @@ export const FilterSection = ({ onSearch, status, sectors }: Props) => {
               <FormTextInput
                 customStyle={{
                   width: setWidth(),
-                  fontSize: '14px'
+                  fontSize: '14px',
                 }}
                 icon={<SearchIcon />}
                 name="industryName"

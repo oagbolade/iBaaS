@@ -11,6 +11,7 @@ import { Form, Formik } from 'formik';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { ClearingSearchParams } from '@/schemas/schema-values/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -18,16 +19,23 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, status }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('clearing-bank');
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const { mappedStatus } = useMapSelectOptions({
-    status
+    status,
   });
+
+  const initialValues = {
+    bankName: searchParams?.bankName ?? '',
+    status: searchParams?.status ?? '',
+    bankCode: searchParams?.bankCode ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status?.toString().length > 0 ? values.status : null,
       bankName: values.bankName?.toString().length > 0 ? values.bankName : null,
-      bankCode: values.bankCode?.toString().length > 0 ? values.bankCode : null
+      bankCode: values.bankCode?.toString().length > 0 ? values.bankCode : null,
     };
 
     onSearch?.(params);
@@ -36,7 +44,8 @@ export const FilterSection = ({ onSearch, status }: Props) => {
   return (
     <>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
       >
         <Form>
@@ -53,7 +62,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields
+                    ...inputFields,
                   }}
                   name="status"
                   options={mappedStatus}
@@ -71,7 +80,7 @@ export const FilterSection = ({ onSearch, status }: Props) => {
                   customStyle={{
                     width: setWidth(),
                     fontSize: '14px',
-                    ...inputFields
+                    ...inputFields,
                   }}
                   icon={<SearchIcon />}
                   name="bankName"

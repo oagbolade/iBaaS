@@ -7,7 +7,7 @@ import { COLUMNS } from './COLUMNS';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
   submitButton,
-  cancelButton
+  cancelButton,
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MuiTableContainer } from '@/components/Table';
 import { TopActionsArea } from '@/components/Revamp/Shared';
@@ -19,6 +19,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { SearchChequeBookResponse } from '@/api/ResponseTypes/setup';
 import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -28,24 +29,29 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>
+  </Box>,
 ];
 
 export const ChequebookTable = () => {
   const { checkbooks } = useGetAllChequeBooks();
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
 
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('cheque-book');
   const {
     totalPages,
     totalElements,
     data: chequeData,
-    isLoading
+    isLoading,
   } = useFilterChequeSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
-    setSearch(true);
+    setSearchActive(true);
   };
 
   const ActionMenu = ({ typeId }: { typeId: string }): React.ReactElement => {
@@ -75,7 +81,7 @@ export const ChequebookTable = () => {
               hideFilterSection: true,
               mainTitle: 'Chequebook',
               secondaryTitle:
-                'See a directory of all chequebooks setup in this system.'
+                'See a directory of all chequebooks setup in this system.',
             }}
             ActionMenuProps={ActionMenu}
             totalPages={totalPages}
@@ -83,7 +89,7 @@ export const ChequebookTable = () => {
             totalElements={totalElements}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               chequeData?.map((dataItem: SearchChequeBookResponse) => {
                 return (
                   <StyledTableRow key={dataItem.userId}>
