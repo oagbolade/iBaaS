@@ -10,7 +10,7 @@ import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { Status } from '@/components/Labels';
@@ -27,7 +27,7 @@ const ActionMenuProps = ({
   status,
   settlementAccount,
   productCode,
-  customerId,
+  customerId
 }: {
   status: string;
   accountNumber: string;
@@ -58,7 +58,7 @@ export const LoanDirectory = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('loan-directory');
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -70,16 +70,16 @@ export const LoanDirectory = () => {
     totalPages,
     totalElements,
     data: getAllLoanData,
-    isLoading: isLoanDataLoading,
+    isLoading: isLoanDataLoading
   } = useGetAllLoans({
     ...searchParams,
-    page,
+    page
   });
 
   React.useEffect(() => {
     const shouldDisableLoanUnderWriting = !checkMultipleUserRoleAccess(
       'Loan Directory',
-      'LOAN UNDERWRITING',
+      'LOAN UNDERWRITING'
     );
 
     setShouldDisableLoanUnderwriting(shouldDisableLoanUnderWriting);
@@ -90,7 +90,7 @@ export const LoanDirectory = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '80px',
+        marginTop: '80px'
       }}
     >
       <Box
@@ -100,7 +100,7 @@ export const LoanDirectory = () => {
       >
         <Link
           style={{
-            pointerEvents: shouldDisableLoanUnderwriting ? 'none' : 'auto',
+            pointerEvents: shouldDisableLoanUnderwriting ? 'none' : 'auto'
           }}
           aria-disabled={shouldDisableLoanUnderwriting}
           tabIndex={shouldDisableLoanUnderwriting ? -1 : undefined}
@@ -111,7 +111,7 @@ export const LoanDirectory = () => {
             customStyle={{
               width: '245px',
               height: '48px',
-              variant: 'contained',
+              variant: 'contained'
             }}
             buttonTitle="Create Loan Underwriting"
           />

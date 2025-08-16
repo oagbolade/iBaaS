@@ -2,7 +2,7 @@ import React from 'react';
 import { styled as muistyled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary, {
-  AccordionSummaryProps,
+  AccordionSummaryProps
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import styled from 'styled-components';
@@ -12,13 +12,13 @@ import {
   PersonalDetailsFormWrapper,
   NextOfKinDetailsForm,
   ReferrerDetailsForm,
-  IdentificationDetailsForm,
+  IdentificationDetailsForm
 } from '@/features/CustomerService/Form/CreateCustomerForms';
 import './removeDivider.module.css';
 import {
   ChevronDown,
   CompletedStepIcon,
-  UnCompletedStepIcon,
+  UnCompletedStepIcon
 } from '@/assets/svg';
 import colors from '@/assets/colors';
 import {
@@ -28,7 +28,7 @@ import {
   IRelationship,
   IStates,
   ITitle,
-  ITown,
+  ITown
 } from '@/api/ResponseTypes/customer-service';
 import { IAccountOfficers } from '@/api/ResponseTypes/admin';
 import { IBranches } from '@/api/ResponseTypes/general';
@@ -36,7 +36,7 @@ import {
   IEducation,
   IEducationByCode,
   IOccupation,
-  ISector,
+  ISector
 } from '@/api/ResponseTypes/setup';
 
 const Accordion = muistyled((props: AccordionProps) => {
@@ -48,7 +48,7 @@ const Accordion = muistyled((props: AccordionProps) => {
     borderRadius: '12px',
     border: `1px solid ${colors.neutral300}`,
     boxShadow: 'none',
-    marginBottom: '20px',
+    marginBottom: '20px'
   };
 });
 
@@ -62,14 +62,14 @@ const AccordionSummary = muistyled((props: AccordionSummaryProps) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       height: '40px',
-      padding: '20px 24px 5px 16px',
-    },
+      padding: '20px 24px 5px 16px'
+    }
   };
 });
 
 const AccordionDetails = muistyled(MuiAccordionDetails)(() => {
   return {
-    padding: '20px 24px 30px 16px',
+    padding: '20px 24px 30px 16px'
   };
 });
 
@@ -116,7 +116,7 @@ const FormSelector = ({
   branches,
   sectors,
   education,
-  professions,
+  professions
 }: Props) => {
   let selectedForm;
   switch (cardKey) {
@@ -189,7 +189,7 @@ export const ShortCardWithAccordion = ({
   branches,
   sectors,
   education,
-  professions,
+  professions
 }: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -216,7 +216,7 @@ export const ShortCardWithAccordion = ({
                   color: `${colors.neutral1000}`,
                   fontSize: '20px',
                   fontWeight: 700,
-                  lineHeight: '32px',
+                  lineHeight: '32px'
                 }}
               >
                 {cardTitle}
@@ -232,7 +232,7 @@ export const ShortCardWithAccordion = ({
                         fontSize: '16px',
                         fontWeight: 300,
                         lineHeight: '24px',
-                        width: '146px',
+                        width: '146px'
                       }}
                       mt={0.8}
                       mr={1}
@@ -254,7 +254,7 @@ export const ShortCardWithAccordion = ({
                 <Box
                   sx={{
                     marginBottom: expanded ? '35px' : '15px',
-                    transform: `${expanded ? 'rotate(180deg)' : 'none'}`,
+                    transform: `${expanded ? 'rotate(180deg)' : 'none'}`
                   }}
                   mt={1.2}
                 >

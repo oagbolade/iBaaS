@@ -23,19 +23,19 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('overdraft');
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
-    status,
+    status
   });
   const { setWidth } = useCurrentBreakpoint();
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     status: searchParams?.status ?? '',
-    accountNumber: searchParams?.accountNumber ?? '',
+    accountNumber: searchParams?.accountNumber ?? ''
   };
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: values.branchID ? values.branchID : null,
       status: values.status ? values.status : null,
-      accountNumber: values.accountNumber ? values.accountNumber : null,
+      accountNumber: values.accountNumber ? values.accountNumber : null
     };
 
     onSearch?.(params);
@@ -54,7 +54,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
             <FormSelectField
               customStyle={{
                 width: setWidth(),
-                ...inputFields,
+                ...inputFields
               }}
               name="branchID"
               options={mappedBranches}
@@ -73,7 +73,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields,
+                ...inputFields
               }}
               name="status"
               options={mappedStatus}
@@ -91,7 +91,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
             <FormTextInput
               customStyle={{
                 width: setWidth(),
-                ...inputFields,
+                ...inputFields
               }}
               type="number"
               icon={<SearchIcon />}

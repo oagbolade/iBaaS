@@ -372,6 +372,7 @@ export interface CreateDemandDepositFormValues {
   maxAge: number;
   micincome: number;
   phoneNo4AcctNumber: number;
+  miscIncome: string;
   ProdDocuments: [];
   ProdCharges: [];
   ProdException: [];
@@ -652,9 +653,9 @@ export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   openbalance: 0,
   closeBalance: 0,
   minintbalance: 0,
-  crtype: null,
-  drType: null,
-  withallowed: null,
+  crtype: 0,
+  drType: 0,
+  withallowed: 0,
   assetBalance: '',
   suspendedAsset: '',
   interestReceivable: '',
@@ -668,7 +669,7 @@ export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   unearnincome: '',
   unearnexp: '',
   stateInactive: 0,
-  checkBook: 0,
+  checkBook: 1,
   sweepIn: 0,
   si: 0,
   od: 0,
@@ -684,6 +685,7 @@ export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   maxAge: 0,
   micincome: 0,
   phoneNo4AcctNumber: 0,
+  miscIncome: '',
   ProdDocuments: [],
   ProdCharges: [],
   ProdException: []

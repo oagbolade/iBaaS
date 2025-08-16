@@ -4,7 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Formik, Form } from 'formik';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { useCurrentBreakpoint } from '@/utils';
-import { IBranches, IStatus } from '@/api/ResponseTypes/general';
+import { IBranches, IProductType, IStatus } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { FormSelectField, FormTextInput } from '@/components/FormikFields';
@@ -17,15 +17,21 @@ type Props = {
   onSearch: Function;
   branches: IBranches[];
   status: IStatus[];
+  productTypes: IProductType[] | Array<any>;
 };
 
-export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
-  const { searchParams } =
-    usePersistedSearch<ISearchParams>('account-overview');
-  const { mappedBranches, mappedStatus } = useMapSelectOptions({
-    branches,
-    status,
-  });
+export const AccountFilterSection = ({
+  onSearch,
+  branches,
+  status,
+  productTypes
+}: Props) => {
+  const { mappedBranches, mappedStatus, mappedProductClass } =
+    useMapSelectOptions({
+      branches,
+      status,
+      productTypes
+    });
   const { setWidth } = useCurrentBreakpoint();
 
   const initialValues = {
@@ -39,6 +45,8 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
       status: values.status.toString().length > 0 ? values.status : null,
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
       accountNumber: values.search.toString().length > 0 ? values.search : null,
+      accountType:
+        values.accountType.toString().length > 0 ? values.accountType : null
     };
 
     onSearch(params);
@@ -65,7 +73,7 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -83,7 +91,7 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="status"
                 options={mappedStatus}
@@ -94,14 +102,32 @@ export const AccountFilterSection = ({ onSearch, branches, status }: Props) => {
               mb={{ tablet: 6 }}
               item
               mobile={12}
-              tablet={7}
+              tablet={2}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                name="accountType"
+                options={mappedProductClass}
+                label="Account Type"
+              />{' '}
+            </Grid>
+            <Grid
+              mb={{ tablet: 4 }}
+              item
+              mobile={8}
+              tablet={4}
               justifyContent="center"
             >
               <FormTextInput
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="search"

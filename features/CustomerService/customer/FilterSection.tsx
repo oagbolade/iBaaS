@@ -22,19 +22,19 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
   const { searchParams } =
     usePersistedSearch<ISearchParams>('customer-overview');
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
   const { setWidth } = useCurrentBreakpoint();
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
-    search: searchParams?.fullName ?? '',
+    search: searchParams?.fullName ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: `${values.branchID.trim().length > 0 ? values.branchID : null}`,
-      fullName: values.search.trim().length > 0 ? values.search : null,
+      fullName: values.search.trim().length > 0 ? values.search : null
     };
 
     onSearch?.(params);
@@ -61,7 +61,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -79,7 +79,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="search"

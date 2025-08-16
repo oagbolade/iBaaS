@@ -19,12 +19,12 @@ export const FilterSection = ({ onSearch }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
 
   const initialValues = {
-    search: searchParams?.fullName ?? '',
+    search: searchParams?.fullName ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
-      fullName: values.search.toString().length > 0 ? values.search : null,
+      fullName: values.search.toString().length > 0 ? values.search : null
     };
 
     onSearch(params);
@@ -50,7 +50,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="search"

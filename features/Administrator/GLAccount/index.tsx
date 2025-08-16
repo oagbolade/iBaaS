@@ -27,7 +27,7 @@ const actionButtons: any = [
       buttonTitle="Create General Ledger"
       customStyle={{ ...submitButton, width: '236px', height: '40px' }}
     />
-  </Link>,
+  </Link>
 ];
 
 export const GLAccount = () => {
@@ -37,17 +37,17 @@ export const GLAccount = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('gl-account');
 
   const {
     totalPages,
     totalElements,
     data: glData,
-    isLoading: isGLDataLoading,
+    isLoading: isGLDataLoading
   } = useFilterGLAccountSearch({
     ...searchParams,
-    page,
+    page
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -63,7 +63,7 @@ export const GLAccount = () => {
     post,
     populate,
     swing,
-    typeP,
+    typeP
   }: {
     glNumber: string;
     pointing?: number;
@@ -99,7 +99,7 @@ export const GLAccount = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
           {isGLDataLoading ? (
@@ -108,7 +108,7 @@ export const GLAccount = () => {
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{
-                hasActions: true,
+                hasActions: true
               }}
               data={glData}
               setPage={setPage}
@@ -145,7 +145,7 @@ export const GLAccount = () => {
                         </StyledTableCell>
                       </StyledTableRow>
                     );
-                  },
+                  }
                 )
               ) : (
                 <StyledTableRow>

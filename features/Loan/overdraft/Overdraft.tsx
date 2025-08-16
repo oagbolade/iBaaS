@@ -8,7 +8,7 @@ import { FilterSection } from './FilterSection';
 import {
   MuiTableContainer,
   renderEmptyTableBody,
-  StyledTableRow,
+  StyledTableRow
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ISearchParams } from '@/app/api/search/route';
@@ -29,12 +29,12 @@ type Props = {
 const ActionMenuProps: React.FC<Props> = ({
   accountNumber,
   customerId,
-  accountName,
+  accountName
 }: Props) => {
   return (
     <Link
       href={`/loan/overdrafts/view-overdraft?accountNumber=${DOMPurify.sanitize(accountNumber)}&accountName=${DOMPurify.sanitize(accountName)}&custmerId=${DOMPurify.sanitize(
-        customerId,
+        customerId
       )}`}
     >
       View Details
@@ -51,7 +51,7 @@ export const OverDrafts = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('overdraft');
 
   const { status } = useGetStatus();
@@ -64,10 +64,10 @@ export const OverDrafts = () => {
     totalPages,
     totalElements,
     data: customerAccountData,
-    isLoading: isOverdraftDataLoading,
+    isLoading: isOverdraftDataLoading
   } = useFilterCustomerAccountSearch({
     ...searchParams,
-    page,
+    page
   });
 
   return (
@@ -75,12 +75,12 @@ export const OverDrafts = () => {
       sx={{
         padding: '25px',
         width: '100%',
-        marginTop: '60px',
+        marginTop: '60px'
       }}
     >
       <Box
         sx={{
-          marginBottom: '25px',
+          marginBottom: '25px'
         }}
       />
 
@@ -98,7 +98,7 @@ export const OverDrafts = () => {
         <MuiTableContainer
           columns={COLUMN}
           tableConfig={{
-            hasActions: true,
+            hasActions: true
           }}
           data={customerAccountData}
           totalPages={totalPages}
@@ -108,7 +108,7 @@ export const OverDrafts = () => {
           showHeader={{
             mainTitle: 'Overdrafts',
             secondaryTitle: 'Set overdraft limit for all your customers.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
         >
           {searchActive ? (

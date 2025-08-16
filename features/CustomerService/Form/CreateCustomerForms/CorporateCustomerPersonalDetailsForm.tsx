@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid , Typography} from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useFormikContext } from 'formik';
@@ -11,7 +11,8 @@ import {
   FormSelectField,
   FormikRadioButton,
   FormikDateTimePicker,
-  FormSelectInput
+  FormSelectInput,
+  CheckboxInput
 } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
@@ -49,6 +50,7 @@ import { useHandleCompletedFields } from '@/utils/hooks/useHandleCompletedFields
 import { useCreateValidationKeysMapper } from '@/utils/hooks/useCreateValidationKeysMapper';
 import { mapCustomerSearch, mapStaffSearch } from '@/utils/mapCustomerSearch';
 import { formatDateOfBirth } from '@/utils/formatDateOfBirth';
+import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
 
 type Props = {
   titles?: ITitle[];
@@ -73,7 +75,8 @@ export const CorporateCustomerPersonalDetailsForm = ({
   professions,
   branches,
   groups,
-  officers
+  officers,
+
 }: Props) => {
   const [isGroupMember, setIsGroupMember] = React.useState<string>('true');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
@@ -251,7 +254,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
       ...prev,
       introid: pickResult() || []
     }));
-  }, [isCustomerSearchLoading, isStaffSearchLoading]);
+  }, [isCustomerSearchLoading, isStaffSearchLoading, accountDetailsResults, users, introducerType]);
 
   return (
     <>
@@ -449,7 +452,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '100%')
           }}
-          required
+          
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>
@@ -460,7 +463,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '100%')
           }}
-          required
+          
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>
@@ -511,7 +514,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
       <Grid item={isTablet} mobile={12}>
         <FormSelectInput
           onChange={handleSelectChange}
-          name="introducerType"
+          name="introType"
           options={IntroducerType}
           label="Introducer Type"
           value={introducerType.customer || introducerType.staff}
@@ -603,6 +606,22 @@ export const CorporateCustomerPersonalDetailsForm = ({
           />
         </Grid>
       )}
+
+       <Grid item={isTablet} mobile={12}>
+                  <Typography sx={{ ...RadioButtonTitle, display: 'inline' }}>
+                    Alert type
+                  </Typography>
+                  <Box sx={{ marginTop: '10px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <CheckboxInput label="SMS" name="smsalert" id="test-sms" />
+                      <CheckboxInput
+                        label="Email"
+                        name="emailalert"
+                        id="test-email"
+                      />
+                    </Box>
+                  </Box>
+                </Grid>
     </>
   );
 };

@@ -149,7 +149,7 @@ export const CreateCustomerContainer = () => {
   React.useEffect(() => {
     setAccountOfficerValue(customerResult?.acctOfficer || '');
     setIntroducerIdValue(customerResult?.introid || '');
-  }, [customerResult]);
+  }, [customerResult, setAccountOfficerValue, setIntroducerIdValue]);
 
   const actionButtons: any = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -213,8 +213,17 @@ export const CreateCustomerContainer = () => {
         : extractIdFromDropdown(accountOfficerValue)
     };
 
+    const getAllCorporateValues = {
+      ...values,
+      emailalert: Number(emailalert),
+      smsalert: Number(smsalert),
+      idIssueDate,
+      idExpryDate,
+      nin: values.natIDNo
+    };
+
     if (customerType === 'corporate') {
-      mutateCorporateCustomer(getAllValues);
+      mutateCorporateCustomer(getAllCorporateValues);
       return;
     }
 
@@ -230,7 +239,13 @@ export const CreateCustomerContainer = () => {
       // Reset completion progress when creating a new customer
       setCompleted(progressCompletionInitialValues);
     }
-  }, [customerResult, isEditing]);
+  }, [
+    customerResult,
+    isEditing,
+    handleCompletedFields,
+    setCompleted,
+    isCustomerResultLoading
+  ]);
 
   React.useEffect(() => {
     const submit = document.getElementById('submitButton');
@@ -252,7 +267,7 @@ export const CreateCustomerContainer = () => {
     if (customerResult?.customerType === corporate) {
       setCustomerType('corporate');
     }
-  }, [customerResult]);
+  }, [customerResult, setCustomerType]);
 
   if (isEditing && isCustomerResultLoading) {
     return <FormSkeleton noOfLoaders={5} />;
@@ -265,7 +280,7 @@ export const CreateCustomerContainer = () => {
 
   const pickSchema =
     customerType === 'corporate'
-      ? Yup.object({ ...createCustomer, ...corporateCustomerPersonalDetails })
+      ? Yup.object({ ...corporateCustomerPersonalDetails })
       : Yup.object({ ...createCustomer, ...individualCustomerPersonalDetails });
 
   const sex = customerResult?.sex === 'Male' ? '1' : '0';
@@ -280,7 +295,7 @@ export const CreateCustomerContainer = () => {
       <TopActionsArea actionButtons={actionButtons} />
       <Box
         sx={{
-          padding: '25px',
+          paddingX: '25px',
           width: '100%'
         }}
       >
@@ -290,6 +305,7 @@ export const CreateCustomerContainer = () => {
         />
         <Formik
           onSubmit={(values) => onSubmit(values)}
+          enableReinitialize
           initialValues={
             // Hardcoded relationtype as string and menu id as number, we need to get more context as to what it is
             isEditing
@@ -330,7 +346,7 @@ export const CreateCustomerContainer = () => {
               <FormSkeleton noOfLoaders={1} />
             ) : (
               <ShortCardWithAccordion
-                cardTitle="Personal Details"
+                cardTitle={`${customerType === 'individual' ? 'Personal Details' : 'Corporate Details'}`}
                 cardKey="personalDetails"
                 completed={completed}
                 titles={title}
@@ -349,51 +365,68 @@ export const CreateCustomerContainer = () => {
             {areStatesLoading || areContriesLoading || areTownsLoading ? (
               <FormSkeleton noOfLoaders={1} />
             ) : (
-              <ShortCardWithAccordion
-                cardTitle="Business/Office/School Details"
-                cardKey="businessDetails"
-                completed={completed}
-                countries={countries}
-                states={states}
-                towns={towns}
-              />
+              <div>
+                {customerType === 'individual' ? (
+                  <ShortCardWithAccordion
+                    cardTitle="Business/Office/School Details"
+                    cardKey="businessDetails"
+                    completed={completed}
+                    countries={countries}
+                    states={states}
+                    towns={towns}
+                  />
+                ) : null}
+              </div>
             )}
 
             {areRelationshipsLoading || areStatesLoading || areTownsLoading ? (
               <FormSkeleton noOfLoaders={1} />
             ) : (
-              <ShortCardWithAccordion
-                cardTitle="Next of Kin Details"
-                cardKey="nextOfKinDetails"
-                completed={completed}
-                relationships={relationships}
-                states={states}
-                towns={towns}
-              />
+              <div>
+                {customerType === 'individual' ? (
+                  <ShortCardWithAccordion
+                    cardTitle="Next of Kin Details"
+                    cardKey="nextOfKinDetails"
+                    completed={completed}
+                    relationships={relationships}
+                    states={states}
+                    towns={towns}
+                  />
+                ) : null}
+              </div>
             )}
 
             {areIdsLoading ? (
               <FormSkeleton noOfLoaders={1} />
             ) : (
-              <ShortCardWithAccordion
-                cardTitle="Identification Details"
-                cardKey="identificationDetails"
-                completed={completed}
-                idCards={idCards}
-              />
+              <div>
+                {customerType === 'individual' ? (
+                  <ShortCardWithAccordion
+                    cardTitle="Identification Details"
+                    cardKey="identificationDetails"
+                    completed={completed}
+                    idCards={idCards}
+                  />
+                ) : null}
+              </div>
             )}
 
             {areOfficersLoading || arebranchesLoading || areGroupsLoading ? (
               <FormSkeleton noOfLoaders={1} />
             ) : (
-              <ShortCardWithAccordion
-                cardTitle="Referrer’s Details"
-                cardKey="referrerDetails"
-                hideCompleted
-                officers={officers}
-                groups={groups}
-                branches={branches}
-              />
+
+              <div>
+                {customerType === 'individual' ? (
+                  <ShortCardWithAccordion
+                    cardTitle="Referrer’s Details"
+                    cardKey="referrerDetails"
+                    hideCompleted
+                    officers={officers}
+                    groups={groups}
+                    branches={branches}
+                  />
+                ) : null}
+              </div>
             )}
 
             <button id="submitButton" type="submit" style={{ display: 'none' }}>

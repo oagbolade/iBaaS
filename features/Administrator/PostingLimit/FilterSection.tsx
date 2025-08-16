@@ -26,7 +26,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     branchCredit: searchParams?.branchCredit ?? '',
-    branchDebit: searchParams?.branchDebit ?? '',
+    branchDebit: searchParams?.branchDebit ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -35,7 +35,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
         values.branchCredit.toString().length > 0 ? values.branchCredit : null,
       branchDebit:
         values.branchDebit.toString().length > 0 ? values.branchDebit : null,
-      branchID: values.branchID.toString().length > 0 ? values.branchID : null,
+      branchID: values.branchID.toString().length > 0 ? values.branchID : null
     };
 
     onSearch(params);
@@ -62,7 +62,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -80,7 +80,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="branchCredit"
@@ -99,7 +99,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="branchDebit"

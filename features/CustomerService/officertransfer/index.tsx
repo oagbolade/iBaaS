@@ -30,7 +30,7 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>{' '}
-  </Box>,
+  </Box>
 ];
 
 const ActionMenuProps = ({ officercode }: { officercode: string }) => {
@@ -52,17 +52,17 @@ export const OfficeTransferTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('transfer-officers');
 
   const {
     totalPages,
     totalElements,
     data: accountOfficerData,
-    isLoading: areAccountOfficersDataLoading,
+    isLoading: areAccountOfficersDataLoading
   } = useFilterAccountOfficerSearch({
     ...searchParams,
-    page,
+    page
   });
 
   const handleSearch = (params: ISearchParams | null) => {
@@ -86,12 +86,12 @@ export const OfficeTransferTable = () => {
           <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
-              hasActions: true,
+              hasActions: true
             }}
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Officer’s Overview',
-              secondaryTitle: 'See a directory of all Officers on this system.',
+              secondaryTitle: 'See a directory of all Officers on this system.'
             }}
             data={accountOfficerData}
             setPage={setPage}
@@ -130,7 +130,7 @@ export const OfficeTransferTable = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                },
+                }
               )
             ) : (
               <StyledTableRow>

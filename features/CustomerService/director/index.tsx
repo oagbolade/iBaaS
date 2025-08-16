@@ -32,7 +32,7 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>{' '}
-  </Box>,
+  </Box>
 ];
 
 export const DirectorTable = () => {
@@ -42,17 +42,17 @@ export const DirectorTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('directors');
 
   const {
     totalPages,
     totalElements,
     data: directorData,
-    isLoading: areDirectorsDataLoading,
+    isLoading: areDirectorsDataLoading
   } = useFilterDirectorsSearch({
     ...searchParams,
-    page,
+    page
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -63,7 +63,7 @@ export const DirectorTable = () => {
   const ActionMenuProps = ({
     directorId,
     customerId,
-    directorName,
+    directorName
   }: {
     directorId: string;
     customerId: string;
@@ -92,12 +92,11 @@ export const DirectorTable = () => {
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Director’s Overview',
-              secondaryTitle:
-                'See a directory of all Directors on this system.',
+              secondaryTitle: 'See a directory of all Directors on this system.'
             }}
             columns={COLUMNS}
             tableConfig={{
-              hasActions: true,
+              hasActions: true
             }}
             data={directorData}
             setPage={setPage}

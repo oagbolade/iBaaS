@@ -21,6 +21,7 @@ interface ISearchFilter {
   prodCode?: string | null;
   reportType?: string | null;
   accountNo?: string | null;
+  accountType?: string | null;
 }
 
 export const searchFilterInitialValues: ISearchFilter = {
@@ -45,5 +46,6 @@ export const searchFilterInitialValues: ISearchFilter = {
   pageNumber: '1',
   pageSize: '10',
   prodCode: '',
-  accountNo: ''
+  accountNo: '',
+  accountType: ''
 };

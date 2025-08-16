@@ -11,7 +11,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   MuiTableContainer,
   renderEmptyTableBody,
-  StyledTableRow,
+  StyledTableRow
 } from '@/components/Table/Table';
 import { TableSingleAction } from '@/components/Table';
 import { StyledTableCell } from '@/components/Table/style';
@@ -31,11 +31,11 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '125px', desktop: '236px' },
-          height: '40px',
+          height: '40px'
         }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export const GeneralLedger = () => {
@@ -47,7 +47,7 @@ export const GeneralLedger = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('general-ledger');
   const ActionMenuProps = ({
     glNumber,
@@ -55,7 +55,7 @@ export const GeneralLedger = () => {
     post,
     populate,
     swing,
-    typeP,
+    typeP
   }: {
     glNumber: string;
     pointing?: number;
@@ -82,10 +82,10 @@ export const GeneralLedger = () => {
     totalPages,
     totalElements,
     data: generalLedgerData,
-    isLoading: isGeneralLedgerLoading,
+    isLoading: isGeneralLedgerLoading
   } = useFilterGeneralLedgerSearch({
     ...searchParams,
-    page,
+    page
   });
 
   return (
@@ -103,7 +103,7 @@ export const GeneralLedger = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
           {isGeneralLedgerLoading ? (
@@ -114,7 +114,7 @@ export const GeneralLedger = () => {
                 columns={TableHeader}
                 data={generalLedgerData}
                 tableConfig={{
-                  hasActions: true,
+                  hasActions: true
                 }}
                 totalPages={totalPages}
                 totalElements={totalElements}
@@ -124,7 +124,7 @@ export const GeneralLedger = () => {
                   mainTitle: 'General Ledger',
                   secondaryTitle:
                     'See a directory of all general ledgers on this system.',
-                  hideFilterSection: true,
+                  hideFilterSection: true
                 }}
               >
                 {searchActive ? (
@@ -140,7 +140,7 @@ export const GeneralLedger = () => {
                         <StyledTableCell align="right">
                           {dataItem.dateOpened
                             ? moment(dataItem.dateOpened).format(
-                                'MMMM Do YYYY, h:mm:ss a',
+                                'MMMM Do YYYY, h:mm:ss a'
                               )
                             : 'N/A'}
                         </StyledTableCell>

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Box } from '@mui/material';
 import { Form, Formik, getIn } from 'formik';
 import { useSearchParams } from 'next/navigation';
+import dayjs from 'dayjs';
 import { ShortCardCasaWithAccordion } from '../AddCasaProduct/ShortCardWithCasaAccording';
 import { ProgressType } from './ShortCardWithAccordion';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
@@ -24,6 +25,7 @@ import { decryptData } from '@/utils/decryptData';
 import useFormProgress from '@/utils/hooks/useFormProgress';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { FormSkeleton } from '@/components/Loaders';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -89,6 +91,8 @@ export const AddCasaNewProduct = ({
     Boolean(isEditing),
     decryptData(productCode as string)
   );
+  const { sysmodel } = useGetSystemDate();
+  const systemDate = dayjs(sysmodel?.systemDate || new Date());
   const { demandDeposit, isLoading } = useGetDemandDepositByCode(
     decryptData(productCode as string)
   );
@@ -104,7 +108,10 @@ export const AddCasaNewProduct = ({
     }));
 
     await mutate({
-      ...values
+      ...values,
+      productExpire: systemDate,
+      productstart: systemDate,
+      currencycode: values.currencycode
     });
   };
 

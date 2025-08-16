@@ -4,7 +4,8 @@ export const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 // Regex allows a-z, A-Z, 0-9, UNDERSCORE _, MINUS -, FULLSTOP .,
-export const stringRegex = /^[a-zA-Z0-9._\- ]+$/;
+export const stringRegex = /^[a-zA-Z0-9 ]+$/;
+export const stringAllowedRegex = /^[a-zA-Z0-9._\- ]+$/;
 export const stringRegexNoNumberAllowed = /^[a-zA-Z._\- ]+$/;
 export const numericRegex = /^\d+$/;
 export const stringRegexNoSpaceAllowed = /^[a-zA-Z0-9._-]+$/; // No spaces allowed at all

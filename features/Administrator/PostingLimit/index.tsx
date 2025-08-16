@@ -26,7 +26,7 @@ const actionButtons: any = [
       buttonTitle="Create New Limit"
       customStyle={{ ...submitButton }}
     />
-  </Link>,
+  </Link>
 ];
 
 export const PostingLimit = () => {
@@ -36,16 +36,16 @@ export const PostingLimit = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('posting-limit');
   const {
     totalPages,
     totalElements,
     data: postingData,
-    isLoading: isPostingDataLoading,
+    isLoading: isPostingDataLoading
   } = useFilterPostingLimitSearch({
     ...searchParams,
-    page,
+    page
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -55,7 +55,7 @@ export const PostingLimit = () => {
 
   const ActionMenuProps = ({
     roleId,
-    branchId,
+    branchId
   }: {
     roleId: string;
     branchId: string;
@@ -79,7 +79,7 @@ export const PostingLimit = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
           {isPostingDataLoading ? (
@@ -88,7 +88,7 @@ export const PostingLimit = () => {
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{
-                hasActions: true,
+                hasActions: true
               }}
               setPage={setPage}
               page={page}
@@ -118,7 +118,7 @@ export const PostingLimit = () => {
                         </StyledTableCell>
                       </StyledTableRow>
                     );
-                  },
+                  }
                 )
               ) : (
                 <StyledTableRow>

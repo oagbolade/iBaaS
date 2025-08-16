@@ -173,7 +173,7 @@ export interface CreateCorporateCustomerFormValues {
   turnOver: number;
   scuml: string;
   compObjective: string;
-  userid: string;
+  // userid: string;
   authid: string;
   acctOfficer: string;
   [key: string | number]: string | number | Dayjs;
@@ -342,7 +342,7 @@ export const createCorporateCustomerInitialValues: CreateCorporateCustomerFormVa
   {
     regno: '',
     compname: '',
-    dob: getCurrentIsoDate(),
+    dob: '',
     sectorcode: '',
     nationality: '',
     statecode: '',
@@ -358,6 +358,7 @@ export const createCorporateCustomerInitialValues: CreateCorporateCustomerFormVa
     taxId: '',
     contact: '',
     introid: '',
+    introType: '' ,
     groupcode: '',
     branchCode: '',
     smsalert: 0,
@@ -370,9 +371,9 @@ export const createCorporateCustomerInitialValues: CreateCorporateCustomerFormVa
     turnOver: 0,
     scuml: '',
     compObjective: '',
-    userid: '',
+    menuid: 35,
     authid: '',
-    acctOfficer: `${getStoredUser()?.profiles?.userid}`
+    acctOfficer: '',
   };
 
 export const createCustomerInitialValues: CreateIndividualCustomerFormValues = {

@@ -14,7 +14,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   MuiTableContainer,
   renderEmptyTableBody,
-  StyledTableRow,
+  StyledTableRow
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { useGetBranches } from '@/api/general/useBranches';
@@ -31,11 +31,11 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '116px', desktop: '236px' },
-          height: '40px',
+          height: '40px'
         }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export const Account = () => {
@@ -46,7 +46,7 @@ export const Account = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('finance-account');
 
   const currentUrl = 'financeMgt';
@@ -60,7 +60,7 @@ export const Account = () => {
     customerId,
     accountNumber,
     status,
-    productType,
+    productType
   }: {
     customerId: string;
     status: number;
@@ -82,10 +82,10 @@ export const Account = () => {
     totalPages,
     totalElements,
     data: financeAccountData,
-    isLoading: isFinanceAccountDataLoading,
+    isLoading: isFinanceAccountDataLoading
   } = useFilterCustomerAccountSearch({
     ...searchParams,
-    page,
+    page
   });
 
   return (
@@ -102,7 +102,7 @@ export const Account = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
           {isFinanceAccountDataLoading ? (
@@ -112,7 +112,7 @@ export const Account = () => {
               <MuiTableContainer
                 columns={FINANCE_ACCOUNT_COLUMNS}
                 tableConfig={{
-                  hasActions: true,
+                  hasActions: true
                 }}
                 data={financeAccountData}
                 totalPages={totalPages}
@@ -123,7 +123,7 @@ export const Account = () => {
                   mainTitle: 'Account Overview',
                   secondaryTitle:
                     'See a directory of all accounts on this system.',
-                  hideFilterSection: true,
+                  hideFilterSection: true
                 }}
               >
                 {searchActive ? (
@@ -139,14 +139,14 @@ export const Account = () => {
                         <StyledTableCell align="right">
                           {dataItem?.dateOpened
                             ? moment(dataItem?.dateOpened).format(
-                                'MMMM Do YYYY, h:mm:ss a',
+                                'MMMM Do YYYY, h:mm:ss a'
                               )
                             : 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           {dataItem?.dateOpened
                             ? moment(dataItem.dateOpened).format(
-                                'MMMM Do YYYY, h:mm:ss a',
+                                'MMMM Do YYYY, h:mm:ss a'
                               )
                             : 'N/A'}
                         </StyledTableCell>

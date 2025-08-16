@@ -34,14 +34,38 @@ export const CustomerAccountTableActionMenu = ({
   productType,
   branchCode
 }: Props) => {
-  const shouldDisableEditAccount = !checkMultipleUserRoleAccess('Customer', 'EDIT ACCOUNT');
-  const shouldDisableManageMandate = !checkMultipleUserRoleAccess('Customer', 'MANAGE MANDATE');
-  const shouldDisableManageLien = !checkMultipleUserRoleAccess('Customer', 'MANAGE LIEN');
-  const shouldDisableChequeBookEdit = !checkMultipleUserRoleAccess('Customer', 'CHECQUEBOOK  EDIT');
-  const shouldDisableAccountReactivation = !checkMultipleUserRoleAccess('Customer', 'ACCOUNT REACTIVATION');
-  const shouldDisableRangeCheque = !checkMultipleUserRoleAccess('Customer', 'RANGE CHEQUE');
-  const shouldDisableCloseAccount = !checkMultipleUserRoleAccess('Customer', 'CLOSE ACCOUNT');
-  const shouldDisableMoveCASAAccount = !checkMultipleUserRoleAccess('Customer', 'MOVE CASA ACCOUNT');
+  const shouldDisableEditAccount = !checkMultipleUserRoleAccess(
+    'Customer',
+    'EDIT ACCOUNT'
+  );
+  const shouldDisableManageMandate = !checkMultipleUserRoleAccess(
+    'Customer',
+    'MANAGE MANDATE'
+  );
+  const shouldDisableManageLien = !checkMultipleUserRoleAccess(
+    'Customer',
+    'MANAGE LIEN'
+  );
+  const shouldDisableChequeBookEdit = !checkMultipleUserRoleAccess(
+    'Customer',
+    'CHECQUEBOOK  EDIT'
+  );
+  const shouldDisableAccountReactivation = !checkMultipleUserRoleAccess(
+    'Customer',
+    'ACCOUNT REACTIVATION'
+  );
+  const shouldDisableRangeCheque = !checkMultipleUserRoleAccess(
+    'Customer',
+    'RANGE CHEQUE'
+  );
+  const shouldDisableCloseAccount = !checkMultipleUserRoleAccess(
+    'Customer',
+    'CLOSE ACCOUNT'
+  );
+  const shouldDisableMoveCASAAccount = !checkMultipleUserRoleAccess(
+    'Customer',
+    'MOVE CASA ACCOUNT'
+  );
 
   const router = useRouter();
   const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
@@ -85,13 +109,16 @@ export const CustomerAccountTableActionMenu = ({
           >
             <Link
               style={{
-                pointerEvents: (shouldDisableEditAccount) ? 'none' : 'auto',
+                pointerEvents: shouldDisableEditAccount ? 'none' : 'auto'
               }}
               aria-disabled={shouldDisableEditAccount}
               tabIndex={shouldDisableEditAccount ? -1 : undefined}
               href={`/customer-service/customer/create-account?isEditing=true&accountNumber=${sanitize(accountNumber)}&branchCode=${sanitize(branchCode)}`}
             >
-              <TableMenuButton disabled={shouldDisableEditAccount} buttonTitle="Edit Account" />
+              <TableMenuButton
+                disabled={shouldDisableEditAccount}
+                buttonTitle="Edit Account"
+              />
             </Link>
           </MenuItem>
           <MenuItem
@@ -101,13 +128,16 @@ export const CustomerAccountTableActionMenu = ({
           >
             <Link
               style={{
-                pointerEvents: (shouldDisableManageMandate) ? 'none' : 'auto',
+                pointerEvents: shouldDisableManageMandate ? 'none' : 'auto'
               }}
               aria-disabled={shouldDisableManageMandate}
               tabIndex={shouldDisableManageMandate ? -1 : undefined}
               href={`/customer-service/customer/mandate/view-mandate/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
             >
-              <TableMenuButton disabled={shouldDisableManageMandate} buttonTitle="Manage Mandate" />
+              <TableMenuButton
+                disabled={shouldDisableManageMandate}
+                buttonTitle="Manage Mandate"
+              />
             </Link>
           </MenuItem>
           <MenuItem
@@ -117,13 +147,16 @@ export const CustomerAccountTableActionMenu = ({
           >
             <Link
               style={{
-                pointerEvents: (shouldDisableManageLien) ? 'none' : 'auto',
+                pointerEvents: shouldDisableManageLien ? 'none' : 'auto'
               }}
               aria-disabled={shouldDisableManageLien}
               tabIndex={shouldDisableManageLien ? -1 : undefined}
               href={`/customer-service/customer/lien/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
             >
-              <TableMenuButton disabled={shouldDisableManageLien} buttonTitle="Manage Lien" />
+              <TableMenuButton
+                disabled={shouldDisableManageLien}
+                buttonTitle="Manage Lien"
+              />
             </Link>
           </MenuItem>
           {isCurrentAccount && (
@@ -135,13 +168,16 @@ export const CustomerAccountTableActionMenu = ({
               >
                 <Link
                   style={{
-                    pointerEvents: (shouldDisableChequeBookEdit) ? 'none' : 'auto',
+                    pointerEvents: shouldDisableChequeBookEdit ? 'none' : 'auto'
                   }}
                   aria-disabled={shouldDisableChequeBookEdit}
                   tabIndex={shouldDisableChequeBookEdit ? -1 : undefined}
                   href={`/customer-service/customer/edit-chequebook/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
                 >
-                  <TableMenuButton disabled={shouldDisableChequeBookEdit} buttonTitle="Edit Chequebook" />
+                  <TableMenuButton
+                    disabled={shouldDisableChequeBookEdit}
+                    buttonTitle="Edit Chequebook"
+                  />
                 </Link>
               </MenuItem>
               <MenuItem
@@ -151,13 +187,16 @@ export const CustomerAccountTableActionMenu = ({
               >
                 <Link
                   style={{
-                    pointerEvents: (shouldDisableRangeCheque) ? 'none' : 'auto',
+                    pointerEvents: shouldDisableRangeCheque ? 'none' : 'auto'
                   }}
                   aria-disabled={shouldDisableRangeCheque}
                   tabIndex={shouldDisableRangeCheque ? -1 : undefined}
                   href={`/customer-service/customer/range-cheque/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
                 >
-                  <TableMenuButton disabled={shouldDisableRangeCheque} buttonTitle="Range Cheque" />
+                  <TableMenuButton
+                    disabled={shouldDisableRangeCheque}
+                    buttonTitle="Range Cheque"
+                  />
                 </Link>
               </MenuItem>
             </>
@@ -169,13 +208,16 @@ export const CustomerAccountTableActionMenu = ({
           >
             <Link
               style={{
-                pointerEvents: (shouldDisableMoveCASAAccount) ? 'none' : 'auto',
+                pointerEvents: shouldDisableMoveCASAAccount ? 'none' : 'auto'
               }}
               aria-disabled={shouldDisableMoveCASAAccount}
               tabIndex={shouldDisableMoveCASAAccount ? -1 : undefined}
               href={`/customer-service/customer/casa-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
             >
-              <TableMenuButton disabled={shouldDisableMoveCASAAccount} buttonTitle="Move CASA" />
+              <TableMenuButton
+                disabled={shouldDisableMoveCASAAccount}
+                buttonTitle="Move CASA"
+              />
             </Link>
           </MenuItem>
           {status === dormantAccount && (
@@ -186,13 +228,18 @@ export const CustomerAccountTableActionMenu = ({
             >
               <Link
                 style={{
-                  pointerEvents: (shouldDisableAccountReactivation) ? 'none' : 'auto',
+                  pointerEvents: shouldDisableAccountReactivation
+                    ? 'none'
+                    : 'auto'
                 }}
                 aria-disabled={shouldDisableAccountReactivation}
                 tabIndex={shouldDisableAccountReactivation ? -1 : undefined}
                 href={`/customer-service/customer/reactivate-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
               >
-                <TableMenuButton disabled={shouldDisableAccountReactivation} buttonTitle="Reactivate Account" />
+                <TableMenuButton
+                  disabled={shouldDisableAccountReactivation}
+                  buttonTitle="Reactivate Account"
+                />
               </Link>
             </MenuItem>
           )}
@@ -203,13 +250,16 @@ export const CustomerAccountTableActionMenu = ({
           >
             <Link
               style={{
-                pointerEvents: (shouldDisableCloseAccount) ? 'none' : 'auto',
+                pointerEvents: shouldDisableCloseAccount ? 'none' : 'auto'
               }}
               aria-disabled={shouldDisableCloseAccount}
               tabIndex={shouldDisableCloseAccount ? -1 : undefined}
               href={`/customer-service/customer/close-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
             >
-              <TableMenuButton disabled={shouldDisableCloseAccount} buttonTitle="Close Account" />
+              <TableMenuButton
+                disabled={shouldDisableCloseAccount}
+                buttonTitle="Close Account"
+              />
             </Link>
           </MenuItem>
         </MenuWrapper>

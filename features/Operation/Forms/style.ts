@@ -7,7 +7,6 @@ export const BatchTitle = {
   fontStyle: 'normal',
   fontWeight: 700,
   lineHeight: '36px',
-  marginTop: { mobile: '35px', tablet: '0px' }
 };
 
 export const title = {

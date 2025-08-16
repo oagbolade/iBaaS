@@ -21,13 +21,13 @@ type Props = {
 export const FilterSection = ({ onSearch, branches }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('finance-account');
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
   const { setWidth } = useCurrentBreakpoint();
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     accountNumber: searchParams?.accountNumber ?? '',
-    search: searchParams?.status ?? '',
+    search: searchParams?.status ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -39,7 +39,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
       accountNumber:
         values.accountNumber.toString().trim().length > 0
           ? values.accountNumber
-          : null,
+          : null
     };
 
     onSearch?.(params);
@@ -66,7 +66,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -84,7 +84,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="accountNumber"

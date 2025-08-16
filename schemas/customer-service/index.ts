@@ -260,12 +260,11 @@ export const corporateCustomerPersonalDetails = {
     .min(11, 'Bank verification number must be 11 characters long')
     .max(11, 'Bank verification number must be 11 characters long')
     .required('Required'),
-  taxIDNo: Yup.string()
+  taxId: Yup.string()
     .matches(stringRegex, 'Invalid tax id')
     .min(10, 'Tax identification number must be 10 characters long')
     .max(10, 'Tax identification number must be 10 characters long')
     .required('Required'),
-  contact: Yup.string().required('Required'),
   compObjective: Yup.string()
     .max(50, 'Objective must be at most 50 characters long')
     .required('Required')

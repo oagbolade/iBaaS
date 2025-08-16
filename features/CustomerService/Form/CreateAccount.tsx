@@ -360,7 +360,9 @@ export const CreateAccount = ({
       ...values,
       cintrate: values.cintrate,
       dintrate: values.dintrate,
-      branchcode: isEditing ? branchCode : extractIdFromDropdown(selectedValue?.branchcode as string),
+      branchcode: isEditing
+        ? branchCode
+        : extractIdFromDropdown(selectedValue?.branchcode as string),
       customerid: extractIdFromDropdown(selectedValue?.customerid as string),
       channel: channelSelect?.value,
       accttitle: accDetailsResults?.accounttitle,

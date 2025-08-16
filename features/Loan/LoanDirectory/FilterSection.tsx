@@ -22,14 +22,14 @@ type Props = {
 export const FilterSection = ({ onSearch, branches }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('loan-directory');
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
   const { setWidth } = useCurrentBreakpoint();
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     status: searchParams?.status ?? '',
     fullName: searchParams?.fullName ?? '',
-    customerID: searchParams?.customerID ?? '',
+    customerID: searchParams?.customerID ?? ''
   };
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -40,7 +40,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
       customerID:
         values.customerID?.toString().trim().length > 0
           ? values.customerID
-          : null,
+          : null
     };
     onSearch?.(params);
   };
@@ -59,7 +59,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               <FormSelectField
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -76,7 +76,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               <FormSelectField
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="status"
                 options={Loan.status}
@@ -93,7 +93,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               <FormTextInput
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields,
+                  ...inputFields
                 }}
                 type="number"
                 icon={<SearchIcon />}
@@ -113,7 +113,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               <FormTextInput
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="fullName"

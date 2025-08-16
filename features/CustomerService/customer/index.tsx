@@ -34,6 +34,7 @@ import { SearchCustomerAccountResponse } from '@/api/ResponseTypes/customer-serv
 import { Status } from '@/components/Labels';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGetProductType } from '@/api/general/useProductType';
 
 export interface IOptions {
   buttonTitle: string;
@@ -324,6 +325,7 @@ const PreviewTable = () => {
   const [value, setValue] = useState(0);
   const { branches } = useGetBranches();
   const { status } = useGetStatus();
+  const { productTypes } = useGetProductType();
   const customerSection = 0;
   const accountSection = 1;
 
@@ -362,15 +364,18 @@ const PreviewTable = () => {
       )}
       {value === accountSection && (
         <Box>
-          {branches !== undefined && status !== undefined && (
-            <AccountFilterSection
-              branches={branches}
-              status={status}
-              onSearch={(params: ISearchParams) =>
-                handleSearch(params, 'account')
-              }
-            />
-          )}
+          {branches !== undefined &&
+            status !== undefined &&
+            productTypes !== undefined && (
+              <AccountFilterSection
+                branches={branches}
+                status={status}
+                productTypes={productTypes}
+                onSearch={(params: ISearchParams) =>
+                  handleSearch(params, 'account')
+                }
+              />
+            )}
         </Box>
       )}
       <TabsV2

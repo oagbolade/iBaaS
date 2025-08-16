@@ -14,7 +14,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchGroupResponse } from '@/api/ResponseTypes/customer-service';
@@ -35,7 +35,7 @@ export const GroupTable = () => {
   React.useEffect(() => {
     const shouldDisable = !checkMultipleUserRoleAccess(
       'Groups',
-      'MANAGE GROUPS',
+      'MANAGE GROUPS'
     );
 
     setShouldDisableCreation(shouldDisable);
@@ -45,7 +45,7 @@ export const GroupTable = () => {
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <Link
         style={{
-          pointerEvents: shouldDisableCreation ? 'none' : 'auto',
+          pointerEvents: shouldDisableCreation ? 'none' : 'auto'
         }}
         aria-disabled={shouldDisableCreation}
         tabIndex={shouldDisableCreation ? -1 : undefined}
@@ -57,7 +57,7 @@ export const GroupTable = () => {
           customStyle={{ ...submitButton }}
         />
       </Link>{' '}
-    </Box>,
+    </Box>
   ];
 
   const { branches } = useGetBranches();
@@ -67,16 +67,16 @@ export const GroupTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('groups');
   const {
     totalPages,
     totalElements,
     data: groupData,
-    isLoading: isGroupDataLoading,
+    isLoading: isGroupDataLoading
   } = useFilterGroupSearch({
     ...searchParams,
-    page,
+    page
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -85,7 +85,7 @@ export const GroupTable = () => {
   };
 
   const ActionMenuProps = ({
-    groupId,
+    groupId
   }: {
     groupId: string;
   }): React.ReactElement => {
@@ -107,12 +107,12 @@ export const GroupTable = () => {
           <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
-              hasActions: true,
+              hasActions: true
             }}
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Group’s Overview',
-              secondaryTitle: 'See a directory of all Groups on this system.',
+              secondaryTitle: 'See a directory of all Groups on this system.'
             }}
             data={groupData}
             totalPages={totalPages}
