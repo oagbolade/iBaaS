@@ -11,7 +11,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { accountEnquiryColumns } from '@/constants/Reports/COLUMNS';
 import {
   IEnquiryParams,
-  useGetAccountEnquiryByBranchId
+  useGetAccountEnquiryByBranchId,
 } from '@/api/reports/useGetAccountEnquiryBybranchId';
 import { IGetAccountEnquiry } from '@/api/ResponseTypes/reports';
 import { StyledTableRow } from '@/components/Table/Table';
@@ -20,21 +20,27 @@ import { renderEmptyTableBody } from '@/components/Revamp/TableV2/TableV2';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
 import {
   DownloadReportContext,
-  IReportQueryParams
+  IReportQueryParams,
 } from '@/context/DownloadReportContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { FormSkeleton } from '@/components/Loaders';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface Props {
   data: IGetAccountEnquiry;
 }
 
 export const AccountEnquiry = () => {
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = useState<number>(1);
-  const [search, setSearch] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('account-enquiry');
   const { setReportType, setExportData, readyDownload, setReadyDownload } =
     React.useContext(DownloadReportContext);
   const { dateValue } = React.useContext(DateRangePickerContext);
@@ -45,7 +51,7 @@ export const AccountEnquiry = () => {
     useGetAccountEnquiryByBranchId({
       ...searchParams,
       getAll: readyDownload,
-      page
+      page,
     });
 
   const rowsPerPage = 10;
@@ -53,13 +59,12 @@ export const AccountEnquiry = () => {
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
   const handleSearch = (params: ISearchParams | null) => {
-    setSearchParams(params);
-    setSearch(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
+    setSearchActive(true);
   };
 
   const AccountEnquiryActions = ({ data }: Props) => {
@@ -82,7 +87,7 @@ export const AccountEnquiry = () => {
         useableBalance: data.useableBalance,
         bookBalance: data.bookBalance,
         customerName: data.customerName,
-        accountStatus: data.accountStatus
+        accountStatus: data.accountStatus,
       });
     };
 
@@ -126,10 +131,10 @@ export const AccountEnquiry = () => {
               mainTitle: 'Account Enquiry',
               secondaryTitle:
                 'See a directory of all account enquiry on this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
           >
-            {search ? (
+            {searchActive ? (
               accountEnquiryData.map(
                 (accountData: IGetAccountEnquiry, index) => {
                   return (
@@ -157,7 +162,7 @@ export const AccountEnquiry = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                }
+                },
               )
             ) : (
               <StyledTableRow>
