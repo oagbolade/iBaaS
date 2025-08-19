@@ -26,6 +26,8 @@ export const AccountFilterSection = ({
   status,
   productTypes
 }: Props) => {
+    const { searchParams } =
+      usePersistedSearch<ISearchParams>('account-overview');
   const { mappedBranches, mappedStatus, mappedProductClass } =
     useMapSelectOptions({
       branches,
@@ -37,6 +39,7 @@ export const AccountFilterSection = ({
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     status: searchParams?.status ?? '',
+    accountType: searchParams?.accountType ?? '',
     search: searchParams?.accountNumber ?? '',
   };
 
