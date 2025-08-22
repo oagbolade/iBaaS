@@ -15,6 +15,7 @@ import { IStandingInstruction } from '@/api/ResponseTypes/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const ActionMenu: React.FC = () => {
   return (
@@ -25,14 +26,19 @@ export const ActionMenu: React.FC = () => {
 };
 
 export const StandingInstructions = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('standing-instruction');
   const { branches } = useGetBranches();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { siTransactions, isLoading } = useGetStandingIntruction({
-    ...searchParams
+    ...searchParams,
   });
 
   const { setReportType, setExportData, readyDownload, setReadyDownload } =
@@ -42,7 +48,7 @@ export const StandingInstructions = () => {
     if (readyDownload) {
       setSearchParams((prev) => ({
         ...prev,
-        getAll: true
+        getAll: true,
       }));
     }
   }, [readyDownload]);
@@ -55,13 +61,13 @@ export const StandingInstructions = () => {
 
   const handleSearch = async (params: ISearchParams | null) => {
     setReadyDownload(false);
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
       getAll: readyDownload,
-      page
+      page,
     });
     setReportType('StandingInstructionReport');
   };
@@ -86,12 +92,12 @@ export const StandingInstructions = () => {
               mainTitle: 'Standing Instructions',
               secondaryTitle:
                 'See a directory of all standing instructions this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
             setPage={setPage}
             page={page}
           >
-            {search ? (
+            {searchActive ? (
               siTransactions?.map((dataItem: IStandingInstruction) => {
                 return (
                   <StyledTableRow key={dataItem.sinumber}>

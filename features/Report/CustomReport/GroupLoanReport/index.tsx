@@ -9,24 +9,28 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { useGetGroupLoan } from '@/api/reports/useGroupLoanReport';
 import { ISearchParams } from '@/app/api/search/route';
 import { FormSkeleton } from '@/components/Loaders';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const GroupLoanReport = () => {
   const { branches } = useGetBranches();
-  const [searchParams, setSearchParams] = React.useState<ISearchParams | null>(
-    null
-  );
-  const [page, setPage] = React.useState(1);
-  const [search, setSearch] = React.useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('group-loan-report');
   const {
     groupLoanReportList = [],
     isLoading,
-    totalRecords
+    totalRecords,
   } = useGetGroupLoan({
     ...searchParams,
-    page
+    page,
   });
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams(params);
   };
 
@@ -34,7 +38,7 @@ export const GroupLoanReport = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px'
+        marginTop: '50px',
       }}
     >
       <TopOverViewSection useBackButton />
@@ -42,7 +46,7 @@ export const GroupLoanReport = () => {
       <Box
         sx={{
           padding: '25px',
-          width: '100%'
+          width: '100%',
         }}
       >
         {branches && (
@@ -57,7 +61,7 @@ export const GroupLoanReport = () => {
                 tableConfig={{
                   hasActions: false,
                   paintedColumns: ['DR Product Balance', ''],
-                  totalRow: ['Total Amount', '', '₦104,200.65', '₦104,200.65']
+                  totalRow: ['Total Amount', '', '₦104,200.65', '₦104,200.65'],
                 }}
                 columns={COLUMN}
                 data={groupLoanReportList}
@@ -66,11 +70,11 @@ export const GroupLoanReport = () => {
                 showHeader={{
                   mainTitle: 'Loan By Group Report',
                   secondaryTitle:
-                    'See a directory of all Loan By Group Report in this system.'
+                    'See a directory of all Loan By Group Report in this system.',
                 }}
                 page={page}
                 setPage={setPage}
-                isSearched={search}
+                isSearched={searchActive}
                 totalPages={totalRecords}
                 totalElements={groupLoanReportList?.length}
               />

@@ -12,7 +12,7 @@ import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSectio
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   LoanOverdueParams,
-  useGetLoanOverdueReport
+  useGetLoanOverdueReport,
 } from '@/api/reports/useGetLoanOverdueReport';
 import { convertToISOString } from '@/utils/convertDatePickerRangeToIsoDate';
 import { loanOverdueColumns } from '@/constants/Reports/COLUMNS';
@@ -24,6 +24,7 @@ import { useGetAllProduct } from '@/api/setup/useProduct';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { FormSkeleton } from '@/components/Loaders';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface Props {
   data: IGetLoanOverdueReport;
@@ -31,39 +32,38 @@ interface Props {
 
 export const LoanOverdue = () => {
   const { branches } = useGetBranches();
-  const [page, setPage] = useState<number>(1);
   const { bankproducts } = useGetAllProduct();
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     useContext(DownloadReportContext);
 
-  const [searchParams, setSearchParams] = useState<LoanOverdueParams | null>(
-    null
-  );
-
-  const { branch, search, product } = searchParams || {};
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<LoanOverdueParams>('loan-overdue');
 
   const {
     loanOverDueList: loanOverDueData = [],
     totalRecords,
-    isLoading
+    isLoading,
   } = useGetLoanOverdueReport({
     ...searchParams,
-    branch,
-    search,
-    product,
     pageSize: 10,
     pageNumber: page,
-    getAll: readyDownload
+    getAll: readyDownload,
   });
 
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams((prev) => ({
         ...prev,
-        getAll: true
+        getAll: true,
       }));
     }
   }, [readyDownload]);
@@ -89,7 +89,7 @@ export const LoanOverdue = () => {
         'Acct Name': item?.fullname || '',
         Branch: item?.branch || '',
         'Officer Name': item?.officerName || item?.officerName2 || '',
-        'CASA Balance': item?.casa_Balance || ''
+        'CASA Balance': item?.casa_Balance || '',
       }));
 
       // Ensure no blank row or misplaced headers
@@ -104,9 +104,10 @@ export const LoanOverdue = () => {
   const handleSearch = (params: LoanOverdueParams | null) => {
     setReadyDownload(false);
     setSearchParams({
-      ...params
+      ...params,
+      reportDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
-    setPage(1); // Reset to the first page on new search
+    setSearchActive(true);
   };
 
   const LoanOverdueAction = ({ data }: Props) => {
@@ -114,7 +115,7 @@ export const LoanOverdue = () => {
 
     const setData = () => {
       setLoanOverduestatedata({
-        ...data
+        ...data,
       });
     };
 
@@ -154,10 +155,10 @@ export const LoanOverdue = () => {
                 mainTitle: 'Loan Overdue',
                 secondaryTitle:
                   'See a directory of all Overdue Loans on this system.',
-                hideFilterSection: true
+                hideFilterSection: true,
               }}
             >
-              {loanOverDueData.length > 0 ? (
+              {searchActive ? (
                 loanOverDueData.map(
                   (accountData: IGetLoanOverdueReport, index) => {
                     return (
@@ -185,7 +186,7 @@ export const LoanOverdue = () => {
                         </StyledTableCell>
                       </StyledTableRow>
                     );
-                  }
+                  },
                 )
               ) : (
                 <StyledTableRow>

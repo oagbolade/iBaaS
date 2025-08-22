@@ -10,19 +10,25 @@ import { useGetPlainTrialBalance } from '@/api/reports/usePlainTrialBalance';
 import { TableV2 } from '@/components/Revamp/TableV2';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const PlainTrialBalance = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setpage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('plain-trial-balance');
   const { branches } = useGetBranches();
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams(params);
   };
 
@@ -31,20 +37,20 @@ export const PlainTrialBalance = () => {
       pagedRecords: [],
       totalDr: 0,
       totalCr: 0,
-      bkBalance: 0
+      bkBalance: 0,
     },
     isLoading: isPlainTrailBalanceDataLoading,
-    totalRecords
+    totalRecords,
   } = useGetPlainTrialBalance({
     ...searchParams,
-    pageNumber: page.toString()
+    pageNumber: page.toString(),
   });
 
   const {
     pagedRecords: getAllPlainTrialBalanceData = [],
     totalDr = 0,
     totalCr = 0,
-    bkBalance = 0
+    bkBalance = 0,
   } = plainTrialBalanceList || {};
 
   React.useEffect(() => {
@@ -54,7 +60,7 @@ export const PlainTrialBalance = () => {
         oldGlNo: item.oldGLno,
         acctName: item.acctName,
         debit: `NGN ${formatCurrency(item.dr)}`,
-        credit: `NGN ${formatCurrency(item.cr)}`
+        credit: `NGN ${formatCurrency(item.cr)}`,
       }));
 
       setExportData(mapPlainTrailBalance as []);
@@ -66,7 +72,7 @@ export const PlainTrialBalance = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px'
+        marginTop: '50px',
       }}
     >
       {branches && (
@@ -78,7 +84,7 @@ export const PlainTrialBalance = () => {
         ) : (
           <Box sx={{ width: '100%' }}>
             <TableV2
-              isSearched={search}
+              isSearched={searchActive}
               tableConfig={{
                 hasActions: false,
                 paintedColumns: ['dr', 'cr'],
@@ -87,15 +93,15 @@ export const PlainTrialBalance = () => {
                   '',
                   '',
                   `${formatCurrency(totalDr)}`,
-                  `${formatCurrency(totalCr)}`
+                  `${formatCurrency(totalCr)}`,
                 ],
                 grandTotalRow: [
                   'Balance in Book',
                   '',
                   '',
                   '',
-                  `${formatCurrency(bkBalance)}`
-                ]
+                  `${formatCurrency(bkBalance)}`,
+                ],
               }}
               keys={keys as []}
               columns={COLUMN}
@@ -104,9 +110,9 @@ export const PlainTrialBalance = () => {
               showHeader={{
                 mainTitle: 'Plain Trial Balance',
                 secondaryTitle:
-                  'See a directory of all Customer Balance Report in this system.'
+                  'See a directory of all Customer Balance Report in this system.',
               }}
-              setPage={setpage}
+              setPage={setPage}
               page={page}
               totalPages={Math.ceil(totalRecords / 10)}
               totalElements={totalRecords}

@@ -17,30 +17,36 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { FormSkeleton } from '@/components/Loaders';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const DormantAccount = () => {
   const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('dormant-account');
   const { branches } = useGetBranches();
   const {
     dormantAccountList: getAllDormantAccountData,
-    isLoading: isDormantAccountDataLoading
+    isLoading: isDormantAccountDataLoading,
   } = useGetAllDormantAccount({
     ...searchParams,
-    page
+    page,
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
     setReportType('DormantAccount');
   };
@@ -72,7 +78,7 @@ export const DormantAccount = () => {
           <MuiTableContainer
             columns={COLUMN}
             tableConfig={{
-              hasActions: true
+              hasActions: true,
             }}
             data={getAllDormantAccountData || []}
             setPage={setPage}
@@ -81,11 +87,11 @@ export const DormantAccount = () => {
               mainTitle: 'Dormant Account',
               secondaryTitle:
                 'See a directory of all dormant account on this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
             ActionMenuProps={ActionMenu}
           >
-            {search ? (
+            {searchActive ? (
               getAllDormantAccountData?.map((dataItem: IDormantAccountList) => {
                 return (
                   <StyledTableRow key={dataItem.accountnumber}>

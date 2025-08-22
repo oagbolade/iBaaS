@@ -13,18 +13,25 @@ import { useCurrentBreakpoint } from '@/utils';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { ISearchParams } from '@/app/api/search/route';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch: (params: ISearchParams | null) => void;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('drill-down');
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
+
+  const initialValues = {
+    branchCode: searchParams?.branchCode ?? '',
+    gl_NodeCode: searchParams?.gl_NodeCode ?? '',
+  };
 
   const onSubmit = (values: any) => {
     const searchParams: ISearchParams = {
@@ -32,21 +39,20 @@ export const FilterSection = ({ onSearch }: Props) => {
         values.branchCode?.toString().trim().length > 0
           ? values.branchCode
           : null,
-      gl_ClassCode:
-        values.gl_ClassCode?.toString().trim().length > 0
-          ? values.gl_ClassCode
-          : null
+      gl_NodeCode:
+        values.gl_NodeCode?.toString().trim().length > 0
+          ? values.gl_NodeCode
+          : null,
     };
-
     onSearch?.(searchParams);
   };
 
   return (
     <Box marginTop={10}>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
-        validationSchema={drillDowndueSchema}
       >
         <Form>
           {/* <Stack
@@ -84,7 +90,7 @@ export const FilterSection = ({ onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '20px',
-              paddingX: '24px'
+              paddingX: '24px',
             }}
           >
             <Box>
@@ -99,10 +105,10 @@ export const FilterSection = ({ onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     icon={<SearchIcon />}
-                    name="gl_ClassCode"
+                    name="gl_NodeCode"
                     placeholder="Search by GL Node Name or code"
                     label="Search"
                   />{' '}
@@ -122,7 +128,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`
+                      color: `${colors.white}`,
                     }}
                     type="submit"
                     buttonTitle="Search"

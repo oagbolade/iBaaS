@@ -21,11 +21,13 @@ export interface LoanOverdueParams {
   pageSize?: number | null;
   pageNumber?: number | null;
   getAll?: boolean | null;
+  branchcode?: string | null;
+  productcode?: string | null;
 }
 
 async function fetchLoanOverdueReport(
   params: LoanOverdueParams,
-  toastActions: IToastActions
+  toastActions: IToastActions,
 ): Promise<ILoanOverdueReportResponse | null> {
   try {
     const urlEndpoint = 'ReportServices/LoanOverDueReport';
@@ -39,13 +41,13 @@ async function fetchLoanOverdueReport(
           selectedDate: params.reportDate,
           productCode: params?.product,
           branchCode: params?.branch,
-          getAll: params.getAll || false
+          getAll: params.getAll || false,
         },
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getStoredUser()?.token}`
-        }
-      }
+          Authorization: `Bearer ${getStoredUser()?.token}`,
+        },
+      },
     );
 
     const { message, title, severity } = globalErrorHandler(data);
@@ -60,7 +62,7 @@ async function fetchLoanOverdueReport(
 }
 
 export function useGetLoanOverdueReport(
-  params: LoanOverdueParams
+  params: LoanOverdueParams,
 ): ILoanOverdueReportResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as ILoanOverdueReportResponse;
@@ -68,7 +70,7 @@ export function useGetLoanOverdueReport(
   const {
     data = fallback,
     isError,
-    isLoading
+    isLoading,
   } = useQuery({
     queryKey: [
       queryKeys.overloanDueReport,
@@ -78,10 +80,10 @@ export function useGetLoanOverdueReport(
       params?.search || '',
       params?.getAll || false,
       params?.pageSize || 10,
-      params?.pageNumber || 1
+      params?.pageNumber || 1,
     ],
     queryFn: () => fetchLoanOverdueReport(params, toastActions),
-    enabled: Boolean((params?.branch || '').length > 0 || params.search)
+    enabled: Boolean((params?.branch || '').length > 0 || params.search),
   });
 
   return { ...data, isError, isLoading };

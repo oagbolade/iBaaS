@@ -7,18 +7,18 @@ import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import { exportData } from '../../AuditTrail/styles';
 import {
   transactionVolumeStyle,
-  allBranchesStyle
+  allBranchesStyle,
 } from '@/features/Report/Overview/styles';
 import {
   FormSelectField,
   FormTextInput,
-  TextInput
+  TextInput,
 } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ChevronDown, ExportIcon } from '@/assets/svg';
 import { labelTypography } from '@/components/FormikFields/styles';
@@ -29,17 +29,27 @@ import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISearchParams } from '@/app/api/search/route';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
   onSearch?: Function;
 };
 export const FilterSection = ({ branches, onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>(
+    'standing-instruction',
+  );
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+    startDate: searchParams?.startDate ?? '',
+    endDate: searchParams?.endDate ?? '',
+  };
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
@@ -50,14 +60,16 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           : '',
       startDate:
         values.startDate.toString().trim().length > 0 ? values.startDate : '',
-      endDate: values.endDate.toString().trim().length > 0 ? values.endDate : ''
+      endDate:
+        values.endDate.toString().trim().length > 0 ? values.endDate : '',
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -66,7 +78,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
             <FormSelectField
               customStyle={{
                 width: setWidth(),
-                ...inputFields
+                ...inputFields,
               }}
               name="branchID"
               options={mappedBranches}
@@ -84,7 +96,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
             <FormTextInput
               customStyle={{
                 width: setWidth(),
-                ...inputFields
+                ...inputFields,
               }}
               icon={<SearchIcon />}
               name="searchWith"
@@ -107,7 +119,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
               customStyle={{
                 backgroundColor: `${colors.activeBlue400}`,
                 border: `1px solid ${colors.activeBlue400}`,
-                color: `${colors.white}`
+                color: `${colors.white}`,
               }}
               type="submit"
               buttonTitle="Search"

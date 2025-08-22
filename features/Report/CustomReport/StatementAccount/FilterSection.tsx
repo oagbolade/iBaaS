@@ -14,6 +14,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { statementOfAccountSchema } from '@/schemas/reports';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { IProducts } from '@/api/ResponseTypes/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -26,20 +27,29 @@ export const FilterSection = ({
   branches,
   onSearch,
   bankproducts,
-  products
+  products,
 }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>(
+    'statement-of-account',
+  );
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedProductClass } = useMapSelectOptions({
     branches,
     bankproducts,
-    products
+    products,
   });
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    productCode: searchParams?.productCode ?? '',
+    accountNumber: searchParams?.accountNumber ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       accountNumber: values.accountNumber || values.searchWith,
       ...(values.productCode && { accttype: values.productCode }),
-      ...(values.branchID && { branchID: values.branchID })
+      ...(values.branchID && { branchID: values.branchID }),
     };
     onSearch?.(params);
   };
@@ -47,14 +57,15 @@ export const FilterSection = ({
   return (
     <Box>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
         validationSchema={statementOfAccountSchema}
       >
         <Form>
           <Box
             sx={{
-              marginTop: '10px'
+              marginTop: '10px',
             }}
           >
             <Box>
@@ -66,7 +77,7 @@ export const FilterSection = ({
                     label="Account Type"
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                   />
                 </Grid>
@@ -75,7 +86,7 @@ export const FilterSection = ({
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -94,7 +105,7 @@ export const FilterSection = ({
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     icon={<SearchIcon />}
                     name="accountNumber"
@@ -118,7 +129,7 @@ export const FilterSection = ({
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
                       color: `${colors.white}`,
-                      width: '100%'
+                      width: '100%',
                     }}
                     type="submit"
                     buttonTitle="Search"

@@ -9,7 +9,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
@@ -19,17 +19,23 @@ import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { chartOfAccountSchema } from '@/schemas/reports';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
   onSearch?: Function;
 };
 export const FilterSection = ({ branches, onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('chart-account');
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+  };
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
@@ -37,14 +43,15 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       searchWith:
         values.searchWith?.toString().trim().length > 0
           ? values.searchWith
-          : null
+          : null,
     };
     onSearch?.(params);
   };
   return (
     <Box marginTop={3}>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
         validationSchema={chartOfAccountSchema}
       >
@@ -52,7 +59,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '20px',
-              paddingX: '24px'
+              paddingX: '24px',
             }}
           >
             <Box>
@@ -61,7 +68,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -79,7 +86,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
@@ -102,7 +109,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`
+                      color: `${colors.white}`,
                     }}
                     type="submit"
                     buttonTitle="Search"

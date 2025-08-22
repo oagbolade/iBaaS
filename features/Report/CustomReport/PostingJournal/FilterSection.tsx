@@ -9,7 +9,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 
@@ -21,6 +21,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { prostingJournalSchema } from '@/schemas/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -29,11 +30,12 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('posting-journal');
   const { dateValue } = React.useContext(DateRangePickerContext);
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
 
   const formattedDateRange = useMemo(() => {
@@ -42,13 +44,18 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     return `${startMonthAndDay} - ${endMonthAndDay}`;
   }, [dateValue]);
 
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+  };
+
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
       searchWith:
         values.searchWith.toString().length > 0 ? values.searchWith : null,
       getAll: false,
-      pageSize: '10'
+      pageSize: '10',
     };
     onSearch?.(params);
   };
@@ -56,7 +63,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   return (
     <Box marginTop={10}>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
         validationSchema={prostingJournalSchema}
       >
@@ -64,7 +72,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px'
+              paddingX: '24px',
             }}
           >
             <Box>
@@ -73,7 +81,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -92,7 +100,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
@@ -114,7 +122,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`
+                      color: `${colors.white}`,
                     }}
                     type="submit"
                     buttonTitle="Search"

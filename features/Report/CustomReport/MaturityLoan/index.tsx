@@ -7,7 +7,7 @@ import { COLUMN } from './Column';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody
+  renderEmptyTableBody,
 } from '@/components/Table/Table';
 import { useGetBranches } from '@/api/general/useBranches';
 import { FormSkeleton } from '@/components/Loaders';
@@ -21,6 +21,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
 import colors from '@/assets/colors';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface ActionMenuProps {
   detail: string;
@@ -38,31 +39,37 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 };
 
 export const MaturityLoan = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [pageNumber, setpageNumber] = React.useState(1);
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('maturity-loan-report');
+
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
-      pageNumber: String(pageNumber),
-      pageSize: '10'
+      pageNumber: String(page),
+      pageSize: '10',
     });
     setReportType('MaturityLoan');
   };
 
   const { loanMaturityList, totalRecords, isLoading } = useGetMaturityLoan({
-    ...searchParams
+    ...searchParams,
   });
 
   React.useEffect(() => {
@@ -92,18 +99,18 @@ export const MaturityLoan = () => {
               mainTitle: 'Maturity Loan',
               secondaryTitle:
                 'See a directory of all Maturity Loan Report in this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
             tableConfig={{
-              hasActions: true
+              hasActions: true,
             }}
             columns={COLUMN}
             data={loanMaturityList}
-            setPage={setpageNumber}
-            page={pageNumber}
+            setPage={setPage}
+            page={page}
             ActionMenuProps={ActionMenu}
           >
-            {search ? (
+            {searchActive ? (
               loanMaturityList?.map((dataItem: ILoanMaturityReport) => {
                 return (
                   <StyledTableRow key={dataItem.accountNumber}>

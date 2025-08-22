@@ -7,7 +7,7 @@ import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
 
 import {
   totalContainer,
-  totalTitle
+  totalTitle,
 } from '@/components/CustomCardsReports/style';
 import { PageTitle } from '@/components/Typography';
 import { FormSkeleton } from '@/components/Loaders';
@@ -20,34 +20,39 @@ import { ITrialBalanceGroup } from '@/api/ResponseTypes/reports';
 import { useGetGLType } from '@/api/admin/useCreateGLAccount';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const TrialBalance = () => {
   const [, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page] = React.useState(1);
   const { branches } = useGetBranches();
   const { glType } = useGetGLType();
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
 
-  const { branchID, reportType, customerID } = searchParams || {};
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('trial-balance');
 
   const { trialBydateList = [], isLoading: isLoadingTrialBydategroupList } =
     useGetTrialBalanceGroup({
       ...searchParams,
-      branchID,
       pageSize: '20',
       pageNumber: String(page),
-      getAll: readyDownload
+      getAll: readyDownload,
     });
 
   const handleSearch = async (params: ISearchParams | null) => {
     setReadyDownload(false);
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || ''
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
     });
   };
 
@@ -55,7 +60,7 @@ export const TrialBalance = () => {
     if (readyDownload) {
       setSearchParams((prev) => ({
         ...prev,
-        getAll: true
+        getAll: true,
       }));
     }
   }, [readyDownload]);
@@ -67,7 +72,7 @@ export const TrialBalance = () => {
         Balance: item?.balance || '',
         'GL Code': item?.gl_classcode || '',
         'Product Type Code': item?.prodtypecode || '',
-        'GL Nodecode': item?.gl_nodecode || ''
+        'GL Nodecode': item?.gl_nodecode || '',
       }));
 
       // Ensure no blank row or misplaced headers
@@ -79,7 +84,7 @@ export const TrialBalance = () => {
     setExportData,
     setReportType,
     trialBydateList,
-    setReadyDownload
+    setReadyDownload,
   ]);
 
   const calculateTotalBalance = (accounts: ITrialBalanceGroup[]): number => {
@@ -89,7 +94,7 @@ export const TrialBalance = () => {
   return (
     <Box
       sx={{
-        width: '100%'
+        width: '100%',
       }}
     >
       <TopOverViewSection useBackButton />
@@ -114,7 +119,7 @@ export const TrialBalance = () => {
                       <ShortCards
                         title={item?.gl_classname}
                         numberOfAccounts={`Balance ₦ ${item.balance.toLocaleString()}`}
-                        link={`/report/custom-report/trial-balance/main-cash?name=${item?.gl_classname}&classCode=${item?.gl_classcode}&reportType=${reportType}&glNodeCode=${item?.gl_nodecode}&glTypeCode=${item?.prodtypecode}&branchID=${branchID}&customerID=${customerID}`}
+                        link={`/report/custom-report/trial-balance/main-cash?name=${item?.gl_classname}&classCode=${item?.gl_classcode}&reportType=${searchParams?.reportType}&glNodeCode=${item?.gl_nodecode}&glTypeCode=${item?.prodtypecode}&branchID=${searchParams?.branchID}&customerID=${searchParams?.customerID}`}
                       />
                     </Box>
                   ))}

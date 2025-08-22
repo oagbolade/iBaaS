@@ -9,7 +9,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Details,
-  SubTitle
+  SubTitle,
 } from './AccountDetailsAccordion';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetBranches } from '@/api/general/useBranches';
@@ -18,7 +18,7 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import {
   useGetAccountDetails,
-  useGetAllCustomerAccountProducts
+  useGetAllCustomerAccountProducts,
 } from '@/api/customer-service/useCustomer';
 import { MuiTableContainer } from '@/components/Table';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
@@ -32,6 +32,7 @@ import { useGetProductType } from '@/api/general/useProductType';
 import { IProductType } from '@/api/ResponseTypes/general';
 import { useGetProductClass } from '@/api/setup/useProduct';
 import { IProducts } from '@/api/ResponseTypes/setup';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const StatementAccount = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,29 +45,34 @@ export const StatementAccount = () => {
   const { productTypes } = useGetProductType();
   const { products } = useGetProductClass();
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
-  const [search, setSearch] = useState(false);
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('statement-of-account');
   const [accountNumber, setAccountNumber] = useState('');
   const [productCode, setProductCode] = useState('');
 
   const { accDetailsResults, isLoading: loadingDetails } = useGetAccountDetails(
-    accountNumber ? (encryptData(accountNumber) as string) : ''
+    accountNumber ? (encryptData(accountNumber) as string) : '',
   );
 
   const { rptStatementList, isLoading: loadingStatements } =
     useGetStatementOfAccount(searchParams);
 
   useEffect(() => {
-    if (search && accDetailsResults) {
+    if (searchActive && accDetailsResults) {
       setHeight('auto');
       setIsOpen(true);
     }
-  }, [search, accDetailsResults]);
+  }, [searchActive, accDetailsResults]);
 
   useEffect(() => {
     if (rptStatementList && rptStatementList?.pagedRecords.length > 0) {
@@ -86,7 +92,7 @@ export const StatementAccount = () => {
 
   const handleSearch = async (params: ISearchParams) => {
     if (!params.accountNumber) return;
-    setSearch(true);
+    setSearchActive(true);
     setAccountNumber(params.accountNumber);
     setProductCode(params.accttype || '');
 
@@ -97,7 +103,7 @@ export const StatementAccount = () => {
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
       page,
-      getAll: false
+      getAll: false,
     };
 
     setSearchParams(queryParams);
@@ -118,7 +124,7 @@ export const StatementAccount = () => {
         )}
       </div>
 
-      {search && (
+      {searchActive && (
         <div>
           {(() => {
             if (loadingDetails) {
@@ -144,7 +150,10 @@ export const StatementAccount = () => {
                         container
                         spacing={2}
                         sx={{
-                          padding: { mobile: '10px 17px', desktop: '20px 32px' }
+                          padding: {
+                            mobile: '10px 17px',
+                            desktop: '20px 32px',
+                          },
                         }}
                       >
                         <Grid
@@ -268,7 +277,7 @@ export const StatementAccount = () => {
                               transform: isOpen
                                 ? 'rotate(180deg)'
                                 : 'rotate(0deg)',
-                              transition: 'transform 0.3s ease'
+                              transition: 'transform 0.3s ease',
                             }}
                           >
                             <ChevronDown />
@@ -300,7 +309,7 @@ export const StatementAccount = () => {
             setPage={setPage}
             page={page}
           >
-            {search && rptStatementList ? (
+            {searchActive && rptStatementList ? (
               rptStatementList?.pagedRecords?.map((statement, index) => (
                 <StyledTableRow key={`${statement.accountnumber || index}`}>
                   <StyledTableCell component="th" scope="row">

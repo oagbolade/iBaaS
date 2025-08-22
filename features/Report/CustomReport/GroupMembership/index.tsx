@@ -18,6 +18,7 @@ import { Status } from '@/components/Labels';
 import { useGetAllGroups } from '@/api/general/useGroup';
 import { useGetAccountOfficers } from '@/api/admin/useAccountOfficer';
 import colors from '@/assets/colors';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface ActionMenuProps {
   detail: string;
@@ -35,21 +36,27 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 };
 
 export const GroupMembership = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { groups } = useGetAllGroups();
   const { officers } = useGetAccountOfficers();
 
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('group-membership');
+
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
 
   const { groupMembershipList, isLoading } = useGetGroupMembership({
     ...searchParams,
-    page
+    page,
   });
 
   React.useEffect(() => {
@@ -66,7 +73,7 @@ export const GroupMembership = () => {
         branchName: item.branchName,
         officer: item.officer,
         gender: item.gender,
-        createdate: item.createdate
+        createdate: item.createdate,
       }));
 
       setExportData(groupMember as []);
@@ -75,9 +82,9 @@ export const GroupMembership = () => {
   }, [groupMembershipList, setReportType, setExportData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
-      ...params
+      ...params,
     });
     setReportType('GroupMembership');
   };
@@ -108,13 +115,13 @@ export const GroupMembership = () => {
               mainTitle: 'Group Membership Report',
               secondaryTitle:
                 'See a directory of all Group Membership Report in this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
             setPage={setPage}
             page={page}
             ActionMenuProps={ActionMenu}
           >
-            {search ? (
+            {searchActive ? (
               groupMembershipList?.map((dataItem: any, index: number) => {
                 return (
                   <StyledTableRow key={index}>

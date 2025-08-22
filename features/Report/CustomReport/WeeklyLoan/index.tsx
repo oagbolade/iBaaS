@@ -7,7 +7,7 @@ import { COLUMN } from './Column';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody
+  renderEmptyTableBody,
 } from '@/components/Table/Table';
 import { useGetBranches } from '@/api/general/useBranches';
 import { useGetAllProduct } from '@/api/setup/useProduct';
@@ -22,6 +22,7 @@ import { useGetAllGroups } from '@/api/general/useGroup';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface ActionMenuProps {
   detail: string;
@@ -39,31 +40,37 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 };
 
 export const WeeklyLoan = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [pageNumber, setpageNumber] = React.useState(1);
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { groups } = useGetAllGroups();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('weekly-loan');
+
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
-      pageNumber: String(pageNumber)
+      pageNumber: String(page),
     });
   };
 
   const { loanWeeklyRepaymentList, totalRecords, isLoading } =
     useGetWeeklyLoanRepayment({
-      ...searchParams
+      ...searchParams,
     });
 
   React.useEffect(() => {
@@ -96,14 +103,14 @@ export const WeeklyLoan = () => {
               mainTitle: 'Weekly Loan Repayment',
               secondaryTitle:
                 'See a directory of all Weekly Loan Repayments Report in this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
-            setPage={setpageNumber}
-            page={pageNumber}
+            setPage={setPage}
+            page={page}
             totalPages={totalRecords}
             ActionMenuProps={ActionMenu}
           >
-            {search ? (
+            {searchActive ? (
               loanWeeklyRepaymentList?.map((dataItem: any) => {
                 return (
                   <StyledTableRow key={dataItem.accountNumber}>

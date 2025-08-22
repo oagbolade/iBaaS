@@ -8,18 +8,18 @@ import { exportData } from '../../AuditTrail/styles';
 import { inputFields } from './style';
 import {
   transactionVolumeStyle,
-  allBranchesStyle
+  allBranchesStyle,
 } from '@/features/Report/Overview/styles';
 import {
   FormSelectField,
   FormTextInput,
-  TextInput
+  TextInput,
 } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ChevronDown, ExportIcon } from '@/assets/svg';
 import { labelTypography } from '@/components/FormikFields/styles';
@@ -29,11 +29,12 @@ import { useCurrentBreakpoint } from '@/utils';
 import {
   IBranches,
   IIAReportType,
-  IProductType
+  IProductType,
 } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISearchParams } from '@/app/api/search/route';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const Wrapper = styled.section`
   margin-right: 20px;
@@ -51,7 +52,7 @@ export const branchOptions = [
   'ID-475748  Festac Branch',
   'ID-475749  Yaba Branch',
   'ID-475750  Coker Branch',
-  'ID-475751  Somolu Branch'
+  'ID-475751  Somolu Branch',
 ];
 
 export const selectButton = {
@@ -61,7 +62,7 @@ export const selectButton = {
   color: `${colors.neutral600}`,
   fontSize: '14px',
   fontWeight: 400,
-  lineHeight: '20px'
+  lineHeight: '20px',
 };
 
 type Props = {
@@ -74,15 +75,25 @@ export const FilterSection = ({
   branches,
   onSearch,
   productTypes,
-  iAReportType
+  iAReportType,
 }: Props) => {
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('income-assurance');
   const { setDirection } = useSetDirection();
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedIAReportType } = useMapSelectOptions({
     branches,
     productTypes,
-    iAReportType
+    iAReportType,
   });
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    reportType: searchParams?.reportType ?? '',
+    startDate: searchParams?.startDate ?? '',
+    endDate: searchParams?.endDate ?? '',
+    search: searchParams?.search ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -92,7 +103,7 @@ export const FilterSection = ({
       search: values.search?.toString().length > 0 ? values.search : null,
       startDate:
         values.startDate.toString().length > 0 ? values.startDate : null,
-      endDate: values.endDate.toString().length > 0 ? values.endDate : null
+      endDate: values.endDate.toString().length > 0 ? values.endDate : null,
     };
     onSearch?.(params);
   };
@@ -100,14 +111,15 @@ export const FilterSection = ({
   return (
     <Box marginTop={10}>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
       >
         <Form>
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px'
+              paddingX: '24px',
             }}
           >
             <Box>
@@ -116,7 +128,7 @@ export const FilterSection = ({
                   <FormSelectField
                     customStyle={{
                       ...inputFields,
-                      width: setWidth()
+                      width: setWidth(),
                     }}
                     name="reportType"
                     options={mappedIAReportType}
@@ -128,7 +140,7 @@ export const FilterSection = ({
                   <FormSelectField
                     customStyle={{
                       ...inputFields,
-                      width: setWidth()
+                      width: setWidth(),
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -147,7 +159,7 @@ export const FilterSection = ({
                   <FormTextInput
                     customStyle={{
                       ...inputFields,
-                      width: setWidth()
+                      width: setWidth(),
                     }}
                     icon={<SearchIcon />}
                     name="search"
@@ -170,7 +182,7 @@ export const FilterSection = ({
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`
+                      color: `${colors.white}`,
                     }}
                     type="submit"
                     buttonTitle="Search"

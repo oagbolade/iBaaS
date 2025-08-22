@@ -8,7 +8,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -21,6 +21,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { maturityLoanSchema } from '@/schemas/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -29,13 +30,16 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>(
+    'maturity-loan-report',
+  );
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
-    bankproducts
+    bankproducts,
   });
 
   const formattedDateRange = useMemo(() => {
@@ -43,6 +47,12 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
     const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
     return `${startMonthAndDay} - ${endMonthAndDay}`;
   }, [dateValue]);
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    prodCode: searchParams?.prodCode ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -54,7 +64,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
           : null,
       prodCode:
         values.prodCode?.toString().trim().length > 0 ? values.prodCode : null,
-      getAll: values.getAll
+      getAll: values.getAll,
     };
     onSearch?.(params);
   };
@@ -62,7 +72,8 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
   return (
     <Box marginTop={10}>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
         validationSchema={maturityLoanSchema}
       >
@@ -70,7 +81,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px'
+              paddingX: '24px',
             }}
           >
             <Grid container spacing={2}>
@@ -84,7 +95,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields
+                    ...inputFields,
                   }}
                   name="prodCode"
                   options={mappedBankproducts}
@@ -97,7 +108,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields
+                    ...inputFields,
                   }}
                   name="branchID"
                   options={mappedBranches}
@@ -116,7 +127,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                 <FormTextInput
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields
+                    ...inputFields,
                   }}
                   icon={<SearchIcon />}
                   name="searchWith"
@@ -138,7 +149,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                   customStyle={{
                     backgroundColor: `${colors.activeBlue400}`,
                     border: `1px solid ${colors.activeBlue400}`,
-                    color: `${colors.white}`
+                    color: `${colors.white}`,
                   }}
                   type="submit"
                   buttonTitle="Search"

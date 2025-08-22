@@ -12,26 +12,31 @@ import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   useGetInflowOutflowReport,
-  IInflowOutflowParams
+  IInflowOutflowParams,
 } from '@/api/reports/useGetInflowOutflowReport';
 import { inflowOutflowReportColumn } from '@/constants/Reports/COLUMNS';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { ISearchParams } from '@/app/api/search/route';
 
 export const InflowOutflowReport = () => {
   const { branches } = useGetBranches();
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
 
-  const [searchParams, setSearchParams] =
-    React.useState<IInflowOutflowParams | null>(null);
-  const [pageNumber, setPageNumber] = React.useState(1);
-  const [isSearched, setSearched] = React.useState(false);
-
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<IInflowOutflowParams>('outflow-report');
   const { branchId, tellerId } = searchParams || {};
 
   const {
@@ -39,14 +44,14 @@ export const InflowOutflowReport = () => {
     totalInflow,
     totalOutflow,
     totalRecords,
-    isLoading
+    isLoading,
   } = useGetInflowOutflowReport({
     ...searchParams,
     branchId,
     tellerId,
     pageSize: 10,
-    pageNumber,
-    getAll: isDateFilterApplied
+    pageNumber: page,
+    getAll: isDateFilterApplied,
   });
 
   React.useEffect(() => {
@@ -59,7 +64,7 @@ export const InflowOutflowReport = () => {
       'Product Name': item.productName || '',
       'Branch Code': item.branchcode || '',
       Inflow: item.inflow || '',
-      Outflow: item.outflow || ''
+      Outflow: item.outflow || '',
     }));
 
     setExportData(formattedExportData);
@@ -70,10 +75,10 @@ export const InflowOutflowReport = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
-    setSearched(true);
-    setPageNumber(1);
+    setSearchActive(true);
+    setPage(1);
   };
 
   return (
@@ -105,12 +110,12 @@ export const InflowOutflowReport = () => {
                 'productName',
                 'branchcode',
                 'inflow',
-                'outflow'
+                'outflow',
               ]}
               hideFilterSection
-              isSearched={isSearched}
-              page={pageNumber}
-              setPage={setPageNumber}
+              isSearched={searchActive}
+              page={page}
+              setPage={setPage}
               totalPages={totalRecords}
               totalElements={inflowOutflowList.length}
             />
