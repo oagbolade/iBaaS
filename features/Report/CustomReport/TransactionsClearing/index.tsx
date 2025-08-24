@@ -18,30 +18,31 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const TransactionClearing = () => {
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('transaction-clearing');
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { status } = useGetStatus();
   const { branches } = useGetBranches();
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
-
-  const { branchID, customerID, status: reportStatus } = searchParams || {};
 
   const { data: transactionsinClearingList = [], isLoading } =
     useGetTransactionClearing({
       ...searchParams,
       page,
-      customerID,
-      branchID,
-      status: reportStatus,
-      pageNumber: String(pageNumber),
+      pageNumber: String(page),
       pageSize: '20',
-      getAll: isDateFilterApplied
+      getAll: isDateFilterApplied,
     });
 
   React.useEffect(() => {
@@ -55,7 +56,7 @@ export const TransactionClearing = () => {
       'Value Date': item?.valuedate?.split(' ')[0] || '',
       Amount: item?.tranamount || '',
       Narration: item?.narration || '',
-      'Posted By': item?.userid || ''
+      'Posted By': item?.userid || '',
     }));
 
     // Ensure no blank row or misplaced headers
@@ -67,9 +68,9 @@ export const TransactionClearing = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
-    setPageNumber(1); // Reset to the first page on new search
+    setSearchActive(true);
   };
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
@@ -94,13 +95,13 @@ export const TransactionClearing = () => {
               mainTitle: 'Transactions in Clearing',
               secondaryTitle:
                 'See a directory of all Transactions in Clearing in this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
             tableConfig={{
-              hasActions: false
+              hasActions: false,
             }}
           >
-            {transactionsinClearingList.length > 0 ? (
+            {searchActive ? (
               transactionsinClearingList?.map(
                 (dataItem: ITransactionClearing) => {
                   return (
@@ -131,7 +132,7 @@ export const TransactionClearing = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                }
+                },
               )
             ) : (
               <StyledTableRow>

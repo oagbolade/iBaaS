@@ -17,6 +17,7 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { useGetIAReportType } from '@/api/general/useIAReportType';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const IncomeAssuranceReport = () => {
   const { productTypes } = useGetProductType();
@@ -28,28 +29,30 @@ export const IncomeAssuranceReport = () => {
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     React.useContext(DownloadReportContext);
 
-  const [search, setSearch] = React.useState<boolean>(false);
-  const [searchParams, setSearchParams] = React.useState<ISearchParams | null>(
-    null
-  );
-
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('income-assurance');
   const {
     data = [],
     isLoading,
-    totalRecords
+    totalRecords,
   } = useGetIncomeAssuranceReport({
     ...searchParams,
     page,
     getAll: readyDownload,
-    pageSize: '10'
+    pageSize: '10',
   });
 
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams((prev) => ({
         ...prev,
-        getAll: true
+        getAll: true,
       }));
     }
   }, [readyDownload]);
@@ -66,7 +69,7 @@ export const IncomeAssuranceReport = () => {
         'product Name': item?.productName || 'N/A',
         'Accured Intrest': item?.accrued_Int?.toLocaleString() || 0,
         Branch: item?.branchName || 'N/A',
-        'Product Code': item?.productCode || 'N/A'
+        'Product Code': item?.productCode || 'N/A',
       }));
 
       // Ensure no blank row or misplaced headers
@@ -80,11 +83,11 @@ export const IncomeAssuranceReport = () => {
 
   const handleSearch = async (params: ISearchParams | null) => {
     setReadyDownload(false);
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
   };
   return (
@@ -109,14 +112,14 @@ export const IncomeAssuranceReport = () => {
               mainTitle: ' Income Assurance Report',
               secondaryTitle:
                 'See a directory of Income Assurance Report in this system.',
-              hideFilterSection: true
+              hideFilterSection: true,
             }}
             setPage={setPage}
             page={page}
             totalPages={totalPages}
             totalElements={totalRecords}
           >
-            {search ? (
+            {searchActive ? (
               data?.map((dataItem: IIncomeAssurance, i) => {
                 return (
                   <StyledTableRow key={i}>

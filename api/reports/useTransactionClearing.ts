@@ -31,8 +31,8 @@ export async function geTransactionClearing(
           endDate: params?.endDate,
           pageSize: Number(params?.pageSize) || 20,
           pageNumber: Number(params?.pageNumber) || 1,
-          branchCode: params?.branchID,
-          searchWith: params?.customerID
+          branchCode: params?.branchCode,
+          searchWith: params?.searchWith
         },
         headers: {
           'Content-Type': 'application/json',
@@ -62,14 +62,14 @@ export function useGetTransactionClearing(params: ISearchParams | null) {
       params?.status?.toString(),
       params?.startDate,
       params?.endDate,
-      params?.customerID,
-      params?.branchID
+      params?.searchWith,
+      params?.branchCode
     ],
     queryFn: () => geTransactionClearing(toastActions, params || {}),
     enabled: Boolean(
       (params?.startDate?.toString() || '').length > 0 ||
         (params?.status || '').length > 0 ||
-        (params?.branchID || '').length > 0 ||
+        (params?.branchCode || '').length > 0 ||
         (params?.endDate || '').length > 0
     )
   });

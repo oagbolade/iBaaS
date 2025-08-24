@@ -11,6 +11,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IBranches, IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import colors from '@/assets/colors';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: Function;
@@ -19,25 +20,37 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch, branches, status }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>(
+    'transaction-clearing',
+  );
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
-    status
+    status,
   });
   const { setWidth } = useCurrentBreakpoint();
 
+  const initialValues = {
+    branchCode: searchParams?.branchCode ?? '',
+    status: searchParams?.status ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+  };
+
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
-      // If no value input, return null
-      branchID: `${values.branchID.trim()}`,
-      customerID: `${values.search.trim()}`,
-      status: values.status
+      status: values.status.toString()?.length > 0 ? values.status : null,
+      branchCode:
+        values.branchCode.toString()?.length > 0 ? values.branchCode : null,
+      searchWith:
+        values.searchWith?.toString().length > 0 ? values.searchWith : null,
     };
+    console.log(params);
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -47,9 +60,9 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields
+                ...inputFields,
               }}
-              name="branchID"
+              name="branchCode"
               options={mappedBranches}
               label="Branch Name"
               required
@@ -60,7 +73,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields
+                ...inputFields,
               }}
               name="status"
               options={mappedStatus}
@@ -73,10 +86,10 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields
+                ...inputFields,
               }}
               icon={<SearchIcon />}
-              name="search"
+              name="searchWith"
               placeholder="Search by account number"
               label="Search"
             />{' '}
@@ -97,7 +110,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 backgroundColor: `${colors.activeBlue400}`,
                 border: `1px solid ${colors.activeBlue400}`,
-                color: `${colors.white}`
+                color: `${colors.white}`,
               }}
             />
           </Grid>

@@ -105,5 +105,6 @@ export interface ISearchParams {
   officerCode?: string | null;
   accountNo?: string | null;
   searchDate?: string | null;
-  accountType?: string | null
+  accountType?: string | null;
+  tellerId?: string | null;
 }

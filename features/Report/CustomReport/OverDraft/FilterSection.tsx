@@ -8,7 +8,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -20,6 +20,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { overdraftSchema } from '@/schemas/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -27,12 +28,14 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('overdraft-report');
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
 
   const formattedDateRange = useMemo(() => {
@@ -40,6 +43,11 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
     return `${startMonthAndDay} - ${endMonthAndDay}`;
   }, [dateValue]);
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -49,7 +57,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         values.searchWith?.toString().trim().length > 0
           ? values.searchWith
           : null,
-      getAll: values.getAll
+      getAll: values.getAll,
     };
     onSearch?.(params);
   };
@@ -57,7 +65,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   return (
     <Box marginTop={10}>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={(values) => onSubmit(values)}
         validationSchema={overdraftSchema}
       >
@@ -65,7 +74,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px'
+              paddingX: '24px',
             }}
           >
             <Box>
@@ -74,7 +83,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -93,7 +102,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields
+                      ...inputFields,
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
@@ -116,7 +125,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`
+                      color: `${colors.white}`,
                     }}
                     type="submit"
                     buttonTitle="Search"

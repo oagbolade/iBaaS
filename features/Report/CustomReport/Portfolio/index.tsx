@@ -12,11 +12,21 @@ import { IPortfolioAtRiskProduct } from '@/api/ResponseTypes/reports';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
 import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { ISearchParams } from '@/app/api/search/route';
 
 export const PortfolioAtRisk = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [searchQuery, setSearchQuery] = useState<string>('');
+   const {
+      searchParams,
+      setSearchParams,
+      searchActive,
+      setSearchActive,
+      page,
+      setPage
+    } = usePersistedSearch<ISearchParams>('portfolio-at-risk');
   const { setDetailedPortfolioAtRiskReportData } =
     useContext(ReportModuleContext);
   const { portfolioatRiskList = [], isLoading } = useGetAllPortfolioAtRisk({

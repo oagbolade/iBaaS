@@ -7,7 +7,7 @@ import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
-  ActionButton
+  ActionButton,
 } from '@/components/Revamp/Buttons';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
@@ -15,6 +15,7 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISearchParams } from '@/app/api/search/route';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { dormantAccountSchema } from '@/schemas/reports';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -22,10 +23,17 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('dormant-account');
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    accountNumber: searchParams?.accountNumber ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -36,21 +44,22 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           ? values.searchWith
           : '',
       getAll: false,
-      pageSize: '10'
+      pageSize: '10',
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={dormantAccountSchema}
     >
       <Form>
         <Box
           sx={{
-            marginTop: '10px'
+            marginTop: '10px',
           }}
         >
           <Box>
@@ -59,7 +68,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields
+                    ...inputFields,
                   }}
                   name="branchID"
                   options={mappedBranches}
@@ -78,7 +87,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                 <FormTextInput
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields
+                    ...inputFields,
                   }}
                   icon={<SearchIcon />}
                   name="searchWith"
@@ -100,7 +109,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   customStyle={{
                     backgroundColor: `${colors.activeBlue400}`,
                     border: `1px solid ${colors.activeBlue400}`,
-                    color: `${colors.white}`
+                    color: `${colors.white}`,
                   }}
                   type="submit"
                   buttonTitle="Search"

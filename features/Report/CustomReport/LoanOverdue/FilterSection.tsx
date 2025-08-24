@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useMemo, useState } from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
@@ -9,12 +9,13 @@ import { buttonBackgroundColor } from '../AccountEnquiry/style';
 import {
   FormSelectField,
   FormSelectInput,
-  TextInput
+  FormTextInput,
+  TextInput,
 } from '@/components/FormikFields';
 import {
   ActionButton,
   ActionButtonWithPopper,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
@@ -25,6 +26,9 @@ import { ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { useCurrentBreakpoint } from '@/utils';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { Form, Formik } from 'formik';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   branches?: IBranches[];
@@ -33,9 +37,8 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState('');
-  const [selectedProduct, setSelectedproduct] = useState('');
+  const { searchParams } =
+    usePersistedSearch<LoanOverdueParams>('loan-overdue');
   const { setDirection } = useSetDirection();
   const { currentDate } = useFormattedDates();
   const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
@@ -43,158 +46,162 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
-    bankproducts
+    bankproducts,
   });
 
-  const handleSearchClick = () => {
-    const searchParams = {
-      branch: selectedBranch || null,
-      search: searchTerm || null,
-      product: selectedProduct || null,
-      reportDate: reportDate.format('YYYY-MM-DD')
-    };
+  const initialValues = {
+    branch: searchParams?.branch ?? '',
+    product: searchParams?.product ?? '',
+    search: searchParams?.search ?? '',
+    reportDate: searchParams?.reportDate ?? '',
+  };
 
-    onSearch(searchParams);
+  const onSubmit = async (values: any) => {
+    const params: LoanOverdueParams = {
+      branch: values.branch.toString().length > 0 ? values.branch : null,
+      product: values.product.length > 0 ? values.product : undefined,
+      search: values.search.length > 0 ? values.search : undefined,
+      reportDate: reportDate.format('YYYY-MM-DD'),
+    };
+    onSearch?.(params);
   };
 
   return (
-    <Box>
-      <Stack
-        sx={{
-          position: 'sticky',
-          top: '60px',
-          zIndex: 3,
-          backgroundColor: `${colors.white}`,
-          borderLeft: `1px solid ${colors.loanTitleColor}`,
-          borderBottom: `1px solid ${colors.loanTitleColor}`,
-          paddingLeft: '10px',
-          paddingRight: '10px'
-        }}
-        direction={setDirection()}
-        justifyContent="space-between"
-      >
-        <Box>
-          <Box mt={2.3}>
-            <BackButton />
-          </Box>
-        </Box>
-        <Stack
-          mt={1}
-          direction={setDirection()}
-          spacing={2}
-          justifyContent="space-between"
-        >
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={(values) => onSubmit(values)}
+    >
+      {() => (
+        <Form>
           <Box>
-            <ActionButtonWithPopper
-              searchGroupVariant="ExportReport"
-              customStyle={{ ...exportData }}
-              icon={<ExportIcon />}
-              iconPosition="start"
-              buttonTitle="Export Data"
-            />
-          </Box>
-
-          <Box>
-            <ActionButtonWithPopper
-              searchGroupVariant="DateRangePicker"
-              CustomDateRangePicker={
-                <DateCalendar
-                  value={reportDate}
-                  onChange={(date) => setReportDate(date)}
-                />
-              }
-              customStyle={{ ...dateFilter }}
-              icon={
-                <CalendarTodayOutlinedIcon
-                  sx={{
-                    color: `${colors.Heading}`
-                  }}
-                />
-              }
-              iconPosition="end"
-              buttonTitle={reportDate.format('YYYY-MM-DD')}
-            />
-          </Box>
-        </Stack>
-      </Stack>
-
-      <Box
-        sx={{
-          marginTop: '30px',
-          paddingX: '24px'
-        }}
-      >
-        <Box>
-          <Grid container spacing={2}>
-            <Grid item mobile={12} tablet={3}>
-              <FormSelectInput
-                customStyle={{
-                  width: setWidth(),
-                  ...inputFields
-                }}
-                name="branchID"
-                options={mappedBranches}
-                label="Branch Name"
-                required
-                value={selectedBranch}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setSelectedBranch(e.target.value)
-                }
-              />
-            </Grid>
-
-            <Grid item mobile={12} tablet={3}>
-              <FormSelectInput
-                customStyle={{
-                  width: setWidth(),
-                  ...inputFields
-                }}
-                name="Product"
-                options={mappedBankproducts}
-                label="Product"
-                value={selectedProduct}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setSelectedproduct(e.target.value)
-                }
-              />
-            </Grid>
-
-            <Grid item mobile={12} tablet={4}>
-              <TextInput
-                customStyle={{
-                  width: setWidth(),
-                  ...inputFields
-                }}
-                icon={<SearchIcon />}
-                name="search"
-                value={searchTerm}
-                placeholder="Search for Account Number"
-                label="Search for Account Number"
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setSearchTerm(e.target.value)
-                }
-              />{' '}
-            </Grid>
-
-            <Grid
-              item
-              mobile={12}
-              tablet={2}
-              sx={{ display: 'flex' }}
-              justifyContent="flex-end"
-              mt={{ tablet: 3.2 }}
-              mr={{ mobile: 30, tablet: 0 }}
-              mb={{ mobile: 6, tablet: 0 }}
+            <Stack
+              sx={{
+                position: 'sticky',
+                top: '60px',
+                zIndex: 3,
+                backgroundColor: `${colors.white}`,
+                borderLeft: `1px solid ${colors.loanTitleColor}`,
+                borderBottom: `1px solid ${colors.loanTitleColor}`,
+                paddingLeft: '10px',
+                paddingRight: '10px',
+              }}
+              direction={setDirection()}
+              justifyContent="space-between"
             >
-              <ActionButton
-                onClick={handleSearchClick}
-                customStyle={buttonBackgroundColor}
-                buttonTitle="Search"
-              />
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </Box>
+              <Box>
+                <Box mt={2.3}>
+                  <BackButton />
+                </Box>
+              </Box>
+              <Stack
+                mt={1}
+                direction={setDirection()}
+                spacing={2}
+                justifyContent="space-between"
+              >
+                <Box>
+                  <ActionButtonWithPopper
+                    searchGroupVariant="ExportReport"
+                    customStyle={{ ...exportData }}
+                    icon={<ExportIcon />}
+                    iconPosition="start"
+                    buttonTitle="Export Data"
+                  />
+                </Box>
+
+                <Box>
+                  <ActionButtonWithPopper
+                    searchGroupVariant="DateRangePicker"
+                    CustomDateRangePicker={
+                      <DateCalendar
+                        value={reportDate}
+                        onChange={(date) => setReportDate(date)}
+                      />
+                    }
+                    customStyle={{ ...dateFilter }}
+                    icon={
+                      <CalendarTodayOutlinedIcon
+                        sx={{
+                          color: `${colors.Heading}`,
+                        }}
+                      />
+                    }
+                    iconPosition="end"
+                    buttonTitle={reportDate.format('YYYY-MM-DD')}
+                  />
+                </Box>
+              </Stack>
+            </Stack>
+
+            <Box
+              sx={{
+                marginTop: '30px',
+                paddingX: '24px',
+              }}
+            >
+              <Box>
+                <Grid container spacing={2}>
+                  <Grid item mobile={12} tablet={3}>
+                    <FormSelectField
+                      customStyle={{
+                        width: setWidth(),
+                        ...inputFields,
+                      }}
+                      name="branch"
+                      options={mappedBranches}
+                      label="Branch Name"
+                      required
+                    />
+                  </Grid>
+
+                  <Grid item mobile={12} tablet={3}>
+                    <FormSelectField
+                      customStyle={{
+                        width: setWidth(),
+                        ...inputFields,
+                      }}
+                      name="product"
+                      options={mappedBankproducts}
+                      label="Product"
+                    />
+                  </Grid>
+
+                  <Grid item mobile={12} tablet={4}>
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(),
+                        ...inputFields,
+                      }}
+                      icon={<SearchIcon />}
+                      name="search"
+                      placeholder="Search for Account Number"
+                      label="Search for Account Number"
+                    />{' '}
+                  </Grid>
+
+                  <Grid
+                    item
+                    mobile={12}
+                    tablet={2}
+                    sx={{ display: 'flex' }}
+                    justifyContent="flex-end"
+                    mt={{ tablet: 3.2 }}
+                    mr={{ mobile: 30, tablet: 0 }}
+                    mb={{ mobile: 6, tablet: 0 }}
+                  >
+                    <ActionButton
+                      type="submit"
+                      customStyle={buttonBackgroundColor}
+                      buttonTitle="Search"
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+          </Box>
+        </Form>
+      )}
+    </Formik>
   );
 };

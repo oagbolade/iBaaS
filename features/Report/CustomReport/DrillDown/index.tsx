@@ -8,7 +8,7 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { useGetGlMainGroupReport } from '@/api/reports/useGetSubGroupResponse';
 import {
   drillDownReportGlColumns,
-  drilMainKey
+  drilMainKey,
 } from '@/constants/Reports/COLUMNS';
 import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
@@ -16,6 +16,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import colors from '@/assets/colors';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface ActionMenuProps {
   detail: string;
@@ -32,21 +33,26 @@ const ActionMenu = ({ detail }: ActionMenuProps) => {
 };
 
 export const DrillDown = () => {
-  const [search, setSearch] = useState<boolean>(true);
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-
   const { setReportType, setExportData, readyDownload, setReadyDownload } =
     React.useContext(DownloadReportContext);
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('drill-down');
 
   const { isLoading, glMainGroupRptList, totalRecords } =
     useGetGlMainGroupReport({
       ...searchParams,
-      pageNumber: String(page)
+      pageNumber: String(page),
     });
 
   const handleSearch = (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setReadyDownload(false);
     setSearchParams(params);
     setReportType('GLMainGroupReport');
@@ -59,8 +65,8 @@ export const DrillDown = () => {
         (item) => ({
           GlName: item.gl_NodeName,
           GlCode: item.gL_NodeCode,
-          total: item.total
-        })
+          total: item.total,
+        }),
       );
       setExportData(reportData as []);
     }
@@ -69,7 +75,7 @@ export const DrillDown = () => {
     readyDownload,
     setExportData,
     glMainGroupRptList,
-    setReportType
+    setReportType,
   ]);
 
   return (
@@ -83,13 +89,13 @@ export const DrillDown = () => {
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <TableV2
-            isSearched={search}
+            isSearched={searchActive}
             columns={drillDownReportGlColumns}
             data={glMainGroupRptList?.pagedMainGroupReports}
             showHeader={{
               mainTitle: 'Drill Down GL',
               secondaryTitle:
-                'See a directory of all Drill Down GL Report in this system.'
+                'See a directory of all Drill Down GL Report in this system.',
             }}
             keys={drilMainKey as []}
             hideFilterSection
@@ -99,8 +105,8 @@ export const DrillDown = () => {
                 'Grand Total',
                 '',
                 `NGN ${formatCurrency(glMainGroupRptList?.total || 0)}`,
-                ''
-              ]
+                '',
+              ],
             }}
             setPage={setPage}
             totalPages={Math.ceil(totalRecords / 10)}

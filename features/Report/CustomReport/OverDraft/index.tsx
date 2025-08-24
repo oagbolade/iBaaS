@@ -19,11 +19,17 @@ import { useGetAllProduct } from '@/api/setup/useProduct';
 import { StyledTableCell } from '@/components/Table/style';
 import { formatDate } from '@/utils/formatDateAndTime';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const OverDraft = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [pageNumber, setpageNumber] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('overdraft-report');
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { dateValue } = React.useContext(DateRangePickerContext);
@@ -33,12 +39,12 @@ export const OverDraft = () => {
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
-      pageNumber: String(pageNumber),
+      pageNumber: String(page),
       pageSize: '10'
     });
     setReportType('OverdraftReport');
@@ -77,10 +83,10 @@ export const OverDraft = () => {
             }}
             columns={COLUMN}
             data={overDraftReport}
-            setPage={setpageNumber}
-            page={pageNumber}
+            setPage={setPage}
+            page={page}
           >
-            {search ? (
+            {searchActive ? (
               overDraftReport?.map((dataItem: IOverdraftReport) => {
                 return (
                   <StyledTableRow key={dataItem.accountnumber}>

@@ -6,7 +6,7 @@ import { buttonBackgroundColor } from '../AccountEnquiry/style';
 import {
   FormSelectField,
   FormSelectInput,
-  TextInput
+  TextInput,
 } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
@@ -14,6 +14,7 @@ import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ISearchParams } from '@/app/api/search/route';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -21,23 +22,32 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('group-loan-report');
   const [searchTerm, setSearchTerm] = useState('');
   const { mappedBranches } = useMapSelectOptions({
-    branches
+    branches,
   });
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    search: searchParams?.search ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      search: values.search?.toString().trim().length > 0 ? values.search : null
+      search:
+        values.search?.toString().trim().length > 0 ? values.search : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
@@ -57,7 +67,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                 customStyle={{
                   width: '400px',
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -74,7 +84,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
               <TextInput
                 customStyle={{
                   fontSize: '14px',
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="search"

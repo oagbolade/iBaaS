@@ -10,7 +10,7 @@ import { TextInput } from '@/components/FormikFields';
 import {
   ActionButton,
   ActionButtonWithPopper,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Report/CustomReport/style';
 import { ITellerPostingParams } from '@/api/reports/useGetTellerPosting';
@@ -19,12 +19,15 @@ import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { exportData } from '@/components/ViewReport/style';
 import { ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { ISearchParams } from '@/app/api/search/route';
 
 type Props = {
   onSearch: (params: ITellerPostingParams | null) => void;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('teller-posting');
   const [searchTerm, setSearchTerm] = useState('');
   const { setDirection } = useSetDirection();
 
@@ -34,7 +37,7 @@ export const FilterSection = ({ onSearch }: Props) => {
   const handleSearchClick = () => {
     const searchParams = {
       search: searchTerm || undefined,
-      reportDate: reportDate.format('YYYY-MM-DD')
+      reportDate: reportDate.format('YYYY-MM-DD'),
     };
 
     onSearch(searchParams);
@@ -47,7 +50,7 @@ export const FilterSection = ({ onSearch }: Props) => {
           borderBottom: `1px solid ${colors.loanTitleColor}`,
           marginTop: '10px',
           paddingX: '24px',
-          position: 'sticky'
+          position: 'sticky',
         }}
         direction={setDirection()}
         justifyContent="space-between"
@@ -86,7 +89,7 @@ export const FilterSection = ({ onSearch }: Props) => {
               icon={
                 <CalendarTodayOutlinedIcon
                   sx={{
-                    color: `${colors.Heading}`
+                    color: `${colors.Heading}`,
                   }}
                 />
               }
@@ -112,7 +115,7 @@ export const FilterSection = ({ onSearch }: Props) => {
             <TextInput
               customStyle={{
                 width: '100%',
-                ...inputFields
+                ...inputFields,
               }}
               icon={<SearchIcon />}
               name="search"

@@ -20,6 +20,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { customerBalanceSchema } from '@/schemas/reports';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -27,11 +28,20 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
+    const { searchParams } =
+      usePersistedSearch<ISearchParams>('balance-sheet-report');
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
+
+  
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    pCode: searchParams?.pCode ?? '',
+    searchWith: searchParams?.searchWith ?? ''
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {

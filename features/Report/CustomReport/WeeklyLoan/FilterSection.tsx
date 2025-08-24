@@ -8,7 +8,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton
+  BackButton,
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -21,6 +21,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { IBankProducts, IGroup } from '@/api/ResponseTypes/customer-service';
 import { weeklyLoanRepaySchema } from '@/schemas/reports';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
@@ -33,8 +34,9 @@ export const FilterSection = ({
   branches,
   bankproducts,
   groups,
-  onSearch
+  onSearch,
 }: Props) => {
+  const { searchParams } = usePersistedSearch<ISearchParams>('weekly-loan');
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { dateValue } = React.useContext(DateRangePickerContext);
@@ -43,7 +45,7 @@ export const FilterSection = ({
     useMapSelectOptions({
       branches,
       bankproducts,
-      groups
+      groups,
     });
 
   const formattedDateRange = useMemo(() => {
@@ -51,6 +53,12 @@ export const FilterSection = ({
     const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
     return `${startMonthAndDay} - ${endMonthAndDay}`;
   }, [dateValue]);
+
+  const initialValues = {
+    branchID: searchParams?.branchID ?? '',
+    prodCode: searchParams?.prodCode ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+  };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -64,14 +72,15 @@ export const FilterSection = ({
         values.prodCode?.toString().trim().length > 0 ? values.prodCode : null,
       getAll: values.getAll,
       groupId:
-        values.groupId?.toString().trim().length > 0 ? values.groupId : null
+        values.groupId?.toString().trim().length > 0 ? values.groupId : null,
     };
     onSearch?.(params);
   };
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
+      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
       validationSchema={weeklyLoanRepaySchema}
     >
@@ -79,7 +88,7 @@ export const FilterSection = ({
         <Box
           sx={{
             marginTop: '30px',
-            paddingX: '24px'
+            paddingX: '24px',
           }}
         >
           <Grid container spacing={2.5}>
@@ -87,7 +96,7 @@ export const FilterSection = ({
               <FormSelectField
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -106,7 +115,7 @@ export const FilterSection = ({
               <FormSelectField
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="prodCode"
                 options={mappedBankproducts}
@@ -125,7 +134,7 @@ export const FilterSection = ({
               <FormSelectField
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields
+                  ...inputFields,
                 }}
                 name="groupId"
                 options={mappedGroups}
@@ -143,7 +152,7 @@ export const FilterSection = ({
               <FormTextInput
                 customStyle={{
                   width: setWidth(),
-                  ...inputFields
+                  ...inputFields,
                 }}
                 icon={<SearchIcon />}
                 name="searchWith"
@@ -165,7 +174,7 @@ export const FilterSection = ({
                 customStyle={{
                   backgroundColor: `${colors.activeBlue400}`,
                   border: `1px solid ${colors.activeBlue400}`,
-                  color: `${colors.white}`
+                  color: `${colors.white}`,
                 }}
                 type="submit"
                 buttonTitle="Search"

@@ -12,18 +12,23 @@ import { FormSkeleton } from '@/components/Loaders';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const TermDepositMaturityReport = () => {
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
-
-  const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [isSearched, setSearched] = useState<boolean>(false);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('team-deposit-maturity');
   const { branches } = useGetBranches();
 
   const [tdReportList, setTdReportList] = useState<
@@ -43,20 +48,20 @@ export const TermDepositMaturityReport = () => {
     'tdAmount',
     'tenor',
     'totalDays',
-    'intRate'
+    'intRate',
   ];
 
   const {
     isLoading,
     tdMaturityReportList,
     tdMaturityReportByDateList,
-    totalRecords
+    totalRecords,
   } = useTermDeporitMaturityReport({
     ...searchParams,
     pageNumber: String(page),
     pageSize: '10',
     reportType: '5',
-    getAll: isDateFilterApplied
+    getAll: isDateFilterApplied,
   });
 
   React.useEffect(() => {
@@ -67,7 +72,7 @@ export const TermDepositMaturityReport = () => {
         tdAmount: `NGN ${formatCurrency(item.tdAmount || 0) || 'N/A'}`,
         tenor: `${item.tenor} day(s)`,
         totalDays: item?.totalDays || 'N/A',
-        intRate: `${item.intRate}%`
+        intRate: `${item.intRate}%`,
       };
     });
 
@@ -87,11 +92,11 @@ export const TermDepositMaturityReport = () => {
   }, [tdMaturityReportList]);
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearched(true);
+    setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
   };
 
@@ -99,7 +104,7 @@ export const TermDepositMaturityReport = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '60px'
+        marginTop: '60px',
       }}
     >
       <TopOverViewSection useBackButton />
@@ -107,7 +112,7 @@ export const TermDepositMaturityReport = () => {
       <Box
         sx={{
           padding: '25px',
-          width: '100%'
+          width: '100%',
         }}
       >
         <Box sx={{ marginTop: '10px', marginBottom: '30px' }}>
@@ -121,11 +126,19 @@ export const TermDepositMaturityReport = () => {
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <TableV2
-            isSearched={isSearched}
+            isSearched={searchActive}
             tableConfig={{
               hasActions: true,
               paintedColumns: ['tdAmount', 'intRate'], // TODO: Pass keys to painted columns here
-              totalRow: ['Total', '', '₦4,764,805,170.51', '', '', '599.70', '']
+              totalRow: [
+                'Total',
+                '',
+                '₦4,764,805,170.51',
+                '',
+                '',
+                '599.70',
+                '',
+              ],
             }}
             keys={keys as []}
             columns={COLUMNS}
@@ -134,7 +147,7 @@ export const TermDepositMaturityReport = () => {
             showHeader={{
               mainTitle: 'Term Deposit Maturity Report',
               secondaryTitle:
-                'See a directory of all term deposit maturity report in this system.'
+                'See a directory of all term deposit maturity report in this system.',
             }}
             setPage={setPage}
             totalElements={totalRecords}

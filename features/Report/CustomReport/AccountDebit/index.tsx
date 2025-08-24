@@ -7,7 +7,7 @@ import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSectio
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   DownloadReportContext,
-  IReportQueryParams
+  IReportQueryParams,
 } from '@/context/DownloadReportContext';
 import { useGetAccountInDebit } from '@/api/reports/useGetAccountInDebit';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
@@ -18,15 +18,23 @@ import { FormSkeleton } from '@/components/Loaders';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const AccountDebit = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = useState<string>('1');
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('account-debit');
   const { setExportData, setReportType, setReportQueryParams } = useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
   const { branches, isLoading: isLoadingBranches } = useGetBranches();
 
@@ -34,8 +42,8 @@ export const AccountDebit = () => {
     useGetAccountInDebit({
       ...searchParams,
       pageSize: '10',
-      pageNumber: page,
-      getAll: isDateFilterApplied
+      pageNumber: String(page),
+      getAll: isDateFilterApplied,
     });
 
   const rowsPerPage = 10;
@@ -46,8 +54,9 @@ export const AccountDebit = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
+    setSearchActive(true);
     setReportType('AccountDebit');
     setReportQueryParams(params as IReportQueryParams); // TODO: need to pass accept just required fields here
   };
@@ -85,10 +94,10 @@ export const AccountDebit = () => {
             mainTitle: 'Account in Debit',
             secondaryTitle:
               'See a directory of all Account in Debit Report in this system.',
-            hideFilterSection: true
+            hideFilterSection: true,
           }}
         >
-          {accountsinDebitList.length > 0 ? (
+          {searchActive ? (
             accountsinDebitList?.map(
               (accountData: IAccountInDebitResponse, index) => {
                 return (
@@ -113,7 +122,7 @@ export const AccountDebit = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                 );
-              }
+              },
             )
           ) : (
             <StyledTableRow>

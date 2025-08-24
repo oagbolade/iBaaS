@@ -11,26 +11,32 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const HoldingTransactions = () => {
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [pageNumber, setpageNumber] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('holding-transactions');
   const { branches } = useGetBranches();
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
+    DownloadReportContext,
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
+    setSearchActive(true);
     setSearchParams(params);
   };
 
   const { data, isLoading, totalRecords } = useGetHoldingTransactionReport({
     ...searchParams,
-    pageNumber: pageNumber.toString(),
-    pageSize: '10'
+    pageNumber: page.toString(),
+    pageSize: '10',
   });
 
   React.useEffect(() => {
@@ -40,7 +46,7 @@ export const HoldingTransactions = () => {
         created: item.create_dt,
         matured: item.end_dt,
         Amount: `NGN ${formatCurrency(item.amt)}`,
-        Reason: item.holdreason
+        Reason: item.holdreason,
       }));
 
       setExportData(mapHoldingTransaction as []);
@@ -52,7 +58,7 @@ export const HoldingTransactions = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px'
+        marginTop: '50px',
       }}
     >
       <TopOverViewSection useBackButton />
@@ -65,7 +71,7 @@ export const HoldingTransactions = () => {
         ) : (
           <Box sx={{ width: '100%' }}>
             <TableV2
-              isSearched={search}
+              isSearched={searchActive}
               tableConfig={{
                 hasActions: false,
                 grandTotalRow: [
@@ -73,8 +79,8 @@ export const HoldingTransactions = () => {
                   '',
                   '',
                   `NGN ${formatCurrency(data?.totalHolding)}`,
-                  ''
-                ]
+                  '',
+                ],
               }}
               keys={keys as []}
               columns={COLUMN}
@@ -83,11 +89,11 @@ export const HoldingTransactions = () => {
               showHeader={{
                 mainTitle: 'Holding Transactions',
                 secondaryTitle:
-                  'See a directory of all holding transactions Report in this system.'
+                  'See a directory of all holding transactions Report in this system.',
               }}
-              setPage={setpageNumber}
+              setPage={setPage}
               totalElements={totalRecords}
-              page={pageNumber}
+              page={page}
             />
           </Box>
         )}
