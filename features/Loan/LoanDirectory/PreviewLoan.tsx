@@ -33,7 +33,7 @@ export const PreviewContentOne: React.FC<{ profileDetail: any }> = ({
       <Details title={profileDetail?.prodname || 'N/A'} />
 
       <SubTitle title="BRANCH" />
-      <Details title={profileDetail?.branch || 'N/A'} />
+      <Details title={profileDetail?.branchName || 'N/A'} />
 
       <SubTitle title="BOOK BALANCE" />
       <Details title={profileDetail?.bkbalance || 'N/A'} />
@@ -141,16 +141,16 @@ export const PreviewContent: React.FC<{
 
 interface LoanPreviewContentProps {
   loanDetails: {
-    settlementacct1?: string;
-    fullname?: string;
-    productname?: string;
-    branch?: string;
-    loanamount?: number;
-    settlementAcctBal?: number;
-    loanterm?: number;
-    intrate?: number;
-    repaydesc?: string;
-    loanschedcalcdesc?: string;
+    settlementAcct?: string;
+    fullName?: string;
+    productName?: string;
+    branchName?: string;
+    loanAmount?: number;
+    currentbalance?: number;
+    loanTerm?: number;
+    intRate?: number;
+    repaymentType?: string;
+    calculationName?: string;
     startdate?: string;
     matdate?: string;
     status?: string;
@@ -169,36 +169,36 @@ const LoanPreviewContent: React.FC<LoanPreviewContentProps> = ({
       }}
     >
       <SubTitle title="Settlement Account" />
-      <Details title={loanDetails?.settlementacct1 || 'N/A'} />
+      <Details title={loanDetails?.settlementAcct || 'N/A'} />
 
       <SubTitle title="Settlement Account Name" />
-      <Details title={loanDetails?.fullname || 'N/A'} />
+      <Details title={loanDetails?.fullName || 'N/A'} />
 
       <SubTitle title="Loan Product" />
-      <Details title={loanDetails?.productname || 'N/A'} />
+      <Details title={loanDetails?.productName || 'N/A'} />
 
       <SubTitle title="Branch" />
-      <Details title={loanDetails?.branch || 'N/A'} />
+      <Details title={loanDetails?.branchName || 'N/A'} />
 
       <SubTitle title="Loan Amount" />
       <Details
-        title={`NGN ${formatCurrency(loanDetails?.loanamount || 0) || 'N/A'}`}
+        title={`NGN ${formatCurrency(loanDetails?.loanAmount || 0) || 'N/A'}`}
       />
 
       <SubTitle title="Current Customer Balance" />
-      <Details title={`NGN ${loanDetails?.settlementAcctBal || 'N/A'}`} />
+      <Details title={`NGN ${loanDetails?.currentbalance || 'N/A'}`} />
 
       <SubTitle title="Loan Term" />
-      <Details title={loanDetails?.loanterm?.toString() || 'N/A'} />
+      <Details title={loanDetails?.loanTerm?.toString() || 'N/A'} />
 
       <SubTitle title="Loan Rate" />
-      <Details title={loanDetails?.intrate?.toString() || 'N/A'} />
+      <Details title={loanDetails?.intRate?.toString() || 'N/A'} />
 
       <SubTitle title="Repayment Type" />
-      <Details title={loanDetails?.repaydesc?.toString() || 'N/A'} />
+      <Details title={loanDetails?.repaymentType?.toString() || 'N/A'} />
 
       <SubTitle title="Calculation Method" />
-      <Details title={loanDetails?.loanschedcalcdesc?.toString() || 'N/A'} />
+      <Details title={loanDetails?.calculationName?.toString() || 'N/A'} />
 
       <SubTitle title=" Start Date" />
       <Details
@@ -220,10 +220,7 @@ const LoanPreviewContent: React.FC<LoanPreviewContentProps> = ({
 
       <Box mb={{ mobile: 5, tablet: 0 }}>
         <SubTitle title="Loan Status" />
-        <Status
-          label={loanDetails?.status === '4' ? 'Active' : 'Matured'}
-          status={loanDetails?.status === '4' ? 'success' : 'matured'}
-        />
+         <Status label={loanDetails?.status as string} status="" />
       </Box>
     </Box>
   );

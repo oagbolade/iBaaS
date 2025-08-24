@@ -2,7 +2,7 @@ import colors from '@/assets/colors';
 
 export const searchgroupContainer = {
   display: 'flex',
-  width: '240px',
+  width: '100%',
   padding: '16px 6px',
   flexDirection: 'column',
   justifyContent: 'center',

@@ -213,7 +213,7 @@ export const ActionButtonWithPopper = ({
         variant="contained"
         ref={anchorRef}
         aria-label="split button"
-        sx={{ boxShadow: 'none' }}
+        sx={{ boxShadow: 'none', display: 'flex', width: '100%' }}
       >
         <Button
           type={type}

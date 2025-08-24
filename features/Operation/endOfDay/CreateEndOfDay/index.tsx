@@ -1,7 +1,8 @@
 'use client';
 import { Box } from '@mui/material';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { CreateEndOfDayForm } from '../../Forms/CreateEndofdayForm';
 import { useGetCurrency } from '@/api/general/useCurrency';
 import { PrimaryIconButton } from '@/components/Buttons';
@@ -13,6 +14,8 @@ import {
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { useGetCommercialBank } from '@/api/setup/useClearingBank';
+import { TableSingleAction } from '@/components/Table';
+import { useGetParams } from '@/utils/hooks/useGetParams';
 
 export const EndOfDayContainer = () => {
   const { currencies } = useGetCurrency();
@@ -21,16 +24,14 @@ export const EndOfDayContainer = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmittingForward, setIsSubmittingForward] =
     useState<boolean>(false);
-  const triggerSubmission = () => {
-    setIsSubmitting(true);
-  };
+  const id = useParams();
   const actionButtons: any = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
-      <PrimaryIconButton
-        buttonTitle="View Details"
-        customStyle={{ ...submitButton }}
-        onClick={triggerSubmission}
-      />
+      <Link
+        href={`/setup/product-gl/view-eod-process/?isEditing=true&id=${id}`}
+      >
+        <TableSingleAction actionName="View Details" />
+      </Link>
     </Box>
   ];
   return (

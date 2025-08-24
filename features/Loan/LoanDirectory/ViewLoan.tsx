@@ -41,11 +41,7 @@ const actionButtons = ({
   const options: any =
     status === 'Running'
       ? [
-          <Link
-            href={`/loan/loan-directory/cancel-loan/?accountNumber=${sanitize(accountNumber)}&action=${sanitize(action)}&customerId=${sanitize(customerId)}`}
-          >
-            Cancel Loan
-          </Link>,
+          
           <Link
             href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
           >

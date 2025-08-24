@@ -22,6 +22,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useFilterCustomerAccountSearch } from '@/api/customer-service/useCustomer';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGetProductClassByCastegory } from '@/api/setup/useProduct';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -48,14 +49,13 @@ export const Account = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('finance-account');
-
+  const productClassBYID = '0';
   const currentUrl = 'financeMgt';
-
+  const { data } = useGetProductClassByCastegory(productClassBYID);
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
     setSearchActive(true);
   };
-
   const ActionMenuProps = ({
     customerId,
     accountNumber,
@@ -95,8 +95,12 @@ export const Account = () => {
         actionButtons={actionButtons}
       />
       <AdminContainer>
-        {branches && (
-          <FilterSection branches={branches} onSearch={handleSearch} />
+        {branches && data && (
+          <FilterSection
+            branches={branches}
+            data={data}
+            onSearch={handleSearch}
+          />
         )}
         <Box
           sx={{

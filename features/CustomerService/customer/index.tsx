@@ -13,12 +13,12 @@ import { ActionButton } from '@/components/Revamp/Buttons';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import {
   submitButton,
-  cancelButton,
+  cancelButton
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { TabsV2 } from '@/components/Revamp/TabsV2';
 import { useGetBranches } from '@/api/general/useBranches';
@@ -26,7 +26,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useGetStatus } from '@/api/general/useStatus';
 import {
   useFilterCustomerAccountSearch,
-  useFilterCustomerSearch,
+  useFilterCustomerSearch
 } from '@/api/customer-service/useCustomer';
 import { FormSkeleton } from '@/components/Loaders';
 import { StyledTableCell } from '@/components/Table/style';
@@ -35,6 +35,10 @@ import { Status } from '@/components/Labels';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGetProductType } from '@/api/general/useProductType';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { ModalContainerV2 } from '@/components/Revamp/Modal';
+import colors from '@/assets/colors';
+import { useGetProductClassByCastegory } from '@/api/setup/useProduct';
 
 export interface IOptions {
   buttonTitle: string;
@@ -44,10 +48,12 @@ export interface IOptions {
 
 const CustomerActionMenuProps = ({
   customerId,
+  type
 }: {
   customerId: string;
+  type: string;
 }): React.ReactElement => {
-  return <TableActionMenu customerId={customerId} />;
+  return <TableActionMenu customerId={customerId} type={type} />;
 };
 
 const CustomerAccountActionMenuProps = ({
@@ -91,13 +97,13 @@ const CustomerOverviewTable = ({
   page,
   search,
   totalPages,
-  totalElements,
+  totalElements
 }: CustomerOverviewTableProps) => {
   return (
     <Box
       sx={{
         position: { mobile: 'relative' },
-        width: '100%',
+        width: '100%'
       }}
     >
       {isLoading ? (
@@ -106,7 +112,7 @@ const CustomerOverviewTable = ({
         <MuiTableContainer
           columns={COLUMNS}
           tableConfig={{
-            hasActions: true,
+            hasActions: true
           }}
           setPage={setPage}
           page={page}
@@ -116,7 +122,7 @@ const CustomerOverviewTable = ({
           showHeader={{
             hideFilterSection: true,
             mainTitle: 'Customer Overview',
-            secondaryTitle: 'See a directory of all customers on this system.',
+            secondaryTitle: 'See a directory of all customers on this system.'
           }}
         >
           {search ? (
@@ -145,6 +151,11 @@ const CustomerOverviewTable = ({
                   <StyledTableCell align="right">
                     <CustomerActionMenuProps
                       customerId={dataItem.customerId || 'N/A'}
+                      type={
+                        dataItem.customerType === '1'
+                          ? 'individual'
+                          : 'corporate'
+                      }
                     />
                   </StyledTableCell>
                 </StyledTableRow>
@@ -174,13 +185,13 @@ const AccountOverviewTable = ({
   page,
   search,
   totalPages,
-  totalElements,
+  totalElements
 }: CustomerOverviewTableProps) => {
   return (
     <Box
       sx={{
         position: { mobile: 'relative' },
-        width: '100%',
+        width: '100%'
       }}
     >
       {isLoading ? (
@@ -189,7 +200,7 @@ const AccountOverviewTable = ({
         <MuiTableContainer
           columns={CUSTOMER_ACCOUNT_COLUMNS}
           tableConfig={{
-            hasActions: true,
+            hasActions: true
           }}
           setPage={setPage}
           page={page}
@@ -199,7 +210,7 @@ const AccountOverviewTable = ({
           showHeader={{
             mainTitle: 'Account Overview',
             secondaryTitle: 'See a directory of all accounts on this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
         >
           {search ? (
@@ -213,7 +224,9 @@ const AccountOverviewTable = ({
                     {dataItem?.accounttitle || 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell align="right">N/A</StyledTableCell>
-                  <StyledTableCell align="right">N/A</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {formatCurrency(dataItem.bkbalance || 'N/A')}
+                  </StyledTableCell>
                   <StyledTableCell align="right">
                     {dataItem?.productName || 'N/A'}
                   </StyledTableCell>
@@ -263,7 +276,7 @@ const PreviewTable = () => {
   const [accountSearchParams, setAccountSearchParams] =
     useState<ISearchParams | null>(null);
   const [hasUserSearched, setHasUserSearched] = useState<IHasUserSearchedProps>(
-    { customer: false, account: false },
+    { customer: false, account: false }
   );
 
   const {
@@ -272,7 +285,7 @@ const PreviewTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('customer-overview');
 
   const {
@@ -281,24 +294,24 @@ const PreviewTable = () => {
     searchActive: searchActiveAccount,
     setSearchActive: setSearchActiveAccount,
     page: pageAccount,
-    setPage: setPageAccount,
+    setPage: setPageAccount
   } = usePersistedSearch<ISearchParams>('account-overview');
   const {
     totalPages,
     totalElements,
     data: customerData,
     isLoading: isCustomerDataLoading,
-    isFetching,
+    isFetching
   } = useFilterCustomerSearch({ ...searchParams, page });
 
   const {
     totalPages: totalAccountPages,
     totalElements: totalAccountElements,
     data: customerAccountData,
-    isLoading: isCustomerAccountDataLoading,
+    isLoading: isCustomerAccountDataLoading
   } = useFilterCustomerAccountSearch({
     ...searchParamsAccount,
-    page: pageAccount,
+    page: pageAccount
   });
 
   const pageMenu = [
@@ -319,13 +332,14 @@ const PreviewTable = () => {
       totalElements={totalAccountElements}
       customerData={customerAccountData}
       isLoading={isCustomerAccountDataLoading}
-    />,
+    />
   ];
-
+  const productClassBYID = '0';
   const [value, setValue] = useState(0);
   const { branches } = useGetBranches();
   const { status } = useGetStatus();
   const { productTypes } = useGetProductType();
+  const { data } = useGetProductClassByCastegory(productClassBYID);
   const customerSection = 0;
   const accountSection = 1;
 
@@ -336,7 +350,7 @@ const PreviewTable = () => {
   const handleSearch = async (params: ISearchParams | null, name: string) => {
     setHasUserSearched((prev) => ({
       ...prev,
-      [name]: true,
+      [name]: true
     }));
 
     if (name === 'account') {
@@ -366,11 +380,13 @@ const PreviewTable = () => {
         <Box>
           {branches !== undefined &&
             status !== undefined &&
+            data !== undefined &&
             productTypes !== undefined && (
               <AccountFilterSection
                 branches={branches}
                 status={status}
                 productTypes={productTypes}
+                data={data}
                 onSearch={(params: ISearchParams) =>
                   handleSearch(params, 'account')
                 }
@@ -390,34 +406,164 @@ const PreviewTable = () => {
   );
 };
 
+const CreateCustomerModalType = ({
+  handleClose
+}: {
+  handleClose: () => void;
+}) => {
+  const [selectedType, setSelectedType] = React.useState<string>('individual');
+  const customerTypes = [
+    {
+      key: 'individual',
+      title: 'Individual Customer',
+      description: 'This is a type of customer for a single user',
+      disabled: false
+    },
+    {
+      key: 'corporate',
+      title: 'Corporate Customer',
+      description: 'This is a type of customer for organisations',
+      disabled: false
+    },
+    {
+      key: 'dependent',
+      title: 'Dependent Customer',
+      description: 'Dependent user who is yet of legal age',
+      disabled: true
+    }
+  ];
+
+  return (
+    <div className="bg-white rounded-lg" style={{ minWidth: 700 }}>
+      <Box sx={{ padding: '20px' }}>
+        <Box mb={2}>
+          <h2 style={{ fontWeight: 600, fontSize: 22 }}>Create Customer</h2>
+        </Box>
+        <Box mb={2}>
+          <span style={{ fontSize: 16 }}>
+            Select your customer type to proceed
+          </span>
+        </Box>
+        <Box display="flex" gap={2} mb={3}>
+          {customerTypes.map((type) => (
+            <Box
+              key={type.key}
+              onClick={
+                type.disabled ? undefined : () => setSelectedType(type.key)
+              }
+              sx={{
+                flex: 1,
+                border: '1px solid',
+                borderColor:
+                  selectedType === type.key
+                    ? `${colors.primaryBlue400}`
+                    : `${colors.neutral400}`,
+                borderRadius: 2,
+                background: (() => {
+                  if (type.disabled) return `${colors.disabledColor}`;
+                  if (selectedType === type.key) return `${colors.lightGrey}`;
+                  return `${colors.white}`;
+                })(),
+                cursor: type.disabled ? 'not-allowed' : 'pointer',
+                p: 2,
+                boxShadow:
+                  selectedType === type.key && !type.disabled
+                    ? `0 0 0 1px ${colors.activeBlue200}`
+                    : 'none',
+                transition: 'all 0.2s',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                minWidth: 180,
+                opacity: type.disabled ? 0.6 : 1
+              }}
+            >
+              <input
+                type="radio"
+                checked={selectedType === type.key}
+                onChange={() => !type.disabled && setSelectedType(type.key)}
+                disabled={type.disabled}
+                style={{
+                  marginBottom: 8,
+                  accentColor: colors.primaryBlue400,
+                  outline: 'none',
+                  boxShadow: 'none',
+                  border: '1px solid transparent',
+                  WebkitAppearance: 'radio'
+                }}
+              />
+              <span style={{ fontWeight: 500, fontSize: 16 }}>
+                {type.title}
+              </span>
+              <span style={{ fontSize: 13, color: '#666', marginTop: 4 }}>
+                {type.description}
+              </span>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: `${colors.neutral200}`,
+          padding: '16px'
+        }}
+        display="flex"
+        justifyContent="flex-end"
+        gap={2}
+      >
+        <ActionButton
+          customStyle={{
+            color: `${colors.neutral1000}`,
+            backgroundColor: `${colors.white}`,
+            border: `1px solid ${colors.white}`
+          }}
+          onClick={handleClose}
+          buttonTitle="Cancel"
+        />
+        <Link
+          href={`/customer-service/customer/create-customer?type=${selectedType}`}
+          passHref
+        >
+          <PrimaryIconButton buttonTitle="Confirm" />
+        </Link>
+      </Box>
+    </div>
+  );
+};
+
 export const CustomerContainer = () => {
   const [shouldDisableCreation, setShouldDisableCreation] = React.useState({
     customer: false,
-    account: false,
+    account: false
   });
+  const [openModal, setopenModal] = React.useState(Boolean);
 
   React.useEffect(() => {
     const shouldDisableCustomerCreation = !checkMultipleUserRoleAccess(
       'Customer',
-      'CUSTOMER CREATION',
+      'CUSTOMER CREATION'
     );
     const shouldDisableAccountCreation = !checkMultipleUserRoleAccess(
       'Customer',
-      'ACCOUNT CREATION',
+      'ACCOUNT CREATION'
     );
 
     setShouldDisableCreation((prev) => ({
       ...prev,
       customer: shouldDisableCustomerCreation,
-      account: shouldDisableAccountCreation,
+      account: shouldDisableAccountCreation
     }));
   }, []);
+
+  const handleClose = () => {
+    setopenModal(false);
+  };
 
   const actionButtons: any = [
     <Box ml={{ mobile: 2, desktop: 0 }}>
       <Link
         style={{
-          pointerEvents: shouldDisableCreation.account ? 'none' : 'auto',
+          pointerEvents: shouldDisableCreation.account ? 'none' : 'auto'
         }}
         aria-disabled={shouldDisableCreation.account}
         tabIndex={shouldDisableCreation.account ? -1 : undefined}
@@ -431,21 +577,13 @@ export const CustomerContainer = () => {
       </Link>
     </Box>,
     <Box ml={{ mobile: 2, desktop: 0 }}>
-      <Link
-        style={{
-          pointerEvents: shouldDisableCreation.customer ? 'none' : 'auto',
-        }}
-        aria-disabled={shouldDisableCreation.customer}
-        tabIndex={shouldDisableCreation.customer ? -1 : undefined}
-        href="/customer-service/customer/create-customer"
-      >
-        <PrimaryIconButton
-          disabled={shouldDisableCreation.customer}
-          buttonTitle="Create Customer"
-          customStyle={{ ...submitButton }}
-        />
-      </Link>
-    </Box>,
+      <PrimaryIconButton
+        onClick={() => setopenModal(true)}
+        disabled={shouldDisableCreation.customer}
+        buttonTitle="Create Customer"
+        customStyle={{ ...submitButton }}
+      />
+    </Box>
   ];
 
   return (
@@ -453,6 +591,11 @@ export const CustomerContainer = () => {
       <TopActionsArea actionButtons={actionButtons} />
       <Box sx={{ padding: '20px' }}>
         <PreviewTable />
+        {openModal && (
+          <ModalContainerV2
+            form={<CreateCustomerModalType handleClose={handleClose} />}
+          />
+        )}
       </Box>
     </>
   );

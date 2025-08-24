@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid , Typography} from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useFormikContext } from 'formik';
@@ -31,7 +31,7 @@ import { CustomerCreationContext } from '@/context/CustomerCreationContext';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
 import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
-import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
+import { dropDownWithCorporateSearch } from '@/features/CustomerService/Form/style';
 import { encryptData } from '@/utils/encryptData';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import {
@@ -75,11 +75,10 @@ export const CorporateCustomerPersonalDetailsForm = ({
   professions,
   branches,
   groups,
-  officers,
-
+  officers
 }: Props) => {
   const [isGroupMember, setIsGroupMember] = React.useState<string>('true');
-  const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { isMobile, setWidth } = useCurrentBreakpoint();
   const customerId = useGetParams('customerId') || '';
   const { customerResult: customerResultCodes } = useGetCustomerByIdCodes(
     encryptData(customerId) as string
@@ -136,9 +135,6 @@ export const CorporateCustomerPersonalDetailsForm = ({
   const { customerType, setCompleted } = React.useContext(
     CustomerCreationContext
   );
-
-  // const isEditing = useGetParams('isEditing');
-  // const corporate = '2';
 
   const shouldRemoveCorporateDetails = false;
 
@@ -254,374 +250,426 @@ export const CorporateCustomerPersonalDetailsForm = ({
       ...prev,
       introid: pickResult() || []
     }));
-  }, [isCustomerSearchLoading, isStaffSearchLoading, accountDetailsResults, users, introducerType]);
+  }, [
+    isCustomerSearchLoading,
+    isStaffSearchLoading,
+    accountDetailsResults,
+    users,
+    introducerType
+  ]);
 
   return (
-    <>
-      <Grid mt={3} item={isTablet} mobile={12}>
-        <FormTextInput
-          name="compname"
-          placeholder="Enter company name"
-          label="Company Name"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="regno"
-          placeholder="Enter company registration number"
-          label="Company Registration Number"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <Box sx={{ width: '100%' }}>
-          <DemoContainer components={['DatePicker']}>
-            <FormikDateTimePicker
-              required
-              label="Date of Registration"
-              handleDateChange={(newValue: Dayjs) => setDob(dayjs(newValue))}
-              value={dob}
-              name="dob"
-              defaultValue=""
-            />
-          </DemoContainer>
-        </Box>
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormSelectField
-          name="nationality"
-          options={mappedCountries}
-          label="Country of Incorporation"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormSelectField
-          name="companyStatecode"
-          options={mappedStates}
-          label="State of Incorporation"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormSelectField
-          name="companyTowncode"
-          options={mappedTowns}
-          label="Company Town"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="address"
-          placeholder="Enter address"
-          label="Company Address"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormSelectField
-          name="sectorcode"
-          options={mappedSectors}
-          label="Company Sector"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="bvn"
-          placeholder="Enter bvn"
-          label="BVN"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="zipCode"
-          placeholder="Enter Zip Code"
-          label="Zip Code"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="taxId"
-          placeholder="Enter Tax Identification Number"
-          label="Tax Identification Number"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="contact"
-          placeholder="Enter Contact Person"
-          label="Contact Person"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="compObjective"
-          placeholder="Enter company's objectives"
-          label="Company's Objectives"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="phone1"
-          placeholder="Enter Office Phone 1"
-          label="Office Phone 1"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="phone2"
-          placeholder="Enter Office Phone 2"
-          label="Office Phone 2"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="phone3"
-          placeholder="Enter Office Phone 3"
-          label="Office Phone 3"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="phone4"
-          placeholder="Enter Office Phone 4"
-          label="Office Phone 4"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="secName"
-          placeholder="Enter Secretary's Name"
-          label="Secretary's Name"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="secphone"
-          placeholder="Enter Secretary's Phone Number"
-          label="Secretary's Phone Number"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="email"
-          placeholder="Enter email address"
-          label="Email Address"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormikRadioButton
-          options={[
-            { label: 'Yes', value: '1' },
-            { label: 'No', value: '0' }
-          ]}
-          title="Authorise Shared Capital?"
-          name="shareCapital"
-          value="0"
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormAmountInput
-          name="turnOver"
-          placeholder="Enter expected turnover"
-          label="Expected Turnover"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="scuml"
-          placeholder="Enter scuml"
-          label="SCUML (Where Applicable)"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <FormSelectInput
-          onChange={handleSelectChange}
-          name="introType"
-          options={IntroducerType}
-          label="Introducer Type"
-          value={introducerType.customer || introducerType.staff}
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-          required
-        />
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
-            handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'introid')
-            }
+    <Box>
+      
+      <Grid container spacing={2} paddingX={2} mt={3}>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="compname"
+            placeholder="Enter company name"
+            label="Company Name"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
             required
-            label="Introducer"
-            name="introid"
-            searchGroupVariant="BasicSearchGroup"
-            dropDownOptions={filteredValues.introid as OptionsI[]}
-            customStyle={dropDownWithSearch}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={(selectedValue.introid as string) || 'Search'}
-            onChange={handleSearch}
-            searchValue={searchValue.introid as string}
-            loading={isCustomerSearchLoading || isStaffSearchLoading}
-            disabled={
-              introducerType.customer?.length === 0 &&
-              introducerType.staff?.length === 0
-            }
           />
-        </StyledSearchableDropdown>
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
+        </Grid>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="regno"
+            placeholder="Enter company registration number"
+            label="Company Registration Number"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
             required
-            handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'acctOfficer')
-            }
-            label="Account Officer"
-            name="acctOfficer"
-            searchGroupVariant="BasicSearchGroup"
-            dropDownOptions={filteredValues.acctOfficer as OptionsI[]}
-            customStyle={dropDownWithSearch}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={(selectedValue.acctOfficer as string) || 'Search'}
-            onChange={handleSearch}
-            searchValue={searchValue.acctOfficer as string}
           />
-        </StyledSearchableDropdown>
+        </Grid>
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
-        <FormSelectField
-          name="branchCode"
-          options={mappedBranches}
-          label="Branch"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '100%')
-          }}
-        />
-      </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <RadioButtons
-          options={[
-            { label: 'Yes', value: 'true' },
-            { label: 'No', value: 'false' }
-          ]}
-          title="Is Customer a Member of a Group?"
-          name="isGroupMember"
-          value={isGroupMember}
-          handleCheck={handleCheck}
-        />
-      </Grid>
-
-      {isGroupMember === 'true' && (
-        <Grid item={isTablet} mobile={12}>
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <Box sx={{ width: '100%' }}>
+            <DemoContainer components={['DatePicker']}>
+              <FormikDateTimePicker
+                disableFuture
+                label="Date of Registration"
+                name="dob"
+                value={dob}
+                handleDateChange={(newValue: Dayjs) => setDob(dayjs(newValue))}
+                required
+              />
+            </DemoContainer>
+          </Box>
+        </Grid>
+        <Grid item mobile={12} tablet={6}>
           <FormSelectField
-            name="groupcode"
-            options={mappedGroups}
-            label="Group"
+            name="nationality"
+            options={mappedCountries}
+            label="Country of Incorporation"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item mobile={12} tablet={6}>
+          <FormSelectField
+            name="companyStatecode"
+            options={mappedStates}
+            label="State of Incorporation"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+
+        <Grid item mobile={12} tablet={6}>
+          <FormSelectField
+            name="companyTowncode"
+            options={mappedTowns}
+            label="Company Town"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item mobile={12} tablet={6}>
+          <FormTextInput
+            name="address"
+            placeholder="Enter address"
+            label="Company Address"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+        <Grid item mobile={12} tablet={6}>
+          <FormSelectField
+            name="sectorcode"
+            options={mappedSectors}
+            label="Company Sector"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item mobile={12} tablet={6}>
+          <FormTextInput
+            name="bvn"
+            placeholder="Enter bvn"
+            label="BVN"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="zipCode"
+            placeholder="Enter Zip Code"
+            label="Zip Code"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
             }}
           />
         </Grid>
-      )}
+      </Grid>
 
-       <Grid item={isTablet} mobile={12}>
-                  <Typography sx={{ ...RadioButtonTitle, display: 'inline' }}>
-                    Alert type
-                  </Typography>
-                  <Box sx={{ marginTop: '10px' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                      <CheckboxInput label="SMS" name="smsalert" id="test-sms" />
-                      <CheckboxInput
-                        label="Email"
-                        name="emailalert"
-                        id="test-email"
-                      />
-                    </Box>
-                  </Box>
-                </Grid>
-    </>
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="taxId"
+            placeholder="Enter Tax Identification Number"
+            label="Tax Identification Number"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="contact"
+            placeholder="Enter Contact Person"
+            label="Contact Person"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="compObjective"
+            placeholder="Enter company's objectives"
+            label="Company's Objectives"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="phone1"
+            placeholder="Enter Office Phone 1"
+            label="Office Phone 1"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="phone2"
+            placeholder="Enter Office Phone 2"
+            label="Office Phone 2"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="phone3"
+            placeholder="Enter Office Phone 3"
+            label="Office Phone 3"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="phone4"
+            placeholder="Enter Office Phone 4"
+            label="Office Phone 4"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="secName"
+            placeholder="Enter Secretary's Name"
+            label="Secretary's Name"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="secphone"
+            placeholder="Enter Secretary's Phone Number"
+            label="Secretary's Phone Number"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="email"
+            placeholder="Enter email address"
+            label="Email Address"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormAmountInput
+            name="shareCapital"
+            placeholder="Authorise Shared Capital"
+            label="Authorise Shared Capital"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <FormAmountInput
+            name="turnOver"
+            placeholder="Enter expected turnover"
+            label="Expected Turnover"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormTextInput
+            name="scuml"
+            placeholder="Enter scuml"
+            label="SCUML (Where Applicable)"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            required
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <StyledSearchableDropdown>
+            <ActionButtonWithPopper
+              
+              handleSelectedValue={(value: string) =>
+                handleSelectedValue(value, 'acctOfficer')
+              }
+              label="Account Officer"
+              name="acctOfficer"
+              searchGroupVariant="BasicSearchGroup"
+              dropDownOptions={filteredValues.acctOfficer as OptionsI[]}
+              customStyle={dropDownWithCorporateSearch}
+              icon={<SearchIcon />}
+              iconPosition="end"
+              buttonTitle={(selectedValue.acctOfficer as string) || 'Search'}
+              onChange={handleSearch}
+              searchValue={searchValue.acctOfficer as string}
+            />
+          </StyledSearchableDropdown>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormSelectInput
+            onChange={handleSelectChange}
+            name="introType"
+            options={IntroducerType}
+            label="Introducer Type"
+            value={introducerType.customer || introducerType.staff}
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+            
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <StyledSearchableDropdown>
+            <ActionButtonWithPopper
+              handleSelectedValue={(value: string) =>
+                handleSelectedValue(value, 'introid')
+              }
+              
+              label="Introducer"
+              name="introid"
+              searchGroupVariant="BasicSearchGroup"
+              dropDownOptions={filteredValues.introid as OptionsI[]}
+              customStyle={dropDownWithCorporateSearch}
+              icon={<SearchIcon />}
+              iconPosition="end"
+              buttonTitle={(selectedValue.introid as string) || 'Search'}
+              onChange={handleSearch}
+              searchValue={searchValue.introid as string}
+              loading={isCustomerSearchLoading || isStaffSearchLoading}
+              disabled={
+                introducerType.customer?.length === 0 &&
+                introducerType.staff?.length === 0
+              }
+            />
+          </StyledSearchableDropdown>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <FormSelectField
+            name="branchCode"
+            options={mappedBranches}
+            label="Branch"
+            customStyle={{
+              width: setWidth(isMobile ? '250px' : '100%')
+            }}
+          />
+        </Grid>
+
+        <Grid item tablet={6} mobile={12}>
+          <Typography sx={{ ...RadioButtonTitle, display: 'inline' }}>
+            Alert type
+          </Typography>
+          <Box sx={{ marginTop: '10px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+              <CheckboxInput label="SMS" name="smsalert" id="test-sms" />
+              <CheckboxInput label="Email" name="emailalert" id="test-email" />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} paddingX={2}>
+        <Grid item tablet={6} mobile={12}>
+          <RadioButtons
+            options={[
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' }
+            ]}
+            title="Is Customer a Member of a Group?"
+            name="isGroupMember"
+            value={isGroupMember}
+            handleCheck={handleCheck}
+          />
+        </Grid>
+        {isGroupMember === 'true' && (
+          <Grid item tablet={6} mobile={12}>
+            <FormSelectField
+              name="groupcode"
+              options={mappedGroups}
+              label="Group"
+              customStyle={{
+                width: setWidth(isMobile ? '250px' : '100%')
+              }}
+            />
+          </Grid>
+        )}
+      </Grid>
+
+    </Box>
   );
 };

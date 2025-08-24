@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 'use client';
 import React, { useState } from 'react';
 import { Box, IconButton } from '@mui/material';
@@ -32,7 +33,12 @@ import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 import { handleRedirect, useCurrentBreakpoint } from '@/utils';
 import { RadioButtons2 } from '@/components/Revamp/Radio/RadioButton2';
 import { cancelButton } from '@/features/Requests/styles';
-import { useCreateRunEOD } from '@/api/operation/useEndOfDay';
+import {
+  useCreateEODConfiguration,
+  useCreateRunEOD,
+  useGetEODConfiguration
+} from '@/api/operation/useEndOfDay';
+import { CreateEODConfigureFormValues } from '@/api/ResponseTypes/operation';
 
 type Props = {
   handleClose: Function;
@@ -40,19 +46,42 @@ type Props = {
 };
 export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
   const { isMobile, setWidth } = useCurrentBreakpoint();
+  const { isLoading, data } = useGetEODConfiguration();
+  const { mutate, isPending } = useCreateEODConfiguration();
   const router = useRouter();
-  const [addValues, setAddValues] = useState<String>('');
+  const [addValues, setAddValues] = useState<any>();
+  const [selectedDays, setSelectedDays] = useState<{ daysOfWeek: string }[]>(
+    []
+  );
+  const [selectedTime, setSelectedTime] = useState<string>('18:00:00'); // Default time
   const handleChange = (value: string) => {
     setAddValues(value);
   };
-  const { mutate } = useCreateRunEOD();
+  const handleDaySelection = (day: string) => {
+    setSelectedDays((prev) =>
+      prev.some((d) => d.daysOfWeek === day)
+        ? prev.filter((d) => d.daysOfWeek !== day)
+        : [...prev, { daysOfWeek: day }]
+    );
+  };
+  const handleTimeSelection = (time: string) => {
+    setSelectedTime((prev) => (prev === time ? '' : time));
+  };
   const handleContinue = () => {
-    const path =
-      addValues === '2'
-        ? '/setup/product-gl/add-product'
-        : '/setup/product-gl/add-casa-product';
-
-    router.push(path);
+    const getAll: CreateEODConfigureFormValues = {
+      days:
+        selectedDays.length > 0
+          ? selectedDays
+          : [{ daysOfWeek: selectedDays.toString() }],
+      options: Number(addValues),
+      time: selectedTime
+    };
+    mutate(getAll, {
+      onSuccess: () => {
+        handleClose(); // Close the modal on successful configuration
+        router.push('/operation/endOfDay/');
+      }
+    });
   };
   return (
     <Box sx={AccountPasswordContainer}>
@@ -81,67 +110,64 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
           <RadioButtons2
             className="permissionOptions"
             options={[
-              { label: 'Manual', value: '1' },
-              { label: 'Automatic', value: '2' }
+              { label: 'Manual', value: 0 },
+              { label: 'Automatic', value: 1 }
             ]}
             // title="You get to run end of day at your own convenience"
-            name="addProduct"
+            name="options"
             customStyle={{
               display: 'flex'
             }}
-            value={addValues.toString()}
+            value={addValues}
             handleCheck={(value: string) => handleChange(value)}
           />
         </Box>
       </Box>
-      {addValues === '2' && (
+      {addValues === '1' && (
         <Box sx={automaticContainer}>
-          <Box sx={runEndofdayStyle}>
-            <PageTitle
-              title="Select preferred days to run End of Day"
-              styles={{ ...endOfdayTitle }}
-            />
-            <Box sx={numberOfDays}>
-              <PrimaryIconButton
-                buttonTitle="Monday"
-                customStyle={{ ...cancelButton }}
-                // onClick={handleOpen}
-              />
-              <PrimaryIconButton
-                buttonTitle="Tuesday"
-                customStyle={{ ...cancelButton }}
-                // onClick={handleOpen}
-              />
-              <PrimaryIconButton
-                buttonTitle="Wednesday"
-                customStyle={{ ...cancelButton }}
-                // onClick={handleOpen}
-              />
-              <PrimaryIconButton
-                buttonTitle="Thursday"
-                customStyle={{ ...cancelButton }}
-                // onClick={handleOpen}
-              />
-              <PrimaryIconButton
-                buttonTitle="Friday"
-                customStyle={{ ...cancelButton }}
-                // onClick={handleOpen}
-              />
-              <PrimaryIconButton
-                buttonTitle="Saturday"
-                customStyle={{ ...cancelButton }}
-                // onClick={handleOpen}
-              />
-              <PrimaryIconButton
-                buttonTitle="Sunday"
-                customStyle={{ ...cancelButton }}
-                // onClick={handleOpen}
-              />
-            </Box>
+          <PageTitle
+            title="Select preferred days to run End of Day"
+            styles={{ ...endOfdayTitle }}
+          />
+          <Box
+            sx={{
+              ...numberOfDays,
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '8px',
+              justifyContent: isMobile ? 'center' : 'flex-start'
+            }}
+          >
+            {data?.days &&
+              data.days.length > 0 &&
+              data.days.map((item) => (
+                <PrimaryIconButton
+                  key={item.daysOfWeek}
+                  buttonTitle={item.daysOfWeek}
+                  customStyle={{
+                    ...cancelButton,
+                    width: '80px', // Increased width for better readability
+                    textAlign: 'center',
+                    padding: '8px',
+                    marginLeft: '30px',
+                    backgroundColor: selectedDays.some(
+                      (d) => d.daysOfWeek === item.daysOfWeek
+                    )
+                      ? colors.activeBlue400
+                      : colors.neutral100,
+                    color: selectedDays.some(
+                      (d) => d.daysOfWeek === item.daysOfWeek
+                    )
+                      ? colors.white
+                      : colors.neutral900
+                  }}
+                  onClick={() => handleDaySelection(item.daysOfWeek)}
+                />
+              ))}
           </Box>
         </Box>
       )}
-      {addValues === '2' && (
+      {addValues === '1' && (
         <Box sx={timeEndofdayStyle}>
           <PageTitle
             title="Select preferred time to run End of Day"
@@ -149,39 +175,23 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
           />
           <Box sx={numberOfDays}>
             <PrimaryIconButton
-              buttonTitle="5:00PM"
-              customStyle={{ ...cancelButton }}
-              // onClick={handleOpen}
-            />
-            <PrimaryIconButton
-              buttonTitle="6:00PM"
-              customStyle={{ ...cancelButton }}
-              // onClick={handleOpen}
-            />
-            <PrimaryIconButton
-              buttonTitle="7:00PM"
-              customStyle={{ ...cancelButton }}
-              // onClick={handleOpen}
-            />
-            <PrimaryIconButton
-              buttonTitle="8:00PM"
-              customStyle={{ ...cancelButton }}
-              // onClick={handleOpen}
-            />
-            <PrimaryIconButton
-              buttonTitle="9:00PM"
-              customStyle={{ ...cancelButton }}
-              // onClick={handleOpen}
-            />
-            <PrimaryIconButton
-              buttonTitle="10:00PM"
-              customStyle={{ ...cancelButton }}
-              // onClick={handleOpen}
-            />
-            <PrimaryIconButton
-              buttonTitle="11:00PM"
-              customStyle={{ ...cancelButton }}
-              // onClick={handleOpen}
+              buttonTitle={data?.time || '18:00:00'}
+              customStyle={{
+                ...cancelButton,
+                padding: '8px',
+                width: '80px', // Increased width for better readability
+                textAlign: 'center',
+                marginLeft: '30px',
+                backgroundColor:
+                  selectedTime === (data?.time || '18:00:00')
+                    ? colors.activeBlue400
+                    : colors.neutral100,
+                color:
+                  selectedTime === (data?.time || '18:00:00')
+                    ? colors.white
+                    : colors.neutral900
+              }}
+              onClick={() => handleTimeSelection(data?.time || '18:00:00')}
             />
           </Box>
         </Box>
@@ -203,7 +213,7 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
             </Box>
             <Box sx={{ ...ConfirmButton, background: 'none' }}>
               <PrimaryIconButton
-                buttonTitle="Continue"
+                buttonTitle={isPending ? 'Loading...' : 'Continue'}
                 customStyle={{
                   ...TypographyConfirm,
                   backgroundColor: `${colors.activeBlue400}`,
@@ -213,7 +223,8 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
                   padding: { mobile: '8px 50px', desktop: '16px 78px' },
                   marginRight: { mobile: '70px', desktop: 0 }
                 }}
-                // onClick={handleContinue}
+                disabled={isPending}
+                onClick={handleContinue}
               />
             </Box>
           </Box>

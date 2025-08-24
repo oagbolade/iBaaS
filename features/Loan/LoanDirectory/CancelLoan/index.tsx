@@ -54,6 +54,7 @@ const FormFields: React.FC<{
 export const CancelLoan: React.FC = () => {
   const searchParams = useSearchParams();
   const accountNumber = searchParams.get('accountNumber') || '';
+  const status = searchParams.get('action') || '';
   const router = useRouter();
 
   const { setDirection } = useSetDirection();
@@ -62,9 +63,10 @@ export const CancelLoan: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const { isLoading } = useGlobalLoadingState();
 
-  const { data, isLoading: isLoadingLoanData } =
+  const { loanAccDetails, isLoading: isLoadingLoanData } =
     useGetLoanAccountByLoanAccountNumber(
-      encryptData(accountNumber as string) || ''
+      encryptData(accountNumber as string) || '',
+      status
     );
 
   const cancelAction = () => {
@@ -109,7 +111,7 @@ export const CancelLoan: React.FC = () => {
       >
         <MobilePreviewContent
           isLoadingLoanData={isLoadingLoanData || false}
-          data={data}
+          data={loanAccDetails}
         />
         <Stack direction={setDirection()}>
           <Box
@@ -141,7 +143,7 @@ export const CancelLoan: React.FC = () => {
               <Box mt={3} />
               <LoanPreviewContent
                 isLoadingLoanData={isLoadingLoanData || false}
-                data={data}
+                data={loanAccDetails}
               />
             </Box>
           )}

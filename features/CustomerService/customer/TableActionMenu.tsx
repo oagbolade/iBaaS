@@ -20,9 +20,10 @@ const MenuWrapper = styled.section`
 
 type Props = {
   customerId: string;
+  type: string;
 };
 
-export const TableActionMenu = ({ customerId }: Props) => {
+export const TableActionMenu = ({ customerId , type}: Props) => {
   const shouldDisableEdit = !checkMultipleUserRoleAccess('Customer', 'EDIT CUSTOMER');
   const shouldDisableView = !checkMultipleUserRoleAccess('Customer', 'CUSTOMER INFO');
 
@@ -69,7 +70,7 @@ export const TableActionMenu = ({ customerId }: Props) => {
               }}
               aria-disabled={shouldDisableEdit}
               tabIndex={shouldDisableEdit ? -1 : undefined}
-              href={`/customer-service/customer/create-customer/?isEditing=true&customerId=${customerId}`}
+              href={`/customer-service/customer/create-customer/?isEditing=true&customerId=${customerId}&type=${type}`}
             >
               <TableMenuButton disabled={shouldDisableEdit} buttonTitle="Edit Customer" />
             </Link>

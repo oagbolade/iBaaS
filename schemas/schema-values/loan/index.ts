@@ -23,6 +23,7 @@ export interface ISetTerminateLoanValues {
   oExtinterest: number;
   userid: string;
   reasons: string;
+  loanWriteOff: string;
 }
 
 export const setTerminateValues: ISetTerminateLoanValues = {
@@ -33,7 +34,8 @@ export const setTerminateValues: ISetTerminateLoanValues = {
   oPenalInt: 0,
   oExtinterest: 0,
   userid: '',
-  reasons: ''
+  reasons: '',
+  loanWriteOff: ''
 };
 export interface SetOverdraftInitialValues {
   accountNumber: string;
