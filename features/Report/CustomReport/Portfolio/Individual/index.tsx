@@ -7,7 +7,7 @@ import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSectio
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   IDetailedPortfolioAtRiskParams,
-  useGetDetailedPortfolioReport
+  useGetDetailedPortfolioReport,
 } from '@/api/reports/useGetDetailedPortfolioReport';
 
 import { DownloadReportContext } from '@/context/DownloadReportContext';
@@ -18,30 +18,36 @@ import { IPortfoliodetailedReport } from '@/api/ResponseTypes/reports';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { ISearchParams } from '@/app/api/search/route';
 
 export const IndividualLoan = () => {
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [searchParams, setSearchParams] =
-    useState<IDetailedPortfolioAtRiskParams | null>(null);
-  const [page, setPage] = useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<IDetailedPortfolioAtRiskParams>(
+    'portfolio-individual-loan',
+  );
+
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
   const { branches, isLoading: isbranchLoading } = useGetBranches();
   const { detailedPortfolioAtRiskReportData } = useContext(ReportModuleContext);
 
-  const { branchCode, search } = searchParams || {};
-
   const { portfolioatRiskDetailRptList = [], totalRecords } =
     useGetDetailedPortfolioReport({
       ...searchParams,
-      branchCode,
-      search,
+      branchCode: searchParams?.branchCode,
       productCode: detailedPortfolioAtRiskReportData.productCode,
       pageNumber: page,
       pageSize: 10,
-      getAll: isDateFilterApplied
+      getAll: isDateFilterApplied,
     });
 
   React.useEffect(() => {
@@ -55,7 +61,7 @@ export const IndividualLoan = () => {
       'Principal At Risk': item.principal_At_Risk || '',
       'Loan Amount': item.loanAmount || '',
       'Loan Balance': item.currentbalance || '',
-      PAR: item.par || ''
+      PAR: item.par || '',
     }));
 
     // Ensure no blank row or misplaced headers
@@ -71,9 +77,9 @@ export const IndividualLoan = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     });
-    setPageNumber(1); // Reset to the first page on new search
+    setSearchActive(true);
   };
 
   if (isbranchLoading) {
@@ -103,10 +109,10 @@ export const IndividualLoan = () => {
             mainTitle: detailedPortfolioAtRiskReportData?.productName,
             secondaryTitle:
               'See a directory of all portfolios at risk this system.',
-            hideFilterSection: true
+            hideFilterSection: true,
           }}
         >
-          {portfolioatRiskDetailRptList.length > 0 ? (
+          {searchActive ? (
             portfolioatRiskDetailRptList.map(
               (reportDetails: IPortfoliodetailedReport, index) => {
                 return (
@@ -134,7 +140,7 @@ export const IndividualLoan = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                 );
-              }
+              },
             )
           ) : (
             <StyledTableRow>

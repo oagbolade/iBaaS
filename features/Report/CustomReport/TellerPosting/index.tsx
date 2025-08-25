@@ -8,7 +8,7 @@ import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSectio
 import { ActionMenu } from '@/features/Report/CustomReport/StandingInstructions';
 import {
   ITellerPostingParams,
-  useGetTellerPosting
+  useGetTellerPosting,
 } from '@/api/reports/useGetTellerPosting';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
@@ -17,6 +17,7 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ITellerPostingReport } from '@/api/ResponseTypes/reports';
 import { FormSkeleton } from '@/components/Loaders';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -33,36 +34,38 @@ const TellerPostingActions = ({ data }: ActionProps) => {
 };
 
 export const TellerPosting = () => {
-  const [searchParams, setSearchParams] = useState<ITellerPostingParams | null>(
-    null
-  );
-  const [page, setPage] = useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ITellerPostingParams>('teller-posting');
+
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
+    DateRangePickerContext,
   );
-
-  const { search } = searchParams || {};
 
   const {
     tellerPostByDateList = [],
     isLoading,
-    totalRecords
+    totalRecords,
   } = useGetTellerPosting({
     ...searchParams,
-    search,
     pageNumber: page,
     pageSize: 10,
-    getAll: readyDownload
+    getAll: readyDownload,
   });
 
   React.useEffect(() => {
     if (readyDownload) {
-      setSearchParams((prev) => ({
-        ...prev,
-        getAll: true
-      }));
+      setSearchParams({
+        ...searchParams,
+        getAll: true,
+      });
     }
   }, [readyDownload]);
 
@@ -86,7 +89,7 @@ export const TellerPosting = () => {
         'From Vault': item?.fromVault || '',
         'Current Balance': item?.curbal || '',
         Withdrawal: item?.withdrawal || '',
-        'To Vault': item?.toVault || ''
+        'To Vault': item?.toVault || '',
       }));
 
       // Ensure no blank row or misplaced headers
@@ -98,7 +101,7 @@ export const TellerPosting = () => {
     setExportData,
     setReportType,
     readyDownload,
-    setReadyDownload
+    setReadyDownload,
   ]);
 
   const rowsPerPage = 10;
@@ -107,9 +110,9 @@ export const TellerPosting = () => {
   const handleSearch = (params: ITellerPostingParams | null) => {
     setReadyDownload(false);
     setSearchParams({
-      ...params
+      ...params,
     });
-    setPage(1); // Reset to the first page on new search
+    setSearchActive(true);
   };
 
   if (isLoading) {
@@ -137,11 +140,11 @@ export const TellerPosting = () => {
             mainTitle: 'Teller Posting',
             secondaryTitle:
               'See a directory of all teller posting in this system.',
-            hideFilterSection: true
+            hideFilterSection: true,
           }}
           ActionMenuProps={ActionMenu}
         >
-          {tellerPostByDateList?.length > 0 ? (
+          {searchActive ? (
             tellerPostByDateList?.map(
               (reportDetails: ITellerPostingReport, index) => {
                 return (
@@ -166,7 +169,7 @@ export const TellerPosting = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                 );
-              }
+              },
             )
           ) : (
             <StyledTableRow>

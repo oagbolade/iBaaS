@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { centraliseNoDataAvailable } from '../style';
@@ -16,38 +16,46 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
 
 export const PortfolioAtRisk = () => {
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-   const {
-      searchParams,
-      setSearchParams,
-      searchActive,
-      setSearchActive,
-      page,
-      setPage
-    } = usePersistedSearch<ISearchParams>('portfolio-at-risk');
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('portfolio-at-risk');
+
   const { setDetailedPortfolioAtRiskReportData } =
     useContext(ReportModuleContext);
+  const { setReportType, setExportData } = useContext(DownloadReportContext);
+
+  const pageSize = 20;
+
   const { portfolioatRiskList = [], isLoading } = useGetAllPortfolioAtRisk({
-    pageNumber,
-    pageSize
+    pageNumber: page,
+    pageSize,
   });
 
-  const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
-  );
+  useEffect(() => {
+    setExportData(portfolioatRiskList as []);
+    setReportType('PortfolioAtRiskProductList');
+  }, [portfolioatRiskList, setExportData, setReportType]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchParams({ search: value });
+    setSearchActive(true);
+  };
 
   const filteredPortfolioAtRiskList = portfolioatRiskList.filter(
     (product: IPortfolioAtRiskProduct) =>
-      product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.productCode.toLowerCase().includes(searchQuery.toLowerCase())
+      product.productName
+        .toLowerCase()
+        .includes(searchParams?.search?.toLowerCase() || '') ||
+      product.productCode
+        .toLowerCase()
+        .includes(searchParams?.search?.toLowerCase() || ''),
   );
-
-  React.useEffect(() => {
-    setExportData(portfolioatRiskList as []);
-    setReportType('PortfolioAtRiskProductList');
-  }, [portfolioatRiskList]);
 
   if (isLoading) {
     return (
@@ -60,12 +68,13 @@ export const PortfolioAtRisk = () => {
   return (
     <Box sx={{ width: '100%', marginTop: '50px' }}>
       <TopOverViewSection useBackButton />
+
       <Box
         sx={{
           marginTop: '30px',
           marginBottom: '30px',
           marginLeft: '20px',
-          width: '100%'
+          width: '100%',
         }}
       >
         <TextInput
@@ -74,12 +83,11 @@ export const PortfolioAtRisk = () => {
           name="Search"
           placeholder="Search for product code or name"
           icon={<SearchIcon />}
-          value={searchQuery}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSearchQuery(e.target.value)
-          }
+          value={searchParams?.search || ''}
+          onChange={handleSearchChange}
         />
       </Box>
+
       <Box sx={{ marginTop: '10px' }}>
         {filteredPortfolioAtRiskList.length > 0 ? (
           filteredPortfolioAtRiskList.map(
@@ -91,7 +99,7 @@ export const PortfolioAtRisk = () => {
                   contextSetter={setDetailedPortfolioAtRiskReportData}
                 />
               </Box>
-            )
+            ),
           )
         ) : (
           <Box sx={centraliseNoDataAvailable}>
