@@ -21,6 +21,7 @@ import { ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
+import { Form, Formik } from 'formik';
 
 type Props = {
   onSearch: (params: ITellerPostingParams | null) => void;
@@ -34,117 +35,126 @@ export const FilterSection = ({ onSearch }: Props) => {
   const { currentDate } = useFormattedDates();
   const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
 
-  const handleSearchClick = () => {
-    const searchParams = {
-      search: searchTerm || undefined,
+  const initialValues = {
+    search: searchParams?.search ?? '',
+    reportDate: searchParams?.reportDate ?? '',
+  };
+
+  const onSubmit = async (values: any) => {
+    const params: ITellerPostingParams = {
+      search:
+        values.search?.toString().trim().length > 0 ? values.search : null,
       reportDate: reportDate.format('YYYY-MM-DD'),
     };
-
-    onSearch(searchParams);
+    onSearch?.(params);
   };
 
   return (
-    <>
-      <Stack
-        sx={{
-          borderBottom: `1px solid ${colors.loanTitleColor}`,
-          marginTop: '10px',
-          paddingX: '24px',
-          position: 'sticky',
-        }}
-        direction={setDirection()}
-        justifyContent="space-between"
-      >
-        <Box>
-          <Box mt={2.3}>
-            <BackButton />
-          </Box>
-        </Box>
-        <Stack
-          mt={1}
-          direction={setDirection()}
-          spacing={2}
-          justifyContent="space-between"
-        >
-          <Box>
-            <ActionButtonWithPopper
-              searchGroupVariant="ExportReport"
-              customStyle={{ ...exportData }}
-              icon={<ExportIcon />}
-              iconPosition="start"
-              buttonTitle="Export Data"
-            />
-          </Box>
-
-          <Box>
-            <ActionButtonWithPopper
-              searchGroupVariant="DateRangePicker"
-              CustomDateRangePicker={
-                <DateCalendar
-                  value={reportDate}
-                  onChange={(date) => setReportDate(date)}
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={(values) => onSubmit(values)}
+    >
+      <Form>
+        <>
+          <Stack
+            sx={{
+              borderBottom: `1px solid ${colors.loanTitleColor}`,
+              marginTop: '10px',
+              paddingX: '24px',
+              position: 'sticky',
+            }}
+            direction={setDirection()}
+            justifyContent="space-between"
+          >
+            <Box>
+              <Box mt={2.3}>
+                <BackButton />
+              </Box>
+            </Box>
+            <Stack
+              mt={1}
+              direction={setDirection()}
+              spacing={2}
+              justifyContent="space-between"
+            >
+              <Box>
+                <ActionButtonWithPopper
+                  searchGroupVariant="ExportReport"
+                  customStyle={{ ...exportData }}
+                  icon={<ExportIcon />}
+                  iconPosition="start"
+                  buttonTitle="Export Data"
                 />
-              }
-              customStyle={{ ...dateFilter }}
-              icon={
-                <CalendarTodayOutlinedIcon
-                  sx={{
-                    color: `${colors.Heading}`,
+              </Box>
+
+              <Box>
+                <ActionButtonWithPopper
+                  searchGroupVariant="DateRangePicker"
+                  CustomDateRangePicker={
+                    <DateCalendar
+                      value={reportDate}
+                      onChange={(date) => setReportDate(date)}
+                    />
+                  }
+                  customStyle={{ ...dateFilter }}
+                  icon={
+                    <CalendarTodayOutlinedIcon
+                      sx={{
+                        color: `${colors.Heading}`,
+                      }}
+                    />
+                  }
+                  iconPosition="end"
+                  buttonTitle={reportDate.format('YYYY-MM-DD')}
+                />
+              </Box>
+            </Stack>
+          </Stack>
+
+          <Box sx={{ height: '120px' }}>
+            <Grid
+              sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
+              spacing={2}
+            >
+              <Grid
+                mb={{ tablet: 22 }}
+                item
+                mobile={22}
+                tablet={22}
+                justifyContent="center"
+              >
+                <TextInput
+                  customStyle={{
+                    width: '100%',
+                    ...inputFields,
                   }}
+                  icon={<SearchIcon />}
+                  name="search"
+                  placeholder="Search a Teller or User ID"
+                  label="Teller/User ID"
+                />{' '}
+              </Grid>
+              <Grid
+                item
+                mobile={12}
+                tablet={1}
+                sx={{ display: 'flex' }}
+                justifyContent="flex-end"
+                mt={{ tablet: 3.2 }}
+                mr={{ mobile: 30, tablet: 0 }}
+                mb={{ mobile: 6, tablet: 0 }}
+              >
+                <ActionButton
+                  type="submit"
+                  customStyle={buttonBackgroundColor}
+                  buttonTitle="Search"
                 />
-              }
-              iconPosition="end"
-              buttonTitle={reportDate.format('YYYY-MM-DD')}
-            />
+              </Grid>
+            </Grid>
           </Box>
-        </Stack>
-      </Stack>
-
-      <Box sx={{ height: '120px' }}>
-        <Grid
-          sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
-          spacing={2}
-        >
-          <Grid
-            mb={{ tablet: 22 }}
-            item
-            mobile={22}
-            tablet={22}
-            justifyContent="center"
-          >
-            <TextInput
-              customStyle={{
-                width: '100%',
-                ...inputFields,
-              }}
-              icon={<SearchIcon />}
-              name="search"
-              value={searchTerm}
-              placeholder="Search a Teller or User ID"
-              label="Teller/User ID"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setSearchTerm(e.target.value)
-              }
-            />{' '}
-          </Grid>
-          <Grid
-            item
-            mobile={12}
-            tablet={1}
-            sx={{ display: 'flex' }}
-            justifyContent="flex-end"
-            mt={{ tablet: 3.2 }}
-            mr={{ mobile: 30, tablet: 0 }}
-            mb={{ mobile: 6, tablet: 0 }}
-          >
-            <ActionButton
-              onClick={handleSearchClick}
-              customStyle={buttonBackgroundColor}
-              buttonTitle="Search"
-            />
-          </Grid>
-        </Grid>
-      </Box>
-    </>
+        </>
+      </Form>
+    </Formik>
   );
 };

@@ -17,6 +17,7 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ITellerPostingReport } from '@/api/ResponseTypes/reports';
 import { FormSkeleton } from '@/components/Loaders';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -33,10 +34,18 @@ const TellerPostingActions = ({ data }: ActionProps) => {
 };
 
 export const TellerPosting = () => {
-  const [searchParams, setSearchParams] = useState<ITellerPostingParams | null>(
-    null
-  );
-  const [page, setPage] = useState(1);
+   const {
+      searchParams,
+      setSearchParams,
+      searchActive,
+      setSearchActive,
+      page,
+      setPage
+    } = usePersistedSearch<ITellerPostingParams>('teller-posting');
+  // const [searchParams, setSearchParams] = useState<ITellerPostingParams | null>(
+  //   null
+  // );
+  // const [page, setPage] = useState(1);
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
