@@ -463,7 +463,8 @@ export async function filterCustomerAccountSearch(
           branchCode: params?.branchID,
           status: params?.status,
           accountNumber: params?.accountNumber,
-          accountName: params?.accountName
+          accountName: params?.accountName,
+          productCode: params?.productCode
         },
         headers: {
           'Content-Type': 'application/json',
@@ -1363,13 +1364,15 @@ export function useFilterCustomerAccountSearch(params: ISearchParams | null) {
       params?.branchID || '',
       params?.accountNumber || '',
       params?.status || '',
-      params?.page || 1
+      params?.page || 1,
+      params?.productCode || ''
     ],
     queryFn: () => filterCustomerAccountSearch(toastActions, params),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
         (params?.status?.toString() || '').length > 0 ||
-        (params?.accountNumber || '').length > 0
+        (params?.accountNumber || '').length > 0 ||
+        (params?.productCode || '').length > 0
     )
   });
 

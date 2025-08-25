@@ -15,9 +15,9 @@ import { queryKeys } from '@/react-query/constants';
 import { getStoredUser } from '@/utils/user-storage';
 
 export interface DisbursedLoanParams {
-  productcode?: string | null;
+  branch?: string | null;
   search?: string | null;
-  branchcode?: string | null;
+  product?: string | null;
   startDate?: string | null;
   endDate?: string | null;
   pageSize?: number | null;
@@ -40,8 +40,8 @@ async function fetchDisbursedLoanReport(
           searchWith: params.search?.trim(),
           startdate: params.startDate,
           enddate: params.endDate,
-          productcode: params?.productcode,
-          branchcode: params?.branchcode,
+          productcode: params?.product,
+          branchcode: params?.branch,
           getAll: params.getAll || false
         },
         headers: {
@@ -75,8 +75,8 @@ export function useGetDisbursedLoanReport(
   } = useQuery({
     queryKey: [
       queryKeys.overloanDueReport,
-      params?.branchcode || '',
-      params?.productcode || '',
+      params?.branch || '',
+      params?.product || '',
       params?.startDate || '',
       params?.endDate || '',
       params?.getAll || false,
@@ -85,7 +85,7 @@ export function useGetDisbursedLoanReport(
       params?.pageNumber || 1
     ],
     queryFn: () => fetchDisbursedLoanReport(params, toastActions),
-    enabled: Boolean((params?.branchcode || '').length > 0 || params.search)
+    enabled: Boolean((params?.branch || '').length > 0 || params.search)
   });
 
   return { ...data, isError, isLoading };

@@ -73,10 +73,10 @@ export const ProductSummary = () => {
 
   React.useEffect(() => {
     if (readyDownload) {
-      setSearchParams((prev) => ({
-        ...prev,
+      setSearchParams({
+        ...searchParams,
         getAll: true,
-      }));
+      });
     }
   }, [readyDownload]);
 

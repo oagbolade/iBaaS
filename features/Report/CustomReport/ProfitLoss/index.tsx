@@ -52,10 +52,10 @@ export const ProfitLoss = () => {
 
   React.useEffect(() => {
     if (readyDownload) {
-      setSearchParams((prev) => ({
-        ...prev,
-        getAll: true
-      }));
+      setSearchParams({
+        ...searchParams,
+        getAll: true,
+      });
     }
   }, [readyDownload]);
 
