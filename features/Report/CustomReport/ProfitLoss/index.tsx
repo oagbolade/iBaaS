@@ -7,7 +7,7 @@ import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import {
   totalContainer,
-  totalTitle
+  totalTitle,
 } from '@/components/CustomCardsReports/style';
 import { PageTitle } from '@/components/Typography';
 import { FormSkeleton } from '@/components/Loaders';
@@ -24,16 +24,14 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const ProfitLoss = () => {
-  // const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  // const [page] = React.useState(1);
-   const {
-      searchParams,
-      setSearchParams,
-      searchActive,
-      setSearchActive,
-      page,
-      setPage
-    } = usePersistedSearch<ISearchParams>('profit-and-loss');
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage,
+  } = usePersistedSearch<ISearchParams>('profit-and-loss');
   const { branches } = useGetBranches();
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     useContext(DownloadReportContext);
@@ -47,7 +45,7 @@ export const ProfitLoss = () => {
       branchID,
       pageSize: '20',
       pageNumber: String(page),
-      getAll: readyDownload
+      getAll: readyDownload,
     });
 
   React.useEffect(() => {
@@ -65,8 +63,8 @@ export const ProfitLoss = () => {
         group.groupItem.map((item) => ({
           'Group Name': group.groupName || '',
           Balance: item.balance || 0,
-          'Item Description': item.itemDesc || ''
-        }))
+          'Item Description': item.itemDesc || '',
+        })),
       );
 
       setExportData(formattedExportData || []);
@@ -77,8 +75,9 @@ export const ProfitLoss = () => {
   const handleSearch = async (params: ISearchParams | null) => {
     setReadyDownload(true);
     setSearchParams({
-      ...params
+      ...params,
     });
+    setSearchActive(true);
   };
 
   return (
@@ -94,7 +93,7 @@ export const ProfitLoss = () => {
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box>
-            {data && data?.length > 0 ? (
+            {searchActive ? (
               <Box>
                 {data?.map((item: DataGroup, i: number) => (
                   <ShortCardWithAccordion

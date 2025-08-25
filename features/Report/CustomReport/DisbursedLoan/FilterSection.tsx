@@ -23,7 +23,7 @@ type Props = {
 
 export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
   const { searchParams } =
-    usePersistedSearch<ISearchParams>('disbursed-loan');
+    usePersistedSearch<LoanOverdueParams>('disbursed-loan');
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,

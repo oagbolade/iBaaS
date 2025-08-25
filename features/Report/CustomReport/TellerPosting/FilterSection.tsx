@@ -6,7 +6,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { buttonBackgroundColor } from '../AccountDebit/style';
 import { dateFilter } from '../../AuditTrail/styles';
-import { TextInput } from '@/components/FormikFields';
+import { FormTextInput, TextInput } from '@/components/FormikFields';
 import {
   ActionButton,
   ActionButtonWithPopper,
@@ -124,7 +124,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 tablet={22}
                 justifyContent="center"
               >
-                <TextInput
+                <FormTextInput
                   customStyle={{
                     width: '100%',
                     ...inputFields,
