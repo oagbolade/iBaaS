@@ -34,19 +34,21 @@ export const EndOfDayProcessTable = ({ EODid }: Props) => {
     React.useContext(DownloadReportContext);
 
   React.useEffect(() => {
+    setReportType('EOD');
     if (readyDownload) {
       setSearchParams((prev) => ({
         ...prev,
         getAll: true
       }));
     }
-  }, [readyDownload]);
+  }, [readyDownload, setReportType]);
 
   React.useEffect(() => {
+    setReportType('EOD');
     if ((process ?? []).length > 0) {
       setExportData(process as []);
     }
-  }, [process, isLoading, readyDownload, setExportData]);
+  }, [process, isLoading, readyDownload, setExportData, setReportType]);
   const handExportData = () => {
     setExportData(process as []);
   };

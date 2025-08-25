@@ -230,6 +230,7 @@ interface IQueryKeys {
   getEODLogs: string;
   getEODResult: string;
   getEODProcesslog: string;
+  getEODConfiguration: string;
 }
 
 export const queryKeys: IQueryKeys = {
@@ -463,5 +464,6 @@ export const queryKeys: IQueryKeys = {
   getGLWithBranchCode: 'getGLWithBranchCode',
   getEODLogs: 'getEODLogs',
   getEODResult: 'getEODResult',
-  getEODProcesslog: 'getEODProcesslog'
+  getEODProcesslog: 'getEODProcesslog',
+  getEODConfiguration: 'getEODConfiguration'
 };

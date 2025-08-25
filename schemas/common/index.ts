@@ -33,7 +33,7 @@ export const searchFieldsSchema = Yup.object({
   accountNumber: Yup.number()
     .typeError('Must be a numeric value')
     .min(0, 'Branch Debit must not be less than 0'),
-  accountType: Yup.number()
+  productCode: Yup.number()
     .typeError('Must be a numeric value')
     .min(0, 'Branch Debit must not be less than 0')
 });

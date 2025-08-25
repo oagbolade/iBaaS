@@ -12,35 +12,47 @@ import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { searchFieldsSchema } from '@/schemas/common';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { IProdType } from '@/api/ResponseTypes/setup';
 
 type Props = {
   onSearch: Function;
   branches: IBranches[];
   status: IStatus[];
   productTypes: IProductType[] | Array<any>;
+  data: IProdType[];
 };
 
 export const AccountFilterSection = ({
   onSearch,
   branches,
   status,
-  productTypes
+  productTypes,
+  data
 }: Props) => {
-    const { searchParams } =
-      usePersistedSearch<ISearchParams>('account-overview');
-  const { mappedBranches, mappedStatus, mappedProductClass } =
-    useMapSelectOptions({
-      branches,
-      status,
-      productTypes
-    });
+
+  const {
+    mappedBranches,
+    mappedStatus,
+    mappedProductClass,
+    mappedProductTypeId
+  } = useMapSelectOptions({
+    branches,
+    status,
+    productTypes,
+    data
+  });
+
   const { setWidth } = useCurrentBreakpoint();
+
+  const { searchParams } =
+    usePersistedSearch<ISearchParams>('account-overview');
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     status: searchParams?.status ?? '',
     accountType: searchParams?.accountType ?? '',
     search: searchParams?.accountNumber ?? '',
+    productCode: searchParams?.productCode ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -48,13 +60,12 @@ export const AccountFilterSection = ({
       status: values.status.toString().length > 0 ? values.status : null,
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
       accountNumber: values.search.toString().length > 0 ? values.search : null,
-      accountType:
-        values.accountType.toString().length > 0 ? values.accountType : null
+      productCode:
+        values.productCode.toString().length > 0 ? values.productCode : null
     };
 
     onSearch(params);
   };
-
   return (
     <Formik
       initialValues={initialValues}
@@ -114,8 +125,33 @@ export const AccountFilterSection = ({
                   fontSize: '14px',
                   ...inputFields
                 }}
-                name="accountType"
-                options={mappedProductClass}
+                name="productCode"
+                options={[
+                  {
+                    value: '1',
+                    name: 'CURRENT'
+                  },
+                  {
+                    value: '9',
+                    name: 'GL TRANSACTIONS'
+                  },
+                  {
+                    value: '3',
+                    name: 'LOAN'
+                  },
+                  {
+                    value: '2',
+                    name: 'SAVINGS'
+                  },
+                  {
+                    value: '5',
+                    name: 'TREASURY ASSETS'
+                  },
+                  {
+                    value: '4',
+                    name: 'TREASURY LIABILITIES'
+                  }
+                ]}
                 label="Account Type"
               />{' '}
             </Grid>

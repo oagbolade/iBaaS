@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Stack, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
+import dayjs from 'dayjs';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import {
   FormTextInput,
@@ -11,15 +12,13 @@ import {
   FormikDateTimePicker
 } from '@/components/FormikFields';
 import { AccountInformation } from '@/features/CustomerService/Customer/CASAAccount/PreviewAccountInfo';
-import { useCurrentBreakpoint } from '@/utils';
+import { useCurrentBreakpoint, frequencyOptions, fetchFrequencyOptions } from '@/utils';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import colors from '@/assets/colors';
 import { useTerminateOverdraft } from '@/api/loans/useCreditFacility';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { getStoredUser } from '@/utils/user-storage';
-import dayjs from 'dayjs';
-import { frequencyOptions, fetchFrequencyOptions } from '@/utils';
 
 type Props = {
   isSubmitting: boolean;
@@ -56,7 +55,6 @@ export const TermianteOverdraftForm = ({
   const { setDirection } = useSetDirection();
   const searchParams = useSearchParams();
   const oldAccountNumber = searchParams.get('oldAccountNumber') ?? '';
-
   const { mutate } = useTerminateOverdraft();
   const detail = searchParams.get('odDetail') || '';
   const odAccDetails = JSON.parse(detail);

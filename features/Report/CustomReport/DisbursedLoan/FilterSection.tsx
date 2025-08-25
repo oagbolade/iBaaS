@@ -1,13 +1,11 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Box, Grid } from '@mui/material';
+import React from 'react';
+import { Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { inputFields } from '../style';
+import { Form, Formik } from 'formik';
 import { buttonBackgroundColor } from '../AccountEnquiry/style';
 import {
   FormSelectField,
-  FormSelectInput,
   FormTextInput,
-  TextInput,
 } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { IBranches } from '@/api/ResponseTypes/general';
@@ -15,7 +13,7 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { LoanOverdueParams } from '@/api/reports/useGetLoanOverdueReport';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { Form, Formik } from 'formik';
+import { ISearchParams } from '@/app/api/search/route';
 
 type Props = {
   branches?: IBranches[];
@@ -25,7 +23,7 @@ type Props = {
 
 export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
   const { searchParams } =
-    usePersistedSearch<LoanOverdueParams>('disbursed-loan');
+    usePersistedSearch<ISearchParams>('disbursed-loan');
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,

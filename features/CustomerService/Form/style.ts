@@ -12,6 +12,18 @@ export const dropDownWithSearch = {
   fontWeight: 400
 };
 
+export const dropDownWithCorporateSearch = {
+  width: '100%',
+  height: '54px',
+  borderRadius: '4px',
+  padding: '12px',
+  border: `1px solid ${colors.neutral200}`,
+  backgroundColor: `${colors.neutral200}`,
+  color: `${colors.neutral600}`,
+  fontSize: '16px',
+  fontWeight: 400
+};
+
 export const accountUpload = {
   margin: '30px',
   marginRight: '20px'

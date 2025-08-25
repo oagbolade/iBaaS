@@ -49,7 +49,7 @@ export const BulkUploadContainer = () => {
           position: 'fixed',
           top: 0,
           width: 'calc(100vw - 300px)',
-          zIndex: 5
+          zIndex: 1
         }}
       >
         <TopActionsArea actionButtons={actionButtons} />

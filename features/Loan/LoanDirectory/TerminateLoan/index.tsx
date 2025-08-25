@@ -15,10 +15,11 @@ import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalCont
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import colors from '@/assets/colors';
-import { useCurrentBreakpoint, handleRedirect } from '@/utils';
 import LoanPreviewContent from '@/features/Loan/LoanDirectory/LoanPreviewContent';
 import { useGetLoanAccountByLoanAccountNumber } from '@/api/loans/useCreditFacility';
 import { encryptData } from '@/utils/encryptData';
+import {handleRedirect } from '@/utils';
+
 
 const MobilePreviewContent: React.FC<{
   data?: any;
@@ -56,11 +57,9 @@ const FormFields: React.FC<{
 export const TerminateLoan = () => {
   const searchParams = useSearchParams();
   const accountNumber = searchParams.get('accountNumber') || '';
-
+  const status = searchParams.get('action') || '';
   const router = useRouter();
-
   const { setDirection } = useSetDirection();
-  const { isTablet } = useCurrentBreakpoint();
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const { isLoading } = useGlobalLoadingState();
 
@@ -72,12 +71,13 @@ export const TerminateLoan = () => {
     handleRedirect(router, '/loan/loan-directory/');
   };
 
-  const { data, isLoading: isLoadingLoanData } =
+  const { loanAccDetails, isLoading: isLoadingLoanData } =
     useGetLoanAccountByLoanAccountNumber(
-      encryptData(accountNumber as string) || ''
+      encryptData(accountNumber as string) || '',
+      status
     );
 
-  const actionButtons:  React.ReactNode[] = [
+  const actionButtons: React.ReactNode[] = [
     <Box ml={{ mobile: 2, desktop: 0 }} sx={{ display: 'flex' }}>
       <ActionButton
         onClick={cancelAction}
@@ -108,7 +108,7 @@ export const TerminateLoan = () => {
       >
         <MobilePreviewContent
           isLoadingLoanData={isLoadingLoanData || false}
-          data={data}
+          data={loanAccDetails}
         />
         <Stack direction={setDirection()}>
           <Box
@@ -120,7 +120,7 @@ export const TerminateLoan = () => {
             <FormFields
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
-              loanDetails={data}
+              loanDetails={loanAccDetails}
             />
           </Box>
 
@@ -141,7 +141,7 @@ export const TerminateLoan = () => {
             <Box mt={3} />
             <LoanPreviewContent
               isLoadingLoanData={isLoadingLoanData || false}
-              data={data}
+              data={loanAccDetails}
             />
           </Box>
         </Stack>

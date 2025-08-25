@@ -34,7 +34,8 @@ export type ReportType =
   | 'StandingInstructionReport'
   | 'ProfitAndLoss'
   | 'AuditTrail'
-  | 'OverdraftReport';
+  | 'OverdraftReport'
+  | 'EOD';
 
 interface IFileNameMapper {
   AccountEnquiry: string;
@@ -73,5 +74,6 @@ export const FileNameMapper: IFileNameMapper = {
   GroupMembership: 'GroupMembership',
   StandingInstructionReport: 'StandingInstructionReport',
   AuditTrail: 'AuditTrailReport',
-  OverdraftReport: 'OverdraftReport'
+  OverdraftReport: 'OverdraftReport',
+  EOD: 'EOD'
 };

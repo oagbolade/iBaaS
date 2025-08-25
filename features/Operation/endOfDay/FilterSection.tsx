@@ -18,6 +18,7 @@ import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { filterSectionSchema } from '@/schemas/setup';
 import { formatFormikDatePickerToISO } from '@/utils/convertDateToISOFormat';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   onSearch?: (params: ISearchParams) => Promise<void>;
@@ -25,7 +26,11 @@ type Props = {
 
 export const FilterSection = ({ onSearch }: Props) => {
   const { isMobile, setWidth } = useCurrentBreakpoint();
-
+  const { searchParams } = usePersistedSearch<ISearchParams>('EOD-Overview');
+  const initialValues = {
+    searchDate: searchParams?.searchDate,
+    searchWith: searchParams?.searchWith
+  };
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       searchDate: formatFormikDatePickerToISO(
@@ -39,7 +44,7 @@ export const FilterSection = ({ onSearch }: Props) => {
 
   return (
     <Formik
-      initialValues={searchFilterInitialValues}
+      initialValues={initialValues}
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>

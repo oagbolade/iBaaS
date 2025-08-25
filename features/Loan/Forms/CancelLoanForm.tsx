@@ -6,7 +6,7 @@ import { FormTextInput, FormikDateTimePicker } from '@/components/FormikFields';
 import { setCancelValues } from '@/schemas/schema-values/loan/index';
 import { cancelLoanSchema } from '@/schemas/loan/index';
 import { useCurrentBreakpoint } from '@/utils';
-import { useCancelLoan } from '@/api/loans/useCreditFacility';
+import { useCloseLoan } from '@/api/loans/useCreditFacility';
 
 export const CancelLoanForm = ({
   accountNumber,
@@ -20,7 +20,7 @@ export const CancelLoanForm = ({
   setIsSubmitting: (submit: boolean) => void;
 }) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-  const { mutate } = useCancelLoan();
+  const { mutate } = useCloseLoan();
 
   const onSubmit = (values: any) => {
     const data = {

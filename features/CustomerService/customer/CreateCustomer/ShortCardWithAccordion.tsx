@@ -130,9 +130,6 @@ const FormSelector = ({
           states={states}
           towns={towns}
           professions={professions}
-          officers={officers}
-          groups={groups}
-          branches={branches}
         />
       );
       break;

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Box, Stack } from '@mui/material';
 import { PreviewContentLoanDetailProductDetails } from '../PreviewLoan';
@@ -56,10 +56,13 @@ export const RestructureLoan = () => {
   const searchParams = useSearchParams();
   const accountNumber = searchParams.get('accountNumber') || '';
   const productCode = searchParams.get('productCode') || '';
+  const status = searchParams.get('action') || '';
 
-  const { data: loanAccDetails , isLoading: loadingData} = useGetLoanAccountByLoanAccountNumber(
-    encryptData(accountNumber as string) || ''
-  );
+  const { loanAccDetails, isLoading: loadingData } =
+    useGetLoanAccountByLoanAccountNumber(
+      encryptData(accountNumber as string) || '',
+      status
+    );
 
   const { loanProducts } = useGetLoansProductDetailCode(
     encryptData(productCode as string) || ''
@@ -91,7 +94,7 @@ export const RestructureLoan = () => {
 
       <PrimaryIconButton
         isLoading={isLoading}
-        type='submit'
+        type="submit"
         onClick={triggerSubmission}
         buttonTitle="Restructure Loan"
         customStyle={{ ...submitButton }}

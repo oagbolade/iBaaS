@@ -24,7 +24,7 @@ export const InterestIncome = () => {
         }}
       >
         <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
-          <FilterSection />
+          <FilterSection onSearch={()=> {}} />
         </Box>
         <TableV2
           tableConfig={{

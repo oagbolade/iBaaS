@@ -4,6 +4,21 @@ export interface ITransactionType {
   trancode: string;
   tranname: string;
 }
+export interface EODResponse {
+  responseCode: string;
+  responseDescription: string;
+  data: Array<{
+    taskName: string;
+    message: string;
+    runDate: string;
+  }>;
+}
+
+export interface CreateEODConfigureFormValues {
+  days: { daysOfWeek: string }[];
+  time: string;
+  options: number;
+}
 
 export interface IEODLogs {
   id: number;
@@ -25,6 +40,14 @@ export interface IEODViewLogs {
   endTime: string;
   procDate: string;
   taskStatus: string;
+}
+export interface IEODDays {
+  daysOfWeek: string;
+}
+export interface IEODConfiguration {
+  time: string;
+  options: number;
+  days: IEODDays[];
 }
 export interface IEODProcess {
   taskid: number;
@@ -113,6 +136,11 @@ export interface GetAllEODDAYResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
   data?: IEODViewLogs[] | Array<any>;
+}
+export interface GetAllEODConfigurationResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IEODConfiguration;
 }
 export interface GetProcessEODDAYResponse extends IFetchingState {
   responseCode?: string;

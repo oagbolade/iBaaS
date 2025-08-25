@@ -22,14 +22,19 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchIEODLogsResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const EndOfDaySetupTable = () => {
   const [openModel, setopenModel] = useState(Boolean);
-  const [search, setSearch] = useState<boolean>(false);
   const [openRunModel, setopenRunModel] = useState(Boolean);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
-  const { data: logs, isLoading } = useGetEODLogs({ ...searchParams, page });
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('EOD-Overview');
   const ActionMenu = ({ id }: { id: number }): React.ReactElement => {
     return (
       <Link
@@ -51,11 +56,11 @@ export const EndOfDaySetupTable = () => {
   };
   // eslint-disable-next-line no-shadow
   const handleSearch = async (params: ISearchParams) => {
-    setSearchParams({
-      ...params
-    });
-    setSearch(true);
+    setSearchParams(params);
+    setSearchActive(true);
   };
+  const { data: logs, isLoading } = useGetEODLogs({ ...searchParams, page });
+
   const actionButtons = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <PrimaryIconButton
@@ -100,7 +105,7 @@ export const EndOfDaySetupTable = () => {
             ActionMenuProps={ActionMenu}
             setPage={setPage}
           >
-            {search ? (
+            {searchActive ? (
               logs?.map((dataItem: SearchIEODLogsResponse) => {
                 return (
                   <StyledTableRow key={dataItem.id}>
@@ -108,10 +113,10 @@ export const EndOfDaySetupTable = () => {
                       {dataItem.fullName}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.createdOn}
+                      {dataItem.startTime}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.startTime}
+                      {dataItem.endTime}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem.lastRunDate}

@@ -214,7 +214,7 @@ export function useCreatLoanUnderwriting() {
   });
   return { mutate, isPending, isError, error };
 }
-export async function cancelLoan(
+export async function closeLoan(
   toastActions: IToastActions,
   body: CancelLoanValues
 ): Promise<void> {
@@ -242,12 +242,12 @@ export async function cancelLoan(
   }
 }
 
-export function useCancelLoan() {
+export function useCloseLoan() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const toastActions = useContext(ToastMessageContext);
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (body: CancelLoanValues) => cancelLoan(toastActions, body),
+    mutationFn: (body: CancelLoanValues) => closeLoan(toastActions, body),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.getAllLoans]
@@ -262,7 +262,7 @@ export function useCancelLoan() {
   return { mutate, isPending, isError, error };
 }
 
-export async function terminateLoan(
+export async function writeOffLoan(
   toastActions: IToastActions,
   body: ISetTerminateLoanValues
 ): Promise<void> {
@@ -286,13 +286,13 @@ export async function terminateLoan(
   }
 }
 
-export function useTerminateLoan() {
+export function useWriteOffLoan() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const toastActions = useContext(ToastMessageContext);
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: ISetTerminateLoanValues) =>
-      terminateLoan(toastActions, body),
+      writeOffLoan(toastActions, body),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.getAllLoans]
@@ -703,17 +703,17 @@ export function useGetLoanAccountByCustomerId(
 
 async function getLoanAccountByLoanAccountNumber(
   toastActions: IToastActions,
-  loanAccount: string
+  loanAccount: string,
+  status: string 
 ): Promise<GetLoanByAccountDetailsResponse> {
   let result: GetLoanByAccountDetailsResponse = {
     responseCode: '',
     responseMessage: '',
-    data: {} as LoanAccountDetailPreview
+    loanAccDetails: {} as LoanAccountDetailPreview
   };
 
   try {
-    // const urlEndpoint = `/CreditManagement/LoanDetails?loanAcct=${loanAccount}`;
-    const urlEndpoint = `/creditmanagement/GetloanAccDetails?accountnumber=${loanAccount}&action=1`;
+    const urlEndpoint = `/creditmanagement/GetloanAccDetails?accountnumber=${loanAccount}&action=${status}`;
 
     const { data }: AxiosResponse<GetLoanByAccountDetailsResponse> =
       await axiosInstance({
@@ -734,7 +734,8 @@ async function getLoanAccountByLoanAccountNumber(
   return result;
 }
 export function useGetLoanAccountByLoanAccountNumber(
-  loanAccount: string
+  loanAccount: string,
+  status: string
 ): GetLoanByAccountDetailsResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetLoanByAccountDetailsResponse;
@@ -748,7 +749,8 @@ export function useGetLoanAccountByLoanAccountNumber(
     queryFn: () =>
       getLoanAccountByLoanAccountNumber(
         toastActions,
-        decryptData(loanAccount) as string
+        decryptData(loanAccount) as string,
+        status
       ),
     enabled: Boolean(loanAccount.toString().length > 0)
   });

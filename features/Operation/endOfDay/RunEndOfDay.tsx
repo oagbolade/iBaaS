@@ -44,7 +44,7 @@ export const RunEndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
   const handleChange = (value: string) => {
     setAddValues(value);
   };
-  const { mutate } = useCreateRunEOD();
+  const { mutate, isPending } = useCreateRunEOD();
   const handleContinue = () => {
     mutate();
   };
@@ -92,7 +92,7 @@ export const RunEndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
             </Box>
             <Box sx={{ ...ConfirmButton, background: 'none' }}>
               <PrimaryIconButton
-                buttonTitle="Continue"
+                buttonTitle={isPending ? 'Loading....' : 'Continue'}
                 customStyle={{
                   ...TypographyConfirm,
                   backgroundColor: `${colors.activeBlue400}`,
@@ -102,6 +102,7 @@ export const RunEndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
                   padding: { mobile: '8px 50px', desktop: '16px 78px' },
                   marginRight: { mobile: '70px', desktop: 0 }
                 }}
+                disabled={isPending}
                 onClick={handleContinue}
               />
             </Box>

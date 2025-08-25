@@ -38,27 +38,27 @@ const LoanPreviewContent: React.FC<LoanPreviewContentProps> = ({
     >
       <MainTitle title="Loan Account Details" />
       <SubTitle title="Settlement Account" />
-      <Details title={data?.settlementacct1 || 'N/A'} />
+      <Details title={data?.settlementAcct || 'N/A'} />
       <SubTitle title="Settlement Account Name" />
-      <Details title={data?.fullname || 'N/A'} />
+      <Details title={data?.fullName || 'N/A'} />
       <SubTitle title="Loan Product" />
-      <Details title={data?.productname || 'N/A'} />
+      <Details title={data?.productName || 'N/A'} />
       <SubTitle title="Branch" />
       <Details title={data?.branchName || 'N/A'} />
       <SubTitle title="Loan Amount" />
       <Details
-        title={`NGN ${formatCurrency(data?.loanamount || 0) || 'N/A'}`}
+        title={`NGN ${formatCurrency(data?.loanAmount || 0) || 'N/A'}`}
       />
       <SubTitle title="Current Customer Balance" />
-      <Details title={`NGN ${data?.settlementAcctBal || 'N/A'}`} />
+      <Details title={`NGN ${data?.currentbalance || 'N/A'}`} />
       <SubTitle title="Loan Term" />
-      <Details title={data?.loanterm?.toString() || 'N/A'} />
+      <Details title={data?.loanTerm?.toString() || 'N/A'} />
       <SubTitle title="Loan Rate" />
-      <Details title={data?.intrate?.toString() || 'N/A'} />
+      <Details title={data?.intRate?.toString() || 'N/A'} />
       <SubTitle title="Repayment Type" />
-      <Details title={data?.repaydesc?.toString() || 'N/A'} />
+      <Details title={data?.repaymentType?.toString() || 'N/A'} />
       <SubTitle title="Calculation Method" />
-      <Details title={data?.loanschedcalcdesc?.toString() || 'N/A'} />
+      <Details title={data?.calculationName?.toString() || 'N/A'} />
       <SubTitle title=" Start Date" />
       <Details
         title={
@@ -77,10 +77,7 @@ const LoanPreviewContent: React.FC<LoanPreviewContentProps> = ({
       />
       <Box mb={{ mobile: 5, tablet: 0 }}>
         <SubTitle title="Loan Status" />
-        <Status
-          label={data?.status === '4' ? 'Active' : 'Matured'}
-          status={data?.status === '4' ? 'success' : 'matured'}
-        />
+        <Status label={data?.status} status="" />
       </Box>
     </Box>
   );

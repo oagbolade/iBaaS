@@ -354,7 +354,7 @@ export const CreateGroupForm = ({
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
                     name="grouplimit"
-                    placeholder="Enter group limit"
+                    placeholder="Enter Group Account Limit"
                     label="Group Account Limit"
                     required
                   />{' '}

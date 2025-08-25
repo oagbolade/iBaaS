@@ -12,22 +12,26 @@ import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { searchFieldsSchema } from '@/schemas/common';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { IProdType } from '@/api/ResponseTypes/setup';
 
 type Props = {
   onSearch?: Function;
   branches?: IBranches[];
+  data?: IProdType[];
 };
 
-export const FilterSection = ({ onSearch, branches }: Props) => {
+export const FilterSection = ({ onSearch, branches, data }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('finance-account');
-  const { mappedBranches } = useMapSelectOptions({
-    branches
+  const { mappedBranches, mappedProductTypeId } = useMapSelectOptions({
+    branches,
+    data
   });
   const { setWidth } = useCurrentBreakpoint();
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     accountNumber: searchParams?.accountNumber ?? '',
-    search: searchParams?.status ?? ''
+    search: searchParams?.status ?? '',
+    productCode: searchParams?.productCode ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -39,7 +43,9 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
       accountNumber:
         values.accountNumber.toString().trim().length > 0
           ? values.accountNumber
-          : null
+          : null,
+      productCode:
+        values.productCode.toString().length > 0 ? values.productCode : null
     };
 
     onSearch?.(params);
@@ -56,10 +62,10 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
         <Box sx={{ height: '120px' }}>
           <Grid container spacing={2}>
             <Grid
-              mb={{ tablet: 3 }}
+              mb={{ tablet: 6 }}
               item
               mobile={12}
-              tablet={5}
+              tablet={2}
               justifyContent="center"
             >
               <FormSelectField
@@ -77,7 +83,50 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               mb={{ tablet: 6 }}
               item
               mobile={12}
-              tablet={6}
+              tablet={2}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                name="productCode"
+                options={[
+                  {
+                    value: '1',
+                    name: 'CURRENT'
+                  },
+                  {
+                    value: '9',
+                    name: 'GL TRANSACTIONS'
+                  },
+                  {
+                    value: '3',
+                    name: 'LOAN'
+                  },
+                  {
+                    value: '2',
+                    name: 'SAVINGS'
+                  },
+                  {
+                    value: '5',
+                    name: 'TREASURY ASSETS'
+                  },
+                  {
+                    value: '4',
+                    name: 'TREASURY LIABILITIES'
+                  }
+                ]}
+                label="Account Type"
+              />{' '}
+            </Grid>
+            <Grid
+              mb={{ tablet: 4 }}
+              item
+              mobile={12}
+              tablet={7}
               justifyContent="center"
             >
               <FormTextInput

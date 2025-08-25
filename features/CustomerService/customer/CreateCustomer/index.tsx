@@ -1,10 +1,11 @@
 'use client';
 import * as React from 'react';
 import { Formik, Form, useFormikContext } from 'formik';
-import { Box, AlertColor } from '@mui/material';
+import { Box } from '@mui/material';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
 import { ShortCardWithAccordion } from './ShortCardWithAccordion';
+import { CorporateCustomerPersonalDetailsForm } from '@/features/CustomerService/Form/CreateCustomerForms/CorporateCustomerPersonalDetailsForm';
 import { useCreateValidationKeysMapper } from '@/utils/hooks/useCreateValidationKeysMapper';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
@@ -100,7 +101,8 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
 export const CreateCustomerContainer = () => {
   const isEditing = useGetParams('isEditing') || null;
   const customerId = useGetParams('customerId') || '';
-  const toastActions = React.useContext(ToastMessageContext);
+  const getCustomerType = useGetParams('type') || 'individual';
+
   const {
     customerType,
     accountOfficerValue,
@@ -111,12 +113,16 @@ export const CreateCustomerContainer = () => {
     setAccountOfficerValue,
     setIntroducerIdValue
   } = React.useContext(CustomerCreationContext);
+  React.useEffect(() => {
+    setCustomerType(getCustomerType);
+  }, [getCustomerType, setCustomerType]);
   const { countries, isLoading: areContriesLoading } = useGetAllCountries();
   const { towns, isLoading: areTownsLoading } = useGetAllTown();
   const { states, isLoading: areStatesLoading } = useGetAllStates();
   const { title, isLoading: areTitlesLoading } = useGetAllTitles();
   const { relationships, isLoading: areRelationshipsLoading } =
     useGetAllRelationships();
+
   const individual = '1';
   const corporate = '2';
 
@@ -186,17 +192,6 @@ export const CreateCustomerContainer = () => {
     const idExpryDate = dayjs(values.idExpryDate).toISOString();
     const idIssueDate = dayjs(values.idIssueDate).toISOString();
 
-    const toastMessage = {
-      title: 'Validation error',
-      severity: 'error',
-      accountOfficerValue: {
-        message: 'Account Officer is required'
-      },
-      introducerIdValue: {
-        message: 'Introducer ID is required'
-      }
-    };
-
     const getAllValues = {
       ...values,
       dob,
@@ -215,10 +210,12 @@ export const CreateCustomerContainer = () => {
 
     const getAllCorporateValues = {
       ...values,
+      dob,
       emailalert: Number(emailalert),
       smsalert: Number(smsalert),
       idIssueDate,
       idExpryDate,
+      introType: '0',
       nin: values.natIDNo
     };
 
@@ -303,6 +300,7 @@ export const CreateCustomerContainer = () => {
           title={`${isEditing ? 'Edit Customer' : 'Create Customer'}`}
           styles={BatchTitle}
         />
+
         <Formik
           onSubmit={(values) => onSubmit(values)}
           enableReinitialize
@@ -335,38 +333,51 @@ export const CreateCustomerContainer = () => {
           validationSchema={pickSchema}
         >
           <Form>
-            <TrackVisitedFields isEditing={isEditing} />
-            {areOfficersLoading ||
-            arebranchesLoading ||
-            areGroupsLoading ||
-            areTitlesLoading ||
-            aresectorsLoading ||
-            areEducationLoading ||
-            areOccupationsLoading ? (
-              <FormSkeleton noOfLoaders={1} />
-            ) : (
-              <ShortCardWithAccordion
-                cardTitle={`${customerType === 'individual' ? 'Personal Details' : 'Corporate Details'}`}
-                cardKey="personalDetails"
-                completed={completed}
-                titles={title}
-                sectors={sectors}
-                education={education}
-                countries={countries}
-                states={states}
-                towns={towns}
-                professions={professions}
-                officers={officers}
-                groups={groups}
-                branches={branches}
-              />
-            )}
-
-            {areStatesLoading || areContriesLoading || areTownsLoading ? (
-              <FormSkeleton noOfLoaders={1} />
+            {customerType === 'corporate' ? (
+              <div>
+                <CorporateCustomerPersonalDetailsForm
+                  sectors={sectors}
+                  countries={countries}
+                  states={states}
+                  towns={towns}
+                  professions={professions}
+                  officers={officers}
+                  groups={groups}
+                  branches={branches}
+                />
+              </div>
             ) : (
               <div>
-                {customerType === 'individual' ? (
+                <TrackVisitedFields isEditing={isEditing} />
+                {areOfficersLoading ||
+                arebranchesLoading ||
+                areGroupsLoading ||
+                areTitlesLoading ||
+                aresectorsLoading ||
+                areEducationLoading ||
+                areOccupationsLoading ? (
+                  <FormSkeleton noOfLoaders={1} />
+                ) : (
+                  <ShortCardWithAccordion
+                    cardTitle="Personal Details"
+                    cardKey="personalDetails"
+                    completed={completed}
+                    titles={title}
+                    sectors={sectors}
+                    education={education}
+                    countries={countries}
+                    states={states}
+                    towns={towns}
+                    professions={professions}
+                    officers={officers}
+                    groups={groups}
+                    branches={branches}
+                  />
+                )}
+
+                {areStatesLoading || areContriesLoading || areTownsLoading ? (
+                  <FormSkeleton noOfLoaders={1} />
+                ) : (
                   <ShortCardWithAccordion
                     cardTitle="Business/Office/School Details"
                     cardKey="businessDetails"
@@ -375,15 +386,13 @@ export const CreateCustomerContainer = () => {
                     states={states}
                     towns={towns}
                   />
-                ) : null}
-              </div>
-            )}
+                )}
 
-            {areRelationshipsLoading || areStatesLoading || areTownsLoading ? (
-              <FormSkeleton noOfLoaders={1} />
-            ) : (
-              <div>
-                {customerType === 'individual' ? (
+                {areRelationshipsLoading ||
+                areStatesLoading ||
+                areTownsLoading ? (
+                  <FormSkeleton noOfLoaders={1} />
+                ) : (
                   <ShortCardWithAccordion
                     cardTitle="Next of Kin Details"
                     cardKey="nextOfKinDetails"
@@ -392,31 +401,24 @@ export const CreateCustomerContainer = () => {
                     states={states}
                     towns={towns}
                   />
-                ) : null}
-              </div>
-            )}
+                )}
 
-            {areIdsLoading ? (
-              <FormSkeleton noOfLoaders={1} />
-            ) : (
-              <div>
-                {customerType === 'individual' ? (
+                {areIdsLoading ? (
+                  <FormSkeleton noOfLoaders={1} />
+                ) : (
                   <ShortCardWithAccordion
                     cardTitle="Identification Details"
                     cardKey="identificationDetails"
                     completed={completed}
                     idCards={idCards}
                   />
-                ) : null}
-              </div>
-            )}
+                )}
 
-            {areOfficersLoading || arebranchesLoading || areGroupsLoading ? (
-              <FormSkeleton noOfLoaders={1} />
-            ) : (
-
-              <div>
-                {customerType === 'individual' ? (
+                {areOfficersLoading ||
+                arebranchesLoading ||
+                areGroupsLoading ? (
+                  <FormSkeleton noOfLoaders={1} />
+                ) : (
                   <ShortCardWithAccordion
                     cardTitle="Referrer’s Details"
                     cardKey="referrerDetails"
@@ -425,10 +427,9 @@ export const CreateCustomerContainer = () => {
                     groups={groups}
                     branches={branches}
                   />
-                ) : null}
+                )}
               </div>
             )}
-
             <button id="submitButton" type="submit" style={{ display: 'none' }}>
               submit alias
             </button>

@@ -242,5 +242,5 @@ export interface LoanAccountDetailPreview {
 export interface GetLoanByAccountDetailsResponse extends IFetchingState {
   responseCode?: string;
   responseMessage?: string;
-  data?: LoanAccountDetailPreview;
+  loanAccDetails?: LoanAccountDetailPreview;
 }

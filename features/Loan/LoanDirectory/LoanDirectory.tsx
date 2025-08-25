@@ -158,14 +158,13 @@ export const LoanDirectory = () => {
                     {`NGN ${formatCurrency(dataItem?.loanAmount || 0) || 'N/A'}`}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    <Status
-                      label={
-                        dataItem?.loanStatus === '4' ? 'Active' : 'Matured'
-                      }
-                      status={
-                        dataItem?.loanStatus === '4' ? 'success' : 'matured'
-                      }
-                    />{' '}
+                    {dataItem?.loanStatus === '1' ? (
+                      <Status label="Pending" status="pending" />
+                    ) : dataItem?.loanStatus === '3' ? (
+                      <Status label="Matured" status="matured" />
+                    ) : dataItem?.loanStatus === '4' ? (
+                      <Status label="Active" status="success" />
+                    ) : null}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
                     <ActionMenuProps

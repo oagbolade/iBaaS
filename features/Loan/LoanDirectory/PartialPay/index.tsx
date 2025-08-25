@@ -56,8 +56,8 @@ const FormFields: React.FC<{
 export const PartialPay = () => {
   const searchParams = useSearchParams();
   const accountNumber = searchParams.get('accountNumber') || '';
+  const status = searchParams.get('action') || '';
   const router = useRouter();
-
   const { setDirection } = useSetDirection();
   const { isTablet } = useCurrentBreakpoint();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -67,9 +67,10 @@ export const PartialPay = () => {
     setIsSubmitting(true);
   };
 
-  const { data, isLoading: isLoadingLoanData } =
+  const { loanAccDetails, isLoading: isLoadingLoanData } =
     useGetLoanAccountByLoanAccountNumber(
-      encryptData(accountNumber as string) || ''
+      encryptData(accountNumber as string) || '',
+      status
     );
 
   const cancelAction = () => {
@@ -83,14 +84,13 @@ export const PartialPay = () => {
         customStyle={{ ...cancelButton }}
         buttonTitle="Cancel"
       />
-      
+
       <PrimaryIconButton
         isLoading={isLoading}
         onClick={triggerSubmission}
         buttonTitle="Submit"
         customStyle={{ ...submitButton }}
       />
-      
     </Box>
   ];
 
@@ -105,7 +105,7 @@ export const PartialPay = () => {
       >
         <MobilePreviewContent
           isLoadingLoanData={isLoadingLoanData || false}
-          data={data}
+          data={loanAccDetails}
         />
         <Stack direction={setDirection()}>
           <Box
@@ -117,7 +117,7 @@ export const PartialPay = () => {
             <FormFields
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
-              loanDetails={data}
+              loanDetails={loanAccDetails}
             />
           </Box>
           {isTablet && (
@@ -138,7 +138,7 @@ export const PartialPay = () => {
               <Box mt={3} />
               <LoanPreviewContent
                 isLoadingLoanData={isLoadingLoanData}
-                data={data}
+                data={loanAccDetails}
               />
             </Box>
           )}
