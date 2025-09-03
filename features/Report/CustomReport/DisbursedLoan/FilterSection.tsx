@@ -1,12 +1,9 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Form, Formik } from 'formik';
 import { buttonBackgroundColor } from '../AccountEnquiry/style';
-import {
-  FormSelectField,
-  FormTextInput,
-} from '@/components/FormikFields';
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
@@ -22,18 +19,17 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
-  const { searchParams } =
-    usePersistedSearch<ISearchParams>('disbursed-loan');
+  const { searchParams } = usePersistedSearch<ISearchParams>('disbursed-loan');
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
-    bankproducts,
+    bankproducts
   });
 
   const initialValues = {
     branchcode: searchParams?.branchcode ?? '',
     productcode: searchParams?.productcode ?? '',
-    search: searchParams?.search ?? '',
+    search: searchParams?.search ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -42,7 +38,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
         values.productcode.toString().length > 0 ? values.productcode : null,
       branchcode:
         values.branchcode.toString().length > 0 ? values.branchcode : null,
-      search: values.search.length > 0 ? values.search : null,
+      search: values.search.length > 0 ? values.search : null
     };
     onSearch(params);
   };
@@ -55,60 +51,70 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
     >
       {() => (
         <Form>
-          <Grid
-            sx={{ padding: '5px 5px', display: 'flex', gap: '35px' }}
-            spacing={2}
-          >
-            <Grid
-              mb={{ tablet: 3 }}
-              item
-              mobile={12}
-              tablet={3}
-              sx={{ display: 'flex', alignItems: 'center', gap: 5 }}
-            >
-              <FormSelectField
-                name="branchcode"
-                options={mappedBranches}
-                label="Branch ID"
-                required
-              />{' '}
-              <FormSelectField
-                name="productcode"
-                options={mappedBankproducts}
-                label="Product"
-              />{' '}
+          <Box>
+            <Grid container spacing={2}>
+              <Grid
+                item
+                mb={{ tablet: 4 }}
+                mobile={12}
+                tablet={4}
+                sx={{ display: 'flex', alignItems: 'center', gap: 5 }}
+              >
+                <FormSelectField
+                  name="branchcode"
+                  options={mappedBranches}
+                  label="Branch ID"
+                  required
+                />{' '}
+              </Grid>
+
+              <Grid
+                mb={{ tablet: 3 }}
+                item
+                mobile={12}
+                tablet={3}
+                sx={{ display: 'flex', alignItems: 'center', gap: 5 }}
+              >
+                <FormSelectField
+                  name="productcode"
+                  options={mappedBankproducts}
+                  label="Product"
+                />{' '}
+              </Grid>
+
+              <Grid
+                item
+                mobile={12}
+                tablet={3}
+                mb={{ tablet: 3 }}
+                justifyContent="center"
+              >
+                <FormTextInput
+                  icon={<SearchIcon />}
+                  name="search"
+                  placeholder="Search for Account Number"
+                  label="Search for Account Number"
+                />{' '}
+              </Grid>
+
+              <Grid
+                item
+                mobile={12}
+                tablet={1}
+                sx={{ display: 'flex' }}
+                justifyContent="flex-end"
+                mt={{ tablet: 3.2 }}
+                mr={{ mobile: 30, tablet: 0 }}
+                mb={{ mobile: 6, tablet: 0 }}
+              >
+                <ActionButton
+                  type="submit"
+                  customStyle={buttonBackgroundColor}
+                  buttonTitle="Search"
+                />
+              </Grid>
             </Grid>
-            <Grid
-              mb={{ tablet: 2 }}
-              item
-              mobile={12}
-              tablet={2}
-              justifyContent="center"
-            >
-              <FormTextInput
-                icon={<SearchIcon />}
-                name="search"
-                placeholder="Search for Account Number"
-                label="Search for Account Number"
-              />{' '}
-            </Grid>
-            <Grid
-              item
-              mobile={12}
-              tablet={1}
-              sx={{ display: 'flex' }}
-              justifyContent="flex-end"
-              mt={{ tablet: 3.2 }}
-              mr={{ mobile: 30, tablet: 0 }}
-              mb={{ mobile: 6, tablet: 0 }}
-            >
-              <ActionButton
-                type="submit"
-                customStyle={buttonBackgroundColor}
-                buttonTitle="Search"
-              />
-            </Grid>
-          </Grid>
+          </Box>
         </Form>
       )}
     </Formik>

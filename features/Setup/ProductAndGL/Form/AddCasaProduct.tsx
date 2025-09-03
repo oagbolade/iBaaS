@@ -26,6 +26,8 @@ import useFormProgress from '@/utils/hooks/useFormProgress';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { ICurrency } from '@/api/ResponseTypes/general';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -36,13 +38,29 @@ type Props = {
   productCode: string | null;
   isSubmitting: boolean;
   setIsSubmitting: (submit: boolean) => void;
+  currencies?: ICurrency[] | Array<any>;
+
+  // eslint-disable-next-line react/no-unused-prop-types
 };
 
 export const AddCasaNewProduct = ({
   productCode,
   isSubmitting,
-  setIsSubmitting
+  setIsSubmitting,
+  currencies
 }: Props) => {
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const {
+    mappedProductType,
+    mappedCurrency,
+    mappedFrequency,
+    mappedProductClass,
+    mappedBankproductCode,
+    mappedProductTypeId,
+    mappedProductClassTypeId
+  } = useMapSelectOptions({
+    currencies
+  });
   const requiredFields: Record<string, string[]> = {
     personalDetails: [
       'dayint',
@@ -58,7 +76,7 @@ export const AddCasaNewProduct = ({
     ],
 
     interestCharges: [
-      'interestIncome',
+      'dayint',
       'withallowed',
       'drType',
       'crtype',
@@ -66,7 +84,6 @@ export const AddCasaNewProduct = ({
     ],
 
     generalLedge: [
-      'accountNumber',
       'liabilityBal',
       'suspendedAsset',
       'assetBalance',
@@ -86,6 +103,22 @@ export const AddCasaNewProduct = ({
 
     document: []
   };
+  React.useEffect(() => {
+    if (mappedCurrency.length > 0) {
+      const defaultCurrency =
+        mappedCurrency.find((c) =>
+          ['001', '001', '001'].some(
+            (keyword) =>
+              c.name.toLowerCase().includes(keyword) ||
+              c.value.toLowerCase().includes(keyword)
+          )
+        )?.value ||
+        mappedCurrency[0]?.value ||
+        '';
+
+      setSelectedCurrency(defaultCurrency);
+    }
+  }, [mappedCurrency]);
   const isEditing = useGetParams('isEditing') || null;
   const { mutate } = useCreateDemandDepositProduct(
     Boolean(isEditing),
@@ -111,7 +144,7 @@ export const AddCasaNewProduct = ({
       ...values,
       productExpire: systemDate,
       productstart: systemDate,
-      currencycode: values.currencycode
+      currencycode: selectedCurrency
     });
   };
 

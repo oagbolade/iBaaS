@@ -226,7 +226,7 @@ export interface CreateDepartmentFormValues {
 export interface CreateGlNodeFormValues {
   gL_NodeCode: string;
   gL_NodeName: string;
-  authid: 'string';
+  authid: string;
   gL_NodeCodes: string;
 }
 
@@ -332,7 +332,7 @@ export interface CreateExceptionFormValues {
 export interface CreateDemandDepositFormValues {
   productCode: string;
   productName: string;
-  productclass: number;
+  productclass: string;
   appType: string;
   productstart: string;
   productExpire: string;
@@ -340,9 +340,9 @@ export interface CreateDemandDepositFormValues {
   openbalance: number;
   closeBalance: number;
   minintbalance: number;
-  crtype: number | null;
-  drType: number | null;
-  withallowed: number | null;
+  crtype: number;
+  drType: number;
+  withallowed: number;
   assetBalance: string;
   suspendedAsset: string;
   interestReceivable: string;
@@ -355,6 +355,10 @@ export interface CreateDemandDepositFormValues {
   acctClosegl: string;
   unearnincome: string;
   unearnexp: string;
+  miscIncome: string;
+  postnodebit: number;
+  accrualfreq: string;
+  capitalizFreq: string;
   stateInactive: number;
   checkBook: number;
   sweepIn: number;
@@ -370,9 +374,7 @@ export interface CreateDemandDepositFormValues {
   penal: number;
   minAge: number;
   maxAge: number;
-  micincome: number;
   phoneNo4AcctNumber: number;
-  miscIncome: string;
   ProdDocuments: [];
   ProdCharges: [];
   ProdException: [];
@@ -645,7 +647,7 @@ export const createLoanAccountInitialValues: CreateLoanAccountFormValues = {
 export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   productCode: '',
   productName: '',
-  productclass: 0,
+  productclass: '',
   appType: '',
   productstart: '',
   productExpire: '',
@@ -668,24 +670,26 @@ export const createDemandDepositInitialValues: CreateDemandDepositFormValues = {
   acctClosegl: '',
   unearnincome: '',
   unearnexp: '',
-  stateInactive: 0,
+  miscIncome: '',
+  postnodebit: 0,
+  accrualfreq: '',
+  capitalizFreq: '',
+  stateInactive: 1,
   checkBook: 1,
-  sweepIn: 0,
-  si: 0,
+  sweepIn: 1,
+  si: 1,
   od: 0,
   interbr: '',
   floor: 0,
   shortname: '',
   lien: 0,
-  intcalbasis: 0,
+  intcalbasis: 365,
   dayint: 0,
   maxamt: 0,
   penal: 0,
   minAge: 0,
   maxAge: 0,
-  micincome: 0,
   phoneNo4AcctNumber: 0,
-  miscIncome: '',
   ProdDocuments: [],
   ProdCharges: [],
   ProdException: []
@@ -769,7 +773,7 @@ export const createRelationshipInitialValues: CreateRelationShipFormValues = {
 export const createZoneInitialValues: CreateZoneFormValues = {
   zoneName: '',
   nodays: 0,
-  authid: 'string',
+  authid: '',
   createdate: getCurrentIsoDate(),
   zoneid: ''
 };
@@ -779,7 +783,7 @@ export const createEducationInitialValues: CreateEducationFormValues = {
   educationname: '',
   status: 0,
   userid: `${getStoredUser()?.profiles.userid}`,
-  authid: 'string',
+  authid: '',
   createdate: getCurrentIsoDate()
 };
 
@@ -875,12 +879,12 @@ export const createGlClassInitialValue: CreateGlClassFormValues = {
   gL_ClassCode: '',
   gL_ClassName: '',
   nodeCode: '',
-  authid: 'string'
+  authid: ''
 };
 export const createGlNodeInitialValue: CreateGlNodeFormValues = {
   gL_NodeCode: '',
   gL_NodeName: '',
-  authid: 'string',
+  authid: '',
   gL_NodeCodes: 'string'
 };
 export const createDepartmentInitialValue: CreateDepartmentFormValues = {
@@ -924,10 +928,10 @@ export const createTownInitialValues: CreateTownFormValues = {
 };
 export const createCountryInitialValues: CreateCountryFormValues = {
   countryName: '',
-  countryMne: 'string',
+  countryMne: '',
   currencyName: '',
   currencyMne: '',
-  authid: 'string'
+  authid: ''
 };
 export const createCompanyInitialValues: CreateCompanyFormValues = {
   bankName: '',

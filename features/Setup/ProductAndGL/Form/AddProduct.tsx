@@ -46,7 +46,7 @@ export const AddNewProduct = ({
       'productclass',
       'productName',
       'minloan',
-      'maxLoan',
+      'maxloan',
       'appType',
       'term',
       'shortname'
@@ -89,6 +89,23 @@ export const AddNewProduct = ({
     Boolean(isEditing),
     decryptData(productId as string)
   );
+  const initialValues = React.useMemo(() => {
+    if (isEditing && loanProducts) {
+      return {
+        ...createLoanAccountInitialValues,
+        ...loanProducts,
+        maxloan: loanProducts.maxloan,
+        ProdException:
+          loanProducts.ProdException?.map((item: any) => item.exceptioncode) ||
+          [],
+        ProdCharges:
+          loanProducts.ProdCharges?.map((item: any) => item.chargecode) || [],
+        ProdDocuments:
+          loanProducts.ProdDocuments?.map((item: any) => item.docId) || []
+      };
+    }
+    return createLoanAccountInitialValues;
+  }, [isEditing, loanProducts]);
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     values.ProdException = values.ProdException.map((resp: string) => ({
@@ -139,7 +156,7 @@ export const AddNewProduct = ({
           />
         </Box>
         <Formik
-          initialValues={loanProducts || createLoanAccountInitialValues}
+          initialValues={initialValues}
           onSubmit={(values, actions) => onSubmit(values, actions)}
         >
           {({ values }) => {

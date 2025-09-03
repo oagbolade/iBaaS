@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Box } from '@mui/material';
 import { COLUMNS } from './COLUMN';

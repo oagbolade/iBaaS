@@ -14,6 +14,7 @@ import { createEducationSchema } from '@/schemas/setup';
 import { createEducationInitialValues } from '@/schemas/schema-values/setup';
 import { decryptData } from '@/utils/decryptData';
 import { encryptData } from '@/utils/encryptData';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type Props = {
   educationId?: string | null;
@@ -29,7 +30,7 @@ export const CreateEducationForm = ({
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('isEditing');
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
-
+  const { sysmodel } = useGetSystemDate();
   const { education, isLoading } = useGetEducationByCode(
     decryptData(educationId ?? '') || null
   );
@@ -40,7 +41,8 @@ export const CreateEducationForm = ({
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     await mutate({
-      ...values
+      ...values,
+      authid: sysmodel?.approvingOfficer
     });
   };
 

@@ -49,7 +49,8 @@ export const CreateIndustryForm = ({
     industryCode: industry?.industryCode?.trim() || '',
     industryMne: industry?.industryMne?.trim() || '',
     industryName: industry?.industryName?.trim() || '',
-    sector: industry?.sector?.trim() || ''
+    sector: industry?.sector?.trim() || '',
+    status: industry?.status
   };
   const { mutate } = useCreateIndustry(
     Boolean(isEditing),
@@ -90,7 +91,11 @@ export const CreateIndustryForm = ({
         }}
       >
         <Formik
-          initialValues={isEditing ? industryData : createIndustryInitialValue}
+          initialValues={
+            isEditing
+              ? { ...industryData, status: industryData.status }
+              : createIndustryInitialValue
+          }
           onSubmit={(values, actions) => onSubmit(values, actions)}
           validationSchema={createIndustrySchema}
         >

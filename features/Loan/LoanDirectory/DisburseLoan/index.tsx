@@ -10,7 +10,7 @@ import { TopActionsArea } from '@/components/Revamp/Shared';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { CancelLoanForm } from '@/features/Loan/Forms/CancelLoanForm';
+import { DisburseLoanForm } from '@/features/Loan/Forms/DisburseLoanForm';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
 import colors from '@/assets/colors';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -42,7 +42,7 @@ const FormFields: React.FC<{
   const customerId = searchParams.get('customerId') || '';
 
   return (
-    <CancelLoanForm
+    <DisburseLoanForm
       isSubmitting={isSubmitting}
       setIsSubmitting={setIsSubmitting}
       accountNumber={accountNumber}
@@ -51,7 +51,7 @@ const FormFields: React.FC<{
   );
 };
 
-export const CancelLoan: React.FC = () => {
+export const DisburseLoan: React.FC = () => {
   const searchParams = useSearchParams();
   const accountNumber = searchParams.get('accountNumber') || '';
   const status = searchParams.get('action') || '';
@@ -91,7 +91,7 @@ export const CancelLoan: React.FC = () => {
 
       <PrimaryIconButton
         isLoading={isLoading}
-        buttonTitle="Cancel Loan"
+        buttonTitle="Disburse Loan"
         onClick={() => {
           triggerSubmission();
         }}
@@ -105,7 +105,6 @@ export const CancelLoan: React.FC = () => {
       <TopActionsArea actionButtons={actionButtons} />
       <Box
         sx={{
-          padding: { mobile: '0 5px', desktop: '0 25px' },
           width: '100%'
         }}
       >

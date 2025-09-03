@@ -68,9 +68,11 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
     encryptData(customerId) as string
   );
 
-  const { setAccountOfficerValue, setIntroducerIdValue, setIntroducerTypeValue } = React.useContext(
-    CustomerCreationContext
-  );
+  const {
+    setAccountOfficerValue,
+    setIntroducerIdValue,
+    setIntroducerTypeValue
+  } = React.useContext(CustomerCreationContext);
 
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [isGroupMember, setIsGroupMember] = React.useState<string>('true');
@@ -102,7 +104,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
   const { accountDetailsResults, isLoading: isCustomerSearchLoading } =
     useSearchCustomer(
       introducerType?.customer && introducerType.customer?.length > 0
-        ? encryptData(debouncedSearchValue as string) as string
+        ? (encryptData(debouncedSearchValue as string) as string)
         : ''
     );
   const { mappedAccountOfficers, mappedBranches, mappedGroups } =
@@ -139,7 +141,14 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
       ...prev,
       introid: pickResult() || []
     }));
-  }, [isCustomerSearchLoading, isStaffSearchLoading]);
+  }, [
+    isCustomerSearchLoading,
+    isStaffSearchLoading,
+    accountDetailsResults,
+    introducerType.customer,
+    introducerType.staff,
+    users
+  ]);
 
   const { customerType, setCompleted } = React.useContext(
     CustomerCreationContext
@@ -271,6 +280,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
               }}
             />
           </Grid>
+
           <Grid item={isTablet} mobile={12}>
             <StyledSearchableDropdown>
               <ActionButtonWithPopper
@@ -295,6 +305,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
               />
             </StyledSearchableDropdown>
           </Grid>
+
           <Grid item={isTablet} mobile={12}>
             <StyledSearchableDropdown>
               <ActionButtonWithPopper
@@ -338,42 +349,49 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
               disabled
             />
           </Grid>
-          <Grid item={isTablet} mobile={12}>
-            <RadioButtons
-              options={[
-                { label: 'Yes', value: 'true' },
-                { label: 'No', value: 'false' }
-              ]}
-              title="Is Customer a Member of a Group?"
-              name="isGroupMember"
-              value={isGroupMember}
-              handleCheck={handleCheck}
-            />
-          </Grid>
-          {isGroupMember === 'true' && (
-            <>
+
+          {introducerType.customer && (
+            <div className='w-full mt-3'>
               <Grid item={isTablet} mobile={12}>
-                <FormSelectField
-                  name="branchCode"
-                  options={mappedBranches}
-                  label="Branch"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
+                <RadioButtons
+                  options={[
+                    { label: 'Yes', value: 'true' },
+                    { label: 'No', value: 'false' }
+                  ]}
+                  title="Is Customer a Member of a Group?"
+                  name="isGroupMember"
+                  value={isGroupMember}
+                  handleCheck={handleCheck}
                 />
               </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormSelectField
-                  name="groupcode"
-                  options={mappedGroups}
-                  label="Group"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
-              </Grid>
-            </>
+
+              {isGroupMember === 'true' && (
+                <>
+                  <Grid item={isTablet} mobile={12}>
+                    <FormSelectField
+                      name="branchCode"
+                      options={mappedBranches}
+                      label="Branch"
+                      customStyle={{
+                        width: setWidth(isMobile ? '250px' : '100%')
+                      }}
+                    />
+                  </Grid>
+                  <Grid item={isTablet} mobile={12}>
+                    <FormSelectField
+                      name="groupcode"
+                      options={mappedGroups}
+                      label="Group"
+                      customStyle={{
+                        width: setWidth(isMobile ? '250px' : '100%')
+                      }}
+                    />
+                  </Grid>
+                </>
+              )}
+            </div>
           )}
+
           <Grid item={isTablet} mobile={12}>
             <FormikRadioButton
               options={[

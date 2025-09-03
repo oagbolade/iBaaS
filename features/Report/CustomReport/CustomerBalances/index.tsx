@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
 import { COLUMN, keys } from './Column';
@@ -68,12 +68,12 @@ export const CustomerBalances = () => {
 
   React.useEffect(() => {
     if (readyDownload) {
-      setSearchParams({
+      setSearchParams({ 
         ...searchParams,
         getAll: true,
       });
     }
-  }, [readyDownload]);
+  }, [readyDownload, setSearchParams, searchParams]);
 
   React.useEffect(() => {
     if (

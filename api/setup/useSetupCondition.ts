@@ -31,7 +31,7 @@ async function createSetupCondition(
   try {
     const urlEndpoint = `/Configuration/ConditionPrecedence/${
       isUpdating
-        ? `UpdateConditionPrecedence?code=${decryptData(code as string)}`
+        ? `UpdateConditionPrecedence?code=${code}`
         : 'CreateConditionPrecedence'
     }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
@@ -103,7 +103,7 @@ async function getSetupConditionByCode(
   };
 
   try {
-    const urlEndpoint = `/Configuration/ConditionPrecedence/GetConditionPrecedence?code=${decryptData(code as string)}`;
+    const urlEndpoint = `/Configuration/ConditionPrecedence/GetConditionPrecedence?code=${code}`;
 
     const { data }: AxiosResponse<UseAllSetupConditionResponse> =
       await axiosInstance({

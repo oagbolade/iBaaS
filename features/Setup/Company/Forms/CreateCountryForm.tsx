@@ -92,7 +92,7 @@ export const CreateCountryForm = ({
                       customStyle={{
                         width: setWidth(isMobile ? '285px' : '100%')
                       }}
-                      name="countryCode"
+                      name="countrycode"
                       placeholder="+234"
                       label="Country Code"
                       required

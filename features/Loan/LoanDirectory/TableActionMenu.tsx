@@ -134,7 +134,16 @@ export const TableActionMenu = ({
                 return handleClose(null);
               }}
             >
-              <TableMenuButton buttonTitle="Disburse Loan" />
+              <Link
+                style={{
+                  pointerEvents: shouldDisable.view ? 'none' : 'auto'
+                }}
+                aria-disabled={shouldDisable.view}
+                tabIndex={shouldDisable.view ? -1 : undefined}
+                href={`/loan/loan-directory/disburse-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
+              >
+                <TableMenuButton buttonTitle="Disburse Loan" />
+              </Link>
             </MenuItem>
           )}
 

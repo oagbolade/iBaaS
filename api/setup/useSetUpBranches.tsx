@@ -295,8 +295,6 @@ async function getBranchByCode(
       });
 
     const { message, title, severity } = globalErrorHandler(data);
-    toast(message, title, severity, toastActions);
-
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);

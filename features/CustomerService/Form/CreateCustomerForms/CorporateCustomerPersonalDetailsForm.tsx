@@ -9,7 +9,6 @@ import { Introducer, SearchFilters } from './ReferrerDetailsForm';
 import {
   FormTextInput,
   FormSelectField,
-  FormikRadioButton,
   FormikDateTimePicker,
   FormSelectInput,
   CheckboxInput
@@ -45,13 +44,14 @@ import {
   CreateCorporateCustomerFormValues,
   CreateIndividualCustomerFormValues
 } from '@/schemas/schema-values/customer-service';
-import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
 import { useHandleCompletedFields } from '@/utils/hooks/useHandleCompletedFields';
 import { useCreateValidationKeysMapper } from '@/utils/hooks/useCreateValidationKeysMapper';
 import { mapCustomerSearch, mapStaffSearch } from '@/utils/mapCustomerSearch';
 import { formatDateOfBirth } from '@/utils/formatDateOfBirth';
 import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
+import { filterCustomerDropdownSearch } from '@/utils/filterDropdownSearch';
 
+// Define Props interface
 type Props = {
   titles?: ITitle[];
   sectors?: ISector[];
@@ -65,6 +65,9 @@ type Props = {
   branches?: IBranches[];
 };
 
+// Update SearchFilters to support both string and OptionsI[] for acctOfficer and introid
+
+// Ensure OptionsI interface is defined
 export const CorporateCustomerPersonalDetailsForm = ({
   titles,
   sectors,
@@ -123,7 +126,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
     staff: [],
     customer: [],
-    acctOfficer: [],
+    acctOfficer: mappedAccountOfficers.filter((item) => item.value) || [],
     introid: []
   });
   const debouncedSearchValue = useDebounce(searchValue.introid, 500);
@@ -132,9 +135,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >();
 
-  const { customerType, setCompleted } = React.useContext(
-    CustomerCreationContext
-  );
+  const { setCompleted } = React.useContext(CustomerCreationContext);
 
   const shouldRemoveCorporateDetails = false;
 
@@ -151,30 +152,35 @@ export const CorporateCustomerPersonalDetailsForm = ({
     value: string,
     name: 'acctOfficer' | 'introid'
   ) => {
-    if (selectInputRef.current) {
-      (selectInputRef.current as Record<string, string>)[name] = value;
-    }
+    if (!value) return; // Prevent setting empty values
 
-    setFieldValue(name, value);
+    // Remove the colon and everything after it
+    const cleanedValue = value.replace(':', ',');
+    if (selectInputRef.current) {
+      selectInputRef.current[name] = cleanedValue;
+    }
+    setFieldValue(name, cleanedValue);
 
     handleCompletedFields({ ...values, ...selectInputRef.current });
 
     setSelectedValue((prev) => ({
       ...prev,
-      [name]: value
+      [name]: cleanedValue
     }));
 
     if (name === 'introid') {
-      setIntroducerIdValue(value);
+      setIntroducerIdValue(cleanedValue);
     }
 
     if (name === 'acctOfficer') {
-      setAccountOfficerValue(value);
+      setAccountOfficerValue(cleanedValue);
     }
   };
 
-  const [dob, setDob] = React.useState(
-    isEditing ? dayjs(formatDateOfBirth(customerResultCodes?.dob)) : ''
+  const [dob, setDob] = React.useState<Dayjs | null>(
+    isEditing && customerResultCodes?.dob
+      ? dayjs(formatDateOfBirth(customerResultCodes.dob))
+      : null
   );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,8 +192,10 @@ export const CorporateCustomerPersonalDetailsForm = ({
     }));
 
     if (name === 'acctOfficer') {
-      const filteredItems = filterDropdownSearch(mappedAccountOfficers, value);
-
+      const filteredItems = filterCustomerDropdownSearch(
+        mappedAccountOfficers.filter((item) => item.value) || [],
+        value
+      );
       setFilteredValues((prev) => ({
         ...prev,
         [name]: filteredItems
@@ -197,7 +205,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
     if (value.trim().length === 0) {
       setFilteredValues({
         introid: [],
-        acctOfficer: mappedAccountOfficers
+        acctOfficer: mappedAccountOfficers.filter((item) => item.value) || []
       });
     }
   };
@@ -206,7 +214,6 @@ export const CorporateCustomerPersonalDetailsForm = ({
     const { value } = event.target;
     setIntroducerType({ [value]: value });
   };
-
   const handleCheck = (booleanValue: string, value: string) => {
     setIsGroupMember(value);
   };
@@ -222,19 +229,18 @@ export const CorporateCustomerPersonalDetailsForm = ({
         ? (encryptData(debouncedSearchValue as string) as string)
         : ''
     );
-
   React.useEffect(() => {
     setFilteredValues({
       staff: [],
       customer: [],
       introid: [],
-      acctOfficer: mappedAccountOfficers
+      acctOfficer: mappedAccountOfficers.filter((item) => item.value) || []
     });
   }, [mappedAccountOfficers]);
 
   React.useEffect(() => {
-    const mappedSearchResults = mapCustomerSearch(accountDetailsResults);
-    const mappedStaffSearchResults = mapStaffSearch(users);
+    const mappedSearchResults = mapCustomerSearch(accountDetailsResults || []);
+    const mappedStaffSearchResults = mapStaffSearch(users || []);
 
     const pickResult = () => {
       if (introducerType.customer && introducerType.customer?.length > 0) {
@@ -244,11 +250,13 @@ export const CorporateCustomerPersonalDetailsForm = ({
       if (introducerType.staff && introducerType.staff?.length > 0) {
         return mappedStaffSearchResults;
       }
+
+      return [];
     };
 
     setFilteredValues((prev) => ({
       ...prev,
-      introid: pickResult() || []
+      introid: pickResult()
     }));
   }, [
     isCustomerSearchLoading,
@@ -260,7 +268,6 @@ export const CorporateCustomerPersonalDetailsForm = ({
 
   return (
     <Box>
-      
       <Grid container spacing={2} paddingX={2} mt={3}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
@@ -294,8 +301,8 @@ export const CorporateCustomerPersonalDetailsForm = ({
                 disableFuture
                 label="Date of Registration"
                 name="dob"
-                value={dob}
-                handleDateChange={(newValue: Dayjs) => setDob(dayjs(newValue))}
+                value={dob?.toString()}
+                handleDateChange={(newValue: Dayjs | null) => setDob(newValue)}
                 required
               />
             </DemoContainer>
@@ -304,7 +311,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         <Grid item mobile={12} tablet={6}>
           <FormSelectField
             name="nationality"
-            options={mappedCountries}
+            options={mappedCountries || []}
             label="Country of Incorporation"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
@@ -318,7 +325,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         <Grid item mobile={12} tablet={6}>
           <FormSelectField
             name="companyStatecode"
-            options={mappedStates}
+            options={mappedStates || []}
             label="State of Incorporation"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
@@ -330,7 +337,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         <Grid item mobile={12} tablet={6}>
           <FormSelectField
             name="companyTowncode"
-            options={mappedTowns}
+            options={mappedTowns || []}
             label="Company Town"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
@@ -355,7 +362,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         <Grid item mobile={12} tablet={6}>
           <FormSelectField
             name="sectorcode"
-            options={mappedSectors}
+            options={mappedSectors || []}
             label="Company Sector"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
@@ -557,20 +564,19 @@ export const CorporateCustomerPersonalDetailsForm = ({
         <Grid item tablet={6} mobile={12}>
           <StyledSearchableDropdown>
             <ActionButtonWithPopper
-              
               handleSelectedValue={(value: string) =>
                 handleSelectedValue(value, 'acctOfficer')
               }
               label="Account Officer"
               name="acctOfficer"
               searchGroupVariant="BasicSearchGroup"
-              dropDownOptions={filteredValues.acctOfficer as OptionsI[]}
+              dropDownOptions={(filteredValues.acctOfficer as OptionsI[]) || []}
               customStyle={dropDownWithCorporateSearch}
               icon={<SearchIcon />}
               iconPosition="end"
-              buttonTitle={(selectedValue.acctOfficer as string) || 'Search'}
+              buttonTitle={selectedValue.acctOfficer.toString() || 'Search'}
               onChange={handleSearch}
-              searchValue={searchValue.acctOfficer as string}
+              searchValue={searchValue.acctOfficer.toString() || ''}
             />
           </StyledSearchableDropdown>
         </Grid>
@@ -581,13 +587,12 @@ export const CorporateCustomerPersonalDetailsForm = ({
           <FormSelectInput
             onChange={handleSelectChange}
             name="introType"
-            options={IntroducerType}
+            options={IntroducerType || []}
             label="Introducer Type"
-            value={introducerType.customer || introducerType.staff}
+            value={introducerType.customer || introducerType.staff || ''}
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
             }}
-            
           />
         </Grid>
 
@@ -597,22 +602,18 @@ export const CorporateCustomerPersonalDetailsForm = ({
               handleSelectedValue={(value: string) =>
                 handleSelectedValue(value, 'introid')
               }
-              
               label="Introducer"
               name="introid"
               searchGroupVariant="BasicSearchGroup"
-              dropDownOptions={filteredValues.introid as OptionsI[]}
+              dropDownOptions={(filteredValues.introid as OptionsI[]) || []}
               customStyle={dropDownWithCorporateSearch}
               icon={<SearchIcon />}
               iconPosition="end"
-              buttonTitle={(selectedValue.introid as string) || 'Search'}
+              buttonTitle={selectedValue.introid.toString() || 'Search'}
               onChange={handleSearch}
-              searchValue={searchValue.introid as string}
+              searchValue={searchValue.introid.toString() || ''}
               loading={isCustomerSearchLoading || isStaffSearchLoading}
-              disabled={
-                introducerType.customer?.length === 0 &&
-                introducerType.staff?.length === 0
-              }
+              disabled={!introducerType.customer && !introducerType.staff}
             />
           </StyledSearchableDropdown>
         </Grid>
@@ -622,7 +623,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         <Grid item tablet={6} mobile={12}>
           <FormSelectField
             name="branchCode"
-            options={mappedBranches}
+            options={mappedBranches || []}
             label="Branch"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
@@ -642,34 +643,34 @@ export const CorporateCustomerPersonalDetailsForm = ({
           </Box>
         </Grid>
       </Grid>
-
-      <Grid container spacing={2} paddingX={2}>
-        <Grid item tablet={6} mobile={12}>
-          <RadioButtons
-            options={[
-              { label: 'Yes', value: 'true' },
-              { label: 'No', value: 'false' }
-            ]}
-            title="Is Customer a Member of a Group?"
-            name="isGroupMember"
-            value={isGroupMember}
-            handleCheck={handleCheck}
-          />
-        </Grid>
-        {isGroupMember === 'true' && (
+      {introducerType.customer === 'customer' && (
+        <Grid container spacing={2} paddingX={2}>
           <Grid item tablet={6} mobile={12}>
-            <FormSelectField
-              name="groupcode"
-              options={mappedGroups}
-              label="Group"
-              customStyle={{
-                width: setWidth(isMobile ? '250px' : '100%')
-              }}
+            <RadioButtons
+              options={[
+                { label: 'Yes', value: 'true' },
+                { label: 'No', value: 'false' }
+              ]}
+              title="Is Customer a Member of a Group?"
+              name="isGroupMember"
+              value={isGroupMember}
+              handleCheck={handleCheck}
             />
           </Grid>
-        )}
-      </Grid>
-
+          {isGroupMember === 'true' && (
+            <Grid item tablet={6} mobile={12}>
+              <FormSelectField
+                name="groupcode"
+                options={mappedGroups || []}
+                label="Group"
+                customStyle={{
+                  width: setWidth(isMobile ? '250px' : '100%')
+                }}
+              />
+            </Grid>
+          )}
+        </Grid>
+      )}
     </Box>
   );
 };

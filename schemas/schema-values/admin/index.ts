@@ -1,6 +1,8 @@
 import { getStoredUser } from '@/utils/user-storage';
 
 import { getCurrentIsoDate } from '@/utils/getCurrentDate';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
+
 
 export interface CreateAccountOfficerFormValues {
   officercode: string;
@@ -242,7 +244,7 @@ export interface CreateGlAccountFormValues {
 
 export const createGlAccountInitialValues: CreateGlAccountFormValues = {
   bkBalance: 0,
-  authid: `${getStoredUser()?.companyCode}`, // TODO: This is athe approving officer's id. May need to leave this blank since we are not yet approving
+  authid: '', // TODO: This is athe approving officer's id. May need to leave this blank since we are not yet approving
   userid: `${getStoredUser()?.profiles.userid}`,
   glNumber: '',
   acctName: '',

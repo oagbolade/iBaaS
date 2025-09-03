@@ -14,6 +14,30 @@ export const setCancelValues: CancelLoanValues = {
   oExtinterest: 0
 };
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export interface disburseLoanvalues  {
+   accountNumber: string,
+   paymode: number;
+   payBank: string;
+   menuid: number;
+   comments: string;
+   authlistId: number;
+   userId: string;
+   authId: string;
+ 
+}
+
+export const setDisburseLoanValues: disburseLoanvalues = {
+   accountNumber: '',
+   paymode: 0,
+   payBank: '',
+   menuid: 31,
+   comments: '',
+   authlistId: 0,
+   userId: '',
+   authId: ''
+};
+
 export interface ISetTerminateLoanValues {
   accountNumber: string;
   loanAcct: string;

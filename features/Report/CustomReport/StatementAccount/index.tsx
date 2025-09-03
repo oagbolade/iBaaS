@@ -163,7 +163,7 @@ export const StatementAccount = () => {
                           justifyContent="center"
                         >
                           <SubTitle title="Account Name" />
-                          <Details
+                          <Details className=' overflow-hidden text-ellipsis block w-64'
                             title={accDetailsResults.accounttitle || 'N/A'}
                           />
                         </Grid>
@@ -316,7 +316,7 @@ export const StatementAccount = () => {
                     {statement.trandate}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {statement.narration}
+                    <span className=' overflow-hidden text-ellipsis block w-64'>{statement.narration}</span>
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
                     {statement.refNo}

@@ -51,6 +51,8 @@ type Props = {
   setProductCode: React.Dispatch<React.SetStateAction<string>>;
   data?: IProdType[] | IProdCodeType[] | Array<any>;
   dataType?: IProdCodeType[] | IProdType[] | Array<any>;
+  setSelectedCurrency: React.Dispatch<React.SetStateAction<string>>;
+  selectedCurrency: string;
 };
 
 export const PersonalCasaDetailsForm = ({
@@ -67,14 +69,16 @@ export const PersonalCasaDetailsForm = ({
   products,
   setProductCode,
   data,
-  dataType
+  dataType,
+  setSelectedCurrency,
+  selectedCurrency
 }: Props) => {
   const { customerType, setCustomerType } = React.useContext(
     CustomerCreationContext
   );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
   const { setFieldValue, values } = useFormikContext<any>();
-  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  // const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const isEditing = useGetParams('isEditing') || null;
 
   const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
@@ -261,7 +265,7 @@ export const PersonalCasaDetailsForm = ({
         <FormTextInput
           name="maxamt"
           placeholder="Enter NDIC Limit"
-          label="Max NDIC Limit"
+          label="Max AML Limit"
           customStyle={{
             width: setWidth(isMobile ? '250px' : '70%')
           }}

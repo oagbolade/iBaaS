@@ -84,25 +84,32 @@ const ResetPassword = ({
           validate={validate}
         >
           <Form>
-            <Box sx={{ width: '100%', marginTop: '30px' }}>
-              <Grid container spacing={1}>
+            <Box
+              sx={{
+                width: '100%',
+                marginTop: '30px',
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              <Grid container spacing={2}>
                 <Grid item mobile={12}>
                   <FormTextInput
                     type="password"
                     customStyle={{
-                      width: '100%',
+                      width: '500px',
                       fontSize: '12px'
                     }}
                     name="newPassword"
                     placeholder="Enter password"
-                    label="Create New Password"
+                    label=" New Password"
                   />{' '}
                 </Grid>
                 <Grid item mobile={12}>
                   <FormTextInput
                     type="password"
                     customStyle={{
-                      width: '100%',
+                      width: '500px',
                       fontSize: '12px'
                     }}
                     name="confirmPassword"

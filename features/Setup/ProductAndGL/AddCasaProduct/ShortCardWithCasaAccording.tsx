@@ -155,6 +155,10 @@ type Props = {
     | IProdCodeType[]
     | IGLWithBranchCode[]
     | Array<any>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  setSelectedCurrency?: React.Dispatch<React.SetStateAction<string>>;
+  // eslint-disable-next-line react/no-unused-prop-types
+  selectedCurrency?: string;
 };
 
 const FormSelector = ({
@@ -184,7 +188,9 @@ const FormSelector = ({
   setProductCode,
   data,
   dataType,
-  dataWithCode
+  dataWithCode,
+  setSelectedCurrency,
+  selectedCurrency
 }: Props) => {
   let selectedForm;
   switch (cardKey) {
@@ -197,6 +203,12 @@ const FormSelector = ({
           countries={countries}
           states={states}
           towns={towns}
+          selectedCurrency={selectedCurrency as string}
+          setSelectedCurrency={
+            setSelectedCurrency as unknown as React.Dispatch<
+              React.SetStateAction<string>
+            >
+          }
           setProductCode={
             setProductCode as unknown as React.Dispatch<
               React.SetStateAction<string>
@@ -300,6 +312,7 @@ export const ShortCardCasaWithAccordion = ({
   const { exception: exceptions } = useGetAllException();
   const { charges: charge, isLoading } = useGetChargeConcession();
   const { data: glwithCode } = useGetAllGLWithBranchCode();
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const { products: productClassBY } = useGetLoanProductCode(productClassBYID);
   if (setProductCode) {
     setProductCode(productCodeType);
@@ -383,6 +396,8 @@ export const ShortCardCasaWithAccordion = ({
                 countries={countries}
                 states={states}
                 towns={towns}
+                selectedCurrency={selectedCurrency}
+                setSelectedCurrency={setSelectedCurrency}
                 relationships={relationships}
                 idCards={idCards}
                 officers={officers}

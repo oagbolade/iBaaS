@@ -92,7 +92,7 @@ export const resetPasswordModalHeading2 = {
 
 export const resetPasswordButton = {
   height: '40px',
-  width: '100%',
+  width: '500px',
   fontSize: '16px',
   fontStyle: 'normal',
   borderRadius: '8px',

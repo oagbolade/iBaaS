@@ -6,7 +6,15 @@ export const filterDropdownSearch = (data: OptionsI[], searchTerm: string) => {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 };
-
+export const filterCustomerDropdownSearch = (
+  data: OptionsI[],
+  searchTerm: string
+) => {
+  return data.filter(
+    (item) =>
+      item.value.toLowerCase().includes(searchTerm.toLowerCase()) ?? false
+  );
+};
 export const filterGeneralLedgerDropdownSearch = (
   data: OptionsI[],
   searchTerm: string | number

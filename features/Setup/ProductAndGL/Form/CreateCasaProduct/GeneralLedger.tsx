@@ -66,7 +66,7 @@ type Props = {
     | Array<any>;
 };
 type SearchFilters = {
-  accountNumber: string | OptionsI[];
+  accountNumber?: string | OptionsI[];
   [key: string]: any;
 };
 export const GeneralCasaLedgerForm = ({
@@ -106,7 +106,6 @@ export const GeneralCasaLedgerForm = ({
   const { setFieldValue, values } = useFormikContext<any>();
 
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
-    accountNumber: '',
     liabilityBal: '',
     suspendedAsset: '',
     assetBalance: '',
@@ -118,11 +117,11 @@ export const GeneralCasaLedgerForm = ({
     interestPayable: '',
     interbr: '',
     taxabsorbed1: '',
-    acctClosegl: ''
+    acctClosegl: '',
+    unearnexp: ''
   });
 
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
-    accountNumber: [],
     liabilityBal: [],
     suspendedAsset: [],
     assetBalance: [],
@@ -134,10 +133,10 @@ export const GeneralCasaLedgerForm = ({
     interestPayable: [],
     interbr: [],
     taxabsorbed1: [],
-    acctClosegl: []
+    acctClosegl: [],
+    unearnexp: []
   });
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
-    accountNumber: '',
     liabilityBal: '',
     suspendedAsset: '',
     assetBalance: '',
@@ -149,7 +148,8 @@ export const GeneralCasaLedgerForm = ({
     interestPayable: '',
     interbr: '',
     taxabsorbed1: '',
-    acctClosegl: ''
+    acctClosegl: '',
+    unearnexp: ''
   });
 
   const accountId = String(
@@ -182,7 +182,6 @@ export const GeneralCasaLedgerForm = ({
 
     if (value.trim().length === 0) {
       setFilteredValues({
-        accountNumber: mappedWithBranchCode,
         liabilityBal: mappedWithBranchCode,
         suspendedAsset: mappedWithBranchCode,
         assetBalance: mappedWithBranchCode,
@@ -194,7 +193,8 @@ export const GeneralCasaLedgerForm = ({
         interestPayable: mappedWithBranchCode,
         interbr: mappedWithBranchCode,
         taxabsorbed1: mappedWithBranchCode,
-        acctClosegl: mappedWithBranchCode
+        acctClosegl: mappedWithBranchCode,
+        unearnexp: mappedWithBranchCode
       });
     }
   };
@@ -205,42 +205,20 @@ export const GeneralCasaLedgerForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'accountNumber')
+              handleSelectedValue(value, 'unearnexp')
             }
-            label="GL Account"
-            name="accountNumber"
+            label="Unearned Interest"
+            name="unearnexp"
             searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.accountNumber as OptionsI[]}
+            dropDownOptions={filteredValues.unearnexp as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.accountNumber as string) || 'Search Account Number'
+              (selectedValue.unearnexp as string) || 'Search Principal Balance'
             }
             onChange={handleSearch}
-            searchValue={searchValue.accountNumber as string}
-          />
-        </StyledSearchableDropdown>
-      </Grid>
-      <Grid item={isTablet} mobile={12}>
-        <StyledSearchableDropdown>
-          <ActionButtonWithPopper
-            handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'liabilityBal')
-            }
-            label="Principal Balance"
-            name="liabilityBal"
-            searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.liabilityBal as OptionsI[]}
-            customStyle={{ ...dropDownWithSearch, width: '960px' }}
-            icon={<SearchIcon />}
-            iconPosition="end"
-            buttonTitle={
-              (selectedValue.liabilityBal as string) ||
-              'Search Principal Balance'
-            }
-            onChange={handleSearch}
-            searchValue={searchValue.liabilityBal as string}
+            searchValue={searchValue.unearnexp as string}
           />
         </StyledSearchableDropdown>
       </Grid>

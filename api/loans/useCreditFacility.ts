@@ -20,7 +20,9 @@ import {
   RestructureLoanValues,
   SetPartialPayOffValues,
   ILoanSources,
-  LoanUnderwriteInitialValues
+  LoanUnderwriteInitialValues,
+  setDisburseLoanValues,
+  disburseLoanvalues
 } from '@/schemas/schema-values/loan';
 import { handleRedirect } from '@/utils';
 import {
@@ -249,6 +251,7 @@ export function useCloseLoan() {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CancelLoanValues) => closeLoan(toastActions, body),
     onSuccess: () => {
+
       queryClient.invalidateQueries({
         queryKey: [queryKeys.getAllLoans]
       });
@@ -396,6 +399,55 @@ export function useRestructureLoan() {
   return { mutate, isPending, isError, error };
 }
 
+export async function disburseLoan(
+  toastActions: IToastActions,
+  body: disburseLoanvalues
+): Promise<void> {
+  try {
+
+    const urlEndpoint = '/CreditManagement/LoanDisbursement';
+    const { data }: AxiosResponse<GetLoanAccountDetailsResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'POST',
+        data: { ...body },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+    if (data.responseCode !== '00') {
+      throw new Error(message);
+    }
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+    throw errorResponse;
+  }
+}
+
+export function useDisburseLoan() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const toastActions = useContext(ToastMessageContext);
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: (body: disburseLoanvalues) => disburseLoan(toastActions, body),
+    onSuccess: () => {
+      
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.getAllLoans]
+      });
+      handleRedirect(router, '/loan/loan-directory/');
+    },
+    onError: () => {
+      // Do nothing on error, preventing handleRedirect from running
+    }
+  });
+
+  return { mutate, isPending, isError, error };
+}
 async function getAllLoansProduct(
   toastActions: IToastActions
 ): Promise<AllLoanProductsResponse> {

@@ -7,7 +7,8 @@ import {
   AccordionDetails as MuiAccordionDetails,
   Box,
   Typography,
-  styled
+  styled,
+  TypographyProps
 } from '@mui/material';
 import colors from '@/assets/colors';
 
@@ -59,7 +60,7 @@ export const SubTitle = ({ title }: { title?: string }) => {
   );
 };
 
-export const Details = ({ title }: { title?: string }) => {
+export const Details = ({ title, ...rest }: { title?: string } & TypographyProps) => {
   return (
     <Typography
       sx={{
@@ -67,8 +68,9 @@ export const Details = ({ title }: { title?: string }) => {
         fontSize: { mobile: '12px', desktop: '16px' },
         fontWeight: 600,
         lineHeight: '24px',
-        marginBottom: '24px'
+        marginBottom: '24px',
       }}
+      {...rest}
     >
       {title}
     </Typography>

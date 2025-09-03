@@ -241,7 +241,16 @@ export const CreateGroupForm = ({
         }}
       >
         <Formik
-          initialValues={group || createGroupInitialValues}
+          initialValues={
+            isEditing
+              ? {
+                  ...group,
+                  secretary: group?.secretary,
+                  acctOfficer: group?.acctOfficer,
+                  GroupHead: group?.groupHead
+                }
+              : createGroupInitialValues
+          }
           onSubmit={(values) => onSubmit(values)}
           validationSchema={createGroupSchema}
         >

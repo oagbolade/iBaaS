@@ -757,6 +757,9 @@ export interface ILoanAccount {
   healthInsuranceAcct: string;
   healthInsuranceAmt: number;
   userid: string;
+  ProdException: [];
+  ProdCharges: [];
+  ProdDocuments: [];
 }
 export interface ICompany {
   bankCode: string;

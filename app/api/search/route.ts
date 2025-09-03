@@ -107,4 +107,6 @@ export interface ISearchParams {
   searchDate?: string | null;
   accountType?: string | null;
   tellerId?: string | null;
+  branchcode?: string | null;
+  productcode?: string | null;
 }

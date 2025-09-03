@@ -34,7 +34,7 @@ export function usePersistedSearch<T>(
         setPageState(parseInt(storedPage || '1', 10));
       }
     }
-  }, []);
+  }, [keyActive, keyPage, keyParams]);
 
   const setSearchParams = (params: T | null) => {
     setSearchParamsState(params);

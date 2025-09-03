@@ -15,6 +15,7 @@ import colors from '@/assets/colors';
 export interface OptionsI {
   name: string;
   value: string;
+  staffID?: string;
 }
 
 type Props = {
@@ -42,10 +43,9 @@ export const FormSelectField = ({
   onChange,
   value = ''
 }: Props) => {
-  const safeValue =
-    !options?.some((option) => option?.value === value)
-      ? ''
-      : value;
+  const safeValue = !options?.some((option) => option?.value === value)
+    ? ''
+    : value;
 
   return (
     <Box mb={{ mobile: 0.5, tablet: 1 }} sx={{ marginBottom: '15px' }}>

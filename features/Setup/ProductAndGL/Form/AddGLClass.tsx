@@ -19,6 +19,7 @@ import { createGlClassSchema } from '@/schemas/setup';
 import { INodeType } from '@/api/ResponseTypes/admin';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { decryptData } from '@/utils/decryptData';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -42,6 +43,8 @@ export const CreateGLClass = ({
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('isEditing');
+  const { sysmodel } = useGetSystemDate();
+
   const { mutate } = useCreateGlClass(
     Boolean(isEditing),
     decryptData(classId ?? '') || null
@@ -55,7 +58,8 @@ export const CreateGLClass = ({
 
     await mutate({
       ...values,
-      gL_ClassCode: combinedCode
+      gL_ClassCode: combinedCode,
+      authid: sysmodel?.approvingOfficer
     });
   };
 
@@ -85,7 +89,18 @@ export const CreateGLClass = ({
         }}
       >
         <Formik
-          initialValues={gl || createGlClassInitialValue}
+          initialValues={
+            isEditing && gl
+              ? {
+                  ...gl,
+                  nodeCode: gl.nodeCode || '',
+                  gL_ClassCode: gl.gL_ClassCode
+                    ? gl.gL_ClassCode.slice(gl.nodeCode?.length || 0)
+                    : '',
+                  gL_ClassName: gl.gL_ClassName || ''
+                }
+              : createGlClassInitialValue
+          }
           onSubmit={(values, actions) => onSubmit(values, actions)}
           validationSchema={createGlClassSchema}
         >

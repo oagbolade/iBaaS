@@ -37,7 +37,6 @@ import { StyledSearchableDropdown } from '@/features/CustomerService/Form/Create
 import { mapCustomerSearchLoan } from '@/utils/mapCustomerSearch';
 import { queryKeys } from '@/react-query/constants';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
-import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import { getStoredUser } from '@/utils/user-storage';
 import { toast } from '@/utils/toast';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';

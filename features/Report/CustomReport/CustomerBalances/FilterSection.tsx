@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
@@ -9,7 +9,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
@@ -35,13 +35,13 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
-    bankproducts,
+    bankproducts
   });
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     pCode: searchParams?.pCode ?? '',
-    searchWith: searchParams?.searchWith ?? '',
+    searchWith: searchParams?.searchWith ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -53,7 +53,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
           ? values.searchWith
           : null,
       pCode: values.pCode?.toString().trim().length > 0 ? values.pCode : null,
-      pageSize: '10',
+      pageSize: '10'
     };
     onSearch?.(params);
   };
@@ -70,7 +70,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '20px',
-              paddingX: '20px',
+              paddingX: '20px'
             }}
           >
             <Box>
@@ -79,7 +79,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -96,7 +96,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="pCode"
                     options={mappedBankproducts}
@@ -114,7 +114,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
@@ -136,7 +136,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

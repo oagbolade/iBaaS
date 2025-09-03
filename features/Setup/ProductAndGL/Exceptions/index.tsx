@@ -28,7 +28,7 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export const ExceptionsTable = () => {
@@ -40,23 +40,23 @@ export const ExceptionsTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('exceptions');
 
   const {
     totalPages,
     totalElements,
     data: exceptionlData,
-    isLoading,
+    isLoading
   } = useFilterExceptionSearch({ ...searchParams, page });
   const handleSearch = async (params: ISearchParams) => {
     setSearchParams({
-      ...params,
+      ...params
     });
     setSearchActive(true);
   };
   const ActionMenu = ({
-    exceptionCode,
+    exceptionCode
   }: {
     exceptionCode: string;
   }): React.ReactElement => {
@@ -86,8 +86,9 @@ export const ExceptionsTable = () => {
               hideFilterSection: true,
               mainTitle: 'Exceptions',
               secondaryTitle:
-                'See a directory of all Exceptions in this system.',
+                'See a directory of all Exceptions in this system.'
             }}
+            ActionMenuProps={ActionMenu}
             totalPages={totalPages}
             setPage={setPage}
             totalElements={totalElements}

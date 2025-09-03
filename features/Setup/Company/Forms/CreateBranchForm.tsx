@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form, useFormikContext } from 'formik';
 import { useSearchParams } from 'next/navigation';
-import { number } from 'yup';
+import * as Yup from 'yup';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
@@ -13,14 +13,10 @@ import {
   useCreateBranch,
   useGetBranchByCode
 } from '@/api/setup/useSetUpBranches';
-import {
-  createBranchInitialValues,
-  CreateBranchTestCaseFormValues
-} from '@/schemas/schema-values/setup';
+import { createBranchInitialValues } from '@/schemas/schema-values/setup';
 import { createBranchSchema } from '@/schemas/setup';
 import { ICountries, IStates } from '@/api/ResponseTypes/customer-service';
 import { encryptData } from '@/utils/encryptData';
-import { decryptData } from '@/utils/decryptData';
 import {
   useGetStateByCountryCode,
   useGetTownByStateCode
@@ -28,7 +24,7 @@ import {
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { isEmptyObject } from '@/utils/isEmptyObject';
 
-// Define IBranch interface to type branchCode
+// Define IBranch interface
 interface IBranch {
   branchName?: string;
   address?: string;
@@ -39,11 +35,12 @@ interface IBranch {
   country?: string;
   state?: string;
   city?: string;
-  residentCountry?: string;
-  residentState?: string;
-  residentTowncode?: string;
-  nationality?: string;
-  statecode?: string;
+}
+
+interface IResidentDetails {
+  country: string;
+  state: string;
+  city: string;
 }
 
 type Props = {
@@ -55,16 +52,13 @@ type Props = {
   towns: ICity[] | Array<any>;
   countries: ICountries[] | Array<any>;
   setIsSubmitting: (submit: boolean) => void;
-  unitTestInitialValues?: CreateBranchTestCaseFormValues;
+  unitTestInitialValues?: any;
 };
 
-interface IResidentDetails {
-  nationality: string;
-  statecode: string;
-  residentTown: string;
-}
+// Schema for validation
+// Initial values
 
-// Component to handle dynamic disabling and options for country, state, and city
+// DynamicSelectFields Component
 const DynamicSelectFields: React.FC<{
   mappedCountries: OptionsI[];
   mappedResidentStates: OptionsI[];
@@ -86,42 +80,31 @@ const DynamicSelectFields: React.FC<{
     country: string;
     state: string;
     city: string;
-    nationality: string;
-    statecode: string;
-    residentTown: string;
   }>();
 
   const [isStateDisabled, setIsStateDisabled] = useState(true);
   const [isCityDisabled, setIsCityDisabled] = useState(true);
 
   useEffect(() => {
-    // Enable state field when a country is selected and states are available
-    setIsStateDisabled(
-      !values.nationality || mappedResidentStates.length === 0
-    );
+    setIsStateDisabled(!values.country || mappedResidentStates.length === 0);
+    setIsCityDisabled(!values.state || mappedResidentTowns.length === 0);
 
-    // Enable city field when a state is selected and towns are available
-    setIsCityDisabled(!values.statecode || mappedResidentTowns.length === 0);
-
-    // Reset state and city when country changes
-    if (!values.nationality) {
-      setFieldValue('statecode', '');
-      setFieldValue('residentTown', '');
+    if (!values.country) {
+      setFieldValue('state', '');
+      setFieldValue('city', '');
     }
 
-    // Reset city when state changes
-    if (!values.statecode) {
-      setFieldValue('residentTown', '');
+    if (!values.state) {
+      setFieldValue('city', '');
     }
   }, [
-    values.nationality,
-    values.statecode,
+    values.country,
+    values.state,
     mappedResidentStates,
     mappedResidentTowns,
     setFieldValue
   ]);
 
-  // Convert setWidth output to string, with fallback
   const getWidth = (mobileWidth: string, defaultWidth: string) => {
     const width = setWidth(isMobile ? mobileWidth : defaultWidth);
     return width !== undefined ? String(width) : defaultWidth;
@@ -135,20 +118,20 @@ const DynamicSelectFields: React.FC<{
             width: getWidth('285px', '100%'),
             fontSize: '14px'
           }}
-          name="nationality"
+          name="country"
           options={mappedCountries}
           label="Country"
           onChange={(e) => {
-            const selectedValues = e.target.value;
+            const selectedValue = e.target.value;
             setResidentDetails((prev) => ({
               ...prev,
-              nationality: selectedValues,
-              statecode: '',
-              residentTown: ''
+              country: selectedValue,
+              state: '',
+              city: ''
             }));
-            setFieldValue('nationality', selectedValues);
-            setFieldValue('statecode', '');
-            setFieldValue('residentTown', '');
+            setFieldValue('country', selectedValue);
+            setFieldValue('state', '');
+            setFieldValue('city', '');
           }}
           required
         />
@@ -159,19 +142,19 @@ const DynamicSelectFields: React.FC<{
             width: getWidth('285px', '100%'),
             fontSize: '14px'
           }}
-          name="statecode"
+          name="state"
           options={mappedResidentStates}
           label="State"
           disabled={isStateDisabled}
           onChange={(e) => {
-            const selectedValues = e.target.value;
+            const selectedValue = e.target.value;
             setResidentDetails((prev) => ({
               ...prev,
-              statecode: selectedValues,
-              residentTown: ''
+              state: selectedValue,
+              city: ''
             }));
-            setFieldValue('statecode', selectedValues);
-            setFieldValue('residentTown', '');
+            setFieldValue('state', selectedValue);
+            setFieldValue('city', '');
           }}
           required
         />
@@ -182,24 +165,26 @@ const DynamicSelectFields: React.FC<{
             width: getWidth('285px', '100%'),
             fontSize: '14px'
           }}
-          name="residentTown"
+          name="city"
           options={mappedResidentTowns}
           label="City"
           disabled={isCityDisabled}
           onChange={(e) => {
-            const selectedValues = e.target.value;
+            const selectedValue = e.target.value;
             setResidentDetails((prev) => ({
               ...prev,
-              residentTown: selectedValues
+              city: selectedValue
             }));
-            setFieldValue('residentTown', selectedValues);
+            setFieldValue('city', selectedValue);
           }}
+          required
         />
       </Grid>
     </>
   );
 };
 
+// CreateBranchForm Component
 export const CreateBranchForm = ({
   branchId,
   isSubmitting,
@@ -223,19 +208,18 @@ export const CreateBranchForm = ({
     []
   );
   const [residentDetails, setResidentDetails] = useState<IResidentDetails>({
-    nationality: branchCode?.nationality || '',
-    statecode: branchCode?.statecode || '',
-    residentTown: branchCode?.residentTowncode || ''
+    country: branchCode?.country || '',
+    state: branchCode?.state || '',
+    city: branchCode?.city || ''
   });
   const { states: allResidentNationStates, isLoading: isLoadingStates } =
     useGetStateByCountryCode(
-      encryptData(residentDetails.nationality) as string,
+      encryptData(residentDetails.country) as string,
       residentFormType
     );
-
   const { towns: allResidentStateTowns, isLoading: isLoadingTowns } =
     useGetTownByStateCode(
-      encryptData(residentDetails.statecode) as string,
+      encryptData(residentDetails.state) as string,
       formType
     );
 
@@ -263,9 +247,13 @@ export const CreateBranchForm = ({
   const [showMainBranch, setShowMainBranch] = useState<number | null>(null);
 
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
-    await mutate({
-      ...values
-    });
+    const payload = {
+      ...values,
+      country: values.country,
+      state: values.state,
+      city: values.city
+    };
+    await mutate(payload);
   };
 
   useEffect(() => {
@@ -304,34 +292,33 @@ export const CreateBranchForm = ({
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: (field: string, value: any) => void
   ) => {
-    const selectedBranchType = Number(e.target.value); // Convert to number
+    const selectedBranchType = Number(e.target.value);
     setShowMainBranch(selectedBranchType);
     if (selectedBranchType === 1) {
-      setFieldValue('mBranchCode', ''); // Clear Main Branch value
+      setFieldValue('mBranchCode', '');
     }
   };
+
   useEffect(() => {
     const submit = document.getElementById('submitButton');
-
     if (isSubmitting) {
       submit?.click();
     }
-
     return () => {
       setIsSubmitting(false);
     };
   }, [isSubmitting]);
 
   useEffect(() => {
-    // Update residentDetails when branchCode changes (edit mode)
     if (branchCode) {
       setResidentDetails({
-        nationality: branchCode.nationality || '',
-        statecode: branchCode.statecode || '',
-        residentTown: branchCode.residentTowncode || ''
+        country: branchCode.country || '',
+        state: branchCode.state || '',
+        city: branchCode.city || ''
       });
     }
   }, [branchCode]);
+
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
   }
@@ -349,7 +336,14 @@ export const CreateBranchForm = ({
       >
         <Formik
           initialValues={
-            unitTestInitialValues || branchCode || createBranchInitialValues
+            unitTestInitialValues || isEditing
+              ? {
+                  ...branchCode,
+                  country: branchCode?.country,
+                  state: branchCode?.state,
+                  city: branchCode?.city
+                }
+              : createBranchInitialValues
           }
           onSubmit={(values, actions) => onSubmit(values, actions)}
           validationSchema={createBranchSchema}
@@ -446,7 +440,7 @@ export const CreateBranchForm = ({
                   </Grid>
                   <DynamicSelectFields
                     mappedCountries={mappedCountries}
-                    mappedResidentStates={mappedState}
+                    mappedResidentStates={mappedResidentStates}
                     mappedResidentTowns={mappedResidentTowns}
                     isMobile={isMobile}
                     setWidth={setWidth}

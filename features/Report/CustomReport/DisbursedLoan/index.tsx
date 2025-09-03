@@ -37,28 +37,28 @@ export const DisbursedLoan = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<LoanOverdueParams>('disbursed-loan');
 
   const {
     disbursedLoans = [],
     totalRecords,
-    isLoading,
+    isLoading
   } = useGetDisbursedLoanReport({
     ...searchParams,
     pageSize: 10,
     pageNumber: page,
-    getAll: readyDownload,
+    getAll: readyDownload
   });
 
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
         ...searchParams,
-        getAll: true,
+        getAll: true
       });
     }
-  }, [readyDownload]);
+  }, [readyDownload, setSearchParams, searchParams]);
 
   React.useEffect(() => {
     if (disbursedLoans.length > 0 && !isLoading && readyDownload) {
@@ -76,7 +76,7 @@ export const DisbursedLoan = () => {
         'Loan Stage': item?.loanStageCycle || '',
         Branch: item?.branch || '',
         'Product Code': item?.productCode || '',
-        'Risk rating': item?.riskRating || '',
+        'Risk rating': item?.riskRating || ''
       }));
 
       // Ensure no blank row or misplaced headers
@@ -89,8 +89,9 @@ export const DisbursedLoan = () => {
     setReadyDownload(false);
     setSearchParams({
       ...params,
+      
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
   };
@@ -135,7 +136,7 @@ export const DisbursedLoan = () => {
               mainTitle: 'Disbursed Loan Report',
               secondaryTitle:
                 'See a directory of all Disbursed Loan Report in this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
             ActionMenuProps={DisbursedLoanActions}
           >
@@ -164,7 +165,7 @@ export const DisbursedLoan = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                },
+                }
               )
             ) : (
               <StyledTableRow>

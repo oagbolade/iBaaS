@@ -42,10 +42,7 @@ export const createBranchSchema = Yup.object({
   email: Yup.string()
     .email('Invalid email address')
     .required('Email is required'),
-  country: Yup.string().required('Country is Required'),
-  state: Yup.string().required('State is Required'),
-  branchType: Yup.string().required('Branch Type Required'),
-  city: Yup.string().required('City is Required')
+  branchType: Yup.string().required('Branch Type Required')
 });
 
 export const createCountrySchema = Yup.object({
@@ -406,7 +403,6 @@ export const createCommercialBankSchema = Yup.object({
 });
 
 export const createClearingBankSchema = Yup.object({
-  bankCode: Yup.string().required('Bank Code is Required'),
   chequeinClear: Yup.string()
     .matches(stringRegex, 'Invalid Cheque clear')
     .required('Cheque clear is Required'),
@@ -428,8 +424,8 @@ export const createGlClassSchema = Yup.object({
   gL_ClassCode: Yup.string()
     .matches(numericRegex, 'Invalid Gl Class code')
     .required('GL Class Code is Required')
-    .min(3, 'Minimum of 3 number')
-    .max(3, 'maximum of 3 number'),
+    .min(3, 'Minimum of 3 numbers')
+    .max(3, 'Maximum of 3 numbers'),
   nodeCode: Yup.string()
     .matches(numericRegex, 'Invalid  Node code')
     .required('Node Code is Required')

@@ -26,7 +26,7 @@ export const actionButtons: any = [
         customStyle={{ ...submitButton }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export const SetupConditionTable = () => {
@@ -36,14 +36,14 @@ export const SetupConditionTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('setup-condition');
 
   const {
     totalPages,
     totalElements,
     data: setupConditionData,
-    isLoading,
+    isLoading
   } = useFilterSetupConditionSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
@@ -70,7 +70,6 @@ export const SetupConditionTable = () => {
           <MuiTableContainer
             columns={COLUMNS}
             data={setupConditionData}
-            showSearch
             ActionMenuProps={ActionMenu}
             totalPages={totalPages}
             setPage={setPage}
@@ -93,7 +92,7 @@ export const SetupConditionTable = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                },
+                }
               )
             ) : (
               <StyledTableRow>

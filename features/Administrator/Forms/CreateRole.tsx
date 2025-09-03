@@ -25,6 +25,7 @@ import { encryptData } from '@/utils/encryptData';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { IPermissionValues } from '@/constants/types';
 import { role as roleSchema } from '@/schemas/admin';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type Props = {
   permissionValues: IPermissionValues;
@@ -61,6 +62,7 @@ export const CreateRole = ({
   );
   const { role, isLoading } = useGetRoleByID(encryptData(roleid));
   const { roles, isLoading: areRolesLoading } = useGetRoles();
+  const { sysmodel } = useGetSystemDate();
 
   const onSubmit = async (values: any) => {
     const canauth = permissionValues?.canauth ? 1 : 0;
@@ -95,7 +97,7 @@ export const CreateRole = ({
       canauth,
       isoperation,
       userid: getStoredUser()?.profiles.userid,
-      authid: getStoredUser()?.profiles.userid,
+      authid: sysmodel?.approvingOfficer,
       rolemenu: dataCaptureList,
       authmenu: authPriviledgeList
     });

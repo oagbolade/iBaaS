@@ -1,10 +1,10 @@
 /* eslint-disable no-constant-condition */
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Stack, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import {
   FormTextInput,
@@ -17,6 +17,7 @@ import { setOverdraftInitialValues } from '@/schemas/schema-values/loan/';
 import {
   useCurrentBreakpoint,
   frequencyOptions,
+  frequencyTermsDays,
   fetchFrequencyOptions
 } from '@/utils';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -25,6 +26,7 @@ import colors from '@/assets/colors';
 import { useSetOverdraft } from '@/api/loans/useCreditFacility';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { getStoredUser } from '@/utils/user-storage';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type Props = {
   isSubmitting: boolean;
@@ -61,21 +63,40 @@ export const SetOverDraft = ({
   const { setDirection } = useSetDirection();
   const searchParams = useSearchParams();
   const actionType = searchParams.get('actionType') ?? '';
-
   const detail = searchParams.get('odDetail') || '{}';
   const odAccDetails = JSON.parse(detail);
-
-  const {
-    branchCode: branch,
-    tenor: term,
-    facilityType,
-    frequency
-  } = odAccDetails;
+  const { sysmodel } = useGetSystemDate();
 
   const { mappedBranches } = useMapSelectOptions({
     branches: branches ?? []
   });
   const { mutate } = useSetOverdraft(actionType);
+
+  const [effectiveDate, setEffectiveDate] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
+  const [expiryDate, setExpiryDate] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
+  const [termFreq, setTermFrequency] = useState<string>('');
+  const [overdraftTerms, setOverdraftTerms] = useState<string>('');
+  const [calculatedDays, setCalculatedDays] = useState<number>(0);
+  
+  const calNumberOfDays = useCallback(() => {
+    const selectedTermFrequency = frequencyTermsDays.find(
+      (term) => term.label === termFreq
+    );
+    const calcLoanDays =
+      Number(overdraftTerms) * Number(selectedTermFrequency?.value);
+    setCalculatedDays(calcLoanDays);
+  }, [termFreq, overdraftTerms]);
+  
+  const handleDateChange = useCallback(() => {
+    if (effectiveDate) {
+      const matDate = dayjs(effectiveDate).add(calculatedDays, 'day');
+      setExpiryDate(matDate);
+    }
+  }, [effectiveDate, calculatedDays]);
 
   useEffect(() => {
     const submit = document.getElementById('submitButton');
@@ -86,6 +107,13 @@ export const SetOverDraft = ({
       setIsSubmitting?.(false);
     };
   }, [isSubmitting, setIsSubmitting]);
+  
+  useEffect(() => {
+    if (termFreq || overdraftTerms) {
+      calNumberOfDays();
+      handleDateChange();
+    }
+  }, [termFreq, overdraftTerms, calNumberOfDays, handleDateChange]);
 
   const user = getStoredUser();
   const userOVerDraftMenuid = Array.isArray(user?.menuItems)
@@ -131,10 +159,13 @@ export const SetOverDraft = ({
               ? {
                   ...setOverdraftInitialValues,
                   ...odAccDetails,
-                  branch,
-                  term,
-                  facilityType: facilityType === 'OD' ? '1' : '2',
-                  frequency: fetchFrequencyOptions(frequency)
+                  branch: odAccDetails.branchCode,
+                  term: odAccDetails.tenor,
+                  facilityType: odAccDetails.facilityType === 'OD' ? '1' : '2',
+                  frequency: fetchFrequencyOptions(odAccDetails.frequency),
+                  reportData: dayjs(odAccDetails.reportDate),
+                  effectiveDate: dayjs(odAccDetails.effectiveDate),
+                  expiryDate: dayjs(odAccDetails.expiryDate)
                 }
               : setOverdraftInitialValues
           }
@@ -219,6 +250,9 @@ export const SetOverDraft = ({
                     placeholder=""
                     label="Facility Terms"
                     required
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setOverdraftTerms(e.target.value)
+                    }
                   />{' '}
                 </Grid>
                 <FormSelectField
@@ -229,26 +263,26 @@ export const SetOverDraft = ({
                   options={frequencyOptions}
                   name="frequency"
                   label="Frequency"
+                  onChange={(e) => setTermFrequency(e.target.value)}
                 />{' '}
-                <Grid item={isTablet} mobile={12}>
-                  <FormikDateTimePicker
-                    label="Posting Date"
-                    name="effectiveDate"
-                    value={dayjs(odAccDetails.reportDate)}
-                  />
-                </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <FormikDateTimePicker
                     label="Start Date"
                     name="effectiveDate"
-                    value={dayjs(odAccDetails.effectiveDate)}
+                    value={effectiveDate || null}
+                    minDate={dayjs(sysmodel?.systemDate).startOf('month')}
+                    maxDate={dayjs(sysmodel?.systemDate)}
+                    handleDateChange={(e: any) => {
+                      setEffectiveDate(e);
+                    }}
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <FormikDateTimePicker
                     label="Expiry Date"
                     name="expiryDate"
-                    value={dayjs(odAccDetails.expiryDate)}
+                    value={expiryDate}
+                    disabled
                   />
                 </Grid>
               </Grid>

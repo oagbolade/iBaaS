@@ -105,6 +105,17 @@ export const OtherCasaDetailsForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <FormikRadioButton
+          name="phoneNo4AcctNumber"
+          options={[
+            { label: 'Yes', value: '1' },
+            { label: 'No', value: '0' }
+          ]}
+          title="Allow number"
+          value="0"
+        />
+      </Grid>
+      <Grid item={isTablet} mobile={12}>
+        <FormikRadioButton
           name="sweepIn"
           options={[
             { label: 'Yes', value: '1' },

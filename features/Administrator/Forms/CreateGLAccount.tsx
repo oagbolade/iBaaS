@@ -27,6 +27,7 @@ import { useGetParams } from '@/utils/hooks/useGetParams';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { encryptData } from '@/utils/encryptData';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 interface PermissionData {
   pointing: number;
@@ -72,7 +73,9 @@ export const CreateGLAccount = ({
     Boolean(isEditing),
     encryptData(glNumber)
   );
+  const { sysmodel } = useGetSystemDate();
 
+  console.log(sysmodel);
   const [glData, setGlData] = useState<IGLData>({
     glClassCode: '',
     glTypeCode: '',
@@ -176,7 +179,7 @@ export const CreateGLAccount = ({
 
     const data = {
       ...values,
-      gl_ClassCode: editingGlClassCode,
+      gl_ClassCode: isEditing ? editingGlClassCode : glData.glClassCode,
       glNumber: getGlNumber,
       prodType: editingProdType,
       currencyCode,
@@ -224,7 +227,13 @@ export const CreateGLAccount = ({
                   ...bankgls,
                   currencyCode: bankgls?.currencyCode?.toString().trim()
                 }
-              : createGlAccountInitialValues
+              : {
+                  ...createGlAccountInitialValues,
+                  authid:
+                    sysmodel?.approvingOfficer === 'No Approving Officer'
+                      ? ''
+                      : sysmodel?.approvingOfficer
+                }
           }
           onSubmit={(values) => onSubmit(values)}
           validationSchema={createGLAccountSchema}

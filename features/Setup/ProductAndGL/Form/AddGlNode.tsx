@@ -24,6 +24,7 @@ import { createNodeSchema } from '@/schemas/setup';
 import { encryptData } from '@/utils/encryptData';
 import { IGLNode, IGLTypeClass } from '@/api/ResponseTypes/setup';
 import { IGLType } from '@/api/ResponseTypes/admin';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -51,6 +52,7 @@ export const CreateGLNode = ({
   const { mappedGLType } = useMapSelectOptions({ glType });
   const [glNodeCode, setGlNodeCode] = useState('');
   const isEditing = searchParams.get('isEditing');
+  const { sysmodel } = useGetSystemDate();
   const { mutate } = useCreateGlNode(
     Boolean(isEditing),
     encryptData(nodeId),
@@ -61,7 +63,8 @@ export const CreateGLNode = ({
   );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     await mutate({
-      ...values
+      ...values,
+      authid: sysmodel?.approvingOfficer
     });
   };
   const handleSelectedChange = (e: any) => {

@@ -474,6 +474,7 @@ export function useFilterRoleSearch(params: ISearchParams | null) {
     queryKey: [
       queryKeys.filterRoleSearch,
       params?.roleName || '',
+      params?.page || 1
     ],
     queryFn: () => filterRoleSearch(toastActions, params),
     enabled: Boolean((params?.roleName?.toString() || '').length > 0 || params?.page)

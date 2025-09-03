@@ -11,6 +11,7 @@ import { useCreateZone, useGetZoneById } from '@/api/setup/useZone';
 import { createZoneInitialValues } from '@/schemas/schema-values/setup';
 import { createZoneSchema } from '@/schemas/setup';
 import { encryptData } from '@/utils/encryptData';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 type Props = {
   zoneId?: string;
@@ -34,6 +35,7 @@ export const CreateZoneSetupForm = ({
   ]);
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('isEditing');
+  const { sysmodel } = useGetSystemDate();
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const { zone, isLoading } = useGetZoneById(
     encryptData(zoneId as string) || null
@@ -46,7 +48,8 @@ export const CreateZoneSetupForm = ({
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     await mutate({
       ...values,
-      nodays: transformDaysToNumber
+      nodays: transformDaysToNumber,
+      authid: sysmodel?.approvingOfficer
     });
   };
 

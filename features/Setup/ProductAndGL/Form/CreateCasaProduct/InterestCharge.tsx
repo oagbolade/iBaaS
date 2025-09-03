@@ -193,7 +193,7 @@ export const InterestCasaChargesForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
-          name="interestIncome"
+          name="dayint"
           placeholder="Enter Interest Days"
           label="Interest Days"
           customStyle={{

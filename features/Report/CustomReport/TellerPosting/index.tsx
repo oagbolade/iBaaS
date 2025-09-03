@@ -17,6 +17,8 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ITellerPostingReport } from '@/api/ResponseTypes/reports';
 import { FormSkeleton } from '@/components/Loaders';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { ISearchParams } from '@/app/api/search/route';
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -33,10 +35,15 @@ const TellerPostingActions = ({ data }: ActionProps) => {
 };
 
 export const TellerPosting = () => {
-  const [searchParams, setSearchParams] = useState<ITellerPostingParams | null>(
-    null
-  );
-  const [page, setPage] = useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('teller-posting');
+
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
@@ -51,7 +58,7 @@ export const TellerPosting = () => {
     totalRecords
   } = useGetTellerPosting({
     ...searchParams,
-    search,
+    search: search ?? undefined,
     pageNumber: page,
     pageSize: 10,
     getAll: readyDownload
@@ -59,12 +66,12 @@ export const TellerPosting = () => {
 
   React.useEffect(() => {
     if (readyDownload) {
-      setSearchParams((prev) => ({
-        ...prev,
+      setSearchParams({
+        ...searchParams,
         getAll: true
-      }));
+      });
     }
-  }, [readyDownload]);
+  }, [readyDownload, setSearchParams, searchParams]);
 
   React.useEffect(() => {
     if (tellerPostByDateList?.length > 0 && readyDownload) {
@@ -106,10 +113,13 @@ export const TellerPosting = () => {
 
   const handleSearch = (params: ITellerPostingParams | null) => {
     setReadyDownload(false);
+    setSearchActive(true);
     setSearchParams({
-      ...params
+      ...params,
+      pageNumber:
+        params?.pageNumber !== undefined ? String(params.pageNumber) : undefined
     });
-    setPage(1); // Reset to the first page on new search
+    setPage(1);
   };
 
   if (isLoading) {
@@ -123,7 +133,6 @@ export const TellerPosting = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <FilterSection onSearch={handleSearch} />
-
       <Box sx={{ width: '100%', padding: '25px' }}>
         <MuiTableContainer
           tableConfig={{ hasActions: false }}

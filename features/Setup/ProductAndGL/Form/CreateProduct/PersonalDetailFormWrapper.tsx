@@ -197,7 +197,7 @@ export const PersonalDetailsForm = ({
 
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
-          name="maxLoan"
+          name="maxloan"
           placeholder="Enter Maximum Loan Amount"
           label="Maximun Loan Amount"
           customStyle={{

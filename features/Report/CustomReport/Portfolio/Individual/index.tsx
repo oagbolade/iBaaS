@@ -18,26 +18,32 @@ import { IPortfoliodetailedReport } from '@/api/ResponseTypes/reports';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { ISearchParams } from '@/app/api/search/route';
 
 export const IndividualLoan = () => {
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [searchParams, setSearchParams] =
-    useState<IDetailedPortfolioAtRiskParams | null>(null);
-  const [page, setPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState<string>('1');
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
   const { branches, isLoading: isbranchLoading } = useGetBranches();
   const { detailedPortfolioAtRiskReportData } = useContext(ReportModuleContext);
-
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('portfolio-at-risk');
   const { branchCode, search } = searchParams || {};
 
   const { portfolioatRiskDetailRptList = [], totalRecords } =
     useGetDetailedPortfolioReport({
       ...searchParams,
-      branchCode,
-      search,
+      branchCode: branchCode ?? undefined,
+      search: search ?? undefined,
       productCode: detailedPortfolioAtRiskReportData.productCode,
       pageNumber: page,
       pageSize: 10,
@@ -61,19 +67,19 @@ export const IndividualLoan = () => {
     // Ensure no blank row or misplaced headers
     setExportData(formattedExportData);
     setReportType('PortfolioAtRisk');
-  }, [portfolioatRiskDetailRptList]);
+  }, [portfolioatRiskDetailRptList, setExportData, setReportType]);
 
   const rowsPerPage = 10;
-  const totalElements = portfolioatRiskDetailRptList.length;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
-
   const handleSearch = (params: IDetailedPortfolioAtRiskParams | null) => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      pageNumber
     });
-    setPageNumber(1); // Reset to the first page on new search
+
+    setSearchActive(true);
   };
 
   if (isbranchLoading) {
@@ -106,7 +112,7 @@ export const IndividualLoan = () => {
             hideFilterSection: true
           }}
         >
-          {portfolioatRiskDetailRptList.length > 0 ? (
+          {portfolioatRiskDetailRptList.length > 0 && searchActive ? (
             portfolioatRiskDetailRptList.map(
               (reportDetails: IPortfoliodetailedReport, index) => {
                 return (

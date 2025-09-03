@@ -1,12 +1,12 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer } from '@/components/Table';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { useGetBranches } from '@/api/general/useBranches';
-import { IEnquiryParams } from '@/api/reports/useGetAccountEnquiryBybranchId';
+// import { IEnquiryParams } from '@/api/reports/useGetAccountEnquiryBybranchId';
 import { FormSkeleton } from '@/components/Loaders';
 import { tellerblanceReportcolumn } from '@/constants/Reports/COLUMNS';
 import { useGetTellerBalanceReport } from '@/api/reports/useGetTellerBalanceReport';
@@ -20,7 +20,7 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 export const TellerBalance = () => {
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
 
   const { branches, isLoading: isLoadingBranches } = useGetBranches();
@@ -31,7 +31,7 @@ export const TellerBalance = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('teller-balance');
 
   const { tellerBalanceList = [], isLoading: isLoadingAccountInDebit } =
@@ -39,7 +39,7 @@ export const TellerBalance = () => {
       ...searchParams,
       pageSize: 20,
       pageNumber: page,
-      getAll: isDateFilterApplied,
+      getAll: isDateFilterApplied
     });
 
   React.useEffect(() => {
@@ -51,25 +51,27 @@ export const TellerBalance = () => {
       'Staff Name': item.staffName || '',
       'Branch Code': item.branchcode || '',
       'User ID': item.userid || '',
-      'Till Balance': item.bkBalance || '',
+      'Till Balance': item.bkBalance || ''
     }));
 
     // Ensure no blank row or misplaced headers
     setExportData(formattedExportData);
     setReportType('TellerBalance');
-  }, [tellerBalanceList]);
+  }, [tellerBalanceList, setExportData, setReportType]);
 
   const rowsPerPage = 10;
   const totalElements = tellerBalanceList.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
-
+  
   const handleSearch = (params: ISearchParams | null) => {
+    console.log('Params from search', params);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
+
   };
 
   if (isLoadingBranches) {
@@ -99,7 +101,7 @@ export const TellerBalance = () => {
               mainTitle: 'Teller Balance Report',
               secondaryTitle:
                 'See a directory of all Teller Balance Report in this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
           >
             {searchActive ? (
@@ -127,7 +129,7 @@ export const TellerBalance = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                },
+                }
               )
             ) : (
               <StyledTableRow>
@@ -142,60 +144,6 @@ export const TellerBalance = () => {
             )}
           </MuiTableContainer>
         )}
-
-        {/* <MuiTableContainer
-          columns={tellerblanceReportcolumn}
-          data={tellerBalanceList}
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-          totalElements={totalElements}
-          showHeader={{
-            mainTitle: 'Teller Balance Report',
-            secondaryTitle:
-              'See a directory of all Teller Balance Report in this system.',
-            hideFilterSection: true,
-          }}
-        >
-          {tellerBalanceList.length > 0 ? (
-            tellerBalanceList?.map(
-              (accountData: ITellerBalanceReportResponse, index) => {
-                return (
-                  <StyledTableRow key={index}>
-                    <StyledTableCell component="th" scope="row">
-                      {accountData?.tillNumber || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      {accountData?.tillName || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {accountData?.staffName || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {accountData?.branchcode || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {accountData?.userid || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {accountData?.bkBalance || 'N/A'}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                );
-              },
-            )
-          ) : (
-            <StyledTableRow>
-              <StyledTableCell
-                colSpan={tellerblanceReportcolumn.length + 1}
-                component="th"
-                scope="row"
-              >
-                {renderEmptyTableBody()}
-              </StyledTableCell>
-            </StyledTableRow>
-          )}
-        </MuiTableContainer> */}
       </Box>
     </Box>
   );

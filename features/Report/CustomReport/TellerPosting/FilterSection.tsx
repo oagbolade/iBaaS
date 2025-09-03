@@ -19,15 +19,13 @@ import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { exportData } from '@/components/ViewReport/style';
 import { ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
-import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { ISearchParams } from '@/app/api/search/route';
 
 type Props = {
   onSearch: (params: ITellerPostingParams | null) => void;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
-  const { searchParams } = usePersistedSearch<ISearchParams>('teller-posting');
+
   const [searchTerm, setSearchTerm] = useState('');
   const { setDirection } = useSetDirection();
 
@@ -50,7 +48,6 @@ export const FilterSection = ({ onSearch }: Props) => {
           borderBottom: `1px solid ${colors.loanTitleColor}`,
           marginTop: '10px',
           paddingX: '24px',
-          position: 'sticky',
         }}
         direction={setDirection()}
         justifyContent="space-between"
@@ -101,15 +98,15 @@ export const FilterSection = ({ onSearch }: Props) => {
       </Stack>
 
       <Box sx={{ height: '120px' }}>
-        <Grid
+        <Grid container
           sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
           spacing={2}
         >
           <Grid
-            mb={{ tablet: 22 }}
+            mb={{ tablet: 10 }}
             item
-            mobile={22}
-            tablet={22}
+            mobile={12}
+            tablet={10}
             justifyContent="center"
           >
             <TextInput
