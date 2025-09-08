@@ -1,9 +1,12 @@
 import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import { FilterSection } from './FilterSection';
 import colors from '@/assets/colors';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/react-query/constants';
+import { FormSkeleton } from '@/components/Loaders';
 
 type Props = {
   mainTitle?: string;
@@ -17,6 +20,18 @@ export const CustomTableHeader = ({
   hideFilterSection = false
 }: Props) => {
   const { setDirection } = useSetDirection();
+
+    const queryClient = useQueryClient();
+
+   const isFetching = useIsFetching({
+    queryKey: [queryKeys.filterGroupSearch]
+  });
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: [queryKeys.filterGroupSearch]
+    });
+  };
 
   return (
     <Box
@@ -35,9 +50,15 @@ export const CustomTableHeader = ({
             sx={{ fontSize: '20px', lineHeight: '32px', fontWeight: 700 }}
           >
             {mainTitle}
-            <ReplayOutlinedIcon
-              sx={{ color: `${colors.activeBlue400}`, marginLeft: '15px' }}
-            />
+               {isFetching ? (
+              <FormSkeleton noOfLoaders={3} />
+          ) : (
+            <IconButton onClick={handleRefresh}>
+              <ReplayOutlinedIcon
+                sx={{ color: colors.activeBlue400, marginLeft: '8px' }}
+              />
+            </IconButton>
+          )}
           </Typography>
           <Typography
             sx={{
