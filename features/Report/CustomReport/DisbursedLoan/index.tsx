@@ -89,7 +89,7 @@ export const DisbursedLoan = () => {
     setReadyDownload(false);
     setSearchParams({
       ...params,
-      
+
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });

@@ -10,7 +10,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 
@@ -37,7 +37,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedGLType } = useMapSelectOptions({
     branches,
-    glType,
+    glType
   });
 
   const { currentDate } = useFormattedDates();
@@ -47,7 +47,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
     branchID: searchParams?.branchID ?? '',
     customerID: searchParams?.customerID ?? '',
     reportType: searchParams?.reportType ?? '',
-    reportDate: searchParams?.reportDate ?? '',
+    reportDate: searchParams?.reportDate ?? ''
   };
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -61,7 +61,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
         values.reportType?.toString().trim().length > 0
           ? values.reportType
           : null,
-      reportDate: reportDate.format('YYYY-MM-DD'),
+      reportDate: reportDate.format('YYYY-MM-DD')
     };
     onSearch?.(params);
   };
@@ -78,7 +78,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Box>
@@ -87,7 +87,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                   <FormikRadioButton
                     options={[
                       { label: 'Balance Sheet', value: '1' },
-                      { label: 'Profit & Loss', value: '0' },
+                      { label: 'Profit & Loss', value: '0' }
                     ]}
                     title="Select Report Type"
                     name="reportType"
@@ -104,7 +104,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -121,7 +121,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="customerID"
                     options={mappedGLType}
@@ -142,7 +142,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

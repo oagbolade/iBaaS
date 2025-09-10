@@ -9,13 +9,13 @@ import { exportData, dateFilter, inputFields } from '../style';
 import {
   FormTextInput,
   FormSelectField,
-  FormikRadioButton,
+  FormikRadioButton
 } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 
@@ -36,12 +36,12 @@ type Props = {
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>(
-    'plain-trial-balance',
+    'plain-trial-balance'
   );
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const { currentDate } = useFormattedDates();
@@ -51,7 +51,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     branchID: searchParams?.branchID ?? '',
     reportType: searchParams?.reportType ?? '',
     searchWith: searchParams?.searchWith ?? '',
-    reportDate: searchParams?.reportDate ?? '',
+    reportDate: searchParams?.reportDate ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -60,7 +60,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       reportType: values.reportType ? values.reportType : null,
       searchWith: values.searchWith ? values.searchWith : null,
       reportDate: reportDate.format('YYYY-MM-DD'),
-      getAll: false,
+      getAll: false
     };
     onSearch?.(params);
   };
@@ -78,7 +78,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
             sx={{
               borderBottom: '1px solid #E8E8E8',
               marginTop: '10px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
             direction={setDirection()}
             justifyContent="space-between"
@@ -116,7 +116,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   icon={
                     <CalendarTodayOutlinedIcon
                       sx={{
-                        color: `${colors.Heading}`,
+                        color: `${colors.Heading}`
                       }}
                     />
                   }
@@ -130,7 +130,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '20px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Box>
@@ -145,7 +145,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormikRadioButton
                     options={[
                       { label: 'Balance Sheet', value: 'trialbalance' },
-                      { label: 'Profit & Loss', value: 'pandl' },
+                      { label: 'Profit & Loss', value: 'pandl' }
                     ]}
                     title="Select Report Type"
                     name="reportType"
@@ -158,7 +158,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -177,7 +177,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
@@ -200,7 +200,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

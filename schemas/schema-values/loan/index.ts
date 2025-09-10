@@ -15,27 +15,26 @@ export const setCancelValues: CancelLoanValues = {
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export interface disburseLoanvalues  {
-   accountNumber: string,
-   paymode: number;
-   payBank: string;
-   menuid: number;
-   comments: string;
-   authlistId: number;
-   userId: string;
-   authId: string;
- 
+export interface disburseLoanvalues {
+  accountNumber: string;
+  paymode: number;
+  payBank: string;
+  menuid: number;
+  comments: string;
+  authlistId: number;
+  userId: string;
+  authId: string;
 }
 
 export const setDisburseLoanValues: disburseLoanvalues = {
-   accountNumber: '',
-   paymode: 0,
-   payBank: '',
-   menuid: 31,
-   comments: '',
-   authlistId: 0,
-   userId: '',
-   authId: ''
+  accountNumber: '',
+  paymode: 0,
+  payBank: '',
+  menuid: 31,
+  comments: '',
+  authlistId: 0,
+  userId: '',
+  authId: ''
 };
 
 export interface ISetTerminateLoanValues {
@@ -131,7 +130,7 @@ export const setPartialPayOffvalues: SetPartialPayOffValues = {
   newtenor: 0.0,
   startdate: '',
   totalDays: 0,
-  menuid: 96  // have to confirm this with infosigth
+  menuid: 96 // have to confirm this with infosigth
 };
 
 export interface RestructureLoanValues {
@@ -139,7 +138,7 @@ export interface RestructureLoanValues {
   customerid: string;
   loanAccno: string;
   settlementAccno: string;
-  principalWriteOff_GL: string| null;
+  principalWriteOff_GL: string | null;
   interestWriteOff_GL: string | null;
   penalWriteOff_GL: string | null;
   prodcode: string;
@@ -364,14 +363,14 @@ export interface ILoanAccDetails {
   loanSource: string;
   loanType: string;
   loanStatus: string;
-  outstandingPenalInterest: string
-  loanSourceCode : string
-  collateralValue: string
-  drawDownDate: string
-  loanterm: string
-  collateralType: string
-  branchcode: string
-  outstandingPrincipal: number
+  outstandingPenalInterest: string;
+  loanSourceCode: string;
+  collateralValue: string;
+  drawDownDate: string;
+  loanterm: string;
+  collateralType: string;
+  branchcode: string;
+  outstandingPrincipal: number;
 }
 
 export interface LoanUnderwriteInitialValues {

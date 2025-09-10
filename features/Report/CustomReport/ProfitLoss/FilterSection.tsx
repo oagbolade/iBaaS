@@ -11,7 +11,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 
@@ -37,7 +37,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const { currentDate } = useFormattedDates();
@@ -45,14 +45,14 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
-    reportDate: searchParams?.reportDate ?? '',
+    reportDate: searchParams?.reportDate ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      reportDate: reportDate.format('YYYY-MM-DD'),
+      reportDate: reportDate.format('YYYY-MM-DD')
     };
     onSearch?.(params);
   };
@@ -69,7 +69,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
           sx={{
             borderBottom: '1px solid #E8E8E8',
             marginTop: '10px',
-            paddingX: '24px',
+            paddingX: '24px'
           }}
           direction={setDirection()}
           justifyContent="space-between"
@@ -101,7 +101,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                 icon={
                   <CalendarTodayOutlinedIcon
                     sx={{
-                      color: `${colors.Heading}`,
+                      color: `${colors.Heading}`
                     }}
                   />
                 }
@@ -121,7 +121,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
         <Box
           sx={{
             marginTop: '30px',
-            paddingX: '24px',
+            paddingX: '24px'
           }}
         >
           <Box>
@@ -136,7 +136,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="branchID"
                   options={mappedBranches}

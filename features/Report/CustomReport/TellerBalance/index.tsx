@@ -62,7 +62,7 @@ export const TellerBalance = () => {
   const rowsPerPage = 10;
   const totalElements = tellerBalanceList.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
-  
+
   const handleSearch = (params: ISearchParams | null) => {
     console.log('Params from search', params);
     setSearchParams({
@@ -71,7 +71,6 @@ export const TellerBalance = () => {
       endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
-
   };
 
   if (isLoadingBranches) {

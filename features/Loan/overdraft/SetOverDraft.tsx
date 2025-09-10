@@ -81,7 +81,7 @@ export const SetOverDraft = ({
   const [termFreq, setTermFrequency] = useState<string>('');
   const [overdraftTerms, setOverdraftTerms] = useState<string>('');
   const [calculatedDays, setCalculatedDays] = useState<number>(0);
-  
+
   const calNumberOfDays = useCallback(() => {
     const selectedTermFrequency = frequencyTermsDays.find(
       (term) => term.label === termFreq
@@ -90,7 +90,7 @@ export const SetOverDraft = ({
       Number(overdraftTerms) * Number(selectedTermFrequency?.value);
     setCalculatedDays(calcLoanDays);
   }, [termFreq, overdraftTerms]);
-  
+
   const handleDateChange = useCallback(() => {
     if (effectiveDate) {
       const matDate = dayjs(effectiveDate).add(calculatedDays, 'day');
@@ -107,7 +107,7 @@ export const SetOverDraft = ({
       setIsSubmitting?.(false);
     };
   }, [isSubmitting, setIsSubmitting]);
-  
+
   useEffect(() => {
     if (termFreq || overdraftTerms) {
       calNumberOfDays();

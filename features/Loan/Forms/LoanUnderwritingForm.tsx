@@ -325,7 +325,11 @@ export const CreateLoanUnderwritingForm = ({
             }}
           >
             <Formik
-              initialValues={loanUnderwritingInitialValues}
+              initialValues={{
+                ...loanUnderwritingInitialValues,
+                interestRate: loanRate
+              }}
+              enableReinitialize
               onSubmit={(values) => onSubmit(values)}
               validationSchema={loanUnderWriteSchema}
             >
@@ -377,7 +381,7 @@ export const CreateLoanUnderwritingForm = ({
                       mr={{ mobile: 35, tablet: 0 }}
                       sx={{ marginBottom: '10px' }}
                     >
-                      <StyledSearchableDropdown style={{ width: '460%' }}>
+                      <StyledSearchableDropdown style={{ width: '100%' }}>
                         <ActionButtonWithPopper
                           loading={isSearchLoading}
                           handleSelectedValue={(value: any) =>
@@ -388,7 +392,7 @@ export const CreateLoanUnderwritingForm = ({
                           searchGroupVariant="LoanCustomerSearch"
                           loanDropDownOptions={filteredValues || []}
                           customStyle={{
-                            width: '460px',
+                            width: '100%',
                             height: '54px',
                             borderRadius: '4px',
                             padding: '12px',
@@ -510,7 +514,6 @@ export const CreateLoanUnderwritingForm = ({
                         name="interestRate"
                         placeholder="0"
                         label="Loan Rate %"
-                        value={loanRate}
                         onChange={(e) => checkMaxMinLoanRate(e.target.value)}
                         required
                       />{' '}

@@ -351,7 +351,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
           </Grid>
 
           {introducerType.customer && (
-            <div className='w-full mt-3'>
+            <div className="w-full mt-3">
               <Grid item={isTablet} mobile={12}>
                 <RadioButtons
                   options={[

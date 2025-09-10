@@ -6,7 +6,7 @@ import { COLUMN } from './Column';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { useGetCheckbookStatus } from '@/api/reports/useChequebook';
@@ -23,7 +23,7 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const ChequeBookStatus = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
@@ -34,7 +34,7 @@ export const ChequeBookStatus = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('checkbook-status');
   const { branches } = useGetBranches();
   const { status } = useGetStatus();
@@ -45,7 +45,7 @@ export const ChequeBookStatus = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
 
     setReportType('ChequeBookStatus');
@@ -53,11 +53,11 @@ export const ChequeBookStatus = () => {
 
   const {
     chequeBookList: getAllChequeBookStatusData,
-    isLoading: isChequeBookDataLoading,
+    isLoading: isChequeBookDataLoading
   } = useGetCheckbookStatus({
     ...searchParams,
     page,
-    getAll: isDateFilterApplied,
+    getAll: isDateFilterApplied
   });
 
   // Set export data when getAllChequeBookStatusData is retrieved
@@ -70,7 +70,7 @@ export const ChequeBookStatus = () => {
   return (
     <Box
       sx={{
-        width: '100%',
+        width: '100%'
       }}
     >
       <TopOverViewSection useBackButton />
@@ -90,13 +90,13 @@ export const ChequeBookStatus = () => {
             <MuiTableContainer
               columns={COLUMN}
               tableConfig={{
-                hasActions: true,
+                hasActions: true
               }}
               showHeader={{
                 hideFilterSection: true,
                 mainTitle: 'Chequebook Status',
                 secondaryTitle:
-                  'See a directory of all Cheque books in this system.',
+                  'See a directory of all Cheque books in this system.'
               }}
               data={getAllChequeBookStatusData}
               setPage={setPage}

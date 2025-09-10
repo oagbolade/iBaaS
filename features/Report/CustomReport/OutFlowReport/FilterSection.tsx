@@ -6,7 +6,7 @@ import {
   FormSelectField,
   FormSelectInput,
   FormTextInput,
-  TextInput,
+  TextInput
 } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
@@ -26,18 +26,18 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     usePersistedSearch<IInflowOutflowParams>('outflow-report');
 
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const initialValues = {
     branchId: searchParams?.branchId ?? '',
-    tellerId: searchParams?.tellerId ?? '',
+    tellerId: searchParams?.tellerId ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: IInflowOutflowParams = {
       branchId: values.branchId.toString().length > 0 ? values.branchId : null,
-      tellerId: values.tellerId.length > 0 ? values.tellerId : undefined,
+      tellerId: values.tellerId.length > 0 ? values.tellerId : undefined
     };
 
     onSearch?.(params);

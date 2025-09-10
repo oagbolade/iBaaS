@@ -13,6 +13,8 @@ import { StyledTableCell } from '@/components/Table/style';
 import { formatDate } from '@/utils/formatDateAndTime';
 import { RequestModuleContext } from '@/context/RequestModuleContext';
 import { usePagination } from '@/utils/hooks/usePagination';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { FormSkeleton } from '@/components/Loaders';
 
 interface Props {
   allRequests?: IFetchAllUserRequest[] | undefined;
@@ -48,6 +50,7 @@ const MyRequestsActions = ({ requests }: RequestProps) => {
 
 export const MyRequestTable = ({ allRequests = [] }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { isLoading } = useGlobalLoadingState();
 
   const filterFunction = (request: IFetchAllUserRequest, term: string) =>
     request.requestType.toLowerCase().includes(term.toLowerCase()) ||
@@ -88,45 +91,49 @@ export const MyRequestTable = ({ allRequests = [] }: Props) => {
           }
         />
       </Box>
-      <MuiTableContainer
-        columns={MyRequestsColumns}
-        data={paginatedData}
-        page={page}
-        setPage={setPage}
-        totalPages={totalPages}
-        totalElements={totalElements}
-      >
-        {paginatedData.length > 0 && paginatedData[0].requestType !== '' ? (
-          paginatedData.map((request: IFetchAllUserRequest) => {
-            return (
-              <StyledTableRow key={request.id}>
-                <StyledTableCell component="th" scope="row">
-                  {request.requestType}
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  {formatDate(request.requestDate)}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {request.approvingOfficer}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <MyRequestsActions requests={request} />
-                </StyledTableCell>
-              </StyledTableRow>
-            );
-          })
-        ) : (
-          <StyledTableRow>
-            <StyledTableCell
-              colSpan={MyRequestsColumns.length + 1}
-              component="th"
-              scope="row"
-            >
-              {renderEmptyTableBody(paginatedData)}
-            </StyledTableCell>
-          </StyledTableRow>
-        )}
-      </MuiTableContainer>
+      {isLoading ? (
+        <FormSkeleton noOfLoaders={3} />
+      ) : (
+        <MuiTableContainer
+          columns={MyRequestsColumns}
+          data={paginatedData}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          totalElements={totalElements}
+        >
+          {paginatedData.length > 0 && paginatedData[0].requestType !== '' ? (
+            paginatedData.map((request: IFetchAllUserRequest) => {
+              return (
+                <StyledTableRow key={request.id}>
+                  <StyledTableCell component="th" scope="row">
+                    {request.requestType}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                    {formatDate(request.requestDate)}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {request.approvingOfficer}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <MyRequestsActions requests={request} />
+                  </StyledTableCell>
+                </StyledTableRow>
+              );
+            })
+          ) : (
+            <StyledTableRow>
+              <StyledTableCell
+                colSpan={MyRequestsColumns.length + 1}
+                component="th"
+                scope="row"
+              >
+                {renderEmptyTableBody(paginatedData)}
+              </StyledTableCell>
+            </StyledTableRow>
+          )}
+        </MuiTableContainer>
+      )}
     </Box>
   );
 };

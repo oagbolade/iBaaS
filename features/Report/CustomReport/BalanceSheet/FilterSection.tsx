@@ -28,15 +28,15 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
-    const { searchParams } =
-      usePersistedSearch<ISearchParams>('balance-sheet-report');
+  const { searchParams } = usePersistedSearch<ISearchParams>(
+    'balance-sheet-report'
+  );
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
 
-  
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     pCode: searchParams?.pCode ?? '',

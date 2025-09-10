@@ -94,7 +94,7 @@ export const FilterSection = ({ onSearch }: Props) => {
         <Box
           sx={{
             paddingX: '24px',
-            marginTop: '16px',
+            marginTop: '16px'
           }}
         >
           <Grid container spacing={2}>

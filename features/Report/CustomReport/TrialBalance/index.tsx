@@ -7,7 +7,7 @@ import { ShortCards } from '@/components/CustomCardsReports/ShortCards';
 
 import {
   totalContainer,
-  totalTitle,
+  totalTitle
 } from '@/components/CustomCardsReports/style';
 import { PageTitle } from '@/components/Typography';
 import { FormSkeleton } from '@/components/Loaders';
@@ -36,7 +36,7 @@ export const TrialBalance = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('trial-balance');
 
   const { trialBydateList = [], isLoading: isLoadingTrialBydategroupList } =
@@ -44,7 +44,7 @@ export const TrialBalance = () => {
       ...searchParams,
       pageSize: '20',
       pageNumber: String(page),
-      getAll: readyDownload,
+      getAll: readyDownload
     });
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -52,7 +52,7 @@ export const TrialBalance = () => {
     setSearchActive(true);
     setSearchParams({
       ...params,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || ''
     });
   };
 
@@ -60,7 +60,7 @@ export const TrialBalance = () => {
     if (readyDownload) {
       setSearchParams({
         ...searchParams,
-        getAll: true,
+        getAll: true
       });
     }
   }, [readyDownload]);
@@ -72,7 +72,7 @@ export const TrialBalance = () => {
         Balance: item?.balance || '',
         'GL Code': item?.gl_classcode || '',
         'Product Type Code': item?.prodtypecode || '',
-        'GL Nodecode': item?.gl_nodecode || '',
+        'GL Nodecode': item?.gl_nodecode || ''
       }));
 
       // Ensure no blank row or misplaced headers
@@ -84,7 +84,7 @@ export const TrialBalance = () => {
     setExportData,
     setReportType,
     trialBydateList,
-    setReadyDownload,
+    setReadyDownload
   ]);
 
   const calculateTotalBalance = (accounts: ITrialBalanceGroup[]): number => {
@@ -94,7 +94,7 @@ export const TrialBalance = () => {
   return (
     <Box
       sx={{
-        width: '100%',
+        width: '100%'
       }}
     >
       <TopOverViewSection useBackButton />

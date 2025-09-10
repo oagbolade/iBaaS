@@ -16,6 +16,7 @@ export interface OptionsI {
   name: string;
   value: string;
   staffID?: string;
+  branchCode?: string;
 }
 
 type Props = {

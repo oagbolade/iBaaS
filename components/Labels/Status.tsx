@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import CircleIcon from '@mui/icons-material/Circle';
 import { labelTypography } from './styles';
+import colors from '@/assets/colors';
 
 interface StatusMap {
   [status: string]: {
@@ -12,24 +13,29 @@ interface StatusMap {
 
 const statusMap: StatusMap = {
   success: {
-    color: '#36743D',
-    border: '1px solid #BEF2B9',
-    background: '#F1FEF1'
+    color: `${colors.activeGreen500}`,
+    border: `1px solid ${colors.activeGreen200}`,
+    background: `${colors.activeGreen100}`
   },
   warning: {
-    color: '#AF5F26',
-    border: '1px solid #AF5F26',
-    background: '#FDED94'
+    color: `${colors.activeYellow500}`,
+    border: `1px solid ${colors.activeYellow500}`,
+    background: `${colors.activeYellow200}`
   },
   danger: {
-    color: '#DC4437',
-    border: '1px solid #DC4437',
-    background: '#F4B7B5'
+    color: `${colors.primaryRed400}`,
+    border: `1px solid ${colors.primaryRed400}`,
+    background: `${colors.primaryRed100}`
   },
   matured: {
-    color: '#1A4983',
-    border: '1px solid #A8D6EF',
-    background: '#EBF8FE'
+    color: `${colors.activeBlue700}`,
+    border: `1px solid ${colors.activeBlue200}`,
+    background: `${colors.activeBlue100}`
+  },
+  pending: {
+    color: `${colors.activeYellow500}`,
+    border: `1px solid ${colors.activeYellow500}`,
+    background: `${colors.activeYellow200}`
   }
 };
 

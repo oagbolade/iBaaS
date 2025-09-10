@@ -26,14 +26,14 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 export const ProfitLoss = () => {
   // const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   // const [page] = React.useState(1);
-   const {
-      searchParams,
-      setSearchParams,
-      searchActive,
-      setSearchActive,
-      page,
-      setPage
-    } = usePersistedSearch<ISearchParams>('profit-and-loss');
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('profit-and-loss');
   const { branches } = useGetBranches();
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
     useContext(DownloadReportContext);
@@ -54,7 +54,7 @@ export const ProfitLoss = () => {
     if (readyDownload) {
       setSearchParams({
         ...searchParams,
-        getAll: true,
+        getAll: true
       });
     }
   }, [readyDownload]);

@@ -6,7 +6,7 @@ import {
   FormSelectField,
   FormSelectInput,
   FormTextInput,
-  TextInput,
+  TextInput
 } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
@@ -26,18 +26,18 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     usePersistedSearch<IProdutSummaryParams>('product-summary');
 
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const initialValues = {
     branchId: searchParams?.branchId ?? '',
-    search: searchParams?.search ?? '',
+    search: searchParams?.search ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: IProdutSummaryParams = {
       branchId: values.branchId.toString().length > 0 ? values.branchId : null,
-      search: values.search.length > 0 ? values.search : undefined,
+      search: values.search.length > 0 ? values.search : undefined
     };
 
     onSearch?.(params);

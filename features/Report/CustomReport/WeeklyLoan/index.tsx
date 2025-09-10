@@ -7,7 +7,7 @@ import { COLUMN } from './Column';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { useGetBranches } from '@/api/general/useBranches';
 import { useGetAllProduct } from '@/api/setup/useProduct';
@@ -51,11 +51,11 @@ export const WeeklyLoan = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('weekly-loan');
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -64,13 +64,13 @@ export const WeeklyLoan = () => {
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
-      pageNumber: String(page),
+      pageNumber: String(page)
     });
   };
 
   const { loanWeeklyRepaymentList, totalRecords, isLoading } =
     useGetWeeklyLoanRepayment({
-      ...searchParams,
+      ...searchParams
     });
 
   React.useEffect(() => {
@@ -103,7 +103,7 @@ export const WeeklyLoan = () => {
               mainTitle: 'Weekly Loan Repayment',
               secondaryTitle:
                 'See a directory of all Weekly Loan Repayments Report in this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
             setPage={setPage}
             page={page}

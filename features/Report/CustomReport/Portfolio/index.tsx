@@ -13,12 +13,11 @@ import { ReportModuleContext } from '@/context/ReportModuleContext';
 import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 
-
 export const PortfolioAtRisk = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [searchQuery, setSearchQuery] = useState<string>('');
- 
+
   const { setDetailedPortfolioAtRiskReportData } =
     useContext(ReportModuleContext);
   const { portfolioatRiskList = [], isLoading } = useGetAllPortfolioAtRisk({
@@ -74,7 +73,7 @@ export const PortfolioAtRisk = () => {
           />
         </Grid>
 
-        <Grid container >
+        <Grid container>
           <Box sx={{ marginTop: '10px' }}>
             {filteredPortfolioAtRiskList.length > 0 ? (
               filteredPortfolioAtRiskList.map(

@@ -20,12 +20,12 @@ export const HoldingTransactions = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('holding-transactions');
   const { branches } = useGetBranches();
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -36,7 +36,7 @@ export const HoldingTransactions = () => {
   const { data, isLoading, totalRecords } = useGetHoldingTransactionReport({
     ...searchParams,
     pageNumber: page.toString(),
-    pageSize: '10',
+    pageSize: '10'
   });
 
   React.useEffect(() => {
@@ -46,7 +46,7 @@ export const HoldingTransactions = () => {
         created: item.create_dt,
         matured: item.end_dt,
         Amount: `NGN ${formatCurrency(item.amt)}`,
-        Reason: item.holdreason,
+        Reason: item.holdreason
       }));
 
       setExportData(mapHoldingTransaction as []);
@@ -58,7 +58,7 @@ export const HoldingTransactions = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection useBackButton />
@@ -79,8 +79,8 @@ export const HoldingTransactions = () => {
                   '',
                   '',
                   `NGN ${formatCurrency(data?.totalHolding)}`,
-                  '',
-                ],
+                  ''
+                ]
               }}
               keys={keys as []}
               columns={COLUMN}
@@ -89,7 +89,7 @@ export const HoldingTransactions = () => {
               showHeader={{
                 mainTitle: 'Holding Transactions',
                 secondaryTitle:
-                  'See a directory of all holding transactions Report in this system.',
+                  'See a directory of all holding transactions Report in this system.'
               }}
               setPage={setPage}
               totalElements={totalRecords}

@@ -7,7 +7,7 @@ import { COLUMN } from './Column';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 
 import { StyledTableCell } from '@/components/Table/style';
@@ -40,7 +40,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 
 export const PostingJournal = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
@@ -52,7 +52,7 @@ export const PostingJournal = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('posting-journal');
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -61,7 +61,7 @@ export const PostingJournal = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
 
     setReportType('PostingJournal');
@@ -70,7 +70,7 @@ export const PostingJournal = () => {
   const { postingJournalList, isLoading } = useGetPostingJournal({
     ...searchParams,
     page,
-    getAll: false,
+    getAll: false
   });
 
   // Set export data when postingJournalList is retrieved
@@ -83,7 +83,7 @@ export const PostingJournal = () => {
   return (
     <Box
       sx={{
-        width: '100%',
+        width: '100%'
       }}
     >
       <TopOverViewSection useBackButton />
@@ -97,13 +97,13 @@ export const PostingJournal = () => {
           <MuiTableContainer
             columns={COLUMN}
             tableConfig={{
-              hasActions: true,
+              hasActions: true
             }}
             showHeader={{
               hideFilterSection: true,
               mainTitle: 'Posting Journal',
               secondaryTitle:
-                'See a directory of all posting journal in this system.',
+                'See a directory of all posting journal in this system.'
             }}
             data={postingJournalList}
             setPage={setPage}

@@ -8,7 +8,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
@@ -33,7 +33,7 @@ export const FilterSection = ({
   branches,
   officers,
   groups,
-  onSearch,
+  onSearch
 }: Props) => {
   const { searchParams } =
     usePersistedSearch<ISearchParams>('group-membership');
@@ -43,14 +43,14 @@ export const FilterSection = ({
     useMapSelectOptions({
       branches,
       officers,
-      groups,
+      groups
     });
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     groupId: searchParams?.groupId ?? '',
     officerCode: searchParams?.officerCode ?? '',
-    searchWith: searchParams?.searchWith ?? '',
+    searchWith: searchParams?.searchWith ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -67,7 +67,7 @@ export const FilterSection = ({
         values.searchWith?.toString().trim().length > 0
           ? values.searchWith
           : null,
-      pageSize: '10',
+      pageSize: '10'
     };
     onSearch?.(params);
   };
@@ -83,7 +83,7 @@ export const FilterSection = ({
         <Box
           sx={{
             marginTop: '20px',
-            paddingX: '24px',
+            paddingX: '24px'
           }}
         >
           <Box>
@@ -92,7 +92,7 @@ export const FilterSection = ({
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="branchID"
                   options={mappedBranches}
@@ -111,7 +111,7 @@ export const FilterSection = ({
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="officerCode"
                   options={mappedAccountOfficers}
@@ -129,7 +129,7 @@ export const FilterSection = ({
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="groupId"
                   options={mappedGroups}
@@ -148,7 +148,7 @@ export const FilterSection = ({
                 <FormTextInput
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   icon={<SearchIcon />}
                   name="searchWith"
@@ -170,7 +170,7 @@ export const FilterSection = ({
                   customStyle={{
                     backgroundColor: `${colors.activeBlue400}`,
                     border: `1px solid ${colors.activeBlue400}`,
-                    color: `${colors.white}`,
+                    color: `${colors.white}`
                   }}
                   type="submit"
                   buttonTitle="Search"

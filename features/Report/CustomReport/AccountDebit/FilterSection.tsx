@@ -6,7 +6,7 @@ import {
   FormSelectField,
   FormSelectInput,
   FormTextInput,
-  TextInput,
+  TextInput
 } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
@@ -24,18 +24,18 @@ type Props = {
 export const FilterSection = ({ branches, onSearch }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('account-debit');
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
-    searchWith: searchParams?.searchWith ?? '',
+    searchWith: searchParams?.searchWith ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      searchWith: values.searchWith.length > 0 ? values.searchWith : undefined,
+      searchWith: values.searchWith.length > 0 ? values.searchWith : undefined
     };
 
     onSearch?.(params);
@@ -66,7 +66,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       width: '400px',
                       fontSize: '14px',
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -84,7 +84,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       width: '500px',
                       fontSize: '14px',
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"

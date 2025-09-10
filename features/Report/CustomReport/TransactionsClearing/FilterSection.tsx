@@ -21,18 +21,18 @@ type Props = {
 
 export const FilterSection = ({ onSearch, branches, status }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>(
-    'transaction-clearing',
+    'transaction-clearing'
   );
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
-    status,
+    status
   });
   const { setWidth } = useCurrentBreakpoint();
 
   const initialValues = {
     branchCode: searchParams?.branchCode ?? '',
     status: searchParams?.status ?? '',
-    searchWith: searchParams?.searchWith ?? '',
+    searchWith: searchParams?.searchWith ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -41,7 +41,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
       branchCode:
         values.branchCode.toString()?.length > 0 ? values.branchCode : null,
       searchWith:
-        values.searchWith?.toString().length > 0 ? values.searchWith : null,
+        values.searchWith?.toString().length > 0 ? values.searchWith : null
     };
     console.log(params);
     onSearch?.(params);
@@ -60,7 +60,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields,
+                ...inputFields
               }}
               name="branchCode"
               options={mappedBranches}
@@ -73,7 +73,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields,
+                ...inputFields
               }}
               name="status"
               options={mappedStatus}
@@ -86,7 +86,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 width: setWidth(),
                 fontSize: '14px',
-                ...inputFields,
+                ...inputFields
               }}
               icon={<SearchIcon />}
               name="searchWith"
@@ -110,7 +110,7 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
               customStyle={{
                 backgroundColor: `${colors.activeBlue400}`,
                 border: `1px solid ${colors.activeBlue400}`,
-                color: `${colors.white}`,
+                color: `${colors.white}`
               }}
             />
           </Grid>

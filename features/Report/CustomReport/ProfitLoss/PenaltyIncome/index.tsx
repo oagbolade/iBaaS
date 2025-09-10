@@ -26,7 +26,7 @@ export const PenaltyIncome = () => {
         }}
       >
         <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
-          <FilterSection onSearch={() => { }} />
+          <FilterSection onSearch={() => {}} />
         </Box>
         <TableV2
           tableConfig={{

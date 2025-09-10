@@ -17,14 +17,15 @@ import { TopActionsArea } from '@/components/Revamp/Shared';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGetEODLogs } from '@/api/operation/useEndOfDay';
 import { FormSkeleton } from '@/components/Loaders';
-import { IEODLogs } from '@/api/ResponseTypes/operation';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { SearchIEODLogsResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const EndOfDaySetupTable = () => {
+  const { isLoading } = useGlobalLoadingState();
   const [openModel, setopenModel] = useState(Boolean);
   const [openRunModel, setopenRunModel] = useState(Boolean);
   const {
@@ -59,7 +60,10 @@ export const EndOfDaySetupTable = () => {
     setSearchParams(params);
     setSearchActive(true);
   };
-  const { data: logs, isLoading } = useGetEODLogs({ ...searchParams, page });
+  const { data: logs, isLoading: areEODLogsLoading } = useGetEODLogs({
+    ...searchParams,
+    page
+  });
 
   const actionButtons = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -90,7 +94,7 @@ export const EndOfDaySetupTable = () => {
         <FilterSection onSearch={handleSearch} />
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        {isLoading || areEODLogsLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

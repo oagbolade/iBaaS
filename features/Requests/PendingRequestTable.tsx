@@ -13,6 +13,8 @@ import { StyledTableCell } from '@/components/Table/style';
 import { formatDate } from '@/utils/formatDateAndTime';
 import { RequestModuleContext } from '@/context/RequestModuleContext';
 import { usePagination } from '@/utils/hooks/usePagination';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { FormSkeleton } from '@/components/Loaders';
 
 interface Props {
   pendingRequests?: IGetPendingRequest[] | undefined;
@@ -55,6 +57,7 @@ const PendingRequestsActions = ({ requests }: RequestProps) => {
 
 export const PendingRequestTable = ({ pendingRequests = [] }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { isLoading } = useGlobalLoadingState();
 
   const filterFunction = (request: IGetPendingRequest, term: string) =>
     request.posttype.toLowerCase().includes(term.toLowerCase()) ||
@@ -95,43 +98,47 @@ export const PendingRequestTable = ({ pendingRequests = [] }: Props) => {
           }
         />
       </Box>
-      <MuiTableContainer
-        columns={PendingRequestsColumns}
-        data={paginatedData}
-        page={page}
-        setPage={setPage}
-        totalPages={totalPages}
-        totalElements={totalElements}
-      >
-        {paginatedData && paginatedData.length > 0 ? (
-          paginatedData.map((request: IGetPendingRequest) => (
-            <StyledTableRow key={request.id}>
-              <StyledTableCell component="th" scope="row">
-                {request.posttype}
-              </StyledTableCell>
-              <StyledTableCell component="th" scope="row">
-                {formatDate(request?.createdate)}
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                {request.post_user}
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                <PendingRequestsActions requests={request} />
+      {isLoading ? (
+        <FormSkeleton noOfLoaders={3} />
+      ) : (
+        <MuiTableContainer
+          columns={PendingRequestsColumns}
+          data={paginatedData}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          totalElements={totalElements}
+        >
+          {paginatedData && paginatedData.length > 0 ? (
+            paginatedData.map((request: IGetPendingRequest) => (
+              <StyledTableRow key={request.id}>
+                <StyledTableCell component="th" scope="row">
+                  {request.posttype}
+                </StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  {formatDate(request?.createdate)}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {request.post_user}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <PendingRequestsActions requests={request} />
+                </StyledTableCell>
+              </StyledTableRow>
+            ))
+          ) : (
+            <StyledTableRow>
+              <StyledTableCell
+                colSpan={PendingRequestsColumns.length + 1}
+                component="th"
+                scope="row"
+              >
+                {renderEmptyTableBody(paginatedData)}
               </StyledTableCell>
             </StyledTableRow>
-          ))
-        ) : (
-          <StyledTableRow>
-            <StyledTableCell
-              colSpan={PendingRequestsColumns.length + 1}
-              component="th"
-              scope="row"
-            >
-              {renderEmptyTableBody(paginatedData)}
-            </StyledTableCell>
-          </StyledTableRow>
-        )}
-      </MuiTableContainer>
+          )}
+        </MuiTableContainer>
+      )}
     </Box>
   );
 };

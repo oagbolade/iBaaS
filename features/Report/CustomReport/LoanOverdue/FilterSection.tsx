@@ -10,12 +10,12 @@ import {
   FormSelectField,
   FormSelectInput,
   FormTextInput,
-  TextInput,
+  TextInput
 } from '@/components/FormikFields';
 import {
   ActionButton,
   ActionButtonWithPopper,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
@@ -46,14 +46,14 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
-    bankproducts,
+    bankproducts
   });
 
   const initialValues = {
     branch: searchParams?.branch ?? '',
     product: searchParams?.product ?? '',
     search: searchParams?.search ?? '',
-    reportDate: searchParams?.reportDate ?? '',
+    reportDate: searchParams?.reportDate ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -61,7 +61,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
       branch: values.branch.toString().length > 0 ? values.branch : null,
       product: values.product.length > 0 ? values.product : undefined,
       search: values.search.length > 0 ? values.search : undefined,
-      reportDate: reportDate.format('YYYY-MM-DD'),
+      reportDate: reportDate.format('YYYY-MM-DD')
     };
     onSearch?.(params);
   };
@@ -84,7 +84,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                 borderLeft: `1px solid ${colors.loanTitleColor}`,
                 borderBottom: `1px solid ${colors.loanTitleColor}`,
                 paddingLeft: '10px',
-                paddingRight: '10px',
+                paddingRight: '10px'
               }}
               direction={setDirection()}
               justifyContent="space-between"
@@ -123,7 +123,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                     icon={
                       <CalendarTodayOutlinedIcon
                         sx={{
-                          color: `${colors.Heading}`,
+                          color: `${colors.Heading}`
                         }}
                       />
                     }
@@ -137,7 +137,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
             <Box
               sx={{
                 marginTop: '30px',
-                paddingX: '24px',
+                paddingX: '24px'
               }}
             >
               <Box>
@@ -146,7 +146,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                     <FormSelectField
                       customStyle={{
                         width: setWidth(),
-                        ...inputFields,
+                        ...inputFields
                       }}
                       name="branch"
                       options={mappedBranches}
@@ -159,7 +159,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                     <FormSelectField
                       customStyle={{
                         width: setWidth(),
-                        ...inputFields,
+                        ...inputFields
                       }}
                       name="product"
                       options={mappedBankproducts}
@@ -171,7 +171,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                     <FormTextInput
                       customStyle={{
                         width: setWidth(),
-                        ...inputFields,
+                        ...inputFields
                       }}
                       icon={<SearchIcon />}
                       name="search"

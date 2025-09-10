@@ -9,7 +9,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 
@@ -37,7 +37,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
-    status,
+    status
   });
 
   const formattedDateRange = useMemo(() => {
@@ -50,7 +50,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     status: searchParams?.status ?? '',
-    accountNumber: searchParams?.accountNumber ?? '',
+    accountNumber: searchParams?.accountNumber ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -59,7 +59,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
       status: values.status.toString().length > 0 ? values.status : '',
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
       getAll: false,
-      pageSize: '10',
+      pageSize: '10'
     };
     onSearch?.(params);
   };
@@ -124,7 +124,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Box>
@@ -133,7 +133,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -151,7 +151,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="status"
                     options={mappedStatus}
@@ -170,7 +170,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="accountNumber"
@@ -192,7 +192,7 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

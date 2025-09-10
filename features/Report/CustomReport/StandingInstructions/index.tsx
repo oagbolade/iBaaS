@@ -32,13 +32,13 @@ export const StandingInstructions = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('standing-instruction');
   const { branches } = useGetBranches();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { siTransactions, isLoading } = useGetStandingIntruction({
-    ...searchParams,
+    ...searchParams
   });
 
   const { setReportType, setExportData, readyDownload, setReadyDownload } =
@@ -48,7 +48,7 @@ export const StandingInstructions = () => {
     if (readyDownload) {
       setSearchParams({
         ...searchParams,
-        getAll: true,
+        getAll: true
       });
     }
   }, [readyDownload]);
@@ -67,7 +67,7 @@ export const StandingInstructions = () => {
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
       getAll: readyDownload,
-      page,
+      page
     });
     setReportType('StandingInstructionReport');
   };
@@ -92,7 +92,7 @@ export const StandingInstructions = () => {
               mainTitle: 'Standing Instructions',
               secondaryTitle:
                 'See a directory of all standing instructions this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
             setPage={setPage}
             page={page}

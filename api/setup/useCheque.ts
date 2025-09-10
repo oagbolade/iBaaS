@@ -49,12 +49,13 @@ async function createCheque(
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
-    if (!SUCCESS_CODES.includes(data?.responseCode as string)) {
+    if (!SUCCESS_CODES.includes(data.responseCode || '')) {
       throw new Error(message);
     }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+    throw errorResponse;
   }
 }
 

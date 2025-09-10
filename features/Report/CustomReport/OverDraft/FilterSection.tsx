@@ -8,7 +8,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -35,7 +35,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const formattedDateRange = useMemo(() => {
@@ -46,7 +46,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
-    searchWith: searchParams?.searchWith ?? '',
+    searchWith: searchParams?.searchWith ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -57,7 +57,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         values.searchWith?.toString().trim().length > 0
           ? values.searchWith
           : null,
-      getAll: values.getAll,
+      getAll: values.getAll
     };
     onSearch?.(params);
   };
@@ -74,7 +74,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Box>
@@ -83,7 +83,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormSelectField
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     name="branchID"
                     options={mappedBranches}
@@ -102,7 +102,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
@@ -125,7 +125,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

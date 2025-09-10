@@ -8,7 +8,7 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { useGetGlMainGroupReport } from '@/api/reports/useGetSubGroupResponse';
 import {
   drillDownReportGlColumns,
-  drilMainKey,
+  drilMainKey
 } from '@/constants/Reports/COLUMNS';
 import { FormSkeleton } from '@/components/Loaders';
 import { ISearchParams } from '@/app/api/search/route';
@@ -42,13 +42,13 @@ export const DrillDown = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('drill-down');
 
   const { isLoading, glMainGroupRptList, totalRecords } =
     useGetGlMainGroupReport({
       ...searchParams,
-      pageNumber: String(page),
+      pageNumber: String(page)
     });
 
   const handleSearch = (params: ISearchParams | null) => {
@@ -65,8 +65,8 @@ export const DrillDown = () => {
         (item) => ({
           GlName: item.gl_NodeName,
           GlCode: item.gL_NodeCode,
-          total: item.total,
-        }),
+          total: item.total
+        })
       );
       setExportData(reportData as []);
     }
@@ -75,7 +75,7 @@ export const DrillDown = () => {
     readyDownload,
     setExportData,
     glMainGroupRptList,
-    setReportType,
+    setReportType
   ]);
 
   return (
@@ -95,7 +95,7 @@ export const DrillDown = () => {
             showHeader={{
               mainTitle: 'Drill Down GL',
               secondaryTitle:
-                'See a directory of all Drill Down GL Report in this system.',
+                'See a directory of all Drill Down GL Report in this system.'
             }}
             keys={drilMainKey as []}
             hideFilterSection
@@ -105,8 +105,8 @@ export const DrillDown = () => {
                 'Grand Total',
                 '',
                 `NGN ${formatCurrency(glMainGroupRptList?.total || 0)}`,
-                '',
-              ],
+                ''
+              ]
             }}
             setPage={setPage}
             totalPages={Math.ceil(totalRecords / 10)}

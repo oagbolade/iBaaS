@@ -6,7 +6,7 @@ import { buttonBackgroundColor } from '../AccountEnquiry/style';
 import {
   FormSelectField,
   FormSelectInput,
-  TextInput,
+  TextInput
 } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
@@ -26,20 +26,19 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     usePersistedSearch<ISearchParams>('group-loan-report');
   const [searchTerm, setSearchTerm] = useState('');
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
-    search: searchParams?.search ?? '',
+    search: searchParams?.search ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      search:
-        values.search?.toString().trim().length > 0 ? values.search : null,
+      search: values.search?.toString().trim().length > 0 ? values.search : null
     };
     onSearch?.(params);
   };
@@ -67,7 +66,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                 customStyle={{
                   width: '400px',
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -84,7 +83,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
               <TextInput
                 customStyle={{
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="search"

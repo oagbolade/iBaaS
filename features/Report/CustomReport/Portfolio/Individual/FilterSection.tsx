@@ -34,7 +34,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   return (
     <Box>
       <Box sx={{ height: '120px' }}>
-        <Grid container
+        <Grid
+          container
           sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
           spacing={2}
         >
@@ -47,7 +48,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
           >
             <FormSelectInput
               customStyle={{
-                
                 ...inputFields
               }}
               name="branchID"

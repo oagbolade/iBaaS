@@ -34,7 +34,7 @@ export const CustomerBalances = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('customer-balances');
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
@@ -49,28 +49,28 @@ export const CustomerBalances = () => {
       pagedCustomerBalances: [],
       grandTotal: 0,
       totalAvaiBal: 0,
-      totalBkBal: 0,
+      totalBkBal: 0
     },
     isLoading: isCustomerBalanceDataLoading,
-    totalRecords = 0,
+    totalRecords = 0
   }: CustomerBalanceList = useGetCustomerBalance({
     ...searchParams,
     getAll: readyDownload,
-    page,
+    page
   });
 
   const {
     pagedCustomerBalances = [],
     grandTotal = 0,
     totalAvaiBal = 0,
-    totalBkBal = 0,
+    totalBkBal = 0
   } = customerBalanceList || [];
 
   React.useEffect(() => {
     if (readyDownload) {
-      setSearchParams({ 
+      setSearchParams({
         ...searchParams,
-        getAll: true,
+        getAll: true
       });
     }
   }, [readyDownload, setSearchParams, searchParams]);
@@ -89,7 +89,7 @@ export const CustomerBalances = () => {
         availBal: `NGN ${item.availBal}`,
         lastdatepay: item.lastdatepay,
         holdBal: `NGN ${item.holdbal}`,
-        pendingCC: `NGN ${item.pendingCC}`,
+        pendingCC: `NGN ${item.pendingCC}`
       }));
       setExportData(mapCustomerBalance as []);
     }
@@ -100,7 +100,7 @@ export const CustomerBalances = () => {
     setExportData,
     grandTotal,
     totalAvaiBal,
-    totalBkBal,
+    totalBkBal
   ]);
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -109,7 +109,7 @@ export const CustomerBalances = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setReportType('CustomerBalance');
   };
@@ -118,7 +118,7 @@ export const CustomerBalances = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '60px',
+        marginTop: '60px'
       }}
     >
       <TopOverViewSection useBackButton />
@@ -148,7 +148,7 @@ export const CustomerBalances = () => {
                   `NGN ${formatCurrency(totalAvaiBal)}`,
                   '',
                   '',
-                  '',
+                  ''
                 ],
                 grandTotalRow: [
                   'Grand Total',
@@ -158,8 +158,8 @@ export const CustomerBalances = () => {
                   '',
                   '',
                   '',
-                  `NGN ${formatCurrency(grandTotal)}`,
-                ],
+                  `NGN ${formatCurrency(grandTotal)}`
+                ]
               }}
               keys={keys as []}
               columns={COLUMN}
@@ -168,7 +168,7 @@ export const CustomerBalances = () => {
               showHeader={{
                 mainTitle: 'Customer Balances',
                 secondaryTitle:
-                  'See a directory of all Customer Balance Report in this system.',
+                  'See a directory of all Customer Balance Report in this system.'
               }}
               setPage={setPage}
               totalElements={totalRecords}

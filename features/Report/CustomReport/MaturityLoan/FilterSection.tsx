@@ -8,7 +8,7 @@ import colors from '@/assets/colors';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
@@ -31,7 +31,7 @@ type Props = {
 
 export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>(
-    'maturity-loan-report',
+    'maturity-loan-report'
   );
   const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
@@ -39,7 +39,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
-    bankproducts,
+    bankproducts
   });
 
   const formattedDateRange = useMemo(() => {
@@ -51,7 +51,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     prodCode: searchParams?.prodCode ?? '',
-    searchWith: searchParams?.searchWith ?? '',
+    searchWith: searchParams?.searchWith ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -64,7 +64,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
           : null,
       prodCode:
         values.prodCode?.toString().trim().length > 0 ? values.prodCode : null,
-      getAll: values.getAll,
+      getAll: values.getAll
     };
     onSearch?.(params);
   };
@@ -81,7 +81,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '30px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Grid container spacing={2}>
@@ -95,7 +95,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="prodCode"
                   options={mappedBankproducts}
@@ -108,7 +108,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                 <FormSelectField
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   name="branchID"
                   options={mappedBranches}
@@ -127,7 +127,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                 <FormTextInput
                   customStyle={{
                     width: setWidth(),
-                    ...inputFields,
+                    ...inputFields
                   }}
                   icon={<SearchIcon />}
                   name="searchWith"
@@ -149,7 +149,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                   customStyle={{
                     backgroundColor: `${colors.activeBlue400}`,
                     border: `1px solid ${colors.activeBlue400}`,
-                    color: `${colors.white}`,
+                    color: `${colors.white}`
                   }}
                   type="submit"
                   buttonTitle="Search"

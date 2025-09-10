@@ -29,6 +29,7 @@ import { encryptData } from '@/utils/encryptData';
 import { Tabs } from '@/components/Revamp/Tabs';
 import { getStoredUser } from '@/utils/user-storage';
 import { useGetAllUsers, useGetUserByID } from '@/api/admin/useAdminUsers';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -59,6 +60,7 @@ export const AddCheque = ({
   const { checkbooks, isLoading } = useGetChequeById(
     encryptData(chequeId ?? '') || null
   );
+  const { sysmodel } = useGetSystemDate();
   // const branchCode = `${getStoredUser()?.profiles?.branchCode}` On hold;
   const userId = `${getStoredUser()?.profiles?.userid}`;
   const { userDetails } = useGetUserByID(encryptData(userId as string));
@@ -68,22 +70,24 @@ export const AddCheque = ({
   >(null);
   const [costAmount, setCostAmount] = React.useState<string | null>(null);
   // const branchCode = `${getStoredUser()?.profiles?.branchCode}` On hold;
-  const costAmountDataCode = `${branchCodeId}${commissionAccount}`;
-
+  const costAmountDataCode = commissionAccount
+    ? `${branchCodeId}${commissionAccount}`
+    : '';
   const { bankgl: accountData } = useGetGLByGLNumber(
-    encryptData(costAmountDataCode) || ''
+    costAmountDataCode ? encryptData(costAmountDataCode) : ''
   );
-  const accountDataCode = `${branchCodeId}${costAmount}`;
+  const accountDataCode = costAmount ? `${branchCodeId}${costAmount}` : '';
   const { bankgl: costAmountData } = useGetGLByGLNumber(
-    encryptData(accountDataCode) || ''
+    accountDataCode ? encryptData(accountDataCode) : ''
   );
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     const lastNumber = values.numberOfleaves;
     await mutate({
       ...values,
-      glAccount1: costAmount,
-      glAccount2: commissionAccount,
-      lastnumber: lastNumber
+      glAccount1: costAmount || values.glAccount1,
+      glAccount2: commissionAccount || values.glAccount2,
+      lastnumber: lastNumber,
+      authorisedby: sysmodel?.approvingOfficer
     });
   };
   useEffect(() => {
@@ -137,7 +141,16 @@ export const AddCheque = ({
         }}
       >
         <Formik
-          initialValues={checkbooks || createChequeBookInitialValues}
+          initialValues={
+            isEditing
+              ? {
+                  ...checkbooks,
+                  glAccount2: checkbooks?.glAccount2,
+                  glAccount1: checkbooks?.glAccount1,
+                  variance: 0
+                }
+              : createChequeBookInitialValues
+          }
           onSubmit={(values, actions) => onSubmit(values, actions)}
           validationSchema={createChequeBokSchema}
         >
@@ -220,6 +233,7 @@ export const AddCheque = ({
                         placeholder="Enter Cost Account"
                         label="Cost Account(Exclude branch code)"
                         value={costAmount?.toString()}
+                        disabled={Boolean(isEditing)}
                         onChange={handleCostAmountChange}
                         customStyle={{
                           width: setWidth(isMobile ? '250px' : '100%')
@@ -236,6 +250,7 @@ export const AddCheque = ({
                       <FormTextInput
                         name="glAccount2"
                         placeholder="Enter Commission Account"
+                        disabled={Boolean(isEditing)}
                         label="Commission Account(Exclude branch code)"
                         value={commissionAccount?.toString()}
                         onChange={handleCommissionAccountChange}

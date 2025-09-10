@@ -119,7 +119,7 @@ export const PostingContainer = ({ accountDetails }: Props) => {
     <>
       <Box
         sx={{
-          marginTop: '60px',
+          marginTop: '70px',
           position: 'fixed',
           top: 0,
           width: 'calc(100vw - 300px)',
@@ -128,11 +128,11 @@ export const PostingContainer = ({ accountDetails }: Props) => {
       >
         <TopActionsArea actionButtons={actionButtons} />
       </Box>
-      <Box mt={{ mobile: 2, desktop: 0 }} sx={{ padding: '0 25px' }}>
+      <Box mt={{ mobile: 2, desktop: 15 }} sx={{ padding: '0 45px' }}>
         <Box
           mr={3}
           sx={{
-            width: '50%',
+            width: '100%',
             padding: { mobile: 0, tablet: '30px 0' }
           }}
         >

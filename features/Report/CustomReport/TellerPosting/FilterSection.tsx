@@ -10,7 +10,7 @@ import { TextInput } from '@/components/FormikFields';
 import {
   ActionButton,
   ActionButtonWithPopper,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Report/CustomReport/style';
 import { ITellerPostingParams } from '@/api/reports/useGetTellerPosting';
@@ -25,7 +25,6 @@ type Props = {
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
-
   const [searchTerm, setSearchTerm] = useState('');
   const { setDirection } = useSetDirection();
 
@@ -35,7 +34,7 @@ export const FilterSection = ({ onSearch }: Props) => {
   const handleSearchClick = () => {
     const searchParams = {
       search: searchTerm || undefined,
-      reportDate: reportDate.format('YYYY-MM-DD'),
+      reportDate: reportDate.format('YYYY-MM-DD')
     };
 
     onSearch(searchParams);
@@ -47,7 +46,7 @@ export const FilterSection = ({ onSearch }: Props) => {
         sx={{
           borderBottom: `1px solid ${colors.loanTitleColor}`,
           marginTop: '10px',
-          paddingX: '24px',
+          paddingX: '24px'
         }}
         direction={setDirection()}
         justifyContent="space-between"
@@ -86,7 +85,7 @@ export const FilterSection = ({ onSearch }: Props) => {
               icon={
                 <CalendarTodayOutlinedIcon
                   sx={{
-                    color: `${colors.Heading}`,
+                    color: `${colors.Heading}`
                   }}
                 />
               }
@@ -98,7 +97,8 @@ export const FilterSection = ({ onSearch }: Props) => {
       </Stack>
 
       <Box sx={{ height: '120px' }}>
-        <Grid container
+        <Grid
+          container
           sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
           spacing={2}
         >
@@ -112,7 +112,7 @@ export const FilterSection = ({ onSearch }: Props) => {
             <TextInput
               customStyle={{
                 width: '100%',
-                ...inputFields,
+                ...inputFields
               }}
               icon={<SearchIcon />}
               name="search"

@@ -13,6 +13,8 @@ import { formatDate } from '@/utils/formatDateAndTime';
 import { IFetchRejectedRequest } from '@/api/ResponseTypes/loans';
 import { RequestModuleContext } from '@/context/RequestModuleContext';
 import { usePagination } from '@/utils/hooks/usePagination';
+import { FormSkeleton } from '@/components/Loaders';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface Props {
   rejectedRequests?: IFetchRejectedRequest[] | undefined;
@@ -48,6 +50,7 @@ const RejectedRequestsActions = ({ requests }: RequestProps) => {
 
 export const RejectedRequestTable = ({ rejectedRequests = [] }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { isLoading } = useGlobalLoadingState();
 
   const filterFunction = (request: IFetchRejectedRequest, term: string) =>
     request?.requestType?.toLowerCase().includes(term.toLowerCase()) ||
@@ -88,45 +91,49 @@ export const RejectedRequestTable = ({ rejectedRequests = [] }: Props) => {
           }
         />
       </Box>
-      <MuiTableContainer
-        columns={RejectedRequestsColumns}
-        data={paginatedData}
-        page={page}
-        setPage={setPage}
-        totalPages={totalPages}
-        totalElements={totalElements}
-      >
-        {paginatedData.length > 0 && paginatedData[0].requestType !== '' ? (
-          paginatedData.map((request: IFetchRejectedRequest) => {
-            return (
-              <StyledTableRow key={request.id}>
-                <StyledTableCell component="th" scope="row">
-                  {request.requestType}
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  {formatDate(request.rejectDate)}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {request.rejectReason}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <RejectedRequestsActions requests={request} />
-                </StyledTableCell>
-              </StyledTableRow>
-            );
-          })
-        ) : (
-          <StyledTableRow>
-            <StyledTableCell
-              colSpan={RejectedRequestsColumns.length + 1}
-              component="th"
-              scope="row"
-            >
-              {renderEmptyTableBody(paginatedData)}
-            </StyledTableCell>
-          </StyledTableRow>
-        )}
-      </MuiTableContainer>
+      {isLoading ? (
+        <FormSkeleton noOfLoaders={3} />
+      ) : (
+        <MuiTableContainer
+          columns={RejectedRequestsColumns}
+          data={paginatedData}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+          totalElements={totalElements}
+        >
+          {paginatedData.length > 0 && paginatedData[0].requestType !== '' ? (
+            paginatedData.map((request: IFetchRejectedRequest) => {
+              return (
+                <StyledTableRow key={request.id}>
+                  <StyledTableCell component="th" scope="row">
+                    {request.requestType}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                    {formatDate(request.rejectDate)}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {request.rejectReason}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <RejectedRequestsActions requests={request} />
+                  </StyledTableCell>
+                </StyledTableRow>
+              );
+            })
+          ) : (
+            <StyledTableRow>
+              <StyledTableCell
+                colSpan={RejectedRequestsColumns.length + 1}
+                component="th"
+                scope="row"
+              >
+                {renderEmptyTableBody(paginatedData)}
+              </StyledTableCell>
+            </StyledTableRow>
+          )}
+        </MuiTableContainer>
+      )}
     </Box>
   );
 };

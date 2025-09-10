@@ -19,12 +19,12 @@ export const PlainTrialBalance = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('plain-trial-balance');
   const { branches } = useGetBranches();
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -37,20 +37,20 @@ export const PlainTrialBalance = () => {
       pagedRecords: [],
       totalDr: 0,
       totalCr: 0,
-      bkBalance: 0,
+      bkBalance: 0
     },
     isLoading: isPlainTrailBalanceDataLoading,
-    totalRecords,
+    totalRecords
   } = useGetPlainTrialBalance({
     ...searchParams,
-    pageNumber: page.toString(),
+    pageNumber: page.toString()
   });
 
   const {
     pagedRecords: getAllPlainTrialBalanceData = [],
     totalDr = 0,
     totalCr = 0,
-    bkBalance = 0,
+    bkBalance = 0
   } = plainTrialBalanceList || {};
 
   React.useEffect(() => {
@@ -60,7 +60,7 @@ export const PlainTrialBalance = () => {
         oldGlNo: item.oldGLno,
         acctName: item.acctName,
         debit: `NGN ${formatCurrency(item.dr)}`,
-        credit: `NGN ${formatCurrency(item.cr)}`,
+        credit: `NGN ${formatCurrency(item.cr)}`
       }));
 
       setExportData(mapPlainTrailBalance as []);
@@ -72,7 +72,7 @@ export const PlainTrialBalance = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       {branches && (
@@ -93,15 +93,15 @@ export const PlainTrialBalance = () => {
                   '',
                   '',
                   `${formatCurrency(totalDr)}`,
-                  `${formatCurrency(totalCr)}`,
+                  `${formatCurrency(totalCr)}`
                 ],
                 grandTotalRow: [
                   'Balance in Book',
                   '',
                   '',
                   '',
-                  `${formatCurrency(bkBalance)}`,
-                ],
+                  `${formatCurrency(bkBalance)}`
+                ]
               }}
               keys={keys as []}
               columns={COLUMN}
@@ -110,7 +110,7 @@ export const PlainTrialBalance = () => {
               showHeader={{
                 mainTitle: 'Plain Trial Balance',
                 secondaryTitle:
-                  'See a directory of all Customer Balance Report in this system.',
+                  'See a directory of all Customer Balance Report in this system.'
               }}
               setPage={setPage}
               page={page}

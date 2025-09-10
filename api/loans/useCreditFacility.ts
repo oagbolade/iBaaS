@@ -37,7 +37,8 @@ import {
   GetCustomerLoanAcct,
   GetLoanByAccountDetailsResponse,
   LoanAccountDetailPreview,
-  GetOverdraftDetailResponse
+  GetOverdraftDetailResponse,
+  GetLoanDisbursementResponse
 } from '@/api/ResponseTypes/loans';
 import { decryptData } from '@/utils/decryptData';
 
@@ -251,7 +252,6 @@ export function useCloseLoan() {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: CancelLoanValues) => closeLoan(toastActions, body),
     onSuccess: () => {
-
       queryClient.invalidateQueries({
         queryKey: [queryKeys.getAllLoans]
       });
@@ -404,9 +404,8 @@ export async function disburseLoan(
   body: disburseLoanvalues
 ): Promise<void> {
   try {
-
     const urlEndpoint = '/CreditManagement/LoanDisbursement';
-    const { data }: AxiosResponse<GetLoanAccountDetailsResponse> =
+    const { data }: AxiosResponse<GetLoanDisbursementResponse> =
       await axiosInstance({
         url: urlEndpoint,
         method: 'POST',
@@ -416,14 +415,21 @@ export async function disburseLoan(
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
       });
+
     const { message, title, severity } = globalErrorHandler(data);
-    toast(message, title, severity, toastActions);
-    if (data.responseCode !== '00') {
+    toast(data.retMsg, 'Data Disbursed successfully', 'success', toastActions); // TODO: Revert this once the response is fixed
+    if (data.retVal !== '0') {
+      // TODO: Revert this once the response is updated
       throw new Error(message);
     }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
-    toast(message, title, severity, toastActions);
+    toast(
+      (errorResponse as any)?.response?.data.retMsg,
+      title,
+      severity,
+      toastActions
+    ); // TODO: Revert this once the response is fixed
     throw errorResponse;
   }
 }
@@ -435,7 +441,6 @@ export function useDisburseLoan() {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (body: disburseLoanvalues) => disburseLoan(toastActions, body),
     onSuccess: () => {
-      
       queryClient.invalidateQueries({
         queryKey: [queryKeys.getAllLoans]
       });
@@ -756,7 +761,7 @@ export function useGetLoanAccountByCustomerId(
 async function getLoanAccountByLoanAccountNumber(
   toastActions: IToastActions,
   loanAccount: string,
-  status: string 
+  status: string
 ): Promise<GetLoanByAccountDetailsResponse> {
   let result: GetLoanByAccountDetailsResponse = {
     responseCode: '',

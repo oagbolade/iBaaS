@@ -115,7 +115,7 @@ export const GeneralLedgerForm = ({
     uid: '',
     micincome: '',
     penalInterest: '',
-    penalSuspense: ''
+    penalIntSuspense: ''
   });
 
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
@@ -131,7 +131,7 @@ export const GeneralLedgerForm = ({
     uid: [],
     micincome: [],
     penalInterest: [],
-    penalSuspense: []
+    penalIntSuspense: []
   });
 
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
@@ -147,7 +147,7 @@ export const GeneralLedgerForm = ({
     uid: '',
     micincome: '',
     penalInterest: '',
-    penalSuspense: ''
+    penalIntSuspense: ''
   });
 
   const handleSelectedValue = (value: string, name: string) => {
@@ -470,20 +470,21 @@ export const GeneralLedgerForm = ({
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
-              handleSelectedValue(value, 'penalSuspense')
+              handleSelectedValue(value, 'penalIntSuspense')
             }
             label="Penal Suspense"
-            name="penalSuspense"
+            name="penalIntSuspense"
             searchGroupVariant="GLSearchGroup"
-            dropDownOptions={filteredValues.penalSuspense as OptionsI[]}
+            dropDownOptions={filteredValues.penalIntSuspense as OptionsI[]}
             customStyle={{ ...dropDownWithSearch, width: '960px' }}
             icon={<SearchIcon />}
             iconPosition="end"
             buttonTitle={
-              (selectedValue.penalSuspense as string) || 'Search Penal Suspense'
+              (selectedValue.penalIntSuspense as string) ||
+              'Search Penal Suspense'
             }
             onChange={handleSearch}
-            searchValue={searchValue.penalSuspense as string}
+            searchValue={searchValue.penalIntSuspense as string}
           />
         </StyledSearchableDropdown>
       </Grid>

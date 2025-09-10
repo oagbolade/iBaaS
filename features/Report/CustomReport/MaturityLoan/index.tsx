@@ -7,7 +7,7 @@ import { COLUMN } from './Column';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { useGetBranches } from '@/api/general/useBranches';
 import { FormSkeleton } from '@/components/Loaders';
@@ -49,11 +49,11 @@ export const MaturityLoan = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('maturity-loan-report');
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -63,13 +63,13 @@ export const MaturityLoan = () => {
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
       pageNumber: String(page),
-      pageSize: '10',
+      pageSize: '10'
     });
     setReportType('MaturityLoan');
   };
 
   const { loanMaturityList, totalRecords, isLoading } = useGetMaturityLoan({
-    ...searchParams,
+    ...searchParams
   });
 
   React.useEffect(() => {
@@ -99,10 +99,10 @@ export const MaturityLoan = () => {
               mainTitle: 'Maturity Loan',
               secondaryTitle:
                 'See a directory of all Maturity Loan Report in this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
             tableConfig={{
-              hasActions: true,
+              hasActions: true
             }}
             columns={COLUMN}
             data={loanMaturityList}

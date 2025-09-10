@@ -5,7 +5,6 @@ import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import {
   FormTextInput,
   FormSelectField,
-  FormikRadioButton
 } from '@/components/FormikFields';
 import { setDisburseLoanValues } from '@/schemas/schema-values/loan/index';
 import { useCurrentBreakpoint } from '@/utils';
@@ -28,7 +27,7 @@ export const DisburseLoanForm = ({
 
   const onSubmit = (values: any) => {
     const data = {
-      ...values,
+      ...values
     };
     mutate(data);
     setIsSubmitting(false);
@@ -70,7 +69,7 @@ export const DisburseLoanForm = ({
           initialValues={{
             ...setDisburseLoanValues,
             accountNumber,
-            userId: `${getStoredUser()?.profiles.userid}`,
+            userId: `${getStoredUser()?.profiles.userid}`
             // menuid: userLoanMenuid?.menu_id ?  userLoanMenuid?.menu_id : 0 TODO: replace with you confirm
           }}
           onSubmit={(values) => onSubmit(values)}
@@ -99,8 +98,8 @@ export const DisburseLoanForm = ({
                       fontSize: '14px'
                     }}
                     options={[
-                      { name: 'Bank', value: '1' },
-                      { name: 'Cash', value: '2' }
+                      { name: 'Bank', value: '0' },
+                      { name: 'Cash', value: '1' }
                     ]}
                     label="Payment Mode"
                     name="paymode"
@@ -109,7 +108,9 @@ export const DisburseLoanForm = ({
                 </Grid>
 
                 <Grid mt={2} item={isTablet} mobile={12}>
-                  <FormikRadioButton
+                  {/* // TODO: confirm later with eben */}
+                  {/* <FormikRadioButton 
+                    
                     options={[
                       { label: 'Yes', value: '1' },
                       { label: 'No', value: '0' }
@@ -117,7 +118,7 @@ export const DisburseLoanForm = ({
                     title="Tranche Disbursement"
                     name="payBank"
                     value="1"
-                  />
+                  /> */}
                 </Grid>
               </Grid>
             </Box>

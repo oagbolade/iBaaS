@@ -75,7 +75,7 @@ export const AddNewProduct = ({
       'uid',
       'micincome',
       'penalInterest',
-      'penalSuspense'
+      'penalIntSuspense'
     ],
     otherDetails: ['manageCollection', 'allowOD', 'postnodebit'],
     document: []
@@ -94,7 +94,23 @@ export const AddNewProduct = ({
       return {
         ...createLoanAccountInitialValues,
         ...loanProducts,
+        schtype: loanProducts.schtype,
+        maxintrate: loanProducts.maxintrate,
         maxloan: loanProducts.maxloan,
+        productclass: loanProducts.productclass,
+        appType: loanProducts.appType,
+        princbalBalance: loanProducts.princbalBalance,
+        interestReceivable: loanProducts.interestReceivable,
+        interestincome: loanProducts.interestincome,
+        susinterest: loanProducts.susinterest,
+        susprinc: loanProducts.susprinc,
+        micincome: loanProducts.micincome,
+        intaccrual: loanProducts.intaccrual,
+        uid: loanProducts.uid,
+        interbr: loanProducts.interbr,
+        penalIntIncome: loanProducts.penalIntIncome,
+        penalintAccrual: loanProducts.penalIntAccrual,
+        penalIntSuspense: loanProducts.penalSuspense,
         ProdException:
           loanProducts.ProdException?.map((item: any) => item.exceptioncode) ||
           [],

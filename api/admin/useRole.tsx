@@ -477,7 +477,9 @@ export function useFilterRoleSearch(params: ISearchParams | null) {
       params?.page || 1
     ],
     queryFn: () => filterRoleSearch(toastActions, params),
-    enabled: Boolean((params?.roleName?.toString() || '').length > 0 || params?.page)
+    enabled: Boolean(
+      (params?.roleName?.toString() || '').length > 0 || params?.page
+    )
   });
 
   return { ...data, isError, isLoading };

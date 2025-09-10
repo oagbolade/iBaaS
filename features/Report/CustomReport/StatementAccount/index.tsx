@@ -9,7 +9,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Details,
-  SubTitle,
+  SubTitle
 } from './AccountDetailsAccordion';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetBranches } from '@/api/general/useBranches';
@@ -18,7 +18,7 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import {
   useGetAccountDetails,
-  useGetAllCustomerAccountProducts,
+  useGetAllCustomerAccountProducts
 } from '@/api/customer-service/useCustomer';
 import { MuiTableContainer } from '@/components/Table';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
@@ -45,7 +45,7 @@ export const StatementAccount = () => {
   const { productTypes } = useGetProductType();
   const { products } = useGetProductClass();
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
@@ -55,13 +55,13 @@ export const StatementAccount = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('statement-of-account');
   const [accountNumber, setAccountNumber] = useState('');
   const [productCode, setProductCode] = useState('');
 
   const { accDetailsResults, isLoading: loadingDetails } = useGetAccountDetails(
-    accountNumber ? (encryptData(accountNumber) as string) : '',
+    accountNumber ? (encryptData(accountNumber) as string) : ''
   );
 
   const { rptStatementList, isLoading: loadingStatements } =
@@ -103,7 +103,7 @@ export const StatementAccount = () => {
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
       page,
-      getAll: false,
+      getAll: false
     };
 
     setSearchParams(queryParams);
@@ -152,8 +152,8 @@ export const StatementAccount = () => {
                         sx={{
                           padding: {
                             mobile: '10px 17px',
-                            desktop: '20px 32px',
-                          },
+                            desktop: '20px 32px'
+                          }
                         }}
                       >
                         <Grid
@@ -163,7 +163,8 @@ export const StatementAccount = () => {
                           justifyContent="center"
                         >
                           <SubTitle title="Account Name" />
-                          <Details className=' overflow-hidden text-ellipsis block w-64'
+                          <Details
+                            className=" overflow-hidden text-ellipsis block w-64"
                             title={accDetailsResults.accounttitle || 'N/A'}
                           />
                         </Grid>
@@ -277,7 +278,7 @@ export const StatementAccount = () => {
                               transform: isOpen
                                 ? 'rotate(180deg)'
                                 : 'rotate(0deg)',
-                              transition: 'transform 0.3s ease',
+                              transition: 'transform 0.3s ease'
                             }}
                           >
                             <ChevronDown />
@@ -316,7 +317,9 @@ export const StatementAccount = () => {
                     {statement.trandate}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    <span className=' overflow-hidden text-ellipsis block w-64'>{statement.narration}</span>
+                    <span className=" overflow-hidden text-ellipsis block w-64">
+                      {statement.narration}
+                    </span>
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
                     {statement.refNo}

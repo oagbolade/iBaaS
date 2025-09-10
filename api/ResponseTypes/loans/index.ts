@@ -41,7 +41,7 @@ export interface ILoanAccountDetails {
   calculationName: string;
   productName: string;
   collvalue: string;
-  loanPurpose: string
+  loanPurpose: string;
 }
 
 export interface IFetchAllUserRequest {
@@ -243,4 +243,12 @@ export interface GetLoanByAccountDetailsResponse extends IFetchingState {
   responseCode?: string;
   responseMessage?: string;
   loanAccDetails?: LoanAccountDetailPreview;
+}
+
+export interface GetLoanDisbursementResponse extends IFetchingState {
+  responseCode?: string;
+  responseMessage?: string;
+  retMsg: string;
+  retPostSeq: string;
+  retVal: string;
 }

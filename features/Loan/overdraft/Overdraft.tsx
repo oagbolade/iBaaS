@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import DOMPurify from 'dompurify';
@@ -19,6 +19,7 @@ import { useFilterCustomerAccountSearch } from '@/api/customer-service/useCustom
 import { useGetStatus } from '@/api/general/useStatus';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 type Props = {
   customerId: string;
@@ -44,6 +45,7 @@ const ActionMenuProps: React.FC<Props> = ({
 
 export const OverDrafts = () => {
   const { branches } = useGetBranches();
+  const { isLoading } = useGlobalLoadingState();
 
   const {
     searchParams,
@@ -92,7 +94,7 @@ export const OverDrafts = () => {
         />
       )}
 
-      {isOverdraftDataLoading ? (
+      {isLoading || isOverdraftDataLoading ? (
         <FormSkeleton noOfLoaders={3} />
       ) : (
         <MuiTableContainer

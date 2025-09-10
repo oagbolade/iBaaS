@@ -31,7 +31,7 @@ export const FilterSection = ({ onSearch, branches, data }: Props) => {
     branchID: searchParams?.branchID ?? '',
     accountNumber: searchParams?.accountNumber ?? '',
     search: searchParams?.status ?? '',
-    productCode: searchParams?.productCode ?? ''
+    productType: searchParams?.productType ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -44,8 +44,8 @@ export const FilterSection = ({ onSearch, branches, data }: Props) => {
         values.accountNumber.toString().trim().length > 0
           ? values.accountNumber
           : null,
-      productCode:
-        values.productCode.toString().length > 0 ? values.productCode : null
+      productType:
+        values.productType.toString().length > 0 ? values.productType : null
     };
 
     onSearch?.(params);
@@ -92,7 +92,7 @@ export const FilterSection = ({ onSearch, branches, data }: Props) => {
                   fontSize: '14px',
                   ...inputFields
                 }}
-                name="productCode"
+                name="productType"
                 options={[
                   {
                     value: '1',

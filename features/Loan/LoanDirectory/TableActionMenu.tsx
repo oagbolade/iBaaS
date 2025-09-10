@@ -140,7 +140,7 @@ export const TableActionMenu = ({
                 }}
                 aria-disabled={shouldDisable.view}
                 tabIndex={shouldDisable.view ? -1 : undefined}
-                href={`/loan/loan-directory/disburse-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
+                href={`/loan/loan-directory/disburse-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}&customerId=${sanitize(customerId)}`}
               >
                 <TableMenuButton buttonTitle="Disburse Loan" />
               </Link>

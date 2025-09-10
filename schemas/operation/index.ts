@@ -207,10 +207,7 @@ export const cashJournalSchema = Yup.object({
   narration1: Yup.string()
     .matches(stringRegex, 'Invalid Narration')
     .required('Narration   is Required'),
-  chequetype: Yup.string().required('Transaction Type is Required'),
-  debitAcct: Yup.string()
-    .matches(numericRegex, 'Input must be a number')
-    .required('debit account is  Required')
+  chequetype: Yup.string().required('Transaction Type is Required')
 });
 
 export const valutManagementSchema = Yup.object({

@@ -29,7 +29,6 @@ export const AccountFilterSection = ({
   productTypes,
   data
 }: Props) => {
-
   const {
     mappedBranches,
     mappedStatus,
@@ -52,7 +51,7 @@ export const AccountFilterSection = ({
     status: searchParams?.status ?? '',
     accountType: searchParams?.accountType ?? '',
     search: searchParams?.accountNumber ?? '',
-    productCode: searchParams?.productCode ?? ''
+    productType: searchParams?.productType ?? ''
   };
 
   const onSubmit = async (values: any) => {
@@ -60,8 +59,8 @@ export const AccountFilterSection = ({
       status: values.status.toString().length > 0 ? values.status : null,
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
       accountNumber: values.search.toString().length > 0 ? values.search : null,
-      productCode:
-        values.productCode.toString().length > 0 ? values.productCode : null
+      productType:
+        values.productType.toString().length > 0 ? values.productType : null
     };
 
     onSearch(params);
@@ -125,7 +124,7 @@ export const AccountFilterSection = ({
                   fontSize: '14px',
                   ...inputFields
                 }}
-                name="productCode"
+                name="productType"
                 options={[
                   {
                     value: '1',

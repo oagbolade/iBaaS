@@ -38,7 +38,7 @@ type Props = {
   customStyle?: CustomStyleI;
   dropDownOptions?: OptionsI[];
   loanDropDownOptions?: any;
-  options?: string[];
+  options?: (string | React.ReactElement)[];
   searchGroupVariant?:
     | 'Default'
     | 'LoanCustomerSearch'
@@ -175,12 +175,14 @@ export const ActionButtonWithPopper = ({
           <Paper sx={{ width: 240, maxWidth: '100%' }}>
             <MenuList id="split-button-menu" autoFocusItem>
               {options?.map((option, index) => {
+                const isString = typeof option === 'string';
                 return (
                   <MenuItem
-                    key={option}
+                    key={isString ? option : index}
                     selected={index === selectedIndex}
                     onClick={(event) => {
-                      return handleMenuItemClick(event, index);
+                      const value = isString ? option : undefined;
+                      return handleMenuItemClick(event, index, value);
                     }}
                   >
                     {option}

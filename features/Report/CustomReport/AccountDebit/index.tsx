@@ -7,7 +7,7 @@ import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSectio
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   DownloadReportContext,
-  IReportQueryParams,
+  IReportQueryParams
 } from '@/context/DownloadReportContext';
 import { useGetAccountInDebit } from '@/api/reports/useGetAccountInDebit';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
@@ -22,7 +22,7 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const AccountDebit = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
 
   const {
@@ -31,10 +31,10 @@ export const AccountDebit = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('account-debit');
   const { setExportData, setReportType, setReportQueryParams } = useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
   const { branches, isLoading: isLoadingBranches } = useGetBranches();
 
@@ -43,7 +43,7 @@ export const AccountDebit = () => {
       ...searchParams,
       pageSize: '10',
       pageNumber: String(page),
-      getAll: isDateFilterApplied,
+      getAll: isDateFilterApplied
     });
 
   const rowsPerPage = 10;
@@ -54,7 +54,7 @@ export const AccountDebit = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
     setReportType('AccountDebit');
@@ -94,7 +94,7 @@ export const AccountDebit = () => {
             mainTitle: 'Account in Debit',
             secondaryTitle:
               'See a directory of all Account in Debit Report in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
         >
           {searchActive ? (
@@ -122,7 +122,7 @@ export const AccountDebit = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                 );
-              },
+              }
             )
           ) : (
             <StyledTableRow>

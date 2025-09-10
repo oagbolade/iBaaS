@@ -6,7 +6,7 @@ import { COLUMN } from './COLUMN';
 import {
   MuiTableContainer,
   StyledTableRow,
-  renderEmptyTableBody,
+  renderEmptyTableBody
 } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { useGetChartOfAccount } from '@/api/reports/useChartAccount';
@@ -27,11 +27,11 @@ export const ChartAccount = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('chart-account');
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -43,10 +43,10 @@ export const ChartAccount = () => {
   const {
     chartofAccountList: getAllChartOfAccountData,
     isLoading: isChartOfAccountLoading,
-    totalRecords,
+    totalRecords
   } = useGetChartOfAccount({
     ...searchParams,
-    pageNumber: String(page),
+    pageNumber: String(page)
   });
 
   React.useEffect(() => {
@@ -56,7 +56,7 @@ export const ChartAccount = () => {
     ) {
       const mapChartOfAccount = getAllChartOfAccountData.map((item) => ({
         glnumber: item.glnumber,
-        acctname: item.acctname,
+        acctname: item.acctname
       }));
 
       setExportData(mapChartOfAccount as []);
@@ -68,7 +68,7 @@ export const ChartAccount = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection useBackButton showDatePicker={false} />
@@ -85,13 +85,13 @@ export const ChartAccount = () => {
             <MuiTableContainer
               columns={COLUMN}
               tableConfig={{
-                hasActions: false,
+                hasActions: false
               }}
               showHeader={{
                 hideFilterSection: true,
                 mainTitle: 'Chart Of Account ',
                 secondaryTitle:
-                  'See a directory of all Chart of Account in this system.',
+                  'See a directory of all Chart of Account in this system.'
               }}
               data={getAllChartOfAccountData}
               totalElements={totalRecords}

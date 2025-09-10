@@ -206,10 +206,16 @@ export const BatchPosting = ({
       ? accountData ?? undefined
       : mapGLAccountToAccountDetails(costAmountData as IGLAccount | null);
 
+  const [selectedPostingIndex, setSelectedPostingIndex] = useState<
+    number | null
+  >(0);
+
   const handleViewPosting = (
     index: number,
     setValues: (values: any) => void
   ) => {
+    setSelectedPostingIndex(index);
+
     const batch = savedBatchData[index];
     if (batch) {
       setValues({
@@ -252,6 +258,32 @@ export const BatchPosting = ({
   const menuId = manageCharges?.menu_id ?? '';
 
   const handleSaveBatch = (values: any, resetForm: () => void) => {
+    // check selectedPostingIndex
+
+    // check the savedBatchData is empty or not
+    if (selectedPostingIndex !== null && savedBatchData.length > 0) {
+      const updatedBatches = [...savedBatchData];
+      const formattedDate = dayjs(values.valueDate).format('YYYY-MM-DD');
+      const updatedBatchData: BatchData = {
+        ...values,
+        batchno: batchPostingNo,
+        valueDate: formattedDate,
+        menuid: Number(menuId),
+        currency: selectedCurrency
+      };
+      updatedBatches[selectedPostingIndex] = updatedBatchData;
+      setSavedBatchData(updatedBatches);
+      setSelectedPostingIndex(null);
+      resetForm();
+      toast(
+        'Batch updated successfully',
+        'Success',
+        'success' as AlertColor,
+        toastActions
+      );
+      return;
+    }
+
     const formattedDate = dayjs(values.valueDate).format('YYYY-MM-DD');
     const newBatchData: BatchData = {
       ...values,
@@ -260,7 +292,9 @@ export const BatchPosting = ({
       menuid: Number(menuId),
       currency: selectedCurrency
     };
+
     setSavedBatchData((prevBatches) => [...prevBatches, newBatchData]);
+
     resetForm();
     toast(
       'Batch saved successfully',
@@ -358,273 +392,271 @@ export const BatchPosting = ({
     >
       {({ values, resetForm, setValues }) => (
         <Form>
-          <Grid container spacing={2}>
-            <Box>
-              <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-                <PageTitle title="Batch Posting" styles={BatchTitle} />
-                <Grid container>
-                  <Grid
-                    item={isTablet}
-                    mobile={12}
-                    mr={{ mobile: 35, tablet: 0 }}
-                    width={{ mobile: '100%', tablet: 0 }}
-                    mb={5}
-                  >
-                    <FormTextInput
-                      name="accountNumber"
-                      placeholder="Enter Account Number"
-                      label="Account Number"
-                      value={accountNumber?.toString()}
-                      onChange={handleAccountNumber}
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormSelectField
-                      name="trancode"
-                      options={mappedTransactionType}
-                      label="Transaction Type"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <DemoContainer components={['DatePicker']}>
-                      <DateTimePicker
-                        label="Value Date"
-                        name="valueDate"
-                        value={values.valueDate || systemDate}
-                        required
-                      />
-                    </DemoContainer>
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormSelectInput
-                      name="currency"
-                      options={mappedCurrency}
-                      label="Currency"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                      value={selectedCurrency}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        setSelectedCurrency(e.target.value)
-                      }
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormAmountInput
-                      name="computedAmount"
-                      placeholder="Enter Pay Amount"
-                      label="Pay Amount"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormTextInput
-                      name="batchno"
-                      value={batchPostingNo || ''}
-                      placeholder="Enter Batch Posting"
-                      label="Batch Posting"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormTextInput
-                      name="narration"
-                      placeholder="Enter narration"
-                      label="Narration"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormTextInput
-                      name="tellerno"
-                      placeholder="Enter voucher number"
-                      label="Voucher Number"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormTextInput
-                      name="chequeno"
-                      placeholder="Enter Cheque Number"
-                      label="Cheque Number"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormTextInput
-                      name="accnttype"
-                      placeholder="Enter Rate"
-                      label="Rate"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12}>
-                    <FormTextInput
-                      name="computedAmount"
-                      placeholder="Enter value"
-                      label="Transaction Amount"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item={isTablet} mobile={12} mt={4}>
-                    <PrimaryIconButton
-                      buttonTitle="Save Batch"
-                      customStyle={{ ...savePosting }}
-                      icon={<AddIcon />}
-                      onClick={() => handleSaveBatch(values, resetForm)}
-                    />
-                  </Grid>
+          <Grid container spacing={8}>
+            <Grid item tablet={6} mobile={12}>
+              <PageTitle title="Batch Posting" styles={BatchTitle} />
+              <Grid container>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                  width={{ mobile: '100%', tablet: 0 }}
+                  mb={5}
+                >
+                  <FormTextInput
+                    name="accountNumber"
+                    placeholder="Enter Account Number"
+                    label="Account Number"
+                    value={accountNumber?.toString()}
+                    onChange={handleAccountNumber}
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
                 </Grid>
-                {savedBatchData.length > 0 && (
-                  <Box sx={postingDetails}>
-                    <Grid item={isTablet} mobile={12} mt={4}>
-                      <PageTitle title="Saved Batches" />
-                    </Grid>
-                    {savedBatchData.map((batch, index) => (
-                      <Box key={index} sx={saveBatches}>
-                        <Box sx={saveBatchesDetails}>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '32px',
-                              flex: '1 0 0'
-                            }}
-                          >
-                            <Box>
-                              <PageTitle title="Teller / Cheque No" />
-                              <PageTitle
-                                title={batch.chequeno}
-                                styles={{ ...saveTitles }}
-                              />
-                            </Box>
+                <Grid item={isTablet} mobile={12}>
+                  <FormSelectField
+                    name="trancode"
+                    options={mappedTransactionType}
+                    label="Transaction Type"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <DemoContainer components={['DatePicker']}>
+                    <DateTimePicker
+                      label="Value Date"
+                      name="valueDate"
+                      value={values.valueDate || systemDate}
+                      required
+                    />
+                  </DemoContainer>
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormSelectInput
+                    name="currency"
+                    options={mappedCurrency}
+                    label="Currency"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    value={selectedCurrency}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setSelectedCurrency(e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormAmountInput
+                    name="computedAmount"
+                    placeholder="Enter Pay Amount"
+                    label="Pay Amount"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="batchno"
+                    value={batchPostingNo || ''}
+                    placeholder="Enter Batch Posting"
+                    label="Batch Posting"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    disabled
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="narration"
+                    placeholder="Enter narration"
+                    label="Narration"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="tellerno"
+                    placeholder="Enter voucher number"
+                    label="Voucher Number"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="chequeno"
+                    placeholder="Enter Cheque Number"
+                    label="Cheque Number"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="accnttype"
+                    placeholder="Enter Rate"
+                    label="Rate"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    disabled
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="computedAmount"
+                    placeholder="Enter value"
+                    label="Transaction Amount"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    disabled
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12} mt={4}>
+                  <PrimaryIconButton
+                    buttonTitle="Save Batch"
+                    customStyle={{ ...savePosting }}
+                    icon={<AddIcon />}
+                    onClick={() => handleSaveBatch(values, resetForm)}
+                  />
+                </Grid>
+              </Grid>
 
-                            <Box>
-                              <PageTitle title="Account Number" />
-                              <PageTitle
-                                title={batch.accountNumber}
-                                styles={{ ...saveTitles }}
-                              />
-                            </Box>
-                            {batch.trancode === '523' && (
-                              <Box>
-                                <PageTitle title="DR" />
-                                <PageTitle
-                                  title={batch.trancode}
-                                  styles={{ ...saveTitles }}
-                                />
-                              </Box>
-                            )}
-                            {batch.trancode === '002' && (
-                              <Box>
-                                <PageTitle title="CR" />
-                                <PageTitle
-                                  title={batch.trancode}
-                                  styles={{ ...saveTitles }}
-                                />
-                              </Box>
-                            )}
-                            <Box>
-                              <PageTitle title="Transaction Amount" />
-                              <PageTitle
-                                title={batch.computedAmount}
-                                styles={{ ...saveTitles }}
-                              />
-                            </Box>
+              {savedBatchData.length > 0 && (
+                <Box sx={postingDetails}>
+                  <Grid item={isTablet} mobile={12} mt={4}>
+                    <PageTitle title="Saved Batches" />
+                  </Grid>
+                  {savedBatchData.map((batch, index) => (
+                    <Box key={index} sx={saveBatches}>
+                      <Box sx={saveBatchesDetails}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '32px',
+                            flex: '1 0 0'
+                          }}
+                        >
+                          <Box>
+                            <PageTitle title="Teller / Cheque No" />
+                            <PageTitle
+                              title={batch.chequeno}
+                              styles={{ ...saveTitles }}
+                            />
                           </Box>
+
+                          <Box>
+                            <PageTitle title="Account Number" />
+                            <PageTitle
+                              title={batch.accountNumber}
+                              styles={{ ...saveTitles }}
+                            />
+                          </Box>
+                          {batch.trancode === '523' && (
+                            <Box>
+                              <PageTitle title="DR" />
+                              <PageTitle
+                                title={batch.trancode}
+                                styles={{ ...saveTitles }}
+                              />
+                            </Box>
+                          )}
+                          {batch.trancode === '002' && (
+                            <Box>
+                              <PageTitle title="CR" />
+                              <PageTitle
+                                title={batch.trancode}
+                                styles={{ ...saveTitles }}
+                              />
+                            </Box>
+                          )}
+                          <Box>
+                            <PageTitle title="Transaction Amount" />
+                            <PageTitle
+                              title={batch.computedAmount}
+                              styles={{ ...saveTitles }}
+                            />
+                          </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '16px'
+                          }}
+                        >
                           <Box
                             sx={{
                               display: 'flex',
-                              alignItems: 'center',
-                              gap: '16px'
+                              flexDirection: 'column',
+                              alignItems: 'flex-end',
+                              gap: '4px'
                             }}
                           >
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'flex-end',
-                                gap: '4px'
-                              }}
-                            >
-                              <Box sx={{ display: 'flex', gap: '16px' }}>
-                                <Box>
-                                  <ActionButton
-                                    buttonTitle="View"
-                                    customStyle={{
-                                      ...DeleteSavedBatches,
-                                      border: 'none',
-                                      backgroundColor: `${colors.white}`
-                                    }}
-                                    onClick={() =>
-                                      handleViewPosting(index, setValues)
-                                    }
-                                  />
-                                </Box>
-                                <Box sx={{ marginRight: '50px' }}>
-                                  <ActionButton
-                                    buttonTitle="Delete"
-                                    customStyle={{
-                                      ...viewSavedBatches,
-                                      border: 'none',
-                                      backgroundColor: `${colors.white}`,
-                                      marginRight: '90px'
-                                    }}
-                                    onClick={() => handleDeletePosting(index)}
-                                  />
-                                </Box>
+                            <Box sx={{ display: 'flex', gap: '16px' }}>
+                              <Box>
+                                <ActionButton
+                                  buttonTitle="View"
+                                  customStyle={{
+                                    ...DeleteSavedBatches,
+                                    border: 'none',
+                                    backgroundColor: `${colors.white}`
+                                  }}
+                                  onClick={() =>
+                                    handleViewPosting(index, setValues)
+                                  }
+                                />
+                              </Box>
+                              <Box sx={{ marginRight: '50px' }}>
+                                <ActionButton
+                                  buttonTitle="Delete"
+                                  customStyle={{
+                                    ...viewSavedBatches,
+                                    border: 'none',
+                                    backgroundColor: `${colors.white}`,
+                                    marginRight: '90px'
+                                  }}
+                                  onClick={() => handleDeletePosting(index)}
+                                />
                               </Box>
                             </Box>
                           </Box>
                         </Box>
                       </Box>
-                    ))}
-                  </Box>
-                )}
-              </Box>
-              <Box>
-                <Box sx={PostingContainer}>
-                  {isMobile ? (
-                    <MobilePreviewContent
-                      PreviewContent={
-                        <PreviewContentOne
-                          accountDetails={normalizedAccountDetails}
-                          loading={isAccountDetailsLoading}
-                        />
-                      }
-                    />
-                  ) : (
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </Grid>
+
+            <Grid item tablet={6} mobile={12}>
+              {isMobile ? (
+                <MobilePreviewContent
+                  PreviewContent={
                     <PreviewContentOne
                       accountDetails={normalizedAccountDetails}
                       loading={isAccountDetailsLoading}
                     />
-                  )}
-                </Box>
-              </Box>
-            </Box>
+                  }
+                />
+              ) : (
+                <PreviewContentOne
+                  accountDetails={normalizedAccountDetails}
+                  loading={isAccountDetailsLoading}
+                />
+              )}
+            </Grid>
           </Grid>
           <button id="submitButton" type="submit" style={{ display: 'none' }}>
             submit alias

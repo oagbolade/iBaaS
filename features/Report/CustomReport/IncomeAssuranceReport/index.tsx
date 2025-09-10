@@ -35,24 +35,24 @@ export const IncomeAssuranceReport = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('income-assurance');
   const {
     data = [],
     isLoading,
-    totalRecords,
+    totalRecords
   } = useGetIncomeAssuranceReport({
     ...searchParams,
     page,
     getAll: readyDownload,
-    pageSize: '10',
+    pageSize: '10'
   });
 
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
         ...searchParams,
-        getAll: true,
+        getAll: true
       });
     }
   }, [readyDownload]);
@@ -69,7 +69,7 @@ export const IncomeAssuranceReport = () => {
         'product Name': item?.productName || 'N/A',
         'Accured Intrest': item?.accrued_Int?.toLocaleString() || 0,
         Branch: item?.branchName || 'N/A',
-        'Product Code': item?.productCode || 'N/A',
+        'Product Code': item?.productCode || 'N/A'
       }));
 
       // Ensure no blank row or misplaced headers
@@ -87,7 +87,7 @@ export const IncomeAssuranceReport = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
   };
   return (
@@ -112,7 +112,7 @@ export const IncomeAssuranceReport = () => {
               mainTitle: ' Income Assurance Report',
               secondaryTitle:
                 'See a directory of Income Assurance Report in this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
             setPage={setPage}
             page={page}

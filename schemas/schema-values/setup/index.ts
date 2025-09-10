@@ -440,7 +440,7 @@ export interface CreateLoanAccountFormValues {
   interbr: string;
   penalIntIncome: string;
   penalIntAccrual: string;
-  penalSuspense: string;
+  penalIntSuspense: string;
   penalrate: number;
   actualRAte: number;
   shortname: string;
@@ -620,7 +620,7 @@ export const createLoanAccountInitialValues: CreateLoanAccountFormValues = {
   interbr: '',
   penalIntIncome: '',
   penalIntAccrual: '',
-  penalSuspense: '',
+  penalIntSuspense: '',
   penalrate: 0,
   actualRAte: 0,
   shortname: '',

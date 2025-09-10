@@ -47,16 +47,16 @@ export const GroupMembership = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('group-membership');
 
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
 
   const { groupMembershipList, isLoading } = useGetGroupMembership({
     ...searchParams,
-    page,
+    page
   });
 
   React.useEffect(() => {
@@ -73,7 +73,7 @@ export const GroupMembership = () => {
         branchName: item.branchName,
         officer: item.officer,
         gender: item.gender,
-        createdate: item.createdate,
+        createdate: item.createdate
       }));
 
       setExportData(groupMember as []);
@@ -84,7 +84,7 @@ export const GroupMembership = () => {
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
     setSearchParams({
-      ...params,
+      ...params
     });
     setReportType('GroupMembership');
   };
@@ -115,7 +115,7 @@ export const GroupMembership = () => {
               mainTitle: 'Group Membership Report',
               secondaryTitle:
                 'See a directory of all Group Membership Report in this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
             setPage={setPage}
             page={page}

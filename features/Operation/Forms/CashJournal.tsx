@@ -29,10 +29,7 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { cashJournalSchema } from '@/schemas/operation';
 import { Details } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { PrimaryIconButton } from '@/components/Buttons';
-import {
-  CashDepositForwardToApprovingOfficerButtonStyle,
-  submitButton
-} from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
+import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { CreateCashJournlInitalValues } from '@/schemas/schema-values/operation';
 import { useCreateCashJournal } from '@/api/operation/useCashJournal';
 import { useGetGLByGLNumber } from '@/api/admin/useCreateGLAccount';
@@ -49,9 +46,15 @@ import { IGLAccount } from '@/api/ResponseTypes/admin';
 import { CustomStyleI } from '@/constants/types';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
 import { toast } from '@/utils/toast';
-import { mockToastActions } from '@/mocks';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
+import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
+import { SearchIcon } from '@/assets/svg';
+import { filterGeneralLedgerDropdownSearch } from '@/utils/filterDropdownSearch';
+import { OptionsI } from '@/components/FormikFields/FormSelectField';
+import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
+import { useGetAllGLWithBranchCode } from '@/api/setup/useProduct';
 
 interface Props {
   accountDetails?: IAccountDetailsResults | undefined;
@@ -125,23 +128,42 @@ export const PreviewContentOne = ({ accountDetails }: Props) => {
   );
 };
 
+type SearchFilters = {
+  accountNumber: string | OptionsI[];
+  [key: string]: any;
+};
+
 export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
+  const { data: dataWithCode } = useGetAllGLWithBranchCode();
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [transactionType, setTransactionType] = React.useState<boolean>(false);
   const [, setIsLoading] = React.useState(true);
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
+    accountNumber: []
+  });
+
+  const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
+    accountNumber: ''
+  });
 
   const toastActions = useContext(ToastMessageContext);
 
-  const [glAccount, setGLAccount] = React.useState<string | null>(null);
   const { mutate } = useCreateCashJournal();
+
   // eslint-disable-next-line no-lone-blocks
   {
     /* ON hold till the endpoint is ready*/
   }
-  const { mappedCurrency, mappedCommercialBank } = useMapSelectOptions({
-    currencies,
-    commBanks
+  const { mappedWithBranchCode, mappedCurrency, mappedCommercialBank } =
+    useMapSelectOptions({
+      currencies,
+      commBanks,
+      dataWithCode
+    });
+
+  const [searchValue, setSearchValue] = React.useState<SearchFilters>({
+    accountNumber: ''
   });
 
   const { submitForm } = useFormikContext() ?? {};
@@ -157,10 +179,10 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
     </Box>
   ];
 
-  const { total, dRtotal, cRtotal, isLoading } = useGetTellerBalanceByUserId();
+  const { total } = useGetTellerBalanceByUserId();
 
   const { bankgl: accountData } = useGetGLByGLNumber(
-    encryptData(glAccount as string)
+    encryptData(selectedValue?.accountNumber as string)
   );
   const onSubmit = async (values: any) => {
     const toastMessage = {
@@ -168,8 +190,12 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
       severity: 'error',
       selectedCurrency: {
         message: 'Currency is required'
+      },
+      glAccountNumber: {
+        message: 'GL Account Number is required'
       }
     };
+
     if (selectedCurrency === '') {
       toast(
         toastMessage.selectedCurrency.message,
@@ -179,18 +205,29 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
       );
       return;
     }
+
+    if (selectedValue?.accountNumber === '') {
+      toast(
+        toastMessage.glAccountNumber.message,
+        toastMessage.title,
+        toastMessage.severity as AlertColor,
+        toastActions
+      );
+      return;
+    }
+
     const getAllValues = {
       ...values,
+      debitAcct: selectedValue?.accountNumber,
+      creditAcct: selectedValue?.accountNumber,
       currencyCode: selectedCurrency
     };
+
     mutate(getAllValues);
   };
 
   const handleSelected = (value: boolean) => {
     setTransactionType(value);
-  };
-  const handleGlAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGLAccount(e.target.value);
   };
 
   const { sysmodel } = useGetSystemDate();
@@ -212,6 +249,44 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
       setIsLoading(false);
     }
   }, [mappedCurrency]); // Runs when mappedCurrency changes
+
+  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = event.target;
+
+    setSearchValue((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+
+    const filteredGlItems = filterGeneralLedgerDropdownSearch(
+      mappedWithBranchCode,
+      value
+    );
+
+    setFilteredValues((prev) => ({
+      ...prev,
+      [name]: filteredGlItems
+    }));
+
+    if (value.trim().length === 0) {
+      setFilteredValues({
+        accountNumber: mappedWithBranchCode
+      });
+    }
+  };
+
+  const handleSelectedValue = (value: string, name: string) => {
+    mappedWithBranchCode?.filter((item) => {
+      if (item.value === value) {
+        setSelectedValue((prev) => ({
+          ...prev,
+          [name]: `${item.branchCode}${value}`
+        }));
+      }
+
+      return null;
+    });
+  };
 
   return (
     <Formik
@@ -259,24 +334,30 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
                   />
                 </Grid>
               )}
-              <Grid
-                item={isTablet}
-                mobile={12}
-                mr={{ mobile: 35, tablet: 0 }}
-                width={{ mobile: '100%', tablet: 0 }}
-                mb={2}
-              >
-                <FormTextInput
-                  name="debitAcct"
-                  placeholder="Enter gl Account"
-                  label="GL  Account Number"
-                  value={glAccount?.toString()}
-                  onChange={handleGlAccountChange}
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
+
+              <Grid item={isTablet} mobile={12}>
+                <StyledSearchableDropdown>
+                  <ActionButtonWithPopper
+                    handleSelectedValue={(value: string) =>
+                      handleSelectedValue(value, 'accountNumber')
+                    }
+                    label="GL Account Number"
+                    name="accountNumber"
+                    searchGroupVariant="GLSearchGroup"
+                    dropDownOptions={filteredValues.accountNumber as OptionsI[]}
+                    customStyle={{ ...dropDownWithSearch, width: '960px' }}
+                    icon={<SearchIcon />}
+                    iconPosition="end"
+                    buttonTitle={
+                      (selectedValue.accountNumber as string) ||
+                      'Search Account Number'
+                    }
+                    onChange={handleSearch}
+                    searchValue={searchValue.accountNumber as string}
+                  />
+                </StyledSearchableDropdown>
               </Grid>
+
               <Grid sx={{ marginTop: 2 }} item={isTablet} mobile={12}>
                 <FormSelectInput
                   name="currencyCode"

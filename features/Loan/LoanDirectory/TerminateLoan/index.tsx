@@ -18,8 +18,7 @@ import colors from '@/assets/colors';
 import LoanPreviewContent from '@/features/Loan/LoanDirectory/LoanPreviewContent';
 import { useGetLoanAccountByLoanAccountNumber } from '@/api/loans/useCreditFacility';
 import { encryptData } from '@/utils/encryptData';
-import {handleRedirect } from '@/utils';
-
+import { handleRedirect } from '@/utils';
 
 const MobilePreviewContent: React.FC<{
   data?: any;

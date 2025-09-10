@@ -19,15 +19,15 @@ export const GroupLoanReport = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('group-loan-report');
   const {
     groupLoanReportList = [],
     isLoading,
-    totalRecords,
+    totalRecords
   } = useGetGroupLoan({
     ...searchParams,
-    page,
+    page
   });
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
@@ -38,7 +38,7 @@ export const GroupLoanReport = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection useBackButton />
@@ -46,7 +46,7 @@ export const GroupLoanReport = () => {
       <Box
         sx={{
           padding: '25px',
-          width: '100%',
+          width: '100%'
         }}
       >
         {branches && (
@@ -61,7 +61,7 @@ export const GroupLoanReport = () => {
                 tableConfig={{
                   hasActions: false,
                   paintedColumns: ['DR Product Balance', ''],
-                  totalRow: ['Total Amount', '', '₦104,200.65', '₦104,200.65'],
+                  totalRow: ['Total Amount', '', '₦104,200.65', '₦104,200.65']
                 }}
                 columns={COLUMN}
                 data={groupLoanReportList}
@@ -70,7 +70,7 @@ export const GroupLoanReport = () => {
                 showHeader={{
                   mainTitle: 'Loan By Group Report',
                   secondaryTitle:
-                    'See a directory of all Loan By Group Report in this system.',
+                    'See a directory of all Loan By Group Report in this system.'
                 }}
                 page={page}
                 setPage={setPage}

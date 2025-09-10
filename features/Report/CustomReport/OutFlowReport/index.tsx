@@ -12,7 +12,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   useGetInflowOutflowReport,
-  IInflowOutflowParams,
+  IInflowOutflowParams
 } from '@/api/reports/useGetInflowOutflowReport';
 import { inflowOutflowReportColumn } from '@/constants/Reports/COLUMNS';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
@@ -23,10 +23,10 @@ import { ISearchParams } from '@/app/api/search/route';
 export const InflowOutflowReport = () => {
   const { branches } = useGetBranches();
   const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext,
+    DownloadReportContext
   );
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
 
   const {
@@ -35,7 +35,7 @@ export const InflowOutflowReport = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<IInflowOutflowParams>('outflow-report');
   const { branchId, tellerId } = searchParams || {};
 
@@ -44,14 +44,14 @@ export const InflowOutflowReport = () => {
     totalInflow,
     totalOutflow,
     totalRecords,
-    isLoading,
+    isLoading
   } = useGetInflowOutflowReport({
     ...searchParams,
     branchId,
     tellerId,
     pageSize: 10,
     pageNumber: page,
-    getAll: isDateFilterApplied,
+    getAll: isDateFilterApplied
   });
 
   React.useEffect(() => {
@@ -64,7 +64,7 @@ export const InflowOutflowReport = () => {
       'Product Name': item.productName || '',
       'Branch Code': item.branchcode || '',
       Inflow: item.inflow || '',
-      Outflow: item.outflow || '',
+      Outflow: item.outflow || ''
     }));
 
     setExportData(formattedExportData);
@@ -75,7 +75,7 @@ export const InflowOutflowReport = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
     setPage(1);
@@ -110,7 +110,7 @@ export const InflowOutflowReport = () => {
                 'productName',
                 'branchcode',
                 'inflow',
-                'outflow',
+                'outflow'
               ]}
               hideFilterSection
               isSearched={searchActive}

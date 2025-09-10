@@ -4,6 +4,7 @@ import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import { FilterSection } from './FilterSection';
 import colors from '@/assets/colors';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { useInvalidateQueries } from '@/utils/hooks/useInvalidateQueries';
 
 type Props = {
   mainTitle?: string;
@@ -17,6 +18,7 @@ export const CustomTableHeader = ({
   hideFilterSection = false
 }: Props) => {
   const { setDirection } = useSetDirection();
+  const { invalidateQueries } = useInvalidateQueries();
 
   return (
     <Box
@@ -36,7 +38,12 @@ export const CustomTableHeader = ({
           >
             {mainTitle}
             <ReplayOutlinedIcon
-              sx={{ color: `${colors.activeBlue400}`, marginLeft: '15px' }}
+              onClick={() => invalidateQueries()}
+              sx={{
+                color: `${colors.activeBlue400}`,
+                marginLeft: '15px',
+                cursor: 'pointer'
+              }}
             />
           </Typography>
           <Typography

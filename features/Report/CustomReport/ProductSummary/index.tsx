@@ -10,13 +10,13 @@ import colors from '@/assets/colors';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import {
   IProdutSummaryParams,
-  useGetProductSummary,
+  useGetProductSummary
 } from '@/api/reports/useGetProductSummary';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   GetProductSummaryReport,
-  IpagedProductSummaries,
+  IpagedProductSummaries
 } from '@/api/ResponseTypes/reports';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
@@ -35,7 +35,7 @@ const ViewMore = ({ data }: IViewMoreProps) => {
           fontWeight: 600,
           lineHeight: '20px',
           color: `${colors.activeBlue400}`,
-          cursor: 'pointer',
+          cursor: 'pointer'
         }}
       >
         View More
@@ -57,25 +57,25 @@ export const ProductSummary = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<IProdutSummaryParams>('product-summary');
 
   const {
     productSummaryList,
     isLoading: isloadingproductSumary,
-    totalRecords,
+    totalRecords
   } = useGetProductSummary({
     ...searchParams,
     pageNumber: page,
     pageSize: 10,
-    getAll: readyDownload,
+    getAll: readyDownload
   });
 
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
         ...searchParams,
-        getAll: true,
+        getAll: true
       });
     }
   }, [readyDownload]);
@@ -92,8 +92,8 @@ export const ProductSummary = () => {
           'Number of Accounts': item?.noofaccts || '',
           'CR Product Balance': item?.crproductbalance || '',
           'DR Product Balance': item?.drproductbalance || '',
-          'Total Balance': item?.totproductbalance || '',
-        }),
+          'Total Balance': item?.totproductbalance || ''
+        })
       );
 
       // Ensure no blank row or misplaced headers
@@ -105,13 +105,13 @@ export const ProductSummary = () => {
     setExportData,
     setReportType,
     readyDownload,
-    setReadyDownload,
+    setReadyDownload
   ]);
 
   const handleSearch = (params: IProdutSummaryParams | null) => {
     setReadyDownload(false);
     setSearchParams({
-      ...params,
+      ...params
     });
     setSearchActive(true);
     // setPage(1); // Reset to the first page on new search
@@ -121,7 +121,7 @@ export const ProductSummary = () => {
     <Box
       sx={{
         width: '100%',
-        marginTop: '50px',
+        marginTop: '50px'
       }}
     >
       <TopOverViewSection useBackButton />
@@ -129,7 +129,7 @@ export const ProductSummary = () => {
       <Box
         sx={{
           padding: '25px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <Box sx={{ marginTop: '20px', marginBottom: '30px' }}>
@@ -150,8 +150,8 @@ export const ProductSummary = () => {
                 `${productSummaryList?.totalCr?.toLocaleString()}`,
                 `${productSummaryList?.totalDr?.toLocaleString()}`,
                 `${productSummaryList?.totalProductBal?.toLocaleString()}`,
-                '',
-              ],
+                ''
+              ]
             }}
             columns={MOCK_COLUMNS_V2}
             data={productSummaryList?.pagedProductSummaries || []}
@@ -161,7 +161,7 @@ export const ProductSummary = () => {
               'noofaccts',
               'crproductbalance',
               'drproductbalance',
-              'totproductbalance',
+              'totproductbalance'
             ]}
             ActionMenuProps={ViewMore}
             hideFilterSection
@@ -169,7 +169,7 @@ export const ProductSummary = () => {
             showHeader={{
               mainTitle: 'Product Summary',
               secondaryTitle:
-                'See a directory of all Product Summary Report in this system.',
+                'See a directory of all Product Summary Report in this system.'
             }}
             page={page}
             setPage={setPage}

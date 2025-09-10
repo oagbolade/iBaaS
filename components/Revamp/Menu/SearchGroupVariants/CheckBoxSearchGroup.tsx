@@ -22,7 +22,7 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import { TypographyButton } from '@/components/Revamp/Modal/style';
 
 type Props = {
-  options?: Array<string>;
+  options?: Array<string | React.ReactElement> | undefined;
   handleClose: any;
 };
 

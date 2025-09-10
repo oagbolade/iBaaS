@@ -27,13 +27,13 @@ export const TransactionClearing = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('transaction-clearing');
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { status } = useGetStatus();
   const { branches } = useGetBranches();
   const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext,
+    DateRangePickerContext
   );
 
   const { data: transactionsinClearingList = [], isLoading } =
@@ -42,7 +42,7 @@ export const TransactionClearing = () => {
       page,
       pageNumber: String(page),
       pageSize: '20',
-      getAll: isDateFilterApplied,
+      getAll: isDateFilterApplied
     });
 
   React.useEffect(() => {
@@ -56,7 +56,7 @@ export const TransactionClearing = () => {
       'Value Date': item?.valuedate?.split(' ')[0] || '',
       Amount: item?.tranamount || '',
       Narration: item?.narration || '',
-      'Posted By': item?.userid || '',
+      'Posted By': item?.userid || ''
     }));
 
     // Ensure no blank row or misplaced headers
@@ -68,7 +68,7 @@ export const TransactionClearing = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
   };
@@ -95,10 +95,10 @@ export const TransactionClearing = () => {
               mainTitle: 'Transactions in Clearing',
               secondaryTitle:
                 'See a directory of all Transactions in Clearing in this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
             tableConfig={{
-              hasActions: false,
+              hasActions: false
             }}
           >
             {searchActive ? (
@@ -132,7 +132,7 @@ export const TransactionClearing = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                },
+                }
               )
             ) : (
               <StyledTableRow>

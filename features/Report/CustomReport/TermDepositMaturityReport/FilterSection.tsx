@@ -22,22 +22,22 @@ type Props = {
 
 export const FilterSection = ({ onSearch, branches }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>(
-    'team-deposit-maturity',
+    'team-deposit-maturity'
   );
   const { mappedBranches } = useMapSelectOptions({
-    branches,
+    branches
   });
   const { setWidth } = useCurrentBreakpoint();
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
-    search: searchParams?.fullName ?? '',
+    search: searchParams?.fullName ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      fullName: values.search.trim().length > 0 ? values.search : null,
+      fullName: values.search.trim().length > 0 ? values.search : null
     };
 
     onSearch?.(params);
@@ -64,7 +64,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth(),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 name="branchID"
                 options={mappedBranches}
@@ -82,7 +82,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
                 customStyle={{
                   width: setWidth('100%'),
                   fontSize: '14px',
-                  ...inputFields,
+                  ...inputFields
                 }}
                 icon={<SearchIcon />}
                 name="search"
@@ -103,7 +103,7 @@ export const FilterSection = ({ onSearch, branches }: Props) => {
               <ActionButton
                 customStyle={{
                   backgroundColor: `${colors.activeBlue400}`,
-                  color: `${colors.white}`,
+                  color: `${colors.white}`
                 }}
                 type="submit"
                 buttonTitle="Search"

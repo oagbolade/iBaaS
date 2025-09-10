@@ -13,7 +13,7 @@ import { useCurrentBreakpoint } from '@/utils';
 import {
   ActionButtonWithPopper,
   ActionButton,
-  BackButton,
+  BackButton
 } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { ISearchParams } from '@/app/api/search/route';
@@ -30,7 +30,7 @@ export const FilterSection = ({ onSearch }: Props) => {
 
   const initialValues = {
     branchCode: searchParams?.branchCode ?? '',
-    gl_NodeCode: searchParams?.gl_NodeCode ?? '',
+    gl_NodeCode: searchParams?.gl_NodeCode ?? ''
   };
 
   const onSubmit = (values: any) => {
@@ -42,7 +42,7 @@ export const FilterSection = ({ onSearch }: Props) => {
       gl_NodeCode:
         values.gl_NodeCode?.toString().trim().length > 0
           ? values.gl_NodeCode
-          : null,
+          : null
     };
     onSearch?.(searchParams);
   };
@@ -90,7 +90,7 @@ export const FilterSection = ({ onSearch }: Props) => {
           <Box
             sx={{
               marginTop: '20px',
-              paddingX: '24px',
+              paddingX: '24px'
             }}
           >
             <Box>
@@ -105,7 +105,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                   <FormTextInput
                     customStyle={{
                       width: setWidth(),
-                      ...inputFields,
+                      ...inputFields
                     }}
                     icon={<SearchIcon />}
                     name="gl_NodeCode"
@@ -128,7 +128,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                     customStyle={{
                       backgroundColor: `${colors.activeBlue400}`,
                       border: `1px solid ${colors.activeBlue400}`,
-                      color: `${colors.white}`,
+                      color: `${colors.white}`
                     }}
                     type="submit"
                     buttonTitle="Search"

@@ -5,7 +5,10 @@ import { useSearchParams } from 'next/navigation';
 import { Box } from '@mui/material';
 import { sanitize } from 'dompurify';
 import { TopActionsArea, LoanDetails } from '@/components/Revamp/Shared';
-import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
+import {
+  ActionButtonWithPopper,
+  ActionButton
+} from '@/components/Revamp/Buttons';
 import { ChevronDown } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { FormSkeleton } from '@/components/Loaders';
@@ -20,65 +23,7 @@ import {
   ICustomerDetails
 } from '@/schemas/schema-values/loan';
 import { ILoanAccountDetails } from '@/api/ResponseTypes/loans';
-
-type Props = {
-  status: string;
-  accountNumber: string;
-  settlementAccount: string;
-  productCode: string;
-  customerId: string;
-  action: string;
-};
-
-const actionButtons = ({
-  accountNumber,
-  action,
-  status,
-  customerId,
-  settlementAccount,
-  productCode
-}: Props) => {
-  const options: any =
-    status === 'Running'
-      ? [
-          
-          <Link
-            href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
-          >
-            Loan Restructure
-          </Link>,
-          <Link
-            href={`/loan/loan-directory/partial-pay/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`}
-          >
-            Partial Pay
-          </Link>,
-          <Link
-            href={`/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`}
-          >
-            Terminate Loan
-          </Link>
-        ]
-      : [];
-
-  return (
-    <ActionButtonWithPopper
-      options={options}
-      customStyle={{
-        borderRadius: '6px',
-        border: `1px solid ${colors.activeBlue400}`,
-        backgroundColor: `${colors.white}`
-      }}
-      icon={
-        <ChevronDown
-          color={`${colors.primaryBlue400}`}
-          props={{ width: '24px', height: '24px' }}
-        />
-      }
-      iconPosition="end"
-      buttonTitle="Actions"
-    />
-  );
-};
+import { cancelButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 
 export const ViewLoan = () => {
   const searchParams = useSearchParams();
@@ -108,24 +53,66 @@ export const ViewLoan = () => {
     );
   }
 
+  const runningActions = [
+    {
+      label: 'Loan Restructure',
+      href: `/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode || loanAccDetails?.productCode || '')}`
+    },
+    {
+      label: 'Partial Pay',
+      href: `/loan/loan-directory/partial-pay/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`
+    },
+    {
+      label: 'Terminate Loan',
+      href: `/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`
+    }
+  ];
+
+  const getActionButtons = () => {
+    if (action === '4') {
+      return [
+        <ActionButtonWithPopper
+          key="running-actions"
+          options={runningActions.map((item) => (
+            <Link key={item.label} href={item.href}>
+              {item.label}
+            </Link>
+          ))}
+          customStyle={{
+            borderRadius: '6px',
+            border: `1px solid ${colors.activeBlue400}`,
+            backgroundColor: `${colors.white}`
+          }}
+          icon={
+            <ChevronDown
+              color={`${colors.primaryBlue400}`}
+              props={{ width: '24px', height: '24px' }}
+            />
+          }
+          iconPosition="end"
+          buttonTitle="Actions"
+        />
+      ];
+    }
+    if (action === '1') {
+      return [
+        <Link
+          key="disburse-action"
+          href={`/loan/loan-directory/disburse-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode || '')}&customerId=${sanitize(accDetailsResults?.customerid || '')}`}
+        >
+          <ActionButton
+            customStyle={{ ...cancelButton }}
+            buttonTitle="Disburse Loan"
+          />
+        </Link>
+      ];
+    }
+    return [];
+  };
+
   return (
     <Box>
-      <TopActionsArea
-        actionButtons={
-          loanAccDetails?.status === 'Running'
-            ? [
-                actionButtons({
-                  accountNumber,
-                  action,
-                  status: loanAccDetails?.status || '',
-                  customerId: accDetailsResults?.customerid || '',
-                  settlementAccount,
-                  productCode: loanAccDetails?.productCode || ''
-                })
-              ]
-            : []
-        }
-      />
+      <TopActionsArea actionButtons={getActionButtons()} />
 
       <Box sx={{ padding: '20px', width: '100%' }}>
         {loanAccDetails && accDetailsResults && (
