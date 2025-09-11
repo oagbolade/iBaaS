@@ -24,7 +24,7 @@ import { DeleteActionSteps } from '@/constants/Steps';
 import { useValidatePassword } from '@/api/admin/useAdminUsers';
 import { getStoredUser } from '@/utils/user-storage';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -69,6 +69,7 @@ export const Roles = () => {
   const [search, setSearch] = useState<boolean>(true);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
+  const { isLoading } = useGlobalLoadingState();
 
   const {
     totalPages,
@@ -149,11 +150,10 @@ export const Roles = () => {
             width: '100%'
           }}
         >
-          {areRoleDataLoading ? (
+          {isLoading || areRoleDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <>
-              <FetchingLoader noOfLoaders={3} />
               <MuiTableContainer
                 columns={COLUMNS}
                 tableConfig={{

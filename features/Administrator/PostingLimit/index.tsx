@@ -20,6 +20,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { useFilterPostingLimitSearch } from '@/api/admin/usePostingLimit';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Link href="/admin/posting-limit/create">
@@ -31,6 +32,7 @@ const actionButtons: any = [
 ];
 
 export const PostingLimit = () => {
+  const { isLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -83,11 +85,10 @@ export const PostingLimit = () => {
             width: '100%'
           }}
         >
-          {isPostingDataLoading ? (
+          {isLoading || isPostingDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <>
-            <FetchingLoader noOfLoaders={3} /> 
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{

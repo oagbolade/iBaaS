@@ -17,6 +17,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { SearchAccountOfficersResponse } from '@/api/ResponseTypes/admin';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 export interface IOptions {
   buttonTitle: string;
   link?: string;
@@ -45,6 +46,7 @@ const ActionMenuProps = ({ officercode }: { officercode: string }) => {
 };
 
 export const OfficeTransferTable = () => {
+  const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
 
   const {
@@ -81,11 +83,10 @@ export const OfficeTransferTable = () => {
         )}
       </div>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {areAccountOfficersDataLoading ? (
+        {isLoading || areAccountOfficersDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <>
-          <FetchingLoader noOfLoaders={3} /> 
         <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{

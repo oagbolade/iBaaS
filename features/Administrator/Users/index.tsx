@@ -33,7 +33,7 @@ import { DeleteActionSteps } from '@/constants/Steps';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
 import { getStoredUser } from '@/utils/user-storage';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }} key="create-user">
@@ -68,6 +68,8 @@ export const Users = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('admin-users');
+
+  const { isLoading } = useGlobalLoadingState();
 
   const excludeSteps = ['proceedToLockOrUnlockUser'];
 
@@ -187,11 +189,10 @@ export const Users = () => {
             width: '100%'
           }}
         >
-          {isUserDataLoading ? (
+          {isLoading || isUserDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <>
-             <FetchingLoader noOfLoaders={3} /> 
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{ hasActions: true }}
