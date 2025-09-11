@@ -33,8 +33,10 @@ import { IProductType } from '@/api/ResponseTypes/general';
 import { useGetProductClass } from '@/api/setup/useProduct';
 import { IProducts } from '@/api/ResponseTypes/setup';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const StatementAccount = () => {
+  const { isLoading } = useGlobalLoadingState();
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState<Height>('auto');
   const expandRef = React.useRef(null);
@@ -300,7 +302,7 @@ export const StatementAccount = () => {
       )}
 
       <div className="mx-5">
-        {loadingStatements ? (
+        {isLoading || loadingStatements ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

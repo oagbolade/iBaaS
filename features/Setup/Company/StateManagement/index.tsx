@@ -19,8 +19,10 @@ import { Status } from '@/components/Labels';
 import { useGetRegion } from '@/api/setup/useCreateRegion';
 import { useFilterStateSearch } from '@/api/setup/useCreateState';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const StateManagement = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { status } = useGetStatus();
   const { states } = useGetAllStates();
   const { region } = useGetRegion();
@@ -79,7 +81,7 @@ export const StateManagement = () => {
             width: '100%',
           }}
         >
-          {isLoading ? (
+          {isGlobalLoading || isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <MuiTableContainer

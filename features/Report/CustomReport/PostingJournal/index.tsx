@@ -22,6 +22,7 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import colors from '@/assets/colors';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface ActionMenuProps {
   detail: string;
@@ -39,6 +40,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 };
 
 export const PostingJournal = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
@@ -91,7 +93,7 @@ export const PostingJournal = () => {
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
       <Box sx={{ paddingX: '24px' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

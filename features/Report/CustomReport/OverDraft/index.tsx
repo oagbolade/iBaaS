@@ -20,8 +20,10 @@ import { StyledTableCell } from '@/components/Table/style';
 import { formatDate } from '@/utils/formatDateAndTime';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const OverDraft = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -68,7 +70,7 @@ export const OverDraft = () => {
       )}
 
       <Box sx={{ paddingX: '24px' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

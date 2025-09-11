@@ -12,8 +12,10 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const HoldingTransactions = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -66,7 +68,7 @@ export const HoldingTransactions = () => {
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
       <Box sx={{ paddingX: '24px' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box sx={{ width: '100%' }}>

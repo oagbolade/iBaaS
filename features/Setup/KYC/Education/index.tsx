@@ -16,6 +16,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { SearchEducationResponse } from '@/api/ResponseTypes/setup';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -33,6 +34,7 @@ const actionButtons: any = [
 ];
 
 export const Education = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -80,7 +82,7 @@ export const Education = () => {
             width: '100%',
           }}
         >
-          {isLoading ? (
+          {isGlobalLoading || isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <MuiTableContainer

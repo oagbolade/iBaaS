@@ -12,6 +12,7 @@ import { IPortfolioAtRiskProduct } from '@/api/ResponseTypes/reports';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
 import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const PortfolioAtRisk = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);

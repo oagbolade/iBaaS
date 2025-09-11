@@ -15,6 +15,7 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -28,6 +29,7 @@ interface CustomerBalanceList {
 }
 
 export const CustomerBalances = () => {
+  const { isLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -131,7 +133,7 @@ export const CustomerBalances = () => {
         />
       )}
       <Box sx={{ paddingX: '20px' }}>
-        {isCustomerBalanceDataLoading ? (
+        {isLoading || isCustomerBalanceDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box sx={{ width: '100%' }}>

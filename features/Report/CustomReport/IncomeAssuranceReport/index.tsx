@@ -18,8 +18,10 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { useGetIAReportType } from '@/api/general/useIAReportType';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const IncomeAssuranceReport = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { productTypes } = useGetProductType();
   const { branches } = useGetBranches();
   const { data: IAreportType } = useGetIAReportType();
@@ -102,7 +104,7 @@ export const IncomeAssuranceReport = () => {
         />
       )}
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

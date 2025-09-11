@@ -27,12 +27,14 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { FormSkeleton } from '@/components/Loaders';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface Props {
   data: IGetAccountEnquiry;
 }
 
 export const AccountEnquiry = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -117,7 +119,7 @@ export const AccountEnquiry = () => {
       )}
 
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

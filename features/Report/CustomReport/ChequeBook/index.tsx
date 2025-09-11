@@ -20,8 +20,10 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const ChequeBookStatus = () => {
+  const { isLoading } = useGlobalLoadingState();
   const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
@@ -83,7 +85,7 @@ export const ChequeBookStatus = () => {
         />
       )}
       <Box sx={{ paddingX: '24px' }}>
-        {isChequeBookDataLoading ? (
+        {isLoading || isChequeBookDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box sx={{ width: '100%' }}>

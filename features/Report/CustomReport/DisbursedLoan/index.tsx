@@ -19,12 +19,14 @@ import { FormSkeleton } from '@/components/Loaders';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface ActionProps {
   data: IGetDisbursedLoanReport;
 }
 
 export const DisbursedLoan = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { dateValue } = React.useContext(DateRangePickerContext);
@@ -121,7 +123,7 @@ export const DisbursedLoan = () => {
           />
         )}
       </Box>
-      {isLoading ? (
+      {isGlobalLoading || isLoading ? (
         <FormSkeleton noOfLoaders={5} />
       ) : (
         <Box sx={{ padding: '25px', width: '100%' }}>

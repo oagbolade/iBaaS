@@ -35,6 +35,7 @@ const actionButtons: any = [
 ];
 
 export const ZoneSetup = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { status } = useGetStatus();
 
   const {
@@ -81,7 +82,7 @@ export const ZoneSetup = () => {
             width: '100%',
           }}
         >
-          {isLoading ? (
+          { isGlobalLoading || isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <MuiTableContainer

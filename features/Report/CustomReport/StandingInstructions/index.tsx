@@ -16,6 +16,7 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const ActionMenu: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ export const ActionMenu: React.FC = () => {
 };
 
 export const StandingInstructions = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -82,7 +84,7 @@ export const StandingInstructions = () => {
         </div>
       )}
       <div className="mx-5">
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

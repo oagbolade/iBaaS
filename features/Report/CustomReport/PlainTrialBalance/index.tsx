@@ -11,8 +11,10 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const PlainTrialBalance = () => {
+  const { isLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -79,7 +81,7 @@ export const PlainTrialBalance = () => {
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
       <Box sx={{ paddingX: '24px' }}>
-        {isPlainTrailBalanceDataLoading ? (
+        {isLoading || isPlainTrailBalanceDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box sx={{ width: '100%' }}>

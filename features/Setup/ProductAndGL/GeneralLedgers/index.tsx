@@ -31,6 +31,7 @@ import {
 import { useFilterGLClassSearch } from '@/api/setup/useGeneralClass';
 import { Status } from '@/components/Labels';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -194,10 +195,11 @@ const GLClassTable = ({
       </Link>
     );
   };
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
 
   return (
     <Box sx={{ width: '100%' }}>
-      {isLoading ? (
+      {isGlobalLoading || isLoading ? (
         <FormSkeleton noOfLoaders={3} />
       ) : (
         <MuiTableContainer

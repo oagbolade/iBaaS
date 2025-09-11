@@ -22,10 +22,12 @@ import { DataGroup } from '@/api/ResponseTypes/reports';
 import { column, profitAndLossColumn } from '@/constants/Reports/ASSETS_DATA';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const ProfitLoss = () => {
   // const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   // const [page] = React.useState(1);
+  const { isLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -90,7 +92,7 @@ export const ProfitLoss = () => {
       </Box>
 
       <div className="mx-5">
-        {isLoadingProfitAndLoss ? (
+        {isLoading || isLoadingProfitAndLoss ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box>

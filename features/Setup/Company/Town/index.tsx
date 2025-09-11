@@ -23,6 +23,7 @@ import { Status } from '@/components/Labels';
 import { TownSearchParams } from '@/schemas/schema-values/setup';
 import { useGetAllStates } from '@/api/general/useGeography';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -40,6 +41,7 @@ const actionButtons: any = [
 ];
 
 export const Town = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { status } = useGetStatus();
   const { states } = useGetAllStates();
 
@@ -91,7 +93,7 @@ export const Town = () => {
             width: '100%',
           }}
         >
-          {isLoading ? (
+          {isGlobalLoading || isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <MuiTableContainer

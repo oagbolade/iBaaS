@@ -23,6 +23,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { SearchLoanProductResponse } from '@/api/ResponseTypes/setup';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export interface IOptions {
   buttonTitle: string;
@@ -31,6 +32,7 @@ export interface IOptions {
 }
 
 export const ProductSetupTable = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { productTypes } = useGetProductType();
   const { products } = useGetProductClass();
   const [openModel, setopenModel] = useState(Boolean);
@@ -126,7 +128,7 @@ export const ProductSetupTable = () => {
         )}
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        { isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

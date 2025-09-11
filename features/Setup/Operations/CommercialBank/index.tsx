@@ -20,6 +20,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { SearchCommercialBankResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -33,6 +34,7 @@ export const actionButtons: any = [
 ];
 
 export const CommercialBankTable = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { status } = useGetStatus();
 
   const {
@@ -75,7 +77,7 @@ export const CommercialBankTable = () => {
         )}
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        { isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

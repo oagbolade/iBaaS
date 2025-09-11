@@ -19,6 +19,7 @@ import { ITellerPostingReport } from '@/api/ResponseTypes/reports';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -35,6 +36,7 @@ const TellerPostingActions = ({ data }: ActionProps) => {
 };
 
 export const TellerPosting = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -122,7 +124,7 @@ export const TellerPosting = () => {
     setPage(1);
   };
 
-  if (isLoading) {
+  if (isGlobalLoading || isLoading) {
     return (
       <Box m={16}>
         <FormSkeleton noOfLoaders={5} />

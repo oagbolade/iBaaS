@@ -16,6 +16,7 @@ import { Status } from '@/components/Labels';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 // ON HOld untill the product gives us go ahead
 export const actionButtons: any = [
@@ -32,6 +33,7 @@ export const actionButtons: any = [
 ];
 
 export const ExceptionsTable = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const [exceptionl, setexceptionl] = useState();
 
   const {
@@ -76,7 +78,7 @@ export const ExceptionsTable = () => {
         <FilterSection onSearch={handleSearch} />
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

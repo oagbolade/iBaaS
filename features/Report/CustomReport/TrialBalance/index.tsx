@@ -21,8 +21,10 @@ import { useGetGLType } from '@/api/admin/useCreateGLAccount';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const TrialBalance = () => {
+  const { isLoading } = useGlobalLoadingState();
   const [, setSearch] = useState<boolean>(false);
   const { branches } = useGetBranches();
   const { glType } = useGetGLType();
@@ -107,7 +109,7 @@ export const TrialBalance = () => {
       )}
 
       <Box>
-        {isLoadingTrialBydategroupList ? (
+        {isLoading || isLoadingTrialBydategroupList ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box>

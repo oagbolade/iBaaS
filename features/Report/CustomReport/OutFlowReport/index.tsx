@@ -19,8 +19,10 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const InflowOutflowReport = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
@@ -96,7 +98,7 @@ export const InflowOutflowReport = () => {
           hideFilterSection
         />
 
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={5} />
         ) : (
           <Box>

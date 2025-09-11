@@ -17,8 +17,10 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const ChartAccount = () => {
+  const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
 
   const {
@@ -78,7 +80,7 @@ export const ChartAccount = () => {
       )}
 
       <Box sx={{ paddingX: '24px' }}>
-        {isChartOfAccountLoading ? (
+        {isLoading || isChartOfAccountLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box sx={{ width: '100%' }}>
