@@ -276,7 +276,8 @@ export const useMapSelectOptions = ({
     dataWithCode?.forEach((prodCodeType: IGLWithBranchCode) => {
       GlWithBranchCodeArray.push({
         value: prodCodeType?.glnumber,
-        name: prodCodeType.acctName
+        name: prodCodeType.acctName,
+        branchCode: prodCodeType.branchCode
       });
     });
     const ProductTypeClassArray: OptionsI[] = [];
