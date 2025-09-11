@@ -16,6 +16,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { FormSkeleton } from '@/components/Loaders';
 import { SearchAccountOfficersResponse } from '@/api/ResponseTypes/admin';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 export interface IOptions {
   buttonTitle: string;
   link?: string;
@@ -83,7 +84,9 @@ export const OfficeTransferTable = () => {
         {areAccountOfficersDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
-          <MuiTableContainer
+          <>
+          <FetchingLoader noOfLoaders={3} /> 
+        <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
               hasActions: true
@@ -144,6 +147,7 @@ export const OfficeTransferTable = () => {
               </StyledTableRow>
             )}
           </MuiTableContainer>
+          </>
         )}
       </Box>
     </Box>

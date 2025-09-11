@@ -19,6 +19,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { useFilterPostingLimitSearch } from '@/api/admin/usePostingLimit';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 
 const actionButtons: any = [
   <Link href="/admin/posting-limit/create">
@@ -85,6 +86,8 @@ export const PostingLimit = () => {
           {isPostingDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
+            <>
+            <FetchingLoader noOfLoaders={3} /> 
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{
@@ -95,6 +98,11 @@ export const PostingLimit = () => {
               data={postingData}
               totalPages={totalPages}
               totalElements={totalElements}
+              showHeader={{
+                mainTitle: 'Posting Limits Overview',
+                secondaryTitle: 'See a directory of all posting limits on this system.',
+                hideFilterSection: true
+              }}
             >
               {searchActive ? (
                 postingData?.map(
@@ -132,6 +140,7 @@ export const PostingLimit = () => {
                 </StyledTableRow>
               )}
             </MuiTableContainer>
+            </>
           )}
         </Box>
         <Box />

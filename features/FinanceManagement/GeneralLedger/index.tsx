@@ -22,6 +22,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useFilterGeneralLedgerSearch } from '@/api/finance/useFinanceAccount';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -110,6 +111,7 @@ export const GeneralLedger = () => {
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <div style={{ marginTop: '24px' }}>
+              <FetchingLoader noOfLoaders={3} /> 
               <MuiTableContainer
                 columns={TableHeader}
                 data={generalLedgerData}

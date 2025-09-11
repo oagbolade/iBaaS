@@ -21,6 +21,9 @@ import { SearchGroupResponse } from '@/api/ResponseTypes/customer-service';
 import { FormSkeleton } from '@/components/Loaders';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useIsFetching } from '@tanstack/react-query';
+import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
+
 
 export interface IOptions {
   buttonTitle: string;
@@ -41,6 +44,7 @@ export const GroupTable = () => {
     setShouldDisableCreation(shouldDisable);
   }, []);
 
+  const isFetching = useIsFetching();
   const actionButtons: any = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <Link
@@ -104,6 +108,8 @@ export const GroupTable = () => {
         {isGroupDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
+          <>
+          <FetchingLoader noOfLoaders={3} /> 
           <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
@@ -153,6 +159,7 @@ export const GroupTable = () => {
               </StyledTableRow>
             )}
           </MuiTableContainer>
+          </>
         )}
       </Box>
     </Box>

@@ -33,6 +33,7 @@ import { DeleteActionSteps } from '@/constants/Steps';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
 import { getStoredUser } from '@/utils/user-storage';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }} key="create-user">
@@ -189,6 +190,8 @@ export const Users = () => {
           {isUserDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
+            <>
+             <FetchingLoader noOfLoaders={3} /> 
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{ hasActions: true }}
@@ -197,6 +200,12 @@ export const Users = () => {
               totalElements={totalElements}
               setPage={handleSetPage}
               page={page}
+              showHeader={{
+  mainTitle: 'Users Overview',
+  secondaryTitle: 'See a directory of all users on this system.',
+  hideFilterSection: true
+}}
+
             >
               {searchActive ? (
                 userData?.map((dataItem: SearchUserResponse & IUsers) => (
@@ -234,6 +243,7 @@ export const Users = () => {
                 </StyledTableRow>
               )}
             </MuiTableContainer>
+            </>
           )}
         </Box>
 

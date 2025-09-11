@@ -17,6 +17,7 @@ import { useFilterDirectorsSearch } from '@/api/customer-service/useDirectors';
 import { FormSkeleton } from '@/components/Loaders';
 import { SearchDirectorResponse } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 
 export interface IOptions {
   buttonTitle: string;
@@ -88,6 +89,8 @@ export const DirectorTable = () => {
         {areDirectorsDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
+          <>
+          <FetchingLoader noOfLoaders={3} /> 
           <MuiTableContainer
             showHeader={{
               hideFilterSection: true,
@@ -149,6 +152,7 @@ export const DirectorTable = () => {
               </StyledTableRow>
             )}
           </MuiTableContainer>
+          </>
         )}
       </Box>
     </Box>

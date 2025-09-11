@@ -125,7 +125,7 @@ const CustomerOverviewTable = ({
             secondaryTitle: 'See a directory of all customers on this system.'
           }}
         >
-          {search ? (
+          {isLoading || search ? (
             customerData?.map((dataItem) => {
               return (
                 <StyledTableRow key={dataItem.customerId}>
@@ -331,7 +331,7 @@ const PreviewTable = () => {
       totalPages={totalAccountPages}
       totalElements={totalAccountElements}
       customerData={customerAccountData}
-      isLoading={isCustomerAccountDataLoading}
+      isLoading={isCustomerAccountDataLoading || isFetching}
     />
   ];
   const productClassBYID = '0';
