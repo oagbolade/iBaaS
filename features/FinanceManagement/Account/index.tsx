@@ -23,7 +23,6 @@ import { useFilterCustomerAccountSearch } from '@/api/customer-service/useCustom
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGetProductClassByCastegory } from '@/api/setup/useProduct';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [

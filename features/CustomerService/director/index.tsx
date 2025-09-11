@@ -17,7 +17,6 @@ import { useFilterDirectorsSearch } from '@/api/customer-service/useDirectors';
 import { FormSkeleton } from '@/components/Loaders';
 import { SearchDirectorResponse } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export interface IOptions {

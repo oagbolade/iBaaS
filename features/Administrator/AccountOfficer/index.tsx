@@ -33,7 +33,6 @@ import { getStoredUser } from '@/utils/user-storage';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
 import { useGetStatus } from '@/api/general/useStatus';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [

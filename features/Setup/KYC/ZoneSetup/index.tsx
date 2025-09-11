@@ -18,6 +18,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { SearchZoneResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>

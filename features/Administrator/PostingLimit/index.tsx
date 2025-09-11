@@ -19,7 +19,6 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { useFilterPostingLimitSearch } from '@/api/admin/usePostingLimit';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [

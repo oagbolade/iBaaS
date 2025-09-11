@@ -22,7 +22,6 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useFilterGeneralLedgerSearch } from '@/api/finance/useFinanceAccount';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [

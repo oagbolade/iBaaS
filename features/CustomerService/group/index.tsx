@@ -22,7 +22,6 @@ import { FormSkeleton } from '@/components/Loaders';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useIsFetching } from '@tanstack/react-query';
-import { FetchingLoader } from '@/components/Loaders/useFetchingLoader';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 
