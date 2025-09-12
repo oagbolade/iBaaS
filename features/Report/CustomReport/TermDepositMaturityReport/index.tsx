@@ -13,8 +13,10 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const TermDepositMaturityReport = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
@@ -122,7 +124,7 @@ export const TermDepositMaturityReport = () => {
           />
         </Box>
 
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <TableV2

@@ -18,8 +18,10 @@ import { StyledTableCell } from '@/components/Table/style';
 import { FormSkeleton } from '@/components/Loaders';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const DormantAccount = () => {
+  const { isLoading} = useGlobalLoadingState();
   const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType } = React.useContext(
     DownloadReportContext
@@ -72,7 +74,7 @@ export const DormantAccount = () => {
         <FilterSection branches={branches} onSearch={handleSearch} />
       </div>
       <div className="mx-5">
-        {isDormantAccountDataLoading ? (
+        {isLoading || isDormantAccountDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

@@ -11,8 +11,10 @@ import { useGetAllBalanceSheet } from '@/api/reports/useGetBalanceSheet';
 import { FormSkeleton } from '@/components/Loaders';
 import { renderEmptyTableBody } from '@/components/Table/Table';
 import { IBalanceSheetList } from '@/api/ResponseTypes/reports';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const BalanceSheet = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const [page, setPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -48,7 +50,7 @@ export const BalanceSheet = () => {
           width: '100%'
         }}
       >
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <Box sx={{ padding: '20px', textAlign: 'center' }}>
             <FormSkeleton noOfLoaders={3} />
           </Box>

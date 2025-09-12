@@ -16,8 +16,10 @@ import { StyledTableCell } from '@/components/Table/style';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const TellerBalance = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
@@ -86,7 +88,7 @@ export const TellerBalance = () => {
       <TopOverViewSection useBackButton />
       <FilterSection branches={branches} onSearch={handleSearch} />
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoadingAccountInDebit ? (
+        {isGlobalLoading || isLoadingAccountInDebit ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

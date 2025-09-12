@@ -25,12 +25,14 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface Props {
   data: IGetLoanOverdueReport;
 }
 
 export const LoanOverdue = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { dateValue, isDateFilterApplied } = React.useContext(
@@ -140,7 +142,7 @@ export const LoanOverdue = () => {
           />
         )}
 
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={5} />
         ) : (
           <Box sx={{ padding: '25px', width: '100%' }}>

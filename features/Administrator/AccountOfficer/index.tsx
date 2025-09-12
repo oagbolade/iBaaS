@@ -33,6 +33,7 @@ import { getStoredUser } from '@/utils/user-storage';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
 import { useGetStatus } from '@/api/general/useStatus';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -50,6 +51,7 @@ const actionButtons: any = [
 ];
 
 export const AccountOfficers = () => {
+  const { isLoading } = useGlobalLoadingState();
   const [deleteStep, setDeleteStep] = useState<DeleteActionSteps>(null);
   const [currentOfficer, setCurrentOfficer] = useState<IAccountOfficers>();
   const { mutate: validatePassword } = useValidatePassword();
@@ -172,9 +174,10 @@ export const AccountOfficers = () => {
             width: '100%'
           }}
         >
-          {areAccountOfficersDataLoading ? (
+          {isLoading || areAccountOfficersDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
+            <>
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{ hasActions: true }}
@@ -183,6 +186,11 @@ export const AccountOfficers = () => {
               page={page}
               totalPages={totalPages}
               totalElements={totalElements}
+              showHeader={{
+                mainTitle: 'Account Officers Overview',
+                secondaryTitle: 'See a directory of all account officers on this system.',
+                hideFilterSection: true
+              }}
             >
               {searchActive ? (
                 accountOfficerData?.map(
@@ -221,6 +229,7 @@ export const AccountOfficers = () => {
                 </StyledTableRow>
               )}
             </MuiTableContainer>
+            </>
           )}
         </Box>
         {deleteStep === 'showToast' && (

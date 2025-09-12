@@ -17,6 +17,7 @@ import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import colors from '@/assets/colors';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const ViewAuditDetails: React.FC<{
   data: IAuditTrail;
@@ -123,6 +124,7 @@ const ViewAuditDetails: React.FC<{
 };
 
 export const AuditTrail = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
@@ -191,7 +193,7 @@ export const AuditTrail = () => {
     >
       <FilterSection onSearch={handleSearch} />
 
-      {isLoading ? (
+      {isGlobalLoading || isLoading ? (
         <FormSkeleton noOfLoaders={3} />
       ) : (
         <Box sx={{ paddingX: '24px' }}>

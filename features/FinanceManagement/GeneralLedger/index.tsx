@@ -22,6 +22,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useFilterGeneralLedgerSearch } from '@/api/finance/useFinanceAccount';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -39,6 +40,7 @@ const actionButtons: any = [
 ];
 
 export const GeneralLedger = () => {
+  const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
 
   const {
@@ -106,7 +108,7 @@ export const GeneralLedger = () => {
             width: '100%'
           }}
         >
-          {isGeneralLedgerLoading ? (
+          {isLoading || isGeneralLedgerLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <div style={{ marginTop: '24px' }}>

@@ -20,6 +20,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Link href="/admin/gl-account/create">
@@ -31,6 +32,7 @@ const actionButtons: any = [
 ];
 
 export const GLAccount = () => {
+  const { isLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -102,9 +104,10 @@ export const GLAccount = () => {
             width: '100%'
           }}
         >
-          {isGLDataLoading ? (
+          {isLoading || isGLDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
+            <>
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{
@@ -115,6 +118,11 @@ export const GLAccount = () => {
               page={page}
               totalPages={totalPages}
               totalElements={totalElements}
+              showHeader={{
+                mainTitle: 'General Ledger Accounts Overview',
+                secondaryTitle: 'See a directory of all general ledger accounts on this system.',
+                hideFilterSection: true
+              }}
             >
               {searchActive ? (
                 glData?.map(
@@ -159,6 +167,7 @@ export const GLAccount = () => {
                 </StyledTableRow>
               )}
             </MuiTableContainer>
+            </>
           )}
         </Box>
         <Box />

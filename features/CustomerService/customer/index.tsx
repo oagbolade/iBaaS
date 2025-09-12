@@ -39,6 +39,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import colors from '@/assets/colors';
 import { useGetProductClassByCastegory } from '@/api/setup/useProduct';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export interface IOptions {
   buttonTitle: string;
@@ -125,7 +126,7 @@ const CustomerOverviewTable = ({
             secondaryTitle: 'See a directory of all customers on this system.'
           }}
         >
-          {search ? (
+          {isLoading || search ? (
             customerData?.map((dataItem) => {
               return (
                 <StyledTableRow key={dataItem.customerId}>
@@ -273,6 +274,7 @@ interface IHasUserSearchedProps {
 }
 
 const PreviewTable = () => {
+  const {isLoading} = useGlobalLoadingState()
   const [accountSearchParams, setAccountSearchParams] =
     useState<ISearchParams | null>(null);
   const [hasUserSearched, setHasUserSearched] = useState<IHasUserSearchedProps>(
@@ -301,7 +303,6 @@ const PreviewTable = () => {
     totalElements,
     data: customerData,
     isLoading: isCustomerDataLoading,
-    isFetching
   } = useFilterCustomerSearch({ ...searchParams, page });
 
   const {
@@ -322,7 +323,8 @@ const PreviewTable = () => {
       totalPages={totalPages}
       totalElements={totalElements}
       customerData={customerData}
-      isLoading={isCustomerDataLoading || isFetching}
+      isLoading={isCustomerDataLoading || isLoading}
+
     />,
     <AccountOverviewTable
       search={searchActiveAccount}
@@ -331,7 +333,7 @@ const PreviewTable = () => {
       totalPages={totalAccountPages}
       totalElements={totalAccountElements}
       customerData={customerAccountData}
-      isLoading={isCustomerAccountDataLoading}
+      isLoading={isCustomerAccountDataLoading || isLoading}
     />
   ];
   const productClassBYID = '0';

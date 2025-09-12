@@ -23,6 +23,7 @@ import { SearchDepartmentResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { DepartmentSearchParams } from '@/schemas/schema-values/setup';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -37,6 +38,7 @@ export const actionButtons: any = [
 ];
 
 export const DepartmentTable = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { status } = useGetStatus();
   const {
     searchParams,
@@ -72,7 +74,7 @@ export const DepartmentTable = () => {
         )}{' '}
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

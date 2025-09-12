@@ -7,8 +7,10 @@ import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const LoanMaturity = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const ActionMenu: React.FC = () => {
     return (
       <Link href="/report/custom-report/view-report">

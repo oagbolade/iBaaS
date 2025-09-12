@@ -24,6 +24,7 @@ import { DeleteActionSteps } from '@/constants/Steps';
 import { useValidatePassword } from '@/api/admin/useAdminUsers';
 import { getStoredUser } from '@/utils/user-storage';
 import { ValidatePasswordRequest } from '@/api/RequestTypes/admin';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -68,7 +69,8 @@ export const Roles = () => {
   const [search, setSearch] = useState<boolean>(true);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
- 
+  const { isLoading } = useGlobalLoadingState();
+
   const {
     totalPages,
     totalElements,
@@ -148,54 +150,61 @@ export const Roles = () => {
             width: '100%'
           }}
         >
-          {areRoleDataLoading ? (
+          {isLoading || areRoleDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
-            <MuiTableContainer
-              columns={COLUMNS}
-              tableConfig={{
-                hasActions: true
-              }}
-              data={rolesData}
-              setPage={setPage}
-              page={page}
-              totalPages={totalPages}
-              totalElements={totalElements}
-            >
-              {search ? (
-                rolesData?.map((dataItem: SearchRoleResponse) => {
-                  return (
-                    <StyledTableRow key={dataItem?.role_id}>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem.role_name || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {dataItem.roledesc || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {dataItem.noOfMembers || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <ActionMenuProps
-                          roleid={dataItem.role_id || 'N/A'}
-                          role={dataItem}
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })
-              ) : (
-                <StyledTableRow>
-                  <StyledTableCell
-                    colSpan={COLUMNS.length + 1}
-                    component="th"
-                    scope="row"
-                  >
-                    {renderEmptyTableBody(rolesData)}
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
-            </MuiTableContainer>
+            <>
+              <MuiTableContainer
+                columns={COLUMNS}
+                tableConfig={{
+                  hasActions: true
+                }}
+                data={rolesData}
+                setPage={setPage}
+                page={page}
+                totalPages={totalPages}
+                totalElements={totalElements}
+                showHeader={{
+                  mainTitle: 'Roles Overview',
+                  secondaryTitle: 'See a directory of all roles on this system.',
+                  hideFilterSection: true
+                }}
+              >
+                {search ? (
+                  rolesData?.map((dataItem: SearchRoleResponse) => {
+                    return (
+                      <StyledTableRow key={dataItem?.role_id}>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem.role_name || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell component="th" scope="row">
+                          {dataItem.roledesc || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          {dataItem.noOfMembers || 'N/A'}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          <ActionMenuProps
+                            roleid={dataItem.role_id || 'N/A'}
+                            role={dataItem}
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  })
+                ) : (
+                  <StyledTableRow>
+                    <StyledTableCell
+                      colSpan={COLUMNS.length + 1}
+                      component="th"
+                      scope="row"
+                    >
+                      {renderEmptyTableBody(rolesData)}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+              </MuiTableContainer>
+            </>
           )}
         </Box>
         <Box />
@@ -210,12 +219,10 @@ export const Roles = () => {
             handleClose={handleDelete}
             form={
               <DeleteConfirmationModal
-                modalTitle={`${
-                  modalTitleDescriptionMapper[deleteStep]?.title || ''
-                }`}
-                modalDescription={`${
-                  modalTitleDescriptionMapper[deleteStep]?.body || ''
-                }`}
+                modalTitle={`${modalTitleDescriptionMapper[deleteStep]?.title || ''
+                  }`}
+                modalDescription={`${modalTitleDescriptionMapper[deleteStep]?.body || ''
+                  }`}
                 deleteStep={deleteStep}
                 handleClose={handleDelete}
               />

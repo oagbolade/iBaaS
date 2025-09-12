@@ -10,8 +10,10 @@ import { useGetGroupLoan } from '@/api/reports/useGroupLoanReport';
 import { ISearchParams } from '@/app/api/search/route';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const GroupLoanReport = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const {
     searchParams,
@@ -53,7 +55,7 @@ export const GroupLoanReport = () => {
           <FilterSection branches={branches} onSearch={handleSearch} />
         )}
         <Box>
-          {isLoading ? (
+          {isGlobalLoading || isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <Box sx={{ width: '100%' }}>

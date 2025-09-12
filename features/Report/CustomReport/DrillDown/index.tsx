@@ -17,6 +17,7 @@ import colors from '@/assets/colors';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface ActionMenuProps {
   detail: string;
@@ -33,6 +34,7 @@ const ActionMenu = ({ detail }: ActionMenuProps) => {
 };
 
 export const DrillDown = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { setReportType, setExportData, readyDownload, setReadyDownload } =
     React.useContext(DownloadReportContext);
 
@@ -85,7 +87,7 @@ export const DrillDown = () => {
       <FilterSection onSearch={handleSearch} />
 
       <Box sx={{ paddingX: '24px' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <TableV2

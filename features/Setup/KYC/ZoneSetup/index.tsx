@@ -18,6 +18,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { SearchZoneResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -35,6 +36,7 @@ const actionButtons: any = [
 ];
 
 export const ZoneSetup = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { status } = useGetStatus();
 
   const {
@@ -81,7 +83,7 @@ export const ZoneSetup = () => {
             width: '100%',
           }}
         >
-          {isLoading ? (
+          { isGlobalLoading || isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <MuiTableContainer

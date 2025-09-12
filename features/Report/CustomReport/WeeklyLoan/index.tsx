@@ -23,6 +23,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface ActionMenuProps {
   detail: string;
@@ -40,6 +41,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 };
 
 export const WeeklyLoan = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { groups } = useGetAllGroups();
@@ -93,7 +95,7 @@ export const WeeklyLoan = () => {
         )}
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

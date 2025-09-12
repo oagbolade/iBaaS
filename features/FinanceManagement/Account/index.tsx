@@ -23,6 +23,7 @@ import { useFilterCustomerAccountSearch } from '@/api/customer-service/useCustom
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGetProductClassByCastegory } from '@/api/setup/useProduct';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const actionButtons: any = [
   <Box ml={{ mobile: 12, desktop: 0 }}>
@@ -40,6 +41,7 @@ const actionButtons: any = [
 ];
 
 export const Account = () => {
+  const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const {
     searchParams,
@@ -109,7 +111,7 @@ export const Account = () => {
             width: '100%'
           }}
         >
-          {isFinanceAccountDataLoading ? (
+          {isLoading || isFinanceAccountDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <div style={{ marginTop: '24px' }} className="">

@@ -22,6 +22,7 @@ import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSectio
 
 import colors from '@/assets/colors';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface ActionMenuProps {
   detail: string;
@@ -39,6 +40,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 };
 
 export const MaturityLoan = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { dateValue } = React.useContext(DateRangePickerContext);
@@ -91,7 +93,7 @@ export const MaturityLoan = () => {
       )}
 
       <Box sx={{ paddingX: '24px' }}>
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

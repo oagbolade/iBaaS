@@ -19,6 +19,7 @@ import { useGetAllGroups } from '@/api/general/useGroup';
 import { useGetAccountOfficers } from '@/api/admin/useAccountOfficer';
 import colors from '@/assets/colors';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface ActionMenuProps {
   detail: string;
@@ -36,6 +37,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 };
 
 export const GroupMembership = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { groups } = useGetAllGroups();
@@ -105,7 +107,7 @@ export const GroupMembership = () => {
       </div>
 
       <div className="mx-5">
-        {isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

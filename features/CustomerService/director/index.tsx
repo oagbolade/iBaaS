@@ -17,6 +17,7 @@ import { useFilterDirectorsSearch } from '@/api/customer-service/useDirectors';
 import { FormSkeleton } from '@/components/Loaders';
 import { SearchDirectorResponse } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export interface IOptions {
   buttonTitle: string;
@@ -36,6 +37,7 @@ export const actionButtons: any = [
 ];
 
 export const DirectorTable = () => {
+  const { isLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
@@ -85,9 +87,10 @@ export const DirectorTable = () => {
         <FilterSection onSearch={handleSearch} />
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {areDirectorsDataLoading ? (
+        {isLoading || areDirectorsDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
+          <>
           <MuiTableContainer
             showHeader={{
               hideFilterSection: true,
@@ -149,6 +152,7 @@ export const DirectorTable = () => {
               </StyledTableRow>
             )}
           </MuiTableContainer>
+          </>
         )}
       </Box>
     </Box>

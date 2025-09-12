@@ -20,6 +20,7 @@ import { SearchChequeBookResponse } from '@/api/ResponseTypes/setup';
 import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const actionButtons: any = [
   <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
@@ -33,6 +34,7 @@ export const actionButtons: any = [
 ];
 
 export const ChequebookTable = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { checkbooks } = useGetAllChequeBooks();
 
   const {
@@ -71,7 +73,7 @@ export const ChequebookTable = () => {
         )}
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        { isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

@@ -19,6 +19,7 @@ import {
   IpagedProductSummaries
 } from '@/api/ResponseTypes/reports';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 interface IViewMoreProps {
   data: IpagedProductSummaries;
@@ -44,6 +45,7 @@ const ViewMore = ({ data }: IViewMoreProps) => {
   );
 };
 export const ProductSummary = () => {
+  const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
 
   const { setExportData, setReportType, readyDownload, setReadyDownload } =
@@ -136,7 +138,7 @@ export const ProductSummary = () => {
           <FilterSection branches={branches} onSearch={handleSearch} />
         </Box>
 
-        {isloadingproductSumary ? (
+        {isLoading || isloadingproductSumary ? (
           <FormSkeleton noOfLoaders={5} />
         ) : (
           <TableV2
