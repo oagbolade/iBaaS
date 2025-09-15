@@ -71,31 +71,32 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >(setCompleted, validationKeysMapper);
 
-  const useUpdateCompletion = <
-    T extends
-      | CreateIndividualCustomerFormValues
-      | CreateCorporateCustomerFormValues
-  >(
-    touched: Record<string, boolean | undefined>,
-    values: T
-  ) => {
-    React.useEffect(() => {
-      const atLeastOneFieldHasBeenVisited = Object.keys(touched).length > 0;
-
-      if (atLeastOneFieldHasBeenVisited) {
-        handleCompletedFields(values);
-      }
-    }, [touched, values]);
-  };
-
-  const { touched, values } = useFormikContext<
+  const { values } = useFormikContext<
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >();
-  useUpdateCompletion<
-    CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
-  >(touched, values);
 
-  return null;
+ 
+  const isInitialized = React.useRef(false);
+
+  React.useEffect(() => {
+    // Only run on first render or when isEditing changes
+    if (!isInitialized.current) {
+      if (isEditing) {
+        // If in editing mode, calculate the initial progress
+        handleCompletedFields(values);
+      } else {
+        // If in create mode, reset the progress to zero
+        setCompleted(progressCompletionInitialValues);
+      }
+      isInitialized.current = true;
+    }
+  }, [isEditing, handleCompletedFields, setCompleted, values]);
+
+  React.useEffect(() => {
+    handleCompletedFields(values);
+  }, [values, handleCompletedFields]);
+
+  return null;
 };
 
 export const CreateCustomerContainer = () => {
@@ -232,10 +233,6 @@ export const CreateCustomerContainer = () => {
       handleCompletedFields(customerResult);
     }
 
-    if (!isEditing) {
-      // Reset completion progress when creating a new customer
-      setCompleted(progressCompletionInitialValues);
-    }
   }, [
     customerResult,
     isEditing,
