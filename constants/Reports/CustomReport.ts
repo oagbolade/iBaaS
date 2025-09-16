@@ -134,14 +134,15 @@ export const reportsData = [
     description:
       'Detailed report on loans that are reaching the end of their term.'
   },
-  // commenting out due to incomplete implementation from the backend or infosite
 
-  // {
-  //   title: 'LOAN MATURITY PROFILE',
-  //   link: '/report/custom-report/loan-maturity',
-  //   description:
-  //     'Generate and analyze a loan maturity profile to gain insight into loan portfolio maturity distribution.'
-  // },
+  // commenting out due to incomplete implementation from the backend or infosite
+  {
+    title: 'LOAN MATURITY PROFILE',
+    menu_name: 'LOAN MATURITY PROFILE',
+    link: '/report/custom-report/loan-maturity',
+    description:
+      'Generate and analyze a loan maturity profile to gain insight into loan portfolio maturity distribution.'
+  },
   {
     title: 'WEEKLY LOAN REPAYMENT',
     menu_name: 'WEEKLY LOAN REPAYMENT REPORT',
@@ -184,14 +185,14 @@ export const reportsData = [
       'View transactions in clearing reports to monitor transactions in the clearing process.'
   },
   // Need clarity on how to get the accurate menu name for running loans
-  
-  // {
-  //   title: 'RUNNING LOANS',
-  //   menu_name: 'LOAN STATUS', // needs clarity
-  //   link: '/report/custom-report/running-loans',
-  //   description:
-  //     'Detailed overview of the current status and details of active loans.'
-  // },
+
+  {
+    title: 'RUNNING LOANS',
+    menu_name: 'RUNNING LOANS', // needs clarity
+    link: '/report/custom-report/running-loans',
+    description:
+      'Detailed overview of the current status and details of active loans.'
+  },
   {
     title: 'OVERDRAFT REPORT',
     menu_name: 'OVERDRAFT REPORT',
@@ -208,12 +209,13 @@ export const reportsData = [
   },
   // commenting out due to incomplete implementation from the backend or infosite
 
-  // {
-  //   title: 'GROUP REPORT',
-  //   link: '/report/custom-report/group-report',
-  //   description:
-  //     'Consolidate data across multiple accounts or entities within a group.'
-  // },
+  {
+    title: 'GROUP REPORT',
+    menu_name: 'GROUP REPORT',
+    link: '/report/custom-report/group-report',
+    description:
+      'Consolidate data across multiple accounts or entities within a group.'
+  },
   {
     title: 'LOAN OVERDUE',
     menu_name: 'LOAN OVERDUE',

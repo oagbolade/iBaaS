@@ -9,14 +9,17 @@ const AuthFaBaseUrl =
   env === 'development'
     ? 'https://ibaas-2fa-generator-service.k8.isw.la/api'
     : 'https://ibaas-2fa-generator-service.k8.isw.la/api';
+    
 const baseUrl =
   env === 'development'
-    ? 'https://ibaas-api.k8.isw.la/api'
+    ? 'https://iswcbaapi.qa.interswitchng.com/api'
     : 'https://ibaas-api.k8.isw.la/api';
+
 const endOfdayUrl =
   env === 'development'
     ? 'https://ibaas-endofbusinessprocess.k8.isw.la/api'
     : 'https://ibaas-endofbusinessprocess.k8.isw.la/api';
+
 const nipBaseUrl =
   env === 'development'
     ? 'https://nip-core-banking-interface.k8.isw.la/api/v1'
@@ -24,7 +27,7 @@ const nipBaseUrl =
 
 const reportsBaseUrl =
   env === 'development'
-    ? 'https://isw-reportsapi.qa.interswitchng.com/api'
-    : 'https://isw-reportsapi.qa.interswitchng.com/api';
+    ? 'https://ibaas-revamp-reports.k8.isw.la/api'
+    : 'https://ibaas-revamp-reports.k8.isw.la/api';
 
 export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl, endOfdayUrl };

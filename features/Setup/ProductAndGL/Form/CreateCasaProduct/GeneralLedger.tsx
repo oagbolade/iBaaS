@@ -1,61 +1,26 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
-import { Field, useFormikContext } from 'formik';
+import { Grid } from '@mui/material';
+import { useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
-import { BatchContainer } from '@/features/Operation/Forms/style';
+
 import {
-  ITitle,
-  ICountries,
-  IStates,
-  ITown
-} from '@/api/ResponseTypes/customer-service';
-import {
-  IEducation,
   IGLWithBranchCode,
-  IOccupation,
   IProdCodeType,
-  IProdType,
-  ISector
+  IProdType
 } from '@/api/ResponseTypes/setup';
-import { CustomerCreationContext } from '@/context/CustomerCreationContext';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import {
-  FormikDateTimePicker,
-  FormSelectField,
-  FormTextInput
-} from '@/components/FormikFields';
+
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
 import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
 import { SearchIcon } from '@/assets/svg';
-import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
-import {
-  searchCustomer,
-  useGetAccountDetails
-} from '@/api/customer-service/useCustomer';
-import { queryKeys } from '@/react-query/constants';
-import { ToastMessageContext } from '@/context/ToastMessageContext';
-import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
+
 import { IGLAccount } from '@/api/ResponseTypes/admin';
-import {
-  filterDropdownSearch,
-  filterGeneralLedgerDropdownSearch
-} from '@/utils/filterDropdownSearch';
+import { filterGeneralLedgerDropdownSearch } from '@/utils/filterDropdownSearch';
 
 type Props = {
-  titles?: ITitle[];
-  sectors?: ISector[];
-  education?: IEducation[];
-  countries?: ICountries[];
-  states?: IStates[];
-  towns?: ITown[];
-  professions?: IOccupation[];
   productTypes?: IProductType[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   bankgl?: IGLAccount[] | Array<any>;
@@ -70,39 +35,19 @@ type SearchFilters = {
   [key: string]: any;
 };
 export const GeneralCasaLedgerForm = ({
-  titles,
-  sectors,
-  education,
-  countries,
-  states,
-  towns,
-  professions,
   productTypes,
   currencies,
   bankgl,
   dataWithCode
 }: Props) => {
-  const { customerType, setCustomerType } = React.useContext(
-    CustomerCreationContext
-  );
-  const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
-
-  const handleCheck = (booleanValue: string, value: string) => {
-    setCustomerType(value);
-  };
-  const {
-    mappedProductType,
-    mappedCurrency,
-    mappedGlAccount,
-    mappedWithBranchCode
-  } = useMapSelectOptions({
+  const { isTablet } = useCurrentBreakpoint();
+  const { mappedWithBranchCode } = useMapSelectOptions({
     productTypes,
     currencies,
     bankgl,
     dataWithCode
   });
-  const toastActions = React.useContext(ToastMessageContext);
-  const searchParams = useSearchParams();
+
   const { setFieldValue, values } = useFormikContext<any>();
 
   const [searchValue, setSearchValue] = React.useState<SearchFilters>({
@@ -152,9 +97,6 @@ export const GeneralCasaLedgerForm = ({
     unearnexp: ''
   });
 
-  const accountId = String(
-    extractIdFromDropdown(selectedValue.accountNumber as string)
-  );
   const handleSelectedValue = (value: string, name: string) => {
     setSelectedValue((prev) => ({
       ...prev,
@@ -200,8 +142,14 @@ export const GeneralCasaLedgerForm = ({
   };
 
   return (
-    <>
-      <Grid item={isTablet} mobile={12}>
+    <Grid
+      sx={{
+        paddingLeft: '30px'
+      }}
+      container
+      spacing={4}
+    >
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -222,7 +170,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -244,7 +192,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -265,7 +213,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -287,7 +235,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -309,7 +257,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -331,7 +279,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -353,7 +301,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -374,7 +322,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -396,7 +344,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -418,7 +366,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -439,7 +387,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -460,7 +408,7 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <StyledSearchableDropdown>
           <ActionButtonWithPopper
             handleSelectedValue={(value: string) =>
@@ -482,6 +430,6 @@ export const GeneralCasaLedgerForm = ({
           />
         </StyledSearchableDropdown>
       </Grid>
-    </>
+    </Grid>
   );
 };

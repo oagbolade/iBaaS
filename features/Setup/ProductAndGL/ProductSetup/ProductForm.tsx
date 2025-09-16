@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation';
-import { string } from 'yup';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
@@ -21,8 +20,7 @@ import {
   AccountTitle,
   AccountPasswordBodyContainer
 } from '@/components/Revamp/Modal/style';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import { handleRedirect, useCurrentBreakpoint } from '@/utils';
+import { useCurrentBreakpoint } from '@/utils';
 import { RadioButtons2 } from '@/components/Revamp/Radio/RadioButton2';
 
 type Props = {
@@ -30,7 +28,7 @@ type Props = {
   closeModalQuickly?: Function;
 };
 export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
-  const { isMobile, setWidth } = useCurrentBreakpoint();
+  const { isMobile } = useCurrentBreakpoint();
   const router = useRouter();
   const [addValues, setAddValues] = useState<String>('');
   const handleChange = (value: string) => {

@@ -1,98 +1,53 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { Grid } from '@mui/material';
 import { useCurrentBreakpoint } from '@/utils';
-import { BatchContainer } from '@/features/Operation/Forms/style';
-import {
-  ITitle,
-  ICountries,
-  IStates,
-  ITown
-} from '@/api/ResponseTypes/customer-service';
-import { IEducation, IOccupation, ISector } from '@/api/ResponseTypes/setup';
-import { CustomerCreationContext } from '@/context/CustomerCreationContext';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import {
-  FormikDateTimePicker,
-  FormikRadioButton,
-  FormSelectField,
-  FormTextInput
-} from '@/components/FormikFields';
-import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
-import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { FormikRadioButton, FormTextInput } from '@/components/FormikFields';
 
-type Props = {
-  titles?: ITitle[];
-  sectors?: ISector[];
-  education?: IEducation[];
-  countries?: ICountries[];
-  states?: IStates[];
-  towns?: ITown[];
-  professions?: IOccupation[];
-  productTypes?: IProductType[] | Array<any>;
-  currencies?: ICurrency[] | Array<any>;
-};
-
-export const OtherCasaDetailsForm = ({
-  titles,
-  sectors,
-  education,
-  countries,
-  states,
-  towns,
-  professions,
-  productTypes,
-  currencies
-}: Props) => {
-  const { customerType, setCustomerType } = React.useContext(
-    CustomerCreationContext
-  );
+export const OtherCasaDetailsForm = () => {
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
 
-  const handleCheck = (booleanValue: string, value: string) => {
-    setCustomerType(value);
-  };
-  const { mappedProductType, mappedCurrency } = useMapSelectOptions({
-    productTypes,
-    currencies
-  });
-
   return (
-    <>
-      <Grid item={isTablet} mobile={12}>
+    <Grid
+      sx={{
+        paddingLeft: '30px'
+      }}
+      container
+      spacing={4}
+    >
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="floor"
           placeholder="Enter Default Amount"
           label="Default Amount"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="minAge"
           placeholder="Enter Minimum Age"
           label="Minimum Age"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="maxAge"
           placeholder="Enter Maximum Age"
           label="Maximum Age"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormikRadioButton
           name="checkBook"
           options={[
@@ -103,18 +58,18 @@ export const OtherCasaDetailsForm = ({
           value="0"
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormikRadioButton
           name="phoneNo4AcctNumber"
           options={[
             { label: 'Yes', value: '1' },
             { label: 'No', value: '0' }
           ]}
-          title="Allow number"
+          title="Use Phone Number as Account Number"
           value="0"
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormikRadioButton
           name="sweepIn"
           options={[
@@ -125,7 +80,7 @@ export const OtherCasaDetailsForm = ({
           value="0"
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormikRadioButton
           name="si"
           options={[
@@ -136,7 +91,7 @@ export const OtherCasaDetailsForm = ({
           value="0"
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormikRadioButton
           name="od"
           options={[
@@ -147,7 +102,7 @@ export const OtherCasaDetailsForm = ({
           value="0"
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormikRadioButton
           name="lien"
           options={[
@@ -158,7 +113,7 @@ export const OtherCasaDetailsForm = ({
           value="0"
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormikRadioButton
           name="stateInactive"
           options={[
@@ -169,6 +124,6 @@ export const OtherCasaDetailsForm = ({
           value="0"
         />
       </Grid>
-    </>
+    </Grid>
   );
 };

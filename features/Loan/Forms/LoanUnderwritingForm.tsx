@@ -76,7 +76,6 @@ export const CreateLoanUnderwritingForm = ({
     dayjs(sysmodel?.systemDate)
   );
   const [postDate, setPostDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
-
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [customerAccount, setCustomerAccount] = useState('');
   const [filteredValues, setFilteredValues] = useState<[]>([]);
@@ -128,16 +127,17 @@ export const CreateLoanUnderwritingForm = ({
 
   // Fetch loan product details and update related fields
   const GetLoanProductByCode = useCallback(
-    (productCode: string) => {
+    (productCode: string, setFieldValue: (field: string, value: any) => void) => {
       getLoanProductDetailByProductCode(
         encryptData(productCode) as string,
         toastActions
       ).then((resp) => {
-        // Type guard for IProductDetails
         const details = resp.loanProducts as IProductDetails;
         if (details && typeof details === 'object') {
           setProductDetail(details);
-          setLoanRate(details.maxintrate ? String(details.maxintrate) : '');
+          const newLoanRate = details.maxintrate ? String(details.maxintrate) : '';
+          setLoanRate(newLoanRate);
+          setFieldValue('interestRate', newLoanRate);
           setPenalRate(details.penalrate ? String(details.penalrate) : '');
           setPenalrateCalcMethod(
             details.penalrateCalcMethod
@@ -155,7 +155,8 @@ export const CreateLoanUnderwritingForm = ({
   const handleSelectedValue = useCallback((value: any) => {
     setSelectedCustomer(value);
     setCustomerAccount(value.customer.accountnumber);
-    setSearchValue(value);
+    setSearchValue(value.customer.accounttitle);
+
   }, []);
 
   // Handle group selection
@@ -329,14 +330,15 @@ export const CreateLoanUnderwritingForm = ({
                 ...loanUnderwritingInitialValues,
                 interestRate: loanRate
               }}
-              enableReinitialize
+            
               onSubmit={(values) => onSubmit(values)}
               validationSchema={loanUnderWriteSchema}
             >
-              <Form>
-                <Box mt={4}>
-                  <Grid container>
-                    <Grid
+              {({ setFieldValue }) => (
+                <Form>
+                  <Box mt={4}>
+                    <Grid container>
+                      <Grid
                       item={isTablet}
                       mobile={12}
                       mr={{ mobile: 35, tablet: 0 }}
@@ -352,7 +354,7 @@ export const CreateLoanUnderwritingForm = ({
                         handleCheck={(e) => getGroup(e)}
                         value={loanUnderwritingInitialValues.userType}
                       />
-                    </Grid>
+                      </Grid>
 
                     {group === 1 && (
                       <Grid
@@ -428,7 +430,9 @@ export const CreateLoanUnderwritingForm = ({
                         options={mappedLoansProduct}
                         label="Loan Product"
                         name="productCode"
-                        onChange={(e) => GetLoanProductByCode(e.target.value)}
+                        onChange={(e) =>
+                          GetLoanProductByCode(e.target.value, setFieldValue)
+                        }
                         required
                       />{' '}
                     </Grid>
@@ -792,7 +796,7 @@ export const CreateLoanUnderwritingForm = ({
                       />{' '}
                     </Grid>
                   </Grid>
-                </Box>
+                  </Box>
 
                 <button
                   id="submitButton"
@@ -801,7 +805,8 @@ export const CreateLoanUnderwritingForm = ({
                 >
                   submit alias
                 </button>
-              </Form>
+                </Form>
+              )}
             </Formik>
           </Box>
         </Box>

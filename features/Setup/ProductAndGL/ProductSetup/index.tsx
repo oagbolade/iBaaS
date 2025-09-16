@@ -102,6 +102,7 @@ export const ProductSetupTable = () => {
   const handleOpen = () => {
     setopenModel(true);
   };
+
   const actionButtons = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <PrimaryIconButton

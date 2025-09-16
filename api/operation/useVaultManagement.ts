@@ -179,6 +179,14 @@ export async function getGldetailsByBranchCodeAndUserId(
 
     const { message, title, severity } = globalErrorHandler();
     toast(message, title, severity, toastActions);
+    if (data.responseCode === '00') {
+      toast(
+        data.responseMessage,
+        data.responseMessage,
+        'success',
+        toastActions
+      );
+    }
 
     result = data;
   } catch (errorResponse) {

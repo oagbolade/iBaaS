@@ -1,40 +1,22 @@
 import React from 'react';
 import {
-  Box,
   Checkbox,
   FormControl,
   Grid,
-  InputLabel,
   ListItemText,
   MenuItem,
   Select
 } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { Field, FieldProps } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
-import { BatchContainer } from '@/features/Operation/Forms/style';
-import {
-  ITitle,
-  ICountries,
-  IStates,
-  ITown,
-  IBankProducts
-} from '@/api/ResponseTypes/customer-service';
+import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import {
   ICreditInterests,
-  IEducation,
   IException,
-  ILoanClass,
-  IOccupation,
-  ISector
+  ILoanClass
 } from '@/api/ResponseTypes/setup';
-import { CustomerCreationContext } from '@/context/CustomerCreationContext';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import {
-  FormikDateTimePicker,
-  FormSelectField,
-  FormTextInput
-} from '@/components/FormikFields';
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IProductLoanRepayment } from '@/api/ResponseTypes/loans';
@@ -42,13 +24,6 @@ import { PageTitle } from '@/components/Typography';
 import { IChargeConcessionType } from '@/api/ResponseTypes/operation';
 
 type Props = {
-  titles?: ITitle[];
-  sectors?: ISector[];
-  education?: IEducation[];
-  countries?: ICountries[];
-  states?: IStates[];
-  towns?: ITown[];
-  professions?: IOccupation[];
   productTypes?: IProductType[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   repaymentTypes?: IProductLoanRepayment[] | Array<any>;
@@ -70,13 +45,6 @@ interface MultiSelectWithCheckboxesProps {
   customStyle: Record<string, any>; // Adjust based on your customStyle shape
 }
 export const InterestLoanChargesForm = ({
-  titles,
-  sectors,
-  education,
-  countries,
-  states,
-  towns,
-  professions,
   productTypes,
   currencies,
   repaymentTypes,
@@ -86,21 +54,11 @@ export const InterestLoanChargesForm = ({
   exception,
   charges
 }: Props) => {
-  const { customerType, setCustomerType } = React.useContext(
-    CustomerCreationContext
-  );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
-
-  const handleCheck = (booleanValue: string, value: string) => {
-    setCustomerType(value);
-  };
   const {
-    mappedProductType,
-    mappedCurrency,
     mappedLoanRepayment,
     mappedCreditInterests,
     mappedLoanClass,
-    mappedBankproducts,
     mappedException,
     mappedChargeConcessionType
   } = useMapSelectOptions({
@@ -160,115 +118,136 @@ export const InterestLoanChargesForm = ({
   };
 
   return (
-    <>
-      <Grid item={isTablet} mobile={12}>
+    <Grid
+      sx={{
+        paddingLeft: '30px'
+      }}
+      container
+      spacing={4}
+    >
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormSelectField
           name="maxintrate"
           options={mappedCreditInterests}
           label="Interest Type"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="actualRAte"
           placeholder="Enter actual Rate"
           label="Actual Rate"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="penalrate"
           placeholder="Enter Penalty Rate"
           label="Penalty Rate"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="minterm"
           placeholder="Enter Mininum Term "
           label="Minimum Terms"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="maxterm"
           placeholder="Enter Maximum Term"
           label="Maximum Terms"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="moratorium"
           placeholder="Enter Moratorium"
           label="Moratorium"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
+        <FormSelectField
+          name="moratoriumtype"
+          options={[
+            { name: 'Yes', value: '1' },
+            { name: 'No', value: '0' }
+          ]}
+          label="Moratorium Type"
+          customStyle={{
+            width: setWidth(isMobile ? '250px' : '100%')
+          }}
+          required
+        />
+      </Grid>
+
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="collval"
           placeholder="Enter Collateral Value"
           label="Collateral Value"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormSelectField
           name="schtype"
           options={mappedLoanRepayment}
           label="Repayment Type"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormSelectField
           name="loanclass"
           options={mappedLoanClass}
           label="Loan Type"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <RadioButtons
           name="allowOD"
           options={[
@@ -280,7 +259,7 @@ export const InterestLoanChargesForm = ({
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <RadioButtons
           name="actualRateCalcMethod"
           options={[
@@ -292,41 +271,74 @@ export const InterestLoanChargesForm = ({
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <Field
           name="ProdCharges"
           component={MultiSelectWithCheckboxes}
           options={mappedChargeConcessionType}
           label="Product Charges"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <Field
           name="ProdException"
           component={MultiSelectWithCheckboxes}
           options={mappedException}
           label="Product Exceptions"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
         />
       </Grid>
 
-      {/* <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="shortName"
-          placeholder="Enter short name"
-          label="Short Name"
+      <Grid item={isTablet} mobile={12} tablet={6}>
+        <FormSelectField
+          name="repayoption"
+          options={[
+            { name: 'Yes', value: '1' },
+            { name: 'No', value: '0' }
+          ]}
+          label=" Repay Option"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
-      </Grid> */}
-    </>
+      </Grid>
+
+      <Grid item={isTablet} mobile={12} tablet={6}>
+        <FormSelectField
+          name="loantype"
+          options={[
+            { name: 'Yes', value: '1' },
+            { name: 'No', value: '0' }
+          ]}
+          label=" Loan Type"
+          customStyle={{
+            width: setWidth(isMobile ? '250px' : '100%')
+          }}
+          required
+        />
+      </Grid>
+
+      <Grid item={isTablet} mobile={12} tablet={6}>
+        <FormSelectField
+          name="postnodebit"
+          options={[
+            { name: 'Yes', value: '1' },
+            { name: 'No', value: '0' }
+          ]}
+          label="Post No Debit"
+          customStyle={{
+            width: setWidth(isMobile ? '250px' : '100%')
+          }}
+          required
+        />
+      </Grid>
+    </Grid>
   );
 };

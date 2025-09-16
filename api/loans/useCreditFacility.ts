@@ -417,19 +417,13 @@ export async function disburseLoan(
       });
 
     const { message, title, severity } = globalErrorHandler(data);
-    toast(data.retMsg, 'Data Disbursed successfully', 'success', toastActions); // TODO: Revert this once the response is fixed
-    if (data.retVal !== '0') {
-      // TODO: Revert this once the response is updated
+    toast(message, title, severity, toastActions);
+    if (data.responseCode !== '00') {
       throw new Error(message);
     }
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
-    toast(
-      (errorResponse as any)?.response?.data.retMsg,
-      title,
-      severity,
-      toastActions
-    ); // TODO: Revert this once the response is fixed
+    toast(message, title, severity, toastActions); // TODO: Revert this once the response is fixed
     throw errorResponse;
   }
 }
@@ -448,6 +442,7 @@ export function useDisburseLoan() {
     },
     onError: () => {
       // Do nothing on error, preventing handleRedirect from running
+       handleRedirect(router, '/loan/loan-directory/'); // remove this once the response is fixed
     }
   });
 

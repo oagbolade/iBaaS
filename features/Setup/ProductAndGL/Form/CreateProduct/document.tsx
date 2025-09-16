@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Checkbox, Grid, Typography } from '@mui/material';
-import { Field, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
 import { IProdDocs } from '@/api/ResponseTypes/setup';
 import { useGetAllProductDocs } from '@/api/setup/useProduct';
@@ -30,7 +30,13 @@ export const DocumentForm = () => {
   };
 
   return (
-    <Grid ml={1} container spacing={2}>
+     <Grid
+          sx={{
+            paddingLeft: '30px'
+          }}
+          container
+          spacing={2}
+        >
       {prodDocs?.map((doc: IProdDocs) => (
         <Grid item={isTablet} mobile={6} key={doc.docid}>
           <Box sx={{ display: 'flex', width: '50%' }}>

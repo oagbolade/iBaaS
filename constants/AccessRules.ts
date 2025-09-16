@@ -157,7 +157,9 @@ export const AccessRules: { [key: string]: string[] } = {
     'SCV REPORT',
     'Takings Report',
     'Placements Reports',
-    'OVERDRAFT REPORT'
+    'OVERDRAFT REPORT',
+    'LOAN MATURITY PROFILE',
+    'RUNNING LOANS'
   ],
   'Audit Trail': ['AUDIT TRAIL REPORT']
 };

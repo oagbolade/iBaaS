@@ -167,13 +167,13 @@ async function getProductType(
         }
       });
 
-    const { message, title, severity } = globalErrorHandler(data);
-    toast(message, title, severity, toastActions);
+    // const { message, title, severity } = globalErrorHandler(data);  // This is commented out because it shows a toast on every product class change cause no responseMessage is passed from the API
+    // toast(message, title, severity, toastActions);  // This is commented out because it shows a toast on every product class change cause no responseMessage is passed from the API
 
     result = data;
   } catch (errorResponse) {
-    const { message, title, severity } = globalErrorHandler({}, errorResponse);
-    toast(message, title, severity, toastActions);
+    // const { message, title, severity } = globalErrorHandler({}, errorResponse);  // This is commented out because it shows a toast on every product class change cause no responseMessage is passed from the API
+    // toast(message, title, severity, toastActions); // This is commented out because it shows a toast on every product class change cause no responseMessage is passed from the API
   }
 
   return result;
@@ -1161,18 +1161,16 @@ export async function generateProductCode(
         Authorization: `Bearer ${getStoredUser()?.token}`
       }
     });
-
-    const { message, title, severity } = globalErrorHandler(data);
+    // const { message, title, severity } = globalErrorHandler(data);  // This is commented out because it shows a toast on every product class change cause no responseMessage is passed from the API
     result = data;
   } catch (errorResponse) {
-    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    // const { message, title, severity } = globalErrorHandler({}, errorResponse);  // This is commented out because it shows a toast on every product class change cause no responseMessage is passed from the API
   }
-
   return result;
 }
 
 export function useGenerateProductCode(productClass: string) {
-  const toastActions = useContext(ToastMessageContext);
+  // const toastActions = useContext(ToastMessageContext);
   const fallback = { productCode: '' } as IProductCode;
   const {
     data = fallback,

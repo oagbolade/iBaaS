@@ -192,7 +192,6 @@ export const Users = () => {
           {isLoading || isUserDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
-            <>
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{ hasActions: true }}
@@ -244,7 +243,6 @@ export const Users = () => {
                 </StyledTableRow>
               )}
             </MuiTableContainer>
-            </>
           )}
         </Box>
 

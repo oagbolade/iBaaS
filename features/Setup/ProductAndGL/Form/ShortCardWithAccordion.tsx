@@ -1,4 +1,3 @@
-/* eslint-disable no-redeclare */
 import React from 'react';
 import { styled as muistyled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
@@ -12,7 +11,6 @@ import { PersonalDetailsForm } from './CreateProduct/PersonalDetailFormWrapper';
 import { InterestLoanChargesForm } from './CreateProduct/interestCharges';
 import { GeneralLedgerForm } from './CreateProduct/GeneralLedger';
 import './removeDivider.module.css';
-import { ConditionalSetupForm } from './CreateProduct/ConditinalSetup';
 import { OtherDetailsForm } from './CreateProduct/OtherDetails';
 import { DocumentForm } from './CreateProduct/document';
 import {
@@ -58,13 +56,10 @@ import { useGetProductType } from '@/api/general/useProductType';
 import { IProductLoanRepayment } from '@/api/ResponseTypes/loans';
 import { useGetAllLoanRepaymentTypes } from '@/api/loans/useCreditFacility';
 import {
-  generateProductCode,
   useGetAllException,
   useGetAllGLWithBranchCode,
   useGetAllLoanTerm,
-  useGetAllProduct,
   useGetLoanClass,
-  useGetLoanProductCode,
   useGetMaxCreditInterest,
   useGetProductClass,
   useGetProductClassByCastegory,
@@ -74,9 +69,6 @@ import { useGetAllCustomerAccountProducts } from '@/api/customer-service/useCust
 import { useGetGLAccount } from '@/api/admin/useCreateGLAccount';
 import { useGetChargeConcession } from '@/api/operation/useChargeConcession';
 import { IChargeConcessionType } from '@/api/ResponseTypes/operation';
-import { useGetParams } from '@/utils/hooks/useGetParams';
-import { FormSkeleton } from '@/components/Loaders';
-import { encryptData } from '@/utils/encryptData';
 
 const Accordion = muistyled((props: AccordionProps) => {
   return <MuiAccordion {...props} />;
@@ -145,23 +137,17 @@ type Props = {
   creditInterests?: ICreditInterests[];
   loanClass?: ILoanClass[];
   interests?: IInterests[];
-  // eslint-disable-next-line react/no-unused-prop-types
   products?: IProducts[] | IProductClass[] | Array<any>;
   bankproducts?: IBankProducts[];
   exception?: IException[];
   frequency?: IFrequency[];
   bankgl?: IGLAccount[] | Array<any>;
   charges?: IChargeConcessionType[] | Array<any>;
-  // eslint-disable-next-line react/no-unused-prop-types
   data?: IProdType[] | IProdCodeType[] | Array<any>;
-  // eslint-disable-next-line react/no-unused-prop-types
   dataType?: IProdCodeType[] | IProdType[] | Array<any>;
-  // eslint-disable-next-line react/no-unused-prop-types
   productCodeGenarate?: string | undefined;
-  // eslint-disable-next-line react/no-unused-prop-types
   setProductCodeGenarate?: React.Dispatch<React.SetStateAction<string>>;
   setProductCode?: React.Dispatch<React.SetStateAction<string>>;
-  // eslint-disable-next-line react/no-unused-prop-types
   dataWithCode?:
     | IProdType[]
     | IProdCodeType[]
@@ -169,27 +155,36 @@ type Props = {
     | Array<any>;
 };
 
+type PropsAccordion = {
+  cardTitle?: string;
+  cardKey: string;
+  completed?: Record<string, ProgressType>;
+  titles?: ITitle[];
+  countries?: ICountries[];
+  states?: IStates[];
+  towns?: ITown[];
+  relationships?: IRelationship[];
+  officers?: IAccountOfficers[];
+  idCards?: IIDTypes[];
+  groups?: IGroup[];
+  branches?: IBranches[];
+  sectors?: ISector[];
+  education?: IEducationByCode | IEducation[] | Array<any>;
+  professions?: IOccupation[] | undefined;
+  productCodeGenarate?: string | undefined;
+  setProductCodeGenarate?: React.Dispatch<React.SetStateAction<string>>;
+  setProductCode?: React.Dispatch<React.SetStateAction<string>>;
+};
+
 const FormSelector = ({
   cardKey,
-  titles,
   countries,
   states,
   towns,
-  relationships,
-  idCards,
-  officers,
-  groups,
-  branches,
-  sectors,
-  education,
-  professions,
-  productTypes,
   currencies,
   repaymentTypes,
   creditInterests,
   loanClass,
-  interests,
-  products,
   bankproducts,
   exception,
   frequency,
@@ -207,13 +202,6 @@ const FormSelector = ({
     case 'personalDetails':
       selectedForm = (
         <PersonalDetailsForm
-          titles={titles}
-          sectors={sectors}
-          education={Array.isArray(education) ? education : []}
-          countries={countries}
-          states={states}
-          towns={towns}
-          professions={professions}
           productCodeGenarate={productCodeGenarate as string}
           setProductCode={
             setProductCode as unknown as React.Dispatch<
@@ -234,10 +222,7 @@ const FormSelector = ({
       break;
     case 'interestCharges':
       selectedForm = (
-        <InterestLoanChargesForm
-          countries={countries}
-          states={states}
-          towns={towns}
+        <InterestLoanChargesForm  
           repaymentTypes={repaymentTypes}
           creditInterests={creditInterests}
           loanClass={loanClass}
@@ -250,8 +235,6 @@ const FormSelector = ({
     case 'generalLedge':
       selectedForm = (
         <GeneralLedgerForm
-          states={states}
-          towns={towns}
           bankgl={bankgl}
           dataWithCode={dataWithCode as IGLWithBranchCode[]}
         />
@@ -286,34 +269,17 @@ export const ShortCardWithAccordion = ({
   sectors,
   education,
   professions,
-  charges,
-  productTypes,
-  currencies,
-  repaymentTypes,
-  creditInterests,
-  loanClass,
-  interests,
-  bankproducts,
-  exception,
-  frequency,
-  bankgl,
-  data,
-  dataType,
   productCodeGenarate,
   setProductCodeGenarate,
-  setProductCode,
-  dataWithCode
-}: Props) => {
+  setProductCode
+}: PropsAccordion) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const isEditing = useGetParams('isEditing') || null;
-
   const handleChange = () => {
     setExpanded(!expanded);
   };
   const productClassBYID = localStorage.getItem('addProduct');
   const [productType, setproductType] = React.useState('');
-
   const { currencies: Currency } = useGetCurrency();
   const { productTypes: product } = useGetProductType();
   const { repaymentTypes: repaymentType } = useGetAllLoanRepaymentTypes();

@@ -1,49 +1,24 @@
-/* eslint-disable no-dupe-keys */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useFormikContext } from 'formik';
 import { useCurrentBreakpoint } from '@/utils';
-import { BatchContainer } from '@/features/Operation/Forms/style';
 import {
-  ITitle,
-  ICountries,
-  IStates,
-  ITown
-} from '@/api/ResponseTypes/customer-service';
-import {
-  IEducation,
   IFrequency,
-  IOccupation,
   IProdCodeType,
   IProdType,
   IProductClass,
-  IProducts,
-  ISector
+  IProducts
 } from '@/api/ResponseTypes/setup';
-import { CustomerCreationContext } from '@/context/CustomerCreationContext';
-import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
-import {
-  FormikDateTimePicker,
-  FormSelectField,
-  FormTextInput
-} from '@/components/FormikFields';
+
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { ICurrency, IProductType } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
 import { generateProductCode } from '@/api/setup/useProduct';
-import { useGetParams } from '@/utils/hooks/useGetParams';
-import { FormSkeleton } from '@/components/Loaders';
 import { encryptData } from '@/utils/encryptData';
 
 type Props = {
-  titles?: ITitle[];
-  sectors?: ISector[];
-  education?: IEducation[];
-  countries?: ICountries[];
-  states?: IStates[];
-  towns?: ITown[];
-  professions?: IOccupation[];
   productTypes?: IProductType[] | Array<any>;
   currencies?: ICurrency[] | Array<any>;
   frequency?: IFrequency[];
@@ -56,13 +31,6 @@ type Props = {
 };
 
 export const PersonalCasaDetailsForm = ({
-  titles,
-  sectors,
-  education,
-  countries,
-  states,
-  towns,
-  professions,
   productTypes,
   currencies,
   frequency,
@@ -73,14 +41,8 @@ export const PersonalCasaDetailsForm = ({
   setSelectedCurrency,
   selectedCurrency
 }: Props) => {
-  const { customerType, setCustomerType } = React.useContext(
-    CustomerCreationContext
-  );
   const { isTablet, setWidth, isMobile } = useCurrentBreakpoint();
   const { setFieldValue, values } = useFormikContext<any>();
-  // const [selectedCurrency, setSelectedCurrency] = React.useState('');
-  const isEditing = useGetParams('isEditing') || null;
-
   const [productCodeGenarate, setProductCodeGenarate] = React.useState('');
   const handleGenerateCode = async (code: string) => {
     setProductCode(values.productclass);
@@ -89,30 +51,24 @@ export const PersonalCasaDetailsForm = ({
       setFieldValue('productCode', resp.productCode);
     });
   };
-  if (setProductCode) {
-    setProductCode(values.productclass);
-  }
-  const handleCheck = (booleanValue: string, value: string) => {
-    setCustomerType(value);
-  };
+
+  useEffect(() => {
+    if (setProductCode) {
+      setProductCode(values.productclass);
+    }
+  }, [setProductCode, values.productclass]);
+
   const datatype: IProdCodeType[] | undefined = dataType;
   const dataName: IProdType[] | undefined = data;
-  const {
-    mappedProductType,
-    mappedCurrency,
-    mappedFrequency,
-    mappedProductClass,
-    mappedBankproductCode,
-    mappedProductTypeId,
-    mappedProductClassTypeId
-  } = useMapSelectOptions({
-    productTypes,
-    currencies,
-    frequency,
-    products,
-    data: dataName,
-    dataType: datatype
-  });
+  const { mappedCurrency, mappedProductTypeId, mappedProductClassTypeId } =
+    useMapSelectOptions({
+      productTypes,
+      currencies,
+      frequency,
+      products,
+      data: dataName,
+      dataType: datatype
+    });
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
       const defaultCurrency =
@@ -125,34 +81,55 @@ export const PersonalCasaDetailsForm = ({
         )?.value ||
         mappedCurrency[0]?.value ||
         '';
-
       setSelectedCurrency(defaultCurrency);
     }
-  }, [mappedCurrency]);
+  }, [mappedCurrency, setSelectedCurrency]);
 
   return (
-    <>
-      <Grid item={isTablet} mobile={12}>
+    <Grid
+      sx={{
+        paddingLeft: '30px'
+      }}
+      container
+      spacing={4}
+    >
+      <Grid
+        sx={{
+          padding: '0px',
+          margin: '0px'
+        }}
+        item={isTablet}
+        mobile={12}
+        tablet={6}
+      >
         <FormSelectField
           name="productclass"
           options={mappedProductClassTypeId}
           label="Product Class"
           onChange={(e) => handleGenerateCode(e.target.value)}
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid
+        sx={{
+          padding: '0px',
+          margin: '0px'
+        }}
+        item={isTablet}
+        mobile={12}
+        tablet={6}
+      >
         <FormTextInput
           name="productCode"
           placeholder="Enter Product code"
           type="number"
           label="Product Code"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           value={productCodeGenarate}
           disabled
@@ -160,37 +137,55 @@ export const PersonalCasaDetailsForm = ({
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid
+        sx={{
+          padding: '0px',
+          margin: '0px',
+          paddingTop: '20px'
+        }}
+        item={isTablet}
+        mobile={12}
+        tablet={6}
+      >
         <FormTextInput
           name="productName"
           placeholder="Enter Product name"
           label="Product Name"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid
+        sx={{
+          padding: '0px',
+          margin: '0px',
+          paddingTop: '20px'
+        }}
+        item={isTablet}
+        mobile={12}
+        tablet={6}
+      >
         <FormTextInput
           name="openbalance"
           placeholder="Enter opening balance"
           label="Opening Balance"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormSelectField
           name="currencycode"
           options={mappedCurrency}
           label="Currency"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           value={selectedCurrency}
           onChange={(e: any) => setSelectedCurrency(e.target.value)}
@@ -198,104 +193,93 @@ export const PersonalCasaDetailsForm = ({
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
-        <Box sx={{ width: '70%' }}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
+        <Box sx={{ width: '100%' }}>
           <DemoContainer components={['DatePicker']}>
             <DateTimePicker label="Start Date" name="productstart" />
           </DemoContainer>
         </Box>
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
-        <Box sx={{ width: '70%' }}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
+        <Box sx={{ width: '100%' }}>
           <DemoContainer components={['DatePicker']}>
             <DateTimePicker label="Expiry Date" name="productExpire" />
           </DemoContainer>
         </Box>
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormSelectField
           name="appType"
           options={mappedProductTypeId}
           label="Product Type"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
-      <Grid item={isTablet} mobile={12}>
+
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="shortname"
           placeholder="Enter short name"
           label="Short Name"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="closeBalance"
           placeholder="Enter Closing Balance"
           label="Closing Balance"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="minintbalance"
           placeholder="Enter Min Balance for Interest"
           label="Minimum Balance for Interest"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
           name="maxamt"
           placeholder="Enter NDIC Limit"
           label="Max AML Limit"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
 
-      <Grid item={isTablet} mobile={12}>
+      <Grid item={isTablet} mobile={12} tablet={6}>
         <FormTextInput
-          name="taxabsorbed1"
+          name="penal"
           placeholder="Enter Penalty Rate"
           label="Penalty Rate % (Annualise)"
           customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
+            width: setWidth(isMobile ? '250px' : '100%')
           }}
           required
         />
       </Grid>
-
-      <Grid item={isTablet} mobile={12}>
-        <FormTextInput
-          name="dayint"
-          placeholder="Enter Interest Days"
-          label="Interest (Days)"
-          customStyle={{
-            width: setWidth(isMobile ? '250px' : '70%')
-          }}
-          required
-        />
-      </Grid>
-    </>
+    </Grid>
   );
 };

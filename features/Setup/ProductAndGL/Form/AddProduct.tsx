@@ -1,26 +1,17 @@
 'use client';
 import * as React from 'react';
 import { Box } from '@mui/material';
-import { Form, Formik, getIn } from 'formik';
-import { useSearchParams } from 'next/navigation';
-import { ProgressType, ShortCardWithAccordion } from './ShortCardWithAccordion';
+import { Form, Formik } from 'formik';
+import {  ShortCardWithAccordion } from './ShortCardWithAccordion';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
-  useCreateDemandDepositProduct,
   useCreateLoanAccountProduct,
-  useGetDemandDepositByCode,
   useGetLoanProductByCode
 } from '@/api/setup/useProduct';
 import { createLoanAccountInitialValues } from '@/schemas/schema-values/setup';
-import {
-  createDepartmentSchema,
-  createLoanProductSchema
-} from '@/schemas/setup';
 import { PageTitle } from '@/components/Typography';
 import { BatchTitle } from '@/features/Operation/Forms/style';
-
-import { encryptData } from '@/utils/encryptData';
 import { FormSkeleton } from '@/components/Loaders';
 import useFormProgress from '@/utils/hooks/useFormProgress';
 import { useGetParams } from '@/utils/hooks/useGetParams';
@@ -148,7 +139,7 @@ export const AddNewProduct = ({
     return () => {
       setIsSubmitting(false);
     };
-  }, [isSubmitting]);
+  }, [isSubmitting, setIsSubmitting]);
 
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;

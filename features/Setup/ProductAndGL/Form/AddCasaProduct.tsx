@@ -1,11 +1,9 @@
 'use client';
 import * as React from 'react';
 import { Box } from '@mui/material';
-import { Form, Formik, getIn } from 'formik';
-import { useSearchParams } from 'next/navigation';
+import { Form, Formik,  } from 'formik';
 import dayjs from 'dayjs';
 import { ShortCardCasaWithAccordion } from '../AddCasaProduct/ShortCardWithCasaAccording';
-import { ProgressType } from './ShortCardWithAccordion';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
@@ -13,14 +11,9 @@ import {
   useGetDemandDepositByCode
 } from '@/api/setup/useProduct';
 import { createDemandDepositInitialValues } from '@/schemas/schema-values/setup';
-import {
-  createCasaProductSchema,
-  createDepartmentSchema
-} from '@/schemas/setup';
 import { PageTitle } from '@/components/Typography';
 import { BatchTitle } from '@/features/Operation/Forms/style';
 
-import { encryptData } from '@/utils/encryptData';
 import { decryptData } from '@/utils/decryptData';
 import useFormProgress from '@/utils/hooks/useFormProgress';
 import { useGetParams } from '@/utils/hooks/useGetParams';
@@ -39,8 +32,6 @@ type Props = {
   isSubmitting: boolean;
   setIsSubmitting: (submit: boolean) => void;
   currencies?: ICurrency[] | Array<any>;
-
-  // eslint-disable-next-line react/no-unused-prop-types
 };
 
 export const AddCasaNewProduct = ({
@@ -51,20 +42,13 @@ export const AddCasaNewProduct = ({
 }: Props) => {
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
   const {
-    mappedProductType,
     mappedCurrency,
-    mappedFrequency,
-    mappedProductClass,
-    mappedBankproductCode,
-    mappedProductTypeId,
-    mappedProductClassTypeId
   } = useMapSelectOptions({
     currencies
   });
   const requiredFields: Record<string, string[]> = {
     personalDetails: [
       'dayint',
-      'taxabsorbed1',
       'maxamt',
       'minintbalance',
       'closeBalance',
@@ -72,7 +56,8 @@ export const AddCasaNewProduct = ({
       'appType',
       'openbalance',
       'productName',
-      'productclass'
+      'productclass',
+      'penal'
     ],
 
     interestCharges: [
@@ -158,7 +143,7 @@ export const AddCasaNewProduct = ({
     return () => {
       setIsSubmitting(false);
     };
-  }, [isSubmitting]);
+  }, [isSubmitting, setIsSubmitting]);
 
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;

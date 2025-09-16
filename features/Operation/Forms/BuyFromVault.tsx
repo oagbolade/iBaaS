@@ -53,7 +53,10 @@ export const BuyFromVault = ({
   const setTellervalue = (value: string) => {
     setTellerNumber(value);
     setTimeout(() => {
-      getTellerBalanceByUserTerllerNumber(toastActions, encryptData(value) as string).then((data) => {
+      getTellerBalanceByUserTerllerNumber(
+        toastActions,
+        encryptData(value) as string
+      ).then((data) => {
         setTellerAmount(data.total);
       });
     }, 1000);
@@ -94,6 +97,7 @@ export const BuyFromVault = ({
           setIsSubmitting(false);
         }
       });
+      setTellervalue(tellerNumber as string);
       // Clear tranAmount and narration fields
       formik.setFieldValue('tranAmount', '');
       formik.setFieldValue('narration', '');

@@ -7,7 +7,6 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import styled from 'styled-components';
 import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
-import { OtherDetailsForm } from '../Form/CreateProduct/OtherDetails';
 import { PersonalCasaDetailsForm } from '../Form/CreateCasaProduct/PersonalDetailsCasaForm';
 import '@/features/Setup/ProductAndGL/Form/removeDivider.module.css';
 import { InterestCasaChargesForm } from '../Form/CreateCasaProduct/InterestCharge';
@@ -140,41 +139,40 @@ type Props = {
   frequency?: IFrequency[];
   bankproducts?: IBankProducts[];
   exception?: IException[];
-  // eslint-disable-next-line react/no-unused-prop-types
   bankgl?: IGLAccount[] | Array<any>;
   charges?: IChargeConcessionType[] | Array<any>;
-  // eslint-disable-next-line react/no-unused-prop-types
   setProductCode?: React.Dispatch<React.SetStateAction<string>>;
-  // eslint-disable-next-line react/no-unused-prop-types
-  // eslint-disable-next-line react/no-unused-prop-types
   data?: IProdType[] | IProdCodeType[] | Array<any>;
   dataType?: IProdCodeType[] | IProdType[] | Array<any>;
-  // eslint-disable-next-line react/no-unused-prop-types
   dataWithCode?:
     | IProdType[]
     | IProdCodeType[]
     | IGLWithBranchCode[]
     | Array<any>;
-  // eslint-disable-next-line react/no-unused-prop-types
   setSelectedCurrency?: React.Dispatch<React.SetStateAction<string>>;
-  // eslint-disable-next-line react/no-unused-prop-types
   selectedCurrency?: string;
 };
 
+type PropsAccordion = {
+  cardTitle?: string;
+  cardKey: string;
+  completed?: Record<string, ProgressType>;
+  titles?: ITitle[];
+  countries?: ICountries[];
+  states?: IStates[];
+  towns?: ITown[];
+  relationships?: IRelationship[];
+  officers?: IAccountOfficers[];
+  idCards?: IIDTypes[];
+  groups?: IGroup[];
+  branches?: IBranches[];
+  sectors?: ISector[];
+  education?: IEducationByCode | IEducation[] | Array<any>;
+  professions?: IOccupation[];
+  setProductCode?: React.Dispatch<React.SetStateAction<string>>;
+};
 const FormSelector = ({
   cardKey,
-  titles,
-  countries,
-  states,
-  towns,
-  relationships,
-  idCards,
-  officers,
-  groups,
-  branches,
-  sectors,
-  education,
-  professions,
   productTypes,
   currencies,
   creditInterests,
@@ -182,7 +180,6 @@ const FormSelector = ({
   products,
   frequency,
   bankgl,
-  bankproducts,
   exception,
   charges,
   setProductCode,
@@ -197,12 +194,6 @@ const FormSelector = ({
     case 'personalDetails':
       selectedForm = (
         <PersonalCasaDetailsForm
-          titles={titles}
-          sectors={sectors}
-          education={Array.isArray(education) ? education : []}
-          countries={countries}
-          states={states}
-          towns={towns}
           selectedCurrency={selectedCurrency as string}
           setSelectedCurrency={
             setSelectedCurrency as unknown as React.Dispatch<
@@ -214,7 +205,6 @@ const FormSelector = ({
               React.SetStateAction<string>
             >
           }
-          professions={professions}
           productTypes={productTypes as IProductType[] | undefined}
           currencies={currencies}
           products={products as IProducts[] | undefined}
@@ -227,14 +217,10 @@ const FormSelector = ({
     case 'interestCharges':
       selectedForm = (
         <InterestCasaChargesForm
-          countries={countries}
-          states={states}
-          towns={towns}
           currencies={currencies}
           creditInterests={creditInterests}
           interests={interests}
           productTypes={productTypes}
-          bankproducts={bankproducts}
           exception={exception}
           charges={charges}
         />
@@ -243,8 +229,6 @@ const FormSelector = ({
     case 'generalLedge':
       selectedForm = (
         <GeneralCasaLedgerForm
-          states={states}
-          towns={towns}
           bankgl={bankgl}
           dataWithCode={dataWithCode as IGLWithBranchCode[]}
         />
@@ -279,19 +263,8 @@ export const ShortCardCasaWithAccordion = ({
   sectors,
   education,
   professions,
-  charges,
-  productTypes,
-  currencies,
-  creditInterests,
-  interests,
-  products,
-  frequency,
-  bankproducts,
-  exception,
-  setProductCode,
-  data,
-  dataType
-}: Props) => {
+  setProductCode
+}: PropsAccordion) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const isEditing = useGetParams('isEditing') || null;
@@ -300,7 +273,6 @@ export const ShortCardCasaWithAccordion = ({
   };
   const productClassBYID = localStorage.getItem('addProduct');
   const [productCodeType, setproductType] = React.useState('');
-
   const { currencies: currency } = useGetCurrency();
   const { productTypes: productType } = useGetProductType();
   const { creditInterests: creditInterest } = useGetMaxCreditInterest();

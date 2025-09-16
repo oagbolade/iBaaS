@@ -2,6 +2,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
+import { useIsFetching } from '@tanstack/react-query';
 import { FilterSection } from './FilterSection';
 import { TableActionMenu } from './TableActionMenu';
 import { COLUMNS } from './COLUMNS';
@@ -21,9 +22,7 @@ import { SearchGroupResponse } from '@/api/ResponseTypes/customer-service';
 import { FormSkeleton } from '@/components/Loaders';
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { useIsFetching } from '@tanstack/react-query';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-
 
 export interface IOptions {
   buttonTitle: string;
@@ -109,7 +108,6 @@ export const GroupTable = () => {
         {isLoading || isGroupDataLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
-          <>
           <MuiTableContainer
             columns={COLUMNS}
             tableConfig={{
@@ -159,7 +157,6 @@ export const GroupTable = () => {
               </StyledTableRow>
             )}
           </MuiTableContainer>
-          </>
         )}
       </Box>
     </Box>
