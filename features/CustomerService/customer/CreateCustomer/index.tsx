@@ -77,20 +77,19 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
 
  
   const isInitialized = React.useRef(false);
+React.useEffect(() => {
+  if (isInitialized.current) return;
 
-  React.useEffect(() => {
-    // Only run on first render or when isEditing changes
-    if (!isInitialized.current) {
-      if (isEditing) {
-        // If in editing mode, calculate the initial progress
-        handleCompletedFields(values);
-      } else {
-        // If in create mode, reset the progress to zero
-        setCompleted(progressCompletionInitialValues);
-      }
-      isInitialized.current = true;
-    }
-  }, [isEditing, handleCompletedFields, setCompleted, values]);
+  if (isEditing) {
+    // Editing mode → calculate initial progress
+    handleCompletedFields(values);
+  } else {
+    // Create mode → reset progress
+    setCompleted(progressCompletionInitialValues);
+  }
+
+  isInitialized.current = true;
+}, [isEditing, handleCompletedFields, setCompleted, values]);
 
   React.useEffect(() => {
     handleCompletedFields(values);
