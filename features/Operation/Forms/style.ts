@@ -444,7 +444,7 @@ export const postingDetails = {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '16px',
-  height: '182px',
+  maxHeight: '700', 
   width: '560px'
 };
 export const saveBatches = {
@@ -460,7 +460,6 @@ export const saveBatches = {
 };
 export const saveTitles = {
   color: `${colors.neutral700}`,
-  fontFamily: 'Averta',
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 400,

@@ -208,7 +208,7 @@ export const BatchPosting = ({
 
   const [selectedPostingIndex, setSelectedPostingIndex] = useState<
     number | null
-  >(0);
+  >(null);
 
   const handleViewPosting = (
     index: number,
@@ -303,6 +303,45 @@ export const BatchPosting = ({
       toastActions
     );
   };
+
+//   const handleSaveBatch = (values: any, resetForm: () => void) => {
+//   const formattedDate = dayjs(values.valueDate).format('YYYY-MM-DD');
+//   const newBatchData: BatchData = {
+//     ...values,
+//     batchno: batchPostingNo,
+//     valueDate: formattedDate,
+//     menuid: Number(menuId),
+//     currency: selectedCurrency
+//   };
+
+//   if (selectedPostingIndex !== null && savedBatchData.length > 0) {
+//     // ✅ Only update when we are in "edit mode"
+//     const updatedBatches = [...savedBatchData];
+//     updatedBatches[selectedPostingIndex] = newBatchData;
+//     setSavedBatchData(updatedBatches);
+//     setSelectedPostingIndex(null); // reset edit mode
+
+//     resetForm();
+//     toast(
+//       'Batch updated successfully',
+//       'Success',
+//       'success' as AlertColor,
+//       toastActions
+//     );
+//   } else {
+//     // ✅ Always append if not editing
+//     setSavedBatchData(prevBatches => [...prevBatches, newBatchData]);
+
+//     resetForm();
+//     toast(
+//       'Batch saved successfully',
+//       'Success',
+//       'success' as AlertColor,
+//       toastActions
+//     );
+//   }
+// };
+
 
   const onSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     const toastMessage = {
@@ -407,6 +446,7 @@ export const BatchPosting = ({
                     name="accountNumber"
                     placeholder="Enter Account Number"
                     label="Account Number"
+                    required
                     value={accountNumber?.toString()}
                     onChange={handleAccountNumber}
                     customStyle={{
@@ -419,6 +459,7 @@ export const BatchPosting = ({
                     name="trancode"
                     options={mappedTransactionType}
                     label="Transaction Type"
+                    required
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
@@ -429,8 +470,9 @@ export const BatchPosting = ({
                     <DateTimePicker
                       label="Value Date"
                       name="valueDate"
-                      value={values.valueDate || systemDate}
                       required
+                      value={values.valueDate || systemDate}
+                      
                     />
                   </DemoContainer>
                 </Grid>
@@ -453,6 +495,7 @@ export const BatchPosting = ({
                     name="computedAmount"
                     placeholder="Enter Pay Amount"
                     label="Pay Amount"
+                    required
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
@@ -532,20 +575,24 @@ export const BatchPosting = ({
                 </Grid>
               </Grid>
 
+           
               {savedBatchData.length > 0 && (
                 <Box sx={postingDetails}>
                   <Grid item={isTablet} mobile={12} mt={4}>
                     <PageTitle title="Saved Batches" />
                   </Grid>
                   {savedBatchData.map((batch, index) => (
-                    <Box key={index} sx={saveBatches}>
+                    <Box key={index} sx={saveBatches}
+                      
+                    >
                       <Box sx={saveBatchesDetails}>
                         <Box
                           sx={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: '32px',
-                            flex: '1 0 0'
+                            flex: '1 0 0',
+                        
                           }}
                         >
                           <Box>
@@ -573,7 +620,7 @@ export const BatchPosting = ({
                             </Box>
                           )}
                           {batch.trancode === '002' && (
-                            <Box>
+                            <Box >
                               <PageTitle title="CR" />
                               <PageTitle
                                 title={batch.trancode}
@@ -638,6 +685,8 @@ export const BatchPosting = ({
                   ))}
                 </Box>
               )}
+            
+            
             </Grid>
 
             <Grid item tablet={6} mobile={12}>
