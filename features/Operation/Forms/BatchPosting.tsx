@@ -304,45 +304,6 @@ export const BatchPosting = ({
     );
   };
 
-//   const handleSaveBatch = (values: any, resetForm: () => void) => {
-//   const formattedDate = dayjs(values.valueDate).format('YYYY-MM-DD');
-//   const newBatchData: BatchData = {
-//     ...values,
-//     batchno: batchPostingNo,
-//     valueDate: formattedDate,
-//     menuid: Number(menuId),
-//     currency: selectedCurrency
-//   };
-
-//   if (selectedPostingIndex !== null && savedBatchData.length > 0) {
-//     // ✅ Only update when we are in "edit mode"
-//     const updatedBatches = [...savedBatchData];
-//     updatedBatches[selectedPostingIndex] = newBatchData;
-//     setSavedBatchData(updatedBatches);
-//     setSelectedPostingIndex(null); // reset edit mode
-
-//     resetForm();
-//     toast(
-//       'Batch updated successfully',
-//       'Success',
-//       'success' as AlertColor,
-//       toastActions
-//     );
-//   } else {
-//     // ✅ Always append if not editing
-//     setSavedBatchData(prevBatches => [...prevBatches, newBatchData]);
-
-//     resetForm();
-//     toast(
-//       'Batch saved successfully',
-//       'Success',
-//       'success' as AlertColor,
-//       toastActions
-//     );
-//   }
-// };
-
-
   const onSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     const toastMessage = {
       title: 'Validation error',
