@@ -230,7 +230,7 @@ export const ChequeWithdrawalInitialValues: CreateChequeWithdrawalFormValues = {
   narration: '',
   currencyCode: '',
   tellerno: 0,
-  action: '0',
+  action: '',
   cheqNumber: 0
 };
 
