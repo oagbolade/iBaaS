@@ -80,8 +80,10 @@ export default function DateTimePicker({
           return (
             <DateTimeWrapper>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "3px" }}>
                 <Typography sx={labelTypography}>{label}</Typography>
                 {required && <Typography sx={asterix}>*</Typography>}
+                </Box>
                 <DatePicker
                   disabled={disabled}
                   className={className}
