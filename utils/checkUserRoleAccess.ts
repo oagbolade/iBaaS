@@ -41,6 +41,11 @@ const checkUserRoleAccess = (roleNames: string[]): boolean => {
 const excludedModules = ['Dashboard'];
 
 export const shouldDisableMenuItem = (name: string): boolean => {
+  // Disable Reports -> Overview
+  if (name === 'Overview') {
+    return true;
+  }
+
   if (excludedModules.includes(name)) {
     return false;
   }

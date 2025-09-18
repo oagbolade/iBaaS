@@ -194,10 +194,12 @@ export const BatchPosting = ({
   const batchPostingNo = batchno ? batchno.toString() : '';
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const isAccountNumber11Digits = accountNumber?.length === 10;
+  
   const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
     useGetAccountDetails(encryptData(accountNumber) || '', {
       enabled: isAccountNumber11Digits && !!accountNumber
     });
+
   const { bankgl: costAmountData } = useGetGLByGLNumber(
     encryptData(accountNumber) || ''
   );

@@ -91,3 +91,15 @@ export const mainMenu = {
   width: '238px',
   height: '35px'
 };
+
+export const comingSoon = {
+  marginLeft: 8,
+  background: colors.activeBlue100, 
+  color: colors.activeBlue400,      
+  fontSize: 12,
+  borderRadius: 8,
+  padding: '2px 8px',
+  fontWeight: 500,
+  display: 'inline-block',
+  verticalAlign: 'middle',
+};

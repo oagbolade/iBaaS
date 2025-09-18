@@ -9,7 +9,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Link from 'next/link';
-import { sideBarItem } from './styles';
+import { comingSoon, sideBarItem } from './styles';
 import styles from './App.module.css';
 import { ChevronDown } from '@/assets/svg';
 import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
@@ -34,6 +34,18 @@ export interface SidebarMenuItem {
 export interface SidebarMenuProps {
   sideBarMenu: SidebarMenuItem[];
   setIsAccordionOpen?: (isOpen: boolean) => void;
+}
+
+function ComingSoon({ menuName }: { menuName: string }) {
+  const comingSoonItems = ['Overview'];
+
+  if (comingSoonItems.includes(menuName)) {
+    return (
+      <span style={comingSoon}>
+        Coming soon
+      </span>
+    );
+  }
 }
 
 export default function SideBarDropdown({
@@ -117,7 +129,7 @@ export default function SideBarDropdown({
             </AccordionSummary>
             <AccordionDetails>
               <Stack ml={3} spacing={2} direction="column">
-                {menuItem.subMenuItems.map((subMenuItem) => {
+                {menuItem.subMenuItems.map((subMenuItem: { link: string, name: string }) => {
                   return (
                     <Button
                       component={Link}
@@ -131,6 +143,7 @@ export default function SideBarDropdown({
                       disabled={shouldDisableMenuItem(subMenuItem.name)}
                     >
                       {subMenuItem.name}
+                      <ComingSoon menuName={subMenuItem.name} />
                     </Button>
                   );
                 })}

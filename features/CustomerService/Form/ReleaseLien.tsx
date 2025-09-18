@@ -70,12 +70,9 @@ export const ReleaseLien = () => {
   const searchParams = useSearchParams();
   const accountNumber = searchParams.get('accountNumber') || '';
   const myHoldnumber = Number(searchParams.get('holdNumber')) || 0;
-  // 2090000005 // Test account number
-  // const accountNumber = '2090000005';
-  // const myHoldnumber = 3;
 
-  const effectiveDate = '2024-02-29T12:00:00';
-  const initialEndDate = '2024-03-23T12:00:00';
+  const effectiveDate = '';
+  const initialEndDate = '';
 
   const startDate = dayjs(effectiveDate);
   const endDate = dayjs(initialEndDate);
@@ -88,8 +85,9 @@ export const ReleaseLien = () => {
 
   const lienType = '1';
   const { lienReason } = useGetLienReason(encryptData(lienType) as string);
-  const { liendetail, accName, lienexist, isLoading } =
-    useGetLienDetail(encryptData(accountNumber) as string);
+  const { liendetail, accName, lienexist, isLoading } = useGetLienDetail(
+    encryptData(accountNumber) as string
+  );
 
   React.useEffect(() => {
     const reasons = lienReason?.map((reason: ILienReason) => ({
@@ -122,8 +120,7 @@ export const ReleaseLien = () => {
       validationSchema={createLien}
     >
       <Form>
-
-          <TopActionsArea actionButtons={actionButtons} />
+        <TopActionsArea actionButtons={actionButtons} />
         <Grid container spacing={2}>
           <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
             <PageTitle title="Release Lien" styles={BatchTitle} />
@@ -158,7 +155,9 @@ export const ReleaseLien = () => {
                     <DateTimePicker
                       label="Start Date"
                       name="effective_dt"
-                      value={startDate}
+                      value={liendetail?.[0]?.effective_dt
+                        ? dayjs(liendetail[0]?.effective_dt)
+                        : startDate}
                       disabled
                     />
                   </DemoContainer>
@@ -170,7 +169,9 @@ export const ReleaseLien = () => {
                     <DateTimePicker
                       label="End Date"
                       name="end_dt"
-                      value={endDate}
+                       value={liendetail?.[0]?.end_dt
+                        ? dayjs(liendetail?.[0]?.end_dt)
+                        : startDate}
                       disabled
                     />
                   </DemoContainer>

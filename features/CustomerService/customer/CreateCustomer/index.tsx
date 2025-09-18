@@ -41,8 +41,6 @@ import {
   CustomerCreationContext,
   progressCompletionInitialValues
 } from '@/context/CustomerCreationContext';
-import { toast } from '@/utils/toast';
-import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { BatchTitle } from '@/features/Operation/Forms/style';
 import { PageTitle } from '@/components/Typography';
 import { useGetAllGroups } from '@/api/general/useGroup';
@@ -71,31 +69,31 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >(setCompleted, validationKeysMapper);
 
-  const { values } = useFormikContext<
+  const useUpdateCompletion = <
+    T extends
+      | CreateIndividualCustomerFormValues
+      | CreateCorporateCustomerFormValues
+  >(
+    touched: Record<string, boolean | undefined>,
+    values: T
+  ) => {
+    React.useEffect(() => {
+      const atLeastOneFieldHasBeenVisited = Object.keys(touched).length > 0;
+
+      if (atLeastOneFieldHasBeenVisited) {
+        handleCompletedFields(values);
+      }
+    }, [touched, values]);
+  };
+
+  const { touched, values } = useFormikContext<
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >();
+  useUpdateCompletion<
+    CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
+  >(touched, values);
 
- 
-  const isInitialized = React.useRef(false);
-React.useEffect(() => {
-  if (isInitialized.current) return;
-
-  if (isEditing) {
-    // Editing mode → calculate initial progress
-    handleCompletedFields(values);
-  } else {
-    // Create mode → reset progress
-    setCompleted(progressCompletionInitialValues);
-  }
-
-  isInitialized.current = true;
-}, [isEditing, handleCompletedFields, setCompleted, values]);
-
-  React.useEffect(() => {
-    handleCompletedFields(values);
-  }, [values, handleCompletedFields]);
-
-  return null;
+  return null;
 };
 
 export const CreateCustomerContainer = () => {
@@ -232,12 +230,13 @@ export const CreateCustomerContainer = () => {
       handleCompletedFields(customerResult);
     }
 
+    if (!isEditing) {
+      // Reset completion progress when creating a new customer
+      setCompleted(progressCompletionInitialValues);
+    }
   }, [
     customerResult,
     isEditing,
-    handleCompletedFields,
-    setCompleted,
-    isCustomerResultLoading
   ]);
 
   React.useEffect(() => {
