@@ -310,7 +310,14 @@ export async function getTellerBalanceByUserTerllerNumber(
     });
 
     const { message, title, severity } = globalErrorHandler();
-    toast(message, title, severity, toastActions);
+     if (data.responseCode === '03') {
+      toast(
+        data.responseMessage,
+        data.responseMessage,
+        'success',
+        toastActions
+      );
+    }
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);

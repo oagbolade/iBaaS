@@ -5,14 +5,12 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AlertColor, Button } from '@mui/material';
-import dayjs, { Dayjs } from 'dayjs';
+import { AlertColor } from '@mui/material';
+import dayjs from 'dayjs';
 import { PreviewContentOne } from '../posting';
 import {
-  BatchContainer,
   BatchTitle,
   DeleteSavedBatches,
-  PostingContainer,
   postingDetails,
   previewContentStyle,
   saveBatches,
@@ -25,14 +23,12 @@ import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
   FormSelectField,
-  FormikDateTimePicker,
   FormSelectInput
 } from '@/components/FormikFields';
 import { CustomStyleI } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
 import {
-  ActionButton,
-  ActionButtonWithPopper
+  ActionButton
 } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
@@ -40,12 +36,9 @@ import {
   cancelButton
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MobileModalContainer } from '@/components/Revamp/Modal/mobile/ModalContainer';
-import { AddIcon, SearchIcon } from '@/assets/svg';
+import { AddIcon } from '@/assets/svg';
 import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
-import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
-import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
-import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
 import { ICurrency } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ITransactionType } from '@/api/ResponseTypes/setup';
@@ -54,15 +47,11 @@ import {
   useGetGenerateBatchNo
 } from '@/api/operation/useBatchPosting';
 import {
-  searchCustomer,
   useGetAccountDetails
 } from '@/api/customer-service/useCustomer';
-import { queryKeys } from '@/react-query/constants';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
-import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 import { toast } from '@/utils/toast';
 import { BatchPostingInitialValues } from '@/schemas/schema-values/operation';
-import { batchPosting } from '@/schemas/operation';
 import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import colors from '@/assets/colors';
@@ -193,18 +182,21 @@ export const BatchPosting = ({
   const [savedBatchData, setSavedBatchData] = useState<BatchData[]>([]);
   const batchPostingNo = batchno ? batchno.toString() : '';
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
-  const isAccountNumber11Digits = accountNumber?.length === 10;
-  
-  const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
-    useGetAccountDetails(encryptData(accountNumber) || '', {
-      enabled: isAccountNumber11Digits && !!accountNumber
-    });
+  const isAccountNumber10Digits = accountNumber?.length === 10;
 
+  const isBatchPosting = true;
+
+  // Fetch Account Details when account number is less than 12 digits that is 11 and below
+  const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
+    useGetAccountDetails(encryptData(accountNumber) || '', isBatchPosting);
+
+  // Fetch GL Account when account number is 12 digits and above
   const { bankgl: costAmountData } = useGetGLByGLNumber(
-    encryptData(accountNumber) || ''
+    encryptData(accountNumber) || '', isBatchPosting
   );
+
   const normalizedAccountDetails: IAccountDetailsResults | undefined =
-    isAccountNumber11Digits
+    isAccountNumber10Digits
       ? accountData ?? undefined
       : mapGLAccountToAccountDetails(costAmountData as IGLAccount | null);
 
@@ -403,7 +395,6 @@ export const BatchPosting = ({
                   mobile={12}
                   mr={{ mobile: 35, tablet: 0 }}
                   width={{ mobile: '100%', tablet: 0 }}
-                  mb={5}
                 >
                   <FormTextInput
                     name="accountNumber"
@@ -435,7 +426,7 @@ export const BatchPosting = ({
                       name="valueDate"
                       required
                       value={values.valueDate || systemDate}
-                      
+
                     />
                   </DemoContainer>
                 </Grid>
@@ -538,7 +529,6 @@ export const BatchPosting = ({
                 </Grid>
               </Grid>
 
-           
               {savedBatchData.length > 0 && (
                 <Box sx={postingDetails}>
                   <Grid item={isTablet} mobile={12} mt={4}>
@@ -546,7 +536,7 @@ export const BatchPosting = ({
                   </Grid>
                   {savedBatchData.map((batch, index) => (
                     <Box key={index} sx={saveBatches}
-                      
+
                     >
                       <Box sx={saveBatchesDetails}>
                         <Box
@@ -555,7 +545,7 @@ export const BatchPosting = ({
                             alignItems: 'center',
                             gap: '32px',
                             flex: '1 0 0',
-                        
+
                           }}
                         >
                           <Box>
@@ -648,8 +638,6 @@ export const BatchPosting = ({
                   ))}
                 </Box>
               )}
-            
-            
             </Grid>
 
             <Grid item tablet={6} mobile={12}>

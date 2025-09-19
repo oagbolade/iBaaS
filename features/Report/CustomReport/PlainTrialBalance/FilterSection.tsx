@@ -1,33 +1,22 @@
 import React from 'react';
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import { DateCalendar } from '@mui/x-date-pickers';
-import dayjs, { Dayjs } from 'dayjs';
-import { exportData, dateFilter, inputFields } from '../style';
+import { inputFields } from '../style';
 import {
   FormTextInput,
   FormSelectField,
   FormikRadioButton
 } from '@/components/FormikFields';
 import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton,
-  BackButton
-} from '@/components/Revamp/Buttons';
-import { ExportIcon } from '@/assets/svg';
-
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { ActionButton } from '@/components/Revamp/Buttons';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { plainTrailBalanceSchema } from '@/schemas/reports';
-import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   branches?: IBranches[];
@@ -38,14 +27,14 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>(
     'plain-trial-balance'
   );
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
 
-  const { currentDate } = useFormattedDates();
-  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
@@ -59,8 +48,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       branchID: values.branchID ? values.branchID : null,
       reportType: values.reportType ? values.reportType : null,
       searchWith: values.searchWith ? values.searchWith : null,
-      reportDate: reportDate.format('YYYY-MM-DD'),
-      getAll: false
+      reportDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      getAll: isDateFilterApplied
     };
     onSearch?.(params);
   };
@@ -74,59 +63,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         validationSchema={plainTrailBalanceSchema}
       >
         <Form>
-          <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '10px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box mt={2.3}>
-              <BackButton />
-            </Box>
-
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="DateRangePicker"
-                  CustomDateRangePicker={
-                    <DateCalendar
-                      value={reportDate}
-                      onChange={(date) => setReportDate(date)}
-                    />
-                  }
-                  customStyle={{ ...dateFilter }}
-                  icon={
-                    <CalendarTodayOutlinedIcon
-                      sx={{
-                        color: `${colors.Heading}`
-                      }}
-                    />
-                  }
-                  iconPosition="end"
-                  buttonTitle={reportDate.format('YYYY-MM-DD')}
-                />
-              </Box>
-            </Stack>
-          </Stack>
-
           <Box
             sx={{
               marginTop: '20px',

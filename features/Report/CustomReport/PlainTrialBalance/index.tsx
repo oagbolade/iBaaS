@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
 import { COLUMN, keys } from './Column';
@@ -12,6 +12,7 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { TopOverViewSingeCalendarSection } from '@/features/Report/Overview/TopOverViewSingleCalenderSection';
 
 export const PlainTrialBalance = () => {
   const { isLoading } = useGlobalLoadingState();
@@ -77,6 +78,8 @@ export const PlainTrialBalance = () => {
         marginTop: '50px'
       }}
     >
+      <TopOverViewSingeCalendarSection />
+
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}

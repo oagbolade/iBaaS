@@ -11,7 +11,6 @@ import { Tabs } from '@/components/Revamp/Tabs';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { IBranches } from '@/api/ResponseTypes/general';
-import colors from '@/assets/colors';
 
 export const VaultManagement = ({ branches }: { branches: IBranches[] }) => {
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);

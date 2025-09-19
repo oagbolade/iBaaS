@@ -55,7 +55,12 @@ export function useGetPlainTrialBalance(params: ISearchParams | null) {
       queryKeys.plainTrialBalance,
       params?.branchID,
       params?.reportDate,
-      params?.reportType
+      params?.reportType,
+      params?.searchWith,
+      params?.getAll,
+      params?.pageNumber,
+      params?.pageSize,
+      params?.page
     ],
     queryFn: () => getPlainTrialBalance(toastActions, params || {}),
     enabled: Boolean(

@@ -54,6 +54,7 @@ export const CustomReports = () => {
                   title={report.title}
                   link={report.link}
                   description={report.description}
+                  linkDisable={report.linkDisable}
                 />
               </Box>
             ))

@@ -18,12 +18,11 @@ import {
   useGetGldetailsByBranchCodeAndUserId,
   getTellerBalanceByUserTerllerNumber
 } from '@/api/operation/useVaultManagement';
-
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { getStoredUser } from '@/utils/user-storage';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
-
+import { TellerAmountContext } from '@/context/TellerAmountContext';
 import { encryptData } from '@/utils/encryptData';
 
 type Props = {
@@ -39,9 +38,8 @@ export const SellToVault = ({
 }: Props) => {
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const [branchCode, setBranchCode] = useState('');
-  const [tellerNumber, setTellerNumber] = useState('');
-  const [tellerAmount, setTellerAmount] = useState(0);
-
+  const { tellerNumber, setTellerNumber, tellerAmount, setTellerAmount } =
+    useContext(TellerAmountContext);
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
@@ -67,7 +65,7 @@ export const SellToVault = ({
       setTellerNumber(tillaccountno);
       setTellerAmount(total);
     }
-  }, [tillaccountno, total]);
+  }, [tillaccountno, total, setTellerAmount, setTellerNumber]);
 
   const { mutate } = useCreateVaultManagement();
   const { mutate: mutateForward } = useForwardToApprovingOfficer();

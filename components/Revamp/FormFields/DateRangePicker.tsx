@@ -42,11 +42,18 @@ export function DateRangePicker({ handleClose, CustomDateRangePicker }: Props) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StyledDateRangeCalendar>
-        {CustomDateRangePicker ||
+        {CustomDateRangePicker || (
           <Box sx={{ display: 'flex' }}>
-            <DateCalendar value={dateValue[0]} onChange={(newValue) => handleDateChange(newValue, 'startDate')} />
-            <DateCalendar value={dateValue[1]} onChange={(newValue) => handleDateChange(newValue, 'endDate')} />
-          </Box>}
+            <DateCalendar
+              value={dateValue[0]}
+              onChange={(newValue) => handleDateChange(newValue, 'startDate')}
+            />
+            <DateCalendar
+              value={dateValue[1]}
+              onChange={(newValue) => handleDateChange(newValue, 'endDate')}
+            />
+          </Box>
+        )}
 
         <PrimaryIconButton
           customStyle={{

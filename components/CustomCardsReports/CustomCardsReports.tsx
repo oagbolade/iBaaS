@@ -22,19 +22,21 @@ type Props = {
   description: string;
   link?: string;
   disable?: boolean;
+  linkDisable?: boolean;
 };
 
 export const CustomCardsReports = ({
   title,
   description,
   link = '',
-  disable = false
+  disable = false,
+  linkDisable = false
 }: Props) => {
   const [shouldDisable, setShouldDisable] = React.useState(false);
   React.useEffect(() => {
     setShouldDisable(disable);
-  }, []);
-  
+  }, [disable]);
+
   if (shouldDisable) {
     return null;
   }
@@ -51,8 +53,19 @@ export const CustomCardsReports = ({
           </Box>
           <CardActions sx={detailCardsArrow}>
             <Stack direction="row" spacing={0.1}>
-              <Link href={link}>
-                <Typography sx={viewDetails}>View Details</Typography>
+              <Link
+                href={link}
+                style={{
+                  pointerEvents: linkDisable ? 'none' : 'auto'
+                }}
+                aria-disabled={linkDisable}
+                tabIndex={linkDisable ? -1 : undefined}
+              >
+                {linkDisable ? (
+                  <Typography sx={viewDetails}>Coming soon</Typography>
+                ) : (
+                  <Typography sx={viewDetails}>View Details</Typography>
+                )}
               </Link>
               <ArrowForwardOutlinedIcon
                 sx={{

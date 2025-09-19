@@ -384,9 +384,8 @@ export async function getDocuments(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/Customer/${
-      type === 'SUBMITTED' ? 'GetDocumentSubmitted' : 'GetDocumentNotSubmitted'
-    }?customerId=${Number(customerId)}&prodcode=${prodcode}`;
+    const urlEndpoint = `/CustomerServices/Customer/${type === 'SUBMITTED' ? 'GetDocumentSubmitted' : 'GetDocumentNotSubmitted'
+      }?customerId=${Number(customerId)}&prodcode=${prodcode}`;
 
     const { data }: AxiosResponse<GetDocumentSubmittedResponse> =
       await axiosInstance({
@@ -620,11 +619,10 @@ async function createCorporateCustomer(
   customerId: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/CustomerServices/${
-      isUpdating
-        ? `EditCorporatecustomer?customerId=${sanitize(customerId ?? '')}`
-        : 'CreateCorporateCustomer'
-    }`;
+    const urlEndpoint = `/CustomerServices/${isUpdating
+      ? `EditCorporatecustomer?customerId=${sanitize(customerId ?? '')}`
+      : 'CreateCorporateCustomer'
+      }`;
     const { data }: AxiosResponse<CreateCorporateCustomerResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -655,11 +653,10 @@ async function createIndividualCustomer(
   customerId: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/CustomerServices/${
-      isUpdating
-        ? `UpdateIndividualCustomer?customerId=${sanitize(customerId ?? '')}`
-        : 'CreateIndividualCustomer'
-    }`;
+    const urlEndpoint = `/CustomerServices/${isUpdating
+      ? `UpdateIndividualCustomer?customerId=${sanitize(customerId ?? '')}`
+      : 'CreateIndividualCustomer'
+      }`;
     const { data }: AxiosResponse<CreateCustomerAccountResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -691,11 +688,10 @@ async function createCustomerAccount(
   accountnumber: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/AccountServices/${
-      isUpdating
-        ? `EditAccount?accountnumber=${accountnumber}`
-        : 'CreateAccount'
-    }`;
+    const urlEndpoint = `/AccountServices/${isUpdating
+      ? `EditAccount?accountnumber=${accountnumber}`
+      : 'CreateAccount'
+      }`;
     const { data }: AxiosResponse<CreateCustomerAccountResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -1243,8 +1239,10 @@ export function useGetProductDetailsByPcode(
 
 export function useGetAccountDetails(
   Accountno: string,
-  p0?: { enabled: boolean }
+  isBatchPosting?: boolean
 ) {
+  const decyptedGLNumber = decryptData(Accountno as string);
+  const isGLAccountNumberLessThan12Digits = (decyptedGLNumber?.length ?? 0) < 12;
   const toastActions = useContext(ToastMessageContext);
   const fallback = [] as GetAccountDetailsResponse;
 
@@ -1253,10 +1251,10 @@ export function useGetAccountDetails(
     isError,
     isLoading
   } = useQuery({
-    queryKey: [queryKeys.getAccountDetails, decryptData(Accountno)],
+    queryKey: [queryKeys.getAccountDetails, decyptedGLNumber],
     queryFn: () =>
-      getAccountDetails(toastActions, decryptData(Accountno) as string),
-    enabled: Boolean(Accountno?.length > 0)
+      getAccountDetails(toastActions, decyptedGLNumber as string),
+    enabled: isBatchPosting ? isGLAccountNumberLessThan12Digits : Boolean(Accountno?.length > 0)
   });
 
   return { ...data, isError, isLoading };
@@ -1299,8 +1297,7 @@ export function useGetCustomerByIdCodes(customerId: string) {
 }
 
 export function useGetMandateDetailsByAccountNumber(
-  accountNumber: string,
-  mendateInfor?: { enabled: string | true }
+  accountNumber: string
 ) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetMandateDetailsByAccountNumberResponse;
@@ -1370,9 +1367,9 @@ export function useFilterCustomerAccountSearch(params: ISearchParams | null) {
     queryFn: () => filterCustomerAccountSearch(toastActions, params),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
-        (params?.status?.toString() || '').length > 0 ||
-        (params?.accountNumber || '').length > 0 ||
-        (params?.productType || '').length > 0
+      (params?.status?.toString() || '').length > 0 ||
+      (params?.accountNumber || '').length > 0 ||
+      (params?.productType || '').length > 0
     )
   });
 
