@@ -154,8 +154,7 @@ export const CashWithDrawal = ({ currencies }: Props) => {
     encryptData(accountNumber) || ''
   );
   const { mandateInfo } = useGetMandateDetailsByAccountNumber(
-    encryptData(accountNumber) || '',
-    { enabled: !!accountNumber || '' }
+    encryptData(accountNumber) || ''
   );
 
   const onSubmit = async (values: any) => {

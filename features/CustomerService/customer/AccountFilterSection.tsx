@@ -32,8 +32,6 @@ export const AccountFilterSection = ({
   const {
     mappedBranches,
     mappedStatus,
-    mappedProductClass,  
-    mappedProductTypeId
   } = useMapSelectOptions({
     branches,
     status,
