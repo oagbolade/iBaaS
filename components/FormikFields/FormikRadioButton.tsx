@@ -124,7 +124,7 @@ export const FormikRadioButton = ({
                         id={String(option.value)}
                         {...field}
                         value={option.value}
-                        checked={field.value === option.value}
+                        checked={field.value === option.value || (!field.value && option.value === '2')}
                         disabled={disable}
                         style={{ ...customStyle }}
                       />

@@ -186,8 +186,8 @@ export const ChequeWithdrawal = ({
                 <Grid item={isTablet} mobile={12}>
                   <FormikRadioButton
                     options={[
-                      { label: 'Bank Cheques', value: '1' },
-                      { label: 'Counter Cheques', value: '2' }
+                      { label: 'Bank Cheques', value: '2' },
+                      { label: 'Counter Cheques', value: '1' }
                     ]}
                     title="Select In-house Cheque Type"
                     name="action"
