@@ -1,5 +1,11 @@
 import * as Yup from 'yup';
-import { emailRegex, numericRegex, phoneRegExp, stringRegex } from '../admin';
+import {
+  emailRegex,
+  numericRegex,
+  phoneRegExp,
+  stringRegex,
+  stringRegexNoNumberAllowed
+} from '../admin';
 
 export const createCompanySchema = Yup.object({
   bankName: Yup.string().required('Company Name is Required'),
@@ -52,7 +58,8 @@ export const createCountrySchema = Yup.object({
   currencyName: Yup.string()
     .matches(stringRegex, 'Invalid currency name')
     .required('Currency Name is Required'),
-  currencyMne: Yup.string().required('Currency Mne is Required')
+  currencyMne: Yup.string().required('Currency Mne is Required'),
+  CountryMne: Yup.string().required('CountryMne is Required')
 });
 
 export const createTownSchema = Yup.object({
@@ -147,10 +154,7 @@ export const createHolidaySchema = Yup.object({
   holidaydesc: Yup.string()
     .matches(stringRegex, 'Invalid Holiday description')
     .required('Holiday description is Required'),
-  holidaydays: Yup.string()
-    .matches(numericRegex, 'Invalid input')
-    .required('Holiday day is Required'),
-  holidaydate: Yup.string().required('Holiday Date is Required')
+  holidaydays: Yup.string().required('Holiday day is Required')
 });
 
 export const updateStateSchema = Yup.object({
@@ -195,7 +199,7 @@ export const createZoneSchema = Yup.object({
 
 export const createRelationshipSchema = Yup.object({
   relationname: Yup.string()
-    .matches(stringRegex, 'Invalid RelationShip name')
+    .matches(stringRegexNoNumberAllowed, 'Invalid RelationShip name')
     .required('RelationShip Name is Required')
 });
 
@@ -395,10 +399,10 @@ export const createNodeSchema = Yup.object({
 
 export const createCommercialBankSchema = Yup.object({
   bankName: Yup.string()
-    .matches(stringRegex, 'Invalid Bank name')
+    .matches(stringRegexNoNumberAllowed, 'Invalid Bank name')
     .required('Bank Name is Required'),
   bankshortname: Yup.string()
-    .matches(stringRegex, 'Invalid Bank short name')
+    .matches(stringRegexNoNumberAllowed, 'Invalid Bank short name')
     .required(' Bank short Name is Required')
 });
 

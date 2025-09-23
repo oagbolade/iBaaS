@@ -71,8 +71,8 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
 
   const useUpdateCompletion = <
     T extends
-      | CreateIndividualCustomerFormValues
-      | CreateCorporateCustomerFormValues
+    | CreateIndividualCustomerFormValues
+    | CreateCorporateCustomerFormValues
   >(
     touched: Record<string, boolean | undefined>,
     values: T
@@ -236,7 +236,7 @@ export const CreateCustomerContainer = () => {
     }
   }, [
     customerResult,
-    isEditing,
+    isEditing
   ]);
 
   React.useEffect(() => {
@@ -303,26 +303,26 @@ export const CreateCustomerContainer = () => {
             // Hardcoded relationtype as string and menu id as number, we need to get more context as to what it is
             isEditing
               ? {
-                  ...customerResult,
-                  bizPhone3: customerResult?.bizPhone3,
-                  mothermdName: customerResult?.mothermdName,
-                  authListID: 0,
-                  comments: 'string',
-                  menuid: 35,
-                  sex,
-                  natIDNo: customerResult?.natIDNo,
-                  branchCode: customerResult?.branchcode,
-                  dob: dayjs(customerResult?.dob),
-                  relcustid: customerResult?.relcustid === '1' ? '1' : '0',
-                  alertType:
-                    customerResult?.smsalert?.toString() === '0' ? '0' : '1',
-                  introid: customerResult?.introid,
-                  acctOfficer: customerResult?.acctOfficer,
-                  sectorcode: customerResult?.sectorcode?.toString().trim(),
-                  relationtype: 'string',
-                  idIssueDate: dayjs(customerResult?.idIssueDate),
-                  idExpryDate: dayjs(customerResult?.idExpryDate)
-                }
+                ...customerResult,
+                bizPhone3: customerResult?.bizPhone3,
+                mothermdName: customerResult?.mothermdName,
+                authListID: 0,
+                comments: 'string',
+                menuid: 35,
+                sex,
+                natIDNo: customerResult?.natIDNo,
+                branchCode: customerResult?.branchcode,
+                dob: dayjs(customerResult?.dob),
+                relcustid: customerResult?.relcustid === '1' ? '1' : '0',
+                alertType:
+                  customerResult?.smsalert?.toString() === '0' ? '0' : '1',
+                introid: customerResult?.introid,
+                acctOfficer: customerResult?.acctOfficer,
+                sectorcode: customerResult?.sectorcode?.toString().trim(),
+                relationtype: 'string',
+                idIssueDate: dayjs(customerResult?.idIssueDate),
+                idExpryDate: dayjs(customerResult?.idExpryDate)
+              }
               : pickInitialValues
           }
           validationSchema={pickSchema}
@@ -345,12 +345,12 @@ export const CreateCustomerContainer = () => {
               <div>
                 <TrackVisitedFields isEditing={isEditing} />
                 {areOfficersLoading ||
-                arebranchesLoading ||
-                areGroupsLoading ||
-                areTitlesLoading ||
-                aresectorsLoading ||
-                areEducationLoading ||
-                areOccupationsLoading ? (
+                  arebranchesLoading ||
+                  areGroupsLoading ||
+                  areTitlesLoading ||
+                  aresectorsLoading ||
+                  areEducationLoading ||
+                  areOccupationsLoading ? (
                   <FormSkeleton noOfLoaders={1} />
                 ) : (
                   <ShortCardWithAccordion
@@ -384,8 +384,8 @@ export const CreateCustomerContainer = () => {
                 )}
 
                 {areRelationshipsLoading ||
-                areStatesLoading ||
-                areTownsLoading ? (
+                  areStatesLoading ||
+                  areTownsLoading ? (
                   <FormSkeleton noOfLoaders={1} />
                 ) : (
                   <ShortCardWithAccordion
@@ -410,8 +410,8 @@ export const CreateCustomerContainer = () => {
                 )}
 
                 {areOfficersLoading ||
-                arebranchesLoading ||
-                areGroupsLoading ? (
+                  arebranchesLoading ||
+                  areGroupsLoading ? (
                   <FormSkeleton noOfLoaders={1} />
                 ) : (
                   <ShortCardWithAccordion

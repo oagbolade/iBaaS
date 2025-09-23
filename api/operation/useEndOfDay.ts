@@ -7,11 +7,13 @@ import {
   EODResponse,
   GetAllEODConfigurationResponse,
   GetAllEODDAYResponse,
+  GetAllEODProcessesResponse,
   GetEODDAYResponse,
   GetProcessEODDAYResponse,
   IEODConfiguration,
   IEODLogs,
   IEODProcess,
+  IEODProcessLogs,
   IEODViewLogs
 } from '../ResponseTypes/operation';
 import { APIResponse } from '../RequestTypes/CommonTypes';
@@ -132,6 +134,39 @@ async function getEODResult(
         Authorization: `Bearer ${getStoredUser()?.token}`
       }
     });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
+async function getEODProcesses(
+  toastActions: IToastActions
+): Promise<GetAllEODProcessesResponse> {
+  let result: GetAllEODProcessesResponse = {
+    responseCode: '',
+    responseDescription: '',
+    data: [] as IEODProcessLogs[]
+  };
+
+  try {
+    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/GetEODProcesses`;
+
+    const { data }: AxiosResponse<GetAllEODProcessesResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
@@ -280,7 +315,22 @@ export function useGetEODResult(): GetAllEODDAYResponse {
 
   return { ...data, isError, isLoading };
 }
+export function useGetEODProcesses(): GetAllEODProcessesResponse {
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = [] as GetAllEODProcessesResponse;
 
+  // get data from server via useQuery
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.getEODProcesses],
+    queryFn: () => getEODProcesses(toastActions)
+  });
+
+  return { ...data, isError, isLoading };
+}
 export function useGetEODConfiguration(): GetAllEODConfigurationResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = [] as GetAllEODConfigurationResponse;

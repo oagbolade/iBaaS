@@ -10,7 +10,6 @@ import { sanitize } from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
-import { useGetStatus } from '@/api/general/useStatus';
 
 import { checkMultipleUserRoleAccess } from '@/utils/checkUserRoleAccess';
 

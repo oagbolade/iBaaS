@@ -1,19 +1,19 @@
 'use client';
 import * as React from 'react';
 import { Box } from '@mui/material';
-import { Form, Formik,  } from 'formik';
+import { Form, Formik } from 'formik';
 import dayjs from 'dayjs';
 import { ShortCardCasaWithAccordion } from '../AddCasaProduct/ShortCardWithCasaAccording';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
+  useGetAllProductByCode,
   useCreateDemandDepositProduct,
   useGetDemandDepositByCode
 } from '@/api/setup/useProduct';
 import { createDemandDepositInitialValues } from '@/schemas/schema-values/setup';
 import { PageTitle } from '@/components/Typography';
 import { BatchTitle } from '@/features/Operation/Forms/style';
-
 import { decryptData } from '@/utils/decryptData';
 import useFormProgress from '@/utils/hooks/useFormProgress';
 import { useGetParams } from '@/utils/hooks/useGetParams';
@@ -41,9 +41,7 @@ export const AddCasaNewProduct = ({
   currencies
 }: Props) => {
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
-  const {
-    mappedCurrency,
-  } = useMapSelectOptions({
+  const { mappedCurrency } = useMapSelectOptions({
     currencies
   });
   const requiredFields: Record<string, string[]> = {
@@ -111,9 +109,14 @@ export const AddCasaNewProduct = ({
   );
   const { sysmodel } = useGetSystemDate();
   const systemDate = dayjs(sysmodel?.systemDate || new Date());
-  const { demandDeposit, isLoading } = useGetDemandDepositByCode(
-    decryptData(productCode as string)
-  );
+  
+  // const { demandDeposit, isLoading } = useGetDemandDepositByCode(  // replace this later
+  //   decryptData(productCode as string)
+  // );
+
+  const { productInfos: demandDeposit, isLoading } = useGetAllProductByCode(productCode);
+
+  
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     values.ProdException = values.ProdException.map((resp: string) => ({
       exceptioncode: resp

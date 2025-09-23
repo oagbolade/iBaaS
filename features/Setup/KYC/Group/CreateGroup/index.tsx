@@ -71,7 +71,6 @@ export const CreateGroup = ({ groupId }: Props) => {
                 isSubmitting={isSubmitting}
                 setIsSubmitting={setIsSubmitting}
                 groupId={groupId}
-                bankgl={Array.isArray(bankgl) ? bankgl : []}
               />
             )}
         </Box>

@@ -29,11 +29,11 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' },
+          height: { mobile: '30px', desktop: '40px' }
         }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export const Industry = () => {
@@ -46,13 +46,13 @@ export const Industry = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('industry');
   const {
     totalPages,
     totalElements,
     data: industryData,
-    isLoading,
+    isLoading
   } = useFilterIndustrySearch({ ...searchParams, page });
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams(params);
@@ -60,7 +60,7 @@ export const Industry = () => {
   };
 
   const ActionMenu = ({
-    industryCode,
+    industryCode
   }: {
     industryCode: string;
   }): React.ReactElement => {
@@ -91,7 +91,7 @@ export const Industry = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
           {isGlobalLoading || isLoading ? (
@@ -104,7 +104,7 @@ export const Industry = () => {
                 mainTitle: 'Industry',
                 secondaryTitle:
                   'See a directory of all industries in this system.',
-                hideFilterSection: true,
+                hideFilterSection: true
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}
@@ -123,7 +123,7 @@ export const Industry = () => {
                         {dataItem.industryName}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem.sector}
+                        {dataItem.sectorName}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         <Status

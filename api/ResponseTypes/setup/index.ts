@@ -55,6 +55,7 @@ export interface SearchIndustryResponse extends IFetchingState {
   userId: string;
   sector: string;
   industryStatus: string;
+  sectorName: string;
 }
 
 export interface SearchProfessionResponse extends IFetchingState {

@@ -124,9 +124,9 @@ export const CreateCountryForm = ({
                     customStyle={{
                       width: setWidth(isMobile ? '285px' : '100%')
                     }}
-                    name="currencyMne"
-                    placeholder="Enter Currency Mneumonic"
-                    label="Currency Mneumonic"
+                    name="CountryMne"
+                    placeholder="Enter Country Mne"
+                    label="Country Mneumonic"
                     required
                   />{' '}
                 </Grid>
@@ -142,6 +142,21 @@ export const CreateCountryForm = ({
                     name="currencyName"
                     placeholder="Enter Currency Name"
                     label="Currency Name"
+                    required
+                  />{' '}
+                </Grid>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                >
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(isMobile ? '285px' : '100%')
+                    }}
+                    name="currencyMne"
+                    placeholder="Enter Currency Mne"
+                    label="Currency Mne"
                     required
                   />{' '}
                 </Grid>

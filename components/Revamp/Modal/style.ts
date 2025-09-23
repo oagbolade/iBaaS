@@ -329,7 +329,8 @@ export const AccountTitle = {
   color: `${colors.neutral900}`,
   fontSize: '20px',
   fontWeight: 700,
-  lineHeight: '32px'
+  lineHeight: '32px',
+  marginRight: '20px'
 };
 
 export const AccountPasswordBodyContainer = {

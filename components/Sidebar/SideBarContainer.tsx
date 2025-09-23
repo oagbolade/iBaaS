@@ -45,7 +45,7 @@ export const SideBarContainer = () => {
         overflow: 'hidden'
       }}
     >
-      <Box
+      {/* <Box
         sx={{
           position: 'sticky',
           top: 0,
@@ -71,7 +71,7 @@ export const SideBarContainer = () => {
             alignItems: 'center'
           }}
         >
-          {/* {BankLogo ? (
+          {BankLogo ? (
             <Box
               sx={{
                 width: '100%',
@@ -91,9 +91,9 @@ export const SideBarContainer = () => {
             </Box>
           ) : (
             <PageTitle title={bank?.bankName} />
-          )} */}
+          )}
         </Link>
-      </Box>
+      </Box> */}
 
       <Box
         sx={{

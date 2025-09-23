@@ -6,7 +6,7 @@ export const BatchTitle = {
   fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 700,
-  lineHeight: '36px',
+  lineHeight: '36px'
 };
 
 export const title = {
@@ -510,7 +510,7 @@ export const processPassingStyle = {
 };
 export const processRunningStyle = {
   display: 'flex',
-  height: '465px',
+  height: '565px',
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '30px',

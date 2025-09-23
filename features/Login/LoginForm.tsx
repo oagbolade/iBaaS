@@ -199,6 +199,7 @@ export function LoginForm() {
               placeholder="Enter company code"
               label="Company Code"
               autoComplete={environment === 'development' ? 'on' : 'off'}
+              required
             />
           </Grid>
 
@@ -212,6 +213,7 @@ export function LoginForm() {
               type={environment === 'development' ? 'text' : 'search'}
               label="Username"
               autoComplete={environment === 'development' ? 'on' : 'off'}
+              required
             />
           </Grid>
 
@@ -223,6 +225,7 @@ export function LoginForm() {
               }}
               name="password"
               placeholder="Enter password"
+              required
               label="Password"
               autoComplete={
                 environment === 'development' ? 'on' : 'new-password'

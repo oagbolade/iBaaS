@@ -196,6 +196,7 @@ export interface CreateCountryFormValues {
   currencyName: string;
   currencyMne: string;
   authid: string;
+  CountryMne: string;
 }
 
 export interface CreateZoneFormValues {
@@ -481,6 +482,7 @@ export interface CreateChargeFormValues {
   menuid: number;
   userid: string;
   firedCharges: string;
+  amortizeType: number;
   tableTypeModel: [
     {
       chargeType: number;
@@ -711,6 +713,7 @@ export const createChargeInitialValues: CreateChargeFormValues = {
   accrualRequired: 0,
   authid: 'string',
   userid: 'string',
+  amortizeType: 0,
   firedCharges: '',
   tableTypeModel: [
     {
@@ -931,7 +934,8 @@ export const createCountryInitialValues: CreateCountryFormValues = {
   countryMne: '',
   currencyName: '',
   currencyMne: '',
-  authid: ''
+  authid: '',
+  CountryMne: ''
 };
 export const createCompanyInitialValues: CreateCompanyFormValues = {
   bankName: '',

@@ -23,6 +23,10 @@ export interface IClearingParams {
 export interface CreateBulkUploadFormValues {
   file: string;
 }
+export interface CreateBulkInsPostBulkFormValues {
+  Typ_BulkTran: string;
+  Menuid: number;
+}
 export interface CreateChargeConcessionFormValues {
   accountnumber: string;
   originatingAccount: string;

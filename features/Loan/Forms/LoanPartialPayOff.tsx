@@ -144,12 +144,12 @@ export const LoanPartialPayOff = ({
       newtenor: newLoanTerm,
       matdate: maturityDate?.format('YYYY-MM-DD'),
       startdate: startDate?.format('YYYY-MM-DD'),
-
-      newprincipal: loanDetails?.principal,
-      intoutst: loanDetails?.intoutst,
-      intpayout: loanDetails?.intpayout,
+      newprincipal: loanDetails?.loanAmount,
+      intoutst: loanDetails?.out_Interest,
+      penintoutst: loanDetails?.out_penal,
       ...restValues
     };
+
     mutate(data);
     setIsSubmitting(false);
   };
@@ -162,9 +162,26 @@ export const LoanPartialPayOff = ({
 
       <Box>
         <Formik
-          initialValues={setPartialPayOffvalues}
+          initialValues={{
+            ...setPartialPayOffvalues,
+            startdate: loanDetails?.startdate,
+            totalDays: loanDetails?.totaldays,
+            matdate: loanDetails?.matdate,
+            princpayout: 0.0,
+            intpayout: 0.0,
+            penintpayout: 0.0,
+            princoutst: 0.0,
+            newrate: loanDetails?.intRate,
+            newtenor: loanDetails?.loanTerm,
+            freq: loanDetails?.frequencyName,
+
+            newprincipal: loanDetails?.loanAmount,
+            intoutst: loanDetails?.out_Interest,
+            penintoutst: loanDetails?.out_penal
+          }}
           onSubmit={(values) => onSubmit(values)}
           validationSchema={partialPayOffSchema}
+          enableReinitialize
         >
           <Form>
             <Box mt={4}>
@@ -244,7 +261,7 @@ export const LoanPartialPayOff = ({
                 <Grid
                   item={isTablet}
                   mobile={12}
-                  width={{ mobile: '100%', tablet: '100%'}}
+                  width={{ mobile: '100%', tablet: '100%' }}
                 >
                   <FormikDateTimePicker
                     label="Maturity Date"
@@ -318,7 +335,7 @@ export const LoanPartialPayOff = ({
                     name="penintoutst"
                     placeholder="32,432"
                     label="Penal Interest Outstanding"
-                    required
+                    disabled
                   />{' '}
                 </Grid>
 
@@ -350,7 +367,6 @@ export const LoanPartialPayOff = ({
                     name="intpayout"
                     placeholder="2,532.53"
                     label="Interest Payout"
-                    value={loanDetails?.interestpaid}
                   />{' '}
                 </Grid>
 
@@ -366,16 +382,15 @@ export const LoanPartialPayOff = ({
                     name="penintpayout"
                     placeholder="2,532.53"
                     label="Penal Interest Payout"
-                    disabled
                     required
                   />{' '}
                 </Grid>
 
                 <Grid item={isTablet} mobile={12}>
-                  <Box>
+                  {/* <Box>
                     <Details title="Balance After" />
                     <Balance amount={loanBalance} />
-                  </Box>
+                  </Box> */}
                 </Grid>
               </Grid>
             </Box>

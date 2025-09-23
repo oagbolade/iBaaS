@@ -89,8 +89,8 @@ export const CreateCharges = ({
         {
           chargeType: values.chargeType,
           rule1: 0,
-          startRange: values.startRange,
-          endRange: values.endRange,
+          startRange: values.startRange || 0,
+          endRange: values.endRange || 0,
           rate: values.rate,
           amount: 0
         }
@@ -105,7 +105,8 @@ export const CreateCharges = ({
       authid: '',
       menuid: Number(menuId),
       userid: `${getStoredUser()?.profiles.userid}`,
-      firedCharges: values.firedCharges
+      firedCharges: values.firedCharges,
+      amortizeType: 0
     });
   };
 

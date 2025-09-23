@@ -38,7 +38,10 @@ import {
   fileSize,
   removeButton
 } from '@/features/Signup/styles';
-import { useCreateBulkUpload } from '@/api/operation/useBulkUpload';
+import {
+  useCreateBulkUpload,
+  useCreateInsPostBulk
+} from '@/api/operation/useBulkUpload';
 import { BulkUploadInitialValues } from '@/schemas/schema-values/operation';
 import { toast } from '@/utils/toast';
 
@@ -117,6 +120,7 @@ export const BulkUpload = ({
   const [fileImage, setFileImage] = useState<any>();
   const toastActions = React.useContext(ToastMessageContext);
   const { mutate } = useCreateBulkUpload();
+  const { mutate: createMutate } = useCreateInsPostBulk();
 
   const [fieldVale, setFieldValue] = React.useState<any>();
   const handleFileChange = async (
@@ -199,7 +203,13 @@ export const BulkUpload = ({
       ...values,
       file: fileImage
     };
+    const getValue = {
+      ...values,
+      Typ_BulkTran: fileImage,
+      Menuid: 15
+    };
     await mutate(getAllValues);
+    await createMutate(getValue);
   };
   useEffect(() => {
     const submit = document.getElementById('submitButton');

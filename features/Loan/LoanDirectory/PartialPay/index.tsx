@@ -110,7 +110,7 @@ export const PartialPay = () => {
         <Stack direction={setDirection()}>
           <Box
             sx={{
-              width: { mobile: '100%', desktop: '500px' },
+              width: { mobile: '100%', desktop: '50%' },
               padding: '32px'
             }}
           >
@@ -120,10 +120,11 @@ export const PartialPay = () => {
               loanDetails={loanAccDetails}
             />
           </Box>
+        
           {isTablet && (
             <Box
               sx={{
-                width: '477px',
+                width: '50%',
                 padding: '32px',
                 gap: '24px',
                 borderLeft: `1px solid ${colors.neutral300}`,

@@ -112,7 +112,7 @@ export const TerminateLoan = () => {
         <Stack direction={setDirection()}>
           <Box
             sx={{
-              width: { mobile: '100%', desktop: '500px' },
+              width: { mobile: '100%', desktop: '50%' },
               padding: '32px'
             }}
           >

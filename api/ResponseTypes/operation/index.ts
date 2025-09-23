@@ -32,6 +32,13 @@ export interface IEODLogs {
   status: number;
   createdOn: string;
 }
+export interface IEODProcessLogs {
+  taskid: number;
+  taskname: string;
+  totalUncompletedPercetage: number;
+  totalCompletedPercetage: number;
+  taskStatus: string;
+}
 export interface IEODViewLogs {
   taskid: number;
   taskname: string;
@@ -136,6 +143,11 @@ export interface GetAllEODDAYResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
   data?: IEODViewLogs[] | Array<any>;
+}
+export interface GetAllEODProcessesResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  data?: IEODProcessLogs[] | Array<any>;
 }
 export interface GetAllEODConfigurationResponse extends IFetchingState {
   responseCode?: string;

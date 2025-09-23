@@ -294,6 +294,8 @@ export interface CreateIndividualCustomerFormValues {
   [key: string]: string | number | Dayjs;
   introType: number;
   userid: string;
+  nin: string;
+  StaffOrDirector: number;
 }
 
 export interface CloseCustomerAccountFormValues {
@@ -451,7 +453,9 @@ export const createCustomerInitialValues: CreateIndividualCustomerFormValues = {
   customerSign: '',
   signImage_Type: '',
   introType: 1,
-  userid: `${getStoredUser()?.profiles?.userid}`
+  userid: `${getStoredUser()?.profiles?.userid}`,
+  StaffOrDirector: 0,
+  nin: '',
 };
 
 export const addGroupMemberInitialValues: AddGroupMemberFormValues = {

@@ -111,7 +111,7 @@ export const AccessRules: { [key: string]: string[] } = {
     'CREATE GUARANTOR',
     'EDIT GUARANTOR',
     'GUARANTOR S MANDATE',
-    'LOAN OFFER LETTER'
+    'LOAN OFFER LETTER',
   ],
   Overdrafts: ['OVERDRAFT'],
   // Reports

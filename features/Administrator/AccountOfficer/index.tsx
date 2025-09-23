@@ -126,7 +126,7 @@ export const AccountOfficers = () => {
         userid: getStoredUser()?.profiles.userid as string
       };
 
-      await validatePassword?.(body);
+      // await validatePassword?.(body);
       await mutate?.(currentOfficer?.officercode);
       setDeleteStep(null);
       refetch();
@@ -177,7 +177,6 @@ export const AccountOfficers = () => {
           {isLoading || areAccountOfficersDataLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
-            <>
             <MuiTableContainer
               columns={COLUMNS}
               tableConfig={{ hasActions: true }}
@@ -188,7 +187,8 @@ export const AccountOfficers = () => {
               totalElements={totalElements}
               showHeader={{
                 mainTitle: 'Account Officers Overview',
-                secondaryTitle: 'See a directory of all account officers on this system.',
+                secondaryTitle:
+                  'See a directory of all account officers on this system.',
                 hideFilterSection: true
               }}
             >
@@ -229,7 +229,6 @@ export const AccountOfficers = () => {
                 </StyledTableRow>
               )}
             </MuiTableContainer>
-            </>
           )}
         </Box>
         {deleteStep === 'showToast' && (

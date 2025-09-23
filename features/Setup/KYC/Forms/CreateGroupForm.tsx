@@ -4,6 +4,7 @@ import { Formik, Form } from 'formik';
 import { useSearchParams } from 'next/navigation';
 import SearchIcon from '@mui/icons-material/Search';
 import styled from 'styled-components';
+import { useDebounce } from '@uidotdev/usehooks';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
@@ -11,7 +12,7 @@ import { FormSkeleton } from '@/components/Loaders';
 import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
-import { IAccountOfficers, IGLAccount } from '@/api/ResponseTypes/admin';
+import { IAccountOfficers } from '@/api/ResponseTypes/admin';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { filterDropdownSearch } from '@/utils/filterDropdownSearch';
 import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
@@ -25,13 +26,15 @@ import {
   extractNameFromDropdown
 } from '@/utils/extractIdFromDropdown';
 import { decryptData } from '@/utils/decryptData';
+import { useSearchCustomer } from '@/api/customer-service/useCustomer';
+import { encryptData } from '@/utils/encryptData';
+import { mapCustomerSearch } from '@/utils/mapCustomerSearch';
 
 type Props = {
   isSubmitting: boolean;
   setIsSubmitting: Function;
   branches?: IBranches[] | Array<any>;
   officers?: IAccountOfficers[];
-  bankgl?: IGLAccount[] | Array<any>;
   groupId?: string | null;
 };
 
@@ -70,15 +73,13 @@ export const CreateGroupForm = ({
   officers,
   isSubmitting,
   setIsSubmitting,
-  groupId,
-  bankgl
+  groupId
 }: Props) => {
   const toastActions = React.useContext(ToastMessageContext);
-  const { mappedAccountOfficers, mappedBranches, mappedGlAccount } =
+  const { mappedAccountOfficers, mappedBranches } =
     useMapSelectOptions({
       officers,
-      branches,
-      bankgl
+      branches
     });
   const searchParams = useSearchParams();
   const isEditing = searchParams.get('isEditing');
@@ -101,6 +102,9 @@ export const CreateGroupForm = ({
     groupHead: ''
   });
 
+  const debouncedGroupHeadValue = useDebounce(searchValue.groupHead, 500);
+  const debouncedSecretaryValue = useDebounce(searchValue.secretary, 500);
+
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
     acctOfficer: [],
     secretary: [],
@@ -121,8 +125,6 @@ export const CreateGroupForm = ({
       });
       setFilteredValues({
         acctOfficer: mappedAccountOfficers,
-        secretary: mappedAccountOfficers,
-        groupHead: mappedAccountOfficers
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,6 +181,7 @@ export const CreateGroupForm = ({
       acctOfficer: extractIdFromDropdown(selectedValue.acctOfficer as string),
       groupHead: extractIdFromDropdown(selectedValue.groupHead as string)
     };
+
     await mutate(getAllValues);
   };
 
@@ -193,6 +196,30 @@ export const CreateGroupForm = ({
       setIsSubmitting(false);
     };
   }, [isSubmitting]);
+
+  const { accountDetailsResults: customerSearchForGroupHead, isLoading: isGroupHeadSearchLoading } =
+    useSearchCustomer(encryptData(debouncedGroupHeadValue as string) as string);
+
+  const { accountDetailsResults: customerSearchForSecretary, isLoading: isSecretarySearchLoading } =
+    useSearchCustomer(encryptData(debouncedSecretaryValue as string) as string);
+
+  React.useEffect(() => {
+    const mappedSearchResults = mapCustomerSearch(customerSearchForGroupHead);
+
+    setFilteredValues((prev) => ({
+      ...prev,
+      groupHead: mappedSearchResults
+    }));
+  }, [isGroupHeadSearchLoading, customerSearchForGroupHead]);
+
+  React.useEffect(() => {
+    const mappedSearchResults = mapCustomerSearch(customerSearchForSecretary);
+
+    setFilteredValues((prev) => ({
+      ...prev,
+      secretary: mappedSearchResults
+    }));
+  }, [isSecretarySearchLoading, customerSearchForSecretary]);
 
   const handleSelectedValue = (value: string, name: string) => {
     setSelectedValue((prev) => ({
@@ -244,11 +271,11 @@ export const CreateGroupForm = ({
           initialValues={
             isEditing
               ? {
-                  ...group,
-                  secretary: group?.secretary,
-                  acctOfficer: group?.acctOfficer,
-                  GroupHead: group?.groupHead
-                }
+                ...group,
+                secretary: group?.secretary,
+                acctOfficer: group?.acctOfficer,
+                GroupHead: group?.groupHead
+              }
               : createGroupInitialValues
           }
           onSubmit={(values) => onSubmit(values)}
@@ -397,7 +424,7 @@ export const CreateGroupForm = ({
                       name="groupHead"
                       searchGroupVariant="BasicSearchGroup"
                       dropDownOptions={filteredValues.groupHead as OptionsI[]}
-                      customStyle={{ ...dropDownWithSearch, width: '440px' }}
+                      customStyle={{ ...dropDownWithSearch, width: '100%' }}
                       icon={<SearchIcon />}
                       iconPosition="end"
                       buttonTitle={
@@ -437,7 +464,7 @@ export const CreateGroupForm = ({
                       name="secretary"
                       searchGroupVariant="BasicSearchGroup"
                       dropDownOptions={filteredValues.secretary as OptionsI[]}
-                      customStyle={{ ...dropDownWithSearch, width: '440px' }}
+                      customStyle={{ ...dropDownWithSearch, width: '100%' }}
                       icon={<SearchIcon />}
                       iconPosition="end"
                       buttonTitle={
