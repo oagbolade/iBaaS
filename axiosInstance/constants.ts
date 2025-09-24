@@ -27,4 +27,10 @@ const reportsBaseUrl =
     ? 'https://isw-reportsapi.qa.interswitchng.com/api'
     : 'https://isw-reportsapi.qa.interswitchng.com/api';
 
-export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl, endOfdayUrl };
+const imageUploadBaseUrl =
+  env === 'development'
+    ? 'https://ibaasfilestorage.k8.isw.la/api'
+    : 'https://ibaasfilestorage.k8.isw.la/api';
+
+export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl, endOfdayUrl, imageUploadBaseUrl };
+

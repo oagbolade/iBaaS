@@ -27,9 +27,10 @@ import {
   IIDTypes,
   IMandateInfo,
   IProductInfos,
-  SearchCustomerResponse
+  SearchCustomerResponse,
+  UploadImageResponse
 } from '@/api/ResponseTypes/customer-service';
-import { axiosInstance, environment } from '@/axiosInstance';
+import { axiosInstance, environment, ImageUploadAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { queryKeys } from '@/react-query/constants';
@@ -743,6 +744,34 @@ async function createGroup(
     toast(message, title, severity, toastActions);
   }
 }
+
+
+
+export async function useUploadBankLogo(
+  toastActions: IToastActions,
+  file: File
+): Promise<UploadImageResponse | void> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const urlEndpoint = "/FileStorage/UploadImage";
+    const response: AxiosResponse<UploadImageResponse> =
+      await ImageUploadAxiosInstance.post(urlEndpoint, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${getStoredUser()?.token}`,
+        },
+      });
+
+    toast("Image uploaded successfully", "Upload", "success", toastActions);
+    return response.data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+}
+
 
 async function createCustomerMandate(
   toastActions: IToastActions,
