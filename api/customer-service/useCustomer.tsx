@@ -765,7 +765,10 @@ export async function useUploadBankLogo(
       });
 
     toast("Image uploaded successfully", "Upload", "success", toastActions);
-    return response.data;
+      return {
+      url: response.data.data, 
+      fileName: file.name,
+    };
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
