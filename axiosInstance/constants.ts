@@ -30,4 +30,10 @@ const reportsBaseUrl =
     ? 'https://ibaas-revamp-reports.k8.isw.la/api'
     : 'https://ibaas-revamp-reports.k8.isw.la/api';
 
-export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl, endOfdayUrl };
+const imageUploadBaseUrl =
+  env === 'development'
+    ? 'https://ibaasfilestorage.k8.isw.la/api'
+    : 'https://ibaasfilestorage.k8.isw.la/api';
+
+export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl, endOfdayUrl, imageUploadBaseUrl };
+

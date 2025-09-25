@@ -535,6 +535,11 @@ export interface CreateCustomerAccountResponse {
   retaccountnumber: string;
 }
 
+export interface UploadImageResponse {
+  url: string;
+  fileName: string;
+}
+
 export interface GenericResponse {
   responseCode: string;
   responseDescription: string;

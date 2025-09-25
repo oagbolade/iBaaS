@@ -40,6 +40,7 @@ import {
 } from '@/features/Signup/styles';
 import { formatFileSize } from '@/utils/formatFileSize';
 import { convertImageToBase64 } from '@/utils/convertImageToBase64';
+import { useUploadBankLogo } from '@/api/customer-service/useCustomer';
 
 type Props = {
   isSubmitting: boolean;
@@ -67,6 +68,7 @@ export const SetupCompanyForm = ({
   const { mutate } = useCreateCompany(bankCode);
   const toastActions = React.useContext(ToastMessageContext);
 
+ const [uploadedPhotoUrl, setUploadedPhotoUrl] = React.useState<string | null>(null);
   const [currentPhoto, setCurrentPhoto] = React.useState<File | null>(null);
   const [base64Photo, setBase64Photo] = React.useState<string | null>(null);
 
@@ -85,10 +87,10 @@ export const SetupCompanyForm = ({
     const statement = Number(permissionOptions[1]?.value) || 0;
     const globalAuth = Number(permissionOptions[2]?.value) || 0;
 
-    if (!base64Photo) {
+    if (!uploadedPhotoUrl) {
       const message = {
-        message: 'Please upload the new bank Logo',
-        title: 'Upload required Bank Logo',
+        message: 'Please upload the new bank photo',
+        title: 'Upload required Bank Photo',
         severity: 'error'
       };
       toast(
@@ -105,7 +107,7 @@ export const SetupCompanyForm = ({
       authtype,
       statement,
       globalAuth,
-      bankLogo: base64Photo,
+      bankLogo: uploadedPhotoUrl,
       last_financialyear: formattedLastFinancialyearDate,
       next_financialyear: formattedNextFinancialyearDate
     });
@@ -121,15 +123,24 @@ export const SetupCompanyForm = ({
     if (!fileFromEvent) return;
     if (!isImageValid(fileFromEvent, toastActions)) return;
 
-    if (imageType === 'photo') {
-      setCurrentPhoto(fileFromEvent);
-      try {
-        const base64 = await convertImageToBase64(fileFromEvent);
-        setBase64Photo(base64);
-      } catch (error) {
-        toast('Failed to process image', 'Error', 'error', toastActions);
+    if (imageType === "photo") {
+    setCurrentPhoto(fileFromEvent);
+
+    try {
+      const base64 = await convertImageToBase64(fileFromEvent);
+      setBase64Photo(base64);
+
+      const uploadedImage = await useUploadBankLogo(toastActions, fileFromEvent);
+
+      if (uploadedImage?.url) {
+        setUploadedPhotoUrl(uploadedImage.url); 
+      } else {
+        toast("Failed to upload photo", "Error", "error", toastActions);
       }
+    } catch (error) {
+      toast("Failed to process or upload image", "Error", "error", toastActions);
     }
+  }
   };
 
   const removeUpload = (uploadType: ImageType) => {
@@ -138,6 +149,8 @@ export const SetupCompanyForm = ({
       setBase64Photo(null);
     }
   };
+
+
 
   React.useEffect(() => {
     const submit = document.getElementById('submitButton');
@@ -208,7 +221,7 @@ export const SetupCompanyForm = ({
                       <Button component="label" startIcon={<UploadDocument />}>
                         <VisuallyHiddenInput
                           type="file"
-                          onChange={(e) => handleImageUpload(e, 'photo')}
+                             onChange={(e) => handleImageUpload(e, "photo")}
                         />
                       </Button>
                       <PageTitle title="Tap here to upload your document" />
