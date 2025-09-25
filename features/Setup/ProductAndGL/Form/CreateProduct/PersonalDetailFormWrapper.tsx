@@ -107,6 +107,7 @@ export const PersonalDetailsForm = ({
       container
       spacing={4}
     >
+    
       <Grid item={isTablet} mobile={12} tablet={6}>
         <FormSelectField
           name="productclass"

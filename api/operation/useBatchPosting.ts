@@ -99,7 +99,6 @@ async function getGenerateBatchNo(
       });
 
     const { message, title, severity } = globalErrorHandler(data);
-    toast(message, title, severity, toastActions);
 
     result = data;
   } catch (errorResponse) {

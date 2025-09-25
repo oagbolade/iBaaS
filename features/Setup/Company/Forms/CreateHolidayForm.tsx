@@ -50,7 +50,8 @@ export const CreateHolidayForm = ({
     await mutate({
       ...values,
       holidaydate: formatFormikDatePickerToISO(dayjs(values.holidaydate)),
-      holidayends: formatFormikDatePickerToISO(dayjs(values.holidayends))
+      holidayends: formatFormikDatePickerToISO(dayjs(values.holidayends)),
+      holidaystatus: values.holidaystatus
     });
   };
 
@@ -192,7 +193,7 @@ export const CreateHolidayForm = ({
                     ]}
                     title="Holiday Status"
                     name="holidaystatus"
-                    value="0"
+                    value={createHolidayInitialValue.holidaystatus}
                   />
                 </Grid>
               </Grid>

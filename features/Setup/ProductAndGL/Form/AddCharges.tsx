@@ -142,7 +142,15 @@ export const CreateCharges = ({
         }}
       >
         <Formik
-          initialValues={charge || createChargeInitialValues}
+          initialValues={
+            isEditing
+              ? {
+                  ...charge,
+                  firedCharges: charge?.firedCharges,
+                  rate: 0
+                }
+              : createChargeInitialValues
+          }
           onSubmit={(values, actions) => onSubmit(values, actions)}
           validationSchema={createChargeSchema}
         >

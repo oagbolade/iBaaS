@@ -115,7 +115,6 @@ export const AddCasaNewProduct = ({
   // );
 
   const { productInfos: demandDeposit, isLoading } = useGetAllProductByCode(productCode);
-
   
   const onSubmit = async (values: any, actions: { resetForm: Function }) => {
     values.ProdException = values.ProdException.map((resp: string) => ({

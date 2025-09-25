@@ -271,7 +271,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
           <Grid item={isTablet} mobile={12}>
             <FormSelectInput
               onChange={handleSelectChange}
-              name="introducerType"
+              name={`${isEditing ? 'introType' : 'introducerType'}`}
               options={IntroducerType}
               label="Introducer Type"
               value={introducerType.customer || introducerType.staff}

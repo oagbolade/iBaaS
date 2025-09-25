@@ -157,7 +157,7 @@ export const Account = () => {
                             : 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell component="th" scope="row">
-                          {dataItem?.accountdesc}
+                          {dataItem?.bkbalance}
                         </StyledTableCell>
                         <StyledTableCell component="th" scope="row">
                           {dataItem?.productName}

@@ -47,6 +47,10 @@ export const chargeConcessionInitialValues: CreateChargeConcessionFormValues = {
 export const BulkUploadInitialValues: CreateBulkUploadFormValues = {
   file: ''
 };
+export const BulkInsPostBulkInitialValues: CreateBulkInsPostBulkFormValues = {
+  Typ_BulkTran: '',
+  Menuid: 15
+};
 export const BatchPostingInitialValues: CreateBatchPostingFormValues = {
   accountNumber: '',
   batchno: '',

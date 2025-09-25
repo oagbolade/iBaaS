@@ -342,7 +342,7 @@ export const IndividualCustomerPersonalDetailsForm = ({
       </Grid>
       <Grid item={isTablet} mobile={12}>
         <FormTextInput
-          name="natIDNo"
+          name={`${isEditing ? 'nin' : 'natIDNo'}`}
           placeholder="Enter National ID No"
           label="National ID No"
           customStyle={{

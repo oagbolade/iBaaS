@@ -42,7 +42,10 @@ import {
   useCreateBulkUpload,
   useCreateInsPostBulk
 } from '@/api/operation/useBulkUpload';
-import { BulkUploadInitialValues } from '@/schemas/schema-values/operation';
+import {
+  BulkInsPostBulkInitialValues,
+  BulkUploadInitialValues
+} from '@/schemas/schema-values/operation';
 import { toast } from '@/utils/toast';
 
 export const VisuallyHiddenInput = styled('input')({
@@ -225,7 +228,7 @@ export const BulkUpload = ({
 
   return (
     <Formik
-      initialValues={BulkUploadInitialValues}
+      initialValues={BulkUploadInitialValues || BulkInsPostBulkInitialValues}
       onSubmit={(values, actions) => onSubmit(values, actions)}
     >
       <Form>

@@ -127,7 +127,11 @@ export const ChequeWithdrawal = ({
     const getAllValues = {
       ...values,
       currencyCode: selectedCurrency,
-      cheqNumber: nextCounterCheqNo
+      cheqNumber:
+        selectValue === true
+          ? nextCounterCheqNo || ChequeWithdrawalInitialValues.cheqNumber // Bank Cheques → auto number
+          : values.cheqNumber, // Counter Cheques → user input
+      action: values.action
     };
     await mutate(getAllValues);
   };
@@ -191,7 +195,7 @@ export const ChequeWithdrawal = ({
                     ]}
                     title="Select In-house Cheque Type"
                     name="action"
-                    value={ChequeWithdrawalInitialValues.action}
+                    value="2"
                     handleCheck={handleRadioButton}
                   />
                 </Grid>

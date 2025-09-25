@@ -3,7 +3,7 @@ export const FINANCE_ACCOUNT_COLUMNS = [
   'Account Name',
   'Created Date',
   'Value Date',
-  'Narration',
+  'Usable Balance',
   'Account Product',
   'Status'
 ];

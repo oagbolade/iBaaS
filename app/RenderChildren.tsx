@@ -43,7 +43,7 @@ export const RenderChildren = ({ children }: Props) => {
   useTrackRecentlyVisitedModules();
 
   const { signout } = useAuth();
-  useIdleTimer(10 * 60 * 1000, signout, toastActions);
+  // useIdleTimer(10 * 60 * 1000, signout, toastActions);
 
   useEffect(() => {
     if (

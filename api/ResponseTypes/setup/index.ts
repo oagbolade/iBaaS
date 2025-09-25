@@ -472,6 +472,7 @@ export interface ICharge {
   accrualRequired: number;
   userid: string;
   authid: string;
+  firedCharges: string;
 }
 export interface IProductInfo {
   productCode: string;
@@ -739,7 +740,8 @@ export interface ILoanAccount {
   uid: string;
   interbr: string;
   penalIntIncome: string;
-  penalIntAccrual: string;
+  penalIntAccrual: string;  // This is for create key payload
+  penalintAccrual: string   // This is for update key pa
   penalSuspense: string;
   penalrate: number;
   actualRAte: number;
@@ -761,6 +763,8 @@ export interface ILoanAccount {
   ProdException: [];
   ProdCharges: [];
   ProdDocuments: [];
+  guarantorFlg: string; // this is for create payload key
+  guarantorFlag: string; // this is for update payloadkey
 }
 export interface ICompany {
   bankCode: string;
@@ -1134,6 +1138,9 @@ export interface UseGetAllLoanAccountResponse extends IFetchingState {
   bankproducts?: IBankProducts[];
   frequency?: IFrequency[];
   termDeposit?: ITreasuryDeposit;
+  productCharges?: [],
+  productExceptions?: [],
+  productDocuments?: []
 }
 
 export interface UseGetAllCompanyResponse extends IFetchingState {

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
 import { Form, Formik } from 'formik';
-import {  ShortCardWithAccordion } from './ShortCardWithAccordion';
+import { ShortCardWithAccordion } from './ShortCardWithAccordion';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
@@ -22,11 +22,13 @@ export const actionButtons: any = [
     <PrimaryIconButton buttonTitle="Submit" customStyle={{ ...submitButton }} />
   </Box>
 ];
+
 type Props = {
   productId: string | null;
   isSubmitting: boolean;
   setIsSubmitting: (submit: boolean) => void;
 };
+
 export const AddNewProduct = ({
   productId,
   isSubmitting,
@@ -71,20 +73,29 @@ export const AddNewProduct = ({
     otherDetails: ['manageCollection', 'allowOD', 'postnodebit'],
     document: []
   };
+
   const isEditing = useGetParams('isEditing') || null;
-  const { loanProducts, isLoading } = useGetLoanProductByCode(
-    decryptData(productId as string)
-  );
+
+  const {
+    loanProducts,
+    productCharges,
+    productExceptions,
+    productDocuments,
+    isLoading
+  } = useGetLoanProductByCode(decryptData(productId as string));
 
   const { mutate } = useCreateLoanAccountProduct(
     Boolean(isEditing),
     decryptData(productId as string)
   );
+
   const initialValues = React.useMemo(() => {
+
     if (isEditing && loanProducts) {
       return {
         ...createLoanAccountInitialValues,
         ...loanProducts,
+        guarantorFlag: 0,
         schtype: loanProducts.schtype,
         maxintrate: loanProducts.maxintrate,
         maxloan: loanProducts.maxloan,
@@ -102,13 +113,9 @@ export const AddNewProduct = ({
         penalIntIncome: loanProducts.penalIntIncome,
         penalintAccrual: loanProducts.penalIntAccrual,
         penalIntSuspense: loanProducts.penalSuspense,
-        ProdException:
-          loanProducts.ProdException?.map((item: any) => item.exceptioncode) ||
-          [],
-        ProdCharges:
-          loanProducts.ProdCharges?.map((item: any) => item.chargecode) || [],
-        ProdDocuments:
-          loanProducts.ProdDocuments?.map((item: any) => item.docId) || []
+        ProdException: productExceptions?.map((item: any) => item.exceptioncode) || [],
+        ProdCharges: productCharges?.map((item: any) => item.chargEcode) || [],
+        ProdDocuments: productDocuments?.map((item: any) => item.docId) || []
       };
     }
     return createLoanAccountInitialValues;
@@ -144,6 +151,7 @@ export const AddNewProduct = ({
   if (isEditing && isLoading) {
     return <FormSkeleton noOfLoaders={5} />;
   }
+
   return (
     <Box
       sx={{

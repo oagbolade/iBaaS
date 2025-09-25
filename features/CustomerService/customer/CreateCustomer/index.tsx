@@ -197,10 +197,11 @@ export const CreateCustomerContainer = () => {
       smsalert: Number(smsalert),
       idIssueDate,
       idExpryDate,
-      nin: values.natIDNo,
+      nin: isEditing ? values.nin : values.natIDNo,
       introid: isEditing
         ? introducerIdValue
         : extractIdFromDropdown(introducerIdValue),
+      introType: isEditing ? values.introType || 1 : values.introducerType,
       acctOfficer: isEditing
         ? accountOfficerValue
         : extractIdFromDropdown(accountOfficerValue)
@@ -214,7 +215,7 @@ export const CreateCustomerContainer = () => {
       idIssueDate,
       idExpryDate,
       introType: '0',
-      nin: values.natIDNo
+      nin: isEditing ? values.nin : values.natIDNo
     };
 
     if (customerType === 'corporate') {
@@ -303,25 +304,72 @@ export const CreateCustomerContainer = () => {
             // Hardcoded relationtype as string and menu id as number, we need to get more context as to what it is
             isEditing
               ? {
-                ...customerResult,
-                bizPhone3: customerResult?.bizPhone3,
-                mothermdName: customerResult?.mothermdName,
-                authListID: 0,
-                comments: 'string',
-                menuid: 35,
-                sex,
-                natIDNo: customerResult?.natIDNo,
-                branchCode: customerResult?.branchcode,
-                dob: dayjs(customerResult?.dob),
-                relcustid: customerResult?.relcustid === '1' ? '1' : '0',
-                alertType:
-                  customerResult?.smsalert?.toString() === '0' ? '0' : '1',
-                introid: customerResult?.introid,
                 acctOfficer: customerResult?.acctOfficer,
-                sectorcode: customerResult?.sectorcode?.toString().trim(),
-                relationtype: 'string',
+                address: customerResult?.address,
+                address2: customerResult?.address2,
+                bizAddress: customerResult?.bizAddress,
+                bizCtry: customerResult?.bizCtry,
+                bizPhone3: customerResult?.bizPhone3,
+                bizState: customerResult?.bizState,
+                bizTowncode: customerResult?.bizTowncode,
+                branchcode: customerResult?.branchcode,
+                bvn: customerResult?.bvn,
+                ctzorRes: customerResult?.ctzorRes,
+                dob: dayjs(customerResult?.dob),
+                eduLevel: customerResult?.eduLevel,
+                email: customerResult?.email,
+                empBusName: customerResult?.empBusName,
+                fatcaid: customerResult?.fatcaid,
+                firstName: customerResult?.firstName,
+                groupcode: customerResult?.groupcode,
+                iDno: customerResult?.iDno,
+                idExpryDate: dayjs(customerResult?.idExpryDate),
                 idIssueDate: dayjs(customerResult?.idIssueDate),
-                idExpryDate: dayjs(customerResult?.idExpryDate)
+                idType: customerResult?.idType,
+                introType: customerResult?.introType,
+                introid: customerResult?.introid,
+                menuid: 35,
+                mothermdName: customerResult?.mothermdName,
+                natIDNo: customerResult?.natIDNo,
+                nationality: customerResult?.nationality,
+                nextOfKin: customerResult?.nextOfKin,
+                nextOfKinRel: customerResult?.nextOfKinRel,
+                nextOfKinState: customerResult?.nextOfKinState,
+                nextOfKinaddr: customerResult?.nextOfKinaddr,
+                nextOfKintown: customerResult?.nextOfKintown,
+                nextOfKinphone: customerResult?.nextOfKinphone,
+                nin: customerResult?.natIDNo,
+                occupation: customerResult?.occupation,
+                othername: customerResult?.othername,
+                phone1: customerResult?.phone1,
+                phone2: customerResult?.phone2,
+                phone3: customerResult?.phone3,
+                phone4: customerResult?.phone4,
+                psprtAlnNO: customerResult?.psprtAlnNO,
+                psprtExpDate: customerResult?.psprtExpDate ? dayjs(customerResult?.psprtExpDate) : undefined,
+                psprtIssDate: customerResult?.psprtIssDate ? dayjs(customerResult?.psprtIssDate) : undefined,
+                refname: customerResult?.refname,
+                refphone: customerResult?.refphone,
+                relcustid: customerResult?.relcustid === '1' ? '1' : '0',
+                relationtype: customerResult?.relationtype ?? '',
+                residentCountry: customerResult?.residentCountry,
+                residentStatecode: customerResult?.residentStatecode,
+                residentTowncode: customerResult?.residentTowncode,
+                residExpDate: customerResult?.residExpDate ? dayjs(customerResult?.residExpDate) : undefined,
+                residPermDate: customerResult?.residPermDate ? dayjs(customerResult?.residPermDate) : undefined,
+                residPermNo: customerResult?.residPermNo,
+                sectorcode: customerResult?.sectorcode?.toString().trim(),
+                sex,
+                sigClass: customerResult?.sigClass,
+                signacct: customerResult?.signacct,
+                smsalert: customerResult?.smsalert,
+                ssn: customerResult?.ssn,
+                'staffOrDirector': 0, // hardcoded as 0 for now
+                statecode: customerResult?.statecode,
+                surName: customerResult?.surName,
+                taxIDNo: customerResult?.taxIDNo,
+                title: customerResult?.title,
+                zipcode: customerResult?.zipCode,
               }
               : pickInitialValues
           }
