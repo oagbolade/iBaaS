@@ -37,7 +37,7 @@ export const frequencyTermsDays = [
   {
     value: '30',
     label: '004',
-    name: 'Months'
+    name: 'Month'
   },
   {
     value: '90',

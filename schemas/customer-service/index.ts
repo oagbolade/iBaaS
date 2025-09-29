@@ -192,11 +192,6 @@ export const individualCustomerPersonalDetails = {
     .matches(phoneRegExp, 'Phone number is not valid')
     .min(10, 'too short')
     .max(11, 'too long'),
-  natIDNo: Yup.string()
-    .matches(numericRegex, 'Invalid national id')
-    .min(11, 'National identification number must be 11 characters long')
-    .max(11, 'National identification number must be 11 characters long')
-    .required('Required'),
   taxIDNo: Yup.string()
     .matches(stringRegex, 'Invalid tax id')
     .min(10, 'Tax identification number must be 10 characters long')
@@ -292,6 +287,26 @@ export const corporateCustomerPersonalDetails = {
     .email('Please enter a valid email address')
     .required('Required'),
   turnOver: Yup.string().required('Required'),
+};
+
+// Need to handle inconsistencies from OEM 😢
+// Edit payload uses 'nin' instead of 'natIDNo'
+// Create payload uses 'natIDNo'
+// So we make one of each field required here
+export const handleInconsistencyForPersonalDetailsEditMode = {
+  nin: Yup.string()
+    .matches(numericRegex, 'Invalid national id')
+    .min(11, 'National identification number must be 11 characters long')
+    .max(11, 'National identification number must be 11 characters long')
+    .required('Required')
+};
+
+export const handleInconsistencyForPersonalDetailsCreateMode = {
+  natIDNo: Yup.string()
+    .matches(numericRegex, 'Invalid national id')
+    .min(11, 'National identification number must be 11 characters long')
+    .max(11, 'National identification number must be 11 characters long')
+    .required('Required')
 };
 
 export const createCustomer = {

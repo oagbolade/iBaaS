@@ -116,16 +116,23 @@ export const loanOverDraftSchema = Yup.object({
 });
 
 export const partialPayOffSchema = Yup.object({
-  princpayout: Yup.number().required('Required'),
-  intpayout: Yup.number().required('Required'),
-  penintpayout: Yup.number().required('Required'),
-  princoutst: Yup.number().required('Required'),
-  intoutst: Yup.number().required('Required'),
-  penintoutst: Yup.number().required('Required'),
+  princpayout: Yup.string().matches(stringRegex).required('Required'),
+  intpayout: Yup.string().matches(stringRegex).required('Required'),
+  penintpayout: Yup.string().matches (stringRegex).required('Required'),
+  newrate: Yup.string().matches(stringRegex).required('Required'),
+  freq: Yup.string().matches(stringRegex).required('Required'),
 });
 
 export const restructuredLoanSchema = Yup.object({
-  
+  PenalWriteOff_GL: Yup.string()
+    .matches(stringRegex, 'Invalid')
+    .required('Required'),
+  InterestWriteOff_GL: Yup.string()
+    .matches(stringRegex, 'Invalid')
+    .required('Required'),
+  PrincipalWriteOff_GL: Yup.string()
+    .matches(stringRegex, 'Invalid')
+    .required('Required')
 });
 
 export const overDraftSearchSchema = Yup.object({

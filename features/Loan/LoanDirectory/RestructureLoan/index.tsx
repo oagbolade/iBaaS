@@ -28,7 +28,22 @@ const FormFields: React.FC<{
   isSubmitting: boolean;
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
   loanAccDetails: any;
-}> = ({ isSubmitting, setIsSubmitting, loanAccDetails }) => {
+  accountNumber: string;
+  settlementAccount: string;
+  productCode: string
+  branchCode: string
+  customerID: string
+}> = ({
+  isSubmitting,
+  setIsSubmitting,
+  loanAccDetails,
+  accountNumber,
+  settlementAccount,
+  productCode,
+  branchCode,
+  customerID
+
+}) => {
   const { repaymentTypes } = useGetAllLoanRepaymentTypes();
   const { loansources } = useGetAllLoanSources();
   const { collaterals } = useGetAllLoanCollaterals();
@@ -39,9 +54,13 @@ const FormFields: React.FC<{
       collaterals={collaterals}
       loansources={loansources}
       isSubmitting={isSubmitting}
-      customerID={loanAccDetails?.customerid || ''}
       setIsSubmitting={setIsSubmitting}
       loanDetails={loanAccDetails}
+      accountNumber={accountNumber}
+      settlementAccount={settlementAccount}
+      productCode={productCode}
+      branchCode={branchCode}
+      customerID={customerID}
     />
   );
 };
@@ -52,11 +71,13 @@ export const RestructureLoan = () => {
   const { isLoading } = useGlobalLoadingState();
   const { setDirection } = useSetDirection();
   const { isTablet } = useCurrentBreakpoint();
-
   const searchParams = useSearchParams();
   const accountNumber = searchParams.get('accountNumber') || '';
+  const settlementAccount = searchParams.get('settlementAccount') || '';
   const productCode = searchParams.get('productCode') || '';
   const status = searchParams.get('action') || '';
+  const branchCode = searchParams.get('branchCode') || '';
+  const customerID = searchParams.get('customerID') || '';
 
   const { loanAccDetails, isLoading: loadingData } =
     useGetLoanAccountByLoanAccountNumber(
@@ -114,7 +135,7 @@ export const RestructureLoan = () => {
         <Stack direction={setDirection()}>
           <Box
             sx={{
-              width: { mobile: '100%', desktop: '500px' },
+              width: { mobile: '100%', desktop: '55%' },
               padding: '32px'
             }}
           >
@@ -122,6 +143,11 @@ export const RestructureLoan = () => {
               isSubmitting={isSubmitting}
               setIsSubmitting={setIsSubmitting}
               loanAccDetails={loanAccDetails}
+              accountNumber={accountNumber}
+              settlementAccount={settlementAccount}
+              productCode={productCode}
+              branchCode={branchCode}
+              customerID={customerID}
             />
           </Box>
           {isTablet && (

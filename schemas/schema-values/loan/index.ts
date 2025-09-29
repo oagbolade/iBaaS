@@ -99,38 +99,38 @@ export interface SetPartialPayOffValues {
   loanacct: string;
   settlementAcct: string;
   matdate: string;
-  newrate: number;
-  newprincipal: number;
-  princpayout: number;
-  intpayout: number;
-  penintpayout: number;
-  princoutst: number;
-  intoutst: number;
-  penintoutst: number;
+  newrate: string;
+  newprincipal: string;
+  princpayout: string;
+  intpayout: string;
+  penintpayout: string;
+  princoutst: string;
+  intoutst: string;
+  penintoutst: string;
   freq: string;
-  newtenor: number;
+  newtenor: string;
   startdate: string;
-  totalDays: number;
-  menuid: number;
+  totalDays: string;
+  menuid: string;
 }
 
 export const setPartialPayOffvalues: SetPartialPayOffValues = {
   loanacct: '',
   settlementAcct: '',
   matdate: '',
-  newrate: 0.0,
-  newprincipal: 0.0,
-  princpayout: 0.0,
-  intpayout: 0.0,
-  penintpayout: 0.0,
-  princoutst: 0.0,
-  intoutst: 0.0,
-  penintoutst: 0.0,
+  newrate: '0',
+  newprincipal: '0',
+  princpayout: '0',
+  intpayout: '0',
+  penintpayout: '0',
+  princoutst: '0',
+  intoutst: '0',
+  penintoutst: '0',
   freq: '',
-  newtenor: 0.0,
+  newtenor: '0',
   startdate: '',
-  totalDays: 0,
-  menuid: 96 // have to confirm this with infosigth
+  totalDays: '0',
+  menuid: '96' // have to confirm this with infosigth
 };
 
 export interface RestructureLoanValues {
@@ -138,20 +138,27 @@ export interface RestructureLoanValues {
   customerid: string;
   loanAccno: string;
   settlementAccno: string;
-  principalWriteOff_GL: string | null;
-  interestWriteOff_GL: string | null;
-  penalWriteOff_GL: string | null;
+
   prodcode: string;
   branchcode: string;
+
+  PrincipalWriteOff_GL: string | null;
   outstandingPrincipal: number | null;
+  principal_To_WriteOff: string | null;
+  principalWriteOff_Type: string | null; // 1: Add all outstanding to restructure, 2: Write off all outstanding, 3: partial write-off
+
+  InterestWriteOff_GL: string | null;
+  PenalWriteOff_GL: string | null;
+  
   outstandingInterest: number | null;
   outstandingPenalInterest: number | null;
-  principal_To_WriteOff: string | null;
+
   interest_To_WriteOff: string | null;
   penal_To_WriteOff: string | null;
-  principalWriteOff_Type: string | null; // 1: Add all outstanding to restructure, 2: Write off all outstanding, 3: partial write-off
+
   interestlWriteOff_Type: string | null;
   penalWriteOff_Type: string | null;
+
   amt_To_Liquidate: number;
   newPrincipal: number;
   refinancingAmt: number;
@@ -184,9 +191,9 @@ export const SetRestructureLoanValues: RestructureLoanValues = {
   customerid: '',
   loanAccno: '',
   settlementAccno: '',
-  principalWriteOff_GL: '',
-  interestWriteOff_GL: '',
-  penalWriteOff_GL: '',
+  PrincipalWriteOff_GL: '',
+  InterestWriteOff_GL: '',
+  PenalWriteOff_GL: '',
   prodcode: '',
   branchcode: '',
   outstandingPrincipal: 0,
@@ -371,6 +378,11 @@ export interface ILoanAccDetails {
   collateralType: string;
   branchcode: string;
   outstandingPrincipal: number;
+  intRate: string
+  loanTerm: string,
+  frequencyName: string,
+  out_Interest: string,
+  out_penal: string
 }
 
 export interface LoanUnderwriteInitialValues {

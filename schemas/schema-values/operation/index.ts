@@ -178,7 +178,7 @@ export interface CreateChequeWithdrawalFormValues {
   narration: string;
   currencyCode: string;
   tellerno: number;
-  action: string;
+  action: number;
   cheqNumber: number;
 }
 export const OutwardClearingInitialValues: CreateOutWardClearingFormValues = {
@@ -238,7 +238,7 @@ export const ChequeWithdrawalInitialValues: CreateChequeWithdrawalFormValues = {
   narration: '',
   currencyCode: '',
   tellerno: 0,
-  action: '',
+  action: 0,
   cheqNumber: 0
 };
 

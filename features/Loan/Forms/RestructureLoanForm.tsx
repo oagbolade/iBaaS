@@ -4,11 +4,11 @@ import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import dayjs from 'dayjs';
 import { InterestSection } from './InterestSection';
+import { ContainerStyle } from './styles';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import {
   FormSelectField,
   FormTextInput,
-  TextFieldArea,
   FormikDateTimePicker,
   FormikRadioButton
 } from '@/components/FormikFields';
@@ -22,6 +22,12 @@ import { useRestructureLoan } from '@/api/loans/useCreditFacility';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { getStoredUser } from '@/utils/user-storage';
 
+const ACTION_OPTIONS = [
+  { label: 'Add', value: '1' },
+  { label: 'Write Off', value: '2' },
+  { label: 'Partial Write Off', value: '3' }
+];
+
 export const RestructureLoanForm = ({
   isSubmitting,
   customerID,
@@ -29,7 +35,11 @@ export const RestructureLoanForm = ({
   loanDetails,
   repaymentTypes,
   loansources,
-  collaterals
+  collaterals,
+  accountNumber,
+  settlementAccount,
+  productCode,
+  branchCode
 }: {
   customerID: string;
   isSubmitting?: boolean;
@@ -38,10 +48,13 @@ export const RestructureLoanForm = ({
   repaymentTypes: any;
   loansources: any;
   collaterals: any;
+  accountNumber: string;
+  settlementAccount: string;
+  productCode: string;
+  branchCode: string;
 }) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const { mutate } = useRestructureLoan();
-  const [loanDetail, setLoanDetail] = useState<ILoanAccDetails>(loanDetails);
   const { mappedLoanRepayment, mappedLoansources, mappedLoanCollateral } =
     useMapSelectOptions({
       repaymentTypes,
@@ -56,54 +69,12 @@ export const RestructureLoanForm = ({
 
   const onSubmit = async (values: any) => {
     const data = {
+      ...values,
       customerid: customerID,
-      settlementAccno: loanDetail.settlementacct1,
-      loanAccno: loanDetail.accountnumber,
-      prodcode: loanDetail.productcode,
-      branchcode: loanDetail?.branchCode,
-      menuId: String(userLoanMenuid?.menu_id),
-      outstandingPrincipal: Number(loanDetail?.outstandingPrincipal),
-      PenalWriteOff_GL: null,
-      InterestWriteOff_GL: null,
-      PrincipalWriteOff_GL: null,
-      principalWriteOff_Type: null,
-      principal_To_WriteOff: null,
-      interestlWriteOff_Type: null,
-      principalWriteOff_GL: null,
-      interest_To_WriteOff: null,
-      outstandingPenalInterest: null,
-      penalWriteOff_Type: null,
-      penal_To_WriteOff: null,
-      paybank: '',
-      narration: values.narration,
-      takecharge: '',
-      collateraldetails: '',
-      restructureType: values.restructureType,
-      penalWriteOff_GL: '',
-      outstandingInterest: 0,
-      amt_To_Liquidate: 0,
-      newPrincipal: 0,
-      refinancingAmt: 0,
-      interestRate: 0,
-      term: 0,
-      days: 0,
-      termFreq: '',
-      repaytype: 0,
-      startdate: '',
-      matdate: '',
-      postdate: '',
-      collateraltype: 0,
-      collateralvalue: 0,
-      source: 0,
-      calcmethod: 0,
-      moratatriumtype: 0,
-      moratarium: 0,
-      lienpercentage: 0,
-      lienamount: 0,
-      paymode: 0,
-      interestWriteOff_GL: ''
+      prodcode: productCode, // loanDetails.productcode,
+      branchcode: branchCode, //  loanDetails?.branchCode,
+      menuId: String(userLoanMenuid?.menu_id)
     };
-
     mutate(data);
     setIsSubmitting(false);
   };
@@ -140,15 +111,38 @@ export const RestructureLoanForm = ({
       >
         <Formik
           initialValues={{
-            ...loanDetail,
             ...SetRestructureLoanValues,
-            source: loanDetail?.loanSourceCode,
-            collateraltype: loanDetail?.collateralType,
-            collateralvalue: loanDetail?.collateralValue,
-            restructureType: selectedRestructureType
+            restructureType: selectedRestructureType,
+            days: loanDetails.totaldays,
+            loanAccno: accountNumber,
+            settlementAccno: settlementAccount,
+            prodcode: loanDetails.productName,
+            source: loanDetails?.loanSourceName,
+            newPrincipal: '',
+            amt_To_Liquidate: '',
+            interestRate: loanDetails.intRate,
+            term: loanDetails.loanTerm,
+            termFreq: loanDetails.frequencyName,
+            calcmethod: '',
+            repaytype: '',
+            postdate: '',
+            collateralType: '',
+            collateralvalue: loanDetails.collvalue,
+            startdate: dayjs(loanDetails.startdate),
+            drawdown: '',
+            matdate: dayjs(loanDetails.matdate),
+            firstdate: '',
+            moratarium: '',
+            moratatriumtype: '',
+            takecharge: '',
+            narration: 'loan restructure',
+            outstandingPrincipal: loanDetails.loanAmount,
+            outstandingInterest: loanDetails.out_Interest,
+            outstandingPenalInterest: loanDetails.out_penal
           }}
           onSubmit={(values) => onSubmit(values)}
           validationSchema={restructuredLoanSchema}
+          enableReinitialize
         >
           <Form>
             <Box mt={4}>
@@ -176,7 +170,6 @@ export const RestructureLoanForm = ({
                     name="loanAccno"
                     placeholder="Loan Account Number"
                     label="Loan Account Number"
-                    value={loanDetail?.accountnumber}
                     disabled
                   />{' '}
                 </Grid>
@@ -189,7 +182,6 @@ export const RestructureLoanForm = ({
                     name="prodcode"
                     placeholder="Select loan product"
                     label="Loan Product"
-                    value={loanDetail?.productname}
                     disabled
                   />{' '}
                 </Grid>
@@ -202,7 +194,6 @@ export const RestructureLoanForm = ({
                     }}
                     options={mappedLoansources}
                     label="Loan Source"
-                    value={loanDetail?.loanSourceCode}
                     name="source"
                     required
                   />{' '}
@@ -215,45 +206,125 @@ export const RestructureLoanForm = ({
                     }}
                     name="settlementAccno"
                     placeholder="Settlement Account"
-                    value={loanDetail?.settlementacct1}
                     label="Settlement Account"
                     disabled
                     required
                   />{' '}
                 </Grid>
 
-                <InterestSection
-                  label="Outstanding Principal"
-                  placeholder="outstanding Principal"
-                  sectionName="outstandingPrincipal"
-                  writeOffValue="principal_To_WriteOff"
-                  writeOffActionType="principalWriteOff_Type"
-                  restructureType={selectedRestructureType}
-                  glAccountNumber="principalWriteOff_GL"
-                  sectionValue={loanDetail?.principaldue}
-                />
+                <Box sx={ContainerStyle}>
+                  <Grid container>
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="outstandingPrincipal"
+                        label="Outstanding Principal"
+                        disabled
+                      />
+                    </Grid>
 
-                <InterestSection
-                  label="Accrued Interest"
-                  placeholder=""
-                  writeOffValue="interest_To_WriteOff"
-                  writeOffActionType="interestlWriteOff_Type"
-                  sectionName="outstandingInterest"
-                  restructureType={selectedRestructureType}
-                  glAccountNumber="interestWriteOff_GL"
-                  sectionValue={loanDetail?.accruedInterest}
-                />
+                    <Grid my={2} item={isTablet} mobile={12}>
+                      <FormikRadioButton
+                        options={ACTION_OPTIONS}
+                        title="Actions"
+                        name="principalWriteOff_Type"
+                        value="0"
+                      />
+                    </Grid>
 
-                <InterestSection
-                  label="Accrued Panel Interest"
-                  placeholder=""
-                  writeOffValue="penal_To_WriteOff"
-                  writeOffActionType="penalWriteOff_Type"
-                  sectionName="outstandingPenalInterest"
-                  restructureType={selectedRestructureType}
-                  glAccountNumber="penalWriteOff_GL"
-                  sectionValue={loanDetail?.outstandingPenalInterest}
-                />
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="principal_To_WriteOff"
+                        placeholder=""
+                        label="Add Value"
+                      />
+                    </Grid>
+
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="PrincipalWriteOff_GL"
+                        placeholder=""
+                        label="Enter GL Account"
+                        required
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+
+                <Box sx={ContainerStyle}>
+                  <Grid container>
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="outstandingInterest"
+                        label="Accrued Interest"
+                        disabled
+                      />
+                    </Grid>
+
+                    <Grid my={2} item={isTablet} mobile={12}>
+                      <FormikRadioButton
+                        options={ACTION_OPTIONS}
+                        title="Actions"
+                        name="interestlWriteOff_Type"
+                        value="0"
+                      />
+                    </Grid>
+
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="interest_To_WriteOff"
+                        placeholder=""
+                        label="Add Value"
+                      />
+                    </Grid>
+
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="InterestWriteOff_GL"
+                        placeholder=""
+                        label="Enter GL Account"
+                        required
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+
+                <Box sx={ContainerStyle}>
+                  <Grid container>
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="outstandingPenalInterest"
+                        label="Accrued Panel Interest"
+                        disabled
+                      />
+                    </Grid>
+
+                    <Grid my={2} item={isTablet} mobile={12}>
+                      <FormikRadioButton
+                        options={ACTION_OPTIONS}
+                        title="Actions"
+                        name="penalWriteOff_Type"
+                        value="0"
+                      />
+                    </Grid>
+
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="penal_To_WriteOff"
+                        placeholder=""
+                        label="Add Value"
+                      />
+                    </Grid>
+
+                    <Grid item={isTablet} mobile={12}>
+                      <FormTextInput
+                        name="PenalWriteOff_GL"
+                        placeholder=""
+                        label="Enter GL Account"
+                        required
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
 
                 <Grid item={isTablet} mobile={12}>
                   <FormTextInput
@@ -263,9 +334,7 @@ export const RestructureLoanForm = ({
                     name="newPrincipal"
                     placeholder=""
                     label="New Principal"
-                    value={loanDetail?.principaldue}
                     required
-                    disabled
                   />{' '}
                 </Grid>
 
@@ -289,10 +358,6 @@ export const RestructureLoanForm = ({
                     name="interestRate"
                     placeholder=""
                     label="Loan Rate (%)"
-                    value={loanDetail?.intrate}
-                    onChange={(e) =>
-                      setLoanDetail({ ...loanDetail, intrate: e.target.value })
-                    }
                     required
                   />{' '}
                 </Grid>
@@ -311,13 +376,6 @@ export const RestructureLoanForm = ({
                         name="term"
                         placeholder="Enter Loan term"
                         label="Loan Term"
-                        value={loanDetail?.loanterm}
-                        onChange={(e) =>
-                          setLoanDetail({
-                            ...loanDetail,
-                            loanterm: e.target.value
-                          })
-                        }
                         required
                       />{' '}
                     </Grid>
@@ -330,13 +388,6 @@ export const RestructureLoanForm = ({
                         }}
                         options={frequencyOptions}
                         name="termFreq"
-                        value={loanDetail?.termfreq}
-                        onChange={(e) =>
-                          setLoanDetail({
-                            ...loanDetail,
-                            termfreq: e.target.value
-                          })
-                        }
                         label=""
                       />{' '}
                     </Grid>
@@ -351,10 +402,7 @@ export const RestructureLoanForm = ({
                     ]}
                     title="Calculation Method"
                     name="calcmethod"
-                    value={loanDetail?.calcmethod}
-                    handleCheck={(e: any) =>
-                      setLoanDetail({ ...loanDetail, calcmethod: e })
-                    }
+                    value="1"
                   />
                 </Grid>
 
@@ -367,13 +415,6 @@ export const RestructureLoanForm = ({
                     options={mappedLoanRepayment}
                     label="Repayment Type"
                     name="repaytype"
-                    value={loanDetail?.repaytype}
-                    onChange={(e) =>
-                      setLoanDetail({
-                        ...loanDetail,
-                        repaytype: e.target.value
-                      })
-                    }
                   />{' '}
                 </Grid>
 
@@ -395,13 +436,6 @@ export const RestructureLoanForm = ({
                     options={mappedLoanCollateral}
                     label="Collateral Type"
                     name="collateralType"
-                    value={loanDetail?.collateralType}
-                    onChange={(e) =>
-                      setLoanDetail({
-                        ...loanDetail,
-                        collateralType: e.target.value
-                      })
-                    }
                     required
                   />{' '}
                 </Grid>
@@ -414,19 +448,7 @@ export const RestructureLoanForm = ({
                     name="collateralvalue"
                     placeholder="1,432,532.53"
                     label="Collateral Value"
-                    value={loanDetail?.collateralValue}
                     required
-                  />{' '}
-                </Grid>
-
-                <Grid item={isTablet} mobile={12}>
-                  <TextFieldArea
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    placeholder="Short text..."
-                    label="Collateral Details"
-                    title="Collateral Value"
                   />{' '}
                 </Grid>
 
@@ -436,11 +458,7 @@ export const RestructureLoanForm = ({
                   mb={2}
                   width={{ mobile: '560px' }}
                 >
-                  <FormikDateTimePicker
-                    label="Start Date"
-                    name="startdate"
-                    value={dayjs(loanDetail?.startdate)}
-                  />
+                  <FormikDateTimePicker label="Start Date" name="startdate" />
                 </Grid>
 
                 <Grid
@@ -452,7 +470,6 @@ export const RestructureLoanForm = ({
                   <FormikDateTimePicker
                     label="Drawn-down Date"
                     name="drawdown"
-                    value={dayjs(loanDetail?.drawDownDate)}
                   />
                 </Grid>
 
@@ -462,11 +479,7 @@ export const RestructureLoanForm = ({
                   mb={2}
                   width={{ mobile: '560px' }}
                 >
-                  <FormikDateTimePicker
-                    label="Maturity Date"
-                    name="matdate"
-                    value={dayjs(loanDetail?.matdate)}
-                  />
+                  <FormikDateTimePicker label="Maturity Date" name="matdate" />
                 </Grid>
 
                 <Grid
@@ -478,7 +491,6 @@ export const RestructureLoanForm = ({
                   <FormikDateTimePicker
                     label="First Payment Date"
                     name="firstdate"
-                    value={dayjs(loanDetail?.firstpmtdate)}
                   />
                 </Grid>
 
@@ -519,13 +531,14 @@ export const RestructureLoanForm = ({
                 </Grid>
 
                 <Grid item={isTablet} mobile={12}>
-                  <TextFieldArea
+                  <FormTextInput
                     customStyle={{
                       width: setWidth(isMobile ? '300px' : '100%')
                     }}
-                    placeholder="Short text..."
+                    name="narration"
+                    placeholder="Please enter"
                     label="Narration"
-                    title="Narration"
+                    required
                   />{' '}
                 </Grid>
 

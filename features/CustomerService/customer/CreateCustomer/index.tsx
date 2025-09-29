@@ -13,6 +13,8 @@ import { PrimaryIconButton } from '@/components/Buttons';
 import {
   corporateCustomerPersonalDetails,
   createCustomer,
+  handleInconsistencyForPersonalDetailsCreateMode,
+  handleInconsistencyForPersonalDetailsEditMode,
   individualCustomerPersonalDetails
 } from '@/schemas/customer-service';
 import {
@@ -171,7 +173,8 @@ export const CreateCustomerContainer = () => {
     isEditing && customerResult?.customerType === individual
   );
   const { validationKeysMapper } = useCreateValidationKeysMapper(
-    shouldRemoveCorporateDetails
+    shouldRemoveCorporateDetails,
+    Boolean(isEditing)
   );
 
   const { handleCompletedFields } = useHandleCompletedFields<ICustomerResult>(
@@ -197,7 +200,6 @@ export const CreateCustomerContainer = () => {
       smsalert: Number(smsalert),
       idIssueDate,
       idExpryDate,
-      nin: isEditing ? values.nin : values.natIDNo,
       introid: isEditing
         ? introducerIdValue
         : extractIdFromDropdown(introducerIdValue),
@@ -274,9 +276,15 @@ export const CreateCustomerContainer = () => {
   const pickSchema =
     customerType === 'corporate'
       ? Yup.object({ ...corporateCustomerPersonalDetails })
-      : Yup.object({ ...createCustomer, ...individualCustomerPersonalDetails });
+      : Yup.object({
+        ...createCustomer, ...individualCustomerPersonalDetails, ...(isEditing
+          ? handleInconsistencyForPersonalDetailsEditMode
+          : handleInconsistencyForPersonalDetailsCreateMode)
+      });
 
   const sex = customerResult?.sex === 'Male' ? '1' : '0';
+
+  const today = dayjs().format('YYYY-MM-DD');
 
   return (
     <Box
@@ -318,8 +326,8 @@ export const CreateCustomerContainer = () => {
                 dob: dayjs(customerResult?.dob),
                 eduLevel: customerResult?.eduLevel,
                 email: customerResult?.email,
-                empBusName: customerResult?.empBusName,
-                fatcaid: customerResult?.fatcaid,
+                empBusName: customerResult?.empBusName ?? '',
+                fatcaid: customerResult?.fatcaid ?? '',
                 firstName: customerResult?.firstName,
                 groupcode: customerResult?.groupcode,
                 iDno: customerResult?.iDno,
@@ -345,9 +353,9 @@ export const CreateCustomerContainer = () => {
                 phone2: customerResult?.phone2,
                 phone3: customerResult?.phone3,
                 phone4: customerResult?.phone4,
-                psprtAlnNO: customerResult?.psprtAlnNO,
-                psprtExpDate: customerResult?.psprtExpDate ? dayjs(customerResult?.psprtExpDate) : undefined,
-                psprtIssDate: customerResult?.psprtIssDate ? dayjs(customerResult?.psprtIssDate) : undefined,
+                psprtAlnNO: customerResult?.psprtAlnNO ?? '',
+                psprtExpDate: customerResult?.psprtExpDate ? dayjs(customerResult?.psprtExpDate) : today,
+                psprtIssDate: customerResult?.psprtIssDate ? dayjs(customerResult?.psprtIssDate) : today,
                 refname: customerResult?.refname,
                 refphone: customerResult?.refphone,
                 relcustid: customerResult?.relcustid === '1' ? '1' : '0',
@@ -355,21 +363,21 @@ export const CreateCustomerContainer = () => {
                 residentCountry: customerResult?.residentCountry,
                 residentStatecode: customerResult?.residentStatecode,
                 residentTowncode: customerResult?.residentTowncode,
-                residExpDate: customerResult?.residExpDate ? dayjs(customerResult?.residExpDate) : undefined,
-                residPermDate: customerResult?.residPermDate ? dayjs(customerResult?.residPermDate) : undefined,
-                residPermNo: customerResult?.residPermNo,
+                residExpDate: customerResult?.residExpDate ? dayjs(customerResult?.residExpDate) : today,
+                residPermDate: customerResult?.residPermDate ? dayjs(customerResult?.residPermDate) : today,
+                residPermNo: customerResult?.residPermNo ?? '',
                 sectorcode: customerResult?.sectorcode?.toString().trim(),
                 sex,
                 sigClass: customerResult?.sigClass,
                 signacct: customerResult?.signacct,
                 smsalert: customerResult?.smsalert,
-                ssn: customerResult?.ssn,
-                'staffOrDirector': 0, // hardcoded as 0 for now
+                ssn: customerResult?.ssn ?? '',
+                staffOrDirector: 0, // hardcoded as 0 for now
                 statecode: customerResult?.statecode,
                 surName: customerResult?.surName,
                 taxIDNo: customerResult?.taxIDNo,
                 title: customerResult?.title,
-                zipcode: customerResult?.zipCode,
+                zipcode: customerResult?.zipCode ?? '',
               }
               : pickInitialValues
           }

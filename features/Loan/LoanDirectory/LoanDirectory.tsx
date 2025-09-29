@@ -27,13 +27,15 @@ const ActionMenuProps = ({
   status,
   settlementAccount,
   productCode,
-  customerId
+  customerId,
+  branchCode
 }: {
   status: string;
   accountNumber: string;
   settlementAccount: string;
   productCode: string;
   customerId: string;
+  branchCode: string
 }): React.ReactElement => {
   return (
     <TableActionMenu
@@ -42,6 +44,7 @@ const ActionMenuProps = ({
       settlementAccount={settlementAccount}
       productCode={productCode}
       customerId={customerId}
+      branchCode={branchCode}
     />
   );
 };
@@ -173,6 +176,7 @@ export const LoanDirectory = () => {
                       settlementAccount={dataItem?.settlementAcct1}
                       productCode={dataItem?.productCode}
                       customerId={dataItem?.customerID}
+                      branchCode={dataItem?.branch}
                     />
                   </StyledTableCell>
                 </StyledTableRow>

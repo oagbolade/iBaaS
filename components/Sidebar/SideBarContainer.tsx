@@ -25,12 +25,11 @@ export const SideBarContainer = () => {
   const customReportPage = '/report/custom-report';
   const { bank } = useGetCompanyByCode();
   // ON hold
-  // const { logo } = useGetBankLogo();
-  // const BankLogo = logo?.toString()
-  //   ? `data:image/png;image/jpg;base64,${logo}`
-  //   : null;
+  const { logo } = useGetBankLogo();
+  console.log(logo);
+  const BankLogo = logo?.toString();
 
-  // saveBankLogoToLocalStorage(BankLogo || '');
+  saveBankLogoToLocalStorage(BankLogo || '');
 
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
@@ -45,7 +44,7 @@ export const SideBarContainer = () => {
         overflow: 'hidden'
       }}
     >
-      {/* <Box
+      <Box
         sx={{
           position: 'sticky',
           top: 0,
@@ -71,7 +70,7 @@ export const SideBarContainer = () => {
             alignItems: 'center'
           }}
         >
-          {BankLogo ? (
+          {BankLogo && BankLogo !== 'undefined' ? (
             <Box
               sx={{
                 width: '100%',
@@ -93,7 +92,7 @@ export const SideBarContainer = () => {
             <PageTitle title={bank?.bankName} />
           )}
         </Link>
-      </Box> */}
+      </Box>
 
       <Box
         sx={{

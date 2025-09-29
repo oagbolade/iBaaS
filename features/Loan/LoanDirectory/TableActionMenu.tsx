@@ -26,6 +26,7 @@ type Props = {
   settlementAccount: string;
   productCode: string;
   customerId: string;
+  branchCode: string;
 };
 
 export const TableActionMenu = ({
@@ -33,7 +34,8 @@ export const TableActionMenu = ({
   accountNumber,
   settlementAccount,
   productCode,
-  customerId
+  customerId,
+  branchCode
 }: Props) => {
   const router = useRouter();
   const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
@@ -193,7 +195,7 @@ export const TableActionMenu = ({
                   }}
                   aria-disabled={shouldDisable.restructLaon}
                   tabIndex={shouldDisable.restructLaon ? -1 : undefined}
-                  href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
+                  href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}&branchCode=${sanitize(branchCode)}&customerID=${sanitize(customerId)}`}
                 >
                   <TableMenuButton buttonTitle="Restructure Loan" />
                 </Link>

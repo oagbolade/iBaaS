@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import { useFormikContext } from 'formik';
 import { ContainerStyle } from './styles';
-import { FormTextInput , FormikRadioButton} from '@/components/FormikFields';
+import { FormTextInput, FormikRadioButton } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 
 interface InterestSectionProps {
@@ -22,7 +22,14 @@ const ACTION_OPTIONS = [
   { label: 'Partial Write Off', value: '3' }
 ];
 
-const FormField = ({ name, placeholder, label, disabled, required = true, customStyle }: any) => (
+const FormField = ({
+  name,
+  placeholder,
+  label,
+  disabled,
+  required = true,
+  customStyle
+}: any) => (
   <FormTextInput
     customStyle={customStyle}
     name={name}
@@ -57,7 +64,15 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
 
       fieldsToReset.forEach(({ name, value }) => setFieldValue(name, value));
     }
-  }, [restructureType, sectionName, writeOffActionType, writeOffValue, glAccountNumber, setFieldValue, sectionValue]);
+  }, [
+    restructureType,
+    sectionName,
+    writeOffActionType,
+    writeOffValue,
+    glAccountNumber,
+    setFieldValue,
+    sectionValue
+  ]);
 
   const commonStyles = {
     width: setWidth(isMobile ? '230px' : '100%')
@@ -70,7 +85,7 @@ export const InterestSection: React.FC<InterestSectionProps> = ({
           <FormField
             customStyle={commonStyles}
             name={sectionName}
-            value={sectionValue?.toString()}
+            value={sectionName}
             placeholder={placeholder}
             label={label}
             disabled

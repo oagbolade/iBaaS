@@ -741,28 +741,27 @@ async function createGroup(
   }
 }
 
-
-
-export async function useUploadBankLogo(
+async function uploadBankLogo(
   toastActions: IToastActions,
   file: File
 ): Promise<UploadImageResponse | void> {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append('file', file);
 
   try {
-    const urlEndpoint = "/FileStorage/UploadImage";
+    const urlEndpoint = '/FileStorage/UploadImage';
     const response: AxiosResponse<UploadImageResponse> =
       await ImageUploadAxiosInstance.post(urlEndpoint, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${getStoredUser()?.token}`,
         },
       });
 
-    toast("Image uploaded successfully", "Upload", "success", toastActions);
-      return {
-      url: response.data.data, 
+    toast('Image uploaded successfully', 'Upload', 'success', toastActions);
+    
+    return {
+      data: response.data?.data,
       fileName: file.name,
     };
   } catch (errorResponse) {
@@ -770,7 +769,6 @@ export async function useUploadBankLogo(
     toast(message, title, severity, toastActions);
   }
 }
-
 
 async function createCustomerMandate(
   toastActions: IToastActions,
@@ -1094,6 +1092,16 @@ type RedirectProps = {
   AccountNumber: string;
   CustomerId: string;
 };
+
+export function useUploadBankLogo() {
+  const toastActions = useContext(ToastMessageContext);
+
+  const { mutate, isPending, isError, error, data } = useMutation({
+    mutationFn: (file: File) => uploadBankLogo(toastActions, file),
+  });
+
+  return { mutate, isPending, isError, error, data };
+}
 
 export function useCreateCustomerMandate({
   AccountNumber,

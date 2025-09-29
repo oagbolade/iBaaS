@@ -455,7 +455,7 @@ export const CreateAccount = ({
           spacing={3}
         >
           <Box
-            sx={{ ...BatchContainer, width: '500px' }}
+            sx={{ ...BatchContainer, width: '50%' }}
             ml={{ desktop: 1, mobile: 5 }}
           >
             <PageTitle
@@ -473,7 +473,7 @@ export const CreateAccount = ({
                     name="branchcode"
                     searchGroupVariant="BasicSearchGroup"
                     dropDownOptions={filteredValues.branchcode as OptionsI[]}
-                    customStyle={{ ...dropDownWithSearch, width: '450px' }}
+                    customStyle={{ ...dropDownWithSearch, width: '100%' }}
                     icon={<SearchIcon />}
                     iconPosition="end"
                     buttonTitle={

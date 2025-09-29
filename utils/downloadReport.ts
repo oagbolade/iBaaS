@@ -7,10 +7,9 @@ import { getCurrentDate } from './getCurrentDate';
 import { PdfGenerator } from './hooks/PdfGenerator';
 // eslint-disable-next-line import/no-cycle
 import { IReportQueryParams } from '@/context/DownloadReportContext';
-import { ReportType } from '@/constants/downloadReport';
-import {FileNameMapper} from '@/constants/downloadReport';
-export type ReportFormat = 'excel' | 'pdf' | 'csv';
+import { ReportType, FileNameMapper } from '@/constants/downloadReport';
 
+export type ReportFormat = 'excel' | 'pdf' | 'csv';
 
 const generatePdf = (
   exportData: Array<any>,

@@ -3,32 +3,43 @@ export interface ValidationKeysMapper {
 }
 
 export const useCreateValidationKeysMapper = (
-  removeCorporateDetails: boolean
+  removeCorporateDetails: boolean,
+  isEditing?: boolean
 ) => {
+  let personalDetails = [
+    'title',
+    'surName',
+    'firstName',
+    'othername',
+    'dob',
+    'sex',
+    'nationality',
+    'statecode',
+    'mothermdName',
+    'bvn',
+    'phone1',
+    'natIDNo',
+    'taxIDNo',
+    'residentCountry',
+    'residentStatecode',
+    'residentTowncode',
+    'address',
+    'sectorcode',
+    'occupation',
+    'eduLevel'
+  ];
+
+  if (isEditing) {
+    // Remove 'natIDNo'
+    personalDetails = personalDetails.filter((key) => key !== 'natIDNo');
+
+    // Insert 'nin' at the correct index (where 'natIDNo' was)
+    personalDetails.splice(12, 0, 'nin');
+  }
+
   // List of required fields for the customer creation form
   const validationKeysMapper: ValidationKeysMapper = {
-    personalDetails: [
-      'title',
-      'surName',
-      'firstName',
-      'othername',
-      'dob',
-      'sex',
-      'nationality',
-      'statecode',
-      'mothermdName',
-      'bvn',
-      'phone1',
-      'natIDNo',
-      'taxIDNo',
-      'residentCountry',
-      'residentStatecode',
-      'residentTowncode',
-      'address',
-      'sectorcode',
-      'occupation',
-      'eduLevel'
-    ],
+    personalDetails,
     businessDetails: [
       'bizState',
       'bizCtry',

@@ -6,12 +6,10 @@ import { TopActionsArea } from '@/components/Revamp/Shared';
 import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { PrimaryIconButton } from '@/components/Buttons';
-import { useGetBranches } from '@/api/general/useBranches';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { SetupCompanyForm } from '@/features/Setup/Company/Forms/SetupCompanyForm';
 import { useGetCurrency } from '@/api/general/useCurrency';
 import { useGetAllStates } from '@/api/general/useGeography';
-import { useGetAllCompany } from '@/api/setup/useCreateCompany';
 
 type Props = {
   userid?: string;
@@ -61,7 +59,6 @@ export const SetupCompany = ({ userid }: Props) => {
           >
             {states !== undefined && currencies !== undefined && (
               <SetupCompanyForm
-                userid={userid}
                 isSubmitting={isSubmitting}
                 setIsSubmitting={setIsSubmitting}
                 currencies={currencies}

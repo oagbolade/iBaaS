@@ -52,6 +52,8 @@ import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
+import { RadioButtons2 } from '@/components/Revamp/Radio/RadioButton2';
 
 type SearchFilters = {
   accountNumber: string | OptionsI[];
@@ -80,7 +82,7 @@ export const ChequeWithdrawal = ({
 
   const { mutate } = useCreateChequeWithdrawal();
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
-  const [selectValue, setSelectValue] = React.useState<boolean>(false);
+  const [selectValue, setSelectValue] = React.useState<any>();
 
   const { nextCounterCheqNo } = useGetCounterCheqNo(accountNumber);
   const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
@@ -128,10 +130,10 @@ export const ChequeWithdrawal = ({
       ...values,
       currencyCode: selectedCurrency,
       cheqNumber:
-        selectValue === true
+        selectValue === '2'
           ? nextCounterCheqNo || ChequeWithdrawalInitialValues.cheqNumber // Bank Cheques → auto number
           : values.cheqNumber, // Counter Cheques → user input
-      action: values.action
+      action: selectValue
     };
     await mutate(getAllValues);
   };
@@ -146,10 +148,9 @@ export const ChequeWithdrawal = ({
     };
   }, [isSubmitting]);
 
-  const handleRadioButton = (value: boolean) => {
+  const handleRadioButton = (value: string) => {
     setSelectValue(value);
   };
-
   const { sysmodel } = useGetSystemDate();
   const systemDate = dayjs(sysmodel?.systemDate || new Date());
 
@@ -176,7 +177,8 @@ export const ChequeWithdrawal = ({
     <Formik
       initialValues={{
         ...ChequeWithdrawalInitialValues,
-        valueDate: sysmodel?.systemDate
+        valueDate: sysmodel?.systemDate,
+        action: ChequeWithdrawalInitialValues.action
       }}
       onSubmit={(values, actions) => onSubmit(values, actions)}
       validationSchema={chequeWithdraw}
@@ -188,14 +190,14 @@ export const ChequeWithdrawal = ({
               <PageTitle title="Cheque Withdrawal" styles={BatchTitle} />
               <Grid container>
                 <Grid item={isTablet} mobile={12}>
-                  <FormikRadioButton
+                  <RadioButtons2
                     options={[
-                      { label: 'Bank Cheques', value: '2' },
-                      { label: 'Counter Cheques', value: '1' }
+                      { label: 'Bank Cheques', value: '1' },
+                      { label: 'Counter Cheques', value: '2' }
                     ]}
                     title="Select In-house Cheque Type"
                     name="action"
-                    value="2"
+                    value={selectValue?.toString()}
                     handleCheck={handleRadioButton}
                   />
                 </Grid>
@@ -233,7 +235,7 @@ export const ChequeWithdrawal = ({
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
-                  {selectValue === true ? (
+                  {selectValue === '2' ? (
                     <FormTextInput
                       name="cheqNumber"
                       placeholder="Enter Cheques Number "

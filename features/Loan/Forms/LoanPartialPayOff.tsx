@@ -49,35 +49,34 @@ export const LoanPartialPayOff = ({
   const { mutate } = usePartialPayOfflLoan();
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const [loanBalance, setLoanBalance] = useState('0');
-  const [newRate, setNewRate] = useState(loanDetails?.intrate);
-  const [newLoanTerm, setNewLoanTerms] = useState(loanDetails?.loanterm);
-  const [totalLoanDays, setTotalLoanDays] = useState(0);
-  const [termFreq, setTermFrequency] = useState(loanDetails?.termfreq);
+  const [newLoanTerm, setNewLoanTerms] = useState(loanDetails?.loanTerm || '0');
+  const [totalLoanDays, setTotalLoanDays] = useState('0');
+
+  const [termFreq, setTermFrequency] = useState('');
+
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [maturityDate, setMaturitDate] = useState<Dayjs | null>(null);
 
-  const calcTotalLoanDays = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const inputValue = Number(e.target.value);
-    setNewLoanTerms(inputValue);
-
+  const calcTotalLoanDays = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void
+  ): void => {
+    const newTerm = e.target.value;
+    setNewLoanTerms(newTerm);
+    setFieldValue('newtenor', newTerm);
     const selectedTermFrequency = frequencyTermsDays.find(
       (term) => term.label === termFreq
     ) || { value: '1' };
-
     const calculatedLoanDaysTotal =
-      inputValue * Number(selectedTermFrequency.value);
-    setTotalLoanDays(calculatedLoanDaysTotal);
+      Number(newTerm) * Number(selectedTermFrequency.value);
+    setTotalLoanDays(String(calculatedLoanDaysTotal));
   };
 
   useEffect(() => {
-    setNewRate(loanDetails?.intrate);
-
-    // Properly convert dates to dayjs objects
     setMaturitDate(loanDetails?.matdate ? dayjs(loanDetails.matdate) : null);
     setStartDate(loanDetails?.startdate ? dayjs(loanDetails.startdate) : null);
-
-    setNewLoanTerms(loanDetails?.loanterm);
-    setTotalLoanDays(loanDetails?.totaldays);
+    setNewLoanTerms(loanDetails?.loanTerm || '0');
+    setTotalLoanDays(loanDetails?.totaldays || '0');
 
     const principal = Number(loanDetails?.principaldue) || 0;
     const interest = Number(loanDetails?.intInterestDue) || 0;
@@ -98,7 +97,7 @@ export const LoanPartialPayOff = ({
 
   const handleDateChange = useCallback(() => {
     if (startDate) {
-      const matDate = dayjs(startDate).add(totalLoanDays, 'day');
+      const matDate = dayjs(startDate).add(Number(totalLoanDays), 'day');
       setMaturitDate(matDate);
     }
   }, [startDate, totalLoanDays]);
@@ -107,14 +106,18 @@ export const LoanPartialPayOff = ({
     handleDateChange();
   }, [startDate, totalLoanDays, handleDateChange]);
 
-  const handleChageTermFrequency = (e: SelectChangeEvent<any>) => {
+  const handleChageTermFrequency = (
+    e: SelectChangeEvent<any>,
+    setFieldValue: (field: string, value: any) => void
+  ) => {
     const selectedTermFrequency = frequencyTermsDays.find(
       (term) => term.label === e.target.value
     ) || { value: '1' };
     setTermFrequency(e.target.value);
+    setFieldValue('freq', e.target.value);
     const calculatedLoanDaysTotal =
-      newLoanTerm * Number(selectedTermFrequency.value);
-    setTotalLoanDays(calculatedLoanDaysTotal);
+      Number(newLoanTerm) * Number(selectedTermFrequency.value);
+    setTotalLoanDays(calculatedLoanDaysTotal.toString());
     if (startDate) {
       const matDate = dayjs(startDate).add(calculatedLoanDaysTotal, 'day');
       setMaturitDate(matDate);
@@ -122,32 +125,20 @@ export const LoanPartialPayOff = ({
   };
 
   const onSubmit = async (values: any) => {
-    const {
-      loanacct,
-      settlementAcct,
-      newrate,
-      totalDays,
-      newtenor,
-      matdate,
-      newprincipal,
-      intoutst,
-      intpayout,
-      startdate,
-      ...restValues
-    } = values;
-
     const data = {
+      ...values,
       loanacct: accountNumber,
       settlementAcct: settlementacct1,
-      newrate: newRate,
       totalDays: totalLoanDays,
       newtenor: newLoanTerm,
-      matdate: maturityDate?.format('YYYY-MM-DD'),
-      startdate: startDate?.format('YYYY-MM-DD'),
+      matdate: maturityDate,
+      startdate: startDate,
       newprincipal: loanDetails?.loanAmount,
       intoutst: loanDetails?.out_Interest,
       penintoutst: loanDetails?.out_penal,
-      ...restValues
+      intpayout: values.intpayout,
+      princpayout: values.princpayout,
+      penintpayout: values.penintpayout
     };
 
     mutate(data);
@@ -164,241 +155,246 @@ export const LoanPartialPayOff = ({
         <Formik
           initialValues={{
             ...setPartialPayOffvalues,
-            startdate: loanDetails?.startdate,
-            totalDays: loanDetails?.totaldays,
-            matdate: loanDetails?.matdate,
-            princpayout: 0.0,
-            intpayout: 0.0,
-            penintpayout: 0.0,
-            princoutst: 0.0,
-            newrate: loanDetails?.intRate,
-            newtenor: loanDetails?.loanTerm,
-            freq: loanDetails?.frequencyName,
 
-            newprincipal: loanDetails?.loanAmount,
+            startdate: loanDetails?.startdate,
+            matdate: loanDetails?.matdate,
+
+            princpayout: 0,
+            intpayout: 0,
+            penintpayout: 0,
+
+            totalDays: loanDetails?.totaldays,
+            newtenor: loanDetails?.loanTerm,
+            freq: termFreq,
+
+            princoutst: loanDetails?.loanAmount,
             intoutst: loanDetails?.out_Interest,
-            penintoutst: loanDetails?.out_penal
+            penintoutst: loanDetails?.out_penal,
+
+            newprincipal: 0
           }}
           onSubmit={(values) => onSubmit(values)}
           validationSchema={partialPayOffSchema}
-          enableReinitialize
         >
-          <Form>
-            <Box mt={4}>
-              <Grid container>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="newrate"
-                    placeholder="3.2"
-                    label="New Rate (%)"
-                    value={newRate}
-                    onChange={(e) => {
-                      setNewRate(e.target.value);
-                    }}
-                    required
-                  />{' '}
-                </Grid>
+          {({ setFieldValue }) => (
+            
+            <Form>
+              <Box mt={4}>
+                <Grid container>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="newrate"
+                      placeholder="3.2"
+                      label="New Rate (%)"
+                      required
+                    />{' '}
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                >
-                  <Grid p={{ mobile: 2, desktop: 0 }} spacing={2} container>
-                    <Grid item={isTablet} mobile={6} tablet={6}>
-                      <FormTextInput
-                        customStyle={{
-                          width: setWidth(isMobile ? '140px' : '100%')
-                        }}
-                        name="newtenor"
-                        placeholder="Enter Loan term"
-                        label="Loan Term"
-                        value={newLoanTerm}
-                        onChange={(e) => calcTotalLoanDays(e)}
-                        required
-                      />{' '}
-                    </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    mr={{ mobile: 35, tablet: 0 }}
+                  >
+                    <Grid p={{ mobile: 2, desktop: 0 }} spacing={2} container>
+                      <Grid item={isTablet} mobile={6} tablet={6}>
+                        <FormTextInput
+                          customStyle={{
+                            width: setWidth(isMobile ? '140px' : '100%')
+                          }}
+                          name="newtenor"
+                          placeholder="Enter Loan term"
+                          label="Loan Term"
+                          value={newLoanTerm}
+                          onChange={(e) => calcTotalLoanDays(e, setFieldValue)}
+                          required
+                        />{' '}
+                      </Grid>
 
-                    <Grid mt={3} item={isTablet} tablet={6} mobile={3}>
-                      <FormSelectField
-                        customStyle={{
-                          width: setWidth(isMobile ? '350px' : '105%'),
-                          fontSize: '14px'
-                        }}
-                        options={frequencyOptions}
-                        name="freq"
-                        value={termFreq}
-                        label=""
-                        onChange={(e) => handleChageTermFrequency(e)}
-                      />{' '}
+                      <Grid mt={3} item={isTablet} tablet={6} mobile={3}>
+                        <FormSelectField
+                          customStyle={{
+                            width: setWidth(isMobile ? '350px' : '105%'),
+                            fontSize: '14px'
+                          }}
+                          options={frequencyOptions}
+                          name="freq"
+                          value={termFreq}
+                          label=""
+                          onChange={(e) =>
+                            handleChageTermFrequency(e, setFieldValue)
+                          }
+                        />{' '}
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: '100%' }}
-                >
-                  <FormikDateTimePicker
-                    label="Start Date"
-                    name="startdate"
-                    value={startDate ?? ''}
-                    handleDateChange={(e: any) => {
-                      setStartDate(e);
-                    }}
-                    required
-                  />
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: '100%' }}
+                  >
+                    <FormikDateTimePicker
+                      label="Start Date"
+                      name="startdate"
+                      value={startDate ?? ''}
+                      handleDateChange={(e: any) => {
+                        setStartDate(e);
+                      }}
+                      required
+                    />
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: '100%' }}
-                >
-                  <FormikDateTimePicker
-                    label="Maturity Date"
-                    name="matdate"
-                    value={maturityDate ?? ''}
-                    disabled
-                    required
-                  />
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: '100%' }}
+                  >
+                    <FormikDateTimePicker
+                      label="Maturity Date"
+                      name="matdate"
+                      value={maturityDate ?? ''}
+                      disabled
+                      required
+                    />
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="totalDays"
-                    placeholder="365"
-                    label="Total Days"
-                    value={String(totalLoanDays)}
-                    disabled
-                  />{' '}
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="totalDays"
+                      placeholder="365"
+                      label="Total Days"
+                      value={totalLoanDays}
+                      disabled
+                    />{' '}
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="newprincipal"
-                    placeholder="33,432,432"
-                    label="Principal Outstanding"
-                    value={loanDetails?.principaldue}
-                    disabled
-                  />{' '}
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="princoutst"
+                      placeholder="33,432,432"
+                      label="Principal Outstanding"
+                      disabled
+                    />{' '}
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="intoutst"
-                    placeholder="32,432"
-                    label="Interest Outstanding"
-                    value={loanDetails?.outStandingInt}
-                    disabled
-                  />{' '}
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="intoutst"
+                      placeholder="32,432"
+                      label="Interest Outstanding"
+                      disabled
+                    />{' '}
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="penintoutst"
-                    placeholder="32,432"
-                    label="Penal Interest Outstanding"
-                    disabled
-                  />{' '}
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="penintoutst"
+                      placeholder="32,432"
+                      label="Penal Interest Outstanding"
+                      disabled
+                    />{' '}
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="princpayout"
-                    placeholder="1,432,532.53"
-                    label="Principal Payout"
-                    required
-                  />{' '}
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="princpayout"
+                      placeholder="1,432,532.53"
+                      label="Principal Payout"
+                      required
+                    />{' '}
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="intpayout"
-                    placeholder="2,532.53"
-                    label="Interest Payout"
-                  />{' '}
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="intpayout"
+                      placeholder="2,532.53"
+                      label="Interest Payout"
+                    />{' '}
+                  </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  width={{ mobile: '100%', tablet: 0 }}
-                >
-                  <FormTextInput
-                    customStyle={{
-                      width: setWidth(isMobile ? '300px' : '100%')
-                    }}
-                    name="penintpayout"
-                    placeholder="2,532.53"
-                    label="Penal Interest Payout"
-                    required
-                  />{' '}
-                </Grid>
+                  <Grid
+                    item={isTablet}
+                    mobile={12}
+                    width={{ mobile: '100%', tablet: 0 }}
+                  >
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '300px' : '100%')
+                      }}
+                      name="penintpayout"
+                      placeholder="2,532.53"
+                      label="Penal Interest Payout"
+                      required
+                    />{' '}
+                  </Grid>
 
-                <Grid item={isTablet} mobile={12}>
-                  {/* <Box>
+                  <Grid item={isTablet} mobile={12}>
+                    {/* <Box>  // Still to be discuss
                     <Details title="Balance After" />
                     <Balance amount={loanBalance} />
                   </Box> */}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
+              </Box>
 
-            <button id="submitButton" type="submit" style={{ display: 'none' }}>
-              submit alias
-            </button>
-          </Form>
+              <button
+                id="submitButton"
+                type="submit"
+                style={{ display: 'none' }}
+              >
+                submit alias
+              </button>
+            </Form>
+          )}
         </Formik>
       </Box>
     </Box>

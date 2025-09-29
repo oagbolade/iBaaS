@@ -202,12 +202,12 @@ async function getProductClassByCategory(
       });
 
     const { message, title, severity } = globalErrorHandler(data);
-    toast(message, title, severity, toastActions);
+    // toast(message, title, severity, toastActions); // This cause error notification
 
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
-    toast(message, title, severity, toastActions);
+    // toast(message, title, severity, toastActions);  // This cause error notification
   }
 
   return result;

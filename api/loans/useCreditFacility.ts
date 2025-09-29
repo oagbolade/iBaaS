@@ -330,6 +330,8 @@ export async function partialPayOffLoan(
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
+    throw errorResponse;
+
   }
 }
 
@@ -448,6 +450,8 @@ export function useDisburseLoan() {
 
   return { mutate, isPending, isError, error };
 }
+
+
 async function getAllLoansProduct(
   toastActions: IToastActions
 ): Promise<AllLoanProductsResponse> {
@@ -785,6 +789,8 @@ async function getLoanAccountByLoanAccountNumber(
 
   return result;
 }
+
+
 export function useGetLoanAccountByLoanAccountNumber(
   loanAccount: string,
   status: string

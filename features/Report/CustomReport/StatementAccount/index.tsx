@@ -81,7 +81,7 @@ export const StatementAccount = () => {
       setExportData?.(rptStatementList?.pagedRecords);
       setReportType('StatementOfAccount');
     }
-  }, [rptStatementList, searchParams, setExportData, setReportType]);
+  }, [rptStatementList, searchParams]);
 
   const handleChange = () => {
     setExpanded(!expanded);

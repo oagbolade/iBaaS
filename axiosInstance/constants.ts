@@ -1,4 +1,4 @@
-export const SEARCH_BASE_URL = 'https://ibaas-search-api.k8.isw.la/api/v1';
+export const SEARCH_BASE_URL = 'https://ibaas-search-api.k9.isw.la/api/v1';
 
 export const REPORT_BASE_URL = 'https://ibaas-revamp-reports.k8.isw.la/api';
 

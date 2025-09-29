@@ -536,7 +536,7 @@ export interface CreateCustomerAccountResponse {
 }
 
 export interface UploadImageResponse {
-  url: string;
+  data: string;
   fileName: string;
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertColor, Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { Formik, Form } from 'formik';
 import dayjs from 'dayjs';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
@@ -19,18 +19,15 @@ import {
 import { createCompanyInitialValues } from '@/schemas/schema-values/setup';
 import { createCompanySchema } from '@/schemas/setup';
 import { IStates } from '@/api/ResponseTypes/customer-service';
-import { encryptData } from '@/utils/encryptData';
 import { PageTitle } from '@/components/Typography';
 import { UploadDocument } from '@/assets/svg';
 import {
   templateTitle,
-  templateUpload,
   templateUploadContainer
 } from '@/features/Operation/Forms/style';
 import { VisuallyHiddenInput } from '@/features/Operation/Forms/BulkUpload';
 import { isImageValid } from '@/utils/isImageValid';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
-import { toast } from '@/utils/toast';
 import {
   fileDetailsContainer,
   fileName,
@@ -39,12 +36,10 @@ import {
   removeButton
 } from '@/features/Signup/styles';
 import { formatFileSize } from '@/utils/formatFileSize';
-import { convertImageToBase64 } from '@/utils/convertImageToBase64';
 import { useUploadBankLogo } from '@/api/customer-service/useCustomer';
 
 type Props = {
   isSubmitting: boolean;
-  userid?: string | null;
   currencies: ICurrency[] | Array<any>;
   states: IStates[] | Array<any>;
   setIsSubmitting: (submit: boolean) => void;
@@ -53,7 +48,6 @@ type Props = {
 export const SetupCompanyForm = ({
   isSubmitting,
   setIsSubmitting,
-  userid,
   currencies,
   states
 }: Props) => {
@@ -67,10 +61,8 @@ export const SetupCompanyForm = ({
   const bankCode = bank?.bankCode || '';
   const { mutate } = useCreateCompany(bankCode);
   const toastActions = React.useContext(ToastMessageContext);
-
- const [uploadedPhotoUrl, setUploadedPhotoUrl] = React.useState<string | null>(null);
   const [currentPhoto, setCurrentPhoto] = React.useState<File | null>(null);
-  const [base64Photo, setBase64Photo] = React.useState<string | null>(null);
+  const {mutate: uploadBankLogo, data, isPending} = useUploadBankLogo();
 
   const onSubmit = async (values: any) => {
     const formattedLastFinancialyearDate = dayjs(
@@ -86,28 +78,14 @@ export const SetupCompanyForm = ({
     const authtype = Number(permissionOptions[0]?.value) || 0;
     const statement = Number(permissionOptions[1]?.value) || 0;
     const globalAuth = Number(permissionOptions[2]?.value) || 0;
-
-    if (!uploadedPhotoUrl) {
-      const message = {
-        message: 'Please upload the new bank photo',
-        title: 'Upload required Bank Photo',
-        severity: 'error'
-      };
-      toast(
-        message.message,
-        message.title,
-        message.severity as AlertColor,
-        toastActions
-      );
-      return;
-    }
+    const uploadedImage = data?.data || '';
 
     await mutate({
       ...values,
       authtype,
       statement,
       globalAuth,
-      bankLogo: uploadedPhotoUrl,
+      bankLogo: uploadedImage,
       last_financialyear: formattedLastFinancialyearDate,
       next_financialyear: formattedNextFinancialyearDate
     });
@@ -122,35 +100,18 @@ export const SetupCompanyForm = ({
     const fileFromEvent = event.target.files?.[0];
     if (!fileFromEvent) return;
     if (!isImageValid(fileFromEvent, toastActions)) return;
-
-    if (imageType === "photo") {
-    setCurrentPhoto(fileFromEvent);
-
-    try {
-      const base64 = await convertImageToBase64(fileFromEvent);
-      setBase64Photo(base64);
-
-      const uploadedImage = await useUploadBankLogo(toastActions, fileFromEvent);
-
-      if (uploadedImage?.url) {
-        setUploadedPhotoUrl(uploadedImage.url); 
-      } else {
-        toast("Failed to upload photo", "Error", "error", toastActions);
-      }
-    } catch (error) {
-      toast("Failed to process or upload image", "Error", "error", toastActions);
+    
+    if (imageType === 'photo') {
+      setCurrentPhoto(fileFromEvent);
+      uploadBankLogo(fileFromEvent);
     }
-  }
   };
 
   const removeUpload = (uploadType: ImageType) => {
     if (uploadType === 'photo') {
       setCurrentPhoto(null);
-      setBase64Photo(null);
     }
   };
-
-
 
   React.useEffect(() => {
     const submit = document.getElementById('submitButton');
@@ -168,15 +129,15 @@ export const SetupCompanyForm = ({
 
   const initialValues = bank
     ? {
-        ...createCompanyInitialValues,
-        ...bank,
-        last_financialyear: bank.last_financialyear
-          ? dayjs(bank.last_financialyear)
-          : null,
-        next_financialyear: bank.next_financialyear
-          ? dayjs(bank.next_financialyear)
-          : null
-      }
+      ...createCompanyInitialValues,
+      ...bank,
+      last_financialyear: bank.last_financialyear
+        ? dayjs(bank.last_financialyear)
+        : null,
+      next_financialyear: bank.next_financialyear
+        ? dayjs(bank.next_financialyear)
+        : null
+    }
     : createCompanyInitialValues;
 
   return (
@@ -221,7 +182,7 @@ export const SetupCompanyForm = ({
                       <Button component="label" startIcon={<UploadDocument />}>
                         <VisuallyHiddenInput
                           type="file"
-                             onChange={(e) => handleImageUpload(e, "photo")}
+                          onChange={(e) => handleImageUpload(e, 'photo')}
                         />
                       </Button>
                       <PageTitle title="Tap here to upload your document" />
@@ -235,7 +196,7 @@ export const SetupCompanyForm = ({
                     {currentPhoto && (
                       <Box sx={fileDetailsContainer}>
                         <Typography sx={fileName}>
-                          {currentPhoto?.name}
+                          {isPending ? 'Uploading please wait...' : `${currentPhoto?.name}`} 
                         </Typography>
                         <Box sx={removeAndSizeContainer}>
                           <Typography sx={fileSize}>
