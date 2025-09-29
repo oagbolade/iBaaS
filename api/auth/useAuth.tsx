@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import axiosRetry from 'axios-retry';
 import { AlertColor } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useUser } from './useUser';
@@ -35,6 +36,15 @@ interface ErrorResponseData {
   message?: string;
   responseCode?: string;
 }
+
+axiosRetry(axiosInstance, {
+  retries: 2, 
+  retryDelay: (retryCount) => retryCount * 1000, 
+  retryCondition: (error) => {
+    return axiosRetry.isNetworkOrIdempotentRequestError(error);
+  },
+});
+
 
 export function useAuth(): UseAuth {
   const router = useRouter();
