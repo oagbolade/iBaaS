@@ -93,6 +93,7 @@ export const ActionButtonWithPopper = ({
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [openDatePicker, setOpenDatePicker] = React.useState(false);
 
   const handleMenuItemClick = (
     event:
@@ -171,7 +172,7 @@ export const ActionButtonWithPopper = ({
         />
       ),
       Default: (
-        <ClickAwayListener onClickAway={handleClose}>
+       
           <Paper sx={{ width: 240, maxWidth: '100%' }}>
             <MenuList id="split-button-menu" autoFocusItem>
               {options?.map((option, index) => {
@@ -191,7 +192,7 @@ export const ActionButtonWithPopper = ({
               })}
             </MenuList>
           </Paper>
-        </ClickAwayListener>
+     
       )
     };
 

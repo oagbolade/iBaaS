@@ -3,7 +3,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import styled from 'styled-components';
 import { DateCalendar } from '@mui/x-date-pickers';
-import { Box } from '@mui/material';
+import { Box, ClickAwayListener } from '@mui/material';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { PrimaryIconButton } from '@/components/Buttons';
 
@@ -41,7 +41,8 @@ export function DateRangePicker({ handleClose, CustomDateRangePicker }: Props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <StyledDateRangeCalendar>
+       <ClickAwayListener onClickAway={handleClose}>
+      <StyledDateRangeCalendar >
         {CustomDateRangePicker || (
           <Box sx={{ display: 'flex' }}>
             <DateCalendar
@@ -66,6 +67,7 @@ export function DateRangePicker({ handleClose, CustomDateRangePicker }: Props) {
           onClick={confirmAndClose}
         />
       </StyledDateRangeCalendar>
+      </ClickAwayListener>
     </LocalizationProvider>
   );
 }

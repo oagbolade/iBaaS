@@ -164,7 +164,7 @@ export const ExportData = ({ handleClose }: Props) => {
             width: { mobile: '400px', desktop: '352px' }
           }}
           buttonTitle={loading ? 'Preparing Export...' : 'Export Report'}
-          disabled={!exportData || exportData?.length === 0 || !reportType || !reportQueryParams}
+          disabled={!exportData || exportData?.length === 0}
         />
       </Box>
     </ClickAwayListener>
