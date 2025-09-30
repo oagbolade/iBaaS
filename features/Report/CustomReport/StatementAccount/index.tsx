@@ -79,9 +79,10 @@ export const StatementAccount = () => {
   useEffect(() => {
     if (rptStatementList && rptStatementList?.pagedRecords.length > 0) {
       setExportData?.(rptStatementList?.pagedRecords);
-      setReportType('StatementOfAccount');
+      const isTD = productCode && ['TD', 'FD'].some(code => productCode.includes(code));
+      setReportType(isTD ? 'StatementOfAccountTD' : 'StatementOfAccountCASA');
     }
-  }, [rptStatementList, searchParams]);
+  }, [rptStatementList, searchParams, productCode, accountNumber, accDetailsResults]);
 
   const handleChange = () => {
     setExpanded(!expanded);

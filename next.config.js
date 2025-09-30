@@ -7,7 +7,7 @@ const nextConfig = {
   // basePath: domain,
   // assetPrefix: domain,
   output: 'export', // Use for deployment
-  // images: { unoptimized: true }, // remove when deploying, we want to optimise images in production
+  images: { unoptimized: true }, // remove when deploying, we want to optimise images in production
   env: {
     DOMAIN: domain
   },
