@@ -37,6 +37,8 @@ export const FilterSection = ({ onSearch }: Props) => {
     onSearch?.(params);
   };
 
+
+
   return (
     <Formik
       initialValues={searchFilterInitialValues}
@@ -85,7 +87,11 @@ export const FilterSection = ({ onSearch }: Props) => {
                   />
                 }
                 iconPosition="end"
-                buttonTitle="Aug 22 - Sep 23"
+                 buttonTitle={
+          dateValue?.[0] && dateValue?.[1]
+            ? `${dateValue[0].format('MMM DD, YYYY')} - ${dateValue[1].format('MMM DD, YYYY')}`
+            : 'Select Date Range'
+        }
               />
             </Box>
           </Stack>

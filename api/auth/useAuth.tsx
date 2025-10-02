@@ -37,12 +37,18 @@ interface ErrorResponseData {
   responseCode?: string;
 }
 
+const isUnauthorizedError = (error: any): boolean => {
+  const httpStatus = error?.response?.status;
+  const responseCode = error?.response?.data?.responseCode;
+  return httpStatus === 401 || responseCode === statusCodes.UNAUTHORIZED;
+};
+
+
 axiosRetry(axiosInstance, {
-  retries: 2, 
-  retryDelay: (retryCount) => retryCount * 1000, 
-  retryCondition: (error) => {
-    return axiosRetry.isNetworkOrIdempotentRequestError(error);
-  },
+  retries: 2,
+  retryDelay: axiosRetry.exponentialDelay, 
+  retryCondition: (error) =>
+    axiosRetry.isNetworkOrIdempotentRequestError(error) || isUnauthorizedError(error),
 });
 
 
@@ -146,13 +152,19 @@ export function useAuth(): UseAuth {
     password: string,
     onFirstTimeUser?: () => void
   ): Promise<void> {
-    authServerCall(
+    try {
+      await 
+       authServerCall(
       '/login/login',
       companyCode,
       username,
       password,
       onFirstTimeUser
     );
+    } catch (error) {
+      console.error("Login failed after retries:", error);
+      throw error;
+    }
   }
 
   async function signup(

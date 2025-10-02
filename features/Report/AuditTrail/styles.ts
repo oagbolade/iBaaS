@@ -42,5 +42,6 @@ export const exportData = {
 
 export const dateFilter = {
   ...exportData,
-  width: { mobile: '290px', desktop: '197px' }
+  width: { mobile: '290px', desktop: '250px' },
+  fontSize: '0.9rem',
 };
