@@ -53,7 +53,6 @@ export const LoanPartialPayOff = ({
   const [totalLoanDays, setTotalLoanDays] = useState('0');
 
   const [termFreq, setTermFrequency] = useState('');
-
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [maturityDate, setMaturitDate] = useState<Dayjs | null>(null);
 
@@ -133,12 +132,15 @@ export const LoanPartialPayOff = ({
       newtenor: newLoanTerm,
       matdate: maturityDate,
       startdate: startDate,
-      newprincipal: loanDetails?.loanAmount,
+
+      princoutst: loanDetails?.loanAmount,
       intoutst: loanDetails?.out_Interest,
       penintoutst: loanDetails?.out_penal,
+
       intpayout: values.intpayout,
       princpayout: values.princpayout,
-      penintpayout: values.penintpayout
+      penintpayout: values.penintpayout,
+      newprincipal: (loanDetails?.loanAmount || 0) - (values.princpayout || 0)
     };
 
     mutate(data);
@@ -169,15 +171,12 @@ export const LoanPartialPayOff = ({
 
             princoutst: loanDetails?.loanAmount,
             intoutst: loanDetails?.out_Interest,
-            penintoutst: loanDetails?.out_penal,
-
-            newprincipal: 0
+            penintoutst: loanDetails?.out_penal
           }}
           onSubmit={(values) => onSubmit(values)}
           validationSchema={partialPayOffSchema}
         >
           {({ setFieldValue }) => (
-            
             <Form>
               <Box mt={4}>
                 <Grid container>
@@ -294,6 +293,7 @@ export const LoanPartialPayOff = ({
                       name="princoutst"
                       placeholder="33,432,432"
                       label="Principal Outstanding"
+                      value={loanDetails?.loanAmount}
                       disabled
                     />{' '}
                   </Grid>
@@ -310,6 +310,7 @@ export const LoanPartialPayOff = ({
                       name="intoutst"
                       placeholder="32,432"
                       label="Interest Outstanding"
+                      value={loanDetails?.out_Interest}
                       disabled
                     />{' '}
                   </Grid>
@@ -326,6 +327,7 @@ export const LoanPartialPayOff = ({
                       name="penintoutst"
                       placeholder="32,432"
                       label="Penal Interest Outstanding"
+                      value={loanDetails?.out_penal}
                       disabled
                     />{' '}
                   </Grid>

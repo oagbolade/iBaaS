@@ -118,20 +118,30 @@ export const loanOverDraftSchema = Yup.object({
 export const partialPayOffSchema = Yup.object({
   princpayout: Yup.string().matches(stringRegex).required('Required'),
   intpayout: Yup.string().matches(stringRegex).required('Required'),
-  penintpayout: Yup.string().matches (stringRegex).required('Required'),
+  penintpayout: Yup.string().matches(stringRegex).required('Required'),
   newrate: Yup.string().matches(stringRegex).required('Required'),
-  freq: Yup.string().matches(stringRegex).required('Required'),
+  freq: Yup.string().matches(stringRegex).required('Required')
 });
 
 export const restructuredLoanSchema = Yup.object({
   PenalWriteOff_GL: Yup.string()
-    .matches(stringRegex, 'Invalid')
+    .matches(stringRegex, 'Enter Gl Account')
     .required('Required'),
   InterestWriteOff_GL: Yup.string()
-    .matches(stringRegex, 'Invalid')
+    .matches(stringRegex, 'Enter Gl Account')
     .required('Required'),
   PrincipalWriteOff_GL: Yup.string()
-    .matches(stringRegex, 'Invalid')
+    .matches(stringRegex, 'Enter GL Account')
+    .required('Required'),
+  amt_To_Liquidate: Yup.string()
+    .matches(stringRegex, 'Enter Amount')
+    .required('Required'),
+
+  source: Yup.string()
+    .matches(stringRegex, 'Enter loan source')
+    .required('Required'),
+  newPrincipal: Yup.string()
+    .matches(stringRegex, 'Enter loan source')
     .required('Required')
 });
 

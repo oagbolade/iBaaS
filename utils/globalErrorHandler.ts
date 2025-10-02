@@ -28,6 +28,7 @@ const ERROR_CODES = [
   '153',
   '409'
 ];
+
 export const SUCCESS_CODES = [0, '0', '00', '20', 200];
 
 export const globalErrorHandler = (

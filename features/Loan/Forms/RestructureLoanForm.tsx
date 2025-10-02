@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
-import dayjs from 'dayjs';
-import { InterestSection } from './InterestSection';
+import dayjs, { Dayjs } from 'dayjs';
 import { ContainerStyle } from './styles';
 import { LargeTitle } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
 import {
@@ -12,7 +11,11 @@ import {
   FormikDateTimePicker,
   FormikRadioButton
 } from '@/components/FormikFields';
-import { useCurrentBreakpoint, frequencyOptions } from '@/utils';
+import {
+  useCurrentBreakpoint,
+  frequencyOptions,
+  frequencyTermsDays
+} from '@/utils';
 import { restructuredLoanSchema } from '@/schemas/loan/index';
 import {
   SetRestructureLoanValues,
@@ -21,6 +24,7 @@ import {
 import { useRestructureLoan } from '@/api/loans/useCreditFacility';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { getStoredUser } from '@/utils/user-storage';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
 
 const ACTION_OPTIONS = [
   { label: 'Add', value: '1' },
@@ -54,6 +58,24 @@ export const RestructureLoanForm = ({
   branchCode: string;
 }) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
+  const { sysmodel } = useGetSystemDate();
+  const [loanTerm, setLoanTerm] = useState<string>('');
+
+  const [maturityDate, setMaturitDate] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
+  const [firstpayCycle, setFirstPayCycle] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
+  const [termFreq, setTermFrequency] = useState<string>('');
+  const [startDate, setStartDate] = useState<Dayjs>(
+    dayjs(sysmodel?.systemDate)
+  );
+
+  const [getCalcDays, setGetCalcDays] = useState<number>(0);
+  const [getFirstPayCycle, setGetFirstPayCycle] = useState<number>(0);
+  const [postDate, setPostDate] = useState<Dayjs>(dayjs(sysmodel?.systemDate));
+
   const { mutate } = useRestructureLoan();
   const { mappedLoanRepayment, mappedLoansources, mappedLoanCollateral } =
     useMapSelectOptions({
@@ -67,12 +89,47 @@ export const RestructureLoanForm = ({
     ? user.menuItems.find((resp: any) => resp.menu_id === 57)
     : null;
 
+  const handleDateChange = useCallback(() => {
+    if (startDate) {
+      const matDate = dayjs(startDate).add(getCalcDays, 'day');
+      const calfirstpayCycle = dayjs(startDate).add(getFirstPayCycle, 'day');
+      setMaturitDate(matDate);
+      setFirstPayCycle(calfirstpayCycle);
+    }
+  }, [getCalcDays, startDate, getFirstPayCycle]);
+
+  // Calculate number of days for loan
+  const calNumberOfDays = useCallback(() => {
+    const selectedTermFrequency = frequencyTermsDays.find(
+      (term) => term.label === termFreq
+    );
+    const calcLoanDays =
+      Number(loanTerm) * Number(selectedTermFrequency?.value);
+    const calccFirstPayCycle = Number(selectedTermFrequency?.value);
+    setGetCalcDays(calcLoanDays);
+    setGetFirstPayCycle(calccFirstPayCycle);
+    handleDateChange();
+  }, [termFreq, loanTerm, handleDateChange]);
+
+  useEffect(() => {
+    if (termFreq || loanTerm) {
+      calNumberOfDays();
+      handleDateChange();
+    }
+  }, [termFreq, calNumberOfDays, handleDateChange, loanTerm]);
+
+  useEffect(() => {
+    if (startDate) {
+      handleDateChange();
+    }
+  }, [startDate, handleDateChange]);
+
   const onSubmit = async (values: any) => {
     const data = {
       ...values,
       customerid: customerID,
-      prodcode: productCode, // loanDetails.productcode,
-      branchcode: branchCode, //  loanDetails?.branchCode,
+      prodcode: productCode,
+      branchcode: branchCode,
       menuId: String(userLoanMenuid?.menu_id)
     };
     mutate(data);
@@ -117,7 +174,7 @@ export const RestructureLoanForm = ({
             loanAccno: accountNumber,
             settlementAccno: settlementAccount,
             prodcode: loanDetails.productName,
-            source: loanDetails?.loanSourceName,
+            source: '',
             newPrincipal: '',
             amt_To_Liquidate: '',
             interestRate: loanDetails.intRate,
@@ -227,7 +284,7 @@ export const RestructureLoanForm = ({
                         options={ACTION_OPTIONS}
                         title="Actions"
                         name="principalWriteOff_Type"
-                        value="0"
+                        value="1"
                       />
                     </Grid>
 
@@ -265,7 +322,7 @@ export const RestructureLoanForm = ({
                         options={ACTION_OPTIONS}
                         title="Actions"
                         name="interestlWriteOff_Type"
-                        value="0"
+                        value="1"
                       />
                     </Grid>
 
@@ -303,7 +360,7 @@ export const RestructureLoanForm = ({
                         options={ACTION_OPTIONS}
                         title="Actions"
                         name="penalWriteOff_Type"
-                        value="0"
+                        value="1"
                       />
                     </Grid>
 
@@ -377,6 +434,7 @@ export const RestructureLoanForm = ({
                         placeholder="Enter Loan term"
                         label="Loan Term"
                         required
+                        onChange={(e) => setLoanTerm(e.target.value)}
                       />{' '}
                     </Grid>
 
@@ -388,6 +446,7 @@ export const RestructureLoanForm = ({
                         }}
                         options={frequencyOptions}
                         name="termFreq"
+                        onChange={(e) => setTermFrequency(e.target.value)}
                         label=""
                       />{' '}
                     </Grid>
@@ -424,7 +483,16 @@ export const RestructureLoanForm = ({
                   mb={2}
                   width={{ mobile: '560px' }}
                 >
-                  <FormikDateTimePicker label="Posting Date" name="postdate" />
+                  <FormikDateTimePicker
+                    value={postDate}
+                    minDate={dayjs(sysmodel?.systemDate).startOf('month')}
+                    maxDate={dayjs(sysmodel?.systemDate)}
+                    handleDateChange={(e: any) => {
+                      setPostDate(e);
+                    }}
+                    label="Posting Date"
+                    name="postdate"
+                  />
                 </Grid>
 
                 <Grid item={isTablet} mobile={12}>
@@ -458,7 +526,16 @@ export const RestructureLoanForm = ({
                   mb={2}
                   width={{ mobile: '560px' }}
                 >
-                  <FormikDateTimePicker label="Start Date" name="startdate" />
+                  <FormikDateTimePicker
+                    label="Start Date"
+                    name="startdate"
+                    value={startDate}
+                    minDate={dayjs(sysmodel?.systemDate).startOf('month')}
+                    maxDate={dayjs(sysmodel?.systemDate)}
+                    handleDateChange={(e: any) => {
+                      setStartDate(e);
+                    }}
+                  />
                 </Grid>
 
                 <Grid
@@ -479,7 +556,12 @@ export const RestructureLoanForm = ({
                   mb={2}
                   width={{ mobile: '560px' }}
                 >
-                  <FormikDateTimePicker label="Maturity Date" name="matdate" />
+                  <FormikDateTimePicker
+                    label="Maturity Date"
+                    name="matdate"
+                    disabled
+                    value={maturityDate}
+                  />
                 </Grid>
 
                 <Grid
@@ -491,6 +573,8 @@ export const RestructureLoanForm = ({
                   <FormikDateTimePicker
                     label="First Payment Date"
                     name="firstdate"
+                    disabled
+                    value={firstpayCycle}
                   />
                 </Grid>
 

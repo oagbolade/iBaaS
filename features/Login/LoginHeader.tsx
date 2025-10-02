@@ -12,7 +12,7 @@ export const LoginHeader = () => {
         height: '72px'
       }}
     >
-      <Typography sx={mainTitle}>Log In</Typography>
+      <Typography sx={mainTitle}>Log In {process.env.NEXT_PUBLIC_TEST_DISPLAY}</Typography>
       <Typography sx={subTitle}>Log in to access dashboard</Typography>
     </Box>
   );

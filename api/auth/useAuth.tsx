@@ -37,20 +37,12 @@ interface ErrorResponseData {
   responseCode?: string;
 }
 
-const isUnauthorizedError = (error: any): boolean => {
-  const httpStatus = error?.response?.status;
-  const responseCode = error?.response?.data?.responseCode;
-  return httpStatus === 401 || responseCode === statusCodes.UNAUTHORIZED;
-};
-
-
 axiosRetry(axiosInstance, {
   retries: 2,
   retryDelay: axiosRetry.exponentialDelay, 
   retryCondition: (error) =>
-    axiosRetry.isNetworkOrIdempotentRequestError(error) || isUnauthorizedError(error),
+    axiosRetry.isNetworkOrIdempotentRequestError(error),
 });
-
 
 export function useAuth(): UseAuth {
   const router = useRouter();
