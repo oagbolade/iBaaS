@@ -74,6 +74,9 @@ export function useAuth(): UseAuth {
         headers: { 'Content-Type': 'application/json' }
       });
 
+      // Debug log. Do not remove ⚠️
+      console.log('Login response data:', data); 
+      
       if (data.responseCode === statusCodes.UNAUTHORIZED) {
         setLoading(false);
         const message = data.responseDescription || 'Unauthorized';
