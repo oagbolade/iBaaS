@@ -25,11 +25,11 @@ export const TopOverViewSection = ({
 }: Props) => {
   const { dateValue } = React.useContext(DateRangePickerContext);
 
-  const formattedDateRange = useMemo(() => {
-    const startMonthAndDay = `${dateValue?.[0]?.format('MMM') ?? ''} ${dateValue?.[0]?.format('DD') ?? ''}`;
-    const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
+    const formattedDateRange = useMemo(() => {
+    const startMonthDayYear = `${dateValue?.[0]?.format('MMM DD, YYYY') ?? ''}`;
+    const endMonthDayYear = `${dateValue?.[1]?.format('MMM DD, YYYY') ?? ''}`;
 
-    return `${startMonthAndDay} - ${endMonthAndDay}`;
+    return `${startMonthDayYear} - ${endMonthDayYear}`;
   }, [dateValue]);
 
   const { setDirection } = useSetDirection();

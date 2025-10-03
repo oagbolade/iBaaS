@@ -107,6 +107,7 @@ export const AccountEnquiry = () => {
   useEffect(() => {
     if (accountEnquiryData.length > 0) {
       setExportData(accountEnquiryData);
+      setReportType('AccountEnquiry');
     }
   }, [accountEnquiryData, setExportData]);
 
