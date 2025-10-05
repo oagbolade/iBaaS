@@ -36,11 +36,11 @@ export const exportData = {
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
   backgroundColor: `${colors.white}`,
-  fontSize: '16px',
+  fontSize: '15px',
   fontWeight: 600
 };
 
 export const dateFilter = {
   ...exportData,
-  width: { mobile: '290px', desktop: '197px' }
+  width: { mobile: '290px', desktop: '260px' }
 };

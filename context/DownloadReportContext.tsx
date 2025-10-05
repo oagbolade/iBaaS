@@ -3,11 +3,13 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
+  useEffect,
   useMemo,
   useState
 } from 'react';
 // eslint-disable-next-line import/no-cycle
 import { ReportType } from '@/constants/downloadReport';
+import { usePathname } from 'next/navigation';
 
 export interface IReportQueryParams {
   branchCode?: null;
@@ -57,6 +59,12 @@ export default function DownloadReportContextProvider({ children }: any) {
     useState<IReportQueryParams>({});
   const [reportDescription, setReportDescription] = useState<string>('');
   const [readyDownload, setReadyDownload] = useState<boolean>(false);
+
+   const pathname = usePathname();
+    useEffect(() => {
+    setExportData([]);
+    setReadyDownload(false);
+  }, [pathname]);
 
   const value: DownloadReportContextType = useMemo(() => {
     return {
