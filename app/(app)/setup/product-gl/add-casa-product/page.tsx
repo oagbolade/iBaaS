@@ -1,5 +1,4 @@
 'use client';
-import dynamic from 'next/dynamic';
 import React from 'react';
 import { encryptData } from '@/utils/encryptData';
 import { useGetParams } from '@/utils/hooks/useGetParams';
