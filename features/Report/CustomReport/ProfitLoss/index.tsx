@@ -52,6 +52,15 @@ export const ProfitLoss = () => {
       getAll: readyDownload
     });
 
+  const { data: downloadData = []} =
+    useGetProfitAndLossGroup({
+      ...searchParams,
+      branchID,
+      pageSize: '20',
+      pageNumber: String(page),
+      getAll: true
+    });
+
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
@@ -62,8 +71,8 @@ export const ProfitLoss = () => {
   }, [readyDownload]);
 
   React.useEffect(() => {
-    if (data?.length > 0 && readyDownload) {
-      const formattedExportData = data.flatMap((group) =>
+    if (downloadData?.length > 0 && readyDownload) {
+      const formattedExportData = downloadData.flatMap((group) =>
         group.groupItem.map((item) => ({
           'Group Name': group.groupName || '',
           Balance: item.balance || 0,
@@ -74,7 +83,7 @@ export const ProfitLoss = () => {
       setExportData(formattedExportData || []);
       setReportType('ProfitAndLoss');
     }
-  }, [data, readyDownload, setExportData, setReportType, setReadyDownload]);
+  }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
     setReadyDownload(true);

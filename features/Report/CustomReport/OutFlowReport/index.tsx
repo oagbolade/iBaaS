@@ -56,10 +56,21 @@ export const InflowOutflowReport = () => {
     getAll: isDateFilterApplied
   });
 
-  React.useEffect(() => {
-    if (!inflowOutflowList.length) return;
+  const {
+    inflowOutflowList: downloadData = [],
+  } = useGetInflowOutflowReport({
+    ...searchParams,
+    branchId,
+    tellerId,
+    pageSize: 10,
+    pageNumber: page,
+    getAll: true
+  });
 
-    const formattedExportData = inflowOutflowList.map((item) => ({
+  React.useEffect(() => {
+    if (!downloadData.length) return;
+
+    const formattedExportData = downloadData.map((item) => ({
       'Account Number': item.accountnumber || '',
       'Account Name': item.accounttitle || '',
       'Product Code': item.productcode || '',
@@ -71,7 +82,7 @@ export const InflowOutflowReport = () => {
 
     setExportData(formattedExportData);
     setReportType('InflowOutflow');
-  }, [inflowOutflowList]);
+  }, [downloadData]);
 
   const handleSearch = (params: IInflowOutflowParams | null) => {
     setSearchParams({

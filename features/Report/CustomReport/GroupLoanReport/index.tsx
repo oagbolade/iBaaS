@@ -31,6 +31,14 @@ export const GroupLoanReport = () => {
     ...searchParams,
     page
   });
+
+  const {
+    groupLoanReportList: downloadData = [],
+  } = useGetGroupLoan({
+    ...searchParams,
+    page,
+    getAll: true
+  });
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
     setSearchParams(params);
@@ -66,7 +74,7 @@ export const GroupLoanReport = () => {
                   totalRow: ['Total Amount', '', '₦104,200.65', '₦104,200.65']
                 }}
                 columns={COLUMN}
-                data={groupLoanReportList}
+                data={downloadData}
                 hideFilterSection
                 keys={['groupid', 'groupname', 'loanamount', 'currentbalance']}
                 showHeader={{

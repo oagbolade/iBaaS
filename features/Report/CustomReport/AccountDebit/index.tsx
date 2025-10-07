@@ -46,8 +46,16 @@ export const AccountDebit = () => {
       getAll: isDateFilterApplied
     });
 
+  const { accountsinDebitList: downloadData = [] } =
+    useGetAccountInDebit({
+      ...searchParams,
+      pageSize: '10',
+      pageNumber: String(page),
+      getAll: true
+    });
+
   const rowsPerPage = 10;
-  const totalElements = accountsinDebitList.length;
+  const totalElements = downloadData.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
   const handleSearch = (params: ISearchParams | null) => {
@@ -63,10 +71,10 @@ export const AccountDebit = () => {
 
   // Set export data when accountEnquiryData is retrieved
   useEffect(() => {
-    if (accountsinDebitList?.length > 0) {
-      setExportData(accountsinDebitList);
+    if (downloadData?.length > 0) {
+      setExportData(downloadData);
     }
-  }, [accountsinDebitList]);
+  }, [downloadData]);
 
   if (isLoadingAccountInDebit || isLoadingBranches) {
     return (

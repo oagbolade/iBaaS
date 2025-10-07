@@ -53,6 +53,13 @@ export const DrillDown = () => {
       pageNumber: String(page)
     });
 
+  const { glMainGroupRptList: downloadData } =
+    useGetGlMainGroupReport({
+      ...searchParams,
+      pageNumber: String(page),
+      getAll: true
+    });
+
   const handleSearch = (params: ISearchParams | null) => {
     setSearchActive(true);
     setReadyDownload(false);
@@ -62,8 +69,8 @@ export const DrillDown = () => {
 
   React.useEffect(() => {
     setReportType('GLMainGroupReport');
-    if (readyDownload && glMainGroupRptList?.pagedMainGroupReports.length > 0) {
-      const reportData = glMainGroupRptList?.pagedMainGroupReports.map(
+    if (readyDownload && downloadData?.pagedMainGroupReports.length > 0) {
+      const reportData = downloadData?.pagedMainGroupReports.map(
         (item) => ({
           GlName: item.gl_NodeName,
           GlCode: item.gL_NodeCode,
@@ -73,11 +80,7 @@ export const DrillDown = () => {
       setExportData(reportData as []);
     }
   }, [
-    isLoading,
-    readyDownload,
-    setExportData,
-    glMainGroupRptList,
-    setReportType
+    downloadData,
   ]);
 
   return (

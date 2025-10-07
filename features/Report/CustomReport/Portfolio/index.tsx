@@ -26,20 +26,28 @@ export const PortfolioAtRisk = () => {
     pageSize
   });
 
+  const { portfolioatRiskList: downloadData = []} = useGetAllPortfolioAtRisk({
+    pageNumber,
+    pageSize,
+    getAll: true
+  });
+
+  
+
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
 
-  const filteredPortfolioAtRiskList = portfolioatRiskList.filter(
+  const filteredPortfolioAtRiskList = downloadData.filter(
     (product: IPortfolioAtRiskProduct) =>
       product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.productCode.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   React.useEffect(() => {
-    setExportData(portfolioatRiskList as []);
+    setExportData(downloadData as []);
     setReportType('PortfolioAtRiskProductList');
-  }, [portfolioatRiskList, setExportData, setReportType]);
+  }, [downloadData]);
 
   if (isLoading) {
     return (

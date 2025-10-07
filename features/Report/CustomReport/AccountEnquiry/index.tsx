@@ -56,8 +56,17 @@ export const AccountEnquiry = () => {
       page,
     });
 
+  const { data: downloadData = []} =
+    useGetAccountEnquiryByBranchId({
+      ...searchParams,
+      getAll: true,
+      page,
+    });
+
+ 
+
   const rowsPerPage = 10;
-  const totalElements = accountEnquiryData.length;
+  const totalElements = downloadData.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
   const handleSearch = (params: ISearchParams | null) => {
@@ -105,11 +114,11 @@ export const AccountEnquiry = () => {
 
   // Set export data when accountEnquiryData is retrieved
   useEffect(() => {
-    if (accountEnquiryData.length > 0) {
-      setExportData(accountEnquiryData);
+    if (downloadData.length > 0) {
+      setExportData(downloadData);
       setReportType('AccountEnquiry');
     }
-  }, [accountEnquiryData, setExportData]);
+  }, [downloadData]);
 
   return (
     <Box sx={{ marginTop: '60px', width: '100%' }}>

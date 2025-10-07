@@ -62,11 +62,24 @@ export const CustomerBalances = () => {
   });
 
   const {
+    customerBalanceList: downloadData = {
+      pagedCustomerBalances: [],
+      grandTotal: 0,
+      totalAvaiBal: 0,
+      totalBkBal: 0
+    },
+  }: CustomerBalanceList = useGetCustomerBalance({
+    ...searchParams,
+    getAll: true,
+    page
+  });
+
+  const {
     pagedCustomerBalances = [],
     grandTotal = 0,
     totalAvaiBal = 0,
     totalBkBal = 0
-  } = customerBalanceList || [];
+  } = downloadData || [];
 
   React.useEffect(() => {
     if (readyDownload) {
