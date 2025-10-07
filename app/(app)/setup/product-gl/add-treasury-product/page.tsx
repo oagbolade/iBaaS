@@ -1,8 +1,12 @@
 'use client';
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { encryptData } from '@/utils/encryptData';
 import { useGetParams } from '@/utils/hooks/useGetParams';
-import { AddTreasuryProduct } from '@/features/Setup/ProductAndGL/AddTreasuryProduct';
+
+const AddTreasuryProduct = dynamic(() => import('@/features/Setup/ProductAndGL/AddTreasuryProduct').then(mod => mod.AddTreasuryProduct), {
+  ssr: false,
+});
 
 export default function AddProductPage() {
   const getParams = useGetParams('productcode') || '';
