@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { TopOverViewSection } from '../../Overview/TopOverViewSection';
@@ -56,14 +56,20 @@ export const GroupMembership = () => {
     DownloadReportContext
   );
 
-  const { groupMembershipList, isLoading } = useGetGroupMembership({
+  const { groupMembershipList, isLoading, totalRecords } = useGetGroupMembership({
     ...searchParams,
     page
   });
 
+  const { groupMembershipList: downloadData } = useGetGroupMembership({
+    ...searchParams,
+    page,
+    getAll: true
+  });
+
   React.useEffect(() => {
-    if (groupMembershipList?.length > 0) {
-      const groupMember = groupMembershipList.map((item) => ({
+    if (downloadData?.length > 0) {
+      const groupMember = downloadData.map((item) => ({
         groupid: item.groupID,
         groupName: item.groupName,
         customerId: item.customerId,
@@ -81,7 +87,7 @@ export const GroupMembership = () => {
       setExportData(groupMember as []);
       setReportType('GroupMembership');
     }
-  }, [groupMembershipList, setReportType, setExportData]);
+  }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
@@ -122,6 +128,8 @@ export const GroupMembership = () => {
             setPage={setPage}
             page={page}
             ActionMenuProps={ActionMenu}
+            totalPages={Math.ceil(totalRecords / 10)}
+            totalElements={totalRecords}
           >
             {searchActive ? (
               groupMembershipList?.map((dataItem: any, index: number) => {

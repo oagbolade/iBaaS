@@ -65,6 +65,8 @@ export const ChargeConcession = ({
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const toastActions = React.useContext(ToastMessageContext);
   const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const { mutate, isPending } = useCreateChargeConcession();
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const [chargeConcessions, setChargeConcessions] = useState<
@@ -77,7 +79,7 @@ export const ChargeConcession = ({
   const { mappedChargeConcessionType } = useMapSelectOptions({
     charges
   });
-  const { accDetailsResults: accountData, isLoading } = useGetAccountDetails(
+  const { accDetailsResults: accountData } = useGetAccountDetails(
     encryptData(accountNumber) || ''
   );
   const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,9 +105,6 @@ export const ChargeConcession = ({
     };
   }, [isSubmitting]);
 
-  if (isLoading) {
-    return <FormSkeleton noOfLoaders={5} />;
-  }
   return (
     <Formik
       initialValues={chargeConcessionInitialValues}

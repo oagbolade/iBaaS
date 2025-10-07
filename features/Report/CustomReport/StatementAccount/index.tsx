@@ -23,13 +23,10 @@ import {
 import { MuiTableContainer } from '@/components/Table';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { ChevronDown } from '@/assets/svg';
 import { encryptData } from '@/utils/encryptData';
 import { useGetStatementOfAccount } from '@/api/reports/useStatementOfAccount';
 import { FormSkeleton } from '@/components/Loaders';
-import { useGetProductType } from '@/api/general/useProductType';
-import { IProductType } from '@/api/ResponseTypes/general';
 import { useGetProductClass } from '@/api/setup/useProduct';
 import { IProducts } from '@/api/ResponseTypes/setup';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
@@ -39,18 +36,16 @@ export const StatementAccount = () => {
   const { isLoading } = useGlobalLoadingState();
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState<Height>('auto');
-  const expandRef = React.useRef(null);
   const [expanded, setExpanded] = useState(true);
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllCustomerAccountProducts();
-  const { setDirection } = useSetDirection();
-  const { productTypes } = useGetProductType();
   const { products } = useGetProductClass();
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
+  
   const {
     searchParams,
     setSearchParams,
@@ -69,6 +64,9 @@ export const StatementAccount = () => {
   const { rptStatementList, isLoading: loadingStatements } =
     useGetStatementOfAccount(searchParams);
 
+    const { rptStatementList: downloadData } =
+    useGetStatementOfAccount({...searchParams, getAll: true});
+
   useEffect(() => {
     if (searchActive && accDetailsResults) {
       setHeight('auto');
@@ -77,12 +75,17 @@ export const StatementAccount = () => {
   }, [searchActive, accDetailsResults]);
 
   useEffect(() => {
-    if (rptStatementList && rptStatementList?.pagedRecords.length > 0) {
-      setExportData?.(rptStatementList?.pagedRecords);
+    if (!downloadData || downloadData?.pagedRecords.length === 0) {
+      setExportData?.([]);
+      return;
+    };
+
+    if (downloadData && downloadData?.pagedRecords.length > 0) {
+      setExportData?.(downloadData?.pagedRecords);
       const isTD = productCode && ['TD', 'FD'].some(code => productCode.includes(code));
       setReportType(isTD ? 'StatementOfAccountTD' : 'StatementOfAccountCASA');
     }
-  }, [rptStatementList, searchParams, productCode, accountNumber, accDetailsResults]);
+  }, [downloadData]);
 
   const handleChange = () => {
     setExpanded(!expanded);

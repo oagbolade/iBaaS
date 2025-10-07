@@ -1,6 +1,5 @@
 'use client';
-import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -21,17 +20,11 @@ import { useGetBankLogo } from '@/api/general/useBankLogo';
 import { saveBankLogoToLocalStorage } from '@/utils/user-storage';
 
 export const SideBarContainer = () => {
-  const pathname: string | null = usePathname();
-  const customReportPage = '/report/custom-report';
   const { bank } = useGetCompanyByCode();
-  // ON hold
   const { logo } = useGetBankLogo();
-  console.log(logo);
   const BankLogo = logo?.toString();
 
   saveBankLogoToLocalStorage(BankLogo || '');
-
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
   return (
     <Box
@@ -130,7 +123,6 @@ export const SideBarContainer = () => {
 
         <SideBarDropdown
           sideBarMenu={sideBarMenu}
-          setIsAccordionOpen={setIsAccordionOpen}
         />
       </Box>
 

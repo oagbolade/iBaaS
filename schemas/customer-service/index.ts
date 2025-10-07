@@ -37,8 +37,13 @@ export const createCustomerAccount = Yup.object({
 
 export const editCheque = Yup.object({
   checktype: Yup.string().required('Required'),
-  startSerialNo: Yup.number().typeError('Must be a numeric value'),
-  endSerialNo: Yup.number().typeError('Must be a numeric value'),
+  startSerialNo: Yup.number()
+    .typeError('Must be a numeric value')
+    .required('Required'),
+  endSerialNo: Yup.number()
+    .typeError('Must be a numeric value')
+    .required('Required')
+    .moreThan(0, 'Must be greater than 0'),
   valueDate: Yup.string().required('Required'),
 });
 

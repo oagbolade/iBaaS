@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
@@ -43,34 +43,29 @@ export const StandingInstructions = () => {
     ...searchParams
   });
 
-  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+  const { siTransactions: downloadData } = useGetStandingIntruction({
+    ...searchParams,
+    getAll: true
+  });
+
+  const { setReportType, setExportData } =
     React.useContext(DownloadReportContext);
 
   React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
+    if ((downloadData ?? []).length > 0) {
+      setExportData(downloadData as []);
     }
-  }, [readyDownload]);
-
-  React.useEffect(() => {
-    if ((siTransactions ?? []).length > 0) {
-      setExportData(siTransactions as []);
-    }
-  }, [siTransactions, isLoading, readyDownload, setExportData]);
+  }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setReadyDownload(false);
     setSearchActive(true);
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
-      getAll: readyDownload,
       page
     });
+
     setReportType('StandingInstructionReport');
   };
 

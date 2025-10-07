@@ -27,9 +27,7 @@ import {
 } from '@/components/FormikFields';
 import { CustomStyleI } from '@/constants/types';
 import { useCurrentBreakpoint } from '@/utils';
-import {
-  ActionButton
-} from '@/components/Revamp/Buttons';
+import { ActionButton } from '@/components/Revamp/Buttons';
 import { PrimaryIconButton } from '@/components/Buttons';
 import {
   submitButton,
@@ -46,9 +44,7 @@ import {
   useCreateBatchPosting,
   useGetGenerateBatchNo
 } from '@/api/operation/useBatchPosting';
-import {
-  useGetAccountDetails
-} from '@/api/customer-service/useCustomer';
+import { useGetAccountDetails } from '@/api/customer-service/useCustomer';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { toast } from '@/utils/toast';
 import { BatchPostingInitialValues } from '@/schemas/schema-values/operation';
@@ -192,7 +188,8 @@ export const BatchPosting = ({
 
   // Fetch GL Account when account number is 12 digits and above
   const { bankgl: costAmountData } = useGetGLByGLNumber(
-    encryptData(accountNumber) || '', isBatchPosting
+    encryptData(accountNumber) || '',
+    isBatchPosting
   );
 
   const normalizedAccountDetails: IAccountDetailsResults | undefined =
@@ -242,7 +239,7 @@ export const BatchPosting = ({
       );
     }
   };
-
+  const rolelevel = getStoredUser()?.profiles?.rolelevel;
   const rawMenuItems = getStoredUser()?.menuItems;
   const menuItems: MenuItemsType[] = Array.isArray(rawMenuItems)
     ? (rawMenuItems as MenuItemsType[])
@@ -252,9 +249,34 @@ export const BatchPosting = ({
   const menuId = manageCharges?.menu_id ?? '';
 
   const handleSaveBatch = (values: any, resetForm: () => void) => {
-    // check selectedPostingIndex
+    const requiredFields = [
+      { key: 'accountNumber', label: 'Account Number' },
+      { key: 'trancode', label: 'Transaction Type' },
+      { key: 'narration', label: 'Narration' },
+      { key: 'tellerno', label: 'Voucher Number' },
+      { key: 'chequeno', label: 'Cheque Number' },
+      { key: 'computedAmount', label: 'Pay Amount' }
+    ];
 
-    // check the savedBatchData is empty or not
+    const missingFields = requiredFields.filter(
+      ({ key }) => !values[key] || values[key].toString().trim() === ''
+    );
+
+    if (missingFields.length > 0 || selectedCurrency === '') {
+      const errorMessage =
+        missingFields.length > 0
+          ? `Please fill the following required fields: ${missingFields
+              .map(({ label }) => label)
+              .join(', ')}`
+          : 'Please select a currency';
+      toast(
+        errorMessage,
+        'Validation error',
+        'error' as AlertColor,
+        toastActions
+      );
+      return;
+    }
     if (selectedPostingIndex !== null && savedBatchData.length > 0) {
       const updatedBatches = [...savedBatchData];
       const formattedDate = dayjs(values.valueDate).format('YYYY-MM-DD');
@@ -315,32 +337,26 @@ export const BatchPosting = ({
       );
       return;
     }
-    const latestSavedBatches = savedBatchData.slice(-3);
-    if (latestSavedBatches.length > 0) {
-      latestSavedBatches.forEach((batch) => {
-        mutate({
-          accountNumber: batch.accountNumber,
-          batchno: batch.batchno,
-          chequeno: batch.chequeno,
-          userid: `${getStoredUser()?.profiles?.userid}`,
-          computedAmount: batch.computedAmount,
-          currency: batch.currency,
-          narration: batch.narration,
-          tellerno: batch.tellerno,
-          trancode: batch.trancode,
-          valueDate: batch.valueDate,
-          rolelevel: 0,
-          menuid: batch.menuid
-        });
-      });
-      resetForm();
-      setSavedBatchData([]);
-      toast(
-        'Batches posted successfully',
-        'Success',
-        'success' as AlertColor,
-        toastActions
-      );
+
+    if (savedBatchData.length > 0) {
+      // Prepare a single payload with all batches
+      const batchPayload = savedBatchData.map((batch) => ({
+        accountNumber: batch.accountNumber,
+        batchno: batch.batchno,
+        chequeno: batch.chequeno,
+        userid: `${getStoredUser()?.profiles?.userid}`,
+        computedAmount: batch.computedAmount,
+        currency: batch.currency,
+        narration: batch.narration,
+        tellerno: batch.tellerno,
+        trancode: batch.trancode,
+        valueDate: batch.valueDate,
+        rolelevel: Number(rolelevel),
+        menuid: batch.menuid
+      }));
+
+      // Call the API once with the array of batches
+      mutate(batchPayload);
     }
   };
 
@@ -426,7 +442,6 @@ export const BatchPosting = ({
                       name="valueDate"
                       required
                       value={values.valueDate || systemDate}
-
                     />
                   </DemoContainer>
                 </Grid>
@@ -535,17 +550,14 @@ export const BatchPosting = ({
                     <PageTitle title="Saved Batches" />
                   </Grid>
                   {savedBatchData.map((batch, index) => (
-                    <Box key={index} sx={saveBatches}
-
-                    >
+                    <Box key={index} sx={saveBatches}>
                       <Box sx={saveBatchesDetails}>
                         <Box
                           sx={{
                             display: 'flex',
                             alignItems: 'center',
                             gap: '32px',
-                            flex: '1 0 0',
-
+                            flex: '1 0 0'
                           }}
                         >
                           <Box>
@@ -555,7 +567,6 @@ export const BatchPosting = ({
                               styles={{ ...saveTitles }}
                             />
                           </Box>
-
                           <Box>
                             <PageTitle title="Account Number" />
                             <PageTitle
@@ -573,7 +584,7 @@ export const BatchPosting = ({
                             </Box>
                           )}
                           {batch.trancode === '002' && (
-                            <Box >
+                            <Box>
                               <PageTitle title="CR" />
                               <PageTitle
                                 title={batch.trancode}

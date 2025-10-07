@@ -38,7 +38,7 @@ const CustomizedRadioLabel = styled(FormControlLabel)(
 export const ExportData = ({ handleClose }: Props) => {
   const [loading, setLoading] = React.useState(false);
   const [reportFormat, setReportformat] = React.useState<ReportFormat>('pdf');
-  const { exportData, reportType, reportQueryParams, setReadyDownload, setExportData } =
+  const { exportData, reportType, reportQueryParams, setExportData } =
     React.useContext(DownloadReportContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,36 +47,30 @@ export const ExportData = ({ handleClose }: Props) => {
 
   const exportReport = async () => {
     if (!exportData || exportData?.length === 0) {
-        setExportData([]);
+      setExportData([]);
       return;
     }
 
+    setLoading(true);
+
     try {
-      setLoading(true);
-      setReadyDownload(true);
       await new Promise<void>((resolve) => {
-        setTimeout(resolve, 100);
+        setTimeout(resolve, 2000); // Simulate a 2-second delay
       });
 
       const dataSnapshot = [...exportData];
 
-       await downloadReport({
-      exportData: dataSnapshot,
-      reportFormat,
-      reportType,
-      reportQueryParams,
-    });
+        await downloadReport({
+          exportData: dataSnapshot,
+          reportFormat,
+          reportType,
+          reportQueryParams,
+        });
 
-   
-    setExportData([]);
-    setReadyDownload(false);
-    setLoading(false);
-    handleClose();
-
-      // checkDataAvailable();
+      setLoading(false);
+      handleClose();
     } catch (error) {
       setLoading(false);
-      setReadyDownload(false);
     }
   };
 

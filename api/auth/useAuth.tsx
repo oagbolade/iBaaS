@@ -40,7 +40,7 @@ interface ErrorResponseData {
 axiosRetry(axiosInstance, {
   retries: 2,
   retryDelay: axiosRetry.exponentialDelay, 
-  retryCondition: (error) =>
+  retryCondition: (error: any) =>
     axiosRetry.isNetworkOrIdempotentRequestError(error),
 });
 

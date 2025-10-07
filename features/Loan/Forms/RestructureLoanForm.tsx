@@ -32,6 +32,20 @@ const ACTION_OPTIONS = [
   { label: 'Partial Write Off', value: '3' }
 ];
 
+type Props = {
+ customerID: string;
+  isSubmitting?: boolean;
+  setIsSubmitting: (submit: boolean) => void;
+  loanDetails: ILoanAccDetails;
+  repaymentTypes: any;
+  loansources: any;
+  collaterals: any;
+  accountNumber: string;
+  settlementAccount: string;
+  productCode: string;
+  branchCode: string;
+}
+
 export const RestructureLoanForm = ({
   isSubmitting,
   customerID,
@@ -44,19 +58,7 @@ export const RestructureLoanForm = ({
   settlementAccount,
   productCode,
   branchCode
-}: {
-  customerID: string;
-  isSubmitting?: boolean;
-  setIsSubmitting: (submit: boolean) => void;
-  loanDetails: ILoanAccDetails;
-  repaymentTypes: any;
-  loansources: any;
-  collaterals: any;
-  accountNumber: string;
-  settlementAccount: string;
-  productCode: string;
-  branchCode: string;
-}) => {
+}: Props) => {
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
   const { sysmodel } = useGetSystemDate();
   const [loanTerm, setLoanTerm] = useState<string>('');
@@ -136,12 +138,12 @@ export const RestructureLoanForm = ({
     setIsSubmitting(false);
   };
 
+  // Use Formik's submitForm method instead of simulating a button click
+  const formikRef = React.useRef<any>(null);
   useEffect(() => {
-    const submit = document.getElementById('submitButton');
-    if (isSubmitting) {
-      submit?.click();
+    if (isSubmitting && formikRef.current) {
+      formikRef.current.submitForm();
     }
-
     return () => {
       setIsSubmitting?.(false);
     };
@@ -167,6 +169,7 @@ export const RestructureLoanForm = ({
         }}
       >
         <Formik
+          innerRef={formikRef}
           initialValues={{
             ...SetRestructureLoanValues,
             restructureType: selectedRestructureType,
@@ -640,9 +643,7 @@ export const RestructureLoanForm = ({
               </Grid>
             </Box>
 
-            <button id="submitButton" type="submit" style={{ display: 'none' }}>
-              submit alias
-            </button>
+            {/* Hidden submit button no longer needed, submission is triggered via Formik's submitForm method */}
           </Form>
         </Formik>
       </Box>

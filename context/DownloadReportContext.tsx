@@ -3,13 +3,11 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
-  useEffect,
   useMemo,
   useState
 } from 'react';
 // eslint-disable-next-line import/no-cycle
 import { ReportType } from '@/constants/downloadReport';
-import { usePathname } from 'next/navigation';
 
 export interface IReportQueryParams {
   branchCode?: null;
@@ -25,14 +23,18 @@ const initialDownloadReportContext = {
   reportType: 'AccountEnquiry' as ReportType,
   reportQueryParams: {},
   reportDescription: '',
-  setExportData: (() => {}) as Dispatch<SetStateAction<Array<any>>>,
-  setReportType: (() => {}) as Dispatch<SetStateAction<ReportType>>,
-  setReportQueryParams: (() => {}) as Dispatch<
+  setExportData: (() => { }) as Dispatch<SetStateAction<Array<any>>>,
+  setReportType: (() => { }) as Dispatch<SetStateAction<ReportType>>,
+  setReportQueryParams: (() => { }) as Dispatch<
     SetStateAction<IReportQueryParams>
   >,
-  setReportDescription: (() => {}) as Dispatch<SetStateAction<string>>,
+  setReportDescription: (() => { }) as Dispatch<SetStateAction<string>>,
   readyDownload: false,
-  setReadyDownload: (() => {}) as Dispatch<SetStateAction<boolean>>
+  setReadyDownload: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  isFetchingDownloadData: false,
+  setStartFetchingDownloadData: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  isDownloadReady: false,
+  setDownloadReady: (() => { }) as Dispatch<SetStateAction<boolean>>
 };
 
 type DownloadReportContextType<T = any> = {
@@ -44,6 +46,10 @@ type DownloadReportContextType<T = any> = {
   setReportType: Dispatch<SetStateAction<ReportType>>;
   setReportQueryParams: Dispatch<SetStateAction<IReportQueryParams>>;
   setReportDescription: Dispatch<SetStateAction<string>>;
+  isFetchingDownloadData: boolean;
+  setStartFetchingDownloadData: Dispatch<SetStateAction<boolean>>;
+  isDownloadReady: boolean;
+  setDownloadReady: Dispatch<SetStateAction<boolean>>;
   readyDownload: boolean;
   setReadyDownload: Dispatch<SetStateAction<boolean>>;
 };
@@ -59,12 +65,8 @@ export default function DownloadReportContextProvider({ children }: any) {
     useState<IReportQueryParams>({});
   const [reportDescription, setReportDescription] = useState<string>('');
   const [readyDownload, setReadyDownload] = useState<boolean>(false);
-
-   const pathname = usePathname();
-    useEffect(() => {
-    setExportData([]);
-    setReadyDownload(false);
-  }, [pathname]);
+  const [isFetchingDownloadData, setStartFetchingDownloadData] = useState<boolean>(false);
+  const [isDownloadReady, setDownloadReady] = useState<boolean>(false);
 
   const value: DownloadReportContextType = useMemo(() => {
     return {
@@ -72,14 +74,18 @@ export default function DownloadReportContextProvider({ children }: any) {
       reportType,
       reportQueryParams,
       reportDescription,
+      readyDownload,
+      isFetchingDownloadData,
+      isDownloadReady,
       setExportData,
       setReportType,
       setReportQueryParams,
       setReportDescription,
-      readyDownload,
+      setDownloadReady,
+      setStartFetchingDownloadData,
       setReadyDownload
     };
-  }, [exportData, reportType, reportQueryParams, reportDescription, readyDownload, setReadyDownload]);
+  }, [exportData, reportType, reportQueryParams, reportDescription, readyDownload, isFetchingDownloadData, isDownloadReady]);
 
   return (
     <DownloadReportContext.Provider value={value}>

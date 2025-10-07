@@ -403,7 +403,7 @@ export interface CreateCashWithdrawalFormValues {
 export const CashWithdrawalInitialValues: CreateCashWithdrawalFormValues = {
   accountNumber: '',
   transAmount: 0,
-  rate: 0,
+  rate: 1,
   valueDate: '',
   narration: '',
   currencyCode: '',
@@ -451,7 +451,7 @@ export const CreateCashJournlInitalValues: CreateCashJournalFormValues = {
   axpostseq: 0,
   initUserid: 'string',
   subbranch: 'string',
-  rate: 0,
+  rate: 1,
   balancedAmount: 0
 };
 

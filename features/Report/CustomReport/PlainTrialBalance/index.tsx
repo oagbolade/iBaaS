@@ -36,6 +36,20 @@ export const PlainTrialBalance = () => {
   };
 
   const {
+    plainTrialBalanceList: downloadDatalist = {
+      pagedRecords: [],
+      totalDr: 0,
+      totalCr: 0,
+      bkBalance: 0
+    },
+    isLoading: isDownloadDataLoading,
+  } = useGetPlainTrialBalance({
+    ...searchParams,
+    pageNumber: page.toString(),
+    getAll: true
+  });
+
+  const {
     plainTrialBalanceList = {
       pagedRecords: [],
       totalDr: 0,
@@ -46,7 +60,8 @@ export const PlainTrialBalance = () => {
     totalRecords
   } = useGetPlainTrialBalance({
     ...searchParams,
-    pageNumber: page.toString()
+    pageNumber: page.toString(),
+    getAll: false
   });
 
   const {
@@ -56,9 +71,13 @@ export const PlainTrialBalance = () => {
     bkBalance = 0
   } = plainTrialBalanceList || {};
 
+  const {
+    pagedRecords: getAllDownloadData = []
+  } = downloadDatalist || {};
+
   React.useEffect(() => {
-    if (getAllPlainTrialBalanceData?.length > 0) {
-      const mapPlainTrailBalance = getAllPlainTrialBalanceData.map((item) => ({
+    if (getAllDownloadData?.length > 0) {
+      const mapPlainTrailBalance = getAllDownloadData.map((item) => ({
         glNumber: item.glNumber,
         oldGlNo: item.oldGLno,
         acctName: item.acctName,
@@ -69,7 +88,7 @@ export const PlainTrialBalance = () => {
       setExportData(mapPlainTrailBalance as []);
       setReportType('PlainTrialBalance');
     }
-  }, [getAllPlainTrialBalanceData, setExportData, setReportType]);
+  }, [getAllDownloadData, isDownloadDataLoading]);
 
   return (
     <Box

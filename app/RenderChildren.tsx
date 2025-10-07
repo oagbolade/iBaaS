@@ -3,7 +3,6 @@ import React, { useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { usePathname } from 'next/navigation';
 import { useRemoveSideBar } from '@/utils/hooks/useRemoveSidebar';
-import { SideBarContext } from '@/app/SideBarContext';
 import { usePageTitle } from '@/utils/hooks/usePageTitle';
 import { authGuard } from '@/utils/hooks/useAuthGuard';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
@@ -19,6 +18,7 @@ import { useNipAuthprovider } from '@/utils/hooks/NipAuthProvider/useNipAuthprov
 import { useAuth } from '@/api/auth/useAuth';
 import useIdleTimer from '@/utils/hooks/useIdleTimer';
 import { useSingleTabSession } from '@/utils/useSessionTimeout';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
 
 type Props = {
   children: React.ReactNode;
@@ -30,6 +30,8 @@ export const RenderChildren = ({ children }: Props) => {
   const { setRecentlyVisitedModules } = useContext(
     TrackRecentlyVisitedModulesContext
   );
+  const { setExportData } =
+    useContext(DownloadReportContext);
   const { marginLeft, width } = useRemoveSideBar();
   const { pageTitle } = usePageTitle();
 
@@ -46,6 +48,10 @@ export const RenderChildren = ({ children }: Props) => {
   useIdleTimer(10 * 60 * 1000, signout, toastActions);
 
   useEffect(() => {
+    // Reset context state on route change
+    // to avoid data leaking between different reports
+    setExportData([]);
+
     if (
       pathname?.includes('dashboard') &&
       sessionStorage.getItem('shouldRefreshDashboard')

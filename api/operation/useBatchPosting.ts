@@ -21,14 +21,14 @@ import { handleRedirect } from '@/utils';
 
 async function createBatchPosting(
   toastActions: IToastActions,
-  body: CreateBatchPostingFormValues
+  body: CreateBatchPostingFormValues[]
 ): Promise<void> {
   try {
     const urlEndpoint = '/Operations/BatchPosting';
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: 'POST',
-      data: [{ ...body }],
+      data: [...body],
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${getStoredUser()?.token}`
@@ -148,7 +148,7 @@ export function useCreateBatchPosting() {
   const toastActions = useContext(ToastMessageContext);
   const queryClient = useQueryClient();
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: (body: CreateBatchPostingFormValues) =>
+    mutationFn: (body: CreateBatchPostingFormValues[]) =>
       createBatchPosting(toastActions, body),
     onSuccess: () => {
       const keysToInvalidate = [[queryKeys.getAccountDetails]];

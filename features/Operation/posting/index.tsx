@@ -78,7 +78,7 @@ export const PreviewContentOne = ({ accountDetails, loading }: Props) => {
       <Box sx={{ marginBottom: '20px' }}>
         <SubTitle title="Account Status" />
         <Status
-          label={accountDetails.status ? 'Active' : 'Inative'}
+          label={Number(accountDetails.acctstatus) === 1 ? 'Active' : 'Inative'}
           status={accountDetails.acctstatus ? 'success' : 'danger'}
         />
       </Box>
