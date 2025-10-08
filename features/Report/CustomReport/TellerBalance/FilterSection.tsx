@@ -18,6 +18,7 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useCurrentBreakpoint } from '@/utils';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import colors from '@/assets/colors';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   branches?: IBranches[];
@@ -28,20 +29,26 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
 
   const { searchParams } = usePersistedSearch<ISearchParams>('teller-balance');
-
+  const { dateValue, isDateFilterApplied } = React.useContext(
+    DateRangePickerContext
+  );
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
-    customerID: searchParams?.customerID ?? ''
+    customerID: searchParams?.customerID ?? '',
+    searchWith: searchParams?.searchWith ?? '',
+    reportDate: searchParams?.reportDate ?? ''
   };
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      customerID: values.customerID.length > 0 ? values.customerID : undefined
+      customerID: values.customerID.length > 0 ? values.customerID : null,
+      searchWith: values.searchWith ? values.searchWith : null,
+      reportDate: dateValue[0]?.format('YYYY-MM-DD') || ''
     };
     onSearch?.(params);
   };

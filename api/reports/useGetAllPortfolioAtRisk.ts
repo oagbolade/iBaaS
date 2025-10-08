@@ -13,6 +13,7 @@ import { getStoredUser } from '@/utils/user-storage';
 export interface IPortfolioAtRiskParams {
   pageSize?: number;
   pageNumber?: number;
+  getAll?: boolean;
 }
 
 async function fetchAllPortfolioAtRisk(
@@ -25,7 +26,8 @@ async function fetchAllPortfolioAtRisk(
       await axiosInstance.get(urlEndpoint, {
         params: {
           pageSize: params.pageSize || 20,
-          pageNumber: params.pageNumber || 1
+          pageNumber: params.pageNumber || 1,
+          getAll: params.getAll || false
         },
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +60,8 @@ export function useGetAllPortfolioAtRisk(
     queryKey: [
       queryKeys.portfolioAtRisk,
       params?.pageNumber || '',
-      params?.pageSize || ''
+      params?.pageSize || '',
+      params?.getAll || ''
     ],
     queryFn: () => fetchAllPortfolioAtRisk(params, toastActions),
     enabled: Boolean(params?.pageNumber || '' || params.pageSize)

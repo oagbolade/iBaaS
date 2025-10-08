@@ -64,10 +64,7 @@ export function useGetCheckbookStatus(params: ISearchParams | null) {
     enabled: Boolean(
       (params?.accountNumber || '').length > 0 ||
         (params?.status?.toString || '').length > 0 ||
-        (params?.branchID?.toString || '').length > 0 ||
-        (params?.startDate || '').length > 0 ||
-        (params?.endDate || '').length > 0 ||
-        (params?.status || 1).toString().length > 0
+        (params?.branchID?.toString || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

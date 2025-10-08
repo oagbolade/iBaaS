@@ -1,12 +1,11 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer } from '@/components/Table';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { useGetBranches } from '@/api/general/useBranches';
-// import { IEnquiryParams } from '@/api/reports/useGetAccountEnquiryBybranchId';
 import { FormSkeleton } from '@/components/Loaders';
 import { tellerblanceReportcolumn } from '@/constants/Reports/COLUMNS';
 import { useGetTellerBalanceReport } from '@/api/reports/useGetTellerBalanceReport';
@@ -19,13 +18,13 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const TellerBalance = () => {
-  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
+  // const { isLoading } = useGlobalLoadingState();
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
 
-  const { branches, isLoading: isLoadingBranches } = useGetBranches();
+  const { branches } = useGetBranches();
 
   const {
     searchParams,
@@ -36,25 +35,25 @@ export const TellerBalance = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('teller-balance');
 
-  const { tellerBalanceList = [], isLoading: isLoadingAccountInDebit } =
-    useGetTellerBalanceReport({
-      ...searchParams,
-      pageSize: 20,
-      pageNumber: page,
-      getAll: isDateFilterApplied
-    });
+  const { tellerBalanceList = [], isLoading } = useGetTellerBalanceReport({
+    ...searchParams,
+    pageSize: 20,
+    pageNumber: page,
+    getAll: isDateFilterApplied
+  });
 
-  const { tellerBalanceList: downloadData = [] } =
-    useGetTellerBalanceReport({
-      ...searchParams,
-      pageSize: 20,
-      pageNumber: page,
-      getAll: true
-    });
+  const { tellerBalanceList: downloadData = [] } = useGetTellerBalanceReport({
+    ...searchParams,
+    pageSize: 20,
+    pageNumber: page,
+    getAll: true
+  });
 
   React.useEffect(() => {
-    if (!downloadData.length) return;
-
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+    
     const formattedExportData = downloadData.map((item) => ({
       'Till Number': item.tillNumber || '',
       'Till Name': item.tillName || '',
@@ -73,30 +72,27 @@ export const TellerBalance = () => {
   const totalElements = downloadData.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
-  const handleSearch = (params: ISearchParams | null) => {
-    console.log('Params from search', params);
-    setSearchParams({
-      ...params,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
-    });
-    setSearchActive(true);
-  };
-
-  if (isLoadingBranches) {
-    return (
-      <Box m={16}>
-        <FormSkeleton noOfLoaders={5} />
-      </Box>
-    );
-  }
+  const handleSearch = useCallback(
+    (params: ISearchParams | null) => {
+      setSearchParams({
+        ...params,
+        startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+        endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      });
+      setSearchActive(true);
+      setPage(1); // Reset to first page on new search
+    },
+    [dateValue, setSearchParams, setSearchActive, setPage]
+  );
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
-      <FilterSection branches={branches} onSearch={handleSearch} />
+      {branches && (
+        <FilterSection branches={branches} onSearch={handleSearch} />
+      )}
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isGlobalLoading || isLoadingAccountInDebit ? (
+        {isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer
@@ -115,30 +111,28 @@ export const TellerBalance = () => {
           >
             {searchActive ? (
               tellerBalanceList?.map(
-                (accountData: ITellerBalanceReportResponse, index) => {
-                  return (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell component="th" scope="row">
-                        {accountData?.tillNumber || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {accountData?.tillName || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {accountData?.staffName || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {accountData?.branchcode || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {accountData?.userid || 'N/A'}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        {accountData?.bkBalance || 'N/A'}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                }
+                (accountData: ITellerBalanceReportResponse, index) => (
+                  <StyledTableRow key={index}>
+                    <StyledTableCell component="th" scope="row">
+                      {accountData?.tillNumber || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {accountData?.tillName || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {accountData?.staffName || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {accountData?.branchcode || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {accountData?.userid || 'N/A'}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {accountData?.bkBalance || 'N/A'}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )
               )
             ) : (
               <StyledTableRow>

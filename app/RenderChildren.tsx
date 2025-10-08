@@ -30,8 +30,7 @@ export const RenderChildren = ({ children }: Props) => {
   const { setRecentlyVisitedModules } = useContext(
     TrackRecentlyVisitedModulesContext
   );
-  const { setExportData } =
-    useContext(DownloadReportContext);
+  const { setExportData } = useContext(DownloadReportContext);
   const { marginLeft, width } = useRemoveSideBar();
   const { pageTitle } = usePageTitle();
 

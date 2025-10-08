@@ -22,9 +22,9 @@ import { handleRedirect } from '@/utils';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const LoanFormContainer = () => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const { isLoading } = useGlobalLoadingState();
-  const router = useRouter();
   const { loans } = useGetAllLoansProduct();
   const { loanPurpose } = useGetAllLoansPurpose();
   const { repaymentTypes } = useGetAllLoanRepaymentTypes();

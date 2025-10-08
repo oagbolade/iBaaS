@@ -26,6 +26,7 @@ export const GroupLoanReport = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('group-loan-report');
+
   const {
     groupLoanReportList = [],
     isLoading,
@@ -35,9 +36,7 @@ export const GroupLoanReport = () => {
     page
   });
 
-  const {
-    groupLoanReportList: downloadData = [],
-  } = useGetGroupLoan({
+  const { groupLoanReportList: downloadData = [] } = useGetGroupLoan({
     ...searchParams,
     page,
     getAll: true
@@ -52,17 +51,13 @@ export const GroupLoanReport = () => {
     if (downloadData && downloadData.length > 0) {
       setExportData?.(downloadData);
       setReportType?.('GroupLoanReport');
-      setReportQueryParams?.(searchParams);
     }
   }, [downloadData]);
-
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
     setSearchParams(params);
   };
-
-
 
   return (
     <Box

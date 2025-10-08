@@ -61,16 +61,21 @@ export const ChequeBookStatus = () => {
     page,
     getAll: isDateFilterApplied
   });
+
   const {
     chequeBookList: downloadData
   } = useGetCheckbookStatus({
     ...searchParams,
     page,
-    getAll: isDateFilterApplied
+    getAll: true
   });
 
   // Set export data when getAllChequeBookStatusData is retrieved
   React.useEffect(() => {
+    if (!downloadData || downloadData?.length === 0) {
+      return  setExportData([]);
+    }
+
     if (downloadData?.length > 0) {
       setExportData(downloadData);
     }
