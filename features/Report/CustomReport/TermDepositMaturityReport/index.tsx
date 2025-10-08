@@ -53,6 +53,17 @@ export const TermDepositMaturityReport = () => {
     'intRate'
   ];
 
+    const {
+    tdMaturityReportList: downloadData,
+  } = useTermDeporitMaturityReport({
+    ...searchParams,
+    pageNumber: String(page),
+    pageSize: '10',
+    reportType: '5',
+    getAll: true
+  });
+
+  
   const {
     isLoading,
     tdMaturityReportList,
@@ -66,16 +77,7 @@ export const TermDepositMaturityReport = () => {
     getAll: isDateFilterApplied
   });
 
-  const {
-    tdMaturityReportList: downloadData,
-    tdMaturityReportByDateList: downloadDateList
-  } = useTermDeporitMaturityReport({
-    ...searchParams,
-    pageNumber: String(page),
-    pageSize: '10',
-    reportType: '5',
-    getAll: true
-  });
+
 
   React.useEffect(() => {
     const mapTDMaturityReport = downloadData?.map((item) => {
