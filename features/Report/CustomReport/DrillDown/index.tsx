@@ -69,7 +69,7 @@ export const DrillDown = () => {
 
   React.useEffect(() => {
     setReportType('GLMainGroupReport');
-    if (readyDownload && downloadData?.pagedMainGroupReports.length > 0) {
+    if (downloadData && downloadData?.pagedMainGroupReports.length > 0) {
       const reportData = downloadData?.pagedMainGroupReports.map(
         (item) => ({
           GlName: item.gl_NodeName,

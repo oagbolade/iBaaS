@@ -65,24 +65,11 @@ export const PlainTrialBalance = () => {
   });
 
   const {
-    plainTrialBalanceList: downloadData = {
-      pagedRecords: [],
-      totalDr: 0,
-      totalCr: 0,
-      bkBalance: 0
-    },
-  } = useGetPlainTrialBalance({
-    ...searchParams,
-    pageNumber: page.toString(),
-    getAll: true
-  });
-
-  const {
     pagedRecords: getAllPlainTrialBalanceData = [],
     totalDr = 0,
     totalCr = 0,
     bkBalance = 0
-  } = downloadData || {};
+  } = plainTrialBalanceList || {};
 
   const {
     pagedRecords: getAllDownloadData = []

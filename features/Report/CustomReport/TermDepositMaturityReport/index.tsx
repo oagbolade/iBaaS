@@ -65,9 +65,10 @@ export const TermDepositMaturityReport = () => {
     reportType: '5',
     getAll: isDateFilterApplied
   });
+
   const {
     tdMaturityReportList: downloadData,
-    tdMaturityReportByDateList: downloadDateList,
+    tdMaturityReportByDateList: downloadDateList
   } = useTermDeporitMaturityReport({
     ...searchParams,
     pageNumber: String(page),

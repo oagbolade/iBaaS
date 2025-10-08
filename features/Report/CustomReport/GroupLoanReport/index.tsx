@@ -11,9 +11,12 @@ import { ISearchParams } from '@/app/api/search/route';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
 
 export const GroupLoanReport = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
+  const { setExportData, setReportType, setReportQueryParams } =
+    React.useContext(DownloadReportContext);
   const { branches } = useGetBranches();
   const {
     searchParams,
@@ -39,10 +42,27 @@ export const GroupLoanReport = () => {
     page,
     getAll: true
   });
+
+  React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData?.([]);
+      return;
+    }
+
+    if (downloadData && downloadData.length > 0) {
+      setExportData?.(downloadData);
+      setReportType?.('GroupLoanReport');
+      setReportQueryParams?.(searchParams);
+    }
+  }, [downloadData]);
+
+
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
     setSearchParams(params);
   };
+
+
 
   return (
     <Box
@@ -74,7 +94,7 @@ export const GroupLoanReport = () => {
                   totalRow: ['Total Amount', '', '₦104,200.65', '₦104,200.65']
                 }}
                 columns={COLUMN}
-                data={downloadData}
+                data={groupLoanReportList}
                 hideFilterSection
                 keys={['groupid', 'groupname', 'loanamount', 'currentbalance']}
                 showHeader={{

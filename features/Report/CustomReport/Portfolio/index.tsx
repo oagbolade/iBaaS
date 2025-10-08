@@ -38,7 +38,13 @@ export const PortfolioAtRisk = () => {
     DownloadReportContext
   );
 
-  const filteredPortfolioAtRiskList = downloadData.filter(
+  const filteredPortfolioAtRiskList = portfolioatRiskList.filter(
+    (product: IPortfolioAtRiskProduct) =>
+      product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.productCode.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredDownloadData = downloadData.filter(
     (product: IPortfolioAtRiskProduct) =>
       product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.productCode.toLowerCase().includes(searchQuery.toLowerCase())
@@ -47,7 +53,7 @@ export const PortfolioAtRisk = () => {
   React.useEffect(() => {
     setExportData(downloadData as []);
     setReportType('PortfolioAtRiskProductList');
-  }, [downloadData]);
+  }, [downloadData, filteredDownloadData]);
 
   if (isLoading) {
     return (

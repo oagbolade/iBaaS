@@ -27,20 +27,13 @@ export const BalanceSheet = () => {
     getAll: false
   });
 
-  const { data: downloadData } = useGetAllBalanceSheet({
-    pageSize: pageSize.toString(),
-    page,
-    searchWith: searchTerm,
-    getAll: true
-  });
-
   const grandTotal = React.useMemo(() => {
-    if (!downloadData) return 0;
-    return downloadData?.reduce(
+    if (!balanceSheetData) return 0;
+    return balanceSheetData?.reduce(
       (sum, item) => sum + parseFloat(String(item.sumbalance)),
       0
     );
-  }, [downloadData]);
+  }, [balanceSheetData]);
 
   return (
     <Box
