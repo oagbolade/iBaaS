@@ -27,17 +27,6 @@ export function DateRangePicker({ handleClose, CustomDateRangePicker }: Props) {
     DateRangePickerContext
   );
 
-  const { sysmodel } = useGetSystemDate();
-  const { previousDate, currentDate } = useFormattedDates();
- React.useEffect(() => {
-  const [startValue, endValue] = dateValue;
-  if (startValue && endValue) return; 
-  const start = dayjs(previousDate);
-  const end = dayjs(currentDate);
-  setDateValue([start, end]);
-}, [sysmodel, previousDate, currentDate, dateValue, setDateValue]);
-
-
   const confirmAndClose = () => {
     setIsDateFilterApplied(true);
     handleClose();

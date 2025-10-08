@@ -19,6 +19,7 @@ import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { exportData } from '@/components/ViewReport/style';
 import { ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   onSearch: (params: ITellerPostingParams | null) => void;
@@ -28,13 +29,13 @@ export const FilterSection = ({ onSearch }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const { setDirection } = useSetDirection();
 
-  const { currentDate } = useFormattedDates();
-  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
+  const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
+  const endDate = dateValue[1];
 
   const handleSearchClick = () => {
     const searchParams = {
       search: searchTerm || undefined,
-      reportDate: reportDate.format('YYYY-MM-DD')
+      reportDate: endDate?.format('YYYY-MM-DD')
     };
 
     onSearch(searchParams);
@@ -77,8 +78,8 @@ export const FilterSection = ({ onSearch }: Props) => {
               searchGroupVariant="DateRangePicker"
               CustomDateRangePicker={
                 <DateCalendar
-                  value={reportDate}
-                  onChange={(date) => setReportDate(date)}
+                  value={endDate}
+                  onChange={(date) => setDateValue([dateValue[0], date])}
                 />
               }
               customStyle={{ ...dateFilter }}
@@ -90,7 +91,7 @@ export const FilterSection = ({ onSearch }: Props) => {
                 />
               }
               iconPosition="end"
-              buttonTitle={reportDate.format('YYYY-MM-DD')}
+              buttonTitle={endDate?.format('YYYY-MM-DD')}
             />
           </Box>
         </Stack>

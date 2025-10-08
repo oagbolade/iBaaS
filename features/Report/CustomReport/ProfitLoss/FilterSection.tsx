@@ -25,6 +25,7 @@ import { trialBalanceGroupSchema } from '@/schemas/reports';
 import { IGLType } from '@/api/ResponseTypes/admin';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   branches?: IBranches[];
@@ -40,8 +41,8 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
     branches
   });
 
-  const { currentDate } = useFormattedDates();
-  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
+  const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
+  const endDate = dateValue[1];
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
@@ -52,7 +53,8 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
     const params: ISearchParams = {
       branchID:
         values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      reportDate: reportDate.format('YYYY-MM-DD')
+      reportDate: endDate?.format('YYYY-MM-DD')
+
     };
     onSearch?.(params);
   };
@@ -107,12 +109,12 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
                 }
                 CustomDateRangePicker={
                   <DateCalendar
-                    value={reportDate}
-                    onChange={(date) => setReportDate(date)}
+                    value={endDate}
+                    onChange={(date) => setDateValue([dateValue[0], date])}
                   />
                 }
                 iconPosition="end"
-                buttonTitle={reportDate.format('YYYY-MM-DD')}
+                buttonTitle={endDate?.format('YYYY-MM-DD')}
               />
             </Box>
           </Stack>
