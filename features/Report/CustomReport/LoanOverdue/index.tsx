@@ -1,20 +1,14 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { DateRange } from '@mui/x-date-pickers-pro';
-import dayjs, { Dayjs } from 'dayjs';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetBranches } from '@/api/general/useBranches';
 import {
   LoanOverdueParams,
   useGetLoanOverdueReport
 } from '@/api/reports/useGetLoanOverdueReport';
-import { convertToISOString } from '@/utils/convertDatePickerRangeToIsoDate';
 import { loanOverdueColumns } from '@/constants/Reports/COLUMNS';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { IGetLoanOverdueReport } from '@/api/ResponseTypes/reports';
@@ -38,7 +32,7 @@ export const LoanOverdue = () => {
   const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     useContext(DownloadReportContext);
 
   const {
@@ -57,8 +51,7 @@ export const LoanOverdue = () => {
   } = useGetLoanOverdueReport({
     ...searchParams,
     pageSize: 10,
-    pageNumber: page,
-    getAll: readyDownload
+    pageNumber: page
   });
 
   const {
@@ -71,16 +64,12 @@ export const LoanOverdue = () => {
   });
 
   React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
     }
-  }, [readyDownload]);
 
-  React.useEffect(() => {
-    if (downloadData.length > 0 && !isLoading && readyDownload) {
+    if (downloadData.length > 0) {
       const formattedExportData = downloadData.map((item) => ({
         'Acc No': item?.accountNumber || '',
         'Prod Code': item?.productCode || '',
@@ -113,7 +102,6 @@ export const LoanOverdue = () => {
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   const handleSearch = (params: LoanOverdueParams | null) => {
-    setReadyDownload(false);
     setSearchParams({
       ...params,
       reportDate: dateValue[1]?.format('YYYY-MM-DD') || ''

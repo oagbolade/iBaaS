@@ -27,7 +27,7 @@ export const InflowOutflowReport = () => {
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
 
@@ -52,8 +52,7 @@ export const InflowOutflowReport = () => {
     branchId,
     tellerId,
     pageSize: 10,
-    pageNumber: page,
-    getAll: isDateFilterApplied
+    pageNumber: page
   });
 
   const {
@@ -68,7 +67,10 @@ export const InflowOutflowReport = () => {
   });
 
   React.useEffect(() => {
-    if (!downloadData.length) return;
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
 
     const formattedExportData = downloadData.map((item) => ({
       'Account Number': item.accountnumber || '',

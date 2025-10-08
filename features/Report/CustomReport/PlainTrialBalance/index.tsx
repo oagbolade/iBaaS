@@ -76,6 +76,11 @@ export const PlainTrialBalance = () => {
   } = downloadDatalist || {};
 
   React.useEffect(() => {
+    if (!getAllDownloadData || getAllDownloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
+    
     if (getAllDownloadData?.length > 0) {
       const mapPlainTrailBalance = getAllDownloadData.map((item) => ({
         glNumber: item.glNumber,

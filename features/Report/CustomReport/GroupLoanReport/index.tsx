@@ -62,8 +62,6 @@ export const GroupLoanReport = () => {
     setSearchParams(params);
   };
 
-
-
   return (
     <Box
       sx={{

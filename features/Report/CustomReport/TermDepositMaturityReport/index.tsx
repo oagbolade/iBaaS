@@ -108,6 +108,10 @@ export const TermDepositMaturityReport = () => {
   }, [tdMaturityReportList]);
 
   React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+    
     const mappedReportList = mapReport(downloadData as ITdMaturityReport[]);
 
     setExportData(mappedReportList as []);

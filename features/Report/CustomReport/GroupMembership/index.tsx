@@ -68,6 +68,10 @@ export const GroupMembership = () => {
   });
 
   React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+
     if (downloadData?.length > 0) {
       const groupMember = downloadData.map((item) => ({
         groupid: item.groupID,

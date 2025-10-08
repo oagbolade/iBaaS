@@ -36,6 +36,7 @@ export type ReportType =
   | 'ProfitAndLoss'
   | 'AuditTrail'
   | 'OverdraftReport'
+  | 'WeeklyLoanRepayment'
   | 'EOD';
 
 interface IFileNameMapper {
@@ -77,5 +78,6 @@ export const FileNameMapper: IFileNameMapper = {
   StandingInstructionReport: 'StandingInstructionReport',
   AuditTrail: 'AuditTrailReport',
   OverdraftReport: 'OverdraftReport',
+  WeeklyLoanRepayment: 'WeeklyLoanRepayment',
   EOD: 'EOD'
 };

@@ -48,7 +48,7 @@ export const ProductSummary = () => {
   const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
 
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     React.useContext(DownloadReportContext);
 
   const [isSearched, setSearched] = React.useState(false);
@@ -70,7 +70,6 @@ export const ProductSummary = () => {
     ...searchParams,
     pageNumber: page,
     pageSize: 10,
-    getAll: readyDownload
   });
 
   const {
@@ -83,19 +82,12 @@ export const ProductSummary = () => {
   });
 
   React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
+    if (!downloadData || downloadData.pagedProductSummaries?.length === 0) {
+      setExportData([]);
+      return;
     }
-  }, [readyDownload]);
 
-  React.useEffect(() => {
-    if (
-      (downloadData?.pagedProductSummaries?.length ?? 0) > 0 &&
-      readyDownload
-    ) {
+    if (downloadData?.pagedProductSummaries?.length > 0) {
       const formattedExportData = downloadData?.pagedProductSummaries.map(
         (item) => ({
           'Product Code': item?.productcode || '',
@@ -116,12 +108,10 @@ export const ProductSummary = () => {
   ]);
 
   const handleSearch = (params: IProdutSummaryParams | null) => {
-    setReadyDownload(false);
     setSearchParams({
       ...params
     });
     setSearchActive(true);
-    // setPage(1); // Reset to the first page on new search
   };
 
   return (

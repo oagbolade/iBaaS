@@ -4,14 +4,12 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { ActionMenu } from '@/features/Report/CustomReport/StandingInstructions';
 import {
   ITellerPostingParams,
   useGetTellerPosting
 } from '@/api/reports/useGetTellerPosting';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { tellerPostingColumn } from '@/constants/Reports/COLUMNS';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
@@ -46,11 +44,8 @@ export const TellerPosting = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('teller-posting');
 
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     useContext(DownloadReportContext);
-  const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
-  );
 
   const { search } = searchParams || {};
 
@@ -63,7 +58,6 @@ export const TellerPosting = () => {
     search: search ?? undefined,
     pageNumber: page,
     pageSize: 10,
-    getAll: readyDownload
   });
 
   const {
@@ -78,16 +72,11 @@ export const TellerPosting = () => {
   });
 
   React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
     }
-  }, [readyDownload, setSearchParams, searchParams]);
 
-  React.useEffect(() => {
-    if (downloadData?.length > 0 && readyDownload) {
+    if (downloadData?.length > 0) {
       const formattedExportData = downloadData.map((item) => ({
         'Account Number': item?.accountNumber || '',
         'Account title': item?.accounttitle || '',
@@ -121,7 +110,6 @@ export const TellerPosting = () => {
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   const handleSearch = (params: ITellerPostingParams | null) => {
-    setReadyDownload(false);
     setSearchActive(true);
     setSearchParams({
       ...params,

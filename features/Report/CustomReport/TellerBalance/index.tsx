@@ -53,8 +53,10 @@ export const TellerBalance = () => {
     });
 
   React.useEffect(() => {
-    if (!downloadData.length) return;
-
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+    
     const formattedExportData = downloadData.map((item) => ({
       'Till Number': item.tillNumber || '',
       'Till Name': item.tillName || '',

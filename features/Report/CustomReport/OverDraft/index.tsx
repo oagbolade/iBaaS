@@ -1,6 +1,6 @@
 'use client';
 import { Box } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './Column';
 import {
@@ -62,6 +62,11 @@ export const OverDraft = () => {
   });
 
   React.useEffect(() => {
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
+
     if (downloadData?.length > 0) {
       setExportData(downloadData);
     }

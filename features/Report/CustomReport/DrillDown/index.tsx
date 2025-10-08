@@ -68,7 +68,10 @@ export const DrillDown = () => {
   };
 
   React.useEffect(() => {
-    setReportType('GLMainGroupReport');
+    if (!downloadData || downloadData.pagedMainGroupReports.length === 0) {
+      setExportData([]);
+    }
+    
     if (downloadData && downloadData?.pagedMainGroupReports.length > 0) {
       const reportData = downloadData?.pagedMainGroupReports.map(
         (item) => ({
@@ -77,6 +80,8 @@ export const DrillDown = () => {
           total: item.total
         })
       );
+      
+      setReportType('GLMainGroupReport');
       setExportData(reportData as []);
     }
   }, [

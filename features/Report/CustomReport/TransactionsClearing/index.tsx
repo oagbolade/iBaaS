@@ -43,14 +43,24 @@ export const TransactionClearing = () => {
       ...searchParams,
       page,
       pageNumber: String(page),
-      pageSize: '20',
-      getAll: isDateFilterApplied
+      pageSize: '10',
+    });
+
+    const { data: downloadData = [] } =
+    useGetTransactionClearing({
+      ...searchParams,
+      page,
+      pageNumber: String(page),
+      pageSize: '10',
+      getAll: true
     });
 
   React.useEffect(() => {
-    if (!transactionsinClearingList?.length) return;
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
 
-    const formattedExportData = transactionsinClearingList?.map((item) => ({
+    const formattedExportData = downloadData?.map((item) => ({
       'Account Number': item?.accountnumber || '',
       'Bank Name': item?.bankname || '',
       'Cheque No': item?.chequeno || '',
@@ -64,7 +74,7 @@ export const TransactionClearing = () => {
     // Ensure no blank row or misplaced headers
     setExportData(formattedExportData);
     setReportType('TransactionInClearing');
-  }, [transactionsinClearingList]);
+  }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchParams({

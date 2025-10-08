@@ -86,6 +86,10 @@ export const CustomerBalances = () => {
   } = downloadData || [];
 
   React.useEffect(() => {
+    if (!getAllDownloadData || getAllDownloadData.length === 0) {
+      setExportData([]);
+    }
+
     if (
       getAllDownloadData &&
       !isCustomerBalanceDataLoading &&

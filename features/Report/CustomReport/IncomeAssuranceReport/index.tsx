@@ -28,7 +28,7 @@ export const IncomeAssuranceReport = () => {
 
   const { dateValue } = React.useContext(DateRangePickerContext);
 
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     React.useContext(DownloadReportContext);
 
   const {
@@ -39,6 +39,7 @@ export const IncomeAssuranceReport = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('income-assurance');
+
   const {
     data = [],
     isLoading,
@@ -46,7 +47,6 @@ export const IncomeAssuranceReport = () => {
   } = useGetIncomeAssuranceReport({
     ...searchParams,
     page,
-    getAll: readyDownload,
     pageSize: '10'
   });
 
@@ -58,19 +58,13 @@ export const IncomeAssuranceReport = () => {
     getAll: true,
     pageSize: '10'
   });
-  
 
   React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
     }
-  }, [readyDownload]);
 
-  React.useEffect(() => {
-    if (downloadData?.length > 0 && !isLoading && readyDownload) {
       const formattedExportData = downloadData?.map((item) => ({
         'Acc No': item?.accountnumber || 'N/A',
         'Account Name': item?.fullname || 'N/A',
@@ -87,14 +81,12 @@ export const IncomeAssuranceReport = () => {
       // Ensure no blank row or misplaced headers
       setExportData(formattedExportData);
       setReportType('IncomeAssuranceReport');
-    }
   }, [downloadData]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setReadyDownload(false);
     setSearchActive(true);
     setSearchParams({
       ...params,

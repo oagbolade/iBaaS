@@ -63,6 +63,10 @@ export const DormantAccount = () => {
 
   // Set export data when getAllChequeBookStatusData is retrieved
   React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+    
     if ((downloadData ?? []).length > 0) {
       setExportData(downloadData as []);
     }

@@ -75,11 +75,22 @@ export const WeeklyLoan = () => {
       ...searchParams
     });
 
+  const { loanWeeklyRepaymentList: downloadData } =
+    useGetWeeklyLoanRepayment({
+      ...searchParams,
+      getAll: true
+    });
+
   React.useEffect(() => {
-    if (loanWeeklyRepaymentList?.length > 0) {
-      setExportData(loanWeeklyRepaymentList);
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
     }
-  }, [loanWeeklyRepaymentList, setExportData, setReportType]);
+
+    if (downloadData?.length > 0) {
+      setExportData(downloadData);
+      setReportType('WeeklyLoanRepayment');
+    }
+  }, [downloadData]);
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>

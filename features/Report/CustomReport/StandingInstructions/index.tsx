@@ -52,6 +52,10 @@ export const StandingInstructions = () => {
     React.useContext(DownloadReportContext);
 
   React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+
     if ((downloadData ?? []).length > 0) {
       setExportData(downloadData as []);
     }
