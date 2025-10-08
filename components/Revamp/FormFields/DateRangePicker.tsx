@@ -6,6 +6,9 @@ import { DateCalendar } from '@mui/x-date-pickers';
 import { Box, ClickAwayListener } from '@mui/material';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { PrimaryIconButton } from '@/components/Buttons';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
+import dayjs from 'dayjs';
+import useFormattedDates from '@/utils/hooks/useFormattedDates';
 
 type Props = {
   handleClose?: any;
@@ -23,6 +26,17 @@ export function DateRangePicker({ handleClose, CustomDateRangePicker }: Props) {
   const { dateValue, setDateValue, setIsDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
+
+  const { sysmodel } = useGetSystemDate();
+  const { previousDate, currentDate } = useFormattedDates();
+ React.useEffect(() => {
+  const [startValue, endValue] = dateValue;
+  if (startValue && endValue) return; 
+  const start = dayjs(previousDate);
+  const end = dayjs(currentDate);
+  setDateValue([start, end]);
+}, [sysmodel, previousDate, currentDate, dateValue, setDateValue]);
+
 
   const confirmAndClose = () => {
     setIsDateFilterApplied(true);
