@@ -40,8 +40,8 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
   const { searchParams } =
     usePersistedSearch<LoanOverdueParams>('loan-overdue');
   const { setDirection } = useSetDirection();
-  const { currentDate } = useFormattedDates();
-  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
+  const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
+  const endDate = dateValue[1];
   const { setWidth } = useCurrentBreakpoint();
 
   const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
@@ -61,7 +61,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
       branch: values.branch.toString().length > 0 ? values.branch : null,
       product: values.product.length > 0 ? values.product : undefined,
       search: values.search.length > 0 ? values.search : undefined,
-      reportDate: reportDate.format('YYYY-MM-DD')
+      reportDate: endDate?.format('YYYY-MM-DD')
     };
     onSearch?.(params);
   };
@@ -115,8 +115,8 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                     searchGroupVariant="DateRangePicker"
                     CustomDateRangePicker={
                       <DateCalendar
-                        value={reportDate}
-                        onChange={(date) => setReportDate(date)}
+                        value={endDate}
+                        onChange={(date) => setDateValue([dateValue[0], date])}
                       />
                     }
                     customStyle={{ ...dateFilter }}
@@ -128,7 +128,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                       />
                     }
                     iconPosition="end"
-                    buttonTitle={reportDate.format('YYYY-MM-DD')}
+                    buttonTitle={endDate?.format('YYYY-MM-DD')}
                   />
                 </Box>
               </Stack>

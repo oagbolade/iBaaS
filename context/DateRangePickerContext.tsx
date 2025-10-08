@@ -1,8 +1,10 @@
 'use client';
-import { createContext, useMemo, useState, useCallback } from 'react';
+import { createContext, useMemo, useState, useCallback, useEffect } from 'react';
 import { DateRange } from '@mui/x-date-pickers-pro';
 import dayjs, { Dayjs } from 'dayjs';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
+
 
 type DateRangePickerContextType = {
   dateValue: DateRange<Dayjs>;
@@ -22,30 +24,39 @@ export const DateRangePickerContext =
   createContext<DateRangePickerContextType>(initialValuesContext);
 
 export default function DateRangePickerContextProvider({ children }: any) {
-  const { currentDate, previousDate } = useFormattedDates();
+  const { currentDate, nextDate } = useFormattedDates();
+  const { sysmodel } = useGetSystemDate();
+
+  // Default to previous and current date
   const [dateValue, setValue] = useState<DateRange<Dayjs>>([
-    dayjs(previousDate),
-    dayjs(currentDate)
+    dayjs(currentDate),
+    dayjs(nextDate),
   ]);
 
-  const [isDateFilterApplied, setIsDateFilterApplied] =
-    useState<boolean>(false);
+  const [isDateFilterApplied, setIsDateFilterApplied] = useState(false);
 
-  const setDateValue = useCallback(
-    (newValue: DateRange<Dayjs>) => {
-      setValue(newValue);
-    },
-    [dateValue]
-  );
+  const setDateValue = useCallback((newValue: DateRange<Dayjs>) => {
+    setValue(newValue);
+  }, []);
 
-  const value: DateRangePickerContextType = useMemo(() => {
-    return {
+
+  useEffect(() => {
+    if (sysmodel?.systemDate) {
+      const systemDate = dayjs(sysmodel.systemDate);
+      const prevSystemDate = systemDate.subtract(1, 'day');
+      setValue([prevSystemDate, systemDate]);
+    }
+  }, [sysmodel?.systemDate]);
+
+  const value = useMemo(
+    () => ({
       dateValue,
       setDateValue,
       isDateFilterApplied,
       setIsDateFilterApplied
-    };
-  }, [dateValue]);
+    }),
+    [dateValue, isDateFilterApplied]
+  );
 
   return (
     <DateRangePickerContext.Provider value={value}>
