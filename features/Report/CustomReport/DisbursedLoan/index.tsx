@@ -30,7 +30,7 @@ export const DisbursedLoan = () => {
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
   const { dateValue } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     useContext(DownloadReportContext);
 
   const {
@@ -50,20 +50,24 @@ export const DisbursedLoan = () => {
     ...searchParams,
     pageSize: 10,
     pageNumber: page,
-    getAll: readyDownload
+    getAll: false
+  });
+
+  const {
+    disbursedLoans: downloadData = [],
+  } = useGetDisbursedLoanReport({
+    ...searchParams,
+    pageSize: 10,
+    pageNumber: page,
+    getAll: true
   });
 
   React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
     }
-  }, [readyDownload, setSearchParams, searchParams]);
 
-  React.useEffect(() => {
-    if (disbursedLoans.length > 0 && !isLoading && readyDownload) {
+    if (disbursedLoans.length > 0) {
       const formattedExportData = disbursedLoans.map((item) => ({
         'Account Number': item?.accountNumber || '',
         'Account Name': item?.fullName || '',
@@ -85,10 +89,9 @@ export const DisbursedLoan = () => {
       setExportData(formattedExportData as []);
       setReportType('LoanOverdueReport');
     }
-  }, [disbursedLoans, isLoading, readyDownload, setExportData, setReportType]);
+  }, [downloadData]);
 
   const handleSearch = (params: LoanOverdueParams | null) => {
-    setReadyDownload(false);
     setSearchParams({
       ...params,
 

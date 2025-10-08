@@ -10,6 +10,7 @@ extends:
   - plugin:css/recommended
   - plugin:react-hooks/recommended
   - prettier
+  - plugin:@typescript-eslint/recommended
 parserOptions:
   ecmaFeatures:
     jsx: true
@@ -63,6 +64,7 @@ rules:
     'lines-around-directive': 'off',
     'react/no-array-index-key': 'off',
     'no-unused-vars': 'warn',
+    "@typescript-eslint/no-unused-vars": 'warn',  
     'react/require-default-props': 'off',
     'react/function-component-definition': 'off',
     'react/react-in-jsx-scope': 'off',

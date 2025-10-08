@@ -56,10 +56,11 @@ export const GroupMembership = () => {
     DownloadReportContext
   );
 
-  const { groupMembershipList, isLoading, totalRecords } = useGetGroupMembership({
-    ...searchParams,
-    page
-  });
+  const { groupMembershipList, isLoading, totalRecords } =
+    useGetGroupMembership({
+      ...searchParams,
+      page
+    });
 
   const { groupMembershipList: downloadData } = useGetGroupMembership({
     ...searchParams,
@@ -68,6 +69,10 @@ export const GroupMembership = () => {
   });
 
   React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+
     if (downloadData?.length > 0) {
       const groupMember = downloadData.map((item) => ({
         groupid: item.groupID,

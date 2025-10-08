@@ -47,9 +47,9 @@ export const endofDaytitle = {
   color: `${colors.neutral700}`,
   /* body/large */
   fontFamily: 'Averta',
-  fontSize: '16px',
+  fontSize: '17px',
   fontStyle: 'normal',
-  fontWeight: 400,
+  fontWeight: 500,
   lineHeight: '24px' /* 150% */,
   whiteSpace: 'pre-line'
 };

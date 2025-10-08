@@ -23,18 +23,18 @@ const initialDownloadReportContext = {
   reportType: 'AccountEnquiry' as ReportType,
   reportQueryParams: {},
   reportDescription: '',
-  setExportData: (() => { }) as Dispatch<SetStateAction<Array<any>>>,
-  setReportType: (() => { }) as Dispatch<SetStateAction<ReportType>>,
-  setReportQueryParams: (() => { }) as Dispatch<
+  setExportData: (() => {}) as Dispatch<SetStateAction<Array<any>>>,
+  setReportType: (() => {}) as Dispatch<SetStateAction<ReportType>>,
+  setReportQueryParams: (() => {}) as Dispatch<
     SetStateAction<IReportQueryParams>
   >,
-  setReportDescription: (() => { }) as Dispatch<SetStateAction<string>>,
+  setReportDescription: (() => {}) as Dispatch<SetStateAction<string>>,
   readyDownload: false,
-  setReadyDownload: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  setReadyDownload: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isFetchingDownloadData: false,
-  setStartFetchingDownloadData: (() => { }) as Dispatch<SetStateAction<boolean>>,
+  setStartFetchingDownloadData: (() => {}) as Dispatch<SetStateAction<boolean>>,
   isDownloadReady: false,
-  setDownloadReady: (() => { }) as Dispatch<SetStateAction<boolean>>
+  setDownloadReady: (() => {}) as Dispatch<SetStateAction<boolean>>
 };
 
 type DownloadReportContextType<T = any> = {
@@ -65,7 +65,8 @@ export default function DownloadReportContextProvider({ children }: any) {
     useState<IReportQueryParams>({});
   const [reportDescription, setReportDescription] = useState<string>('');
   const [readyDownload, setReadyDownload] = useState<boolean>(false);
-  const [isFetchingDownloadData, setStartFetchingDownloadData] = useState<boolean>(false);
+  const [isFetchingDownloadData, setStartFetchingDownloadData] =
+    useState<boolean>(false);
   const [isDownloadReady, setDownloadReady] = useState<boolean>(false);
 
   const value: DownloadReportContextType = useMemo(() => {
@@ -85,7 +86,15 @@ export default function DownloadReportContextProvider({ children }: any) {
       setStartFetchingDownloadData,
       setReadyDownload
     };
-  }, [exportData, reportType, reportQueryParams, reportDescription, readyDownload, isFetchingDownloadData, isDownloadReady]);
+  }, [
+    exportData,
+    reportType,
+    reportQueryParams,
+    reportDescription,
+    readyDownload,
+    isFetchingDownloadData,
+    isDownloadReady
+  ]);
 
   return (
     <DownloadReportContext.Provider value={value}>

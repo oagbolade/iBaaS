@@ -30,9 +30,9 @@ const FormFields: React.FC<{
   loanAccDetails: any;
   accountNumber: string;
   settlementAccount: string;
-  productCode: string
-  branchCode: string
-  customerID: string
+  productCode: string;
+  branchCode: string;
+  customerID: string;
 }> = ({
   isSubmitting,
   setIsSubmitting,
@@ -42,7 +42,6 @@ const FormFields: React.FC<{
   productCode,
   branchCode,
   customerID
-
 }) => {
   const { repaymentTypes } = useGetAllLoanRepaymentTypes();
   const { loansources } = useGetAllLoanSources();
@@ -67,7 +66,7 @@ const FormFields: React.FC<{
 
 export const RestructureLoan = () => {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const { isLoading } = useGlobalLoadingState();
   const { setDirection } = useSetDirection();
   const { isTablet } = useCurrentBreakpoint();

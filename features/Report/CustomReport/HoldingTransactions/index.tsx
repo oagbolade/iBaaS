@@ -49,6 +49,10 @@ export const HoldingTransactions = () => {
   });
 
   React.useEffect(() => {
+    if (!downloadData || downloadData.pagedHoldTrans.length === 0) {
+      setExportData([]);
+    }
+
     if (downloadData?.pagedHoldTrans?.length > 0) {
       const mapHoldingTransaction = downloadData.pagedHoldTrans.map((item) => ({
         accountNumber: item.accountnumber,

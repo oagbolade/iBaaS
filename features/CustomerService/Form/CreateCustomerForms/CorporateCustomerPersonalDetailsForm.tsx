@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useDebounce } from '@uidotdev/usehooks';
@@ -51,6 +51,13 @@ import { formatDateOfBirth } from '@/utils/formatDateOfBirth';
 import { RadioButtonTitle } from '@/components/Revamp/Radio/style';
 import { filterCustomerDropdownSearch } from '@/utils/filterDropdownSearch';
 
+import {
+  useGetStateByCountryCode,
+  useGetTownByStateCode
+} from '@/api/general/useGeography';
+
+import { isEmptyObject } from '@/utils/isEmptyObject';
+
 // Define Props interface
 type Props = {
   titles?: ITitle[];
@@ -66,6 +73,13 @@ type Props = {
 };
 
 // Update SearchFilters to support both string and OptionsI[] for acctOfficer and introid
+interface IResidentDetails {
+  residentCountry: string;
+  residentState: string;
+  residentTown: string;
+  nationality: string;
+  statecode: string;
+}
 
 // Ensure OptionsI interface is defined
 export const CorporateCustomerPersonalDetailsForm = ({
@@ -80,13 +94,13 @@ export const CorporateCustomerPersonalDetailsForm = ({
   groups,
   officers
 }: Props) => {
+  const isEditing = useGetParams('isEditing') || null;
   const [isGroupMember, setIsGroupMember] = React.useState<string>('true');
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const customerId = useGetParams('customerId') || '';
   const { customerResult: customerResultCodes } = useGetCustomerByIdCodes(
     encryptData(customerId) as string
   );
-  const isEditing = useGetParams('isEditing') || null;
   const [selectedValue, setSelectedValue] = React.useState<SearchFilters>({
     introid: customerResultCodes?.introducer || '',
     acctOfficer: customerResultCodes?.acctOfficer || ''
@@ -177,10 +191,10 @@ export const CorporateCustomerPersonalDetailsForm = ({
     }
   };
 
-  const [dob, setDob] = React.useState<Dayjs | null>(
+  const [dob, setDob] = React.useState<Dayjs | ''>(
     isEditing && customerResultCodes?.dob
       ? dayjs(formatDateOfBirth(customerResultCodes.dob))
-      : null
+      : ''
   );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -266,9 +280,103 @@ export const CorporateCustomerPersonalDetailsForm = ({
     introducerType
   ]);
 
+  const [mappedResidentStates, setMappedResidentStates] = React.useState<
+    OptionsI[]
+  >([]);
+
+  const [mappedResidentTowns, setMappedResidentTowns] = React.useState<
+    OptionsI[]
+  >([]);
+
+  const [residentDetails, setResidentDetails] =
+    React.useState<IResidentDetails>({
+      residentCountry: customerResultCodes?.residentCountry || '',
+      residentState: customerResultCodes?.residentStatecode || '',
+      residentTown: customerResultCodes?.residentTowncode || '',
+      nationality: customerResultCodes?.nationality || '',
+      statecode: customerResultCodes?.statecode || ''
+    });
+
+  const formType = 'personal';
+  const residentFormType = 'personal-resident';
+
+  const { states: allNationStates } = useGetStateByCountryCode(
+    encryptData(
+      customerResultCodes?.nationality || residentDetails.nationality
+    ) as string,
+    formType
+  );
+
+  type LocationType = 'state' | 'town';
+
+  const pickInitialLocationCode = (locationType: LocationType): string => {
+    switch (locationType) {
+      case 'state':
+        if (residentDetails.residentCountry.length > 0) {
+          return residentDetails.residentCountry;
+        }
+
+        return customerResultCodes?.residentCountry || '';
+      case 'town':
+        if (residentDetails.residentState.length > 0) {
+          return residentDetails.residentState;
+        }
+
+        return customerResultCodes?.residentStatecode || '';
+      default:
+        return customerResultCodes?.statecode || '';
+    }
+  };
+
+  const { states: allResidentNationStates, isLoading: isLoadingStates } =
+    useGetStateByCountryCode(
+      encryptData(pickInitialLocationCode('state')) as string,
+      residentFormType
+    );
+
+  const { towns: allResidentStateTowns, isLoading: isLoadingTowns } =
+    useGetTownByStateCode(
+      encryptData(pickInitialLocationCode('town')) as string,
+      formType
+    );
+
+  useEffect(() => {
+    if (allResidentNationStates !== undefined) {
+      const allResidentNationStatesArray = allResidentNationStates?.map(
+        (state: IStates) => ({
+          name: state.stateName,
+          value: state.stateCode?.toString().trim()
+        })
+      );
+
+      setMappedResidentStates(allResidentNationStatesArray);
+    }
+  }, [allResidentNationStates, isLoadingStates, residentDetails.residentState]);
+
+  useEffect(() => {
+    if (
+      allResidentStateTowns !== undefined &&
+      !isEmptyObject(allResidentStateTowns) &&
+      !isLoadingTowns
+    ) {
+      const allResidentStateTownsArray = (allResidentStateTowns || [])?.map(
+        (town: ITown) => ({
+          name: town.townName,
+          value: town.townCode?.toString().trim()
+        })
+      );
+
+      setMappedResidentTowns(allResidentStateTownsArray);
+    }
+  }, [allResidentStateTowns, isLoadingTowns]);
+
+  if (isEditing && isLoadingTowns && isLoadingStates) {
+    return '...';
+  }
+
   return (
     <Box>
-      <Grid container spacing={2} paddingX={2} mt={3}>
+      <Grid container spacing={8} paddingX={2} mt={3}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
             name="compname"
@@ -293,7 +401,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <Box sx={{ width: '100%' }}>
             <DemoContainer components={['DatePicker']}>
@@ -301,8 +409,10 @@ export const CorporateCustomerPersonalDetailsForm = ({
                 disableFuture
                 label="Date of Registration"
                 name="dob"
-                value={dob?.toString()}
-                handleDateChange={(newValue: Dayjs | null) => setDob(newValue)}
+                value={dob}
+                handleDateChange={(newValue: Dayjs | string) =>
+                  setDob(newValue as Dayjs)
+                }
                 required
               />
             </DemoContainer>
@@ -316,38 +426,61 @@ export const CorporateCustomerPersonalDetailsForm = ({
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
             }}
+            onChange={(e) => {
+              setResidentDetails((prev) => ({
+                ...prev,
+                residentCountry: e.target.value
+              }));
+            }}
             required
+            value={residentDetails?.residentCountry?.toString().trim()}
           />
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item mobile={12} tablet={6}>
           <FormSelectField
             name="companyStatecode"
-            options={mappedStates || []}
+            options={mappedResidentStates || []}
             label="State of Incorporation"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
             }}
+            onChange={(e) => {
+              setResidentDetails((prev) => ({
+                ...prev,
+                residentState: e.target.value
+              }));
+            }}
             required
+            value={residentDetails?.residentState?.toString().trim()}
+            disabled={!isEditing && mappedResidentStates?.length === 0}
           />
         </Grid>
 
         <Grid item mobile={12} tablet={6}>
           <FormSelectField
             name="companyTowncode"
-            options={mappedTowns || []}
+            options={mappedResidentTowns || []}
             label="Company Town"
             customStyle={{
               width: setWidth(isMobile ? '250px' : '100%')
             }}
             required
+            onChange={(e) => {
+              setResidentDetails((prev) => ({
+                ...prev,
+                residentTown: e.target.value
+              }));
+            }}
+            value={residentDetails?.residentTown?.toString().trim()}
+            disabled={!isEditing && mappedResidentTowns?.length === 0}
           />
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item mobile={12} tablet={6}>
           <FormTextInput
             name="address"
@@ -372,7 +505,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item mobile={12} tablet={6}>
           <FormTextInput
             name="bvn"
@@ -397,7 +530,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
             name="taxId"
@@ -423,7 +556,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
             name="compObjective"
@@ -449,7 +582,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
             name="phone2"
@@ -473,7 +606,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
             name="phone4"
@@ -497,7 +630,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
             name="secphone"
@@ -522,7 +655,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormAmountInput
             name="shareCapital"
@@ -548,7 +681,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormTextInput
             name="scuml"
@@ -582,7 +715,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormSelectInput
             onChange={handleSelectChange}
@@ -619,7 +752,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} paddingX={2}>
+      <Grid container spacing={8} paddingX={2}>
         <Grid item tablet={6} mobile={12}>
           <FormSelectField
             name="branchCode"
@@ -644,7 +777,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
         </Grid>
       </Grid>
       {introducerType.customer === 'customer' && (
-        <Grid container spacing={2} paddingX={2}>
+        <Grid container spacing={8} paddingX={2}>
           <Grid item tablet={6} mobile={12}>
             <RadioButtons
               options={[

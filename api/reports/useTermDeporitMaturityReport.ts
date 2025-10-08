@@ -67,7 +67,8 @@ export function useTermDeporitMaturityReport(params: ISearchParams | null) {
       params?.startDate || '',
       params?.endDate || '',
       params?.reportType || '',
-      params?.pageNumber || 1
+      params?.pageNumber || 1,
+      params?.getAll
     ],
     queryFn: () => getTermDeporitMaturityReport(toastActions, params || {}),
     enabled: Boolean(

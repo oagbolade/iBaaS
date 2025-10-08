@@ -25,8 +25,6 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const ProfitLoss = () => {
-  // const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  // const [page] = React.useState(1);
   const { isLoading } = useGlobalLoadingState();
   const {
     searchParams,
@@ -37,7 +35,7 @@ export const ProfitLoss = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('profit-and-loss');
   const { branches } = useGetBranches();
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     useContext(DownloadReportContext);
   const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
 
@@ -49,29 +47,23 @@ export const ProfitLoss = () => {
       branchID,
       pageSize: '20',
       pageNumber: String(page),
-      getAll: readyDownload
     });
 
-  const { data: downloadData = []} =
-    useGetProfitAndLossGroup({
-      ...searchParams,
-      branchID,
-      pageSize: '20',
-      pageNumber: String(page),
-      getAll: true
-    });
+  const { data: downloadData = [] } = useGetProfitAndLossGroup({
+    ...searchParams,
+    branchID,
+    pageSize: '20',
+    pageNumber: String(page),
+    getAll: true
+  });
 
   React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
     }
-  }, [readyDownload]);
 
-  React.useEffect(() => {
-    if (downloadData?.length > 0 && readyDownload) {
+    if (downloadData?.length > 0) {
       const formattedExportData = downloadData.flatMap((group) =>
         group.groupItem.map((item) => ({
           'Group Name': group.groupName || '',
@@ -86,7 +78,6 @@ export const ProfitLoss = () => {
   }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setReadyDownload(true);
     setSearchParams({
       ...params
     });

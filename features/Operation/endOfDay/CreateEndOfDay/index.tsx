@@ -16,24 +16,35 @@ import { TopActionsArea } from '@/components/Revamp/Shared';
 import { useGetCommercialBank } from '@/api/setup/useClearingBank';
 import { TableSingleAction } from '@/components/Table';
 import { useGetParams } from '@/utils/hooks/useGetParams';
+import { useGetEODProcesses } from '@/api/operation/useEndOfDay';
 
 export const EndOfDayContainer = () => {
   const { currencies } = useGetCurrency();
   const { commBanks } = useGetCommercialBank();
-
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmittingForward, setIsSubmittingForward] =
     useState<boolean>(false);
   const id = useParams();
-  const actionButtons: any = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
-      <Link
-        href={`/setup/product-gl/view-eod-process/?isEditing=true&id=${id}`}
-      >
-        <TableSingleAction actionName="View Details" />
-      </Link>
-    </Box>
-  ];
+  const { data, isLoading } = useGetEODProcesses();
+
+  const taskId = data && data.length > 0 ? data[0].taskid : null;
+
+  const actionButtons = taskId
+    ? [
+        <Box
+          sx={{ display: 'flex' }}
+          ml={{ mobile: 2, desktop: 0 }}
+          key="view-details"
+        >
+          <Link
+            href={`/setup/product-gl/view-eod-process/?isEditing=true&id=${taskId}`}
+          >
+            <TableSingleAction actionName="View Details" />
+          </Link>
+        </Box>
+      ]
+    : [];
+
   return (
     <>
       <Box

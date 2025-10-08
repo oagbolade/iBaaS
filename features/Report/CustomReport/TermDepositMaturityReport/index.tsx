@@ -14,15 +14,14 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { ITdMaturityReport } from '@/api/ResponseTypes/reports';
 
 export const TermDepositMaturityReport = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { dateValue, isDateFilterApplied } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const {
     searchParams,
     setSearchParams,
@@ -31,6 +30,7 @@ export const TermDepositMaturityReport = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('team-deposit-maturity');
+  
   const { branches } = useGetBranches();
 
   const [tdReportList, setTdReportList] = useState<
@@ -53,9 +53,15 @@ export const TermDepositMaturityReport = () => {
     'intRate'
   ];
 
-    const {
-    tdMaturityReportList: downloadData,
-  } = useTermDeporitMaturityReport({
+  const { tdMaturityReportList, isLoading, totalRecords } =
+    useTermDeporitMaturityReport({
+      ...searchParams,
+      pageNumber: String(page),
+      pageSize: '10',
+      reportType: '5'
+    });
+
+  const { tdMaturityReportList: downloadData } = useTermDeporitMaturityReport({
     ...searchParams,
     pageNumber: String(page),
     pageSize: '10',
@@ -63,24 +69,8 @@ export const TermDepositMaturityReport = () => {
     getAll: true
   });
 
-  
-  const {
-    isLoading,
-    tdMaturityReportList,
-    tdMaturityReportByDateList,
-    totalRecords
-  } = useTermDeporitMaturityReport({
-    ...searchParams,
-    pageNumber: String(page),
-    pageSize: '10',
-    reportType: '5',
-    getAll: isDateFilterApplied
-  });
-
-
-
-  React.useEffect(() => {
-    const mapTDMaturityReport = downloadData?.map((item) => {
+  const mapReport = (reportList: ITdMaturityReport[]) => {
+    const mapTDMaturityReport = reportList?.map((item) => {
       return {
         fullName: item.fullName,
         accountNumber: item.accountNumber,
@@ -101,6 +91,25 @@ export const TermDepositMaturityReport = () => {
           intRate: string;
         }[]
       | undefined = mapTDMaturityReport;
+
+    return mappedReportList;
+  };
+
+  React.useEffect(() => {
+    const mappedReportList = mapReport(
+      tdMaturityReportList as ITdMaturityReport[]
+    );
+
+    setTdReportList(mappedReportList || []);
+  }, [tdMaturityReportList]);
+
+  React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+    
+    const mappedReportList = mapReport(downloadData as ITdMaturityReport[]);
+
     setExportData(mappedReportList as []);
     setReportType('TermDepositMaturity');
     setTdReportList(mappedReportList || []);

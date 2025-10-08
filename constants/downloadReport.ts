@@ -31,10 +31,12 @@ export type ReportType =
   | 'ProductSummaryDetails'
   | 'GLAccountClassReport'
   | 'GroupMembership'
+  | 'GroupLoanReport'
   | 'StandingInstructionReport'
   | 'ProfitAndLoss'
   | 'AuditTrail'
   | 'OverdraftReport'
+  | 'WeeklyLoanRepayment'
   | 'EOD';
 
 interface IFileNameMapper {
@@ -72,8 +74,10 @@ export const FileNameMapper: IFileNameMapper = {
   GLAccountClassReport: 'GLAccountClassReport',
   ChartOfAccount: 'ChartOfAccount',
   GroupMembership: 'GroupMembership',
+  GroupLoanReport: 'GroupLoanReport',
   StandingInstructionReport: 'StandingInstructionReport',
   AuditTrail: 'AuditTrailReport',
   OverdraftReport: 'OverdraftReport',
+  WeeklyLoanRepayment: 'WeeklyLoanRepayment',
   EOD: 'EOD'
 };

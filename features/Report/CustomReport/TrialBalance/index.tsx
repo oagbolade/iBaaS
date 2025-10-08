@@ -28,9 +28,9 @@ export const TrialBalance = () => {
   const [, setSearch] = useState<boolean>(false);
   const { branches } = useGetBranches();
   const { glType } = useGetGLType();
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     useContext(DownloadReportContext);
-  const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
+  const { dateValue } = useContext(DateRangePickerContext);
 
   const {
     searchParams,
@@ -46,11 +46,16 @@ export const TrialBalance = () => {
       ...searchParams,
       pageSize: '20',
       pageNumber: String(page),
-      getAll: readyDownload
+    });
+
+  const { trialBydateList: downloadData = [] } =
+    useGetTrialBalanceGroup({
+      ...searchParams,
+      pageSize: '20',
+      pageNumber: String(page),
     });
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setReadyDownload(false);
     setSearchActive(true);
     setSearchParams({
       ...params,
@@ -58,18 +63,13 @@ export const TrialBalance = () => {
     });
   };
 
-  React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams({
-        ...searchParams,
-        getAll: true
-      });
-    }
-  }, [readyDownload]);
-
   useEffect(() => {
-    if (trialBydateList.length > 0 && readyDownload) {
-      const formattedExportData = trialBydateList.map((item) => ({
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+    }
+
+    if (trialBydateList.length > 0 ) {
+      const formattedExportData = downloadData.map((item) => ({
         'GL Class Name': item?.gl_classname || '',
         Balance: item?.balance || '',
         'GL Code': item?.gl_classcode || '',
@@ -82,11 +82,7 @@ export const TrialBalance = () => {
       setReportType('TrialBalanceByDate');
     }
   }, [
-    readyDownload,
-    setExportData,
-    setReportType,
-    trialBydateList,
-    setReadyDownload
+    downloadData
   ]);
 
   const calculateTotalBalance = (accounts: ITrialBalanceGroup[]): number => {

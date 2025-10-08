@@ -80,6 +80,11 @@ export const MaturityLoan = () => {
   });
 
   React.useEffect(() => {
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
+
     if (downloadData?.length > 0) {
       setExportData(downloadData);
     }
@@ -116,6 +121,7 @@ export const MaturityLoan = () => {
             setPage={setPage}
             page={page}
             ActionMenuProps={ActionMenu}
+            totalElements={totalRecords}
           >
             {searchActive ? (
               loanMaturityList?.map((dataItem: ILoanMaturityReport) => {

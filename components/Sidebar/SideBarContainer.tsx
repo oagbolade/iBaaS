@@ -121,9 +121,7 @@ export const SideBarContainer = () => {
           <Profile />
         </Box>
 
-        <SideBarDropdown
-          sideBarMenu={sideBarMenu}
-        />
+        <SideBarDropdown sideBarMenu={sideBarMenu} />
       </Box>
 
       <Box

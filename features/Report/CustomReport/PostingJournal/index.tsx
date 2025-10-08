@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
@@ -59,7 +59,6 @@ export const PostingJournal = () => {
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
-    setReportType('PostingJournal');
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
@@ -74,6 +73,7 @@ export const PostingJournal = () => {
     page,
     getAll: false
   });
+
   const { postingJournalList: downloadData } = useGetPostingJournal({
     ...searchParams,
     page,
@@ -82,6 +82,11 @@ export const PostingJournal = () => {
 
   // Set export data when postingJournalList is retrieved
   React.useEffect(() => {
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
+
     if (downloadData?.length > 0) {
       setExportData(downloadData);
     }
