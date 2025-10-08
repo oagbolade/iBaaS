@@ -56,11 +56,16 @@ export const OverDraft = () => {
     ...searchParams
   });
 
+  const { overDraftReport: downloadData} = useGetOverdraftReport({
+    ...searchParams,
+    getAll: true
+  });
+
   React.useEffect(() => {
-    if (overDraftReport?.length > 0) {
-      setExportData(overDraftReport);
+    if (downloadData?.length > 0) {
+      setExportData(downloadData);
     }
-  }, [overDraftReport, setExportData, setReportType]);
+  }, [downloadData]);
 
   return (
     <Box sx={{ width: '100%' }}>

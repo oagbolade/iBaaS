@@ -41,9 +41,16 @@ export const HoldingTransactions = () => {
     pageSize: '10'
   });
 
+  const { data: downloadData } = useGetHoldingTransactionReport({
+    ...searchParams,
+    pageNumber: page.toString(),
+    pageSize: '10',
+    getAll: true
+  });
+
   React.useEffect(() => {
-    if (data?.pagedHoldTrans?.length > 0) {
-      const mapHoldingTransaction = data.pagedHoldTrans.map((item) => ({
+    if (downloadData?.pagedHoldTrans?.length > 0) {
+      const mapHoldingTransaction = downloadData.pagedHoldTrans.map((item) => ({
         accountNumber: item.accountnumber,
         created: item.create_dt,
         matured: item.end_dt,
@@ -54,7 +61,7 @@ export const HoldingTransactions = () => {
       setExportData(mapHoldingTransaction as []);
       setReportType('HoldingTransaction');
     }
-  }, [data, setExportData, setReportType]);
+  }, [downloadData]);
 
   return (
     <Box

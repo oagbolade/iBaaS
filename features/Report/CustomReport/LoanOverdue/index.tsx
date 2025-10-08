@@ -61,6 +61,15 @@ export const LoanOverdue = () => {
     getAll: readyDownload
   });
 
+  const {
+    loanOverDueList: downloadData = [],
+  } = useGetLoanOverdueReport({
+    ...searchParams,
+    pageSize: 10,
+    pageNumber: page,
+    getAll: true
+  });
+
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
@@ -71,8 +80,8 @@ export const LoanOverdue = () => {
   }, [readyDownload]);
 
   React.useEffect(() => {
-    if (loanOverDueData.length > 0 && !isLoading && readyDownload) {
-      const formattedExportData = loanOverDueData.map((item) => ({
+    if (downloadData.length > 0 && !isLoading && readyDownload) {
+      const formattedExportData = downloadData.map((item) => ({
         'Acc No': item?.accountNumber || '',
         'Prod Code': item?.productCode || '',
         'Loan Amount': item?.loanamount || '',
@@ -98,7 +107,7 @@ export const LoanOverdue = () => {
       setExportData(formattedExportData);
       setReportType('LoanOverdueReport');
     }
-  }, [loanOverDueData, isLoading, readyDownload, setExportData, setReportType]);
+  }, [downloadData]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);

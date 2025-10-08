@@ -50,6 +50,16 @@ export const IncomeAssuranceReport = () => {
     pageSize: '10'
   });
 
+  const {
+    data: downloadData = [],
+  } = useGetIncomeAssuranceReport({
+    ...searchParams,
+    page,
+    getAll: true,
+    pageSize: '10'
+  });
+  
+
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
@@ -60,8 +70,8 @@ export const IncomeAssuranceReport = () => {
   }, [readyDownload]);
 
   React.useEffect(() => {
-    if (data?.length > 0 && !isLoading && readyDownload) {
-      const formattedExportData = data?.map((item) => ({
+    if (downloadData?.length > 0 && !isLoading && readyDownload) {
+      const formattedExportData = downloadData?.map((item) => ({
         'Acc No': item?.accountnumber || 'N/A',
         'Account Name': item?.fullname || 'N/A',
         'Start Date': item?.startdate?.split('T')[0] || 'N/A',
@@ -78,7 +88,7 @@ export const IncomeAssuranceReport = () => {
       setExportData(formattedExportData);
       setReportType('IncomeAssuranceReport');
     }
-  }, [data, isLoading, readyDownload, setExportData, setReportType]);
+  }, [downloadData]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);

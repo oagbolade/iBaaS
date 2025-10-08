@@ -11,9 +11,12 @@ import { ISearchParams } from '@/app/api/search/route';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
 
 export const GroupLoanReport = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
+  const { setExportData, setReportType, setReportQueryParams } =
+    React.useContext(DownloadReportContext);
   const { branches } = useGetBranches();
   const {
     searchParams,
@@ -31,10 +34,35 @@ export const GroupLoanReport = () => {
     ...searchParams,
     page
   });
+
+  const {
+    groupLoanReportList: downloadData = [],
+  } = useGetGroupLoan({
+    ...searchParams,
+    page,
+    getAll: true
+  });
+
+  React.useEffect(() => {
+    if (!downloadData || downloadData.length === 0) {
+      setExportData?.([]);
+      return;
+    }
+
+    if (downloadData && downloadData.length > 0) {
+      setExportData?.(downloadData);
+      setReportType?.('GroupLoanReport');
+      setReportQueryParams?.(searchParams);
+    }
+  }, [downloadData]);
+
+
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
     setSearchParams(params);
   };
+
+
 
   return (
     <Box

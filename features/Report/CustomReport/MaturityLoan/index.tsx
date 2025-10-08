@@ -74,11 +74,16 @@ export const MaturityLoan = () => {
     ...searchParams
   });
 
+  const { loanMaturityList: downloadData } = useGetMaturityLoan({
+    ...searchParams,
+    getAll: true
+  });
+
   React.useEffect(() => {
-    if (loanMaturityList?.length > 0) {
-      setExportData(loanMaturityList);
+    if (downloadData?.length > 0) {
+      setExportData(downloadData);
     }
-  }, [loanMaturityList, setExportData, setReportType]);
+  }, [downloadData]);
 
   return (
     <Box sx={{ width: '100%' }}>

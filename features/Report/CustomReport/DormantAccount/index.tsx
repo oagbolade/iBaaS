@@ -43,6 +43,14 @@ export const DormantAccount = () => {
     page
   });
 
+  const {
+    dormantAccountList: downloadData
+  } = useGetAllDormantAccount({
+    ...searchParams,
+    page,
+    getAll: true
+  });
+
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
     setSearchParams({
@@ -55,10 +63,10 @@ export const DormantAccount = () => {
 
   // Set export data when getAllChequeBookStatusData is retrieved
   React.useEffect(() => {
-    if ((getAllDormantAccountData ?? []).length > 0) {
-      setExportData(getAllDormantAccountData as []);
+    if ((downloadData ?? []).length > 0) {
+      setExportData(downloadData as []);
     }
-  }, [getAllDormantAccountData, setExportData, setReportType]);
+  }, [downloadData]);
 
   const ActionMenu: React.FC = () => {
     return (
