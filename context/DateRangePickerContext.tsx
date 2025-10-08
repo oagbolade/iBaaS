@@ -22,10 +22,10 @@ export const DateRangePickerContext =
   createContext<DateRangePickerContextType>(initialValuesContext);
 
 export default function DateRangePickerContextProvider({ children }: any) {
-  const { currentDate, nextDate } = useFormattedDates();
+  const { currentDate, previousDate } = useFormattedDates();
   const [dateValue, setValue] = useState<DateRange<Dayjs>>([
-    dayjs(currentDate),
-    dayjs(nextDate)
+    dayjs(previousDate),
+    dayjs(currentDate)
   ]);
 
   const [isDateFilterApplied, setIsDateFilterApplied] =

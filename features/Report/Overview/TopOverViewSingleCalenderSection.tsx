@@ -76,7 +76,7 @@ export const TopOverViewSingeCalendarSection = () => {
               />
             }
             iconPosition="end"
-            buttonTitle={dateValue[0]?.format('YYYY-MM-DD')}
+            buttonTitle={dateValue[1]?.format('YYYY-MM-DD')}
           />
         </Box>
       </Stack>
