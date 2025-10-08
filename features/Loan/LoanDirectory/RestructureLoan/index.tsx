@@ -67,7 +67,7 @@ const FormFields: React.FC<{
 
 export const RestructureLoan = () => {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const { isLoading } = useGlobalLoadingState();
   const { setDirection } = useSetDirection();
   const { isTablet } = useCurrentBreakpoint();
