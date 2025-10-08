@@ -74,13 +74,18 @@ export const PostingJournal = () => {
     page,
     getAll: false
   });
+  const { postingJournalList: downloadData } = useGetPostingJournal({
+    ...searchParams,
+    page,
+    getAll: true
+  });
 
   // Set export data when postingJournalList is retrieved
   React.useEffect(() => {
-    if (postingJournalList?.length > 0) {
-      setExportData(postingJournalList);
+    if (downloadData?.length > 0) {
+      setExportData(downloadData);
     }
-  }, [postingJournalList, setExportData, setReportType]);
+  }, [downloadData, setExportData, setReportType]);
 
   return (
     <Box

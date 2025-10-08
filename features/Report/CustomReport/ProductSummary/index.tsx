@@ -73,6 +73,15 @@ export const ProductSummary = () => {
     getAll: readyDownload
   });
 
+  const {
+    productSummaryList: downloadData,
+  } = useGetProductSummary({
+    ...searchParams,
+    pageNumber: page,
+    pageSize: 10,
+    getAll: true
+  });
+
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
@@ -84,10 +93,10 @@ export const ProductSummary = () => {
 
   React.useEffect(() => {
     if (
-      (productSummaryList?.pagedProductSummaries?.length ?? 0) > 0 &&
+      (downloadData?.pagedProductSummaries?.length ?? 0) > 0 &&
       readyDownload
     ) {
-      const formattedExportData = productSummaryList?.pagedProductSummaries.map(
+      const formattedExportData = downloadData?.pagedProductSummaries.map(
         (item) => ({
           'Product Code': item?.productcode || '',
           'Product Name': item?.productname || '',
@@ -103,11 +112,7 @@ export const ProductSummary = () => {
       setReportType('ProductSummary');
     }
   }, [
-    productSummaryList?.pagedProductSummaries,
-    setExportData,
-    setReportType,
-    readyDownload,
-    setReadyDownload
+    downloadData?.pagedProductSummaries,
   ]);
 
   const handleSearch = (params: IProdutSummaryParams | null) => {

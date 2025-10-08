@@ -44,10 +44,18 @@ export const TellerBalance = () => {
       getAll: isDateFilterApplied
     });
 
-  React.useEffect(() => {
-    if (!tellerBalanceList.length) return;
+  const { tellerBalanceList: downloadData = [] } =
+    useGetTellerBalanceReport({
+      ...searchParams,
+      pageSize: 20,
+      pageNumber: page,
+      getAll: true
+    });
 
-    const formattedExportData = tellerBalanceList.map((item) => ({
+  React.useEffect(() => {
+    if (!downloadData.length) return;
+
+    const formattedExportData = downloadData.map((item) => ({
       'Till Number': item.tillNumber || '',
       'Till Name': item.tillName || '',
       'Staff Name': item.staffName || '',
@@ -59,10 +67,10 @@ export const TellerBalance = () => {
     // Ensure no blank row or misplaced headers
     setExportData(formattedExportData);
     setReportType('TellerBalance');
-  }, [tellerBalanceList, setExportData, setReportType]);
+  }, [downloadData]);
 
   const rowsPerPage = 10;
-  const totalElements = tellerBalanceList.length;
+  const totalElements = downloadData.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
   const handleSearch = (params: ISearchParams | null) => {

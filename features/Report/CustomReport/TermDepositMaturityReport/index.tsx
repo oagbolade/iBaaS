@@ -66,8 +66,19 @@ export const TermDepositMaturityReport = () => {
     getAll: isDateFilterApplied
   });
 
+  const {
+    tdMaturityReportList: downloadData,
+    tdMaturityReportByDateList: downloadDateList
+  } = useTermDeporitMaturityReport({
+    ...searchParams,
+    pageNumber: String(page),
+    pageSize: '10',
+    reportType: '5',
+    getAll: true
+  });
+
   React.useEffect(() => {
-    const mapTDMaturityReport = tdMaturityReportList?.map((item) => {
+    const mapTDMaturityReport = downloadData?.map((item) => {
       return {
         fullName: item.fullName,
         accountNumber: item.accountNumber,
@@ -91,7 +102,7 @@ export const TermDepositMaturityReport = () => {
     setExportData(mappedReportList as []);
     setReportType('TermDepositMaturity');
     setTdReportList(mappedReportList || []);
-  }, [tdMaturityReportList]);
+  }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);

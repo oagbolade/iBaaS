@@ -178,11 +178,18 @@ export const AuditTrail = () => {
       page
     });
 
+  const { auditTrailList: downloadData } =
+    useGetAllAuditTrailReports({
+      ...searchParams,
+      page,
+      getAll: true
+    });
+
   React.useEffect(() => {
-    if (getAllAuditTrailsData?.length > 0) {
-      setExportData(getAllAuditTrailsData);
+    if (downloadData?.length > 0) {
+      setExportData(downloadData);
     }
-  }, [getAllAuditTrailsData, setExportData, setReportType]);
+  }, [downloadData]);
 
   return (
     <Box

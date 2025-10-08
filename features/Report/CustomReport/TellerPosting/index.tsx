@@ -66,6 +66,17 @@ export const TellerPosting = () => {
     getAll: readyDownload
   });
 
+  const {
+    tellerPostByDateList: downloadData = [],
+    totalRecords: downloadTotalRecords
+  } = useGetTellerPosting({
+    ...searchParams,
+    search: search ?? undefined,
+    pageNumber: page,
+    pageSize: 10,
+    getAll: true
+  });
+
   React.useEffect(() => {
     if (readyDownload) {
       setSearchParams({
@@ -76,8 +87,8 @@ export const TellerPosting = () => {
   }, [readyDownload, setSearchParams, searchParams]);
 
   React.useEffect(() => {
-    if (tellerPostByDateList?.length > 0 && readyDownload) {
-      const formattedExportData = tellerPostByDateList.map((item) => ({
+    if (downloadData?.length > 0 && readyDownload) {
+      const formattedExportData = downloadData.map((item) => ({
         'Account Number': item?.accountNumber || '',
         'Account title': item?.accounttitle || '',
         Narration: item?.narration || '',
@@ -103,11 +114,7 @@ export const TellerPosting = () => {
       setReportType('TellerPostingSummary');
     }
   }, [
-    tellerPostByDateList,
-    setExportData,
-    setReportType,
-    readyDownload,
-    setReadyDownload
+    downloadData,
   ]);
 
   const rowsPerPage = 10;
