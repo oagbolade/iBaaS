@@ -31,6 +31,7 @@ export type ReportType =
   | 'ProductSummaryDetails'
   | 'GLAccountClassReport'
   | 'GroupMembership'
+  | 'GroupLoanReport'
   | 'StandingInstructionReport'
   | 'ProfitAndLoss'
   | 'AuditTrail'
@@ -72,6 +73,7 @@ export const FileNameMapper: IFileNameMapper = {
   GLAccountClassReport: 'GLAccountClassReport',
   ChartOfAccount: 'ChartOfAccount',
   GroupMembership: 'GroupMembership',
+  GroupLoanReport: 'GroupLoanReport',
   StandingInstructionReport: 'StandingInstructionReport',
   AuditTrail: 'AuditTrailReport',
   OverdraftReport: 'OverdraftReport',

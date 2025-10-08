@@ -26,6 +26,7 @@ export const GroupLoanReport = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('group-loan-report');
+  
   const {
     groupLoanReportList = [],
     isLoading,
@@ -52,7 +53,6 @@ export const GroupLoanReport = () => {
     if (downloadData && downloadData.length > 0) {
       setExportData?.(downloadData);
       setReportType?.('GroupLoanReport');
-      setReportQueryParams?.(searchParams);
     }
   }, [downloadData]);
 
