@@ -56,7 +56,7 @@ export const OverDraft = () => {
     ...searchParams
   });
 
-  const { overDraftReport: downloadData} = useGetOverdraftReport({
+  const { overDraftReport: downloadData } = useGetOverdraftReport({
     ...searchParams,
     getAll: true
   });

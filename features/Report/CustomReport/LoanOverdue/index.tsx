@@ -54,9 +54,7 @@ export const LoanOverdue = () => {
     pageNumber: page
   });
 
-  const {
-    loanOverDueList: downloadData = [],
-  } = useGetLoanOverdueReport({
+  const { loanOverDueList: downloadData = [] } = useGetLoanOverdueReport({
     ...searchParams,
     pageSize: 10,
     pageNumber: page,

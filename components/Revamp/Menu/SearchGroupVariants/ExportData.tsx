@@ -60,12 +60,12 @@ export const ExportData = ({ handleClose }: Props) => {
 
       const dataSnapshot = [...exportData];
 
-        await downloadReport({
-          exportData: dataSnapshot,
-          reportFormat,
-          reportType,
-          reportQueryParams,
-        });
+      await downloadReport({
+        exportData: dataSnapshot,
+        reportFormat,
+        reportType,
+        reportQueryParams
+      });
 
       setLoading(false);
       handleClose();

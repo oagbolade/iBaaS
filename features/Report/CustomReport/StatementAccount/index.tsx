@@ -40,12 +40,10 @@ export const StatementAccount = () => {
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllCustomerAccountProducts();
   const { products } = useGetProductClass();
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
-  
+
   const {
     searchParams,
     setSearchParams,
@@ -64,8 +62,10 @@ export const StatementAccount = () => {
   const { rptStatementList, isLoading: loadingStatements } =
     useGetStatementOfAccount(searchParams);
 
-    const { rptStatementList: downloadData } =
-    useGetStatementOfAccount({...searchParams, getAll: true});
+  const { rptStatementList: downloadData } = useGetStatementOfAccount({
+    ...searchParams,
+    getAll: true
+  });
 
   useEffect(() => {
     if (searchActive && accDetailsResults) {
@@ -78,11 +78,12 @@ export const StatementAccount = () => {
     if (!downloadData || downloadData?.pagedRecords.length === 0) {
       setExportData?.([]);
       return;
-    };
+    }
 
     if (downloadData && downloadData?.pagedRecords.length > 0) {
       setExportData?.(downloadData?.pagedRecords);
-      const isTD = productCode && ['TD', 'FD'].some(code => productCode.includes(code));
+      const isTD =
+        productCode && ['TD', 'FD'].some((code) => productCode.includes(code));
       setReportType(isTD ? 'StatementOfAccountTD' : 'StatementOfAccountCASA');
     }
   }, [downloadData]);

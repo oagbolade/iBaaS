@@ -48,8 +48,9 @@ export const StandingInstructions = () => {
     getAll: true
   });
 
-  const { setReportType, setExportData } =
-    React.useContext(DownloadReportContext);
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
 
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {

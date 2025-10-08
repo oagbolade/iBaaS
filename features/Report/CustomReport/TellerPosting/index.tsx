@@ -102,9 +102,7 @@ export const TellerPosting = () => {
       setExportData(formattedExportData);
       setReportType('TellerPostingSummary');
     }
-  }, [
-    downloadData,
-  ]);
+  }, [downloadData]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);

@@ -49,14 +49,13 @@ export const ProfitLoss = () => {
       pageNumber: String(page),
     });
 
-  const { data: downloadData = []} =
-    useGetProfitAndLossGroup({
-      ...searchParams,
-      branchID,
-      pageSize: '20',
-      pageNumber: String(page),
-      getAll: true
-    });
+  const { data: downloadData = [] } = useGetProfitAndLossGroup({
+    ...searchParams,
+    branchID,
+    pageSize: '20',
+    pageNumber: String(page),
+    getAll: true
+  });
 
   React.useEffect(() => {
     if (!downloadData || downloadData?.length === 0) {

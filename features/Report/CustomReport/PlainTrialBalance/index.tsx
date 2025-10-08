@@ -42,7 +42,7 @@ export const PlainTrialBalance = () => {
       totalCr: 0,
       bkBalance: 0
     },
-    isLoading: isDownloadDataLoading,
+    isLoading: isDownloadDataLoading
   } = useGetPlainTrialBalance({
     ...searchParams,
     pageNumber: page.toString(),
@@ -71,9 +71,7 @@ export const PlainTrialBalance = () => {
     bkBalance = 0
   } = plainTrialBalanceList || {};
 
-  const {
-    pagedRecords: getAllDownloadData = []
-  } = downloadDatalist || {};
+  const { pagedRecords: getAllDownloadData = [] } = downloadDatalist || {};
 
   React.useEffect(() => {
     if (!getAllDownloadData || getAllDownloadData?.length === 0) {

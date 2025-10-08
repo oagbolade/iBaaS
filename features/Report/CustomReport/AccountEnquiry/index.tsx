@@ -11,7 +11,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { accountEnquiryColumns } from '@/constants/Reports/COLUMNS';
 import {
   IEnquiryParams,
-  useGetAccountEnquiryByBranchId,
+  useGetAccountEnquiryByBranchId
 } from '@/api/reports/useGetAccountEnquiryBybranchId';
 import { IGetAccountEnquiry } from '@/api/ResponseTypes/reports';
 import { StyledTableRow } from '@/components/Table/Table';
@@ -20,7 +20,7 @@ import { renderEmptyTableBody } from '@/components/Revamp/TableV2/TableV2';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
 import {
   DownloadReportContext,
-  IReportQueryParams,
+  IReportQueryParams
 } from '@/context/DownloadReportContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
@@ -41,7 +41,7 @@ export const AccountEnquiry = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('account-enquiry');
   const { setReportType, setExportData, readyDownload, setReadyDownload } =
     React.useContext(DownloadReportContext);
@@ -53,17 +53,14 @@ export const AccountEnquiry = () => {
     useGetAccountEnquiryByBranchId({
       ...searchParams,
       getAll: readyDownload,
-      page,
+      page
     });
 
-  const { data: downloadData = []} =
-    useGetAccountEnquiryByBranchId({
-      ...searchParams,
-      getAll: true,
-      page,
-    });
-
- 
+  const { data: downloadData = [] } = useGetAccountEnquiryByBranchId({
+    ...searchParams,
+    getAll: true,
+    page
+  });
 
   const rowsPerPage = 10;
   const totalElements = downloadData.length;
@@ -73,7 +70,7 @@ export const AccountEnquiry = () => {
     setSearchParams({
       ...params,
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
   };
@@ -98,7 +95,7 @@ export const AccountEnquiry = () => {
         useableBalance: data.useableBalance,
         bookBalance: data.bookBalance,
         customerName: data.customerName,
-        accountStatus: data.accountStatus,
+        accountStatus: data.accountStatus
       });
     };
 
@@ -143,7 +140,7 @@ export const AccountEnquiry = () => {
               mainTitle: 'Account Enquiry',
               secondaryTitle:
                 'See a directory of all account enquiry on this system.',
-              hideFilterSection: true,
+              hideFilterSection: true
             }}
           >
             {searchActive ? (
@@ -174,7 +171,7 @@ export const AccountEnquiry = () => {
                       </StyledTableCell>
                     </StyledTableRow>
                   );
-                },
+                }
               )
             ) : (
               <StyledTableRow>

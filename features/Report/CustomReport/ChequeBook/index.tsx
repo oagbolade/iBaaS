@@ -67,7 +67,7 @@ export const ChequeBookStatus = () => {
   } = useGetCheckbookStatus({
     ...searchParams,
     page,
-    getAll: isDateFilterApplied
+    getAll: true
   });
 
   // Set export data when getAllChequeBookStatusData is retrieved

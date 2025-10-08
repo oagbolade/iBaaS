@@ -6,7 +6,10 @@ import { COLUMNS } from './COLUMNS';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { ISearchParams } from '@/app/api/search/route';
-import { useGetEODProcesslog } from '@/api/operation/useEndOfDay';
+import {
+  useGetEODProcesses,
+  useGetEODProcesslog
+} from '@/api/operation/useEndOfDay';
 import { FormSkeleton } from '@/components/Loaders';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
@@ -28,11 +31,15 @@ type Props = {
 export const EndOfDayProcessTable = ({ EODid }: Props) => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
+  const { data } = useGetEODProcesses();
 
   const { data: process, isLoading } = useGetEODProcesslog(searchParams, EODid);
   const { setReportType, setExportData, readyDownload, setReadyDownload } =
     React.useContext(DownloadReportContext);
-
+  const totalPercentageUncompleted =
+    data?.find((item) => item.totalUncompletedPercentage) || 0;
+  const totalPercentageCompleted =
+    data?.find((item) => item.totalPercentageCompleted) || 0;
   React.useEffect(() => {
     setReportType('EOD');
     if (readyDownload) {
@@ -75,14 +82,20 @@ export const EndOfDayProcessTable = ({ EODid }: Props) => {
                 title="total processes Passed"
                 styles={{ ...totalProcesTitle }}
               />
-              <PageTitle title="80%" styles={{ ...totalTitle }} />
+              <PageTitle
+                title={totalPercentageCompleted?.toString()}
+                styles={{ ...totalTitle }}
+              />
             </Box>
             <Box sx={{ marginLeft: '640px' }}>
               <PageTitle
                 title="total processes failed"
                 styles={{ ...totalProcesTitle }}
               />
-              <PageTitle title="20%" styles={{ ...totalTitle }} />
+              <PageTitle
+                title={totalPercentageUncompleted?.toString()}
+                styles={{ ...totalTitle }}
+              />
             </Box>
           </Box>
         </Box>

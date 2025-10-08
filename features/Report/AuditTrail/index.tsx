@@ -178,12 +178,11 @@ export const AuditTrail = () => {
       page
     });
 
-  const { auditTrailList: downloadData } =
-    useGetAllAuditTrailReports({
-      ...searchParams,
-      page,
-      getAll: true
-    });
+  const { auditTrailList: downloadData } = useGetAllAuditTrailReports({
+    ...searchParams,
+    page,
+    getAll: true
+  });
 
   React.useEffect(() => {
     if (downloadData?.length > 0) {

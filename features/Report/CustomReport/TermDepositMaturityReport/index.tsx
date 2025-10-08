@@ -21,9 +21,7 @@ export const TermDepositMaturityReport = () => {
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const {
     searchParams,
     setSearchParams,
@@ -32,6 +30,7 @@ export const TermDepositMaturityReport = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('team-deposit-maturity');
+  
   const { branches } = useGetBranches();
 
   const [tdReportList, setTdReportList] = useState<
@@ -54,20 +53,15 @@ export const TermDepositMaturityReport = () => {
     'intRate'
   ];
 
-  const {
-    tdMaturityReportList,
-    isLoading,
-    totalRecords
-  } = useTermDeporitMaturityReport({
-    ...searchParams,
-    pageNumber: String(page),
-    pageSize: '10',
-    reportType: '5'
-  });
+  const { tdMaturityReportList, isLoading, totalRecords } =
+    useTermDeporitMaturityReport({
+      ...searchParams,
+      pageNumber: String(page),
+      pageSize: '10',
+      reportType: '5'
+    });
 
-  const {
-    tdMaturityReportList: downloadData
-  } = useTermDeporitMaturityReport({
+  const { tdMaturityReportList: downloadData } = useTermDeporitMaturityReport({
     ...searchParams,
     pageNumber: String(page),
     pageSize: '10',
@@ -89,20 +83,22 @@ export const TermDepositMaturityReport = () => {
 
     const mappedReportList:
       | {
-        fullName: string;
-        accountNumber: string;
-        tdAmount: string;
-        tenor: string;
-        totalDays: string;
-        intRate: string;
-      }[]
+          fullName: string;
+          accountNumber: string;
+          tdAmount: string;
+          tenor: string;
+          totalDays: string;
+          intRate: string;
+        }[]
       | undefined = mapTDMaturityReport;
 
     return mappedReportList;
   };
 
   React.useEffect(() => {
-    const mappedReportList = mapReport(tdMaturityReportList as ITdMaturityReport[]);
+    const mappedReportList = mapReport(
+      tdMaturityReportList as ITdMaturityReport[]
+    );
 
     setTdReportList(mappedReportList || []);
   }, [tdMaturityReportList]);
@@ -172,7 +168,7 @@ export const TermDepositMaturityReport = () => {
             setPage={setPage}
             totalElements={totalRecords}
             page={page}
-          // ActionMenuProps={{}} Need to add this to view more
+            // ActionMenuProps={{}} Need to add this to view more
           />
         )}
       </Box>

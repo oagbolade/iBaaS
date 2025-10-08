@@ -1,7 +1,8 @@
 export const SEARCH_BASE_URL = 'https://ibaas-search-api.k9.isw.la/api/v1';
 
 export const REPORT_BASE_URL = 'https://ibaas-revamp-reports.k8.isw.la/api';
-
+export const END_OF_DAY_BASE_URL =
+  'http://ibaas-endofbusinessprocess.k9.isw.la/api';
 const env = process.env.NODE_ENV || 'production';
 
 // Assign baseUrl based on environment
@@ -35,5 +36,11 @@ const imageUploadBaseUrl =
     ? 'https://ibaasfilestorage.k8.isw.la/api'
     : 'https://ibaasfilestorage.k8.isw.la/api';
 
-export { baseUrl, nipBaseUrl, reportsBaseUrl, AuthFaBaseUrl, endOfdayUrl, imageUploadBaseUrl };
-
+export {
+  baseUrl,
+  nipBaseUrl,
+  reportsBaseUrl,
+  AuthFaBaseUrl,
+  endOfdayUrl,
+  imageUploadBaseUrl
+};

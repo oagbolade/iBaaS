@@ -30,9 +30,9 @@ const FormFields: React.FC<{
   loanAccDetails: any;
   accountNumber: string;
   settlementAccount: string;
-  productCode: string
-  branchCode: string
-  customerID: string
+  productCode: string;
+  branchCode: string;
+  customerID: string;
 }> = ({
   isSubmitting,
   setIsSubmitting,
@@ -42,7 +42,6 @@ const FormFields: React.FC<{
   productCode,
   branchCode,
   customerID
-
 }) => {
   const { repaymentTypes } = useGetAllLoanRepaymentTypes();
   const { loansources } = useGetAllLoanSources();

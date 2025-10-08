@@ -72,9 +72,7 @@ export const ProductSummary = () => {
     pageSize: 10,
   });
 
-  const {
-    productSummaryList: downloadData,
-  } = useGetProductSummary({
+  const { productSummaryList: downloadData } = useGetProductSummary({
     ...searchParams,
     pageNumber: page,
     pageSize: 10,
@@ -103,9 +101,7 @@ export const ProductSummary = () => {
       setExportData(formattedExportData || []);
       setReportType('ProductSummary');
     }
-  }, [
-    downloadData?.pagedProductSummaries,
-  ]);
+  }, [downloadData?.pagedProductSummaries]);
 
   const handleSearch = (params: IProdutSummaryParams | null) => {
     setSearchParams({

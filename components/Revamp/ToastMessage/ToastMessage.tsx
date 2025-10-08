@@ -27,14 +27,17 @@ export const ToastMessage = ({ body, title, alertType = 'success' }: Props) => {
     message,
     title: contextTitle
   } = useContext(ToastMessageContext);
-  
+
   const env = process.env.NODE_ENV || 'production';
 
   useEffect(() => {
     if (open) {
-      setTimeout(() => {
-        toggleSnackbar();
-      }, env === 'development' ? 2000 : 7000);
+      setTimeout(
+        () => {
+          toggleSnackbar();
+        },
+        env === 'development' ? 2000 : 7000
+      );
     }
   }, [open]);
 

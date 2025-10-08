@@ -55,9 +55,7 @@ export const InflowOutflowReport = () => {
     pageNumber: page
   });
 
-  const {
-    inflowOutflowList: downloadData = [],
-  } = useGetInflowOutflowReport({
+  const { inflowOutflowList: downloadData = [] } = useGetInflowOutflowReport({
     ...searchParams,
     branchId,
     tellerId,

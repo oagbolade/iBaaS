@@ -46,13 +46,12 @@ export const AccountDebit = () => {
       getAll: isDateFilterApplied
     });
 
-  const { accountsinDebitList: downloadData = [] } =
-    useGetAccountInDebit({
-      ...searchParams,
-      pageSize: '10',
-      pageNumber: String(page),
-      getAll: true
-    });
+  const { accountsinDebitList: downloadData = [] } = useGetAccountInDebit({
+    ...searchParams,
+    pageSize: '10',
+    pageNumber: String(page),
+    getAll: true
+  });
 
   const rowsPerPage = 10;
   const totalElements = downloadData.length;

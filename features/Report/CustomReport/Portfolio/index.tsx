@@ -25,7 +25,7 @@ export const PortfolioAtRisk = () => {
     pageSize
   });
 
-  const { portfolioatRiskList: downloadData = []} = useGetAllPortfolioAtRisk({
+  const { portfolioatRiskList: downloadData = [] } = useGetAllPortfolioAtRisk({
     pageNumber,
     pageSize,
     getAll: true

@@ -454,8 +454,8 @@ export const CorporateCustomerPersonalDetailsForm = ({
               }));
             }}
             required
-          value={residentDetails?.residentState?.toString().trim()}
-          disabled={!isEditing && mappedResidentStates?.length === 0}
+            value={residentDetails?.residentState?.toString().trim()}
+            disabled={!isEditing && mappedResidentStates?.length === 0}
           />
         </Grid>
 

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
@@ -35,7 +35,7 @@ const ActionMenu = ({ detail }: ActionMenuProps) => {
 
 export const DrillDown = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+  const { setReportType, setExportData, setReadyDownload } =
     React.useContext(DownloadReportContext);
 
   const {
@@ -53,12 +53,11 @@ export const DrillDown = () => {
       pageNumber: String(page)
     });
 
-  const { glMainGroupRptList: downloadData } =
-    useGetGlMainGroupReport({
-      ...searchParams,
-      pageNumber: String(page),
-      getAll: true
-    });
+  const { glMainGroupRptList: downloadData } = useGetGlMainGroupReport({
+    ...searchParams,
+    pageNumber: String(page),
+    getAll: true
+  });
 
   const handleSearch = (params: ISearchParams | null) => {
     setSearchActive(true);
@@ -73,20 +72,14 @@ export const DrillDown = () => {
     }
     
     if (downloadData && downloadData?.pagedMainGroupReports.length > 0) {
-      const reportData = downloadData?.pagedMainGroupReports.map(
-        (item) => ({
-          GlName: item.gl_NodeName,
-          GlCode: item.gL_NodeCode,
-          total: item.total
-        })
-      );
-      
-      setReportType('GLMainGroupReport');
+      const reportData = downloadData?.pagedMainGroupReports.map((item) => ({
+        GlName: item.gl_NodeName,
+        GlCode: item.gL_NodeCode,
+        total: item.total
+      }));
       setExportData(reportData as []);
     }
-  }, [
-    downloadData,
-  ]);
+  }, [downloadData]);
 
   return (
     <Box sx={{ width: '100%' }}>

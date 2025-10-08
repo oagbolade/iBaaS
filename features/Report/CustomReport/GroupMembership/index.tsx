@@ -56,10 +56,11 @@ export const GroupMembership = () => {
     DownloadReportContext
   );
 
-  const { groupMembershipList, isLoading, totalRecords } = useGetGroupMembership({
-    ...searchParams,
-    page
-  });
+  const { groupMembershipList, isLoading, totalRecords } =
+    useGetGroupMembership({
+      ...searchParams,
+      page
+    });
 
   const { groupMembershipList: downloadData } = useGetGroupMembership({
     ...searchParams,

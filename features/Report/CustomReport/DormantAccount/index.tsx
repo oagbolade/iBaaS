@@ -21,7 +21,7 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const DormantAccount = () => {
-  const { isLoading} = useGlobalLoadingState();
+  const { isLoading } = useGlobalLoadingState();
   const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType } = React.useContext(
     DownloadReportContext
@@ -43,9 +43,7 @@ export const DormantAccount = () => {
     page
   });
 
-  const {
-    dormantAccountList: downloadData
-  } = useGetAllDormantAccount({
+  const { dormantAccountList: downloadData } = useGetAllDormantAccount({
     ...searchParams,
     page,
     getAll: true

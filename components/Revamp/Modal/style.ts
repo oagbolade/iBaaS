@@ -305,7 +305,26 @@ export const AccountPasswordContainer = {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '36px',
-  padding: '2px'
+  padding: '2px',
+  overflow: 'scroll',
+  // maxHeight: '45.556px',
+  scrollbarWidth: 'none',
+  scrollbarColor: `${colors.neutral900} ${colors.neutral100}`,
+  '&::-webkit-scrollbar': {
+    width: '8px',
+    display: 'none'
+  },
+  '&::-webkit-scrollbar-track': {
+    background: `${colors.neutral100}`,
+    borderRadius: '4px'
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: `${colors.neutral900}`,
+    borderRadius: '4px'
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    background: `${colors.activeBlue400}`
+  }
 };
 export const AccountPasswordTitleContainer = {
   display: 'flex',
