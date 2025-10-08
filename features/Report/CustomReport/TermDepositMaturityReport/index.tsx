@@ -106,13 +106,13 @@ export const TermDepositMaturityReport = () => {
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
       setExportData([]);
+      return;
     }
     
     const mappedReportList = mapReport(downloadData as ITdMaturityReport[]);
 
     setExportData(mappedReportList as []);
     setReportType('TermDepositMaturity');
-    setTdReportList(mappedReportList || []);
   }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -166,6 +166,7 @@ export const TermDepositMaturityReport = () => {
                 'See a directory of all term deposit maturity report in this system.'
             }}
             setPage={setPage}
+            totalPages={Math.ceil((totalRecords ?? 0) / 10)}
             totalElements={totalRecords}
             page={page}
             // ActionMenuProps={{}} Need to add this to view more

@@ -70,7 +70,8 @@ export function useGetAccountInDebit(
       queryKeys.getAccountInDebit,
       params?.branchID || '',
       params?.customerID || '',
-      params?.pageSize || 1
+      params?.pageSize || 1,
+      params?.getAll
     ],
     queryFn: () => fetchAccountInDebit(params, toastActions),
     enabled: Boolean((params?.branchID || '').length > 0 || params?.customerID)
