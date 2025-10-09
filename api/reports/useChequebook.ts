@@ -57,7 +57,7 @@ export function useGetCheckbookStatus(params: ISearchParams | null) {
       params?.branchID?.toString || '',
       params?.startDate || '',
       params?.endDate || '',
-      params?.page || 1,
+      params?.pageNumber || 1,
       params?.status
     ],
     queryFn: () => getChequebookStatus(toastActions, params || {}),

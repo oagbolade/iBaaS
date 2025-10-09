@@ -90,7 +90,7 @@ export interface ISearchParams {
   endDate?: string | null;
   reportDate?: string | null;
   reportType?: string | null;
-  pageNumber?: string | null;
+  pageNumber?: string | number | null;
   pageSize?: string | number | null;
   productClass?: string | null;
   tellerName?: string | null;

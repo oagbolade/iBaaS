@@ -36,7 +36,7 @@ export const TransactionClearing = () => {
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { status } = useGetStatus();
   const { branches } = useGetBranches();
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
 

@@ -21,7 +21,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 export const TellerBalance = () => {
   // const { isLoading } = useGlobalLoadingState();
   const { setExportData, setReportType } = useContext(DownloadReportContext);
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
 
@@ -39,8 +39,7 @@ export const TellerBalance = () => {
   const { tellerBalanceList = [], isLoading } = useGetTellerBalanceReport({
     ...searchParams,
     pageSize: 20,
-    pageNumber: page,
-    getAll: isDateFilterApplied
+    pageNumber: page
   });
 
   const { tellerBalanceList: downloadData = [] } = useGetTellerBalanceReport({

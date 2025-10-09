@@ -13,3 +13,8 @@ export const footerStyles = {
   background: `${colors.lightGrey}`,
 };
 
+export const footerTextStyles = {
+  color: `${colors.neutral900}`,
+  fontSize: '12px',
+  fontWeight: 400,
+};

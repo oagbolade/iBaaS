@@ -32,7 +32,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     branches
   });
 
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
 
@@ -48,8 +48,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       branchID: values.branchID ? values.branchID : null,
       reportType: values.reportType ? values.reportType : null,
       searchWith: values.searchWith ? values.searchWith : null,
-      reportDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      getAll: isDateFilterApplied
+      reportDate: dateValue[0]?.format('YYYY-MM-DD') || ''
     };
     onSearch?.(params);
   };

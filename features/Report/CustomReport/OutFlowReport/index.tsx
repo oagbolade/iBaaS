@@ -102,47 +102,48 @@ export const InflowOutflowReport = () => {
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
 
-      {isGlobalLoading || isLoading ? (
-        <FormSkeleton noOfLoaders={5} />
-      ) : (
-        <Box>
-          <TableV2
-            columns={inflowOutflowReportColumn}
-            data={inflowOutflowList}
-            keys={[
-              'accountnumber',
-              'accounttitle',
-              'productcode',
-              'productName',
-              'branchcode',
-              'inflow',
-              'outflow'
-            ]}
-            showHeader={{
-              mainTitle: 'Inflow/Outflow Report',
-              secondaryTitle: "See a directory of all inflow/outflow reports in this system."
-            }}
-            hideFilterSection
-            isSearched={searchActive}
-            page={page}
-            setPage={setPage}
-            totalPages={Math.ceil((totalRecords ?? 0) / 10)}
-            totalElements={totalRecords}
-          />
+      <Box mx={4}>
+        {isGlobalLoading || isLoading ? (
+          <FormSkeleton noOfLoaders={5} />
+        ) : (
+          <Box>
+            <TableV2
+              columns={inflowOutflowReportColumn}
+              data={inflowOutflowList}
+              keys={[
+                'accountnumber',
+                'accounttitle',
+                'productcode',
+                'productName',
+                'branchcode',
+                'inflow',
+                'outflow'
+              ]}
+              showHeader={{
+                mainTitle: 'Inflow/Outflow Report',
+                secondaryTitle: "See a directory of all inflow/outflow reports in this system."
+              }}
+              hideFilterSection
+              isSearched={searchActive}
+              page={page}
+              setPage={setPage}
+              totalPages={Math.ceil((totalRecords ?? 0) / 10)}
+              totalElements={totalRecords}
+            />
 
-          {inflowOutflowList.length > 0 && (
-            <Box sx={totalInflowContainerStyle}>
-              <Typography>Total Amount</Typography>
+            {inflowOutflowList.length > 0 && (
+              <Box sx={totalInflowContainerStyle}>
+                <Typography>Total Amount</Typography>
 
-              <Box sx={totalStyle}>
-                <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
-                <Typography>₦{totalInflow?.toLocaleString()}</Typography>
+                <Box sx={totalStyle}>
+                  <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
+                  <Typography>₦{totalInflow?.toLocaleString()}</Typography>
+                </Box>
               </Box>
-            </Box>
-          )}
-        </Box>
-      )}
-      
+            )}
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };
