@@ -25,7 +25,7 @@ export const InflowOutflowReport = () => {
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
 
@@ -50,8 +50,6 @@ export const InflowOutflowReport = () => {
     branchId,
     tellerId,
     pageSize: 10,
-<<<<<<< HEAD
-=======
     pageNumber: page
   });
 
@@ -60,29 +58,16 @@ export const InflowOutflowReport = () => {
     branchId,
     tellerId,
     pageSize: 10,
->>>>>>> 41974da916cfc4388821468386a8d46680be127d
     pageNumber: page,
-    getAll: isDateFilterApplied
+    getAll: true
   });
 
   React.useEffect(() => {
-    if (!inflowOutflowList.length) return;
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
 
-<<<<<<< HEAD
-    const formattedExportData = inflowOutflowList.map((item) => ({
-      'Account Number': item.accountnumber || '',
-      'Account Name': item.accounttitle || '',
-      'Product Code': item.productcode || '',
-      'Product Name': item.productName || '',
-      'Branch Code': item.branchcode || '',
-      Inflow: item.inflow || '',
-      Outflow: item.outflow || ''
-    }));
-
-    setExportData(formattedExportData);
-    setReportType('InflowOutflow');
-  }, [inflowOutflowList]);
-=======
     if (downloadData && downloadData?.length > 0) {
       const formattedExportData = downloadData.map((item) => ({
         'Account Number': item.accountnumber || '',
@@ -98,7 +83,6 @@ export const InflowOutflowReport = () => {
       setReportType('InflowOutflow');
     }
   }, [downloadData]);
->>>>>>> 41974da916cfc4388821468386a8d46680be127d
 
   const handleSearch = (params: IInflowOutflowParams | null) => {
     setSearchParams({
@@ -118,46 +102,48 @@ export const InflowOutflowReport = () => {
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
 
-      {isGlobalLoading || isLoading ? (
-        <FormSkeleton noOfLoaders={5} />
-      ) : (
-        <Box>
-          <TableV2
-            columns={inflowOutflowReportColumn}
-            data={inflowOutflowList}
-            keys={[
-              'accountnumber',
-              'accounttitle',
-              'productcode',
-              'productName',
-              'branchcode',
-              'inflow',
-              'outflow'
-            ]}
-            showHeader={{
-              mainTitle: 'Inflow/Outflow Report',
-              secondaryTitle: "See a directory of all inflow/outflow reports in this system."
-            }}
-            hideFilterSection
-            isSearched={searchActive}
-            page={page}
-            setPage={setPage}
-            totalPages={Math.ceil((totalRecords ?? 0) / 10)}
-            totalElements={totalRecords}
-          />
+      <Box mx={4}>
+        {isGlobalLoading || isLoading ? (
+          <FormSkeleton noOfLoaders={5} />
+        ) : (
+          <Box>
+            <TableV2
+              columns={inflowOutflowReportColumn}
+              data={inflowOutflowList}
+              keys={[
+                'accountnumber',
+                'accounttitle',
+                'productcode',
+                'productName',
+                'branchcode',
+                'inflow',
+                'outflow'
+              ]}
+              showHeader={{
+                mainTitle: 'Inflow/Outflow Report',
+                secondaryTitle: "See a directory of all inflow/outflow reports in this system."
+              }}
+              hideFilterSection
+              isSearched={searchActive}
+              page={page}
+              setPage={setPage}
+              totalPages={Math.ceil((totalRecords ?? 0) / 10)}
+              totalElements={totalRecords}
+            />
 
-          {inflowOutflowList.length > 0 && (
-            <Box sx={totalInflowContainerStyle}>
-              <Typography>Total Amount</Typography>
+            {inflowOutflowList.length > 0 && (
+              <Box sx={totalInflowContainerStyle}>
+                <Typography>Total Amount</Typography>
 
-              <Box sx={totalStyle}>
-                <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
-                <Typography>₦{totalInflow?.toLocaleString()}</Typography>
+                <Box sx={totalStyle}>
+                  <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
+                  <Typography>₦{totalInflow?.toLocaleString()}</Typography>
+                </Box>
               </Box>
-            </Box>
-          )}
-        </Box>
-      )}
+            )}
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };
