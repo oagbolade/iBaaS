@@ -25,6 +25,8 @@ import {
   TablePaginationTitle
 } from '@/components/Table/style';
 import { calculatePages } from '@/utils/calculatePages';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { formatIfCurrency } from '@/utils/formatIfCurrency';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => {
   return {
@@ -138,6 +140,18 @@ export const TableV2 = <T,>({
 }: Props<T>) => {
   const actionsColumn = tableConfig?.hasActions ? 1 : 0;
 
+ const currencyKeys = [
+  'crproductbalance',
+  'drproductbalance',
+  'totproductbalance',
+  'loanamount',
+  'currentbalance',
+  'bkbalance',
+  'inflow',
+  'outflow',
+] as const satisfies readonly string[];
+
+
   const StyledTableCell = styled(TableCell, {
     shouldForwardProp: (prop) =>
       prop !== 'isHeader' && prop !== 'isPainted' && prop !== 'rowType'
@@ -250,40 +264,40 @@ export const TableV2 = <T,>({
           <TableBody>
             {isSearched
               ? data?.map((dataItem, index) => {
-                  return (
-                    <StyledTableRow key={index}>
-                      {checkboxHeader && (
-                        <StyledTableCell component="th" scope="row">
-                          <Checkbox />
-                        </StyledTableCell>
-                      )}
-                      {keys?.map((key) => (
-                        <StyledTableCell
-                          isPainted={tableConfig?.paintedColumns?.includes(
-                            key as string
-                          )}
-                          colSpan={columns.length + actionsColumn}
-                          align="right"
-                          key={String(key)}
-                        >
-                          {String(dataItem[key])}
-                        </StyledTableCell>
-                      ))}
-                      {tableConfig?.hasActions && (
-                        <StyledTableCell
-                          colSpan={columns.length + actionsColumn}
-                          align="right"
-                        >
-                          {ActionMenuProps ? (
-                            <ActionMenuProps data={dataItem} />
-                          ) : (
-                            <ActionMenu />
-                          )}
-                        </StyledTableCell>
-                      )}
-                    </StyledTableRow>
-                  );
-                })
+                return (
+                  <StyledTableRow key={index}>
+                    {checkboxHeader && (
+                      <StyledTableCell component="th" scope="row">
+                        <Checkbox />
+                      </StyledTableCell>
+                    )}
+                    {keys?.map((key) => (
+                      <StyledTableCell
+                        isPainted={tableConfig?.paintedColumns?.includes(
+                          key as string
+                        )}
+                        colSpan={columns.length + actionsColumn}
+                        align="right"
+                        key={String(key)}
+                      >
+                         {formatIfCurrency(String(key), dataItem[key], currencyKeys)}
+                      </StyledTableCell>
+                    ))}
+                    {tableConfig?.hasActions && (
+                      <StyledTableCell
+                        colSpan={columns.length + actionsColumn}
+                        align="right"
+                      >
+                        {ActionMenuProps ? (
+                          <ActionMenuProps data={dataItem} />
+                        ) : (
+                          <ActionMenu />
+                        )}
+                      </StyledTableCell>
+                    )}
+                  </StyledTableRow>
+                );
+              })
               : renderEmptyTableBody()}
             <StyledTableRow>
               {isSearched &&
@@ -321,7 +335,7 @@ export const TableV2 = <T,>({
       </TableContainer>
       {isSearched && (
         <Stack direction="row" justifyContent="space-between" spacing={3}>
-          <PageTitle
+          <PageTitle 
             title={`${totalElements || data?.length} result(s) found`}
             styles={TableTitle}
           />

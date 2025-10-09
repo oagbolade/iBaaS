@@ -9,7 +9,7 @@ export const detailsCards = {
   width: '350px',
   height: '260px',
   border: `1px solid ${colors.neutral300}`,
-  boxShadow: 'none'
+  boxShadow: 'none',
 };
 
 export const detailsTitleContainer = {
@@ -22,7 +22,7 @@ export const detailsTitleContainer = {
   justifyContent: 'center',
   flexDirection: 'column',
   width: '100%',
-  height: 'auto'
+  height: 'auto',
 };
 
 export const detailsTitle = {

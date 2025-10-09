@@ -18,6 +18,7 @@ import {
 import { PageTitle } from '@/components/Typography';
 import { TableSingleAction } from '@/components/Table';
 import { IPortfolioAtRiskProduct } from '@/api/ResponseTypes/reports';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 type Props = {
   PortfolioOption: IPortfolioAtRiskProduct;
@@ -83,7 +84,11 @@ export const PortfolioCard = ({
                     styles={{ ...PortfolioProduct }}
                   />
                   <PageTitle
-                    title={String(PortfolioOption.currentbalance)}
+                    title={String(
+                      `NGN ${formatCurrency(
+                        PortfolioOption?.currentbalance || 0
+                      ) || 'N/A'}`
+                    )}
                     styles={{ ...PortfolioProductTilte }}
                   />
                 </Box>

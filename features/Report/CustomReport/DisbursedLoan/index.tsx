@@ -20,6 +20,7 @@ import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 interface ActionProps {
   data: IGetDisbursedLoanReport;
@@ -163,7 +164,7 @@ export const DisbursedLoan = () => {
                         {accountData?.officerName || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {accountData?.currentbalance?.toLocaleString() || 'N/A'}
+                        {`NGN ${formatCurrency(accountData?.currentbalance || 0)}` || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         <DisbursedLoanActions data={accountData} />

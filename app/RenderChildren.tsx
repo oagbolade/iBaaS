@@ -83,7 +83,6 @@ export const RenderChildren = ({ children }: Props) => {
         marginLeft,
         width,
         minWidth: 0,
-        overflowX: 'auto',
         boxSizing: 'border-box',
         height: '100vh',
         display: 'flex',

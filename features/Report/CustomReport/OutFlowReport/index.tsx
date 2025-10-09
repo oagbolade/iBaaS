@@ -142,6 +142,7 @@ export const InflowOutflowReport = () => {
           )}
         </Box>
       )}
+      
     </Box>
   );
 };

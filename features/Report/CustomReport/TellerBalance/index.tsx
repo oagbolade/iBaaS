@@ -16,6 +16,7 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const TellerBalance = () => {
   // const { isLoading } = useGlobalLoadingState();
@@ -129,7 +130,9 @@ export const TellerBalance = () => {
                       {accountData?.userid || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {accountData?.bkBalance || 'N/A'}
+                      {`NGN ${formatCurrency(
+                        accountData?.bkBalance || 0
+                      ) || 'N/A'}`}
                     </StyledTableCell>
                   </StyledTableRow>
                 )

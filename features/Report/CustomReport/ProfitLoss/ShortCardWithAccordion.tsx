@@ -201,7 +201,9 @@ export const ShortCardWithAccordion = ({
             <Grid item mobile={6} tablet={2} desktop={2}>
               <Stack>
                 <Title title="Total Balance" />
-                <Value title={assetValue} />
+                <Value title={`NGN ${formatCurrency(
+                        assetValue || 0
+                      ) || 'N/A'}`} />
               </Stack>
             </Grid>
 
