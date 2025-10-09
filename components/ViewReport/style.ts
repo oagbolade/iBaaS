@@ -41,7 +41,7 @@ export const ViewAccountContainer = {
   borderRadius: '5px',
   border: ` 1px solid ${colors.gray900}`,
   background: `${colors.white}`,
-  width: '1000px',
+  width: '95%',
   height: 'fixed',
   marginTop: '80px',
   marginLeft: '50px'

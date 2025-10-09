@@ -1,16 +1,13 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { DateRange } from '@mui/x-date-pickers-pro';
-import dayjs, { Dayjs } from 'dayjs';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetBranches } from '@/api/general/useBranches';
 import { accountEnquiryColumns } from '@/constants/Reports/COLUMNS';
 import {
-  IEnquiryParams,
   useGetAccountEnquiryByBranchId
 } from '@/api/reports/useGetAccountEnquiryBybranchId';
 import { IGetAccountEnquiry } from '@/api/ResponseTypes/reports';
@@ -19,8 +16,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { renderEmptyTableBody } from '@/components/Revamp/TableV2/TableV2';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
 import {
-  DownloadReportContext,
-  IReportQueryParams
+  DownloadReportContext
 } from '@/context/DownloadReportContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
@@ -43,7 +39,8 @@ export const AccountEnquiry = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('account-enquiry');
-  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+
+  const { setReportType, setExportData } =
     React.useContext(DownloadReportContext);
   const { dateValue } = React.useContext(DateRangePickerContext);
 
@@ -52,7 +49,6 @@ export const AccountEnquiry = () => {
   const { data: accountEnquiryData = [], isLoading } =
     useGetAccountEnquiryByBranchId({
       ...searchParams,
-      getAll: readyDownload,
       page
     });
 

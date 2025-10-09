@@ -21,7 +21,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const AccountDebit = () => {
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
 
@@ -33,9 +33,11 @@ export const AccountDebit = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('account-debit');
+
   const { setExportData, setReportType, setReportQueryParams } = useContext(
     DownloadReportContext
   );
+
   const { branches, isLoading: isLoadingBranches } = useGetBranches();
 
   const { accountsinDebitList = [], isLoading: isLoadingAccountInDebit, totalRecords } =
@@ -53,7 +55,7 @@ export const AccountDebit = () => {
   });
 
   const rowsPerPage = 10;
-  const totalPages = Math.ceil(totalRecords || 0 / rowsPerPage);
+  const totalPages = Math.ceil((totalRecords ?? 0) / rowsPerPage);
 
   const handleSearch = (params: ISearchParams | null) => {
     setSearchParams({

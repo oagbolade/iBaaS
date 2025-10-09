@@ -72,7 +72,7 @@ export function useGetInflowOutflowReport(
       params?.pageNumber || '',
       params?.branchId || '',
       params?.tellerId || '',
-      params?.getAll || ''
+      params?.getAll || false
     ],
     queryFn: () => fetchInflowOutflowReport(params, toastActions),
     enabled: Boolean((params?.branchId || '').length > 0)
