@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { ViewReports } from '@/components/ViewReport/ViewReports';
 import { ViewMaturityLoan } from '@/components/ViewReport/ViewMaturityLoan';
 import { ViewPostingJournal } from '@/components/ViewReport/ViewPotingJournal';
+import {ViewTermDepositMaturity} from '@/components/ViewReport/ViewTermDepositMaturity';
 import { MuiTableContainer } from '@/components/Table';
 import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
 import MOCK_DATA from '@/constants/MOCK_DATA.json';
@@ -18,7 +19,8 @@ export const ViewAccountEnquiry = () => {
       getMaturityLoan: 'maturityLoan',
       getPostingJournal: 'postingJournal',
       getLoanWeelyRepayment: 'weeklyLoan',
-      getGroupMembership: 'groupMembership'
+      getGroupMembership: 'groupMembership',
+      getTermDepostMaturity: 'termDepositMaturity'
     };
 
     const actionKey = Object.keys(actionMap).find((key) =>
@@ -34,6 +36,7 @@ export const ViewAccountEnquiry = () => {
   const getPostingJournalDetail = searchParams.get('postingJournalDetail');
   const getWeekLoanRepayment = searchParams.get('loanDetailWeekly');
   const getGroupMembershipDetail = searchParams.get('groupDetail');
+  const getTermDepositMaturity = searchParams.get('detail');
 
   const renderContent = () => {
     switch (actionType) {
@@ -68,6 +71,14 @@ export const ViewAccountEnquiry = () => {
           <Box>
             <ViewMaturityLoan
               detail={JSON.parse(getGroupMembershipDetail || '{}')}
+            />
+          </Box>
+        );
+      case 'termDepositMaturity':
+        return (
+          <Box>
+            <ViewTermDepositMaturity
+              detail={JSON.parse(getTermDepositMaturity || '{}')}
             />
           </Box>
         );

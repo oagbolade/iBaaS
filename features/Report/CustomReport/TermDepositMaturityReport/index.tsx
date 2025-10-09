@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { COLUMNS } from './COLUMNS';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
@@ -14,7 +15,32 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import colors from '@/assets/colors';
 import { ITdMaturityReport } from '@/api/ResponseTypes/reports';
+
+interface IViewMoreProps {
+  data: any;
+}
+
+const ViewMore = ({ data }: IViewMoreProps) => {
+  return (
+    <Link
+        href={`/report/custom-report/view-report/?getTermDepostMaturity=termDepositMaturity&detail=${JSON.stringify(data)}`}
+    >
+      <Typography
+        sx={{
+          fontSize: '14px',
+          fontWeight: 600,
+          lineHeight: '20px',
+          color: `${colors.activeBlue400}`,
+          cursor: 'pointer'
+        }}
+      >
+        View More
+      </Typography>
+    </Link>
+  );
+};
 
 export const TermDepositMaturityReport = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
@@ -106,13 +132,13 @@ export const TermDepositMaturityReport = () => {
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
       setExportData([]);
+      return;
     }
     
     const mappedReportList = mapReport(downloadData as ITdMaturityReport[]);
 
     setExportData(mappedReportList as []);
     setReportType('TermDepositMaturity');
-    setTdReportList(mappedReportList || []);
   }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -154,7 +180,7 @@ export const TermDepositMaturityReport = () => {
             tableConfig={{
               hasActions: true,
               paintedColumns: ['tdAmount', 'intRate'], // TODO: Pass keys to painted columns here
-              totalRow: ['Total', '', '₦4,764,805,170.51', '', '', '599.70', '']
+              totalRow: ['Total', '', '', '', '', '', '']
             }}
             keys={keys as []}
             columns={COLUMNS}
@@ -166,9 +192,10 @@ export const TermDepositMaturityReport = () => {
                 'See a directory of all term deposit maturity report in this system.'
             }}
             setPage={setPage}
+            totalPages={Math.ceil((totalRecords ?? 0) / 10)}
             totalElements={totalRecords}
             page={page}
-            // ActionMenuProps={{}} Need to add this to view more
+            ActionMenuProps={ViewMore}
           />
         )}
       </Box>

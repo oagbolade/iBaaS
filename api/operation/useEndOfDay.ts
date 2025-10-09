@@ -265,7 +265,7 @@ export function useGetEODProcesslog(
     isError,
     isLoading
   } = useQuery({
-    queryKey: [queryKeys.getEODProcesslog],
+    queryKey: [queryKeys.getEODProcesslog, params?.getAll || false],
     queryFn: () => getEODProcesslog(toastActions, params, id)
   });
 

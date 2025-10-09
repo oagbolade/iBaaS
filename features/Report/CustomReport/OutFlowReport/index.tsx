@@ -6,7 +6,6 @@ import { FilterSection } from './FilterSection';
 import { totalInflowContainerStyle, totalStyle } from './style';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { TableV2 } from '@/components/Revamp/TableV2';
-import { CustomTableHeader } from '@/components/Revamp/Shared/Table/CustomTableHeader';
 import { FormSkeleton } from '@/components/Loaders';
 
 import { useGetBranches } from '@/api/general/useBranches';
@@ -18,7 +17,6 @@ import { inflowOutflowReportColumn } from '@/constants/Reports/COLUMNS';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const InflowOutflowReport = () => {
@@ -52,6 +50,17 @@ export const InflowOutflowReport = () => {
     branchId,
     tellerId,
     pageSize: 10,
+<<<<<<< HEAD
+=======
+    pageNumber: page
+  });
+
+  const { inflowOutflowList: downloadData } = useGetInflowOutflowReport({
+    ...searchParams,
+    branchId,
+    tellerId,
+    pageSize: 10,
+>>>>>>> 41974da916cfc4388821468386a8d46680be127d
     pageNumber: page,
     getAll: isDateFilterApplied
   });
@@ -59,6 +68,7 @@ export const InflowOutflowReport = () => {
   React.useEffect(() => {
     if (!inflowOutflowList.length) return;
 
+<<<<<<< HEAD
     const formattedExportData = inflowOutflowList.map((item) => ({
       'Account Number': item.accountnumber || '',
       'Account Name': item.accounttitle || '',
@@ -72,6 +82,23 @@ export const InflowOutflowReport = () => {
     setExportData(formattedExportData);
     setReportType('InflowOutflow');
   }, [inflowOutflowList]);
+=======
+    if (downloadData && downloadData?.length > 0) {
+      const formattedExportData = downloadData.map((item) => ({
+        'Account Number': item.accountnumber || '',
+        'Account Name': item.accounttitle || '',
+        'Product Code': item.productcode || '',
+        'Product Name': item.productName || '',
+        'Branch Code': item.branchcode || '',
+        Inflow: item.inflow || '',
+        Outflow: item.outflow || ''
+      }));
+
+      setExportData(formattedExportData);
+      setReportType('InflowOutflow');
+    }
+  }, [downloadData]);
+>>>>>>> 41974da916cfc4388821468386a8d46680be127d
 
   const handleSearch = (params: IInflowOutflowParams | null) => {
     setSearchParams({
@@ -87,54 +114,50 @@ export const InflowOutflowReport = () => {
     <Box sx={{ width: '100%', marginTop: '50px' }}>
       <TopOverViewSection useBackButton />
 
-      <div className="mt-8">
+      {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
-      </div>
+      )}
 
-      <div className="mx-5">
-        <CustomTableHeader
-          mainTitle="Inflow/Outflow Report"
-          secondaryTitle="See a directory of all inflow/outflow reports in this system."
-          hideFilterSection
-        />
+      {isGlobalLoading || isLoading ? (
+        <FormSkeleton noOfLoaders={5} />
+      ) : (
+        <Box>
+          <TableV2
+            columns={inflowOutflowReportColumn}
+            data={inflowOutflowList}
+            keys={[
+              'accountnumber',
+              'accounttitle',
+              'productcode',
+              'productName',
+              'branchcode',
+              'inflow',
+              'outflow'
+            ]}
+            showHeader={{
+              mainTitle: 'Inflow/Outflow Report',
+              secondaryTitle: "See a directory of all inflow/outflow reports in this system."
+            }}
+            hideFilterSection
+            isSearched={searchActive}
+            page={page}
+            setPage={setPage}
+            totalPages={Math.ceil((totalRecords ?? 0) / 10)}
+            totalElements={totalRecords}
+          />
 
-        {isGlobalLoading || isLoading ? (
-          <FormSkeleton noOfLoaders={5} />
-        ) : (
-          <Box>
-            <TableV2
-              columns={inflowOutflowReportColumn}
-              data={inflowOutflowList}
-              keys={[
-                'accountnumber',
-                'accounttitle',
-                'productcode',
-                'productName',
-                'branchcode',
-                'inflow',
-                'outflow'
-              ]}
-              hideFilterSection
-              isSearched={searchActive}
-              page={page}
-              setPage={setPage}
-              totalPages={totalRecords}
-              totalElements={inflowOutflowList.length}
-            />
+          {inflowOutflowList.length > 0 && (
+            <Box sx={totalInflowContainerStyle}>
+              <Typography>Total Amount</Typography>
 
-            {inflowOutflowList.length > 0 && (
-              <Box sx={totalInflowContainerStyle}>
-                <Typography>Total Amount</Typography>
-
-                <Box sx={totalStyle}>
-                  <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
-                  <Typography>₦{totalInflow?.toLocaleString()}</Typography>
-                </Box>
+              <Box sx={totalStyle}>
+                <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
+                <Typography>₦{totalInflow?.toLocaleString()}</Typography>
               </Box>
-            )}
-          </Box>
-        )}
-      </div>
+            </Box>
+          )}
+        </Box>
+      )}
     </Box>
   );
 };

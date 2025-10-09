@@ -41,37 +41,44 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
   const [searchParams] = useState<ISearchParams | null>(null);
   const { glSubGroupRptList, isLoading } = useGetGlSubGroupReport({
     ...searchParams,
-    getAll: false,
     nodeCode: detail.gL_NodeCode,
     pageSize: '10'
   });
 
-  const { setReportType, setExportData, readyDownload } = React.useContext(
+  const { glSubGroupRptList: downloadData } = useGetGlSubGroupReport({
+    ...searchParams,
+    getAll: true,
+    nodeCode: detail.gL_NodeCode,
+    pageSize: '10'
+  });
+
+  const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
 
   React.useEffect(() => {
-    setReportType('GLSubMainGroupReport');
+    if (!downloadData || downloadData?.pagedSubGroupReports.length === 0) {
+      setExportData([]);
+      return;
+    }
+
     if (
-      readyDownload &&
-      Array.isArray(glSubGroupRptList?.pagedSubGroupReports) &&
-      glSubGroupRptList.pagedSubGroupReports.length > 0
+      Array.isArray(downloadData?.pagedSubGroupReports) &&
+      downloadData.pagedSubGroupReports.length > 0
     ) {
-      const reportData = glSubGroupRptList?.pagedSubGroupReports.map(
+      const reportData = downloadData?.pagedSubGroupReports.map(
         (item) => ({
           GlName: item.gL_ClassName,
           GlCode: item.gL_ClassCode,
           total: item.total
         })
       );
+
+      setReportType('GLSubMainGroupReport');
       setExportData(reportData as []);
     }
   }, [
-    isLoading,
-    readyDownload,
-    setExportData,
-    glSubGroupRptList,
-    setReportType
+    downloadData
   ]);
 
   return (

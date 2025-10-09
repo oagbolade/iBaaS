@@ -14,8 +14,24 @@ import {
 import { PageTitle } from '@/components/Typography';
 import { InterSwitchImage } from '@/assets/interswitch/image';
 import colors from '@/assets/colors';
+import { getLastPage, getStoredUser } from '@/utils/user-storage';
 
 export const LoginContainer = () => {
+  // check if user is authenticated
+  // redirect to dashboard if authenticated
+  // else show login page
+  if (typeof window !== 'undefined') {
+    const token = getStoredUser()?.token;
+    const lastPage = getLastPage();
+
+    console.log('getLastPage', lastPage);
+
+    if (token) {
+      window.location.href = lastPage || '/dashboard';
+      return null;
+    }
+  } 
+
   return (
     <Stack
       direction={{ xs: 'column', md: 'row' }}

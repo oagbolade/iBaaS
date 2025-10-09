@@ -26,6 +26,7 @@ async function fetchAccountInDebit(
 ): Promise<IAccountInDebitResponseType | null> {
   try {
     const urlEndpoint = '/ReportServices/AccountsinDebitReport';
+
     const { data }: AxiosResponse<IAccountInDebitResponseType> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
@@ -70,10 +71,12 @@ export function useGetAccountInDebit(
       queryKeys.getAccountInDebit,
       params?.branchID || '',
       params?.customerID || '',
-      params?.pageSize || 1
+      params?.pageSize || 1,
+      params?.pageNumber || 1,
+      params?.getAll
     ],
     queryFn: () => fetchAccountInDebit(params, toastActions),
-    enabled: Boolean((params?.branchID || '').length > 0 || params?.customerID)
+    enabled: Boolean((params?.branchID || '').length > 0)
   });
 
   return { ...data, isError, isLoading };

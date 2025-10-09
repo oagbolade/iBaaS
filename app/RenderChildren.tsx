@@ -34,12 +34,12 @@ export const RenderChildren = ({ children }: Props) => {
   const { marginLeft, width } = useRemoveSideBar();
   const { pageTitle } = usePageTitle();
 
-  // Check Auth Status every minute
-  const ONE_MINUTE = 1 * 60 * 1000;
+  // Check Auth Status every two seconds
+  const TWO_SECONDS = 2000;
 
   setInterval(() => {
     authGuard(toastActions);
-  }, ONE_MINUTE);
+  }, TWO_SECONDS);
 
   useTrackRecentlyVisitedModules();
 

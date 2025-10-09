@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer } from '@/components/Table';
@@ -21,7 +21,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const AccountDebit = () => {
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
 
@@ -33,20 +33,21 @@ export const AccountDebit = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('account-debit');
+
   const { setExportData, setReportType, setReportQueryParams } = useContext(
     DownloadReportContext
   );
+
   const { branches, isLoading: isLoadingBranches } = useGetBranches();
 
-  const { accountsinDebitList = [], isLoading: isLoadingAccountInDebit } =
+  const { accountsinDebitList = [], isLoading: isLoadingAccountInDebit, totalRecords } =
     useGetAccountInDebit({
       ...searchParams,
       pageSize: '10',
       pageNumber: String(page),
-      getAll: isDateFilterApplied
     });
 
-  const { accountsinDebitList: downloadData = [] } = useGetAccountInDebit({
+  const { accountsinDebitList: downloadData } = useGetAccountInDebit({
     ...searchParams,
     pageSize: '10',
     pageNumber: String(page),
@@ -54,8 +55,7 @@ export const AccountDebit = () => {
   });
 
   const rowsPerPage = 10;
-  const totalElements = downloadData.length;
-  const totalPages = Math.ceil(totalElements / rowsPerPage);
+  const totalPages = Math.ceil((totalRecords ?? 0) / rowsPerPage);
 
   const handleSearch = (params: ISearchParams | null) => {
     setSearchParams({
@@ -64,13 +64,17 @@ export const AccountDebit = () => {
       endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
     setSearchActive(true);
-    setReportType('AccountDebit');
     setReportQueryParams(params as IReportQueryParams); // TODO: need to pass accept just required fields here
   };
 
   // Set export data when accountEnquiryData is retrieved
   useEffect(() => {
-    if (downloadData?.length > 0) {
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+    }
+
+    if (downloadData && downloadData?.length > 0) {
+      setReportType('AccountDebit');
       setExportData(downloadData);
     }
   }, [downloadData]);
@@ -86,9 +90,9 @@ export const AccountDebit = () => {
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
-      <div className="mt-8">
+      {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
-      </div>
+      )}
       <Box sx={{ padding: '25px', width: '100%' }}>
         <MuiTableContainer
           columns={accountDebitInReportColumns}
@@ -96,7 +100,7 @@ export const AccountDebit = () => {
           page={Number(page)}
           setPage={setPage}
           totalPages={totalPages}
-          totalElements={totalElements}
+          totalElements={totalRecords}
           showHeader={{
             mainTitle: 'Account in Debit',
             secondaryTitle:

@@ -14,12 +14,10 @@ import {
 } from '@/api/reports/useGetProductSummary';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
-import {
-  GetProductSummaryReport,
-  IpagedProductSummaries
-} from '@/api/ResponseTypes/reports';
+import { IpagedProductSummaries } from '@/api/ResponseTypes/reports';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 interface IViewMoreProps {
   data: IpagedProductSummaries;
@@ -44,14 +42,27 @@ const ViewMore = ({ data }: IViewMoreProps) => {
     </Link>
   );
 };
+
 export const ProductSummary = () => {
   const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
 
-  const { setExportData, setReportType } =
-    React.useContext(DownloadReportContext);
+  const { setExportData, setReportType } = React.useContext(
+    DownloadReportContext
+  );
 
-  const [isSearched, setSearched] = React.useState(false);
+  interface ProductSummaryRow {
+    productcode: string;
+    productname: string;
+    noofaccts: string | number;
+    crproductbalance: string;
+    drproductbalance: string;
+    totproductbalance: string;
+  }
+
+  const [productSummaryData, setProductSummaryData] = React.useState<
+    ProductSummaryRow[]
+  >([]);
 
   const {
     searchParams,
@@ -69,7 +80,7 @@ export const ProductSummary = () => {
   } = useGetProductSummary({
     ...searchParams,
     pageNumber: page,
-    pageSize: 10,
+    pageSize: 10
   });
 
   const { productSummaryList: downloadData } = useGetProductSummary({
@@ -91,17 +102,41 @@ export const ProductSummary = () => {
           'Product Code': item?.productcode || '',
           'Product Name': item?.productname || '',
           'Number of Accounts': item?.noofaccts || '',
-          'CR Product Balance': item?.crproductbalance || '',
-          'DR Product Balance': item?.drproductbalance || '',
+          'CR Product Balance':
+            `NGN ${formatCurrency(item.crproductbalance || 0) || 'N/A'}` || '',
+          'DR Product Balance':
+            `NGN ${formatCurrency(item?.drproductbalance) || 'N/A'}` || '',
           'Total Balance': item?.totproductbalance || ''
         })
       );
 
-      // Ensure no blank row or misplaced headers
-      setExportData(formattedExportData || []);
-      setReportType('ProductSummary');
+      const data = productSummaryList?.pagedProductSummaries.map((item) => ({
+        productcode: item?.productcode || '',
+        productname: item?.productname || '',
+        noofaccts: item?.noofaccts || '',
+        crproductbalance:
+          `NGN ${formatCurrency(item.crproductbalance || 0) || 'N/A'}` || '',
+        drproductbalance:
+          `NGN ${formatCurrency(item?.drproductbalance) || 'N/A'}` || '',
+        totproductbalance:
+          `NGN ${formatCurrency(item?.totproductbalance) || 'N/A'}` || ''
+      }));
+
+      setProductSummaryData(data || []);
+      if (downloadData) {
+        setExportData(formattedExportData || []);
+        setReportType('ProductSummary');
+      }
+    } else {
+      setProductSummaryData([]);
     }
-  }, [downloadData?.pagedProductSummaries]);
+  }, [
+    downloadData?.pagedProductSummaries,
+    downloadData,
+    productSummaryList?.pagedProductSummaries,
+    setExportData,
+    setReportType
+  ]);
 
   const handleSearch = (params: IProdutSummaryParams | null) => {
     setSearchParams({
@@ -147,7 +182,7 @@ export const ProductSummary = () => {
               ]
             }}
             columns={MOCK_COLUMNS_V2}
-            data={productSummaryList?.pagedProductSummaries || []}
+            data={productSummaryData}
             keys={[
               'productcode',
               'productname',

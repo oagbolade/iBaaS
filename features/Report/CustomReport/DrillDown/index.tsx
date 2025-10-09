@@ -35,7 +35,7 @@ const ActionMenu = ({ detail }: ActionMenuProps) => {
 
 export const DrillDown = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const { setReportType, setExportData, setReadyDownload } =
+  const { setReportType, setExportData } =
     React.useContext(DownloadReportContext);
 
   const {
@@ -61,7 +61,6 @@ export const DrillDown = () => {
 
   const handleSearch = (params: ISearchParams | null) => {
     setSearchActive(true);
-    setReadyDownload(false);
     setSearchParams(params);
     setReportType('GLMainGroupReport');
   };

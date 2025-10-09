@@ -11,10 +11,9 @@ import {
   useGetEODProcesslog
 } from '@/api/operation/useEndOfDay';
 import { FormSkeleton } from '@/components/Loaders';
-import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
+import { StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import {
-  SearchIEODLogsResponse,
   SearchProcessEODLogsResponse
 } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
@@ -34,28 +33,28 @@ export const EndOfDayProcessTable = ({ EODid }: Props) => {
   const { data } = useGetEODProcesses();
 
   const { data: process, isLoading } = useGetEODProcesslog(searchParams, EODid);
-  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+  const { data: downloadData } = useGetEODProcesslog({ ...searchParams, getAll: true }, EODid);
+
+  const { setReportType, setExportData } =
     React.useContext(DownloadReportContext);
+
   const totalPercentageUncompleted =
     data?.find((item) => item.totalUncompletedPercentage) || 0;
+
   const totalPercentageCompleted =
     data?.find((item) => item.totalPercentageCompleted) || 0;
-  React.useEffect(() => {
-    setReportType('EOD');
-    if (readyDownload) {
-      setSearchParams((prev) => ({
-        ...prev,
-        getAll: true
-      }));
-    }
-  }, [readyDownload, setReportType]);
 
   React.useEffect(() => {
-    setReportType('EOD');
-    if ((process ?? []).length > 0) {
-      setExportData(process as []);
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
     }
-  }, [process, isLoading, readyDownload, setExportData, setReportType]);
+  
+    if ((process ?? []).length > 0) {
+      setReportType('EOD');
+      setExportData(downloadData as []);
+    }
+  }, [downloadData]);
+
   const handExportData = () => {
     setExportData(process as []);
   };

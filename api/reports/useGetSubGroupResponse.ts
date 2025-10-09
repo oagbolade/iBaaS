@@ -122,6 +122,7 @@ export function useGetGlSubGroupReport(
       params?.nodeCode || '',
       params?.getAll || false,
       params?.pageNumber || 10,
+      params?.getAll || 1,
       params?.pageSize || 1
     ],
     queryFn: () => fetchGlSubGroupReport(params, toastActions),
@@ -143,7 +144,7 @@ async function fetchGlNodeClassReport(
           Gl_ClassCode: params.gl_ClassCode,
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1,
-          getAll: params.getAll,
+          getAll: params.getAll || false,
           searchWith: params.searchWith,
           branchCode: params.branchID
         },
@@ -182,7 +183,8 @@ export function useGlNodeClassReport(
       params?.gl_ClassCode || '',
       params?.pageSize || 10,
       params?.page || 1,
-      params?.pageNumber || 10
+      params?.pageNumber || 10,
+      params?.getAll || 10
     ],
     queryFn: () => fetchGlNodeClassReport(params, toastActions),
     enabled: Boolean(

@@ -1,20 +1,14 @@
-import React, { ChangeEvent, useState } from 'react';
+import React from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { Form, Formik } from 'formik';
 import { buttonBackgroundColor } from '../AccountDebit/style';
-import {
-  FormSelectField,
-  FormSelectInput,
-  FormTextInput,
-  TextInput
-} from '@/components/FormikFields';
+import { FormSelectField, FormTextInput } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
-import { inputFields } from '@/features/Loan/LoanDirectory/styles';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { IProdutSummaryParams } from '@/api/reports/useGetProductSummary';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { Form, Formik } from 'formik';
 
 type Props = {
   branches?: IBranches[];
@@ -52,56 +46,55 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
       {() => (
         <Form>
           <Box>
-            <Box sx={{ height: '120px' }}>
+            <Grid
+              container
+              spacing={2}
+            >
               <Grid
-                sx={{ padding: '5px 5px', display: 'flex', gap: '35px' }}
-                spacing={2}
+               
+                item
+                mobile={12}
+                tablet={4}
+                justifyContent="center"
               >
-                <Grid
-                  mb={{ tablet: 3 }}
-                  item
-                  mobile={12}
-                  tablet={5}
-                  justifyContent="center"
-                >
-                  <FormSelectField
-                    name="branchId"
-                    options={mappedBranches}
-                    label="Branch ID"
-                  />{' '}
-                </Grid>
-                <Grid
-                  mb={{ tablet: 10 }}
-                  item
-                  mobile={12}
-                  tablet={10}
-                  justifyContent="center"
-                >
-                  <FormTextInput
-                    icon={<SearchIcon />}
-                    name="search"
-                    placeholder="Search by product code or name"
-                    label="Product Code/Name"
-                  />{' '}
-                </Grid>
-                <Grid
-                  item
-                  mobile={12}
-                  tablet={1}
-                  sx={{ display: 'flex' }}
-                  justifyContent="flex-end"
-                  mt={{ tablet: 3.2 }}
-                  mr={{ mobile: 30, tablet: 0 }}
-                  mb={{ mobile: 6, tablet: 0 }}
-                >
-                  <ActionButton
-                    type="submit"
-                    customStyle={buttonBackgroundColor}
-                    buttonTitle="Search"
-                  />
-                </Grid>
+                <FormSelectField
+                  name="branchId"
+                  options={mappedBranches}
+                  label="Branch ID"
+                />{' '}
               </Grid>
-            </Box>
+
+              <Grid
+              
+                item
+                mobile={12}
+                tablet={7}
+                justifyContent="center"
+              >
+                <FormTextInput
+                  icon={<SearchIcon />}
+                  name="search"
+                  placeholder="Search by product code or name"
+                  label="Product Code/Name"
+                />{' '}
+              </Grid>
+              <Grid
+                item
+                mobile={12}
+                tablet={1}
+                sx={{ display: 'flex' }}
+                justifyContent="flex-end"
+                mt={{ tablet: 3.2 }}
+                mr={{ mobile: 30, tablet: 0 }}
+                mb={{ mobile: 6, tablet: 0 }}
+              >
+                <ActionButton
+                  type="submit"
+                  customStyle={buttonBackgroundColor}
+                  buttonTitle="Search"
+                />
+              </Grid>
+            </Grid>
           </Box>
         </Form>
       )}

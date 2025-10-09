@@ -41,7 +41,7 @@ export const CustomerBalances = () => {
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
 
-  const { setReportType, setExportData, readyDownload, setReadyDownload } =
+  const { setReportType, setExportData } =
     React.useContext(DownloadReportContext);
 
   const { dateValue } = React.useContext(DateRangePickerContext);
@@ -57,7 +57,6 @@ export const CustomerBalances = () => {
     totalRecords = 0
   }: CustomerBalanceList = useGetCustomerBalance({
     ...searchParams,
-    getAll: readyDownload,
     page
   });
 
@@ -108,7 +107,6 @@ export const CustomerBalances = () => {
   }, [getAllDownloadData, isCustomerBalanceDataLoading]);
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setReadyDownload(false);
     setSearchActive(true);
     setSearchParams({
       ...params,
