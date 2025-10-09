@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { TrailBalanceGroupResponse } from '../ResponseTypes/reports';
-import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -10,7 +10,6 @@ import { IToastActions } from '@/constants/types';
 import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
 import { toast } from '@/utils/toast';
-import { getCurrentIsoDate } from '@/utils/getCurrentDate';
 
 export async function getTrialBalanceGroup(
   toastActions: IToastActions,
@@ -59,7 +58,8 @@ export function useGetTrialBalanceGroup(params: ISearchParams | null) {
       params?.pageNumber || 1,
       params?.reportDate || '',
       params?.reportType || '',
-      params?.endDate || ''
+      params?.endDate || '',
+      params?.getAll || ''
     ],
     queryFn: () => getTrialBalanceGroup(toastActions, params || {}),
     enabled: Boolean(

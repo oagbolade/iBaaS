@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { centraliseNoDataAvailable } from '../style';
 import { FilterSection } from './FilterSection';
@@ -25,7 +25,6 @@ import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const TrialBalance = () => {
   const { isLoading } = useGlobalLoadingState();
-  const [, setSearch] = useState<boolean>(false);
   const { branches } = useGetBranches();
   const { glType } = useGetGLType();
   const { setExportData, setReportType } =
@@ -53,6 +52,7 @@ export const TrialBalance = () => {
       ...searchParams,
       pageSize: '20',
       pageNumber: String(page),
+      getAll: true
     });
 
   const handleSearch = async (params: ISearchParams | null) => {
