@@ -31,6 +31,8 @@ import { useGetProductClass } from '@/api/setup/useProduct';
 import { IProducts } from '@/api/ResponseTypes/setup';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import moment from 'moment';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const StatementAccount = () => {
   const { isLoading } = useGlobalLoadingState();
@@ -321,7 +323,9 @@ export const StatementAccount = () => {
               rptStatementList?.pagedRecords?.map((statement, index) => (
                 <StyledTableRow key={`${statement.accountnumber || index}`}>
                   <StyledTableCell component="th" scope="row">
-                    {statement.trandate}
+                    {statement.trandate
+                      ? moment(statement.trandate).format('MMMM Do YYYY, h:mm:ss a')
+                      : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
                     <span className=" overflow-hidden text-ellipsis block w-64">
@@ -332,16 +336,24 @@ export const StatementAccount = () => {
                     {statement.refNo}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {statement.enddate}
+                    {statement.enddate
+                      ? moment(statement.enddate).format('MMMM Do YYYY, h:mm:ss a')
+                      : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {statement.debit}
+                   {statement?.debit
+  ? `NGN ${formatCurrency(statement.debit)}`
+  : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {statement?.credit || 'N/A'}
+                    {statement?.credit
+  ? `NGN ${formatCurrency(statement.credit)}`
+  : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {statement.bkBalance || '0.0'}
+                {statement?.bkBalance
+  ? `NGN ${formatCurrency(statement.bkBalance)}`
+  : 'N/A'}
                   </StyledTableCell>
                 </StyledTableRow>
               ))

@@ -20,6 +20,8 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import moment from 'moment';
 
 export const TransactionClearing = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
@@ -128,13 +130,13 @@ export const TransactionClearing = () => {
                         {dataItem?.chequeno || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.create_dt?.split(' ')[0] || 'N/A'}
+                        {moment(dataItem?.create_dt?.split(' ')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {dataItem?.valuedate?.split(' ')[0] || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {dataItem?.tranamount || 'N/A'}
+                        {`NGN ${formatCurrency(dataItem?.tranamount || 0)}` || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {dataItem?.narration || 'N/A'}

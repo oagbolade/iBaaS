@@ -20,6 +20,8 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import moment from 'moment';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 interface Props {
   data: IGetLoanOverdueReport;
@@ -134,6 +136,7 @@ export const LoanOverdue = () => {
             branches={branches}
             bankproducts={bankproducts}
             onSearch={handleSearch}
+            
           />
         )}
 
@@ -167,16 +170,17 @@ export const LoanOverdue = () => {
                           {accountData?.productCode || 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {accountData?.loanamount || 'N/A'}
+                          {`NGN ${formatCurrency(accountData?.loanamount || 0)}` || 'N/A'} 
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {accountData?.startdate?.split('T')[0] || 'N/A'}
+                          {moment(accountData?.startdate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
+                        
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {accountData?.matDate?.split('T')[0] || 'N/A'}
+                          {moment(accountData?.matDate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {accountData?.principal_Outstanding || 'N/A'}
+                          {`NGN ${formatCurrency(accountData?.principal_Outstanding || 0)}` || 'N/A'} 
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           <LoanOverdueAction data={accountData} />

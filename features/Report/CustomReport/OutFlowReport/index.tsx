@@ -20,6 +20,7 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const InflowOutflowReport = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
@@ -138,8 +139,12 @@ export const InflowOutflowReport = () => {
                 <Typography>Total Amount</Typography>
 
                 <Box sx={totalStyle}>
-                  <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
-                  <Typography>₦{totalInflow?.toLocaleString()}</Typography>
+                  <Typography>₦{`NGN ${formatCurrency(
+                        totalOutflow?.toLocaleString() || 0
+                      ) || 'N/A'}`}</Typography>
+                  <Typography>₦{`NGN ${formatCurrency(
+                        totalInflow?.toLocaleString() || 0
+                      ) || 'N/A'}`}</Typography>
                 </Box>
               </Box>
             )}

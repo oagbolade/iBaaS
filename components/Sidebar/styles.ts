@@ -18,7 +18,7 @@ export const companyContainer = {
   width: '243px',
   minHeight: '124px',
   marginTop: 1,
-  marginBottom: 1,
+  marginBottom: 5,
 };
 
 export const companyNameTitle = {

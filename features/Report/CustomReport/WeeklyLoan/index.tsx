@@ -24,6 +24,7 @@ import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import moment from 'moment';
 
 interface ActionMenuProps {
   detail: string;
@@ -143,14 +144,16 @@ export const WeeklyLoan = () => {
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">
-                      {formatCurrency(dataItem?.loanamount) || 'N/A'}
+                      {`NGN ${formatCurrency(dataItem?.loanamount) || 'N/A'}`}
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">
-                      {formatDateAndTime(dataItem?.matDate) || 'N/A'}
+                      {dataItem?.matDate
+                        ? moment(dataItem?.matDate).format('YYYY-MM-DD, hh:mm A')
+                        : 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                      {formatCurrency(dataItem?.expectedAmt) || 'N/A'}
+                      {`NGN ${formatCurrency(dataItem?.expectedAmt) || 'N/A'}`}
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">

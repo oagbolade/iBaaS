@@ -135,7 +135,10 @@ export const PostingJournal = () => {
                       {dataItem?.tranname || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                      {formatDateAndTime(dataItem?.tranDate)}
+                      {/* {formatDateAndTime(dataItem?.tranDate)} */}
+                       {dataItem?.tranDate
+                        ? formatDateAndTime(dataItem?.tranDate)
+                        : 'N/A'}
                     </StyledTableCell>
 
                     <StyledTableCell component="th" scope="row">

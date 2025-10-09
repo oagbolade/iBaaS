@@ -8,6 +8,7 @@ import {
   StyledTableRow,
   renderEmptyTableBody
 } from '@/components/Table/Table';
+import moment from 'moment';
 import { StyledTableCell } from '@/components/Table/style';
 import { useGetCheckbookStatus } from '@/api/reports/useChequebook';
 import { ISearchParams } from '@/app/api/search/route';
@@ -73,7 +74,7 @@ export const ChequeBookStatus = () => {
   // Set export data when getAllChequeBookStatusData is retrieved
   React.useEffect(() => {
     if (!downloadData || downloadData?.length === 0) {
-      return  setExportData([]);
+      return setExportData([]);
     }
 
     if (downloadData?.length > 0) {
@@ -128,7 +129,9 @@ export const ChequeBookStatus = () => {
                       </StyledTableCell>
 
                       <StyledTableCell component="th" scope="row">
-                        {formatDateAndTime(dataItem?.createdate)}
+                        {dataItem.createdate
+                          ? moment(dataItem.createdate).format('MMMM Do YYYY, h:mm:ss a')
+                          : 'N/A'}
                       </StyledTableCell>
 
                       <StyledTableCell component="th" scope="row">

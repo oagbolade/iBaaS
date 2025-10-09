@@ -19,6 +19,8 @@ import { useGetIAReportType } from '@/api/general/useIAReportType';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import moment from 'moment';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const IncomeAssuranceReport = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
@@ -132,22 +134,22 @@ export const IncomeAssuranceReport = () => {
                       {dataItem?.fullname || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.startdate?.split('T')[0] || 'N/A'}
+                      {moment(dataItem?.startdate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.matdate?.split('T')[0] || 'N/A'}
+                      {moment(dataItem?.matdate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.intrate || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.loanamount?.toLocaleString() || 'N/A'}
+                      {`NGN ${formatCurrency(dataItem?.loanamount || 0)}` || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.productName || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.accrued_Int?.toLocaleString() || 'N/A'}
+                      {`NGN ${formatCurrency(dataItem?.accrued_Int || 0)}` || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.branchName || 'N/A'}

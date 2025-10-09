@@ -17,6 +17,25 @@ export const TopOverViewSingeCalendarSection = () => {
 
   const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
   type Key = 'startDate';
+
+    const memoizedDateCalendar = React.useMemo(
+    () => (
+      <DateCalendar
+        value={dateValue[0]}
+        onChange={(newValue) => {
+          if (newValue && !newValue.isSame(dateValue[0], 'day')) {
+            setDateValue([newValue, dateValue[1]]);
+          }
+        }}
+      />
+    ),
+    [dateValue, setDateValue]
+  );
+
+  const formattedEndDate = React.useMemo(
+    () => dateValue[1]?.format('YYYY-MM-DD') ?? '',
+    [dateValue[1]]
+  );
   const handleDateChange = (newValue: any, key: Key) => {
     if (key === 'startDate') {
       setDateValue([newValue, dateValue[1]]);
@@ -61,12 +80,7 @@ export const TopOverViewSingeCalendarSection = () => {
         <Box>
           <ActionButtonWithPopper
             searchGroupVariant="DateRangePicker"
-            CustomDateRangePicker={
-              <DateCalendar
-                value={dateValue[0]}
-                onChange={(newValue) => handleDateChange(newValue, 'startDate')}
-              />
-            }
+             CustomDateRangePicker={memoizedDateCalendar}
             customStyle={{ ...dateFilter }}
             icon={
               <CalendarTodayOutlinedIcon
@@ -76,7 +90,7 @@ export const TopOverViewSingeCalendarSection = () => {
               />
             }
             iconPosition="end"
-            buttonTitle={dateValue[1]?.format('YYYY-MM-DD')}
+            buttonTitle={formattedEndDate}
           />
         </Box>
       </Stack>

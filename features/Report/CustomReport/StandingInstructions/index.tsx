@@ -17,6 +17,7 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import moment from 'moment';
 
 export const ActionMenu: React.FC = () => {
   return (
@@ -110,10 +111,14 @@ export const StandingInstructions = () => {
                       {dataItem?.toaccountnumber || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.create_dt || 'N/A'}
+                      {dataItem?.create_dt
+                        ? moment(dataItem.create_dt).format('MMMM Do YYYY, h:mm:ss a')
+                        : 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.nextDate || 'N/A'}
+                      {dataItem?.nextDate
+                        ? moment(dataItem.nextDate).format('MMMM Do YYYY, h:mm:ss a')
+                        : 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.toaccountnumber || 'N/A'}
