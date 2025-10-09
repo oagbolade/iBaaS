@@ -52,7 +52,7 @@ export const OverDraft = () => {
     setReportType('OverdraftReport');
   };
 
-  const { overDraftReport, isLoading } = useGetOverdraftReport({
+  const { overDraftReport, isLoading, totalRecords } = useGetOverdraftReport({
     ...searchParams
   });
 
@@ -71,6 +71,9 @@ export const OverDraft = () => {
       setExportData(downloadData);
     }
   }, [downloadData]);
+
+  const rowsPerPage = 10;
+  const totalPages = Math.ceil(totalRecords / rowsPerPage);
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -97,6 +100,8 @@ export const OverDraft = () => {
             data={overDraftReport}
             setPage={setPage}
             page={page}
+            totalPages={totalPages}
+            totalElements={totalRecords}
           >
             {searchActive ? (
               overDraftReport?.map((dataItem: IOverdraftReport) => {

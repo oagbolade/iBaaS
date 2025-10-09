@@ -79,5 +79,6 @@ export const FileNameMapper: IFileNameMapper = {
   AuditTrail: 'AuditTrailReport',
   OverdraftReport: 'OverdraftReport',
   WeeklyLoanRepayment: 'WeeklyLoanRepayment',
+  AccountDebit: 'AccountDebit',
   EOD: 'EOD'
 };

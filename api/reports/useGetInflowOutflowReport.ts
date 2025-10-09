@@ -34,7 +34,8 @@ async function fetchInflowOutflowReport(
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1,
           searchWith: params?.tellerId,
-          branchCode: params?.branchId
+          branchCode: params?.branchId,
+          getAll: params?.getAll || false
         },
         headers: {
           'Content-Type': 'application/json',
@@ -70,10 +71,11 @@ export function useGetInflowOutflowReport(
       params?.endDate || '',
       params?.pageNumber || '',
       params?.branchId || '',
-      params?.tellerId || ''
+      params?.tellerId || '',
+      params?.getAll || false
     ],
     queryFn: () => fetchInflowOutflowReport(params, toastActions),
-    enabled: Boolean((params?.branchId || '').length > 0 || params.tellerId)
+    enabled: Boolean((params?.branchId || '').length > 0)
   });
 
   return { ...data, isError, isLoading };

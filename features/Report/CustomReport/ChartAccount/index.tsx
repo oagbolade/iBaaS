@@ -51,12 +51,25 @@ export const ChartAccount = () => {
     pageNumber: String(page)
   });
 
+  const {
+    chartofAccountList: downloadData,
+  } = useGetChartOfAccount({
+    ...searchParams,
+    pageNumber: String(page),
+    getAll: true
+  });
+
   React.useEffect(() => {
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
+
     if (
-      Array.isArray(getAllChartOfAccountData) &&
-      getAllChartOfAccountData.length > 0
+      Array.isArray(downloadData) &&
+      downloadData.length > 0
     ) {
-      const mapChartOfAccount = getAllChartOfAccountData.map((item) => ({
+      const mapChartOfAccount = downloadData.map((item) => ({
         glnumber: item.glnumber,
         acctname: item.acctname
       }));
@@ -64,7 +77,7 @@ export const ChartAccount = () => {
       setExportData(mapChartOfAccount as []);
       setReportType('ChartOfAccount');
     }
-  }, [getAllChartOfAccountData, setExportData, setReportType]);
+  }, [downloadData]);
 
   return (
     <Box
@@ -91,7 +104,7 @@ export const ChartAccount = () => {
               }}
               showHeader={{
                 hideFilterSection: true,
-                mainTitle: 'Chart Of Account ',
+                mainTitle: 'Chart Of Account',
                 secondaryTitle:
                   'See a directory of all Chart of Account in this system.'
               }}

@@ -18,7 +18,6 @@ import { ITrialBalance } from '@/api/ResponseTypes/reports';
 import { useGetTrialBalance } from '@/api/reports/useTrialBalance';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
 
@@ -26,7 +25,7 @@ export const MainCash = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     useContext(DownloadReportContext);
   const glClassCode = useGetParams('classCode') || '';
   const selectedReport = useGetParams('name') || '';
@@ -54,11 +53,25 @@ export const MainCash = () => {
     glTypeCode,
     reportType,
     startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD'),
-    getAll: readyDownload
+  });
+
+  const {
+    trialBydateList: downloadData,
+  } = useGetTrialBalance({
+    ...searchParams,
+    pageSize: '10',
+    branchID,
+    searchWith: searchParams?.customerID || customerID,
+    pageNumber: String(page),
+    gl_ClassCode: glClassCode,
+    glNodeCode,
+    glTypeCode,
+    reportType,
+    startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD'),
+    getAll: true
   });
 
   const handleSearch = async (params: ISearchParams | null) => {
-    setReadyDownload(false);
     setSearchParams({
       ...params,
       gl_ClassCode: glClassCode,
@@ -70,17 +83,13 @@ export const MainCash = () => {
     setPage(1); // Reset to the first page on new search
   };
 
-  React.useEffect(() => {
-    if (readyDownload) {
-      setSearchParams((prev) => ({
-        ...prev,
-        getAll: true
-      }));
-    }
-  }, [readyDownload]);
-
   useEffect(() => {
-    if (trialBydateList?.pagedTrialBalances.length > 0 && readyDownload) {
+    if (!downloadData || downloadData?.pagedTrialBalances.length === 0) {
+      setExportData([]);
+      return;
+    }
+
+    if (downloadData?.pagedTrialBalances.length > 0) {
       const formattedExportData = trialBydateList?.pagedTrialBalances.map(
         (item) => ({
           'GL Account Number': item?.acctno || 'N/A',
@@ -98,11 +107,7 @@ export const MainCash = () => {
       setReportType('TrialBalanceByDate');
     }
   }, [
-    setExportData,
-    setReportType,
-    trialBydateList?.pagedTrialBalances,
-    readyDownload,
-    setReadyDownload
+    downloadData
   ]);
 
   const rowsPerPage = 10;

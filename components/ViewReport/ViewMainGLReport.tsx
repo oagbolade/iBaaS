@@ -25,7 +25,7 @@ export const ViewMainGLReport: React.FC<{ detail: any }> = ({ detail }) => {
   const [search] = useState<boolean>(true);
   const [searchParams] = useState<ISearchParams | null>(null);
 
-  const { glClassCodeRptList, isLoading } = useGlNodeClassReport({
+  const { glClassCodeRptList, isLoading, totalRecords } = useGlNodeClassReport({
     ...searchParams,
     gl_ClassCode: detail.gL_ClassCode,
     branchCode: '001', // get this from the backend when its avaiable (from query params)
@@ -33,18 +33,29 @@ export const ViewMainGLReport: React.FC<{ detail: any }> = ({ detail }) => {
     pageSize: '10'
   });
 
-  const { setReportType, setExportData, readyDownload } = React.useContext(
+  const { glClassCodeRptList: downloadData } = useGlNodeClassReport({
+    ...searchParams,
+    gl_ClassCode: detail.gL_ClassCode,
+    branchCode: '001', // get this from the backend when its avaiable (from query params)
+    getAll: true,
+    pageSize: '10'
+  });
+
+  const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
 
   React.useEffect(() => {
-    setReportType('GLAccountClassReport');
+    if (!downloadData || downloadData?.pagedAccountsByClassCode.length === 0) {
+      setExportData([]);
+      return;
+    }
+
     if (
-      readyDownload &&
-      Array.isArray(glClassCodeRptList?.pagedAccountsByClassCode) &&
-      glClassCodeRptList.pagedAccountsByClassCode.length > 0
+      Array.isArray(downloadData?.pagedAccountsByClassCode) &&
+      downloadData.pagedAccountsByClassCode.length > 0
     ) {
-      const reportdata = glClassCodeRptList?.pagedAccountsByClassCode.map(
+      const reportdata = downloadData?.pagedAccountsByClassCode.map(
         (item) => ({
           Branchname: item.branchName,
           BranchCode: item.branchCode,
@@ -53,15 +64,14 @@ export const ViewMainGLReport: React.FC<{ detail: any }> = ({ detail }) => {
           balance: item.bkbalance
         })
       );
+
+      setReportType('GLAccountClassReport');
       setExportData(reportdata as []);
     }
   }, [
-    isLoading,
-    readyDownload,
-    setExportData,
-    glClassCodeRptList,
-    setReportType
+    downloadData
   ]);
+
   return (
     <Box marginTop={10}>
       <Stack
@@ -179,6 +189,8 @@ export const ViewMainGLReport: React.FC<{ detail: any }> = ({ detail }) => {
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <TableV2
+            totalElements={totalRecords}
+            totalPages={Math.ceil(totalRecords / 10)}
             isSearched={search}
             columns={drillClassCodeDownReportGlColumns}
             data={glClassCodeRptList?.pagedAccountsByClassCode || []}

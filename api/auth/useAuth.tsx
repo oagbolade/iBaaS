@@ -171,6 +171,17 @@ export function useAuth(): UseAuth {
   }
 
   async function signout(): Promise<void> {
+    const token = getStoredUser()?.token;
+
+    if (!token) {
+      setTimeout(() => {
+        clearStoredUser();
+        toast('Logout successful, redirecting please wait...', 'success');
+        window.location.href = '/login';
+        return;
+      }, 1500);
+    }
+
     try {
       const urlEndpoint = '/Login/Logout/Logout';
 

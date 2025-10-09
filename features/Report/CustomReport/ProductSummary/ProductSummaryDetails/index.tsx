@@ -1,21 +1,15 @@
 'use client';
-import { Box, Typography } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import { Box } from '@mui/material';
+import React, { useState } from 'react';
 import { PageTitle } from '@/components/Typography';
 import {
-  tellerPostingContainerStyles,
-  ViewAccountContainer,
   ViewAccountTitle,
   ViewStyle,
-  ViewTellerPostingStyle,
   ViewTitle
 } from '@/components/ViewReport/style';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
-import { BackButton } from '@/components/Revamp/Buttons';
-import { backButtonContainerStyle } from '@/features/Requests/styles';
 import {
-  IProdutSummaryDetailsParams,
   useGetProductSummaryDetails
 } from '@/api/reports/useGetProductSummaryDetails';
 import { FormSkeleton } from '@/components/Loaders';
@@ -24,6 +18,7 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { ProductSummaryDetailsColumns } from '@/constants/MOCK_COLUMNSv2';
 import { TextInput } from '@/components/FormikFields';
 import { SearchIcon } from '@/assets/svg';
+import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const ProductSummaryDetails = () => {
   const productCode = useGetParams('productCode') || '';
@@ -33,9 +28,6 @@ export const ProductSummaryDetails = () => {
   const drProductBalance = useGetParams('drProductBalance') || '';
   const totalProductBalance = useGetParams('totalProductBalance') || '';
 
-  const [searchParams, setSearchParams] =
-    React.useState<IProdutSummaryDetailsParams | null>(null);
-
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,10 +35,8 @@ export const ProductSummaryDetails = () => {
   };
 
   const [page, setPage] = React.useState(1);
-  const { setExportData, setReportType, readyDownload, setReadyDownload } =
+  const { setExportData, setReportType } =
     React.useContext(DownloadReportContext);
-
-  const { search } = searchParams || {};
 
   const {
     data: productSummaryDetails,
@@ -56,22 +46,46 @@ export const ProductSummaryDetails = () => {
     productCode,
     pageNumber: page,
     pageSize: 10,
-    getAll: readyDownload
   });
 
-  const filteredDetails = productSummaryDetails?.pagedProductSummaries.filter(
-    (details) =>
-      details?.accountnumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      details?.accounttitle.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const {
+    data: downloadData,
+  } = useGetProductSummaryDetails({
+    productCode,
+    pageNumber: page,
+    pageSize: 10,
+    getAll: true
+  });
+
+  const filteredDetails = productSummaryDetails?.pagedProductSummaries
+    ?.filter(
+      (details) =>
+        details?.accountnumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        details?.accounttitle?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    ?.map((item) => ({
+      branchname: item.branchname,
+      accountnumber: item.accountnumber,
+      accounttitle: item.accounttitle,
+      dateopened: item.dateopened,
+      bkbalance:  `NGN ${formatCurrency(item.bkbalance || 0) || 'N/A'}` || '',
+      availBal:  `NGN ${formatCurrency(item.availBal || 0) || 'N/A'}` || '',
+      lastdatepay: item.lastdatepay,
+      holdbal: item.holdbal,
+      pendingCC: item.pendingCC
+    }));
 
   React.useEffect(() => {
+    if (!downloadData || downloadData?.pagedProductSummaries?.length === 0) {
+      setExportData([]);
+      return;
+    }
+    
     if (
-      (productSummaryDetails?.pagedProductSummaries?.length ?? 0) > 0 &&
-      readyDownload
+      (downloadData?.pagedProductSummaries?.length ?? 0) > 0
     ) {
       const formattedExportData =
-        productSummaryDetails?.pagedProductSummaries.map((item) => ({
+        downloadData?.pagedProductSummaries.map((item) => ({
           'Product Code': item?.productcode || '',
           'Product Name': item?.productname || '',
           'Number of Accounts': numberOfAccount || '',
@@ -94,26 +108,17 @@ export const ProductSummaryDetails = () => {
       setReportType('ProductSummaryDetails');
     }
   }, [
-    productSummaryDetails?.pagedProductSummaries,
-    setExportData,
-    setReportType,
-    readyDownload,
-    setReadyDownload,
-    numberOfAccount,
-    crProductBalance,
-    drProductBalance,
-    totalProductBalance
+    downloadData
   ]);
 
   return (
-    <Box sx={{ marginTop: '100px' }}>
-      <Box sx={{ width: '1300px' }}>
-        <TopOverViewSection useBackButton />
-      </Box>
+    <Box sx={{ marginTop: '60px' }}>
+      <TopOverViewSection useBackButton />
+
       <Box
         sx={{
-          margin: '90px 0 50px 50px',
-          width: 'inset',
+          margin: '90px 0px 50px 50px',
+          width: '95%',
           padding: '50px',
           border: '1px solid #E1E6ED'
         }}
@@ -126,100 +131,52 @@ export const ProductSummaryDetails = () => {
             columnGapGap: '20px'
           }}
         >
-          <Box>
-            <Box>
-              <Box>
-                <Box sx={ViewStyle}>
-                  <PageTitle
-                    title="PRODUCT CODE"
-                    styles={{ ...ViewAccountTitle }}
-                  />
-                  <PageTitle title={productCode} styles={{ ...ViewTitle }} />
-                </Box>
-              </Box>
-            </Box>
+          <Box sx={ViewStyle}>
+            <PageTitle title="PRODUCT CODE" styles={{ ...ViewAccountTitle }} />
+            <PageTitle title={productCode} styles={{ ...ViewTitle }} />
           </Box>
 
-          <Box>
-            <Box>
-              <Box>
-                <Box sx={ViewStyle}>
-                  <PageTitle
-                    title="NUMBER OF ACCOUNTS"
-                    styles={{ ...ViewAccountTitle }}
-                  />
-                  <PageTitle
-                    title={numberOfAccount}
-                    styles={{ ...ViewTitle }}
-                  />
-                </Box>
-              </Box>
-            </Box>
+          <Box sx={ViewStyle}>
+            <PageTitle
+              title="NUMBER OF ACCOUNTS"
+              styles={{ ...ViewAccountTitle }}
+            />
+            <PageTitle title={numberOfAccount} styles={{ ...ViewTitle }} />
           </Box>
 
-          <Box>
-            <Box>
-              <Box>
-                <Box sx={ViewStyle}>
-                  <PageTitle
-                    title="CR PRODUCT BALANCE"
-                    styles={{ ...ViewAccountTitle }}
-                  />
-                  <PageTitle
-                    title={Number(crProductBalance).toLocaleString()}
-                    styles={{ ...ViewTitle }}
-                  />
-                </Box>
-              </Box>
-            </Box>
+          <Box sx={ViewStyle}>
+            <PageTitle
+              title="CR PRODUCT BALANCE"
+              styles={{ ...ViewAccountTitle }}
+            />
+            <PageTitle
+              title={Number(crProductBalance).toLocaleString()}
+              styles={{ ...ViewTitle }}
+            />
           </Box>
 
-          <Box>
-            <Box>
-              <Box>
-                <Box sx={ViewStyle}>
-                  <PageTitle
-                    title="DR PRODUCT BALANCE"
-                    styles={{ ...ViewAccountTitle }}
-                  />
-                  <PageTitle
-                    title={Number(drProductBalance).toLocaleString()}
-                    styles={{ ...ViewTitle }}
-                  />
-                </Box>
-              </Box>
-            </Box>
+          <Box sx={ViewStyle}>
+            <PageTitle
+              title="DR PRODUCT BALANCE"
+              styles={{ ...ViewAccountTitle }}
+            />
+            <PageTitle
+              title={Number(drProductBalance).toLocaleString()}
+              styles={{ ...ViewTitle }}
+            />
           </Box>
 
-          <Box>
-            <Box>
-              <Box>
-                <Box sx={ViewStyle}>
-                  <PageTitle
-                    title="PRODUCT NAME"
-                    styles={{ ...ViewAccountTitle }}
-                  />
-                  <PageTitle title={productName} styles={{ ...ViewTitle }} />
-                </Box>
-              </Box>
-            </Box>
+          <Box sx={ViewStyle}>
+            <PageTitle title="PRODUCT NAME" styles={{ ...ViewAccountTitle }} />
+            <PageTitle title={productName} styles={{ ...ViewTitle }} />
           </Box>
 
-          <Box>
-            <Box>
-              <Box>
-                <Box sx={ViewStyle}>
-                  <PageTitle
-                    title="TOTAL BALANCE"
-                    styles={{ ...ViewAccountTitle }}
-                  />
-                  <PageTitle
-                    title={Number(totalProductBalance).toLocaleString()}
-                    styles={{ ...ViewTitle }}
-                  />
-                </Box>
-              </Box>
-            </Box>
+          <Box sx={ViewStyle}>
+            <PageTitle title="TOTAL BALANCE" styles={{ ...ViewAccountTitle }} />
+            <PageTitle
+              title={Number(totalProductBalance).toLocaleString()}
+              styles={{ ...ViewTitle }}
+            />
           </Box>
         </Box>
       </Box>
@@ -233,17 +190,14 @@ export const ProductSummaryDetails = () => {
         {isloadingproductSumaryDetails ? (
           <FormSkeleton noOfLoaders={5} />
         ) : (
-          <Box>
+          <div>
             <Box
               sx={{
-                marginTop: '10px',
                 marginBottom: '30px',
-                marginLeft: '20px',
                 width: '100%'
               }}
             >
               <TextInput
-                customStyle={{ width: '90%' }}
                 name="Search"
                 placeholder="Search"
                 icon={<SearchIcon />}
@@ -254,7 +208,7 @@ export const ProductSummaryDetails = () => {
 
             <TableV2
               tableConfig={{
-                hasActions: true,
+                hasActions: false,
                 totalRow: [
                   'Total',
                   '',
@@ -298,7 +252,7 @@ export const ProductSummaryDetails = () => {
               totalPages={Math.ceil((totalRecords || 0) / 10)}
               totalElements={totalRecords}
             />
-          </Box>
+          </div>
         )}
       </Box>
     </Box>
