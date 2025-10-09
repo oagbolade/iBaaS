@@ -59,14 +59,14 @@ export const ChequeBookStatus = () => {
     totalRecords
   } = useGetCheckbookStatus({
     ...searchParams,
-    pageNumber: page,
+    pageNumber: String(page),
   });
 
   const {
     chequeBookList: downloadData
   } = useGetCheckbookStatus({
     ...searchParams,
-    pageNumber: page,
+    pageNumber: String(page),
     getAll: true
   });
 

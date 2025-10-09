@@ -25,7 +25,6 @@ import {
   TablePaginationTitle
 } from '@/components/Table/style';
 import { calculatePages } from '@/utils/calculatePages';
-import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { formatIfCurrency } from '@/utils/formatIfCurrency';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => {
@@ -150,7 +149,6 @@ export const TableV2 = <T,>({
   'inflow',
   'outflow',
 ] as const satisfies readonly string[];
-
 
   const StyledTableCell = styled(TableCell, {
     shouldForwardProp: (prop) =>
