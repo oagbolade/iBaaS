@@ -20,7 +20,6 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const InflowOutflowReport = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
@@ -28,7 +27,7 @@ export const InflowOutflowReport = () => {
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { dateValue } = React.useContext(
+  const { dateValue, isDateFilterApplied } = React.useContext(
     DateRangePickerContext
   );
 
@@ -53,25 +52,14 @@ export const InflowOutflowReport = () => {
     branchId,
     tellerId,
     pageSize: 10,
-    pageNumber: page
-  });
-
-  const { inflowOutflowList: downloadData = [] } = useGetInflowOutflowReport({
-    ...searchParams,
-    branchId,
-    tellerId,
-    pageSize: 10,
     pageNumber: page,
-    getAll: true
+    getAll: isDateFilterApplied
   });
 
   React.useEffect(() => {
-    if (!downloadData || downloadData?.length === 0) {
-      setExportData([]);
-      return;
-    }
+    if (!inflowOutflowList.length) return;
 
-    const formattedExportData = downloadData.map((item) => ({
+    const formattedExportData = inflowOutflowList.map((item) => ({
       'Account Number': item.accountnumber || '',
       'Account Name': item.accounttitle || '',
       'Product Code': item.productcode || '',
@@ -83,7 +71,7 @@ export const InflowOutflowReport = () => {
 
     setExportData(formattedExportData);
     setReportType('InflowOutflow');
-  }, [downloadData]);
+  }, [inflowOutflowList]);
 
   const handleSearch = (params: IInflowOutflowParams | null) => {
     setSearchParams({
@@ -139,12 +127,8 @@ export const InflowOutflowReport = () => {
                 <Typography>Total Amount</Typography>
 
                 <Box sx={totalStyle}>
-                  <Typography>₦{`NGN ${formatCurrency(
-                        totalOutflow?.toLocaleString() || 0
-                      ) || 'N/A'}`}</Typography>
-                  <Typography>₦{`NGN ${formatCurrency(
-                        totalInflow?.toLocaleString() || 0
-                      ) || 'N/A'}`}</Typography>
+                  <Typography>₦{totalOutflow?.toLocaleString()}</Typography>
+                  <Typography>₦{totalInflow?.toLocaleString()}</Typography>
                 </Box>
               </Box>
             )}

@@ -149,6 +149,8 @@ export const TableV2 = <T,>({
   'bkbalance',
   'inflow',
   'outflow',
+  'Total Balance',
+  'DR Product Balance'
 ] as const satisfies readonly string[];
 
 
