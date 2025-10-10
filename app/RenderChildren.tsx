@@ -86,7 +86,6 @@ export const RenderChildren = ({ children }: Props) => {
         boxSizing: 'border-box',
         height: '100vh',
         display: 'flex',
-        overflowX: 'auto',
         flexDirection: 'column'
       }}
     >
