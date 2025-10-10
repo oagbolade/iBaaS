@@ -20,8 +20,8 @@ export async function getPlainTrialBalance(
   let result: PlainTrialBalanceResponse = {} as PlainTrialBalanceResponse;
   try {
     // report url
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/PLAINTRIALBALANCE?reportdate=${params?.reportDate}&reporttype=${params?.reportType}&branchcode=${params?.branchID}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize || '10'}&getAll=${params?.getAll}&searchWith=${params?.searchWith|| ''}`;
-  
+    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/PLAINTRIALBALANCE?reportdate=${params?.reportDate}&reporttype=${params?.reportType}&branchcode=${params?.branchID}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize || '10'}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith || ''}`;
+
     const { data }: AxiosResponse<PlainTrialBalanceResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -65,9 +65,9 @@ export function useGetPlainTrialBalance(params: ISearchParams | null) {
     queryFn: () => getPlainTrialBalance(toastActions, params || {}),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
-        (params?.reportType || '').length > 0 ||
-        (params?.searchWith || '').length > 0 ||
-        (params?.reportDate || '').length > 0
+      (params?.reportType || '').length > 0 ||
+      (params?.searchWith || '').length > 0 ||
+      (params?.reportDate || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

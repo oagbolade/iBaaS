@@ -14,7 +14,6 @@ import { useGetCheckbookStatus } from '@/api/reports/useChequebook';
 import { ISearchParams } from '@/app/api/search/route';
 import { FormSkeleton } from '@/components/Loaders';
 import { IChequeBookList } from '@/api/ResponseTypes/reports';
-import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { useGetBranches } from '@/api/general/useBranches';
 import { useGetStatus } from '@/api/general/useStatus';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
@@ -25,7 +24,7 @@ import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const ChequeBookStatus = () => {
   const { isLoading } = useGlobalLoadingState();
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
   const { setExportData, setReportType, setReportQueryParams } =
@@ -56,21 +55,22 @@ export const ChequeBookStatus = () => {
 
   const {
     chequeBookList: getAllChequeBookStatusData,
-    isLoading: isChequeBookDataLoading
+    isLoading: isChequeBookDataLoading,
+    totalRecords
   } = useGetCheckbookStatus({
     ...searchParams,
-    page,
-    getAll: isDateFilterApplied
+    pageNumber: String(page),
   });
 
   const {
     chequeBookList: downloadData
   } = useGetCheckbookStatus({
     ...searchParams,
-    page,
+    pageNumber: String(page),
     getAll: true
   });
 
+  const rowsPerPage = 10;
   // Set export data when getAllChequeBookStatusData is retrieved
   React.useEffect(() => {
     if (!downloadData || downloadData?.length === 0) {
@@ -116,6 +116,8 @@ export const ChequeBookStatus = () => {
               data={getAllChequeBookStatusData}
               setPage={setPage}
               page={page}
+              totalElements={totalRecords}
+              totalPages={Math.ceil(totalRecords / (rowsPerPage))}
             >
               {searchActive ? (
                 getAllChequeBookStatusData?.map((dataItem: IChequeBookList) => {

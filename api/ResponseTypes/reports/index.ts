@@ -80,6 +80,7 @@ export interface ChequeBookStatusResponse extends IFetchingState {
   responseCode: string;
   responseDescription: string;
   chequeBookList: IChequeBookList[];
+  totalRecords: number;
 }
 
 export interface ICustomerBalance {

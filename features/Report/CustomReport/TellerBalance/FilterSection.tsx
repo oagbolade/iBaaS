@@ -29,7 +29,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const { setWidth } = useCurrentBreakpoint();
 
   const { searchParams } = usePersistedSearch<ISearchParams>('teller-balance');
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
   const { mappedBranches } = useMapSelectOptions({

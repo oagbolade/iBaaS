@@ -20,11 +20,12 @@ import { StyledTableCell } from '@/components/Table/style';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
+import { set } from 'lodash';
 
 export const IndividualLoan = () => {
   const [pageNumber, setPageNumber] = useState<string>('1');
   const { setExportData, setReportType } = useContext(DownloadReportContext);
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
   const { branches, isLoading: isbranchLoading } = useGetBranches();
@@ -47,13 +48,26 @@ export const IndividualLoan = () => {
       productCode: detailedPortfolioAtRiskReportData.productCode,
       pageNumber: page,
       pageSize: 10,
-      getAll: isDateFilterApplied
+    });
+
+  const { portfolioatRiskDetailRptList: downloadData } =
+    useGetDetailedPortfolioReport({
+      ...searchParams,
+      branchCode: branchCode ?? undefined,
+      search: search ?? undefined,
+      productCode: detailedPortfolioAtRiskReportData.productCode,
+      pageNumber: page,
+      pageSize: 10,
+      getAll: true
     });
 
   React.useEffect(() => {
-    if (!portfolioatRiskDetailRptList.length) return;
+    if (!downloadData || downloadData.length) {
+      setExportData([]);
+      return
+    };
 
-    const formattedExportData = portfolioatRiskDetailRptList.map((item) => ({
+    const formattedExportData = downloadData.map((item) => ({
       'Account Number': item.accountnumber || '',
       'Account Name': item.fullname || '',
       'Start Date': item.startdate.split('T')[0] || '',
@@ -67,7 +81,7 @@ export const IndividualLoan = () => {
     // Ensure no blank row or misplaced headers
     setExportData(formattedExportData);
     setReportType('PortfolioAtRisk');
-  }, [portfolioatRiskDetailRptList, setExportData, setReportType]);
+  }, [downloadData]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);

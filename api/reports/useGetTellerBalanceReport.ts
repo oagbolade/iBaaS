@@ -75,7 +75,8 @@ export function useGetTellerBalanceReport(
       params?.customerId || '',
       params?.pageNumber || 1,
       params?.startDate || '',
-      params?.endDate || ''
+      params?.endDate || '',
+      params?.getAll || false,
     ],
     queryFn: () => getTellerBalanceReport(params, toastActions),
     enabled: Boolean((params?.branchId || '').length > 0 || params.customerId)

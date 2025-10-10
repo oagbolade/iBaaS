@@ -25,7 +25,6 @@ import {
   TablePaginationTitle
 } from '@/components/Table/style';
 import { calculatePages } from '@/utils/calculatePages';
-import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { formatIfCurrency } from '@/utils/formatIfCurrency';
 import { formatIfDate } from '@/utils/formatIfDate';
 
@@ -163,7 +162,6 @@ export const TableV2 = <T,>({
     'create_dt',
     'end_dt',
   ] as const satisfies readonly string[];
-
 
   const StyledTableCell = styled(TableCell, {
     shouldForwardProp: (prop) =>

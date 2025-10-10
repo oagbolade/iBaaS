@@ -17,7 +17,7 @@ export async function getChequebookStatus(
 ) {
   let result: ChequeBookStatusResponse = {} as ChequeBookStatusResponse;
   try {
-    const urlEndpoint = `/ReportServices/Chequebookstatus?status=${params?.status}&startDate=${params?.startDate}&endDate=${params?.endDate}&acctno=${params?.accountNumber || ''}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/ReportServices/Chequebookstatus?status=${params?.status}&startDate=${params?.startDate}&endDate=${params?.endDate}&acctno=${params?.accountNumber || ''}&pageNumber=${Number(params?.pageNumber) || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<ChequeBookStatusResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,
@@ -57,7 +57,7 @@ export function useGetCheckbookStatus(params: ISearchParams | null) {
       params?.branchID?.toString || '',
       params?.startDate || '',
       params?.endDate || '',
-      params?.page || 1,
+      params?.pageNumber || 1,
       params?.status
     ],
     queryFn: () => getChequebookStatus(toastActions, params || {}),

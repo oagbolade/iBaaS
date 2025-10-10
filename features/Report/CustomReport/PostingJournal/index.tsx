@@ -41,7 +41,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 
 export const PostingJournal = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const { dateValue, isDateFilterApplied } = React.useContext(
+  const { dateValue } = React.useContext(
     DateRangePickerContext
   );
   const { setExportData, setReportType, setReportQueryParams } =

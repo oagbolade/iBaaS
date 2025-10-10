@@ -37,7 +37,7 @@ export const ProfitLoss = () => {
   const { branches } = useGetBranches();
   const { setExportData, setReportType } =
     useContext(DownloadReportContext);
-  const { dateValue, isDateFilterApplied } = useContext(DateRangePickerContext);
+  const { dateValue } = useContext(DateRangePickerContext);
 
   const { branchID } = searchParams || {};
 

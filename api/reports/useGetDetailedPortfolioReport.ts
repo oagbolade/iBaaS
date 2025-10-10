@@ -75,7 +75,8 @@ export function useGetDetailedPortfolioReport(
       params?.pageSize || '',
       params?.search,
       params?.startDate || '',
-      params?.endDate || ''
+      params?.endDate || '',
+      params?.getAll || false
     ],
     queryFn: () => fetchDetailedPortfolioAtRisk(params, toastActions),
     enabled: Boolean(params?.branchCode)
