@@ -1,6 +1,4 @@
 import { formatCurrency } from './hooks/useCurrencyFormat';
-
-
 export const formatIfCurrency = (
   key: string,
   value: unknown,

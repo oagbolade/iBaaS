@@ -26,6 +26,7 @@ import {
 } from '@/components/Table/style';
 import { calculatePages } from '@/utils/calculatePages';
 import { formatIfCurrency } from '@/utils/formatIfCurrency';
+import { formatIfDate } from '@/utils/formatIfDate';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => {
   return {
@@ -139,16 +140,28 @@ export const TableV2 = <T,>({
 }: Props<T>) => {
   const actionsColumn = tableConfig?.hasActions ? 1 : 0;
 
- const currencyKeys = [
-  'crproductbalance',
-  'drproductbalance',
-  'totproductbalance',
-  'loanamount',
-  'currentbalance',
-  'bkbalance',
-  'inflow',
-  'outflow',
-] as const satisfies readonly string[];
+  const currencyKeys = [
+    'crproductbalance',
+    'drproductbalance',
+    'totproductbalance',
+    'loanamount',
+    'currentbalance',
+    'bkbalance',
+    'inflow',
+    'outflow',
+    'Total Balance',
+    'DR Product Balance',
+    'amt',
+    'holdreason',
+    'accountnumber',
+  ] as const satisfies readonly string[];
+
+  const dateKeys = [
+    'Created Date',
+    'Matured Date',
+    'create_dt',
+    'end_dt',
+  ] as const satisfies readonly string[];
 
   const StyledTableCell = styled(TableCell, {
     shouldForwardProp: (prop) =>
@@ -278,7 +291,11 @@ export const TableV2 = <T,>({
                         align="right"
                         key={String(key)}
                       >
-                         {formatIfCurrency(String(key), dataItem[key], currencyKeys)}
+                        {formatIfCurrency(
+                          String(key),
+                          formatIfDate(String(key), dataItem[key], dateKeys),
+                          currencyKeys
+                        )}
                       </StyledTableCell>
                     ))}
                     {tableConfig?.hasActions && (
@@ -333,7 +350,7 @@ export const TableV2 = <T,>({
       </TableContainer>
       {isSearched && (
         <Stack direction="row" justifyContent="space-between" spacing={3}>
-          <PageTitle 
+          <PageTitle
             title={`${totalElements || data?.length} result(s) found`}
             styles={TableTitle}
           />
