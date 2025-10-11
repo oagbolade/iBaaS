@@ -16,7 +16,9 @@ import { useGetMaturityLoan } from '@/api/reports/useMaturityLoan';
 import { ILoanMaturityReport } from '@/api/ResponseTypes/reports';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import { useGetAllProduct } from '@/api/setup/useProduct';
+import {
+  useGetProductTypeByid
+} from '@/api/setup/useProduct';
 import { StyledTableCell } from '@/components/Table/style';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 
@@ -42,9 +44,14 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 export const MaturityLoan = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
-  const { bankproducts } = useGetAllProduct();
-  const { dateValue } = React.useContext(DateRangePickerContext);
 
+  const { data: rawBankProducts } = useGetProductTypeByid('3');
+  const bankproducts = rawBankProducts?.map((item) => ({
+    productCode: String(item.PCode ?? '').trim(),
+    productName: String(item.PName ?? '').trim()
+  }));
+
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const {
     searchParams,
     setSearchParams,
@@ -88,7 +95,7 @@ export const MaturityLoan = () => {
     if (downloadData?.length > 0) {
       setExportData(downloadData);
     }
-  }, [downloadData]);
+  }, [downloadData, setExportData]);
 
   return (
     <Box sx={{ width: '100%' }}>

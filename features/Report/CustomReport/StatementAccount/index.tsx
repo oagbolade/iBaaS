@@ -2,6 +2,7 @@
 import { Box, Grid, IconButton, Stack, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import AnimateHeight, { Height } from 'react-animate-height';
+import moment from 'moment';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './COLUMNS';
 import {
@@ -16,10 +17,7 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { ISearchParams } from '@/app/api/search/route';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import {
-  useGetAccountDetails,
-  useGetAllCustomerAccountProducts
-} from '@/api/customer-service/useCustomer';
+import { useGetAccountDetails } from '@/api/customer-service/useCustomer';
 import { MuiTableContainer } from '@/components/Table';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
@@ -31,8 +29,8 @@ import { useGetProductClass } from '@/api/setup/useProduct';
 import { IProducts } from '@/api/ResponseTypes/setup';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import moment from 'moment';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 
 export const StatementAccount = () => {
   const { isLoading } = useGlobalLoadingState();
@@ -40,8 +38,14 @@ export const StatementAccount = () => {
   const [height, setHeight] = useState<Height>('auto');
   const [expanded, setExpanded] = useState(true);
   const { branches } = useGetBranches();
-  const { bankproducts } = useGetAllCustomerAccountProducts();
   const { products } = useGetProductClass();
+
+  const selectedProduct = products?.filter(
+    (product): product is IProducts =>
+      typeof (product as IProducts).prodclass !== 'undefined' &&
+      (product as IProducts).prodclass !== '99' // this is gl transaction
+  );
+
   const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
@@ -126,9 +130,8 @@ export const StatementAccount = () => {
         {branches && products && (
           <FilterSection
             branches={branches}
-            bankproducts={bankproducts || []}
             onSearch={handleSearch}
-            products={products as IProducts[]}
+            products={selectedProduct as IProducts[]}
           />
         )}
       </div>
@@ -318,13 +321,18 @@ export const StatementAccount = () => {
             showSearch
             setPage={setPage}
             page={page}
+            tableConfig={{
+              hasActions: false
+            }}
           >
             {searchActive && rptStatementList ? (
               rptStatementList?.pagedRecords?.map((statement, index) => (
                 <StyledTableRow key={`${statement.accountnumber || index}`}>
                   <StyledTableCell component="th" scope="row">
                     {statement.trandate
-                      ? moment(statement.trandate).format('MMMM Do YYYY, h:mm:ss a')
+                      ? moment(statement.trandate).format(
+                          'MMMM Do YYYY, h:mm:ss a'
+                        )
                       : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
@@ -336,24 +344,23 @@ export const StatementAccount = () => {
                     {statement.refNo}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                    {statement.enddate
-                      ? moment(statement.enddate).format('MMMM Do YYYY, h:mm:ss a')
-                      : 'N/A'}
+                    {formatDateAndTime(statement?.enddate)}
                   </StyledTableCell>
+                  
                   <StyledTableCell component="th" scope="row">
-                   {statement?.debit
-  ? `NGN ${formatCurrency(statement.debit)}`
-  : 'N/A'}
+                    {statement?.debit
+                      ? `NGN ${formatCurrency(statement.debit)}`
+                      : '0.0'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
                     {statement?.credit
-  ? `NGN ${formatCurrency(statement.credit)}`
-  : 'N/A'}
+                      ? `NGN ${formatCurrency(statement.credit)}`
+                      : '0.0'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                {statement?.bkBalance
-  ? `NGN ${formatCurrency(statement.bkBalance)}`
-  : 'N/A'}
+                    {statement?.bkBalance
+                      ? `NGN ${formatCurrency(statement.bkBalance)}`
+                      : '0.0'}
                   </StyledTableCell>
                 </StyledTableRow>
               ))

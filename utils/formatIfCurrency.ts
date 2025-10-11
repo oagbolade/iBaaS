@@ -1,4 +1,5 @@
 import { formatCurrency } from './hooks/useCurrencyFormat';
+
 export const formatIfCurrency = (
   key: string,
   value: unknown,
@@ -8,13 +9,16 @@ export const formatIfCurrency = (
     return value != null && value !== '' ? String(value) : 'N/A';
   }
 
-  const num =
-    typeof value === 'string'
-      ? parseFloat(value.replace(/,/g, '').trim())
-      : typeof value === 'number'
-      ? value
-      : NaN;
+  let num: number;
+  
+  if (typeof value === 'string') {
+    num = parseFloat(value.replace(/,/g, '').trim());
+  } else if (typeof value === 'number') {
+    num = value;
+  } else {
+    num = NaN;
+  }
 
-  if (isNaN(num)) return 'N/A';
+  if (Number.isNaN(num)) return 'N/A';
   return `NGN ${formatCurrency(num)}`;
 };

@@ -18,7 +18,7 @@ import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
   branches?: IBranches[];
-  bankproducts: IBankProducts[];
+  // bankproducts: IBankProducts[];
   onSearch?: Function;
   products: IProducts[] | Array<any>;
 };
@@ -26,7 +26,7 @@ type Props = {
 export const FilterSection = ({
   branches,
   onSearch,
-  bankproducts,
+  // bankproducts,
   products
 }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>(
@@ -35,7 +35,7 @@ export const FilterSection = ({
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedProductClass } = useMapSelectOptions({
     branches,
-    bankproducts,
+    // bankproducts,
     products
   });
 

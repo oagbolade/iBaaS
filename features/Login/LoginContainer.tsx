@@ -24,8 +24,6 @@ export const LoginContainer = () => {
     const token = getStoredUser()?.token;
     const lastPage = getLastPage();
 
-    console.log('getLastPage', lastPage);
-
     if (token) {
       window.location.href = lastPage || '/dashboard';
       return null;

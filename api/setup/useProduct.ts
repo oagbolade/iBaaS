@@ -212,6 +212,7 @@ async function getProductClassByCategory(
 
   return result;
 }
+
 async function getGLWithBranchCode(
   toastActions: IToastActions
 ): Promise<UseGetGLWithBranchCodeResponse> {
@@ -245,6 +246,7 @@ async function getGLWithBranchCode(
 
   return result;
 }
+
 export async function filterAllProductSearch(
   toastActions: IToastActions,
   params: ISearchParams | null
