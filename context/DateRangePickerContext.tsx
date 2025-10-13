@@ -1,9 +1,11 @@
 'use client';
-import { createContext, useMemo, useState, useCallback, useEffect } from 'react';
+import { createContext, useMemo, useState, useCallback, useEffect, useContext } from 'react';
 import { DateRange } from '@mui/x-date-pickers-pro';
 import dayjs, { Dayjs } from 'dayjs';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import { toast } from '@/utils/toast';
+import { ToastMessageContext } from './ToastMessageContext';
 
 
 type DateRangePickerContextType = {
@@ -16,8 +18,8 @@ type DateRangePickerContextType = {
 const initialValuesContext: DateRangePickerContextType = {
   isDateFilterApplied: false,
   dateValue: [dayjs(), dayjs()],
-  setDateValue: () => {},
-  setIsDateFilterApplied: () => {}
+  setDateValue: () => { },
+  setIsDateFilterApplied: () => { }
 };
 
 export const DateRangePickerContext =
@@ -26,6 +28,7 @@ export const DateRangePickerContext =
 export default function DateRangePickerContextProvider({ children }: any) {
   const { currentDate, nextDate } = useFormattedDates();
   const { sysmodel } = useGetSystemDate();
+  const toastActions = useContext(ToastMessageContext);
 
   // Default to previous and current date
   const [dateValue, setValue] = useState<DateRange<Dayjs>>([
@@ -36,8 +39,18 @@ export default function DateRangePickerContextProvider({ children }: any) {
   const [isDateFilterApplied, setIsDateFilterApplied] = useState(false);
 
   const setDateValue = useCallback((newValue: DateRange<Dayjs>) => {
+    const [start, end] = newValue;
+    if (start && end && !end.isAfter(start, 'day')) {
+      toast(
+        'End date must be after the start date.', 
+        'Invalid Date Range', 'error',
+         toastActions
+        );
+      return;
+    }
     setValue(newValue);
   }, []);
+
 
 
   useEffect(() => {

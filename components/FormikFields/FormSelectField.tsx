@@ -94,9 +94,7 @@ export const FormSelectField = ({
                     'data-testid': name,
                     placeholder: name
                   }}
-                  IconComponent={() => {
-                    return icon || <KeyboardArrowDownIcon fontSize="large" />;
-                  }}
+                  IconComponent={icon || KeyboardArrowDownIcon}
                 >
                   <MenuItem value="" selected>
                     {loading ? 'Loading...' : 'Select an Option'}
