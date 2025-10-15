@@ -165,15 +165,18 @@ export const MainCash = () => {
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
-                          {dataItem?.debitacct || dataItem?.debitAcct || 0}
+                          {/* {dataItem?.debitacct || dataItem?.debitAcct || 0} */}
+                          {`NGN ${formatCurrency(dataItem?.debitacct || dataItem?.debitAcct || 0)}`}
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
-                          {dataItem?.creditAcct || 0}
+                          {/* {dataItem?.creditAcct || 0} */}
+                          {`NGN ${formatCurrency(dataItem?.creditAcct || 0)}`}
+
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
-                          {dataItem?.totalname || dataItem?.differ || 0}
+                          {`NGN ${formatCurrency(dataItem?.totalname || dataItem?.differ || 0)}`}
                         </StyledTableCell>
                       </StyledTableRow>
                     );
@@ -202,7 +205,7 @@ export const MainCash = () => {
                   >
                     <Typography>Last Night Balance</Typography>
                     <Typography>
-                      ₦ {trialBydateList?.lastNightBalance?.toLocaleString()}
+                      {`NGN ${formatCurrency(trialBydateList?.lastNightBalance || 0)}`}
                     </Typography>
                   </Box>
 
@@ -211,7 +214,7 @@ export const MainCash = () => {
                   >
                     <Typography>Debit</Typography>
                     <Typography>
-                      ₦ {trialBydateList?.totalDrBal?.toLocaleString()}
+                      {`NGN ${formatCurrency(trialBydateList?.totalDrBal || 0)}`}
                     </Typography>
                   </Box>
 
@@ -220,7 +223,8 @@ export const MainCash = () => {
                   >
                     <Typography>Credit</Typography>
                     <Typography>
-                      ₦ {trialBydateList?.totalCrBal?.toLocaleString()}
+
+                      {`NGN ${formatCurrency(trialBydateList?.totalCrBal || 0)}`}
                     </Typography>
                   </Box>
 
@@ -229,7 +233,8 @@ export const MainCash = () => {
                   >
                     <Typography>Balance</Typography>
                     <Typography>
-                      ₦ {trialBydateList?.totalBal?.toLocaleString()}
+
+                      {`NGN ${formatCurrency(trialBydateList?.totalBal || 0)}`}
                     </Typography>
                   </Box>
                 </Box>

@@ -341,19 +341,19 @@ export const StatementAccount = () => {
                       : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                   {statement?.debit
-  ? `NGN ${formatCurrency(statement.debit)}`
-  : 'N/A'}
+                    {statement?.debit
+                      ? `NGN ${formatCurrency(statement.debit)}`
+                      : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
                     {statement?.credit
-  ? `NGN ${formatCurrency(statement.credit)}`
-  : 'N/A'}
+                      ? `NGN ${formatCurrency(statement.credit)}`
+                      : 'N/A'}
                   </StyledTableCell>
                   <StyledTableCell component="th" scope="row">
-                {statement?.bkBalance
-  ? `NGN ${formatCurrency(statement.bkBalance)}`
-  : 'N/A'}
+                    {statement?.bkBalance
+                      ? `NGN ${formatCurrency(statement.bkBalance)}`
+                      : 'N/A'}
                   </StyledTableCell>
                 </StyledTableRow>
               ))

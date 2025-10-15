@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { COLUMN } from '../COLUMN';
 import { FilterSection } from '../SubFilterSection';
@@ -15,12 +15,16 @@ import { StyledTableCell } from '@/components/Table/style';
 import { ITrialBalance } from '@/api/ResponseTypes/reports';
 import { useGetTrialBalance } from '@/api/reports/useTrialBalance';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
 
 export const OverdraftSavingsAccount = () => {
   const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
+  const { setExportData, setReportType } =
+    React.useContext(DownloadReportContext);
+
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
@@ -34,6 +38,27 @@ export const OverdraftSavingsAccount = () => {
     ...searchParams,
     page
   });
+
+  const {
+    trialBydateList: downloadData
+  } = useGetTrialBalance({
+    ...searchParams,
+    page,
+    getAll: true
+  });
+
+
+  useEffect(() => {
+    if (!downloadData || downloadData?.pagedTrialBalances?.length === 0) {
+      setExportData?.([]);
+      return;
+    }
+
+    if (downloadData && downloadData?.pagedTrialBalances?.length > 0) {
+      setExportData?.(downloadData?.pagedTrialBalances);
+      setReportType('TrialBalanceByDate');
+    }
+  }, [downloadData]);
 
   return (
     <Box
