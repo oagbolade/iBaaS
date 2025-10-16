@@ -43,7 +43,21 @@ export const BalanceSheet = () => {
       }}
     >
       <TopOverViewSection useBackButton />
-      <Box>{branches && <FilterSection branches={branches} />}</Box>
+      <Box>
+        {branches && (
+          <FilterSection 
+            branches={branches} 
+            onSearch={(params: any) => {
+              if (params.searchWith !== null) {
+                setSearchTerm(params.searchWith);
+              } else {
+                setSearchTerm('');
+              }
+              setPage(1);
+            }} 
+          />
+        )}
+      </Box>
       <Box
         sx={{
           padding: '25px',
