@@ -1,19 +1,54 @@
-# Stage 1: Build stage
-FROM iswprodacr.azurecr.io/node:18-alpine AS build
+# ---------- Stage 1: Base dependencies (for caching) ----------
+FROM iswprodacr.azurecr.io/node:18-alpine AS deps
+
 WORKDIR /app
-COPY package.json package-lock.json ./
-COPY .env .env ./
-# RUN npm install --legacy-peer-deps
+
+# Copy dependency files only (better cache)
+COPY package*.json ./
+
+# Install all deps using your proxy
 RUN npm --proxy=http://172.25.20.117:80 install --legacy-peer-deps
+
+# ---------- Stage 2: Build Stage ----------
+FROM iswprodacr.azurecr.io/node:18-alpine AS build
+
+WORKDIR /app
+
+# Copy node_modules from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy project files
 COPY . .
+
+# Ensure static export mode is disabled
+# (comment out or remove `output: 'export'` in next.config.js)
 RUN npm run build
 
-# Stage 2: NGINX Build Stage
-FROM iswprodacr.azurecr.io/nginx:1.12-alpine
+# ---------- Stage 3: Production Runtime ----------
+FROM iswprodacr.azurecr.io/node:18-alpine AS runner
+
 WORKDIR /app
-# (FOR M1 CHIPS)
-# FROM arm64v8/nginx:stable-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/out /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Copy only essential files
+COPY package*.json ./
+
+# Remove husky prepare hook before install
+RUN npm pkg delete scripts.prepare
+
+# Disable husky during npm install (so it never triggers the prepare script)
+RUN npm --proxy=http://172.25.20.117:80 install --omit=dev --legacy-peer-deps
+
+# Copy built artifacts and static assets
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
+COPY --from=build /app/next.config.js ./next.config.js
+
+# (Optional) If you use custom fonts or other assets
+# COPY --from=build /app/.env ./.env
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
