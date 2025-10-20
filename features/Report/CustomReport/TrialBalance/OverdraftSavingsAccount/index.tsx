@@ -25,7 +25,6 @@ export const OverdraftSavingsAccount = () => {
   const { setExportData, setReportType } =
     React.useContext(DownloadReportContext);
 
-
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
     setSearchParams(params);
@@ -46,7 +45,6 @@ export const OverdraftSavingsAccount = () => {
     page,
     getAll: true
   });
-
 
   useEffect(() => {
     if (!downloadData || downloadData?.pagedTrialBalances?.length === 0) {
