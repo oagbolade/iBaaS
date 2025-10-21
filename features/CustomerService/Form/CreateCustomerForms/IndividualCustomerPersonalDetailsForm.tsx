@@ -30,6 +30,7 @@ import {
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { encryptData } from '@/utils/encryptData';
 import { isEmptyObject } from '@/utils/isEmptyObject';
+import { useFormikContext } from 'formik';
 
 type Props = {
   titles?: ITitle[];
@@ -174,6 +175,30 @@ export const IndividualCustomerPersonalDetailsForm = ({
     }
   }, [allResidentStateTowns, isLoadingTowns]);
 
+  const { values } = useFormikContext<any>();
+ React.useEffect(() => {
+  const selectedTown = mappedResidentTowns.find(town => town.value === values?.residentTowncode)?.name || '';
+
+  const personalDetails = {
+    country: values?.residentCountry || '',
+    state: values?.residentStatecode || '',
+    town: values?.residentTowncode || '',
+    townName: selectedTown,
+    address: values?.address || '',
+    phone: values?.phone1 || ''
+  };
+
+  if (Object.values(personalDetails).some(Boolean)) {
+    localStorage.setItem('personalDetails', JSON.stringify(personalDetails));
+  }
+}, [
+  values?.residentCountry,
+  values?.residentStatecode,
+  values?.residentTowncode,
+  values?.address,
+  values?.phone1,
+  mappedResidentTowns
+]);
   if (isEditing && isLoading && isLoadingTowns && isLoadingStates) {
     return '...';
   }

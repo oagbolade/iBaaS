@@ -87,6 +87,7 @@ export interface ISearchParams {
   productCode?: string | null;
   intName?: string | null;
   startDate?: string | null;
+  startFrom?: string | null;
   endDate?: string | null;
   reportDate?: string | null;
   reportType?: string | null;
