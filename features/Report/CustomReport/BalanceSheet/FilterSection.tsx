@@ -1,27 +1,13 @@
-
 import React from 'react';
-import { Box, Grid, Stack } from '@mui/material';
-import { Formik, Form } from 'formik';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import { exportData, dateFilter, inputFields } from '../style';
+import { Formik, Form } from 'formik';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
-import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton,
-  BackButton
-} from '@/components/Revamp/Buttons';
-import { ExportIcon } from '@/assets/svg';
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { ActionButton } from '@/components/Revamp/Buttons';
 import { useCurrentBreakpoint } from '@/utils';
-import { IBranches } from '@/api/ResponseTypes/general';
-import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
-import { customerBalanceSchema } from '@/schemas/reports';
-import { IBankProducts } from '@/api/ResponseTypes/customer-service';
-import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import * as Yup from 'yup';
+import { IBranches } from '@/api/ResponseTypes/general';
 
 type Props = {
   branches?: IBranches[];
@@ -29,66 +15,64 @@ type Props = {
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
-  const { searchParams } = usePersistedSearch<ISearchParams>(
-    'balance-sheet-report'
-  );
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
-  const { mappedBranches } = useMapSelectOptions({
-    branches
-  });
+  const { mappedBranches } = useMapSelectOptions({ branches });
 
   const initialValues = {
-    branchID: searchParams?.branchID ?? '',
-    pCode: searchParams?.pCode ?? '',
-    searchWith: searchParams?.searchWith ?? ''
+    branchID: '',
+    searchWith: ''
   };
 
-  const onSubmit = async (values: any) => {
-    const params: ISearchParams = {
-      branchID:
-        values.branchID?.toString().trim().length > 0 ? values.branchID : null,
-      searchWith:
-        values.searchWith?.toString().trim().length > 0
-          ? values.searchWith
-          : null,
-      pCode: values.pCode?.toString().trim().length > 0 ? values.pCode : null,
-      pageSize: '10'
-    };
-    onSearch?.(params);
+  // ✅ Only branchID is required; searchWith can be empty
+  const validationSchema = Yup.object({
+    branchID: Yup.string().required('Branch selection is required'),
+    // searchWith: Yup.string().nullable()
+  });
+
+  const handleSubmit = (values: any) => {
+    onSearch?.({
+      branchID: values.branchID,
+      searchWith: values.searchWith?.trim() || ''
+    });
   };
 
   return (
-    <Box>
+    <Box mt={2} ml={2}>
       <Formik
-        initialValues={searchFilterInitialValues}
-        onSubmit={(values) => onSubmit(values)}
-        validationSchema={customerBalanceSchema}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
       >
-        <Form>
-          <Box
-            sx={{
-              marginTop: '20px',
-              paddingX: '24px'
-            }}
-          >
-            <Box>
-              <Grid container spacing={2}>
-                <Grid item mobile={12} tablet={3} justifyContent="center">
-                  <FormSelectField
-                    customStyle={{
-                      width: setWidth(),
-                      ...inputFields
-                    }}
-                    name="branchID"
-                    options={mappedBranches}
-                    label="Branch"
-                  />{' '}
-                </Grid>
+        {({ handleSubmit }) => (
+          <Form onSubmit={handleSubmit}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item mobile={12} tablet={3}>
+                <FormSelectField
+                  name="branchID"
+                  label="Branch"
+                  options={mappedBranches}
+                  customStyle={{ width: setWidth() }}
+                />
               </Grid>
-            </Box>
-          </Box>
-        </Form>
+
+              <Grid item mobile={12} tablet={4} mt={1}>
+                <FormTextInput
+                  name="searchWith"
+                  label="Search"
+                  placeholder="Search"
+                />
+              </Grid>
+
+              <Grid item mobile={12} tablet={2} mt={2.5}>
+                <ActionButton
+                  type="submit"
+                  buttonTitle="Search"
+                  icon={<SearchIcon />}
+                />
+              </Grid>
+            </Grid>
+          </Form>
+        )}
       </Formik>
     </Box>
   );

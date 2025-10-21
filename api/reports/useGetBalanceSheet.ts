@@ -62,7 +62,7 @@ export function useGetAllBalanceSheet(
     ],
     queryFn: () => fetchAllBalanceSheet(toastActions, params || {}),
     enabled: Boolean(
-      params?.page || '' || params?.pageSize || params?.searchWith,
+      params?.branchID,
     ),
   });
 
