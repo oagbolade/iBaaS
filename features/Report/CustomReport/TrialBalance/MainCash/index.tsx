@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { COLUMN } from '../COLUMN';
@@ -24,6 +24,13 @@ import useFormattedDates from '@/utils/hooks/useFormattedDates';
 export const MainCash = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
+
+    useLayoutEffect(() => {
+    setSearchParams(null);
+    setPage(1);
+  }, []);
+
+
   const { branches } = useGetBranches();
   const { setExportData, setReportType } =
     useContext(DownloadReportContext);
@@ -38,29 +45,32 @@ export const MainCash = () => {
   const { currentDate } = useFormattedDates();
   const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
 
-  const {
+    const {
     trialBydateList,
     isLoading: isTrialBalanceDataLoading,
     totalRecords = 0
-  } = useGetTrialBalance({
-    ...searchParams,
-    pageSize: '10',
-    branchID,
-    searchWith: searchParams?.customerID || customerID,
-    pageNumber: String(page),
-    gl_ClassCode: glClassCode,
-    glNodeCode,
-    glTypeCode,
-    reportType,
-    startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD'),
-  });
+  } = useGetTrialBalance(
+    {
+      ...searchParams,
+      pageSize: '10',
+      branchID,
+      searchWith: searchParams?.customerID || customerID,
+      pageNumber: String(page),
+      gl_ClassCode: glClassCode,
+      glNodeCode,
+      glTypeCode,
+      reportType,
+      startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD'),
+    }
+  );
+
 
   const {
     trialBydateList: downloadData,
   } = useGetTrialBalance({
-    ...searchParams,
+    ...(searchParams || {}),
     pageSize: '10',
-    branchID,
+    branchID: searchParams?.branchID || branchID,
     searchWith: searchParams?.customerID || customerID,
     pageNumber: String(page),
     gl_ClassCode: glClassCode,

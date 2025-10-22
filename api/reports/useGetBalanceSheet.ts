@@ -21,7 +21,7 @@ async function fetchAllBalanceSheet(
   let result: GetAllBalanceSheetResponse = {} as GetAllBalanceSheetResponse;
 
   try {
-    const urlEndpoint = `/ReportServices/groupedBalanceSheetAndPAndL?startFrom=2025-05-18&pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith || ''}`;
+    const urlEndpoint = `/ReportServices/groupedBalanceSheetAndPAndL?startFrom=${params?.startFrom || ''}&pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith || ''}`;
     const { data }: AxiosResponse<GetAllBalanceSheetResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,

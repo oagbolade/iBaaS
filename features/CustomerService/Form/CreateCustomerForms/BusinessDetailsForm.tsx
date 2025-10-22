@@ -1,5 +1,14 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import {
+  Box,
+  Grid,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio
+} from '@mui/material';
+import { useFormikContext } from 'formik';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { BatchContainer } from '@/features/Operation/Forms/style';
@@ -66,10 +75,56 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
       allStateTowns
     });
 
+  const { setFieldValue } = useFormikContext();
+  const [usePersonalDetails, setUsePersonalDetails] = React.useState<string | null>(null);
+
+  const handleUsePersonalDetails = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const value = event.target.value;
+  setUsePersonalDetails(value);
+
+  if (value !== 'yes') return;
+
+  try {
+    const savedDetails = JSON.parse(localStorage.getItem('personalDetails') || '{}');
+
+    const { country, state, town, address, phone } = savedDetails;
+
+    if (!country || !state || !town) {
+      console.error('Incomplete personal details found');
+      return;
+    }
+
+    const updatedDetails = { country, state, town };
+    setLocationDetails(updatedDetails);
+    ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach((field, index) => {
+      const value = [country, state, town, address, phone][index];
+      setFieldValue(field, value);
+    });
+    localStorage.removeItem('personalDetails');
+  } catch (error) {
+    console.error('Error loading personal details:', error);
+  }
+};
   return (
     <Grid container spacing={2}>
       <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
         <Grid container>
+          {/* Add radio button group at the top */}
+          <Grid item={isTablet} mobile={12} mb={2}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Use Personal Details?</FormLabel>
+              <RadioGroup
+                row
+                value={usePersonalDetails || ''} // Set empty string when null
+                onChange={handleUsePersonalDetails}
+              >
+                <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+                <FormControlLabel value="no" control={<Radio />} label="No" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+
+          {/* Existing form fields */}
           <Grid item={isTablet} mobile={12}>
             <FormSelectField
               name="bizCtry"

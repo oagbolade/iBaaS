@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { Formik, Form } from 'formik';
@@ -83,6 +84,49 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     options={mappedBranches}
                     label="Branch"
                   />{' '}
+                </Grid>
+
+                  <Grid
+                  mb={{ tablet: 6 }}
+                  item
+                  mobile={12}
+                  tablet={4}
+                  justifyContent="center"
+                  marginTop={3}
+                >
+                  <FormTextInput
+                    customStyle={{
+                      width: setWidth(),
+                      ...inputFields
+                    }}
+                    icon={<SearchIcon />}
+                    name="searchWith"
+                    placeholder="Search"
+                    label=""
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  mobile={12}
+                  tablet={2}
+                  sx={{ display: 'flex' }}
+                  justifyContent="flex-end"
+                  mt={{ tablet: 3.2 }}
+                  mr={{ mobile: 30, tablet: 0 }}
+                  mb={{ mobile: 6, tablet: 0 }}
+                  ml={{ mobile: 0, tablet: 0 }}
+                >
+                  <ActionButton
+                    customStyle={{
+                      backgroundColor: `${colors.activeBlue400}`,
+                      border: `1px solid ${colors.activeBlue400}`,
+                      color: `${colors.white}`,
+                      width: '100%'
+                    }}
+                    type="submit"
+                    buttonTitle="Search"
+                  />
                 </Grid>
               </Grid>
             </Box>
