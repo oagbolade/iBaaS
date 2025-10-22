@@ -1,42 +1,20 @@
-export const SEARCH_BASE_URL = 'https://ibaas-search-api.k9.isw.la/api/v1';
-
-export const REPORT_BASE_URL = 'https://ibaas-revamp-reports.k8.isw.la/api';
-export const END_OF_DAY_BASE_URL =
-  'http://ibaas-endofbusinessprocess.k9.isw.la/api';
 const env = process.env.NODE_ENV || 'production';
 
-// Assign baseUrl based on environment
-const AuthFaBaseUrl =
-  env === 'development'
-    ? 'https://ibaas-2fa-generator-service.k8.isw.la/api'
-    : 'https://ibaas-2fa-generator-service.k8.isw.la/api';
+const SEARCH_BASE_URL = process.env.NEXT_PUBLIC_SEARCH_BASE_URL!;
+const REPORT_BASE_URL = process.env.NEXT_PUBLIC_REPORT_BASE_URL!;
+const END_OF_DAY_BASE_URL = process.env.NEXT_PUBLIC_END_OF_DAY_BASE_URL!;
 
-const baseUrl =
-  env === 'development'
-    ? 'https://ibaas-api.k9.isw.la/api'
-    : 'https://ibaas-api.k8.isw.la/api';
-
-const endOfdayUrl =
-  env === 'development'
-    ? 'https://ibaas-endofbusinessprocess.k8.isw.la/api'
-    : 'https://ibaas-endofbusinessprocess.k8.isw.la/api';
-
-const nipBaseUrl =
-  env === 'development'
-    ? 'https://nip-core-banking-interface.k8.isw.la/api/v1'
-    : 'https://nip-core-banking-interface.k8.isw.la/api/v1';
-
-const reportsBaseUrl =
-  env === 'development'
-    ? 'https://ibaas-revamp-reports.k8.isw.la/api'
-    : 'https://ibaas-revamp-reports.k8.isw.la/api';
-
-const imageUploadBaseUrl =
-  env === 'development'
-    ? 'https://ibaasfilestorage.k8.isw.la/api'
-    : 'https://ibaasfilestorage.k8.isw.la/api';
-
+const AuthFaBaseUrl = process.env.NEXT_PUBLIC_AUTH_FA_BASE_URL!;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+const endOfdayUrl = process.env.NEXT_PUBLIC_ENDOFDAY_URL!;
+const nipBaseUrl = process.env.NEXT_PUBLIC_NIP_BASE_URL!;
+const reportsBaseUrl = process.env.NEXT_PUBLIC_REPORTS_BASE_URL!;
+const imageUploadBaseUrl = process.env.NEXT_PUBLIC_IMAGE_UPLOAD_BASE_URL!;
 export {
+  env,
+  SEARCH_BASE_URL,
+  REPORT_BASE_URL,
+  END_OF_DAY_BASE_URL,
   baseUrl,
   nipBaseUrl,
   reportsBaseUrl,

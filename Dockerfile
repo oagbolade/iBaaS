@@ -32,6 +32,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# Install runtime tools (gettext provides envsubst)
+RUN apk add --no-cache gettext
+
 # Copy only essential files
 COPY package*.json ./
 
@@ -48,6 +51,11 @@ COPY --from=build /app/next.config.js ./next.config.js
 
 # (Optional) If you use custom fonts or other assets
 # COPY --from=build /app/.env ./.env
+
+# ---------- Inject Runtime Config Support ----------
+# Copy our entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 3000
 

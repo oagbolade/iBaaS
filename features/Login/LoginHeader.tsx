@@ -3,10 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { mainTitle, subTitle } from './styles';
 
-export const LoginHeader = ({ runtimeConfig }: { runtimeConfig?: any}) => {
-  // will remove once I figure out this env runtime issue with nextjs
-  console.log('Runtime Config in LoginHeader:', runtimeConfig);
-
+export const LoginHeader = () => {
   return (
     <Box
       sx={{

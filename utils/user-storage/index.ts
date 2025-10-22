@@ -35,8 +35,19 @@ export function getLastPage(): string | null {
   if (typeof window !== 'undefined') {
     const lastPage = localStorage.getItem(LAST_PAGE_LOCALSTORAGE_KEY);
 
-    // return lastPage ? JSON.parse(decryptData(lastPage) as string) : null; // temp fix
+    if (!lastPage) return null;
+
+    try {
+      const decrypted = decryptData(lastPage);
+      if (!decrypted) return null;
+
+      return JSON.parse(decrypted as string);
+    } catch (error) {
+      console.error('Error parsing last page from localStorage:', error);
+      return null;
+    }
   }
+
   return null;
 }
 
