@@ -34,7 +34,8 @@ export const getPasswordFromLocalStorage = () => {
 export function getLastPage(): string | null {
   if (typeof window !== 'undefined') {
     const lastPage = localStorage.getItem(LAST_PAGE_LOCALSTORAGE_KEY);
-    return lastPage ? JSON.parse(decryptData(lastPage) as string) : null;
+
+    // return lastPage ? JSON.parse(decryptData(lastPage) as string) : null; // temp fix
   }
   return null;
 }

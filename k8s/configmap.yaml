@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nextjs-config
+data:
+  NEXT_PUBLIC_API_URL: "https://api.yourdomain.com"
+  TEST_ENV: "should show fron k8s"
+  NEXT_PUBLIC_APP_NAME: "Firmly"
+  NEXT_PUBLIC_STAGE: "staging"
+  NEXT_PUBLIC_ANALYTICS_ID: "G-12345ABCDE"

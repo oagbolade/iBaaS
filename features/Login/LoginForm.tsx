@@ -28,6 +28,7 @@ import {
   getBroadcastChannel,
   setSessionActive
 } from '@/utils/user-storage/broadcastChannel';
+import { getRuntimeConfig } from '@/lib/runtimeConfig';
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -174,9 +175,17 @@ export function LoginForm() {
     }
   };
 
+  const [config, setConfig] = useState<any>(null);
+
+  React.useEffect(() => {
+    getRuntimeConfig().then(setConfig);
+  }, []);
+
+  if (!config) return <p>Loading...</p>;
+
   return (
     <Box className="p-10" sx={loginFormStyle}>
-      <LoginHeader />
+      <LoginHeader runtimeConfig={config} />
 
       <Formik
         initialValues={loginInitialValues}

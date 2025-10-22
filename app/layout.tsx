@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import Head from 'next/head';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material/styles';
+import { PublicEnvScript } from 'next-runtime-env';
 import { LoginTheme } from './MuiTheme';
 import { queryClient } from '@/react-query/queryClient';
 import { ToastMessage } from '@/components/Revamp/ToastMessage';
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
   description: 'Core Banking Application'
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children
 }: {
@@ -29,7 +32,10 @@ export default function RootLayout({
       <ToastMessageContextProvider>
         <MuiSnackbarContextProvider>
           <ThemeProvider theme={LoginTheme}>
-            <html lang="en">
+            <html lang="en" className=''>
+              <head>
+                <PublicEnvScript />
+              </head>
               <body className={inter.className} suppressHydrationWarning>
                 <Head>
                   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />         

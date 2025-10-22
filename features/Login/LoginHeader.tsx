@@ -3,7 +3,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { mainTitle, subTitle } from './styles';
 
-export const LoginHeader = () => {
+export const LoginHeader = ({ runtimeConfig }: { runtimeConfig?: any}) => {
+  // will remove once I figure out this env runtime issue with nextjs
+  console.log('Runtime Config in LoginHeader:', runtimeConfig);
+
   return (
     <Box
       sx={{
@@ -13,7 +16,7 @@ export const LoginHeader = () => {
       }}
     >
       <Typography sx={mainTitle}>Log In</Typography>
-      <Typography sx={subTitle}>Log in to access dashboard</Typography>
+      <Typography sx={subTitle}>Log in to access dashboard </Typography>
     </Box>
   );
 };
