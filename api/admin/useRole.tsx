@@ -56,6 +56,7 @@ export async function filterUserByRoleSearch(
         phoneNo: params?.phoneNo
       },
       headers: {
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         'Content-Type': 'application/json',
         token: `${getStoredUser()?.token}`
       }
@@ -98,6 +99,7 @@ export async function filterRoleSearch(
         roleName: params?.roleName
       },
       headers: {
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         'Content-Type': 'application/json',
         token: `${getStoredUser()?.token}`
       }

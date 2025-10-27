@@ -46,6 +46,7 @@ export async function filterDirectorsSearch(
           fullName: params?.fullName
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

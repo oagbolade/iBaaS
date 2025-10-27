@@ -13,7 +13,7 @@ export const LoginHeader = () => {
       }}
     >
       <Typography sx={mainTitle}>Log In</Typography>
-      <Typography sx={subTitle}>Log in to access dashboard</Typography>
+      <Typography sx={subTitle}>Log in to access dashboard </Typography>
     </Box>
   );
 };

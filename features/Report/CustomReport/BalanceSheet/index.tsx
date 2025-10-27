@@ -25,11 +25,9 @@ export const BalanceSheet = () => {
     searchWith: '',
     branchID: ''
   });
-
-  // ✅ Get date range from context (user-selected date)
+  
   const { dateValue } = React.useContext(DateRangePickerContext);
 
-  // ✅ Extract selected start date
 const startFrom = dateValue?.[0]
   ? dateValue[0].format('YYYY-MM-DD')
   : '2025-10-02';

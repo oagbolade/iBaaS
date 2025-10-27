@@ -107,6 +107,7 @@ export async function filterCommercialBankSearch(
           bankshortname: params?.bankshortname
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

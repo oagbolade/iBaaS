@@ -48,6 +48,7 @@ export async function filterAccountOfficerSearch(
           phoneNo: params?.phoneNo
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

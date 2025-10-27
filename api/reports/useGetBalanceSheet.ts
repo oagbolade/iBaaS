@@ -5,7 +5,7 @@ import {
   GetAllBalanceSheetResponse,
   GetAllBalanceSheetByItemIdResponse,
 } from '../ResponseTypes/reports';
-import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';

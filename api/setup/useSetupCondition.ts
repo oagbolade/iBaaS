@@ -71,6 +71,7 @@ export async function filterSetupConditionSearch(
           description: params?.description
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

@@ -72,6 +72,7 @@ export async function filterSectorSearch(
         sectorCode: params?.sectorCode
       },
       headers: {
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         'Content-Type': 'application/json',
         token: `${getStoredUser()?.token}`
       }

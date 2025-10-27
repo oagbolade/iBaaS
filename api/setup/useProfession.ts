@@ -74,6 +74,7 @@ export async function filterProfessionSearch(
           profcode: params?.profcode
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

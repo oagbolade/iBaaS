@@ -32,6 +32,7 @@ export async function filterFinanceAccount(
         url: urlEndpoint,
         method: 'GET',
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }
@@ -98,6 +99,7 @@ export async function filterGeneralLedgerSearch(
           glnumber: params?.glNumber
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

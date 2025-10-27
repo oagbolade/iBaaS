@@ -41,6 +41,7 @@ export async function filterPostingLimitSearch(
           branchDebit: params?.branchDebit
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

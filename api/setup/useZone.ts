@@ -72,6 +72,7 @@ export async function filterZoneSearch(
         zoneid: params?.zoneid
       },
       headers: {
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         'Content-Type': 'application/json',
         token: `${getStoredUser()?.token}`
       }

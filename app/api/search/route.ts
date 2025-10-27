@@ -9,6 +9,7 @@ export type Actions =
 export interface ISearchParams {
   search?: string | null;
   branchID?: string | null;
+  startFrom?: string | null;
   customerID?: string | null;
   email?: string | null;
   phoneNo?: string | null;
@@ -87,7 +88,6 @@ export interface ISearchParams {
   productCode?: string | null;
   intName?: string | null;
   startDate?: string | null;
-  startFrom?: string | null;
   endDate?: string | null;
   reportDate?: string | null;
   reportType?: string | null;

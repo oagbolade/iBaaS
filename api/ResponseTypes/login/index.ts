@@ -9,6 +9,7 @@ export interface MenuItemsType {
   trancode: string;
   url: string;
 }
+
 export interface UserLoginResponse {
   responseCode: string;
   responseDescription?: string;

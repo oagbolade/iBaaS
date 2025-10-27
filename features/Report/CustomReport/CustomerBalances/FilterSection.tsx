@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
@@ -21,6 +21,8 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { customerBalanceSchema } from '@/schemas/reports';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGetProductType } from '@/api/general/useProductType';
+import { log } from 'console';
 
 type Props = {
   branches?: IBranches[];
@@ -38,11 +40,26 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
     bankproducts
   });
 
-  const initialValues = {
-    branchID: searchParams?.branchID ?? '',
-    pCode: searchParams?.pCode ?? '',
-    searchWith: searchParams?.searchWith ?? ''
-  };
+  const { productTypes } = useGetProductType();
+
+  // memoize mapped product types to avoid recreating options each render
+  const mappedProductTypes = useMemo(
+    () =>
+      (productTypes || []).map((product) => ({
+        name: product.producttypedesc,
+        value: product.producttypeid?.toString() ?? ''
+      })),
+    [productTypes]
+  );
+
+  const initialValues = useMemo(
+    () => ({
+      branchID: searchParams?.branchID ?? '',
+      pCode: searchParams?.pCode ?? '',
+      searchWith: searchParams?.searchWith ?? ''
+    }),
+    [searchParams]
+  );
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
@@ -58,12 +75,20 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
     onSearch?.(params);
   };
 
+  // stable submit handler for Formik
+  const handleSubmit = useCallback(
+    (values: any) => {
+      onSubmit(values);
+    },
+    [onSearch]
+  );
+
   return (
     <Box>
       <Formik
         initialValues={initialValues}
         enableReinitialize
-        onSubmit={(values) => onSubmit(values)}
+        onSubmit={handleSubmit}
         validationSchema={customerBalanceSchema}
       >
         <Form>
@@ -99,8 +124,8 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                       ...inputFields
                     }}
                     name="pCode"
-                    options={mappedBankproducts}
-                    label="Product Code"
+                    options={mappedProductTypes}
+                    label="Product Type"
                   />{' '}
                 </Grid>
                 <Grid
@@ -150,3 +175,5 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
     </Box>
   );
 };
+
+FilterSection.displayName = 'FilterSection';

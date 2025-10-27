@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs, { Dayjs } from 'dayjs';
+import { useFormikContext } from 'formik';
 import {
   FormTextInput,
   FormSelectField,
@@ -19,7 +20,6 @@ import {
 import { IEducation, IOccupation, ISector } from '@/api/ResponseTypes/setup';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import {
-  useGetCustomerById,
   useGetCustomerByIdCodes
 } from '@/api/customer-service/useCustomer';
 import { formatDateOfBirth } from '@/utils/formatDateOfBirth';
@@ -30,7 +30,6 @@ import {
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { encryptData } from '@/utils/encryptData';
 import { isEmptyObject } from '@/utils/isEmptyObject';
-import { useFormikContext } from 'formik';
 
 type Props = {
   titles?: ITitle[];

@@ -54,6 +54,7 @@ export async function filterGLAccountSearch(
           glnumber: params?.glAccountNumber
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

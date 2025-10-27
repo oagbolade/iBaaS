@@ -162,6 +162,7 @@ async function getProductType(
         url: urlEndpoint,
         method: 'GET',
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
@@ -196,6 +197,7 @@ async function getProductClassByCategory(
         url: urlEndpoint,
         method: 'GET',
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
@@ -230,6 +232,7 @@ async function getGLWithBranchCode(
         url: urlEndpoint,
         method: 'GET',
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
@@ -265,6 +268,7 @@ export async function filterAllProductSearch(
           productCode: params?.productCode
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

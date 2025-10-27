@@ -1,7 +1,8 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
+import moment from 'moment';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './Column';
 import {
@@ -10,7 +11,7 @@ import {
   renderEmptyTableBody
 } from '@/components/Table/Table';
 import { useGetBranches } from '@/api/general/useBranches';
-import { useGetAllProduct } from '@/api/setup/useProduct';
+import { useGetProductTypeByid } from '@/api/setup/useProduct';
 import { ISearchParams } from '@/app/api/search/route';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
@@ -20,11 +21,9 @@ import { StyledTableCell } from '@/components/Table/style';
 import colors from '@/assets/colors';
 import { useGetAllGroups } from '@/api/general/useGroup';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
-import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import moment from 'moment';
 
 interface ActionMenuProps {
   detail: string;
@@ -44,7 +43,13 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 export const WeeklyLoan = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
-  const { bankproducts } = useGetAllProduct();
+
+  const { data: rawBankProducts } = useGetProductTypeByid('3');
+  const bankproducts = rawBankProducts?.map((item) => ({
+    productCode: String(item.PCode ?? '').trim(),
+    productName: String(item.PName ?? '').trim()
+  }));
+
   const { groups } = useGetAllGroups();
   const { dateValue } = React.useContext(DateRangePickerContext);
 
@@ -76,11 +81,10 @@ export const WeeklyLoan = () => {
       ...searchParams
     });
 
-  const { loanWeeklyRepaymentList: downloadData } =
-    useGetWeeklyLoanRepayment({
-      ...searchParams,
-      getAll: true
-    });
+  const { loanWeeklyRepaymentList: downloadData } = useGetWeeklyLoanRepayment({
+    ...searchParams,
+    getAll: true
+  });
 
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
@@ -88,9 +92,23 @@ export const WeeklyLoan = () => {
     }
 
     if (downloadData?.length > 0) {
-      setExportData(downloadData);
+      const mappedData = downloadData.map((item) => ({
+        'Account Number': item?.accountNumber || '',
+        'Account Name': item?.fullName || '',
+        'Settlement Account': item?.settlementAcct1 || '',
+        'Loan Amount':   `NGN ${formatCurrency(item?.loanamount) || ''}`,
+        'Start Date': item?.startDate
+          ? moment(item?.startDate).format('YYYY-MM-DD, hh:mm A')
+          : '',
+        'Maturity Date': item?.matDate
+          ? moment(item?.matDate).format('YYYY-MM-DD, hh:mm A')
+          : ''
+      }));
+
+      setExportData(mappedData);
       setReportType('WeeklyLoanRepayment');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [downloadData]);
 
   return (
@@ -114,9 +132,9 @@ export const WeeklyLoan = () => {
             columns={COLUMN}
             data={loanWeeklyRepaymentList || []}
             showHeader={{
-              mainTitle: 'Weekly Loan Repayment',
+              mainTitle: 'Loan Repayment',
               secondaryTitle:
-                'See a directory of all Weekly Loan Repayments Report in this system.',
+                'See a directory of all  Loan Repayments Report in this system.',
               hideFilterSection: true
             }}
             setPage={setPage}
@@ -149,7 +167,9 @@ export const WeeklyLoan = () => {
 
                     <StyledTableCell component="th" scope="row">
                       {dataItem?.matDate
-                        ? moment(dataItem?.matDate).format('YYYY-MM-DD, hh:mm A')
+                        ? moment(dataItem?.matDate).format(
+                            'YYYY-MM-DD, hh:mm A'
+                          )
                         : 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">

@@ -70,6 +70,7 @@ export async function filterGroupSearch(
         groupId: params?.groupId
       },
       headers: {
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         'Content-Type': 'application/json',
         token: `${getStoredUser()?.token}`
       }

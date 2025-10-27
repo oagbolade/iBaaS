@@ -1,14 +1,11 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetBranches } from '@/api/general/useBranches';
-import { useGetAllProduct } from '@/api/setup/useProduct';
 import { LoanOverdueParams } from '@/api/reports/useGetLoanOverdueReport';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { useGetDisbursedLoanReport } from '@/api/reports/useGetDisbursedLoan';
@@ -21,6 +18,7 @@ import { StyledTableCell } from '@/components/Table/style';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
+import { useGetProductTypeByid } from '@/api/setup/useProduct';
 
 interface ActionProps {
   data: IGetDisbursedLoanReport;
@@ -29,10 +27,14 @@ interface ActionProps {
 export const DisbursedLoan = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
-  const { bankproducts } = useGetAllProduct();
+  const { data: rawBankProducts } = useGetProductTypeByid('3');
+  const bankproducts = rawBankProducts?.map((item) => ({
+    productCode: String(item.PCode ?? '').trim(),
+    productName: String(item.PName ?? '').trim()
+  }));
+
   const { dateValue } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType } =
-    useContext(DownloadReportContext);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
 
   const {
     searchParams,
@@ -54,9 +56,7 @@ export const DisbursedLoan = () => {
     getAll: false
   });
 
-  const {
-    disbursedLoans: downloadData = [],
-  } = useGetDisbursedLoanReport({
+  const { disbursedLoans: downloadData = [] } = useGetDisbursedLoanReport({
     ...searchParams,
     pageSize: 10,
     pageNumber: page,
@@ -65,37 +65,34 @@ export const DisbursedLoan = () => {
 
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
-      setExportData([]);
+      setExportData((prev) => (prev && prev.length > 0 ? [] : prev || []));
+      return;
     }
 
-    if (disbursedLoans.length > 0) {
-      const formattedExportData = disbursedLoans.map((item) => ({
-        'Account Number': item?.accountNumber || '',
-        'Account Name': item?.fullName || '',
-        'Group Name': item?.groupname || '',
-        'Officer Name': item?.officerName?.split('T')[0] || '',
-        'Facility Amount': item?.currentbalance.toLocaleString() || '',
-        Gender: item?.gender || '',
-        'Settlement Account': item?.settlementAcct1 || '',
-        'Start Date': item?.startDate || '',
-        'Maturity Date': item?.matDate || '',
-        'CASA Balance': item?.bkBalance || '',
-        'Loan Stage': item?.loanStageCycle || '',
-        Branch: item?.branch || '',
-        'Product Code': item?.productCode || '',
-        'Risk rating': item?.riskRating || ''
-      }));
+    const formattedExportData = downloadData.map((item) => ({
+      'Account Number': item?.accountNumber || '',
+      'Account Name': item?.fullName || '',
+      'Group Name': item?.groupname || '',
+      'Officer Name': item?.officerName?.split('T')[0] || '',
+      'Facility Amount': item?.currentbalance?.toLocaleString() || '',
+      Gender: item?.gender || '',
+      'Settlement Account': item?.settlementAcct1 || '',
+      'Start Date': item?.startDate || '',
+      'Maturity Date': item?.matDate || '',
+      'CASA Balance': item?.bkBalance || '',
+      'Loan Stage': item?.loanStageCycle || '',
+      Branch: item?.branch || '',
+      'Product Code': item?.productCode || '',
+      'Risk rating': item?.riskRating || ''
+    }));
 
-      // Ensure no blank row or misplaced headers
-      setExportData(formattedExportData as []);
-      setReportType('LoanOverdueReport');
-    }
-  }, [downloadData]);
+    setExportData(formattedExportData);
+    setReportType('LoanOverdueReport');
+  }, [downloadData, setExportData, setReportType]);
 
   const handleSearch = (params: LoanOverdueParams | null) => {
     setSearchParams({
       ...params,
-
       startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     });
@@ -164,7 +161,8 @@ export const DisbursedLoan = () => {
                         {accountData?.officerName || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {`NGN ${formatCurrency(accountData?.currentbalance || 0)}` || 'N/A'}
+                        {`NGN ${formatCurrency(accountData?.currentbalance || 0)}` ||
+                          'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         <DisbursedLoanActions data={accountData} />

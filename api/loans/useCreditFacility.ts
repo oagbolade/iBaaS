@@ -123,6 +123,7 @@ export async function getAllLoans(
           fullName: params?.fullName
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }
@@ -450,7 +451,6 @@ export function useDisburseLoan() {
 
   return { mutate, isPending, isError, error };
 }
-
 
 async function getAllLoansProduct(
   toastActions: IToastActions
@@ -790,7 +790,6 @@ async function getLoanAccountByLoanAccountNumber(
   return result;
 }
 
-
 export function useGetLoanAccountByLoanAccountNumber(
   loanAccount: string,
   status: string
@@ -879,6 +878,7 @@ export async function getAllOverdraft(
           customerId: params?.customerID
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

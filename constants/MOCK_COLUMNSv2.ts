@@ -18,3 +18,12 @@ export const ProductSummaryDetailsColumns = [
   'Uncleared Bal',
   'Pending Chg'
 ];
+
+export const ProductSumarryColumn = [
+  'Product Code',
+  'Product Name',
+  'Number of Accounts',
+  'CR Product Balance',
+  'DR Product Balance',
+  'Total Balance'
+];

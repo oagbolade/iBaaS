@@ -48,6 +48,7 @@ export async function filterUserSearch(
       },
       headers: {
         'Content-Type': 'application/json',
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         token: `${getStoredUser()?.token}`
       }
     });

@@ -274,7 +274,7 @@ interface IHasUserSearchedProps {
 }
 
 const PreviewTable = () => {
-  const {isLoading} = useGlobalLoadingState()
+  const { isLoading } = useGlobalLoadingState();
   const [accountSearchParams, setAccountSearchParams] =
     useState<ISearchParams | null>(null);
   const [hasUserSearched, setHasUserSearched] = useState<IHasUserSearchedProps>(
@@ -302,7 +302,7 @@ const PreviewTable = () => {
     totalPages,
     totalElements,
     data: customerData,
-    isLoading: isCustomerDataLoading,
+    isLoading: isCustomerDataLoading
   } = useFilterCustomerSearch({ ...searchParams, page });
 
   const {
@@ -324,7 +324,6 @@ const PreviewTable = () => {
       totalElements={totalElements}
       customerData={customerData}
       isLoading={isCustomerDataLoading || isLoading}
-
     />,
     <AccountOverviewTable
       search={searchActiveAccount}

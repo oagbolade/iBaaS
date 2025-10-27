@@ -9,9 +9,7 @@ import {
 } from '@/components/ViewReport/style';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
-import {
-  useGetProductSummaryDetails
-} from '@/api/reports/useGetProductSummaryDetails';
+import { useGetProductSummaryDetails } from '@/api/reports/useGetProductSummaryDetails';
 import { FormSkeleton } from '@/components/Loaders';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TableV2 } from '@/components/Revamp/TableV2';
@@ -35,8 +33,9 @@ export const ProductSummaryDetails = () => {
   };
 
   const [page, setPage] = React.useState(1);
-  const { setExportData, setReportType } =
-    React.useContext(DownloadReportContext);
+  const { setExportData, setReportType } = React.useContext(
+    DownloadReportContext
+  );
 
   const {
     data: productSummaryDetails,
@@ -45,12 +44,10 @@ export const ProductSummaryDetails = () => {
   } = useGetProductSummaryDetails({
     productCode,
     pageNumber: page,
-    pageSize: 10,
+    pageSize: 10
   });
 
-  const {
-    data: downloadData,
-  } = useGetProductSummaryDetails({
+  const { data: downloadData } = useGetProductSummaryDetails({
     productCode,
     pageNumber: page,
     pageSize: 10,
@@ -60,7 +57,9 @@ export const ProductSummaryDetails = () => {
   const filteredDetails = productSummaryDetails?.pagedProductSummaries
     ?.filter(
       (details) =>
-        details?.accountnumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        details?.accountnumber
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         details?.accounttitle?.toLowerCase().includes(searchTerm.toLowerCase())
     )
     ?.map((item) => ({
@@ -68,11 +67,11 @@ export const ProductSummaryDetails = () => {
       accountnumber: item.accountnumber,
       accounttitle: item.accounttitle,
       dateopened: item.dateopened,
-      bkbalance:  `NGN ${formatCurrency(item.bkbalance || 0) || 'N/A'}` || '',
-      availBal:  `NGN ${formatCurrency(item.availBal || 0) || 'N/A'}` || '',
+      bkbalance: item.bkbalance,
+      availBal: `NGN ${formatCurrency(item.availBal || 0) || 'N/A'}` || '',
       lastdatepay: item.lastdatepay,
-      holdbal: item.holdbal,
-      pendingCC: item.pendingCC
+      holdbal: `NGN ${formatCurrency(item.holdbal || 0) || 'N/A'}` || '',
+      pendingCC: `NGN ${formatCurrency(item.pendingCC || 0) || 'N/A'}` || ''
     }));
 
   React.useEffect(() => {
@@ -80,12 +79,10 @@ export const ProductSummaryDetails = () => {
       setExportData([]);
       return;
     }
-    
-    if (
-      (downloadData?.pagedProductSummaries?.length ?? 0) > 0
-    ) {
-      const formattedExportData =
-        downloadData?.pagedProductSummaries.map((item) => ({
+
+    if ((downloadData?.pagedProductSummaries?.length ?? 0) > 0) {
+      const formattedExportData = downloadData?.pagedProductSummaries.map(
+        (item) => ({
           'Product Code': item?.productcode || '',
           'Product Name': item?.productname || '',
           'Number of Accounts': numberOfAccount || '',
@@ -96,20 +93,23 @@ export const ProductSummaryDetails = () => {
           'Account No': item?.accountnumber || '',
           'Account Title': item?.accounttitle || '',
           'Date Opened': item?.dateopened || '',
-          'Book Balance': item?.bkbalance || '',
-          'Available Bal': item?.availBal || '',
+          'Book Balance':
+            `NGN ${formatCurrency(item.bkbalance || 0) || 'N/A'}` || '',
+          'Available Bal':
+            `NGN ${formatCurrency(item.availBal || 0) || 'N/A'}` || '',
           'Last Transaction': item?.lastdatepay || '',
-          'Uncleared Bal': item?.holdbal || '',
-          'Pending Chg': item?.pendingCC || ''
-        }));
+          'Holding Bal':
+            `NGN ${formatCurrency(item.holdbal || 0) || 'N/A'}` || '',
+          'Pending Chg':
+            `NGN ${formatCurrency(item.pendingCC || 0) || 'N/A'}` || ''
+        })
+      );
 
       // Ensure no blank row or misplaced headers
       setExportData(formattedExportData || []);
       setReportType('ProductSummaryDetails');
     }
-  }, [
-    downloadData
-  ]);
+  }, [downloadData]);
 
   return (
     <Box sx={{ marginTop: '60px' }}>
@@ -150,7 +150,7 @@ export const ProductSummaryDetails = () => {
               styles={{ ...ViewAccountTitle }}
             />
             <PageTitle
-              title={Number(crProductBalance).toLocaleString()}
+              title={`NGN ${Number(crProductBalance).toLocaleString()}`}
               styles={{ ...ViewTitle }}
             />
           </Box>
@@ -161,7 +161,7 @@ export const ProductSummaryDetails = () => {
               styles={{ ...ViewAccountTitle }}
             />
             <PageTitle
-              title={Number(drProductBalance).toLocaleString()}
+              title={`NGN ${Number(drProductBalance).toLocaleString()}`}
               styles={{ ...ViewTitle }}
             />
           </Box>
@@ -174,7 +174,7 @@ export const ProductSummaryDetails = () => {
           <Box sx={ViewStyle}>
             <PageTitle title="TOTAL BALANCE" styles={{ ...ViewAccountTitle }} />
             <PageTitle
-              title={Number(totalProductBalance).toLocaleString()}
+              title={`NGN ${Number(totalProductBalance).toLocaleString()}`}
               styles={{ ...ViewTitle }}
             />
           </Box>
@@ -214,11 +214,11 @@ export const ProductSummaryDetails = () => {
                   '',
                   '',
                   '',
-                  `${productSummaryDetails?.totalBookeBalance.toLocaleString()}`,
-                  `${productSummaryDetails?.totalAvailableBalance?.toLocaleString()}`,
+                  `NGN ${productSummaryDetails?.totalBookeBalance.toLocaleString()}`,
+                  `NGN ${productSummaryDetails?.totalAvailableBalance?.toLocaleString()}`,
                   '',
                   '',
-                  `${productSummaryDetails?.totalPendingBalance?.toLocaleString()}`
+                  `NGN ${productSummaryDetails?.totalPendingBalance?.toLocaleString()}`
                 ],
                 grandTotalRow: [
                   'Balance',
@@ -229,7 +229,7 @@ export const ProductSummaryDetails = () => {
                   '',
                   '',
                   '',
-                  `${productSummaryDetails?.totalAvailableBalance?.toLocaleString()}`
+                  `NGN ${productSummaryDetails?.totalAvailableBalance?.toLocaleString()}`
                 ]
               }}
               columns={ProductSummaryDetailsColumns}

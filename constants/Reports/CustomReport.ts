@@ -166,7 +166,7 @@ export const reportsData = [
   },
   {
     linkDisable: false,
-    title: 'WEEKLY LOAN REPAYMENT',
+    title: 'LOAN REPAYMENT',
     menu_name: 'WEEKLY LOAN REPAYMENT REPORT',
     link: '/report/custom-report/weekly-loan',
     description:

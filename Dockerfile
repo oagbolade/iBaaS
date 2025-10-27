@@ -1,19 +1,57 @@
-# Stage 1: Build stage
-FROM iswprodacr.azurecr.io/node:18-alpine AS build
+# ---------- Stage 1: Base dependencies (for caching) ----------
+FROM iswprodacr.azurecr.io/node:18-alpine AS deps
+
 WORKDIR /app
-COPY package.json package-lock.json ./
-COPY .env .env ./
-# RUN npm install --legacy-peer-deps
-RUN npm --proxy=http://172.25.20.117:80 install --legacy-peer-deps
+
+# Copy dependency files only (better cache)
+COPY package*.json ./
+
+# Install all deps using your proxy
+RUN npm install --legacy-peer-deps
+
+# ---------- Stage 2: Build Stage ----------
+FROM iswprodacr.azurecr.io/node:18-alpine AS build
+
+WORKDIR /app
+
+# Copy node_modules from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy project files
 COPY . .
+
+# Ensure static export mode is disabled
+# (comment out or remove `output: 'export'` in next.config.js)
 RUN npm run build
 
-# Stage 2: NGINX Build Stage
-FROM iswprodacr.azurecr.io/nginx:1.12-alpine
+# ---------- Stage 3: Production Runtime ----------
+FROM iswprodacr.azurecr.io/node:18-alpine AS runner
+
 WORKDIR /app
-# (FOR M1 CHIPS)
-# FROM arm64v8/nginx:stable-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/out /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Install runtime tools (gettext provides envsubst)
+RUN apk add --no-cache gettext
+
+# Copy only essential files
+COPY package*.json ./
+RUN npm install --omit=dev --legacy-peer-deps
+
+# Copy built artifacts and static assets
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
+COPY --from=build /app/next.config.js ./next.config.js
+
+# (Optional) If you use custom fonts or other assets
+# COPY --from=build /app/.env ./.env
+
+# ---------- Inject Runtime Config Support ----------
+# Copy our entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 3000
+
+ENTRYPOINT ["/entrypoint.sh"]

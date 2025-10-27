@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FilterSection } from './FilterSection';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { TableV2 } from '@/components/Revamp/TableV2';
-import { MOCK_COLUMNS_V2 } from '@/constants/MOCK_COLUMNSv2';
+import { ProductSumarryColumn } from '@/constants/MOCK_COLUMNSv2';
 import colors from '@/assets/colors';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import {
@@ -55,9 +55,9 @@ export const ProductSummary = () => {
     productcode: string;
     productname: string;
     noofaccts: string | number;
-    crproductbalance: string;
-    drproductbalance: string;
-    totproductbalance: string;
+    crproductbalance: number | string;
+    drproductbalance: number | string;
+    totproductbalance: number | string;
   }
 
   const [productSummaryData, setProductSummaryData] = React.useState<
@@ -103,9 +103,9 @@ export const ProductSummary = () => {
           'Product Name': item?.productname || '',
           'Number of Accounts': item?.noofaccts || '',
           'CR Product Balance':
-            `NGN ${formatCurrency(item.crproductbalance || 0) || 'N/A'}` || '',
+            `NGN ${formatCurrency(item.crproductbalance || 0) || '0'}` || '',
           'DR Product Balance':
-            `NGN ${formatCurrency(item?.drproductbalance) || 'N/A'}` || '',
+            `NGN ${formatCurrency(item?.drproductbalance) || '0'}` || '',
           'Total Balance': item?.totproductbalance || ''
         })
       );
@@ -114,15 +114,12 @@ export const ProductSummary = () => {
         productcode: item?.productcode || '',
         productname: item?.productname || '',
         noofaccts: item?.noofaccts || '',
-        crproductbalance:
-          `NGN ${formatCurrency(item.crproductbalance || 0) || 'N/A'}` || '',
-        drproductbalance:
-          `NGN ${formatCurrency(item?.drproductbalance) || 'N/A'}` || '',
-        totproductbalance:
-          `NGN ${formatCurrency(item?.totproductbalance) || 'N/A'}` || ''
+        crproductbalance: item?.crproductbalance ?? 0,
+        drproductbalance: item?.drproductbalance ?? 0,
+        totproductbalance: item?.totproductbalance ?? 0
       }));
 
-      setProductSummaryData(data || []);
+  setProductSummaryData(data || []);
       if (downloadData) {
         setExportData(formattedExportData || []);
         setReportType('ProductSummary');
@@ -170,18 +167,18 @@ export const ProductSummary = () => {
           <TableV2
             tableConfig={{
               hasActions: true,
-              paintedColumns: ['CR Product Balalnce', 'DR Product Balance'],
+              paintedColumns: ['crproductbalance', 'drproductbalance'],
               totalRow: [
                 'Total',
                 '',
                 `${productSummaryList?.totalAccount?.toLocaleString()}`,
-                `${productSummaryList?.totalCr?.toLocaleString()}`,
-                `${productSummaryList?.totalDr?.toLocaleString()}`,
-                `${productSummaryList?.totalProductBal?.toLocaleString()}`,
+                `NGN ${productSummaryList?.totalCr?.toLocaleString()}`,
+                `NGN ${productSummaryList?.totalDr?.toLocaleString()}`,
+                `NGN ${productSummaryList?.totalProductBal?.toLocaleString()}`,
                 ''
               ]
             }}
-            columns={MOCK_COLUMNS_V2}
+            columns={ProductSumarryColumn}
             data={productSummaryData}
             keys={[
               'productcode',

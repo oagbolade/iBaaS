@@ -467,6 +467,7 @@ export async function filterCustomerAccountSearch(
           productType: params?.productType
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }
@@ -514,6 +515,7 @@ export async function filterCustomerSearch(
           phoneNo: params?.phoneNo
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

@@ -16,6 +16,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { TopOverViewSingeCalendarSection } from '../../Overview/TopOverViewSingleCalenderSection';
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -46,6 +47,12 @@ export const CustomerBalances = () => {
 
   const { dateValue } = React.useContext(DateRangePickerContext);
 
+  // Use persisted searchParams for data fetching dates so selecting a date
+  // in the picker alone doesn't trigger a fetch. Search button stores the
+  // chosen dates into searchParams via handleSearch below.
+  const startDate = searchParams?.startDate || '';
+  const endDate = searchParams?.endDate || '';
+
   const {
     customerBalanceList = {
       pagedCustomerBalances: [],
@@ -57,8 +64,14 @@ export const CustomerBalances = () => {
     totalRecords = 0
   }: CustomerBalanceList = useGetCustomerBalance({
     ...searchParams,
-    page
+    page,
+    startDate,
+    endDate
   });
+
+React.useEffect(() => {
+  console.log('Customer Balance', customerBalanceList);
+}, [customerBalanceList]);
 
   const {
     customerBalanceList: downloadData = {
@@ -70,8 +83,11 @@ export const CustomerBalances = () => {
   }: CustomerBalanceList = useGetCustomerBalance({
     ...searchParams,
     getAll: true,
-    page
+    page,
+    startDate,
+    endDate
   });
+
 
   const {
     pagedCustomerBalances = [],
@@ -80,7 +96,7 @@ export const CustomerBalances = () => {
     totalBkBal = 0
   } = customerBalanceList || [];
 
-  const { pagedCustomerBalances: getAllDownloadData = [] } = downloadData || [];
+  const { pagedCustomerBalances: getAllDownloadData } = downloadData;
 
   React.useEffect(() => {
     if (!getAllDownloadData || getAllDownloadData.length === 0) {
@@ -104,17 +120,20 @@ export const CustomerBalances = () => {
       }));
       setExportData(mapCustomerBalance as []);
     }
-  }, [getAllDownloadData, isCustomerBalanceDataLoading]);
+  }, [getAllDownloadData]);
 
-  const handleSearch = async (params: ISearchParams | null) => {
-    setSearchActive(true);
-    setSearchParams({
-      ...params,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
-    });
-    setReportType('CustomerBalance');
-  };
+  const handleSearch = React.useCallback(
+    async (params: ISearchParams | null) => {
+      setSearchActive(true);
+      setSearchParams({
+        ...params,
+        startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+        endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      });
+      setReportType('CustomerBalance');
+    },
+    [setSearchParams, setSearchActive, dateValue, setReportType]
+  );
 
   return (
     <Box
@@ -123,7 +142,7 @@ export const CustomerBalances = () => {
         marginTop: '60px'
       }}
     >
-      <TopOverViewSection useBackButton />
+        <TopOverViewSingeCalendarSection />
 
       {branches && bankproducts && (
         <FilterSection

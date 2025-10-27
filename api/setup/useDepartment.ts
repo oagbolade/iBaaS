@@ -17,8 +17,7 @@ import { IToastActions } from '@/constants/types';
 import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import {
-  CreateDepartmentFormValues,
-  DepartmentSearchParams
+  CreateDepartmentFormValues
 } from '@/schemas/schema-values/setup';
 import { ISearchParams } from '@/app/api/search/route';
 import { SEARCH_BASE_URL } from '@/axiosInstance/constants';
@@ -127,6 +126,7 @@ export async function filterDepartmantSearch(
           departmentName: params?.departmentName
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

@@ -1,12 +1,10 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Box } from '@mui/material';
-import Link from 'next/link';
+import moment from 'moment';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './COLUMNS';
 import { MuiTableContainer } from '@/components/Table';
-import { MOCK_COLUMNS } from '@/constants/MOCK_COLUMNS';
-import MOCK_DATA from '@/constants/MOCK_DATA.json';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetStatus } from '@/api/general/useStatus';
 import { useGetBranches } from '@/api/general/useBranches';
@@ -21,7 +19,6 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
-import moment from 'moment';
 
 export const TransactionClearing = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
@@ -33,49 +30,52 @@ export const TransactionClearing = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('transaction-clearing');
-  const { setExportData, setReportType } = useContext(DownloadReportContext);
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
   const { status } = useGetStatus();
   const { branches } = useGetBranches();
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { data: transactionsinClearingList = [], isLoading } =
     useGetTransactionClearing({
       ...searchParams,
       page,
       pageNumber: String(page),
-      pageSize: '10',
+      pageSize: '10'
     });
 
-    const { data: downloadData = [] } =
-    useGetTransactionClearing({
-      ...searchParams,
-      page,
-      pageNumber: String(page),
-      pageSize: '10',
-      getAll: true
-    });
+  const { data: downloadData = [] } = useGetTransactionClearing({
+    ...searchParams,
+    page,
+    pageNumber: String(page),
+    pageSize: '10',
+    getAll: true
+  });
 
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
       setExportData([]);
     }
 
-    const formattedExportData = downloadData?.map((item) => ({
-      'Account Number': item?.accountnumber || '',
-      'Bank Name': item?.bankname || '',
-      'Cheque No': item?.chequeno || '',
-      'Created Date': item?.create_dt?.split(' ')[0] || '',
-      'Value Date': item?.valuedate?.split(' ')[0] || '',
-      Amount: item?.tranamount || '',
-      Narration: item?.narration || '',
-      'Posted By': item?.userid || ''
-    }));
+    if (downloadData?.length > 0) {
+      const formattedExportData = downloadData?.map((item) => ({
+        'Account Number': item?.accountnumber || '',
+        'Bank Name': item?.bankname || '',
+        'Cheque No': item?.chequeno || '',
+        'Created Date': item?.create_dt?.split(' ')[0] || '',
+        'Value Date': item?.valuedate?.split(' ')[0] || '',
+        Amount: item?.tranamount || '',
+        Narration: item?.narration || '',
+        'Posted By': item?.userid || ''
+      }));
 
-    // Ensure no blank row or misplaced headers
-    setExportData(formattedExportData);
-    setReportType('TransactionInClearing');
+      // // Ensure no blank row or misplaced headers
+      setExportData(formattedExportData);
+      setReportType('TransactionInClearing');
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [downloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
@@ -86,6 +86,7 @@ export const TransactionClearing = () => {
     });
     setSearchActive(true);
   };
+
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
@@ -130,13 +131,16 @@ export const TransactionClearing = () => {
                         {dataItem?.chequeno || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {moment(dataItem?.create_dt?.split(' ')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
+                        {moment(dataItem?.create_dt?.split(' ')[0]).format(
+                          'YYYY-MM-DD, hh:mm:ss A'
+                        ) || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {dataItem?.valuedate?.split(' ')[0] || 'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {`NGN ${formatCurrency(dataItem?.tranamount || 0)}` || 'N/A'}
+                        {`NGN ${formatCurrency(dataItem?.tranamount || 0)}` ||
+                          'N/A'}
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {dataItem?.narration || 'N/A'}

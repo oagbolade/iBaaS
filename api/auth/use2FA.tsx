@@ -5,17 +5,14 @@ import {
   UseGetAllAuth2fa,
   UseGetAllAuth2faCheck
 } from '../ResponseTypes/admin';
-import { AuthFaAxiosInstance, nipAxiosInstance } from '@/axiosInstance';
+import { AuthFaAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import {
   Aut2FaChcheckValue,
   Aut2FaValue,
-  NipLoginResponse,
-  NipLoginValue
 } from '@/schemas/schema-values/auth';
 import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
-import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 
 const auth2fa = async (

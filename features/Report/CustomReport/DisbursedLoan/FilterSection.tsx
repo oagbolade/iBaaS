@@ -11,6 +11,7 @@ import { LoanOverdueParams } from '@/api/reports/useGetLoanOverdueReport';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
+import { disburseLoanSchema } from '@/schemas/reports';
 
 type Props = {
   branches?: IBranches[];
@@ -48,18 +49,13 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values) => onSubmit(values)}
+      validationSchema={disburseLoanSchema}
     >
       {() => (
         <Form>
           <Box>
             <Grid container spacing={2}>
-              <Grid
-                item
-                mb={{ tablet: 4 }}
-                mobile={12}
-                tablet={4}
-                sx={{ display: 'flex', alignItems: 'center', gap: 5 }}
-              >
+              <Grid item mb={{ tablet: 3 }} mobile={12} tablet={3}>
                 <FormSelectField
                   name="branchcode"
                   options={mappedBranches}
@@ -68,13 +64,7 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                 />{' '}
               </Grid>
 
-              <Grid
-                mb={{ tablet: 3 }}
-                item
-                mobile={12}
-                tablet={3}
-                sx={{ display: 'flex', alignItems: 'center', gap: 5 }}
-              >
+              <Grid mb={{ tablet: 3 }} item mobile={12} tablet={3}>
                 <FormSelectField
                   name="productcode"
                   options={mappedBankproducts}
@@ -85,8 +75,8 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
               <Grid
                 item
                 mobile={12}
-                tablet={3}
-                mb={{ tablet: 3 }}
+                tablet={5}
+                mb={{ tablet: 5 }}
                 justifyContent="center"
               >
                 <FormTextInput

@@ -112,6 +112,7 @@ export async function filterTransactionSearch(
           tranName: params?.tranName
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

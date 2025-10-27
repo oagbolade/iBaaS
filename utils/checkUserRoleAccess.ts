@@ -1,13 +1,12 @@
-import { getStoredUser } from './user-storage';
+import { getStoredMenuItems } from './user-storage';
 import { AccessRules } from '@/constants/AccessRules';
 
-const user = getStoredUser();
-const userItems = user?.menuItems || [];
+const menuItems = getStoredMenuItems() || [];
 
 export const checkMultipleUserRoleAccess = (
   menuName: string,
   userRole: string
-): boolean => {
+) => {
   let userRoleIsContainedInRule = false;
 
   Object.keys(AccessRules).forEach((key) => {
@@ -21,7 +20,7 @@ export const checkMultipleUserRoleAccess = (
     throw new Error(`Role ${userRole} is not found in the AccessRules`);
   }
 
-  return userItems.some(
+  return menuItems.some(
     (item) => userRole.toLowerCase() === item.menu_name.toLowerCase()
   );
 };
@@ -32,7 +31,7 @@ const checkUserRoleAccess = (roleNames: string[]): boolean => {
   }
 
   return roleNames.some((roleName) =>
-    userItems.some(
+    menuItems.some(
       (item) => roleName.toLowerCase() === item.menu_name.toLowerCase()
     )
   );

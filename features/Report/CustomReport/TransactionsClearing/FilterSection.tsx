@@ -1,17 +1,17 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Formik, Form } from 'formik';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IBranches, IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import colors from '@/assets/colors';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import {transactionInClearingSchema} from '@/schemas/reports';
 
 type Props = {
   onSearch?: Function;
@@ -38,18 +38,16 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status.toString()?.length > 0 ? values.status : null,
-      branchCode:
-        values.branchCode.toString()?.length > 0 ? values.branchCode : null,
-      searchWith:
-        values.searchWith?.toString().length > 0 ? values.searchWith : null
+      branchCode: values.branchCode.toString()?.length > 0 ? values.branchCode : null,
+      searchWith: values.searchWith?.toString().length > 0 ? values.searchWith : null
     };
-    console.log(params);
     onSearch?.(params);
   };
 
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={transactionInClearingSchema}
       enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
