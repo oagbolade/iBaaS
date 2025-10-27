@@ -22,7 +22,6 @@ import { customerBalanceSchema } from '@/schemas/reports';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGetProductType } from '@/api/general/useProductType';
-import { log } from 'console';
 
 type Props = {
   branches?: IBranches[];
@@ -42,7 +41,6 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
 
   const { productTypes } = useGetProductType();
 
-  // memoize mapped product types to avoid recreating options each render
   const mappedProductTypes = useMemo(
     () =>
       (productTypes || []).map((product) => ({

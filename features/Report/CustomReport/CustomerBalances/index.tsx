@@ -47,9 +47,6 @@ export const CustomerBalances = () => {
 
   const { dateValue } = React.useContext(DateRangePickerContext);
 
-  // Use persisted searchParams for data fetching dates so selecting a date
-  // in the picker alone doesn't trigger a fetch. Search button stores the
-  // chosen dates into searchParams via handleSearch below.
   const startDate = searchParams?.startDate || '';
   const endDate = searchParams?.endDate || '';
 
@@ -68,10 +65,6 @@ export const CustomerBalances = () => {
     startDate,
     endDate
   });
-
-React.useEffect(() => {
-  console.log('Customer Balance', customerBalanceList);
-}, [customerBalanceList]);
 
   const {
     customerBalanceList: downloadData = {
