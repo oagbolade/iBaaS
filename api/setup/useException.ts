@@ -72,6 +72,7 @@ export async function filterExceptionSearch(
           exceptioncode: params?.exceptioncode
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

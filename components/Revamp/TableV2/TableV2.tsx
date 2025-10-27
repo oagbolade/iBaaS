@@ -153,7 +153,7 @@ export const TableV2 = <T,>({
     'DR Product Balance',
     'amt',
     'holdreason',
-    'accountnumber',
+    'bkbalance'
   ] as const satisfies readonly string[];
 
   const dateKeys = [

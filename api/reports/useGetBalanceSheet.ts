@@ -5,7 +5,7 @@ import {
   GetAllBalanceSheetResponse,
   GetAllBalanceSheetByItemIdResponse,
 } from '../ResponseTypes/reports';
-import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -61,9 +61,7 @@ export function useGetAllBalanceSheet(
       params?.searchWith || '',
     ],
     queryFn: () => fetchAllBalanceSheet(toastActions, params || {}),
-    enabled: Boolean(
-      params?.page || '' || params?.pageSize || params?.searchWith,
-    ),
+    enabled: String(params?.branchID).length >= 0,
   });
 
   return { ...data, isError, isLoading };

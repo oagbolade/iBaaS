@@ -1,0 +1,25 @@
+# For live reload during development ()
+# ---------- Development Dockerfile ----------
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files first (for better layer caching)
+COPY package*.json ./
+
+# Install dependencies (including dev deps)
+RUN npm install --legacy-peer-deps
+
+# Copy all source code
+COPY . .
+
+# Expose your dev port
+EXPOSE 4000
+
+# Set environment variables for development
+ENV NODE_ENV=development
+ENV PORT=4000
+ENV HOST=0.0.0.0
+
+# Default command — runs Next.js in dev mode (with hot reload)
+CMD ["npm", "run", "dev"]

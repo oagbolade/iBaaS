@@ -65,6 +65,16 @@ export const PlainTrialBalance = () => {
     bkBalance = 0
   } = plainTrialBalanceList || {};
 
+
+
+  const mappedResult = getAllPlainTrialBalanceData.map((item) => ({
+    glNumber: item.glNumber,
+    oldGLno: item.oldGLno,
+    acctName: item.acctName,
+    dr: `NGN ${formatCurrency(item.dr)}`,
+    cr: `NGN ${formatCurrency(item.cr)}`
+  }));
+
   React.useEffect(() => {
     if (!downloadDatalist?.pagedRecords || downloadDatalist?.pagedRecords.length === 0) {
       setExportData([]);
@@ -111,20 +121,20 @@ export const PlainTrialBalance = () => {
                   'Total',
                   '',
                   '',
-                  `${formatCurrency(totalDr)}`,
-                  `${formatCurrency(totalCr)}`
+                  `NGN ${formatCurrency(totalDr)}`,
+                  `NGN ${formatCurrency(totalCr)}`
                 ],
                 grandTotalRow: [
                   'Balance in Book',
                   '',
                   '',
                   '',
-                  `${formatCurrency(bkBalance)}`
+                  `NGN ${formatCurrency(bkBalance)}`
                 ]
               }}
               keys={keys as []}
               columns={COLUMN}
-              data={getAllPlainTrialBalanceData}
+              data={mappedResult}
               hideFilterSection
               showHeader={{
                 mainTitle: 'Plain Trial Balance',

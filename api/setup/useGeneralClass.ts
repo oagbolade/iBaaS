@@ -104,6 +104,7 @@ export async function filterGlClassSearch(
         status: params?.status
       },
       headers: {
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         'Content-Type': 'application/json',
         token: `${getStoredUser()?.token}`
       }

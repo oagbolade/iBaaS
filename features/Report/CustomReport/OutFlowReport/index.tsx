@@ -25,9 +25,7 @@ export const InflowOutflowReport = () => {
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const {
     searchParams,
@@ -53,23 +51,29 @@ export const InflowOutflowReport = () => {
     pageNumber: page
   });
 
-  const { inflowOutflowList: downloadData } = useGetInflowOutflowReport({
-    ...searchParams,
-    branchId,
-    tellerId,
-    pageSize: 10,
-    pageNumber: page,
-    getAll: true
-  });
+  // const {
+  //   inflowOutflowList: downloadData,
+  //   isLoading,
+  //   totalInflow,
+  //   totalOutflow,
+  //   totalRecords
+  // } = useGetInflowOutflowReport({
+  //   ...searchParams,
+  //   branchId,
+  //   tellerId,
+  //   pageSize: 10,
+  //   pageNumber: page,
+  //   getAll: true
+  // });
 
   React.useEffect(() => {
-    if (!downloadData || downloadData?.length === 0) {
+    if (!inflowOutflowList || inflowOutflowList?.length === 0) {
       setExportData([]);
       return;
     }
 
-    if (downloadData && downloadData?.length > 0) {
-      const formattedExportData = downloadData.map((item) => ({
+    if (inflowOutflowList && inflowOutflowList?.length > 0) {
+      const formattedExportData = inflowOutflowList.map((item) => ({
         'Account Number': item.accountnumber || '',
         'Account Name': item.accounttitle || '',
         'Product Code': item.productcode || '',
@@ -82,7 +86,7 @@ export const InflowOutflowReport = () => {
       setExportData(formattedExportData);
       setReportType('InflowOutflow');
     }
-  }, [downloadData]);
+  }, [inflowOutflowList]);
 
   const handleSearch = (params: IInflowOutflowParams | null) => {
     setSearchParams({
@@ -104,7 +108,7 @@ export const InflowOutflowReport = () => {
 
       <Box mx={4}>
         {isGlobalLoading || isLoading ? (
-          <FormSkeleton noOfLoaders={5} />
+          <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box>
             <TableV2
@@ -121,7 +125,8 @@ export const InflowOutflowReport = () => {
               ]}
               showHeader={{
                 mainTitle: 'Inflow/Outflow Report',
-                secondaryTitle: "See a directory of all inflow/outflow reports in this system."
+                secondaryTitle:
+                  'See a directory of all inflow/outflow reports in this system.'
               }}
               hideFilterSection
               isSearched={searchActive}

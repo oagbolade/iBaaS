@@ -69,10 +69,8 @@ export const globalErrorHandler = (
   }
 
   if (data.responseCode === statusCodes.UNAUTHORIZED) {
-    console.log('errorResponse 222', data);
-
-    const message = data.responseDescription || 'Unauthorized222';
-    const title = 'Unauthorised User, please try again222';
+    const message = data.responseDescription || 'Unauthorized';
+    const title = 'Unauthorised User, please try again';
     return { message, title, severity };
   }
 
@@ -109,9 +107,8 @@ export const globalErrorHandler = (
     axios.isAxiosError(errorResponse) &&
     errorResponse?.response?.status === statusCodes.AXIOS_UNAUTHORIZED
   ) {
-    console.log('errorResponse 333', errorResponse);
-    const title = 'Unauthorised user333';
-    const message = 'Unauthorised User. Please Login Again333';
+    const title = 'Unauthorised user';
+    const message = 'Unauthorised User. Please Login Again';
     clearStoredUser();
     return { message, title, severity };
   }
@@ -119,12 +116,10 @@ export const globalErrorHandler = (
   if (
     axios.isAxiosError(errorResponse) &&
     errorResponse?.response?.data?.responseDescription ===
-    statusCodes.AXIOS_UNAUTHORIZED
+      statusCodes.AXIOS_UNAUTHORIZED
   ) {
-    console.log('errorResponse 444', errorResponse);
-
-    const title = 'Unauthorised user444';
-    const message = 'Unauthorised User. Please Login Again444';
+    const title = 'Unauthorised user';
+    const message = 'Unauthorised User. Please Login Again';
     clearStoredUser();
     return { message, title, severity };
   }
@@ -133,13 +128,12 @@ export const globalErrorHandler = (
   const message =
     (axios.isAxiosError(errorResponse) &&
       errorResponse?.response?.data?.responseDescription) ||
-      errorResponse?.response?.data?.ResponseDescription ||
-      errorResponse?.response?.data?.responseMessage
+    errorResponse?.response?.data?.ResponseDescription ||
+    errorResponse?.response?.data?.responseMessage
       ? errorResponse?.response?.data?.responseDescription ||
-      errorResponse?.response?.data?.ResponseDescription ||
-      errorResponse?.response?.data?.responseMessage
+        errorResponse?.response?.data?.ResponseDescription ||
+        errorResponse?.response?.data?.responseMessage
       : SERVER_ERROR;
 
   return { message, title, severity };
 };
-

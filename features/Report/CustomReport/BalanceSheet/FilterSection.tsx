@@ -1,26 +1,19 @@
-
 import React from 'react';
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import { exportData, dateFilter, inputFields } from '../style';
+import { inputFields } from '../style';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
-  ActionButtonWithPopper,
   ActionButton,
-  BackButton
 } from '@/components/Revamp/Buttons';
-import { ExportIcon } from '@/assets/svg';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { customerBalanceSchema } from '@/schemas/reports';
-import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
@@ -32,7 +25,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>(
     'balance-sheet-report'
   );
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
     branches
@@ -61,7 +53,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   return (
     <Box>
       <Formik
-        initialValues={searchFilterInitialValues}
+        initialValues={initialValues || searchFilterInitialValues}
         onSubmit={(values) => onSubmit(values)}
         validationSchema={customerBalanceSchema}
       >

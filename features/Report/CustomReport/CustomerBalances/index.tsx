@@ -80,7 +80,7 @@ export const CustomerBalances = () => {
     totalBkBal = 0
   } = customerBalanceList || [];
 
-  const { pagedCustomerBalances: getAllDownloadData = [] } = downloadData || [];
+  const { pagedCustomerBalances: getAllDownloadData } = downloadData;
 
   React.useEffect(() => {
     if (!getAllDownloadData || getAllDownloadData.length === 0) {
@@ -104,7 +104,7 @@ export const CustomerBalances = () => {
       }));
       setExportData(mapCustomerBalance as []);
     }
-  }, [getAllDownloadData, isCustomerBalanceDataLoading]);
+  }, [getAllDownloadData]);
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);

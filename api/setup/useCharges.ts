@@ -69,6 +69,7 @@ export async function filterChargeSearch(
         chargeDesc: params?.chargeDesc
       },
       headers: {
+        'Tenant-ID': getStoredUser()?.companyCode || '',
         'Content-Type': 'application/json',
         token: `${getStoredUser()?.token}`
       }

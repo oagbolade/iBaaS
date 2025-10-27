@@ -73,6 +73,7 @@ export async function filterEducationSearch(
           educationname: params?.educationname
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

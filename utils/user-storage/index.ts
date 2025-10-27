@@ -1,11 +1,12 @@
 import { decryptData } from '../decryptData';
 import { encryptData } from '../encryptData';
-import { UserLoginResponse } from '@/api/ResponseTypes/login';
+import { MenuItemsType, UserLoginResponse } from '@/api/ResponseTypes/login';
 
 export const USER_LOCALSTORAGE_KEY = 'ibaas_user';
 export const LAST_PAGE_LOCALSTORAGE_KEY = 'ibaas_last_page';
 export const RECENTLY_VISITED_LOCALSTORAGE_KEY = 'recently_visited_modules';
 export const BANK_LOGO_LOCALSTORAGE_KEY = 'bank_logo';
+export const MENU_ITEMS_LOCALSTORAGE_KEY = 'menu_items';
 
 export interface IRecentlyVisited {
   moduleName: string;
@@ -13,7 +14,7 @@ export interface IRecentlyVisited {
 }
 
 // helper to get user from localstorage
-export function getStoredUser(): UserLoginResponse | null {
+export function getStoredUser (): UserLoginResponse | null {
   if (typeof window !== 'undefined') {
     const storedUser = localStorage.getItem(USER_LOCALSTORAGE_KEY);
     return storedUser ? JSON.parse(decryptData(storedUser) as string) : null;
@@ -22,8 +23,19 @@ export function getStoredUser(): UserLoginResponse | null {
   return null;
 }
 
+export function getStoredMenuItems (): MenuItemsType[] | null {
+  if (typeof window !== 'undefined') {
+    const storedItems = localStorage.getItem(MENU_ITEMS_LOCALSTORAGE_KEY);
+    return storedItems ? JSON.parse(storedItems) : null;
+  }
+
+  return null;
+}
+
 export const savePasswordToLocalStorage = (password: string) => {
-  localStorage.setItem('userPassword', password);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('userPassword', password);
+  }
 };
 
 // Utility function to get password from localStorage (can be used outside)
@@ -66,17 +78,30 @@ export function getRecentlyVisitedModules(): IRecentlyVisited[] | null {
 }
 
 export function setLastPage(url: string): void {
-  localStorage.setItem(
-    LAST_PAGE_LOCALSTORAGE_KEY,
-    String(encryptData(JSON.stringify(url)))
-  );
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(
+      LAST_PAGE_LOCALSTORAGE_KEY,
+      String(encryptData(JSON.stringify(url)))
+    );
+  }
 }
 
 export function setStoredUser(user: UserLoginResponse): void {
-  localStorage.setItem(
-    USER_LOCALSTORAGE_KEY,
-    String(encryptData(JSON.stringify(user)))
-  );
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(
+      USER_LOCALSTORAGE_KEY,
+      String(encryptData(JSON.stringify(user)))
+    );
+  }
+}
+
+export function setMenuItemsToLocalStorage(menuItems: string): void {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(
+      MENU_ITEMS_LOCALSTORAGE_KEY,
+      menuItems
+    );
+  }
 }
 
 export function saveBankLogoToLocalStorage(logo: string): void {
@@ -97,5 +122,7 @@ export function getBankLogoFromLocalStorage(): string | null {
 }
 
 export function clearStoredUser(): void {
-  localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+  }
 }

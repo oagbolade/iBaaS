@@ -113,6 +113,7 @@ export async function filterInterestSearch(
           intcode: params?.intcode
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

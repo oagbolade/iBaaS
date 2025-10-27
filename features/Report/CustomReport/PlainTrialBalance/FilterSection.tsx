@@ -116,7 +116,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
-                    placeholder="Search by Gl number or Gl name"
+                    placeholder="Search by Gl number"
                     label="Search"
                   />{' '}
                 </Grid>

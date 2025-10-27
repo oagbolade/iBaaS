@@ -77,7 +77,7 @@ export const AccountFilterSection = ({
               mb={{ tablet: 6 }}
               item
               mobile={12}
-              tablet={2}
+              tablet={3}
               justifyContent="center"
             >
               <FormSelectField

@@ -106,6 +106,7 @@ export async function filterDocumentSearch(
           docShortname: params?.docShortname
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

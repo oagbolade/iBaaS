@@ -77,6 +77,7 @@ export async function filterChequeSearch(
           typeDesc: params?.typeDesc
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

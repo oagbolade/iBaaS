@@ -4,7 +4,7 @@ import {
   AuthFaBaseUrl,
   baseUrl,
   nipBaseUrl,
-  reportsBaseUrl,
+  REPORT_BASE_URL,
   endOfdayUrl,
   imageUploadBaseUrl
 } from './constants';
@@ -29,30 +29,35 @@ export function extendTokenExpirationTime(
   localStorage.setItem(USER_LOCALSTORAGE_KEY, String(encryptData(updatedUser)));
 }
 
-const config: AxiosRequestConfig = {
-  baseURL: baseUrl,
+const tenantID: AxiosRequestConfig = {
   headers: {
-    'Tenant-ID': getStoredUser()?.companyCode || ''
-  }
+    'Tenant-ID': getStoredUser()?.companyCode || '',
+  },
 };
 
-export const axiosInstance = axios.create(config);
+export const axiosInstance = axios.create({
+  baseURL: baseUrl,
+  ...tenantID
+});
 
 export const nipAxiosInstance = axios.create({
   baseURL: nipBaseUrl
 });
+
 export const AuthFaAxiosInstance = axios.create({
   baseURL: AuthFaBaseUrl
 });
+
 export const ImageUploadAxiosInstance = axios.create({
   baseURL: imageUploadBaseUrl
 });
+
 export const EndOfDayAxiosInstance = axios.create({
   baseURL: endOfdayUrl
 });
 
 export const reportsAxiosInstance = axios.create({
-  baseURL: reportsBaseUrl
+  baseURL: REPORT_BASE_URL
 });
 
 // Any status code that lie within the range of 2xx causes this function to trigger

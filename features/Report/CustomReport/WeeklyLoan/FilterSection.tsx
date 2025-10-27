@@ -1,26 +1,17 @@
-import React, { useMemo } from 'react';
-import { Box, Stack, Grid } from '@mui/material';
+import React from 'react';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Formik, Form } from 'formik';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import { exportData, dateFilter, inputFields } from '../style';
+import { inputFields } from '../style';
 import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton,
-  BackButton
-} from '@/components/Revamp/Buttons';
-import { ExportIcon } from '@/assets/svg';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
+import { ActionButton } from '@/components/Revamp/Buttons';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { useCurrentBreakpoint } from '@/utils';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IBankProducts, IGroup } from '@/api/ResponseTypes/customer-service';
 import { weeklyLoanRepaySchema } from '@/schemas/reports';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
@@ -37,9 +28,7 @@ export const FilterSection = ({
   onSearch
 }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('weekly-loan');
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
-  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { mappedBranches, mappedBankproducts, mappedGroups } =
     useMapSelectOptions({
@@ -47,12 +36,6 @@ export const FilterSection = ({
       bankproducts,
       groups
     });
-
-  const formattedDateRange = useMemo(() => {
-    const startMonthAndDay = `${dateValue?.[0]?.format('MMM') ?? ''} ${dateValue?.[0]?.format('DD') ?? ''}`;
-    const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
-    return `${startMonthAndDay} - ${endMonthAndDay}`;
-  }, [dateValue]);
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
@@ -101,7 +84,6 @@ export const FilterSection = ({
                 name="branchID"
                 options={mappedBranches}
                 label="Branch Name"
-                required
               />{' '}
             </Grid>
 
@@ -120,7 +102,6 @@ export const FilterSection = ({
                 name="prodCode"
                 options={mappedBankproducts}
                 label="Product"
-                required
               />{' '}
             </Grid>
 

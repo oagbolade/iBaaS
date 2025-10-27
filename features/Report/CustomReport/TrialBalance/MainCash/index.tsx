@@ -30,7 +30,6 @@ export const MainCash = () => {
     setPage(1);
   }, []);
 
-
   const { branches } = useGetBranches();
   const { setExportData, setReportType } =
     useContext(DownloadReportContext);
@@ -63,7 +62,6 @@ export const MainCash = () => {
       startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD'),
     }
   );
-
 
   const {
     trialBydateList: downloadData,

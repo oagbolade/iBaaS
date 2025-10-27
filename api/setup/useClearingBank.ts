@@ -143,6 +143,7 @@ export async function filterClearingBankSearch(
           bankCode: params?.bankCode
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

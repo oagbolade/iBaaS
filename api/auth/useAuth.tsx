@@ -11,7 +11,8 @@ import { statusCodes } from '@/api/ResponseTypes/StatusCodes';
 import {
   clearStoredUser,
   getLastPage,
-  getStoredUser
+  getStoredUser,
+  setMenuItemsToLocalStorage
 } from '@/utils/user-storage';
 import { useGetParams } from '@/utils/hooks/useGetParams';
 
@@ -75,7 +76,8 @@ export function useAuth(): UseAuth {
       });
 
       // Debug log. Do not remove ⚠️
-      console.log('Login response data:', data); 
+      console.log('Login response data:', data.menuItems); 
+      setMenuItemsToLocalStorage(JSON.stringify(data.menuItems));
       
       if (data.responseCode === statusCodes.UNAUTHORIZED) {
         setLoading(false);

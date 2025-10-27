@@ -69,7 +69,6 @@ export function useGetTrialBalance(params: ISearchParams | null) {
       params?.reportType
     ],
     queryFn: () => getTrialBalance(toastActions, params || {}),
-    staleTime: 0,
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
         (params?.reportType || '').length > 0 ||

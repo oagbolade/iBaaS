@@ -79,7 +79,7 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
   const [usePersonalDetails, setUsePersonalDetails] = React.useState<string | null>(null);
 
   const handleUsePersonalDetails = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const value = event.target.value;
+  const {value} = event.target;
   setUsePersonalDetails(value);
 
   if (value !== 'yes') return;
@@ -90,15 +90,14 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
     const { country, state, town, address, phone } = savedDetails;
 
     if (!country || !state || !town) {
-      console.error('Incomplete personal details found');
       return;
     }
 
     const updatedDetails = { country, state, town };
     setLocationDetails(updatedDetails);
     ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach((field, index) => {
-      const value = [country, state, town, address, phone][index];
-      setFieldValue(field, value);
+      const fieldValues = [country, state, town, address, phone][index];
+      setFieldValue(field, fieldValues);
     });
     localStorage.removeItem('personalDetails');
   } catch (error) {

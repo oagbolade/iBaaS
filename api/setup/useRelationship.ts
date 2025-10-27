@@ -74,6 +74,7 @@ export async function filterRelationshipSearch(
           relationid: params?.relationid
         },
         headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
           token: `${getStoredUser()?.token}`
         }

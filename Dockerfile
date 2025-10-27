@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all deps using your proxy
-RUN npm --proxy=http://172.25.20.117:80 install --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # ---------- Stage 2: Build Stage ----------
 FROM iswprodacr.azurecr.io/node:18-alpine AS build
@@ -37,12 +37,7 @@ RUN apk add --no-cache gettext
 
 # Copy only essential files
 COPY package*.json ./
-
-# Remove husky prepare hook before install
-RUN npm pkg delete scripts.prepare
-
-# Disable husky during npm install (so it never triggers the prepare script)
-RUN npm --proxy=http://172.25.20.117:80 install --omit=dev --legacy-peer-deps
+RUN npm install --omit=dev --legacy-peer-deps
 
 # Copy built artifacts and static assets
 COPY --from=build /app/.next ./.next
@@ -59,4 +54,4 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+ENTRYPOINT ["/entrypoint.sh"]
