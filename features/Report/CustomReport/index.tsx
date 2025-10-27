@@ -35,7 +35,7 @@ export const CustomReports = () => {
         }}
       >
         <TextInput
-          customStyle={{ width: '90%' }}
+          customStyle={{ width: '479px' }}
           name="Search"
           placeholder="Search"
           icon={<SearchIcon />}
