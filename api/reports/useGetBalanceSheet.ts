@@ -61,7 +61,9 @@ export function useGetAllBalanceSheet(
       params?.searchWith || '',
     ],
     queryFn: () => fetchAllBalanceSheet(toastActions, params || {}),
-    enabled: String(params?.branchID).length >= 0,
+    enabled: Boolean(
+      params?.branchID,
+    ),
   });
 
   return { ...data, isError, isLoading };

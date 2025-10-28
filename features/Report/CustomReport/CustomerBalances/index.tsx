@@ -16,6 +16,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { TopOverViewSingeCalendarSection } from '../../Overview/TopOverViewSingleCalenderSection';
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -46,6 +47,9 @@ export const CustomerBalances = () => {
 
   const { dateValue } = React.useContext(DateRangePickerContext);
 
+  const startDate = searchParams?.startDate || '';
+  const endDate = searchParams?.endDate || '';
+
   const {
     customerBalanceList = {
       pagedCustomerBalances: [],
@@ -57,7 +61,9 @@ export const CustomerBalances = () => {
     totalRecords = 0
   }: CustomerBalanceList = useGetCustomerBalance({
     ...searchParams,
-    page
+    page,
+    startDate,
+    endDate
   });
 
   const {
@@ -70,8 +76,11 @@ export const CustomerBalances = () => {
   }: CustomerBalanceList = useGetCustomerBalance({
     ...searchParams,
     getAll: true,
-    page
+    page,
+    startDate,
+    endDate
   });
+
 
   const {
     pagedCustomerBalances = [],
@@ -106,15 +115,18 @@ export const CustomerBalances = () => {
     }
   }, [getAllDownloadData]);
 
-  const handleSearch = async (params: ISearchParams | null) => {
-    setSearchActive(true);
-    setSearchParams({
-      ...params,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
-    });
-    setReportType('CustomerBalance');
-  };
+  const handleSearch = React.useCallback(
+    async (params: ISearchParams | null) => {
+      setSearchActive(true);
+      setSearchParams({
+        ...params,
+        startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+        endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      });
+      setReportType('CustomerBalance');
+    },
+    [setSearchParams, setSearchActive, dateValue, setReportType]
+  );
 
   return (
     <Box
@@ -123,7 +135,7 @@ export const CustomerBalances = () => {
         marginTop: '60px'
       }}
     >
-      <TopOverViewSection useBackButton />
+        <TopOverViewSingeCalendarSection />
 
       {branches && bankproducts && (
         <FilterSection

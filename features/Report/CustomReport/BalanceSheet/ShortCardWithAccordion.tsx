@@ -162,18 +162,23 @@ export const ShortCardWithAccordion = ({
     searchWith: activeSearchTerm,
   });
 
-  const tableData = React.useMemo(() => {
-    if (expanded && detailData?.length) {
-      return detailData.map((item) => ({
-        assets: item.itemDesc || '',
-        amount: `${formatCurrency(item.sumbalance)}`,
-        itemid: item.itemid,
-        groupname: item.itemDesc,
-        balance: item.sumbalance,
-      })) as IData[];
-    }
-    return defaultData;
-  }, [detailData, defaultData, expanded]);
+const tableData = React.useMemo(() => {
+  if (expanded && detailData?.length) {
+    // Filter alphabetically based on current searchTerm
+    const filteredData = detailData.filter((item) =>
+      item.itemDesc?.toLowerCase().startsWith(searchTerm.toLowerCase())
+    );
+
+    return filteredData.map((item) => ({
+      assets: item.itemDesc || '',
+      amount: `${formatCurrency(item.sumbalance)}`,
+      itemid: item.itemid,
+      groupname: item.itemDesc,
+      balance: item.sumbalance,
+    })) as IData[];
+  }
+  return defaultData;
+}, [detailData, defaultData, expanded, searchTerm]);
 
   const total = React.useMemo(() => {
     if (!detailData) return 0;
@@ -251,10 +256,12 @@ export const ShortCardWithAccordion = ({
               gap: '12px',
               marginTop: '20px',
               marginBottom: '30px',
+               width: '336px' 
             }}
           >
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1}}>
               <TextInput
+                
                 name="Search"
                 placeholder="Search"
                 icon={<SearchIcon />}
@@ -262,7 +269,7 @@ export const ShortCardWithAccordion = ({
                 value={searchTerm}
               />
             </Box>
-            <ActionButton
+            {/* <ActionButton
               customStyle={{
                 backgroundColor: `${colors.activeBlue400}`,
                 border: `1px solid ${colors.activeBlue400}`,
@@ -272,7 +279,7 @@ export const ShortCardWithAccordion = ({
               type="button"
               buttonTitle="Search"
               onClick={handleSearch}
-            />
+            /> */}
           </Box>
 
           {(() => {
