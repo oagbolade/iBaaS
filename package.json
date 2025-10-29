@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "test": "jest --watchAll",
     "test-pipeline": "jest --silent",
     "build": "next build",
@@ -50,7 +50,7 @@
     "mssql": "^10.0.2",
     "msw": "^2.2.14",
     "mui-nested-menu": "^3.2.2",
-    "next": "^15.5.6",
+    "next": "^16.0.1",
     "nextjs-toploader": "^1.4.2",
     "nprogress": "^0.2.0",
     "postcss": "8.4.26",
