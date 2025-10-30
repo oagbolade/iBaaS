@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo && start http://localhost:3000",
     "test": "jest --watchAll",
     "test-pipeline": "jest --silent",
     "build": "next build",
@@ -15,6 +15,7 @@
     "pretty-quick": "pretty-quick --staged",
     "typecheck": "tsc --noEmit"
   },
+
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
