@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   nextjs:
@@ -6,11 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - "4000:4000"
+      - '4000:4000'
     volumes:
       - .:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
-# Just Run: 
+# Just Run:
 # docker compose -f docker-compose.dev.yml up
