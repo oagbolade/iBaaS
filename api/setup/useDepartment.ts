@@ -16,9 +16,7 @@ import { queryKeys } from '@/react-query/constants';
 import { IToastActions } from '@/constants/types';
 import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
-import {
-  CreateDepartmentFormValues
-} from '@/schemas/schema-values/setup';
+import { CreateDepartmentFormValues } from '@/schemas/schema-values/setup';
 import { ISearchParams } from '@/app/api/search/route';
 import { SEARCH_BASE_URL } from '@/axiosInstance/constants';
 import { handleRedirect } from '@/utils';

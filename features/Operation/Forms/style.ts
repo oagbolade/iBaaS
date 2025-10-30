@@ -58,7 +58,7 @@ export const BatchContainer = {
 
 export const PostingContainer = {
   display: 'flex',
-  width: { tablet: '461px', mobile: '300px' },
+  width: { tablet: '500px', mobile: '300px' },
   minHeight: '100vh',
   padding: '32px',
   flexDirection: 'column',

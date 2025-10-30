@@ -16,7 +16,11 @@ import { TopActionsArea } from '@/components/Revamp/Shared';
 import { useGetCommercialBank } from '@/api/setup/useClearingBank';
 import { TableSingleAction } from '@/components/Table';
 import { useGetParams } from '@/utils/hooks/useGetParams';
-import { useGetEODProcesses } from '@/api/operation/useEndOfDay';
+import {
+  useCreateRunEOD,
+  useGetEODProcesses
+} from '@/api/operation/useEndOfDay';
+import { IEODData } from '@/api/ResponseTypes/operation';
 
 export const EndOfDayContainer = () => {
   const { currencies } = useGetCurrency();
@@ -25,11 +29,10 @@ export const EndOfDayContainer = () => {
   const [isSubmittingForward, setIsSubmittingForward] =
     useState<boolean>(false);
   const id = useParams();
-  const { data, isLoading } = useGetEODProcesses();
+  const { mutate, isPending, data } = useCreateRunEOD();
 
-  const taskId = data && data.length > 0 ? data[0].taskid : null;
-
-  const actionButtons = taskId
+  const taskNumber = data?.data?.find((item: any) => item.taskid);
+  const actionButtons = taskNumber
     ? [
         <Box
           sx={{ display: 'flex' }}
@@ -37,7 +40,7 @@ export const EndOfDayContainer = () => {
           key="view-details"
         >
           <Link
-            href={`/setup/product-gl/view-eod-process/?isEditing=true&id=${taskId}`}
+            href={`/setup/product-gl/view-eod-process/?isEditing=true&id=${taskNumber}`}
           >
             <TableSingleAction actionName="View Details" />
           </Link>

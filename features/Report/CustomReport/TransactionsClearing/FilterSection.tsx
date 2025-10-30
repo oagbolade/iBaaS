@@ -11,7 +11,7 @@ import { IBranches, IStatus } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import colors from '@/assets/colors';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import {transactionInClearingSchema} from '@/schemas/reports';
+import { transactionInClearingSchema } from '@/schemas/reports';
 
 type Props = {
   onSearch?: Function;
@@ -29,17 +29,22 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
   });
   const { setWidth } = useCurrentBreakpoint();
 
-  const initialValues = {
-    branchCode: searchParams?.branchCode ?? '',
-    status: searchParams?.status ?? '',
-    searchWith: searchParams?.searchWith ?? ''
-  };
+  const initialValues = React.useMemo(
+    () => ({
+      branchCode: searchParams?.branchCode ?? '',
+      status: searchParams?.status ?? '',
+      searchWith: searchParams?.searchWith ?? ''
+    }),
+    [searchParams]
+  );
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       status: values.status.toString()?.length > 0 ? values.status : null,
-      branchCode: values.branchCode.toString()?.length > 0 ? values.branchCode : null,
-      searchWith: values.searchWith?.toString().length > 0 ? values.searchWith : null
+      branchCode:
+        values.branchCode.toString()?.length > 0 ? values.branchCode : null,
+      searchWith:
+        values.searchWith?.toString().length > 0 ? values.searchWith : null
     };
     onSearch?.(params);
   };
@@ -48,7 +53,6 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
     <Formik
       initialValues={initialValues}
       validationSchema={transactionInClearingSchema}
-      enableReinitialize
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>

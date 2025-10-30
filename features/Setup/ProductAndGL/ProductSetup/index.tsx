@@ -15,7 +15,7 @@ import { useGetProductType } from '@/api/general/useProductType';
 import { ISearchParams } from '@/app/api/search/route';
 import {
   useFilterLoanProductSearch,
-  useGetProductClass,
+  useGetProductClass
 } from '@/api/setup/useProduct';
 import { FormSkeleton } from '@/components/Loaders';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
@@ -42,13 +42,13 @@ export const ProductSetupTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('product-setup');
   const {
     totalPages,
     totalElements,
     data: productData,
-    isLoading,
+    isLoading
   } = useFilterLoanProductSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
@@ -56,7 +56,7 @@ export const ProductSetupTable = () => {
   };
   const ProductActionMenuProps = ({
     moduleCode,
-    productCode,
+    productCode
   }: {
     moduleCode: string;
     productCode: string;
@@ -113,7 +113,7 @@ export const ProductSetupTable = () => {
       {openModel && (
         <ModalContainerV2 form={<ProductForm handleClose={handleClose} />} />
       )}
-    </Box>,
+    </Box>
   ];
 
   return (
@@ -129,7 +129,7 @@ export const ProductSetupTable = () => {
         )}
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        { isGlobalLoading || isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer
@@ -139,7 +139,7 @@ export const ProductSetupTable = () => {
               hideFilterSection: true,
               mainTitle: 'Products',
               secondaryTitle:
-                'See a directory of all products setup in this system.',
+                'See a directory of all products setup in this system.'
             }}
             ActionMenuProps={ProductActionMenuProps}
             totalPages={totalPages}

@@ -10,7 +10,7 @@ export const formatIfCurrency = (
   }
 
   let num: number;
-  
+
   if (typeof value === 'string') {
     num = parseFloat(value.replace(/,/g, '').trim());
   } else if (typeof value === 'number') {

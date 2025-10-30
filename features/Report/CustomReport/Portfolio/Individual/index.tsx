@@ -25,9 +25,7 @@ import { set } from 'lodash';
 export const IndividualLoan = () => {
   const [pageNumber, setPageNumber] = useState<string>('1');
   const { setExportData, setReportType } = useContext(DownloadReportContext);
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const { branches, isLoading: isbranchLoading } = useGetBranches();
   const { detailedPortfolioAtRiskReportData } = useContext(ReportModuleContext);
   const {
@@ -47,7 +45,7 @@ export const IndividualLoan = () => {
       search: search ?? undefined,
       productCode: detailedPortfolioAtRiskReportData.productCode,
       pageNumber: page,
-      pageSize: 10,
+      pageSize: 10
     });
 
   const { portfolioatRiskDetailRptList: downloadData } =
@@ -64,8 +62,8 @@ export const IndividualLoan = () => {
   React.useEffect(() => {
     if (!downloadData || downloadData.length) {
       setExportData([]);
-      return
-    };
+      return;
+    }
 
     const formattedExportData = downloadData.map((item) => ({
       'Account Number': item.accountnumber || '',

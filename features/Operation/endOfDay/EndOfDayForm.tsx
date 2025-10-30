@@ -201,19 +201,27 @@ export const EndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
                 value={dayjs(`${selectedTime}`)}
                 onChange={handleTimeSelection}
                 sx={{
-                  width: isMobile ? '100%' : '200px',
+                  width: isMobile ? '100%' : '300px',
                   marginLeft: '30px',
+                  overflow: 'scroll',
+                  scrollbarWidth: 'none',
                   '& .MuiInputBase-root': {
                     backgroundColor: colors.neutral100,
                     borderRadius: '6px',
-                    padding: '8px'
+                    padding: '8px',
+                    overflow: 'scroll',
+                    scrollbarWidth: 'none'
                   },
                   '& .MuiInputBase-input': {
-                    color: colors.neutral900
+                    color: colors.neutral900,
+                    overflow: 'scroll',
+                    scrollbarWidth: 'none'
                   },
                   '& .Mui-focused': {
                     backgroundColor: colors.activeBlue400,
-                    color: colors.white
+                    color: colors.white,
+                    overflow: 'scroll',
+                    scrollbarWidth: 'none'
                   }
                 }}
               />

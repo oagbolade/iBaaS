@@ -30,7 +30,11 @@ import {
   SearchCustomerResponse,
   UploadImageResponse
 } from '@/api/ResponseTypes/customer-service';
-import { axiosInstance, environment, ImageUploadAxiosInstance } from '@/axiosInstance';
+import {
+  axiosInstance,
+  environment,
+  ImageUploadAxiosInstance
+} from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { queryKeys } from '@/react-query/constants';
@@ -385,8 +389,9 @@ export async function getDocuments(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/Customer/${type === 'SUBMITTED' ? 'GetDocumentSubmitted' : 'GetDocumentNotSubmitted'
-      }?customerId=${Number(customerId)}&prodcode=${prodcode}`;
+    const urlEndpoint = `/CustomerServices/Customer/${
+      type === 'SUBMITTED' ? 'GetDocumentSubmitted' : 'GetDocumentNotSubmitted'
+    }?customerId=${Number(customerId)}&prodcode=${prodcode}`;
 
     const { data }: AxiosResponse<GetDocumentSubmittedResponse> =
       await axiosInstance({
@@ -622,10 +627,11 @@ async function createCorporateCustomer(
   customerId: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/CustomerServices/${isUpdating
-      ? `EditCorporatecustomer?customerId=${sanitize(customerId ?? '')}`
-      : 'CreateCorporateCustomer'
-      }`;
+    const urlEndpoint = `/CustomerServices/${
+      isUpdating
+        ? `EditCorporatecustomer?customerId=${sanitize(customerId ?? '')}`
+        : 'CreateCorporateCustomer'
+    }`;
     const { data }: AxiosResponse<CreateCorporateCustomerResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -656,10 +662,11 @@ async function createIndividualCustomer(
   customerId: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/CustomerServices/${isUpdating
-      ? `UpdateIndividualCustomer?customerId=${sanitize(customerId ?? '')}`
-      : 'CreateIndividualCustomer'
-      }`;
+    const urlEndpoint = `/CustomerServices/${
+      isUpdating
+        ? `UpdateIndividualCustomer?customerId=${sanitize(customerId ?? '')}`
+        : 'CreateIndividualCustomer'
+    }`;
     const { data }: AxiosResponse<CreateCustomerAccountResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -691,10 +698,11 @@ async function createCustomerAccount(
   accountnumber: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/AccountServices/${isUpdating
-      ? `EditAccount?accountnumber=${accountnumber}`
-      : 'CreateAccount'
-      }`;
+    const urlEndpoint = `/AccountServices/${
+      isUpdating
+        ? `EditAccount?accountnumber=${accountnumber}`
+        : 'CreateAccount'
+    }`;
     const { data }: AxiosResponse<CreateCustomerAccountResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -756,15 +764,15 @@ async function uploadBankLogo(
       await ImageUploadAxiosInstance.post(urlEndpoint, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${getStoredUser()?.token}`,
-        },
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
       });
 
     toast('Image uploaded successfully', 'Upload', 'success', toastActions);
-    
+
     return {
       data: response.data?.data,
-      fileName: file.name,
+      fileName: file.name
     };
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
@@ -1099,7 +1107,7 @@ export function useUploadBankLogo() {
   const toastActions = useContext(ToastMessageContext);
 
   const { mutate, isPending, isError, error, data } = useMutation({
-    mutationFn: (file: File) => uploadBankLogo(toastActions, file),
+    mutationFn: (file: File) => uploadBankLogo(toastActions, file)
   });
 
   return { mutate, isPending, isError, error, data };
@@ -1284,7 +1292,8 @@ export function useGetAccountDetails(
   isBatchPosting?: boolean
 ) {
   const decyptedGLNumber = decryptData(Accountno as string);
-  const isGLAccountNumberLessThan12Digits = (decyptedGLNumber?.length ?? 0) < 12;
+  const isGLAccountNumberLessThan12Digits =
+    (decyptedGLNumber?.length ?? 0) < 12;
   const toastActions = useContext(ToastMessageContext);
   const fallback = [] as GetAccountDetailsResponse;
 
@@ -1294,9 +1303,10 @@ export function useGetAccountDetails(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getAccountDetails, decyptedGLNumber],
-    queryFn: () =>
-      getAccountDetails(toastActions, decyptedGLNumber as string),
-    enabled: isBatchPosting ? isGLAccountNumberLessThan12Digits : Boolean(Accountno?.length > 0)
+    queryFn: () => getAccountDetails(toastActions, decyptedGLNumber as string),
+    enabled: isBatchPosting
+      ? isGLAccountNumberLessThan12Digits
+      : Boolean(Accountno?.length > 0)
   });
 
   return { ...data, isError, isLoading };
@@ -1338,9 +1348,7 @@ export function useGetCustomerByIdCodes(customerId: string) {
   return { ...data, isError, isLoading };
 }
 
-export function useGetMandateDetailsByAccountNumber(
-  accountNumber: string
-) {
+export function useGetMandateDetailsByAccountNumber(accountNumber: string) {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetMandateDetailsByAccountNumberResponse;
 
@@ -1409,9 +1417,9 @@ export function useFilterCustomerAccountSearch(params: ISearchParams | null) {
     queryFn: () => filterCustomerAccountSearch(toastActions, params),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
-      (params?.status?.toString() || '').length > 0 ||
-      (params?.accountNumber || '').length > 0 ||
-      (params?.productType || '').length > 0
+        (params?.status?.toString() || '').length > 0 ||
+        (params?.accountNumber || '').length > 0 ||
+        (params?.productType || '').length > 0
     )
   });
 

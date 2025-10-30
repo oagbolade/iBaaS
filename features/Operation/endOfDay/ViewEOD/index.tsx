@@ -13,9 +13,7 @@ import {
 import { FormSkeleton } from '@/components/Loaders';
 import { StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
-import {
-  SearchProcessEODLogsResponse
-} from '@/api/ResponseTypes/setup';
+import { SearchProcessEODLogsResponse } from '@/api/ResponseTypes/setup';
 import { Status } from '@/components/Labels';
 import { PageTitle } from '@/components/Typography';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
@@ -30,13 +28,17 @@ type Props = {
 export const EndOfDayProcessTable = ({ EODid }: Props) => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
-  const { data } = useGetEODProcesses();
+  const { data, eodMetrics, eobException } = useGetEODProcesses();
 
   const { data: process, isLoading } = useGetEODProcesslog(searchParams, EODid);
-  const { data: downloadData } = useGetEODProcesslog({ ...searchParams, getAll: true }, EODid);
+  const { data: downloadData } = useGetEODProcesslog(
+    { ...searchParams, getAll: true },
+    EODid
+  );
 
-  const { setReportType, setExportData } =
-    React.useContext(DownloadReportContext);
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
 
   const totalPercentageUncompleted =
     data?.find((item) => item.totalUncompletedPercentage) || 0;
@@ -48,7 +50,7 @@ export const EndOfDayProcessTable = ({ EODid }: Props) => {
     if (!downloadData || downloadData?.length === 0) {
       setExportData([]);
     }
-  
+
     if ((process ?? []).length > 0) {
       setReportType('EOD');
       setExportData(downloadData as []);

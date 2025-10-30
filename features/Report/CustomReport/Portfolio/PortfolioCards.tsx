@@ -85,9 +85,10 @@ export const PortfolioCard = ({
                   />
                   <PageTitle
                     title={String(
-                      `NGN ${formatCurrency(
-                        PortfolioOption?.currentbalance || 0
-                      ) || 'N/A'}`
+                      `NGN ${
+                        formatCurrency(PortfolioOption?.currentbalance || 0) ||
+                        'N/A'
+                      }`
                     )}
                     styles={{ ...PortfolioProductTilte }}
                   />

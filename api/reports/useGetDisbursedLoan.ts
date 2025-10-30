@@ -87,8 +87,8 @@ export function useGetDisbursedLoanReport(
     queryFn: () => fetchDisbursedLoanReport(params, toastActions),
     enabled: Boolean(
       (params?.branchcode || '').length > 0 ||
-      (params?.productcode || '').length > 0 ||
-      Boolean(params?.search)
+        (params?.productcode || '').length > 0 ||
+        Boolean(params?.search)
     )
   });
 

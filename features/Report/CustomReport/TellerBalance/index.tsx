@@ -19,41 +19,48 @@ import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const TellerBalance = () => {
-  // const { isLoading } = useGlobalLoadingState();
+  const { isLoading } = useGlobalLoadingState();
   const { setExportData, setReportType } = useContext(DownloadReportContext);
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { branches } = useGetBranches();
-
   const {
     searchParams,
     setSearchParams,
-    searchActive,
-    setSearchActive,
     page,
-    setPage
+    setPage,
+    searchActive,
+    setSearchActive
   } = usePersistedSearch<ISearchParams>('teller-balance');
 
-  const { tellerBalanceList = [], isLoading } = useGetTellerBalanceReport({
-    ...searchParams,
-    pageSize: 20,
-    pageNumber: page
-  });
+  const handleSearch = useCallback(
+    async (params: ISearchParams) => {
+      setSearchParams(params);
+      setSearchActive(true);
+      setPage(1); // Reset to first page on new search
+    },
+    [setSearchParams, setPage, searchActive, setSearchActive]
+  );
 
+  const { tellerBalanceList = [], isLoading: tellerIsLoading } =
+    useGetTellerBalanceReport({
+      ...searchParams,
+      pageSize: 20,
+      page,
+      getAll: true
+    });
   const { tellerBalanceList: downloadData = [] } = useGetTellerBalanceReport({
     ...searchParams,
-    pageSize: 20,
-    pageNumber: page,
+    page,
     getAll: true
   });
 
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
       setExportData([]);
+      return;
     }
-    
+
     const formattedExportData = downloadData.map((item) => ({
       'Till Number': item.tillNumber || '',
       'Till Name': item.tillName || '',
@@ -63,27 +70,13 @@ export const TellerBalance = () => {
       'Till Balance': item.bkBalance || ''
     }));
 
-    // Ensure no blank row or misplaced headers
     setExportData(formattedExportData);
     setReportType('TellerBalance');
-  }, [downloadData]);
+  }, [downloadData, setExportData, setReportType]);
 
   const rowsPerPage = 10;
   const totalElements = downloadData.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
-
-  const handleSearch = useCallback(
-    (params: ISearchParams | null) => {
-      setSearchParams({
-        ...params,
-        startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-        endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
-      });
-      setSearchActive(true);
-      setPage(1); // Reset to first page on new search
-    },
-    [dateValue, setSearchParams, setSearchActive, setPage]
-  );
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
@@ -92,13 +85,12 @@ export const TellerBalance = () => {
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
       <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
+        {isLoading || tellerIsLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer
             columns={tellerblanceReportcolumn}
             data={tellerBalanceList}
-            page={page}
             setPage={setPage}
             totalPages={totalPages}
             totalElements={totalElements}
@@ -109,29 +101,29 @@ export const TellerBalance = () => {
               hideFilterSection: true
             }}
           >
-            {searchActive ? (
-              tellerBalanceList?.map(
-                (accountData: ITellerBalanceReportResponse, index) => (
-                  <StyledTableRow key={index}>
+            {searchActive && tellerBalanceList.length > 0 ? (
+              tellerBalanceList.map(
+                (dataItem: ITellerBalanceReportResponse) => (
+                  <StyledTableRow key={dataItem?.userid}>
                     <StyledTableCell component="th" scope="row">
-                      {accountData?.tillNumber || 'N/A'}
+                      {dataItem?.tillNumber || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                      {accountData?.tillName || 'N/A'}
+                      {dataItem?.tillName || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {accountData?.staffName || 'N/A'}
+                      {dataItem?.staffName || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {accountData?.branchcode || 'N/A'}
+                      {dataItem?.branchName || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {accountData?.userid || 'N/A'}
+                      {dataItem?.userid || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {`NGN ${formatCurrency(
-                        accountData?.bkBalance || 0
-                      ) || 'N/A'}`}
+                      {`NGN ${
+                        formatCurrency(dataItem?.bkBalance || 0) || 'N/A'
+                      }`}
                     </StyledTableCell>
                   </StyledTableRow>
                 )

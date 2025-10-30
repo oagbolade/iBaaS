@@ -60,8 +60,16 @@ export const useNipAuthprovider = () => {
       }
 
       const credentials: NipLoginValue = {
-        username: typeof window !== 'undefined' && process.env.NODE_ENV !== 'development' ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_NIP_USERNAME : process.env.NEXT_PUBLIC_NIP_USERNAME || '',
-        password: typeof window !== 'undefined' && process.env.NODE_ENV !== 'development' ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_NIP_PASSWORD : process.env.NEXT_PUBLIC_NIP_PASSWORD || ''
+        username:
+          typeof window !== 'undefined' &&
+          process.env.NODE_ENV !== 'development'
+            ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_NIP_USERNAME
+            : process.env.NEXT_PUBLIC_NIP_USERNAME || '',
+        password:
+          typeof window !== 'undefined' &&
+          process.env.NODE_ENV !== 'development'
+            ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_NIP_PASSWORD
+            : process.env.NEXT_PUBLIC_NIP_PASSWORD || ''
       };
 
       mutate(credentials, {

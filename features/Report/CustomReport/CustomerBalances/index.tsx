@@ -3,6 +3,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { FilterSection } from './FilterSection';
 import { COLUMN, keys } from './Column';
+import { TopOverViewSingeCalendarSection } from '@/features/Report/Overview/TopOverViewSingleCalenderSection';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
 import { useGetAllProduct } from '@/api/setup/useProduct';
@@ -13,10 +14,8 @@ import { TableV2 } from '@/components/Revamp/TableV2';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import { TopOverViewSingeCalendarSection } from '../../Overview/TopOverViewSingleCalenderSection';
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -42,8 +41,9 @@ export const CustomerBalances = () => {
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
 
-  const { setReportType, setExportData } =
-    React.useContext(DownloadReportContext);
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
 
   const { dateValue } = React.useContext(DateRangePickerContext);
 
@@ -80,7 +80,6 @@ export const CustomerBalances = () => {
     startDate,
     endDate
   });
-
 
   const {
     pagedCustomerBalances = [],

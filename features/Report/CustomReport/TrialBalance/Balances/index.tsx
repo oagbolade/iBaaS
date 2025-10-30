@@ -23,9 +23,9 @@ export const CommercialBanks = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const { branches } = useGetBranches();
-  const { setExportData, setReportType } =
-    React.useContext(DownloadReportContext);
-
+  const { setExportData, setReportType } = React.useContext(
+    DownloadReportContext
+  );
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
@@ -37,12 +37,10 @@ export const CommercialBanks = () => {
     isLoading: isTrialBalanceDataLoading
   } = useGetTrialBalance({
     ...searchParams,
-    page,
+    page
   });
 
-  const {
-    trialBydateList: downloadData,
-  } = useGetTrialBalance({
+  const { trialBydateList: downloadData } = useGetTrialBalance({
     ...searchParams,
     page,
     getAll: true

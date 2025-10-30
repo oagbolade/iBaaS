@@ -25,14 +25,13 @@ export const MainCash = () => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
 
-    useLayoutEffect(() => {
+  useLayoutEffect(() => {
     setSearchParams(null);
     setPage(1);
   }, []);
 
   const { branches } = useGetBranches();
-  const { setExportData, setReportType } =
-    useContext(DownloadReportContext);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
   const glClassCode = useGetParams('classCode') || '';
   const selectedReport = useGetParams('name') || '';
   const reportType = useGetParams('reportType') || '';
@@ -44,28 +43,24 @@ export const MainCash = () => {
   const { currentDate } = useFormattedDates();
   const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
 
-    const {
+  const {
     trialBydateList,
     isLoading: isTrialBalanceDataLoading,
     totalRecords = 0
-  } = useGetTrialBalance(
-    {
-      ...searchParams,
-      pageSize: '10',
-      branchID,
-      searchWith: searchParams?.customerID || customerID,
-      pageNumber: String(page),
-      gl_ClassCode: glClassCode,
-      glNodeCode,
-      glTypeCode,
-      reportType,
-      startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD'),
-    }
-  );
-
-  const {
-    trialBydateList: downloadData,
   } = useGetTrialBalance({
+    ...searchParams,
+    pageSize: '10',
+    branchID,
+    searchWith: searchParams?.customerID || customerID,
+    pageNumber: String(page),
+    gl_ClassCode: glClassCode,
+    glNodeCode,
+    glTypeCode,
+    reportType,
+    startDate: searchParams?.reportDate || reportDate.format('YYYY-MM-DD')
+  });
+
+  const { trialBydateList: downloadData } = useGetTrialBalance({
     ...(searchParams || {}),
     pageSize: '10',
     branchID: searchParams?.branchID || branchID,
@@ -114,9 +109,7 @@ export const MainCash = () => {
       setExportData(formattedExportData as []);
       setReportType('TrialBalanceByDate');
     }
-  }, [
-    downloadData
-  ]);
+  }, [downloadData]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
@@ -180,7 +173,6 @@ export const MainCash = () => {
                         <StyledTableCell component="th" scope="row">
                           {/* {dataItem?.creditAcct || 0} */}
                           {`NGN ${formatCurrency(dataItem?.creditAcct || 0)}`}
-
                         </StyledTableCell>
 
                         <StyledTableCell component="th" scope="row">
@@ -231,7 +223,6 @@ export const MainCash = () => {
                   >
                     <Typography>Credit</Typography>
                     <Typography>
-
                       {`NGN ${formatCurrency(trialBydateList?.totalCrBal || 0)}`}
                     </Typography>
                   </Box>
@@ -241,7 +232,6 @@ export const MainCash = () => {
                   >
                     <Typography>Balance</Typography>
                     <Typography>
-
                       {`NGN ${formatCurrency(trialBydateList?.totalBal || 0)}`}
                     </Typography>
                   </Box>

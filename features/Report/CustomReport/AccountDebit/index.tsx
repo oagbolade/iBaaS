@@ -21,9 +21,7 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 export const AccountDebit = () => {
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const {
     searchParams,
@@ -40,12 +38,15 @@ export const AccountDebit = () => {
 
   const { branches, isLoading: isLoadingBranches } = useGetBranches();
 
-  const { accountsinDebitList = [], isLoading: isLoadingAccountInDebit, totalRecords } =
-    useGetAccountInDebit({
-      ...searchParams,
-      pageSize: '10',
-      pageNumber: String(page),
-    });
+  const {
+    accountsinDebitList = [],
+    isLoading: isLoadingAccountInDebit,
+    totalRecords
+  } = useGetAccountInDebit({
+    ...searchParams,
+    pageSize: '10',
+    pageNumber: String(page)
+  });
 
   const { accountsinDebitList: downloadData } = useGetAccountInDebit({
     ...searchParams,

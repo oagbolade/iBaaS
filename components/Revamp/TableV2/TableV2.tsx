@@ -160,7 +160,7 @@ export const TableV2 = <T,>({
     'Created Date',
     'Matured Date',
     'create_dt',
-    'end_dt',
+    'end_dt'
   ] as const satisfies readonly string[];
 
   const StyledTableCell = styled(TableCell, {
@@ -275,44 +275,44 @@ export const TableV2 = <T,>({
           <TableBody>
             {isSearched
               ? data?.map((dataItem, index) => {
-                return (
-                  <StyledTableRow key={index}>
-                    {checkboxHeader && (
-                      <StyledTableCell component="th" scope="row">
-                        <Checkbox />
-                      </StyledTableCell>
-                    )}
-                    {keys?.map((key) => (
-                      <StyledTableCell
-                        isPainted={tableConfig?.paintedColumns?.includes(
-                          key as string
-                        )}
-                        colSpan={columns.length + actionsColumn}
-                        align="right"
-                        key={String(key)}
-                      >
-                        {formatIfCurrency(
-                          String(key),
-                          formatIfDate(String(key), dataItem[key], dateKeys),
-                          currencyKeys
-                        )}
-                      </StyledTableCell>
-                    ))}
-                    {tableConfig?.hasActions && (
-                      <StyledTableCell
-                        colSpan={columns.length + actionsColumn}
-                        align="right"
-                      >
-                        {ActionMenuProps ? (
-                          <ActionMenuProps data={dataItem} />
-                        ) : (
-                          <ActionMenu />
-                        )}
-                      </StyledTableCell>
-                    )}
-                  </StyledTableRow>
-                );
-              })
+                  return (
+                    <StyledTableRow key={index}>
+                      {checkboxHeader && (
+                        <StyledTableCell component="th" scope="row">
+                          <Checkbox />
+                        </StyledTableCell>
+                      )}
+                      {keys?.map((key) => (
+                        <StyledTableCell
+                          isPainted={tableConfig?.paintedColumns?.includes(
+                            key as string
+                          )}
+                          colSpan={columns.length + actionsColumn}
+                          align="right"
+                          key={String(key)}
+                        >
+                          {formatIfCurrency(
+                            String(key),
+                            formatIfDate(String(key), dataItem[key], dateKeys),
+                            currencyKeys
+                          )}
+                        </StyledTableCell>
+                      ))}
+                      {tableConfig?.hasActions && (
+                        <StyledTableCell
+                          colSpan={columns.length + actionsColumn}
+                          align="right"
+                        >
+                          {ActionMenuProps ? (
+                            <ActionMenuProps data={dataItem} />
+                          ) : (
+                            <ActionMenu />
+                          )}
+                        </StyledTableCell>
+                      )}
+                    </StyledTableRow>
+                  );
+                })
               : renderEmptyTableBody()}
             <StyledTableRow>
               {isSearched &&

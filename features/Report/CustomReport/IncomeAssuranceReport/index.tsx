@@ -30,8 +30,9 @@ export const IncomeAssuranceReport = () => {
 
   const { dateValue } = React.useContext(DateRangePickerContext);
 
-  const { setExportData, setReportType } =
-    React.useContext(DownloadReportContext);
+  const { setExportData, setReportType } = React.useContext(
+    DownloadReportContext
+  );
 
   const {
     searchParams,
@@ -65,22 +66,22 @@ export const IncomeAssuranceReport = () => {
       return;
     }
 
-      const formattedExportData = downloadData?.map((item) => ({
-        'Acc No': item?.accountnumber || 'N/A',
-        'Account Name': item?.fullname || 'N/A',
-        'Start Date': item?.startdate?.split('T')[0] || 'N/A',
-        'Maturity Date': item?.matdate?.split('T')[0] || 'N/A',
-        'Intrest Rate': item?.intrate || 'N/A',
-        'Loan Amount': item?.loanamount?.toLocaleString() || 0,
-        'product Name': item?.productName || 'N/A',
-        'Accured Intrest': item?.accrued_Int?.toLocaleString() || 0,
-        Branch: item?.branchName || 'N/A',
-        'Product Code': item?.productCode || 'N/A'
-      }));
+    const formattedExportData = downloadData?.map((item) => ({
+      'Acc No': item?.accountnumber || 'N/A',
+      'Account Name': item?.fullname || 'N/A',
+      'Start Date': item?.startdate?.split('T')[0] || 'N/A',
+      'Maturity Date': item?.matdate?.split('T')[0] || 'N/A',
+      'Intrest Rate': item?.intrate || 'N/A',
+      'Loan Amount': item?.loanamount?.toLocaleString() || 0,
+      'product Name': item?.productName || 'N/A',
+      'Accured Intrest': item?.accrued_Int?.toLocaleString() || 0,
+      Branch: item?.branchName || 'N/A',
+      'Product Code': item?.productCode || 'N/A'
+    }));
 
-      // Ensure no blank row or misplaced headers
-      setExportData(formattedExportData);
-      setReportType('IncomeAssuranceReport');
+    // Ensure no blank row or misplaced headers
+    setExportData(formattedExportData);
+    setReportType('IncomeAssuranceReport');
   }, [downloadData]);
 
   const rowsPerPage = 10;
@@ -134,22 +135,28 @@ export const IncomeAssuranceReport = () => {
                       {dataItem?.fullname || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {moment(dataItem?.startdate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
+                      {moment(dataItem?.startdate?.split('T')[0]).format(
+                        'YYYY-MM-DD, hh:mm:ss A'
+                      ) || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {moment(dataItem?.matdate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
+                      {moment(dataItem?.matdate?.split('T')[0]).format(
+                        'YYYY-MM-DD, hh:mm:ss A'
+                      ) || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.intrate || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {`NGN ${formatCurrency(dataItem?.loanamount || 0)}` || 'N/A'}
+                      {`NGN ${formatCurrency(dataItem?.loanamount || 0)}` ||
+                        'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.productName || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {`NGN ${formatCurrency(dataItem?.accrued_Int || 0)}` || 'N/A'}
+                      {`NGN ${formatCurrency(dataItem?.accrued_Int || 0)}` ||
+                        'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.branchName || 'N/A'}

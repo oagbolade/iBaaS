@@ -1,9 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import {
-  IAccountInDebitResponseType
-} from '../ResponseTypes/reports';
+import { IAccountInDebitResponseType } from '../ResponseTypes/reports';
 import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';

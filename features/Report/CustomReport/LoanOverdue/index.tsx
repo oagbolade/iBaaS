@@ -31,11 +31,8 @@ export const LoanOverdue = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { bankproducts } = useGetAllProduct();
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
-  const { setExportData, setReportType } =
-    useContext(DownloadReportContext);
+  const { dateValue } = React.useContext(DateRangePickerContext);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
 
   const {
     searchParams,
@@ -136,7 +133,6 @@ export const LoanOverdue = () => {
             branches={branches}
             bankproducts={bankproducts}
             onSearch={handleSearch}
-            
           />
         )}
 
@@ -170,17 +166,22 @@ export const LoanOverdue = () => {
                           {accountData?.productCode || 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {`NGN ${formatCurrency(accountData?.loanamount || 0)}` || 'N/A'} 
+                          {`NGN ${formatCurrency(accountData?.loanamount || 0)}` ||
+                            'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {moment(accountData?.startdate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
-                        
+                          {moment(accountData?.startdate?.split('T')[0]).format(
+                            'YYYY-MM-DD, hh:mm:ss A'
+                          ) || 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {moment(accountData?.matDate?.split('T')[0]).format('YYYY-MM-DD, hh:mm:ss A') || 'N/A'}
+                          {moment(accountData?.matDate?.split('T')[0]).format(
+                            'YYYY-MM-DD, hh:mm:ss A'
+                          ) || 'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          {`NGN ${formatCurrency(accountData?.principal_Outstanding || 0)}` || 'N/A'} 
+                          {`NGN ${formatCurrency(accountData?.principal_Outstanding || 0)}` ||
+                            'N/A'}
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           <LoanOverdueAction data={accountData} />

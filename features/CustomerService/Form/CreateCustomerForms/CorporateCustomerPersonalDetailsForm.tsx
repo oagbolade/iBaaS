@@ -5,7 +5,10 @@ import { useDebounce } from '@uidotdev/usehooks';
 import { useFormikContext } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
 import dayjs, { Dayjs } from 'dayjs';
-import { Introducer, SearchFilters } from './ReferrerDetailsForm';
+import {
+  IntroducerCorporate,
+  SearchFilters
+} from './ReferrerDetailsForm';
 import {
   FormTextInput,
   FormSelectField,
@@ -39,7 +42,9 @@ import {
 } from '@/api/customer-service/useCustomer';
 import { useSearchStaff } from '@/api/customer-service/useSearchStaff';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
-import { IntroducerType } from '@/constants/CustomerService/viewCustomerDetails';
+import {
+  IntroducerTypeCorp
+} from '@/constants/CustomerService/viewCustomerDetails';
 import {
   CreateCorporateCustomerFormValues,
   CreateIndividualCustomerFormValues
@@ -108,8 +113,6 @@ export const CorporateCustomerPersonalDetailsForm = ({
   const {
     mappedSectors,
     mappedCountries,
-    mappedStates,
-    mappedTowns,
     mappedBranches,
     mappedGroups,
     mappedAccountOfficers
@@ -133,10 +136,11 @@ export const CorporateCustomerPersonalDetailsForm = ({
     introid: '',
     acctOfficer: ''
   });
-  const [introducerType, setIntroducerType] = React.useState<Introducer>({
-    staff: '',
-    customer: ''
-  });
+  const [introducerType, setIntroducerType] =
+    React.useState<IntroducerCorporate>({
+      staff: '',
+      customer: ''
+    });
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
     staff: [],
     customer: [],
@@ -226,8 +230,15 @@ export const CorporateCustomerPersonalDetailsForm = ({
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setIntroducerType({ [value]: value });
+    if (value === 'staff') {
+      setIntroducerType({ staff: value, customer: '' });
+    } else if (value === 'customer') {
+      setIntroducerType({ staff: '', customer: value });
+    } else {
+      setIntroducerType({ staff: '', customer: '' });
+    }
   };
+
   const handleCheck = (booleanValue: string, value: string) => {
     setIsGroupMember(value);
   };
@@ -720,7 +731,7 @@ export const CorporateCustomerPersonalDetailsForm = ({
           <FormSelectInput
             onChange={handleSelectChange}
             name="introType"
-            options={IntroducerType || []}
+            options={IntroducerTypeCorp}
             label="Introducer Type"
             value={introducerType.customer || introducerType.staff || ''}
             customStyle={{

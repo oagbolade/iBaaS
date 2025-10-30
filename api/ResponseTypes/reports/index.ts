@@ -576,7 +576,9 @@ export interface ITrialBalance {
   lastNightBalance: string;
   totalname: string;
 }
-
+export interface IEfassReport {
+  date: string;
+}
 export interface ITrialBalanceGroup {
   balance: number;
   gl_classname: string;
@@ -588,6 +590,9 @@ export interface TrailBalanceGroupResponse
   extends IFetchingState,
     IReportsResponse {
   trialBydateList?: ITrialBalanceGroup[];
+}
+export interface EfassReportResponse extends IFetchingState, IReportsResponse {
+  data?: IEfassReport[];
 }
 export interface TrailBalanceResponse extends IFetchingState, IReportsResponse {
   trialBydateList: {

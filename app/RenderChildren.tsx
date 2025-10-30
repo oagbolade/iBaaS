@@ -44,8 +44,7 @@ export const RenderChildren = ({ children }: Props) => {
   useTrackRecentlyVisitedModules();
 
   const { signout } = useAuth();
-  useIdleTimer(10 * 60 * 1000, signout, toastActions);
-
+  useIdleTimer(5 * 60 * 1000, signout, toastActions);
   useEffect(() => {
     // Reset context state on route change
     // to avoid data leaking between different reports

@@ -2,11 +2,11 @@ import React from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import { ActionButton } from '@/components/Revamp/Buttons';
 import { useCurrentBreakpoint } from '@/utils';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
-import * as Yup from 'yup';
 import { IBranches } from '@/api/ResponseTypes/general';
 
 type Props = {
@@ -26,7 +26,6 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   // ✅ Only branchID is required; searchWith can be empty
   const validationSchema = Yup.object({
     branchID: Yup.string().required('Branch selection is required'),
-    // searchWith: Yup.string().nullable()
   });
 
   const handleSubmit = (values: any) => {
@@ -43,8 +42,8 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ handleSubmit }) => (
-          <Form onSubmit={handleSubmit}>
+        {({ handleSubmit: submit }) => (
+          <Form onSubmit={submit}>
             <Grid container spacing={2} alignItems="center">
               <Grid item mobile={12} tablet={3}>
                 <FormSelectField

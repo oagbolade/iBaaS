@@ -73,8 +73,8 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
 
   const useUpdateCompletion = <
     T extends
-    | CreateIndividualCustomerFormValues
-    | CreateCorporateCustomerFormValues
+      | CreateIndividualCustomerFormValues
+      | CreateCorporateCustomerFormValues
   >(
     touched: Record<string, boolean | undefined>,
     values: T
@@ -91,6 +91,7 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
   const { touched, values } = useFormikContext<
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >();
+
   useUpdateCompletion<
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >(touched, values);
@@ -181,7 +182,15 @@ export const CreateCustomerContainer = () => {
     setCompleted,
     validationKeysMapper
   );
-
+  const introducerNumber = localStorage.getItem('introducerType');
+  // eslint-disable-next-line no-nested-ternary
+  const val =
+    // eslint-disable-next-line no-nested-ternary
+    introducerNumber === 'staff'
+      ? 0
+      : introducerNumber === 'customer'
+        ? 2
+        : null;
   const onSubmit = async (values: any) => {
     const emailalert = (
       document.querySelector('#test-email') as HTMLInputElement
@@ -203,7 +212,7 @@ export const CreateCustomerContainer = () => {
       introid: isEditing
         ? introducerIdValue
         : extractIdFromDropdown(introducerIdValue),
-      introType: isEditing ? values.introType || 1 : values.introducerType,
+      introType: isEditing ? val : val,
       acctOfficer: isEditing
         ? accountOfficerValue
         : extractIdFromDropdown(accountOfficerValue)
@@ -216,7 +225,7 @@ export const CreateCustomerContainer = () => {
       smsalert: Number(smsalert),
       idIssueDate,
       idExpryDate,
-      introType: '0',
+      introType: val,
       nin: isEditing ? values.nin : values.natIDNo
     };
 
@@ -237,10 +246,7 @@ export const CreateCustomerContainer = () => {
       // Reset completion progress when creating a new customer
       setCompleted(progressCompletionInitialValues);
     }
-  }, [
-    customerResult,
-    isEditing
-  ]);
+  }, [customerResult, isEditing]);
 
   React.useEffect(() => {
     const submit = document.getElementById('submitButton');
@@ -277,10 +283,12 @@ export const CreateCustomerContainer = () => {
     customerType === 'corporate'
       ? Yup.object({ ...corporateCustomerPersonalDetails })
       : Yup.object({
-        ...createCustomer, ...individualCustomerPersonalDetails, ...(isEditing
-          ? handleInconsistencyForPersonalDetailsEditMode
-          : handleInconsistencyForPersonalDetailsCreateMode)
-      });
+          ...createCustomer,
+          ...individualCustomerPersonalDetails,
+          ...(isEditing
+            ? handleInconsistencyForPersonalDetailsEditMode
+            : handleInconsistencyForPersonalDetailsCreateMode)
+        });
 
   const sex = customerResult?.sex === 'Male' ? '1' : '0';
 
@@ -312,73 +320,88 @@ export const CreateCustomerContainer = () => {
             // Hardcoded relationtype as string and menu id as number, we need to get more context as to what it is
             isEditing
               ? {
-                acctOfficer: customerResult?.acctOfficer,
-                address: customerResult?.address,
-                address2: customerResult?.address2,
-                bizAddress: customerResult?.bizAddress,
-                bizCtry: customerResult?.bizCtry,
-                bizPhone3: customerResult?.bizPhone3,
-                bizState: customerResult?.bizState,
-                bizTowncode: customerResult?.bizTowncode,
-                branchcode: customerResult?.branchcode,
-                bvn: customerResult?.bvn,
-                ctzorRes: customerResult?.ctzorRes,
-                dob: dayjs(customerResult?.dob),
-                eduLevel: customerResult?.eduLevel,
-                email: customerResult?.email,
-                empBusName: customerResult?.empBusName ?? '',
-                fatcaid: customerResult?.fatcaid ?? '',
-                firstName: customerResult?.firstName,
-                groupcode: customerResult?.groupcode,
-                iDno: customerResult?.iDno,
-                idExpryDate: dayjs(customerResult?.idExpryDate),
-                idIssueDate: dayjs(customerResult?.idIssueDate),
-                idType: customerResult?.idType,
-                introType: customerResult?.introType,
-                introid: customerResult?.introid,
-                menuid: 35,
-                mothermdName: customerResult?.mothermdName,
-                natIDNo: customerResult?.natIDNo,
-                nationality: customerResult?.nationality,
-                nextOfKin: customerResult?.nextOfKin,
-                nextOfKinRel: customerResult?.nextOfKinRel,
-                nextOfKinState: customerResult?.nextOfKinState,
-                nextOfKinaddr: customerResult?.nextOfKinaddr,
-                nextOfKintown: customerResult?.nextOfKintown,
-                nextOfKinphone: customerResult?.nextOfKinphone,
-                nin: customerResult?.natIDNo,
-                occupation: customerResult?.occupation,
-                othername: customerResult?.othername,
-                phone1: customerResult?.phone1,
-                phone2: customerResult?.phone2,
-                phone3: customerResult?.phone3,
-                phone4: customerResult?.phone4,
-                psprtAlnNO: customerResult?.psprtAlnNO ?? '',
-                psprtExpDate: customerResult?.psprtExpDate ? dayjs(customerResult?.psprtExpDate) : today,
-                psprtIssDate: customerResult?.psprtIssDate ? dayjs(customerResult?.psprtIssDate) : today,
-                refname: customerResult?.refname,
-                refphone: customerResult?.refphone,
-                relcustid: customerResult?.relcustid === '1' ? '1' : '0',
-                relationtype: customerResult?.relationtype ?? '',
-                residentCountry: customerResult?.residentCountry,
-                residentStatecode: customerResult?.residentStatecode,
-                residentTowncode: customerResult?.residentTowncode,
-                residExpDate: customerResult?.residExpDate ? dayjs(customerResult?.residExpDate) : today,
-                residPermDate: customerResult?.residPermDate ? dayjs(customerResult?.residPermDate) : today,
-                residPermNo: customerResult?.residPermNo ?? '',
-                sectorcode: customerResult?.sectorcode?.toString().trim(),
-                sex,
-                sigClass: customerResult?.sigClass,
-                signacct: customerResult?.signacct,
-                smsalert: customerResult?.smsalert,
-                ssn: customerResult?.ssn ?? '',
-                staffOrDirector: 0, // hardcoded as 0 for now
-                statecode: customerResult?.statecode,
-                surName: customerResult?.surName,
-                taxIDNo: customerResult?.taxIDNo,
-                title: customerResult?.title,
-                zipcode: customerResult?.zipCode ?? '',
-              }
+                  acctOfficer: customerResult?.acctOfficer,
+                  address: customerResult?.address,
+                  address2: customerResult?.address2,
+                  bizAddress: customerResult?.bizAddress,
+                  bizCtry: customerResult?.bizCtry,
+                  bizPhone3: customerResult?.bizPhone3,
+                  bizState: customerResult?.bizState,
+                  bizTowncode: customerResult?.bizTowncode,
+                  branchcode: customerResult?.branchcode,
+                  bvn: customerResult?.bvn,
+                  ctzorRes: customerResult?.ctzorRes,
+                  dob: dayjs(customerResult?.dob),
+                  eduLevel: customerResult?.eduLevel,
+                  email: customerResult?.email,
+                  empBusName: customerResult?.empBusName ?? '',
+                  fatcaid: customerResult?.fatcaid ?? '',
+                  firstName: customerResult?.firstName,
+                  groupcode: customerResult?.groupcode,
+                  iDno: customerResult?.iDno,
+                  idExpryDate: dayjs(customerResult?.idExpryDate),
+                  idIssueDate: dayjs(customerResult?.idIssueDate),
+                  idType: customerResult?.idType,
+                  introType: customerResult?.introType,
+                  introid: customerResult?.introid,
+                  menuid: 35,
+                  mothermdName: customerResult?.mothermdName,
+                  natIDNo: customerResult?.natIDNo,
+                  nationality: customerResult?.nationality,
+                  nextOfKin: customerResult?.nextOfKin,
+                  nextOfKinRel: customerResult?.nextOfKinRel,
+                  nextOfKinState: customerResult?.nextOfKinState,
+                  nextOfKinaddr: customerResult?.nextOfKinaddr,
+                  nextOfKintown: customerResult?.nextOfKintown,
+                  nextOfKinphone: customerResult?.nextOfKinphone,
+                  nin: customerResult?.natIDNo,
+                  occupation: customerResult?.occupation,
+                  othername: customerResult?.othername,
+                  phone1: customerResult?.phone1,
+                  phone2: customerResult?.phone2,
+                  phone3: customerResult?.phone3,
+                  phone4: customerResult?.phone4,
+                  psprtAlnNO: customerResult?.psprtAlnNO ?? '',
+                  psprtExpDate: customerResult?.psprtExpDate
+                    ? dayjs(customerResult?.psprtExpDate)
+                    : today,
+                  psprtIssDate: customerResult?.psprtIssDate
+                    ? dayjs(customerResult?.psprtIssDate)
+                    : today,
+                  refname: customerResult?.refname,
+                  refphone: customerResult?.refphone,
+                  relcustid: customerResult?.relcustid === '1' ? '1' : '0',
+                  relationtype: customerResult?.relationtype ?? '',
+                  residentCountry: customerResult?.residentCountry,
+                  residentStatecode: customerResult?.residentStatecode,
+                  residentTowncode: customerResult?.residentTowncode,
+                  residExpDate: customerResult?.residExpDate
+                    ? dayjs(customerResult?.residExpDate)
+                    : today,
+                  residPermDate: customerResult?.residPermDate
+                    ? dayjs(customerResult?.residPermDate)
+                    : today,
+                  residPermNo: customerResult?.residPermNo ?? '',
+                  sectorcode: customerResult?.sectorcode?.toString().trim(),
+                  sex,
+                  sigClass: customerResult?.sigClass,
+                  signacct: customerResult?.signacct,
+                  smsalert: customerResult?.smsalert,
+                  ssn: customerResult?.ssn ?? '',
+                  staffOrDirector: 0, // hardcoded as 0 for now
+                  statecode: customerResult?.statecode,
+                  surName: customerResult?.surName,
+                  taxIDNo: customerResult?.taxIDNo,
+                  title: customerResult?.title,
+                  zipcode: customerResult?.zipCode ?? '',
+                  shareCapital: customerResult?.shareCapital ?? '',
+                  turnOver: customerResult?.turnOver ?? '',
+                  compname: customerResult?.fullname,
+                  regno: customerResult?.regno,
+                  companyStatecode: customerResult?.companyStatecode,
+                  companyTowncode: customerResult?.companyTowncode,
+                  companyAddress: customerResult?.companyAddress
+                }
               : pickInitialValues
           }
           validationSchema={pickSchema}
@@ -401,12 +424,12 @@ export const CreateCustomerContainer = () => {
               <div>
                 <TrackVisitedFields isEditing={isEditing} />
                 {areOfficersLoading ||
-                  arebranchesLoading ||
-                  areGroupsLoading ||
-                  areTitlesLoading ||
-                  aresectorsLoading ||
-                  areEducationLoading ||
-                  areOccupationsLoading ? (
+                arebranchesLoading ||
+                areGroupsLoading ||
+                areTitlesLoading ||
+                aresectorsLoading ||
+                areEducationLoading ||
+                areOccupationsLoading ? (
                   <FormSkeleton noOfLoaders={1} />
                 ) : (
                   <ShortCardWithAccordion
@@ -440,8 +463,8 @@ export const CreateCustomerContainer = () => {
                 )}
 
                 {areRelationshipsLoading ||
-                  areStatesLoading ||
-                  areTownsLoading ? (
+                areStatesLoading ||
+                areTownsLoading ? (
                   <FormSkeleton noOfLoaders={1} />
                 ) : (
                   <ShortCardWithAccordion
@@ -466,8 +489,8 @@ export const CreateCustomerContainer = () => {
                 )}
 
                 {areOfficersLoading ||
-                  arebranchesLoading ||
-                  areGroupsLoading ? (
+                arebranchesLoading ||
+                areGroupsLoading ? (
                   <FormSkeleton noOfLoaders={1} />
                 ) : (
                   <ShortCardWithAccordion

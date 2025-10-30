@@ -16,9 +16,7 @@ import { useGetMaturityLoan } from '@/api/reports/useMaturityLoan';
 import { ILoanMaturityReport } from '@/api/ResponseTypes/reports';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import {
-  useGetProductTypeByid
-} from '@/api/setup/useProduct';
+import { useGetProductTypeByid } from '@/api/setup/useProduct';
 import { StyledTableCell } from '@/components/Table/style';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 

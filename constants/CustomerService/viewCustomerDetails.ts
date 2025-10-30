@@ -3,6 +3,11 @@ export const IntroducerType = [
   { name: 'Customer', value: 'customer' }
 ];
 
+export const IntroducerTypeCorp = [
+  { name: 'Staff', value: 'staff' },
+  { name: 'Customer', value: 'customer' }
+];
+
 export const SignatoryClass = [
   { name: 'A', value: 'A' },
   { name: 'B', value: 'B' },

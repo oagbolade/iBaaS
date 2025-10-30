@@ -35,8 +35,7 @@ export const ProfitLoss = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('profit-and-loss');
   const { branches } = useGetBranches();
-  const { setExportData, setReportType } =
-    useContext(DownloadReportContext);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue } = useContext(DateRangePickerContext);
 
   const { branchID } = searchParams || {};
@@ -46,7 +45,7 @@ export const ProfitLoss = () => {
       ...searchParams,
       branchID,
       pageSize: '20',
-      pageNumber: String(page),
+      pageNumber: String(page)
     });
 
   const { data: downloadData = [] } = useGetProfitAndLossGroup({

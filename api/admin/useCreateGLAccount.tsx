@@ -385,7 +385,7 @@ export function useGetGLByGLNumber(
   glNumber: string | null,
   isBatchPosting?: boolean
 ): UseGetGLByGlNumber {
-  const decyptedGLNumber =  decryptData(glNumber as string);
+  const decyptedGLNumber = decryptData(glNumber as string);
   const isGLAccountNumber10Digits = (decyptedGLNumber?.length ?? 0) >= 12;
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as UseGetGLByGlNumber;
@@ -395,13 +395,11 @@ export function useGetGLByGLNumber(
     isError,
     isLoading
   } = useQuery({
-    queryKey: [
-      queryKeys.getGLAccountByGlNumber,
-      decyptedGLNumber
-    ],
-    queryFn: () =>
-      getGLByGLNumber(toastActions, decyptedGLNumber),
-    enabled: isBatchPosting ? isGLAccountNumber10Digits : Boolean((glNumber || '').length > 0)
+    queryKey: [queryKeys.getGLAccountByGlNumber, decyptedGLNumber],
+    queryFn: () => getGLByGLNumber(toastActions, decyptedGLNumber),
+    enabled: isBatchPosting
+      ? isGLAccountNumber10Digits
+      : Boolean((glNumber || '').length > 0)
   });
 
   return { ...data, isError, isLoading };
@@ -594,8 +592,9 @@ async function CreateGLAccount(
   GLNumber: string | null
 ): Promise<void> {
   try {
-    const urlEndpoint = `/Admin/GLAccount/${isUpdating ? `UpdateGLAccount?GLNumber=${GLNumber}` : 'CreateGLAccount'
-      }`;
+    const urlEndpoint = `/Admin/GLAccount/${
+      isUpdating ? `UpdateGLAccount?GLNumber=${GLNumber}` : 'CreateGLAccount'
+    }`;
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
       method: isUpdating ? 'PUT' : 'POST',
@@ -682,8 +681,8 @@ export function useFilterGLAccountSearch(params: ISearchParams | null) {
     queryFn: () => filterGLAccountSearch(toastActions, params || {}),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
-      (params?.glAccountNumber || '').length > 0 ||
-      (params?.accountName || '').length > 0
+        (params?.glAccountNumber || '').length > 0 ||
+        (params?.accountName || '').length > 0
     )
   });
 

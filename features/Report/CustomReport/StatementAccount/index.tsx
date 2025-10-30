@@ -346,7 +346,7 @@ export const StatementAccount = () => {
                   <StyledTableCell component="th" scope="row">
                     {formatDateAndTime(statement?.enddate)}
                   </StyledTableCell>
-                  
+
                   <StyledTableCell component="th" scope="row">
                     {statement?.debit
                       ? `NGN ${formatCurrency(statement.debit)}`

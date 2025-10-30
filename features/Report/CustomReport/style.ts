@@ -8,7 +8,7 @@ export const customReportContainer = {
   alignItems: 'flex-start',
   gap: '24px',
   borderRadius: '8px',
-  marginTop: '50px',
+  marginTop: '50px'
 };
 
 export const cardsDetailsContainer = {
@@ -19,7 +19,7 @@ export const cardsDetailsContainer = {
   alignItems: 'flex-start',
   width: '100%',
   borderRadius: '8px',
-  rowGap: '30px',
+  rowGap: '30px'
 };
 
 export const inputFields = {

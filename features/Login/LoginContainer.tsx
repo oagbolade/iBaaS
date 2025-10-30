@@ -28,7 +28,7 @@ export const LoginContainer = () => {
       window.location.href = lastPage || '/dashboard';
       return null;
     }
-  } 
+  }
 
   return (
     <Stack

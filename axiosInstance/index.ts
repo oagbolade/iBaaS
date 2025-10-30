@@ -31,8 +31,8 @@ export function extendTokenExpirationTime(
 
 const tenantID: AxiosRequestConfig = {
   headers: {
-    'Tenant-ID': getStoredUser()?.companyCode || '',
-  },
+    'Tenant-ID': getStoredUser()?.companyCode || ''
+  }
 };
 
 export const axiosInstance = axios.create({

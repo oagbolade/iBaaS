@@ -35,8 +35,9 @@ const ActionMenu = ({ detail }: ActionMenuProps) => {
 
 export const DrillDown = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const { setReportType, setExportData } =
-    React.useContext(DownloadReportContext);
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
 
   const {
     searchParams,
@@ -69,7 +70,7 @@ export const DrillDown = () => {
     if (!downloadData || downloadData.pagedMainGroupReports.length === 0) {
       setExportData([]);
     }
-    
+
     if (downloadData && downloadData?.pagedMainGroupReports.length > 0) {
       const reportData = downloadData?.pagedMainGroupReports.map((item) => ({
         GlName: item.gl_NodeName,

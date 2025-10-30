@@ -17,23 +17,22 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'iBaaS',
-  description: 'Core Banking Application',
+  description: 'Core Banking Application'
 };
 
 export const dynamic = 'force-dynamic';
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
-  
   return (
     <QueryClientProvider client={queryClient}>
       <ToastMessageContextProvider>
         <MuiSnackbarContextProvider>
           <ThemeProvider theme={LoginTheme}>
-            <html lang="en" className=''>
+            <html lang="en" className="">
               <head>
                 <meta
                   name="viewport"

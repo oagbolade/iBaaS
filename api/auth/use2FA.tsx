@@ -7,10 +7,7 @@ import {
 } from '../ResponseTypes/admin';
 import { AuthFaAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
-import {
-  Aut2FaChcheckValue,
-  Aut2FaValue,
-} from '@/schemas/schema-values/auth';
+import { Aut2FaChcheckValue, Aut2FaValue } from '@/schemas/schema-values/auth';
 import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import { ToastMessageContext } from '@/context/ToastMessageContext';

@@ -112,12 +112,16 @@ export const StandingInstructions = () => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.create_dt
-                        ? moment(dataItem.create_dt).format('MMMM Do YYYY, h:mm:ss a')
+                        ? moment(dataItem.create_dt).format(
+                            'MMMM Do YYYY, h:mm:ss a'
+                          )
                         : 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {dataItem?.nextDate
-                        ? moment(dataItem.nextDate).format('MMMM Do YYYY, h:mm:ss a')
+                        ? moment(dataItem.nextDate).format(
+                            'MMMM Do YYYY, h:mm:ss a'
+                          )
                         : 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">

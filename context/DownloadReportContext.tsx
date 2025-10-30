@@ -64,12 +64,7 @@ export default function DownloadReportContextProvider({ children }: any) {
       setReportQueryParams,
       setReportDescription
     };
-  }, [
-    exportData,
-    reportType,
-    reportQueryParams,
-    reportDescription,
-  ]);
+  }, [exportData, reportType, reportQueryParams, reportDescription]);
 
   return (
     <DownloadReportContext.Provider value={value}>

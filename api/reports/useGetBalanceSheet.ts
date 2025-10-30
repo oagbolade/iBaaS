@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   GetAllBalanceSheetResponse,
-  GetAllBalanceSheetByItemIdResponse,
+  GetAllBalanceSheetByItemIdResponse
 } from '../ResponseTypes/reports';
 import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
@@ -16,7 +16,7 @@ import { ISearchParams } from '@/app/api/search/route';
 
 async function fetchAllBalanceSheet(
   toastActions: IToastActions,
-  params: ISearchParams | null,
+  params: ISearchParams | null
 ) {
   let result: GetAllBalanceSheetResponse = {} as GetAllBalanceSheetResponse;
 
@@ -28,8 +28,8 @@ async function fetchAllBalanceSheet(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getStoredUser()?.token}`,
-        },
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
       });
 
     const { message, title, severity } = globalErrorHandler({ ...data });
@@ -43,7 +43,7 @@ async function fetchAllBalanceSheet(
 }
 
 export function useGetAllBalanceSheet(
-  params: ISearchParams | null,
+  params: ISearchParams | null
 ): GetAllBalanceSheetResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetAllBalanceSheetResponse;
@@ -51,19 +51,17 @@ export function useGetAllBalanceSheet(
   const {
     data = fallback,
     isError,
-    isLoading,
+    isLoading
   } = useQuery({
     queryKey: [
       queryKeys.balanceSheet,
       params?.getAll || false,
       params?.pageSize || 10,
       params?.page || 1,
-      params?.searchWith || '',
+      params?.searchWith || ''
     ],
     queryFn: () => fetchAllBalanceSheet(toastActions, params || {}),
-    enabled: Boolean(
-      params?.branchID,
-    ),
+    enabled: String(params?.branchID).length >= 0
   });
 
   return { ...data, isError, isLoading };
@@ -71,7 +69,7 @@ export function useGetAllBalanceSheet(
 
 async function fetchAllBalanceSheetByItemId(
   toastActions: IToastActions,
-  params: ISearchParams | null,
+  params: ISearchParams | null
 ) {
   let result: GetAllBalanceSheetByItemIdResponse =
     {} as GetAllBalanceSheetByItemIdResponse;
@@ -84,8 +82,8 @@ async function fetchAllBalanceSheetByItemId(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getStoredUser()?.token}`,
-        },
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
       });
 
     const { message, title, severity } = globalErrorHandler({ ...data });
@@ -99,7 +97,7 @@ async function fetchAllBalanceSheetByItemId(
 }
 
 export function useGetAllBalanceSheetByItemId(
-  params: ISearchParams | null,
+  params: ISearchParams | null
 ): GetAllBalanceSheetByItemIdResponse {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as GetAllBalanceSheetByItemIdResponse;
@@ -107,7 +105,7 @@ export function useGetAllBalanceSheetByItemId(
   const {
     data = fallback,
     isError,
-    isLoading,
+    isLoading
   } = useQuery({
     queryKey: [
       queryKeys.balanceSheetbyId,
@@ -115,7 +113,7 @@ export function useGetAllBalanceSheetByItemId(
       params?.getAll || false,
       params?.pageSize || 10,
       params?.page || 1,
-      params?.searchWith || '',
+      params?.searchWith || ''
     ],
     queryFn: () => fetchAllBalanceSheetByItemId(toastActions, params || {}),
     enabled: Boolean(
@@ -128,8 +126,8 @@ export function useGetAllBalanceSheetByItemId(
         params?.page ||
         '' ||
         params?.pageSize ||
-        params?.searchWith,
-    ),
+        params?.searchWith
+    )
   });
 
   return { ...data, isError, isLoading };

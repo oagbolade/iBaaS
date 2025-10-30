@@ -47,7 +47,7 @@ export const NextOfKinDetailsForm = ({
 
     return customerResult?.nextOfKinState || '';
   };
-  
+
   const { towns: allStateTowns } = useGetTownByStateCode(
     encryptData(pickInitialLocationCode()) as string,
     formType
@@ -95,7 +95,6 @@ export const NextOfKinDetailsForm = ({
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
-              required
             />
           </Grid>
           <Grid item={isTablet} mobile={12}>
@@ -106,7 +105,6 @@ export const NextOfKinDetailsForm = ({
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
-              required
             />
           </Grid>
           <Grid item={isTablet} mobile={12}>
@@ -117,7 +115,6 @@ export const NextOfKinDetailsForm = ({
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
-              required
               onChange={(e) => {
                 setLocationDetails((prev) => ({
                   ...prev,
@@ -135,7 +132,6 @@ export const NextOfKinDetailsForm = ({
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
-              required
               onChange={(e) => {
                 setLocationDetails((prev) => ({
                   ...prev,

@@ -29,10 +29,7 @@ export const AccountFilterSection = ({
   productTypes,
   data
 }: Props) => {
-  const {
-    mappedBranches,
-    mappedStatus,
-  } = useMapSelectOptions({
+  const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
     status,
     productTypes,

@@ -27,8 +27,7 @@ export const TrialBalance = () => {
   const { isLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
   const { glType } = useGetGLType();
-  const { setExportData, setReportType } =
-    useContext(DownloadReportContext);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue } = useContext(DateRangePickerContext);
 
   const {
@@ -44,16 +43,15 @@ export const TrialBalance = () => {
     useGetTrialBalanceGroup({
       ...searchParams,
       pageSize: '20',
-      pageNumber: String(page),
+      pageNumber: String(page)
     });
 
-  const { trialBydateList: downloadData = [] } =
-    useGetTrialBalanceGroup({
-      ...searchParams,
-      pageSize: '20',
-      pageNumber: String(page),
-      getAll: true
-    });
+  const { trialBydateList: downloadData = [] } = useGetTrialBalanceGroup({
+    ...searchParams,
+    pageSize: '20',
+    pageNumber: String(page),
+    getAll: true
+  });
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearchActive(true);
@@ -68,7 +66,7 @@ export const TrialBalance = () => {
       setExportData([]);
     }
 
-    if (trialBydateList.length > 0 ) {
+    if (trialBydateList.length > 0) {
       const formattedExportData = downloadData.map((item) => ({
         'GL Class Name': item?.gl_classname || '',
         Balance: item?.balance || '',
@@ -81,9 +79,7 @@ export const TrialBalance = () => {
       setExportData(formattedExportData);
       setReportType('TrialBalanceByDate');
     }
-  }, [
-    downloadData
-  ]);
+  }, [downloadData]);
 
   const calculateTotalBalance = (accounts: ITrialBalanceGroup[]): number => {
     return accounts.reduce((total, account) => total + account.balance, 0);

@@ -119,7 +119,7 @@ export const ProductSummary = () => {
         totproductbalance: item?.totproductbalance ?? 0
       }));
 
-  setProductSummaryData(data || []);
+      setProductSummaryData(data || []);
       if (downloadData) {
         setExportData(formattedExportData || []);
         setReportType('ProductSummary');

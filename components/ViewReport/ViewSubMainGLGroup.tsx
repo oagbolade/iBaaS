@@ -66,20 +66,16 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
       Array.isArray(downloadData?.pagedSubGroupReports) &&
       downloadData.pagedSubGroupReports.length > 0
     ) {
-      const reportData = downloadData?.pagedSubGroupReports.map(
-        (item) => ({
-          GlName: item.gL_ClassName,
-          GlCode: item.gL_ClassCode,
-          total: item.total
-        })
-      );
+      const reportData = downloadData?.pagedSubGroupReports.map((item) => ({
+        GlName: item.gL_ClassName,
+        GlCode: item.gL_ClassCode,
+        total: item.total
+      }));
 
       setReportType('GLSubMainGroupReport');
       setExportData(reportData as []);
     }
-  }, [
-    downloadData
-  ]);
+  }, [downloadData]);
 
   return (
     <Box marginTop={10}>

@@ -51,10 +51,14 @@ export type SearchFilters = {
 };
 
 export type Introducer = {
-  staff?: string;
-  customer?: string;
+  customer: string;
+  staff: string;
 };
 
+export type IntroducerCorporate = {
+  customer: string;
+  staff: string;
+};
 type Props = {
   officers?: IAccountOfficers[];
   groups?: IGroup[];
@@ -85,8 +89,8 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
     acctOfficer: ''
   });
   const [introducerType, setIntroducerType] = React.useState<Introducer>({
-    staff: '',
-    customer: ''
+    customer: '',
+    staff: ''
   });
   const [filteredValues, setFilteredValues] = React.useState<SearchFilters>({
     staff: [],
@@ -95,7 +99,6 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
     introid: []
   });
   const debouncedSearchValue = useDebounce(searchValue.introid, 500);
-
   const { users, isLoading: isStaffSearchLoading } = useSearchStaff(
     introducerType?.staff && introducerType.staff.length > 0
       ? (debouncedSearchValue as string)
@@ -103,7 +106,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
   );
   const { accountDetailsResults, isLoading: isCustomerSearchLoading } =
     useSearchCustomer(
-      introducerType?.customer && introducerType.customer?.length > 0
+      introducerType?.customer && introducerType.customer.length > 0
         ? (encryptData(debouncedSearchValue as string) as string)
         : ''
     );
@@ -124,22 +127,20 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
   }, [mappedAccountOfficers]);
 
   React.useEffect(() => {
-    const mappedSearchResults = mapCustomerSearch(accountDetailsResults);
-    const mappedStaffSearchResults = mapStaffSearch(users);
+    const mappedCustomer = mapCustomerSearch(accountDetailsResults);
+    const mappedStaff = mapStaffSearch(users);
 
-    const pickResult = () => {
-      if (introducerType.customer && introducerType.customer?.length > 0) {
-        return mappedSearchResults;
-      }
-
-      if (introducerType.staff && introducerType.staff?.length > 0) {
-        return mappedStaffSearchResults;
-      }
-    };
-
+    // 2. Choose which one to use
+    const selected =
+      // eslint-disable-next-line no-nested-ternary
+      introducerType.customer
+        ? mappedCustomer
+        : introducerType.staff
+          ? mappedStaff
+          : [];
     setFilteredValues((prev) => ({
       ...prev,
-      introid: pickResult() || []
+      introid: selected
     }));
   }, [
     isCustomerSearchLoading,
@@ -199,11 +200,14 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
       setIntroducerTypeValue(value);
     }
   };
-
   const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    localStorage.setItem('introducerType', value);
     handleSelectedValue(value, 'introducerType');
-    setIntroducerType({ [value]: value });
+    setIntroducerType({
+      customer: value === 'customer' ? value : '',
+      staff: value === 'staff' ? value : ''
+    });
     setIntroducerTypeValue(value);
   };
 
@@ -274,7 +278,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
               name={`${isEditing ? 'introType' : 'introducerType'}`}
               options={IntroducerType}
               label="Introducer Type"
-              value={introducerType.customer || introducerType.staff}
+              value={introducerType.customer || introducerType.staff || ''}
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
               }}

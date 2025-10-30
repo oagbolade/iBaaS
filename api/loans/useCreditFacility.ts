@@ -332,7 +332,6 @@ export async function partialPayOffLoan(
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
     throw errorResponse;
-
   }
 }
 
@@ -445,7 +444,7 @@ export function useDisburseLoan() {
     },
     onError: () => {
       // Do nothing on error, preventing handleRedirect from running
-       handleRedirect(router, '/loan/loan-directory/'); // remove this once the response is fixed
+      handleRedirect(router, '/loan/loan-directory/'); // remove this once the response is fixed
     }
   });
 

@@ -42,7 +42,7 @@ export const CustomCardsReports = ({
   }
 
   return (
-    <Box sx={{ marginLeft: '16px', }}>
+    <Box sx={{ marginLeft: '16px' }}>
       <Card sx={detailsCards}>
         <CardContent sx={detailsTitleContainer}>
           <Box>

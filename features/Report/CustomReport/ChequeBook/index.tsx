@@ -24,9 +24,7 @@ import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 export const ChequeBookStatus = () => {
   const { isLoading } = useGlobalLoadingState();
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
 
@@ -59,12 +57,10 @@ export const ChequeBookStatus = () => {
     totalRecords
   } = useGetCheckbookStatus({
     ...searchParams,
-    pageNumber: String(page),
+    pageNumber: String(page)
   });
 
-  const {
-    chequeBookList: downloadData
-  } = useGetCheckbookStatus({
+  const { chequeBookList: downloadData } = useGetCheckbookStatus({
     ...searchParams,
     pageNumber: String(page),
     getAll: true
@@ -117,7 +113,7 @@ export const ChequeBookStatus = () => {
               setPage={setPage}
               page={page}
               totalElements={totalRecords}
-              totalPages={Math.ceil(totalRecords / (rowsPerPage))}
+              totalPages={Math.ceil(totalRecords / rowsPerPage)}
             >
               {searchActive ? (
                 getAllChequeBookStatusData?.map((dataItem: IChequeBookList) => {
@@ -132,7 +128,9 @@ export const ChequeBookStatus = () => {
 
                       <StyledTableCell component="th" scope="row">
                         {dataItem.createdate
-                          ? moment(dataItem.createdate).format('MMMM Do YYYY, h:mm:ss a')
+                          ? moment(dataItem.createdate).format(
+                              'MMMM Do YYYY, h:mm:ss a'
+                            )
                           : 'N/A'}
                       </StyledTableCell>
 

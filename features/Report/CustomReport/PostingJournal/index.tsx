@@ -41,9 +41,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ detail }) => {
 
 export const PostingJournal = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType, setReportQueryParams } =
     React.useContext(DownloadReportContext);
 
@@ -135,7 +133,7 @@ export const PostingJournal = () => {
                       {dataItem?.tranname || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                       {dataItem?.tranDate
+                      {dataItem?.tranDate
                         ? formatDateAndTime(dataItem?.tranDate)
                         : 'N/A'}
                     </StyledTableCell>

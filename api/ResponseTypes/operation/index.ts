@@ -4,6 +4,46 @@ export interface ITransactionType {
   trancode: string;
   tranname: string;
 }
+export interface IEODData {
+  taskid: number;
+  taskname: string;
+  procName: string;
+  callText: string;
+  callOrder: number;
+  startTime: string;
+  endTime: string;
+  procDate: string;
+  taskStatus: string;
+  eoddate: string;
+  status: string;
+  retMsg: string;
+  createDate: string;
+  actionCode: number;
+}
+export interface IEodMetrics {
+  id: number;
+  lastRunDate: string;
+  startTime: string;
+  endTime: string;
+  totalUncompletedPercetage: string;
+  totalCompletedPercetage: string;
+  userId: string;
+  fullName: string;
+  status: number;
+  createdOn: string;
+}
+export interface IError {
+  id: number;
+  lastRunDate: string;
+  startTime: string;
+  endTime: string;
+  totalUncompletedPercetage: string;
+  totalCompletedPercetage: string;
+  userId: string;
+  fullName: string;
+  status: number;
+  createdOn: string;
+}
 export interface EODResponse {
   responseCode: string;
   responseDescription: string;
@@ -12,6 +52,8 @@ export interface EODResponse {
     message: string;
     runDate: string;
   }>;
+  eodMetrics?: IEodMetrics;
+  EobException?: IError[];
 }
 
 export interface CreateEODConfigureFormValues {
@@ -39,6 +81,7 @@ export interface IEODProcessLogs {
   totalCompletedPercetage: number;
   taskStatus: string;
 }
+
 export interface IEODViewLogs {
   taskid: number;
   taskname: string;
@@ -127,7 +170,14 @@ export interface GetAllClearingBanksResponse extends IFetchingState {
   zones?: IGetZone[] | Array<any>;
   clearBanks?: IGetClearingBank[] | Array<any>;
 }
-
+export interface GetAllEODResponse extends IFetchingState {
+  responseCode?: string;
+  responseDescription?: string;
+  eodMetrics?: IEodMetrics;
+  data: IEODData[] | Array<any>;
+  EobException?: IError[];
+  // error?: IError[] | Array<any>;
+}
 export interface GetAllCounterCheqNo extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
@@ -148,6 +198,8 @@ export interface GetAllEODProcessesResponse extends IFetchingState {
   responseCode?: string;
   responseDescription?: string;
   data?: IEODProcessLogs[] | Array<any>;
+  eobException?: IError[];
+  eodMetrics?: IEodMetrics;
 }
 export interface GetAllEODConfigurationResponse extends IFetchingState {
   responseCode?: string;

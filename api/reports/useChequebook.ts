@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AxiosResponse  } from 'axios';
+import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';

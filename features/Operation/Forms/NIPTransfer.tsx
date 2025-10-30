@@ -612,7 +612,7 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
               </Grid>
             </Grid>
           </Box>
-          <Box sx={PostingContainer}>
+           <Box mt={4} sx={PostingContainer}>
             {isMobile ? (
               <MobilePreviewContent
                 PreviewContent={<PreviewContent />}

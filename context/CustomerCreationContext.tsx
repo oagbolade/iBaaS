@@ -14,7 +14,7 @@ export type ProgressType = {
 
 export const progressCompletionInitialValues: Record<string, ProgressType> = {
   corporateCustomerPersonalDetails: {
-    total: 20,
+    total: 17,
     progress: 0
   },
   personalDetails: {
@@ -26,7 +26,7 @@ export const progressCompletionInitialValues: Record<string, ProgressType> = {
     progress: 0
   },
   nextOfKinDetails: {
-    total: 6,
+    total: 5,
     progress: 0
   },
   identificationDetails: {

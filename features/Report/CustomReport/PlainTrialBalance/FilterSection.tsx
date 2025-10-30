@@ -32,9 +32,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     branches
   });
 
-  const { dateValue } = React.useContext(
-    DateRangePickerContext
-  );
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',

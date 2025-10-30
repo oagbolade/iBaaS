@@ -7,17 +7,13 @@ import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetBranches } from '@/api/general/useBranches';
 import { accountEnquiryColumns } from '@/constants/Reports/COLUMNS';
-import {
-  useGetAccountEnquiryByBranchId
-} from '@/api/reports/useGetAccountEnquiryBybranchId';
+import { useGetAccountEnquiryByBranchId } from '@/api/reports/useGetAccountEnquiryBybranchId';
 import { IGetAccountEnquiry } from '@/api/ResponseTypes/reports';
 import { StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { renderEmptyTableBody } from '@/components/Revamp/TableV2/TableV2';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
-import {
-  DownloadReportContext
-} from '@/context/DownloadReportContext';
+import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { FormSkeleton } from '@/components/Loaders';
@@ -40,8 +36,9 @@ export const AccountEnquiry = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('account-enquiry');
 
-  const { setReportType, setExportData } =
-    React.useContext(DownloadReportContext);
+  const { setReportType, setExportData } = React.useContext(
+    DownloadReportContext
+  );
   const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { branches } = useGetBranches();

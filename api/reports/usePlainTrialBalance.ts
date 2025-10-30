@@ -65,9 +65,9 @@ export function useGetPlainTrialBalance(params: ISearchParams | null) {
     queryFn: () => getPlainTrialBalance(toastActions, params || {}),
     enabled: Boolean(
       (params?.branchID || '').length > 0 ||
-      (params?.reportType || '').length > 0 ||
-      (params?.searchWith || '').length > 0 ||
-      (params?.reportDate || '').length > 0
+        (params?.reportType || '').length > 0 ||
+        (params?.searchWith || '').length > 0 ||
+        (params?.reportDate || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

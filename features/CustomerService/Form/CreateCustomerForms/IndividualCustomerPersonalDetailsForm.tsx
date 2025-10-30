@@ -19,9 +19,7 @@ import {
 } from '@/api/ResponseTypes/customer-service';
 import { IEducation, IOccupation, ISector } from '@/api/ResponseTypes/setup';
 import { useGetParams } from '@/utils/hooks/useGetParams';
-import {
-  useGetCustomerByIdCodes
-} from '@/api/customer-service/useCustomer';
+import { useGetCustomerByIdCodes } from '@/api/customer-service/useCustomer';
 import { formatDateOfBirth } from '@/utils/formatDateOfBirth';
 import {
   useGetStateByCountryCode,
@@ -175,29 +173,32 @@ export const IndividualCustomerPersonalDetailsForm = ({
   }, [allResidentStateTowns, isLoadingTowns]);
 
   const { values } = useFormikContext<any>();
- React.useEffect(() => {
-  const selectedTown = mappedResidentTowns.find(town => town.value === values?.residentTowncode)?.name || '';
+  React.useEffect(() => {
+    const selectedTown =
+      mappedResidentTowns.find(
+        (town) => town.value === values?.residentTowncode
+      )?.name || '';
 
-  const personalDetails = {
-    country: values?.residentCountry || '',
-    state: values?.residentStatecode || '',
-    town: values?.residentTowncode || '',
-    townName: selectedTown,
-    address: values?.address || '',
-    phone: values?.phone1 || ''
-  };
+    const personalDetails = {
+      country: values?.residentCountry || '',
+      state: values?.residentStatecode || '',
+      town: values?.residentTowncode || '',
+      townName: selectedTown,
+      address: values?.address || '',
+      phone: values?.phone1 || ''
+    };
 
-  if (Object.values(personalDetails).some(Boolean)) {
-    localStorage.setItem('personalDetails', JSON.stringify(personalDetails));
-  }
-}, [
-  values?.residentCountry,
-  values?.residentStatecode,
-  values?.residentTowncode,
-  values?.address,
-  values?.phone1,
-  mappedResidentTowns
-]);
+    if (Object.values(personalDetails).some(Boolean)) {
+      localStorage.setItem('personalDetails', JSON.stringify(personalDetails));
+    }
+  }, [
+    values?.residentCountry,
+    values?.residentStatecode,
+    values?.residentTowncode,
+    values?.address,
+    values?.phone1,
+    mappedResidentTowns
+  ]);
   if (isEditing && isLoading && isLoadingTowns && isLoadingStates) {
     return '...';
   }
@@ -341,6 +342,7 @@ export const IndividualCustomerPersonalDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '100%')
           }}
+          required
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>
@@ -372,7 +374,6 @@ export const IndividualCustomerPersonalDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '100%')
           }}
-          required
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>
@@ -383,7 +384,6 @@ export const IndividualCustomerPersonalDetailsForm = ({
           customStyle={{
             width: setWidth(isMobile ? '250px' : '100%')
           }}
-          required
         />
       </Grid>
       <Grid item={isTablet} mobile={12}>

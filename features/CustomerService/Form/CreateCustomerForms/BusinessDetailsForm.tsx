@@ -76,34 +76,42 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
     });
 
   const { setFieldValue } = useFormikContext();
-  const [usePersonalDetails, setUsePersonalDetails] = React.useState<string | null>(null);
+  const [usePersonalDetails, setUsePersonalDetails] = React.useState<
+    string | null
+  >(null);
 
-  const handleUsePersonalDetails = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const {value} = event.target;
-  setUsePersonalDetails(value);
+  const handleUsePersonalDetails = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value } = event.target;
+    setUsePersonalDetails(value);
 
-  if (value !== 'yes') return;
+    if (value !== 'yes') return;
 
-  try {
-    const savedDetails = JSON.parse(localStorage.getItem('personalDetails') || '{}');
+    try {
+      const savedDetails = JSON.parse(
+        localStorage.getItem('personalDetails') || '{}'
+      );
 
-    const { country, state, town, address, phone } = savedDetails;
+      const { country, state, town, address, phone } = savedDetails;
 
-    if (!country || !state || !town) {
-      return;
+      if (!country || !state || !town) {
+        return;
+      }
+
+      const updatedDetails = { country, state, town };
+      setLocationDetails(updatedDetails);
+      ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach(
+        (field, index) => {
+          const fieldValues = [country, state, town, address, phone][index];
+          setFieldValue(field, fieldValues);
+        }
+      );
+      localStorage.removeItem('personalDetails');
+    } catch (error) {
+      console.error('Error loading personal details:', error);
     }
-
-    const updatedDetails = { country, state, town };
-    setLocationDetails(updatedDetails);
-    ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach((field, index) => {
-      const fieldValues = [country, state, town, address, phone][index];
-      setFieldValue(field, fieldValues);
-    });
-    localStorage.removeItem('personalDetails');
-  } catch (error) {
-    console.error('Error loading personal details:', error);
-  }
-};
+  };
   return (
     <Grid container spacing={2}>
       <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>

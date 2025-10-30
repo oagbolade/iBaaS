@@ -1,10 +1,17 @@
 import CryptoJS from 'crypto-js';
 
 export const decryptData = (encryptedData: string): string | null => {
-
   if (typeof window !== 'undefined') {
-    const key = CryptoJS.enc.Utf8.parse(process.env.NODE_ENV === 'production' ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_LOGIN_KEY : process.env.NEXT_PUBLIC_LOGIN_KEY || '');
-    const iv = CryptoJS.enc.Utf8.parse(process.env.NODE_ENV === 'production' ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_LOGIN_IV : process.env.NEXT_PUBLIC_LOGIN_IV || '');
+    const key = CryptoJS.enc.Utf8.parse(
+      process.env.NODE_ENV === 'production'
+        ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_LOGIN_KEY
+        : process.env.NEXT_PUBLIC_LOGIN_KEY || ''
+    );
+    const iv = CryptoJS.enc.Utf8.parse(
+      process.env.NODE_ENV === 'production'
+        ? window.RUNTIME_CONFIG?.NEXT_PUBLIC_LOGIN_IV
+        : process.env.NEXT_PUBLIC_LOGIN_IV || ''
+    );
 
     // dont decrypt the data item if its falsey
     if (!encryptedData) {

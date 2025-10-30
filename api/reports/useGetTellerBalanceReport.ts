@@ -13,6 +13,7 @@ import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { toast } from '@/utils/toast';
 import { queryKeys } from '@/react-query/constants';
 import { getStoredUser } from '@/utils/user-storage';
+import { ISearchParams } from '@/app/api/search/route';
 
 export interface IEnquiryParams {
   branchId?: string;
@@ -25,7 +26,7 @@ export interface IEnquiryParams {
 }
 
 async function getTellerBalanceReport(
-  params: IEnquiryParams,
+  params: ISearchParams,
   toastActions: IToastActions
 ): Promise<IGetTellerBalanceReportResponseType | null> {
   try {
@@ -33,8 +34,8 @@ async function getTellerBalanceReport(
     const { data }: AxiosResponse<IGetTellerBalanceReportResponseType> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
-          branchCode: params.branchId,
-          customerId: params.customerId,
+          branchCode: params?.branchID?.toString(),
+          customerId: params?.customerID?.toString() || '',
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1,
           startDate: params.startDate,
@@ -59,7 +60,7 @@ async function getTellerBalanceReport(
 }
 
 export function useGetTellerBalanceReport(
-  params: IEnquiryParams
+  params: ISearchParams
 ): IGetTellerBalanceReportResponseType {
   const toastActions = useContext(ToastMessageContext);
   const fallback = {} as IGetTellerBalanceReportResponseType;
@@ -71,15 +72,18 @@ export function useGetTellerBalanceReport(
   } = useQuery({
     queryKey: [
       queryKeys.getTellerBalanceReport,
-      params?.branchId || '',
-      params?.customerId || '',
+      params?.branchID?.toString() || '',
+      params?.customerID?.toString() || '',
       params?.pageNumber || 1,
-      params?.startDate || '',
-      params?.endDate || '',
-      params?.getAll || false,
+      params?.pageSize || 10,
+      params?.startDate?.toString || '',
+      params?.endDate || ''
     ],
     queryFn: () => getTellerBalanceReport(params, toastActions),
-    enabled: Boolean((params?.branchId || '').length > 0 || params.customerId)
+    enabled: Boolean(
+      (params?.branchID?.toString() || '').length > 0 ||
+        params.customerID?.toString()
+    )
   });
 
   return { ...data, isError, isLoading };

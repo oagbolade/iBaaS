@@ -35,9 +35,7 @@ export const PlainTrialBalance = () => {
     setSearchParams(params);
   };
 
-  const {
-    plainTrialBalanceList: downloadDatalist
-  } = useGetPlainTrialBalance({
+  const { plainTrialBalanceList: downloadDatalist } = useGetPlainTrialBalance({
     ...searchParams,
     pageNumber: page.toString(),
     getAll: true
@@ -65,8 +63,6 @@ export const PlainTrialBalance = () => {
     bkBalance = 0
   } = plainTrialBalanceList || {};
 
-
-
   const mappedResult = getAllPlainTrialBalanceData.map((item) => ({
     glNumber: item.glNumber,
     oldGLno: item.oldGLno,
@@ -76,19 +72,24 @@ export const PlainTrialBalance = () => {
   }));
 
   React.useEffect(() => {
-    if (!downloadDatalist?.pagedRecords || downloadDatalist?.pagedRecords.length === 0) {
+    if (
+      !downloadDatalist?.pagedRecords ||
+      downloadDatalist?.pagedRecords.length === 0
+    ) {
       setExportData([]);
       return;
     }
-    
+
     if (downloadDatalist?.pagedRecords.length > 0) {
-      const mapPlainTrailBalance = downloadDatalist.pagedRecords.map((item) => ({
-        glNumber: item.glNumber,
-        oldGlNo: item.oldGLno,
-        acctName: item.acctName,
-        debit: `NGN ${formatCurrency(item.dr)}`,
-        credit: `NGN ${formatCurrency(item.cr)}`
-      }));
+      const mapPlainTrailBalance = downloadDatalist.pagedRecords.map(
+        (item) => ({
+          glNumber: item.glNumber,
+          oldGlNo: item.oldGLno,
+          acctName: item.acctName,
+          debit: `NGN ${formatCurrency(item.dr)}`,
+          credit: `NGN ${formatCurrency(item.cr)}`
+        })
+      );
 
       setExportData(mapPlainTrailBalance as []);
       setReportType('PlainTrialBalance');

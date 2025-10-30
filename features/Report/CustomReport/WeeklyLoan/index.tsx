@@ -96,7 +96,7 @@ export const WeeklyLoan = () => {
         'Account Number': item?.accountNumber || '',
         'Account Name': item?.fullName || '',
         'Settlement Account': item?.settlementAcct1 || '',
-        'Loan Amount':   `NGN ${formatCurrency(item?.loanamount) || ''}`,
+        'Loan Amount': `NGN ${formatCurrency(item?.loanamount) || ''}`,
         'Start Date': item?.startDate
           ? moment(item?.startDate).format('YYYY-MM-DD, hh:mm A')
           : '',

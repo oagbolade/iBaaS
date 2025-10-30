@@ -25,13 +25,13 @@ export const CustomReports = () => {
   );
 
   return (
-    <Box sx={{ margin: '90px 0 45px 0', padding: '0 25px 45px 0',  }}>
+    <Box sx={{ margin: '90px 0 45px 0', padding: '0 25px 45px 0' }}>
       <Box
         sx={{
           marginTop: '10px',
           marginLeft: '20px',
           width: '100%',
-          overflowY: 'auto',
+          overflowY: 'auto'
         }}
       >
         <TextInput
@@ -50,7 +50,12 @@ export const CustomReports = () => {
             filteredReports.map((report, index) => (
               <Box key={index} mb={{ mobile: 2, desktop: 2 }}>
                 <CustomCardsReports
-                  disable={!checkMultipleUserRoleAccess('Custom Report', report?.menu_name)}
+                  disable={
+                    !checkMultipleUserRoleAccess(
+                      'Custom Report',
+                      report?.menu_name
+                    )
+                  }
                   title={report.title}
                   link={report.link}
                   description={report.description}

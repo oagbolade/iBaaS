@@ -8,13 +8,16 @@ import {
   GetAllEODConfigurationResponse,
   GetAllEODDAYResponse,
   GetAllEODProcessesResponse,
+  GetAllEODResponse,
   GetEODDAYResponse,
   GetProcessEODDAYResponse,
   IEODConfiguration,
   IEODLogs,
+  IEodMetrics,
   IEODProcess,
   IEODProcessLogs,
-  IEODViewLogs
+  IEODViewLogs,
+  IError
 } from '../ResponseTypes/operation';
 import { APIResponse } from '../RequestTypes/CommonTypes';
 import {
@@ -34,8 +37,8 @@ import { REPORT_BASE_URL } from '@/axiosInstance/constants';
 
 async function createRunEOD(toastActions: IToastActions): Promise<EODResponse> {
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/Run`;
-    const { data }: AxiosResponse<EODResponse> = await axiosInstance({
+    const urlEndpoint = '/EODProcess/Run';
+    const { data }: AxiosResponse<EODResponse> = await EndOfDayAxiosInstance({
       url: urlEndpoint,
       method: 'POST',
       headers: {
@@ -46,11 +49,11 @@ async function createRunEOD(toastActions: IToastActions): Promise<EODResponse> {
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
-    return data; // Return the EODResponse data
+    return data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
-    throw errorResponse; // Rethrow or handle error appropriately
+    throw errorResponse;
   }
 }
 
@@ -59,8 +62,8 @@ async function createSaveEODConfiguration(
   body: CreateEODConfigureFormValues
 ): Promise<void> {
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/SaveEODConfiguration`;
-    const { data }: AxiosResponse<APIResponse> = await axiosInstance({
+    const urlEndpoint = '/EODProcess/SaveEODConfiguration';
+    const { data }: AxiosResponse<APIResponse> = await EndOfDayAxiosInstance({
       url: urlEndpoint,
       method: 'POST',
       data: { ...body },
@@ -88,20 +91,21 @@ async function getEODLogs(
   };
 
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/GetEODLogs?pageSize=${params?.pageSize || 1}&pageNumber=${params?.pageNumber || 10}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith}&searchDate=${params?.searchDate}`;
+    const urlEndpoint = `/EODProcess/GetEODLogs?pageSize=${params?.pageSize || 1}&pageNumber=${params?.pageNumber || 10}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith}&searchDate=${params?.searchDate}`;
 
-    const { data }: AxiosResponse<GetEODDAYResponse> = await axiosInstance({
-      url: urlEndpoint,
-      method: 'GET',
-      data: {
-        searchWith: params?.searchWith,
-        searchDate: params?.searchDate
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${getStoredUser()?.token}`
-      }
-    });
+    const { data }: AxiosResponse<GetEODDAYResponse> =
+      await EndOfDayAxiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        data: {
+          searchWith: params?.searchWith,
+          searchDate: params?.searchDate
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
@@ -124,16 +128,17 @@ async function getEODResult(
   };
 
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/GetEODResult`;
+    const urlEndpoint = '/EODProcess/GetEODResult';
 
-    const { data }: AxiosResponse<GetAllEODDAYResponse> = await axiosInstance({
-      url: urlEndpoint,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${getStoredUser()?.token}`
-      }
-    });
+    const { data }: AxiosResponse<GetAllEODDAYResponse> =
+      await EndOfDayAxiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
 
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
@@ -152,14 +157,16 @@ async function getEODProcesses(
   let result: GetAllEODProcessesResponse = {
     responseCode: '',
     responseDescription: '',
-    data: [] as IEODProcessLogs[]
+    data: [] as IEODProcessLogs[],
+    eobException: [] as IError[],
+    eodMetrics: {} as IEodMetrics
   };
 
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/GetEODProcesses`;
+    const urlEndpoint = '/EODProcess/GetEODProcesses';
 
     const { data }: AxiosResponse<GetAllEODProcessesResponse> =
-      await axiosInstance({
+      await EndOfDayAxiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {
@@ -189,10 +196,10 @@ async function getEODConfiguration(
   };
 
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/GetEODConfiguration`;
+    const urlEndpoint = '/EODProcess/GetEODConfiguration';
 
     const { data }: AxiosResponse<GetAllEODConfigurationResponse> =
-      await axiosInstance({
+      await EndOfDayAxiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {
@@ -229,10 +236,10 @@ async function getEODProcesslog(
   };
 
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/EODProcess/GetEODProcesslog?id=${id}&pageSize=${params?.pageSize || 1}&pageNumber=${params?.pageNumber || 10}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/EODProcess/GetEODProcesslog?id=${id}&pageSize=${params?.pageSize || 1}&pageNumber=${params?.pageNumber || 50}&getAll=${params?.getAll || false}`;
 
     const { data }: AxiosResponse<GetProcessEODDAYResponse> =
-      await axiosInstance({
+      await EndOfDayAxiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {

@@ -156,11 +156,7 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
-                  style={{
-                    pointerEvents: shouldDisable.terminate ? 'none' : 'auto'
-                  }}
-                  aria-disabled={shouldDisable.terminate}
-                  tabIndex={shouldDisable.terminate ? -1 : undefined}
+            
                   href={`/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}`}
                 >
                   <TableMenuButton buttonTitle="Terminate Loan" />

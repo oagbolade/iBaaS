@@ -55,22 +55,18 @@ export const ViewMainGLReport: React.FC<{ detail: any }> = ({ detail }) => {
       Array.isArray(downloadData?.pagedAccountsByClassCode) &&
       downloadData.pagedAccountsByClassCode.length > 0
     ) {
-      const reportdata = downloadData?.pagedAccountsByClassCode.map(
-        (item) => ({
-          Branchname: item.branchName,
-          BranchCode: item.branchCode,
-          AccountName: item.acctName,
-          GlNumber: item.glNumber,
-          balance: item.bkbalance
-        })
-      );
+      const reportdata = downloadData?.pagedAccountsByClassCode.map((item) => ({
+        Branchname: item.branchName,
+        BranchCode: item.branchCode,
+        AccountName: item.acctName,
+        GlNumber: item.glNumber,
+        balance: item.bkbalance
+      }));
 
       setReportType('GLAccountClassReport');
       setExportData(reportdata as []);
     }
-  }, [
-    downloadData
-  ]);
+  }, [downloadData]);
 
   return (
     <Box marginTop={10}>

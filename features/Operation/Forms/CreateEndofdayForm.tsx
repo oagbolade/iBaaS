@@ -19,13 +19,17 @@ import {
   totalTitle
 } from './style';
 import { PageTitle } from '@/components/Typography';
-import { useGetEODProcesses } from '@/api/operation/useEndOfDay';
+import {
+  useCreateRunEOD,
+  useGetEODProcesses
+} from '@/api/operation/useEndOfDay';
 import { FormSkeleton } from '@/components/Loaders';
 import { Status } from '@/components/Labels';
 
 export const CreateEndOfDayForm = () => {
-  const { data, isLoading } = useGetEODProcesses();
-
+  const { data, isLoading, eobException, eodMetrics } = useGetEODProcesses();
+  const { mutate, isPending, data: process } = useCreateRunEOD();
+  console.log(process);
   if (isLoading) {
     return <FormSkeleton noOfLoaders={3} />;
   }

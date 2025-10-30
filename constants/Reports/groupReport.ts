@@ -37,7 +37,11 @@ export const customerServiceReportsGroup = [
     link: '/report/custom-report/group-report/customer-service/clearing-items'
   },
   { reportName: 'Reactivated Accounts', link: '/reports' },
-  { reportName: 'Account Rate', link: '/reports' }
+  { reportName: 'Account Rate', link: '/reports' },
+  {
+    reportName: 'DownLoad All Regulatory Reports',
+    link: '/report/custom-report/statement-account'
+  }
 ];
 
 export const operationalReportsGroup = [

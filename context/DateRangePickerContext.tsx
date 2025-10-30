@@ -1,5 +1,12 @@
 'use client';
-import { createContext, useMemo, useState, useCallback, useEffect, useContext } from 'react';
+import {
+  createContext,
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useContext
+} from 'react';
 import { DateRange } from '@mui/x-date-pickers-pro';
 import dayjs, { Dayjs } from 'dayjs';
 import { ToastMessageContext } from './ToastMessageContext';
@@ -17,8 +24,8 @@ type DateRangePickerContextType = {
 const initialValuesContext: DateRangePickerContextType = {
   isDateFilterApplied: false,
   dateValue: [dayjs(), dayjs()],
-  setDateValue: () => { },
-  setIsDateFilterApplied: () => { }
+  setDateValue: () => {},
+  setIsDateFilterApplied: () => {}
 };
 
 export const DateRangePickerContext =
@@ -32,7 +39,7 @@ export default function DateRangePickerContextProvider({ children }: any) {
   // Default to previous and current date
   const [dateValue, setValue] = useState<DateRange<Dayjs>>([
     dayjs(currentDate),
-    dayjs(nextDate),
+    dayjs(nextDate)
   ]);
 
   const [isDateFilterApplied, setIsDateFilterApplied] = useState(false);
@@ -41,10 +48,11 @@ export default function DateRangePickerContextProvider({ children }: any) {
     const [start, end] = newValue;
     if (start && end && !end.isAfter(start, 'day')) {
       toast(
-        'End date must be after the start date.', 
-        'Invalid Date Range', 'error',
-         toastActions
-        );
+        'End date must be after the start date.',
+        'Invalid Date Range',
+        'error',
+        toastActions
+      );
       return;
     }
     setValue(newValue);
