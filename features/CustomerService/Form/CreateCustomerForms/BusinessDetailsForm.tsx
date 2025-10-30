@@ -76,45 +76,59 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
     });
 
   const { setFieldValue } = useFormikContext();
-  const [usePersonalDetails, setUsePersonalDetails] = React.useState<string | null>(null);
+  const [usePersonalDetails, setUsePersonalDetails] =
+    React.useState<string | null>(null);
 
   const handleUsePersonalDetails = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const {value} = event.target;
-  setUsePersonalDetails(value);
+    const { value } = event.target;
+    setUsePersonalDetails(value);
 
-  if (value !== 'yes') return;
+    if (value === 'yes') {
+      try {
+        const savedDetails = JSON.parse(localStorage.getItem('personalDetails') || '{}');
+        const { country, state, town, address, phone } = savedDetails;
 
-  try {
-    const savedDetails = JSON.parse(localStorage.getItem('personalDetails') || '{}');
+        if (!country || !state || !town) return;
 
-    const { country, state, town, address, phone } = savedDetails;
+        const updatedDetails = { country, state, town };
+        setLocationDetails(updatedDetails);
 
-    if (!country || !state || !town) {
-      return;
+        ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach(
+          (field, index) => {
+            const fieldValues = [country, state, town, address, phone][index];
+            setFieldValue(field, fieldValues);
+          }
+        );
+
+        localStorage.removeItem('personalDetails');
+      } catch (error) {
+        console.error('Error loading personal details:', error);
+      }
+    } else if (value === 'no') {
+      // Clear all related form fields
+      setLocationDetails({
+        country: '',
+        state: '',
+        town: ''
+      });
+
+      ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach(
+        (field) => setFieldValue(field, '')
+      );
     }
+  };
 
-    const updatedDetails = { country, state, town };
-    setLocationDetails(updatedDetails);
-    ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach((field, index) => {
-      const fieldValues = [country, state, town, address, phone][index];
-      setFieldValue(field, fieldValues);
-    });
-    localStorage.removeItem('personalDetails');
-  } catch (error) {
-    console.error('Error loading personal details:', error);
-  }
-};
   return (
     <Grid container spacing={2}>
       <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
         <Grid container>
-          {/* Add radio button group at the top */}
+          {/* Radio button group */}
           <Grid item={isTablet} mobile={12} mb={2}>
             <FormControl component="fieldset">
-              <FormLabel component="legend">Use Personal Details?</FormLabel>
+              <FormLabel component="legend">Copy Address From Personal Details?</FormLabel>
               <RadioGroup
                 row
-                value={usePersonalDetails || ''} // Set empty string when null
+                value={usePersonalDetails || ''}
                 onChange={handleUsePersonalDetails}
               >
                 <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -123,7 +137,7 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
             </FormControl>
           </Grid>
 
-          {/* Existing form fields */}
+          {/* Business location and contact fields */}
           <Grid item={isTablet} mobile={12}>
             <FormSelectField
               name="bizCtry"
@@ -133,15 +147,16 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
               required
-              onChange={(e) => {
+              onChange={(e) =>
                 setLocationDetails((prev) => ({
                   ...prev,
                   country: e.target.value
-                }));
-              }}
-              value={locationDetails.country || null}
+                }))
+              }
+              value={locationDetails.country || ''}
             />
           </Grid>
+
           <Grid item={isTablet} mobile={12}>
             <FormSelectField
               name="bizState"
@@ -151,16 +166,17 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
               required
-              onChange={(e) => {
+              onChange={(e) =>
                 setLocationDetails((prev) => ({
                   ...prev,
                   state: e.target.value
-                }));
-              }}
-              value={locationDetails.state || null}
+                }))
+              }
+              value={locationDetails.state || ''}
               disabled={!isEditing && mappedNationStates?.length === 0}
             />
           </Grid>
+
           <Grid item={isTablet} mobile={12}>
             <FormSelectField
               name="bizTowncode"
@@ -170,16 +186,17 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
               required
-              onChange={(e) => {
+              onChange={(e) =>
                 setLocationDetails((prev) => ({
                   ...prev,
                   town: e.target.value
-                }));
-              }}
-              value={locationDetails.town || null}
+                }))
+              }
+              value={locationDetails.town || ''}
               disabled={!isEditing && mappedStateTowns?.length === 0}
             />
           </Grid>
+
           <Grid item={isTablet} mobile={12}>
             <FormTextInput
               name="bizAddress"
@@ -191,6 +208,7 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
               required
             />
           </Grid>
+
           <Grid item={isTablet} mobile={12}>
             <FormTextInput
               name="bizPhone3"
@@ -202,6 +220,7 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
               required
             />
           </Grid>
+
           <Grid item={isTablet} mobile={12}>
             <FormSelectField
               name="sigClass"
