@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -65,7 +65,9 @@ export const TableActionMenu = ({ handleDelete, roleid, role }: Props) => {
               return handleClose(null);
             }}
           >
-            <Link href={`/admin/roles/view?roleid=${sanitize(roleid)}`}>
+            <Link
+              href={`/admin/roles/view?roleid=${DOMPurify.sanitize(roleid)}`}
+            >
               <TableMenuButton buttonTitle="View Role" />
             </Link>
           </MenuItem>
@@ -75,7 +77,7 @@ export const TableActionMenu = ({ handleDelete, roleid, role }: Props) => {
             }}
           >
             <Link
-              href={`/admin/roles/create?roleid=${sanitize(roleid)}&isEditing=true`}
+              href={`/admin/roles/create?roleid=${DOMPurify.sanitize(roleid)}&isEditing=true`}
             >
               <TableMenuButton buttonTitle="Edit Role" />
             </Link>

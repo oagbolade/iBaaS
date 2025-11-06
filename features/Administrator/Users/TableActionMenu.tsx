@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -66,7 +66,7 @@ export const TableActionMenu = ({ handleDelete, userid, user }: Props) => {
             }}
           >
             <Link
-              href={`/admin/users/update/?isEditing=true&userid=${sanitize(userid)}`}
+              href={`/admin/users/update/?isEditing=true&userid=${DOMPurify.sanitize(userid)}`}
             >
               <TableMenuButton buttonTitle="Edit User" />
             </Link>
@@ -77,7 +77,7 @@ export const TableActionMenu = ({ handleDelete, userid, user }: Props) => {
             }}
           >
             <Link
-              href={`/admin/users/reset/?userid=${sanitize(userid)}&fullname=${sanitize(user.fullname as string)}&roleId=${sanitize(user.role_id as string)}`}
+              href={`/admin/users/reset/?userid=${DOMPurify.sanitize(userid)}&fullname=${DOMPurify.sanitize(user.fullname as string)}&roleId=${DOMPurify.sanitize(user.role_id as string)}`}
             >
               <TableMenuButton buttonTitle="Reset User" />
             </Link>

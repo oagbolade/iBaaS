@@ -24,7 +24,7 @@ async function getTellerPosting(
   toastActions: IToastActions
 ): Promise<GetTellerPostingReport | null> {
   try {
-    const urlEndpoint = '/ReportServices/TellerPostingsSummary';
+    const urlEndpoint = '/api/ReportServices/TellerPostingsSummary';
     const { data }: AxiosResponse<GetTellerPostingReport> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

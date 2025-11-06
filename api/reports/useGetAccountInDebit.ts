@@ -23,7 +23,7 @@ async function fetchAccountInDebit(
   toastActions: IToastActions
 ): Promise<IAccountInDebitResponseType | null> {
   try {
-    const urlEndpoint = '/ReportServices/AccountsinDebitReport';
+    const urlEndpoint = '/api/ReportServices/AccountsinDebitReport';
 
     const { data }: AxiosResponse<IAccountInDebitResponseType> =
       await reportsAxiosInstance.get(urlEndpoint, {

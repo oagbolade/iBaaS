@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { SearchResultsGenericResponse } from '../ResponseTypes/general';
 import {
   CreateCorporateCustomerResponse,
@@ -70,7 +70,7 @@ async function getCustomerAccountInfoList(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/CustomerAccountInfoList?customerid=${sanitize(customerId ?? '')}`;
+    const urlEndpoint = `/CustomerServices/CustomerAccountInfoList?customerid=${DOMPurify.sanitize(customerId ?? '')}`;
 
     const { data }: AxiosResponse<GetCustomerAccountInfoListResponse> =
       await axiosInstance({
@@ -105,7 +105,7 @@ async function getCustomerAccountInfo(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/FetchCustomerAccountInfo?customerId=${sanitize(customerId ?? '')}`;
+    const urlEndpoint = `/CustomerServices/FetchCustomerAccountInfo?customerId=${DOMPurify.sanitize(customerId ?? '')}`;
 
     const { data }: AxiosResponse<GetCustomerAccountInfoResponse> =
       await axiosInstance({
@@ -174,7 +174,7 @@ export async function getMandateDetailsByAccountNumber(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/GetMandateDetailsByAccountNumber?accountNumber=${sanitize(accountNumber)}`;
+    const urlEndpoint = `/CustomerServices/GetMandateDetailsByAccountNumber?accountNumber=${DOMPurify.sanitize(accountNumber)}`;
 
     const { data }: AxiosResponse<GetMandateDetailsByAccountNumberResponse> =
       await axiosInstance({
@@ -208,7 +208,7 @@ export async function getCustomerById(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/GetCustomerbyID?customerid=${sanitize(customerId ?? '')}`;
+    const urlEndpoint = `/CustomerServices/GetCustomerbyID?customerid=${DOMPurify.sanitize(customerId ?? '')}`;
 
     const { data }: AxiosResponse<GetCustomerByIdResponse> =
       await axiosInstance({
@@ -246,7 +246,7 @@ export async function getCustomerByIdCodes(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/GetCustomerbyIDCodes?customerid=${sanitize(customerId ?? '')}`;
+    const urlEndpoint = `/CustomerServices/GetCustomerbyIDCodes?customerid=${DOMPurify.sanitize(customerId ?? '')}`;
 
     const { data }: AxiosResponse<GetCustomerByIdResponse> =
       await axiosInstance({
@@ -284,7 +284,7 @@ export async function getAccountDetails(
   };
 
   try {
-    const urlEndpoint = `/AccountServices/GetAccountDetails?Accountno=${sanitize(Accountno)}`;
+    const urlEndpoint = `/AccountServices/GetAccountDetails?Accountno=${DOMPurify.sanitize(Accountno)}`;
 
     const { data }: AxiosResponse<GetAccountDetailsResponse> =
       await axiosInstance({
@@ -319,7 +319,7 @@ export async function getProductDetailsByPcode(
   };
 
   try {
-    const urlEndpoint = `/CustomerServices/Customer/GetProductDetailsByPcode?prodcode=${sanitize(prodcode)}&customerId=${sanitize(customerId ?? '')}`;
+    const urlEndpoint = `/CustomerServices/Customer/GetProductDetailsByPcode?prodcode=${DOMPurify.sanitize(prodcode)}&customerId=${DOMPurify.sanitize(customerId ?? '')}`;
 
     const { data }: AxiosResponse<GetProductDetailsByPcodeResponse> =
       await axiosInstance({
@@ -459,7 +459,7 @@ export async function filterCustomerAccountSearch(
   let result: SearchResultsGenericResponse = {} as SearchResultsGenericResponse;
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/customer-service/search/accounts?page=${sanitize(String(params?.page ?? 1))}&size=10`;
+    const urlEndpoint = `${SEARCH_BASE_URL}/customer-service/search/accounts?page=${DOMPurify.sanitize(String(params?.page ?? 1))}&size=10`;
     const { data }: AxiosResponse<SearchCustomerResponse> = await axiosInstance(
       {
         url: urlEndpoint,
@@ -507,7 +507,7 @@ export async function filterCustomerSearch(
   let result: SearchResultsGenericResponse = {} as SearchResultsGenericResponse;
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/customer-service/search/customers?page=${sanitize(String(params?.page ?? 1))}&size=10`;
+    const urlEndpoint = `${SEARCH_BASE_URL}/customer-service/search/customers?page=${DOMPurify.sanitize(String(params?.page ?? 1))}&size=10`;
     const { data }: AxiosResponse<SearchCustomerResponse> = await axiosInstance(
       {
         url: urlEndpoint,
@@ -629,7 +629,7 @@ async function createCorporateCustomer(
   try {
     const urlEndpoint = `/CustomerServices/${
       isUpdating
-        ? `EditCorporatecustomer?customerId=${sanitize(customerId ?? '')}`
+        ? `EditCorporatecustomer?customerId=${DOMPurify.sanitize(customerId ?? '')}`
         : 'CreateCorporateCustomer'
     }`;
     const { data }: AxiosResponse<CreateCorporateCustomerResponse> =
@@ -664,7 +664,7 @@ async function createIndividualCustomer(
   try {
     const urlEndpoint = `/CustomerServices/${
       isUpdating
-        ? `UpdateIndividualCustomer?customerId=${sanitize(customerId ?? '')}`
+        ? `UpdateIndividualCustomer?customerId=${DOMPurify.sanitize(customerId ?? '')}`
         : 'CreateIndividualCustomer'
     }`;
     const { data }: AxiosResponse<CreateCustomerAccountResponse> =

@@ -12,7 +12,6 @@ import { useGetTellerBalanceReport } from '@/api/reports/useGetTellerBalanceRepo
 import { ITellerBalanceReportResponse } from '@/api/ResponseTypes/reports';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { ISearchParams } from '@/app/api/search/route';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
@@ -21,7 +20,6 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 export const TellerBalance = () => {
   const { isLoading } = useGlobalLoadingState();
   const { setExportData, setReportType } = useContext(DownloadReportContext);
-  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const { branches } = useGetBranches();
   const {
@@ -39,7 +37,7 @@ export const TellerBalance = () => {
       setSearchActive(true);
       setPage(1); // Reset to first page on new search
     },
-    [setSearchParams, setPage, searchActive, setSearchActive]
+    [setSearchParams, setPage, setSearchActive]
   );
 
   const { tellerBalanceList = [], isLoading: tellerIsLoading } =
@@ -47,32 +45,35 @@ export const TellerBalance = () => {
       ...searchParams,
       pageSize: 20,
       page,
-      getAll: true
+      getAll: false
     });
+
   const { tellerBalanceList: downloadData = [] } = useGetTellerBalanceReport({
     ...searchParams,
     page,
     getAll: true
   });
 
+  const formattedExportData = React.useMemo(
+    () =>
+      downloadData.map((item) => ({
+        'Till Number': item.tillNumber || '',
+        'Till Name': item.tillName || '',
+        'Staff Name': item.staffName || '',
+        'Branch Code': item.branchcode || '',
+        'User ID': item.userid || '',
+        'Till Balance': item.bkBalance || ''
+      })),
+    [downloadData]
+  );
+
   React.useEffect(() => {
-    if (!downloadData || downloadData.length === 0) {
-      setExportData([]);
-      return;
-    }
-
-    const formattedExportData = downloadData.map((item) => ({
-      'Till Number': item.tillNumber || '',
-      'Till Name': item.tillName || '',
-      'Staff Name': item.staffName || '',
-      'Branch Code': item.branchcode || '',
-      'User ID': item.userid || '',
-      'Till Balance': item.bkBalance || ''
-    }));
-
     setExportData(formattedExportData);
+  }, [formattedExportData, setExportData]);
+
+  React.useEffect(() => {
     setReportType('TellerBalance');
-  }, [downloadData, setExportData, setReportType]);
+  }, [setReportType]);
 
   const rowsPerPage = 10;
   const totalElements = downloadData.length;

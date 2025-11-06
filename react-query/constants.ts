@@ -233,6 +233,7 @@ interface IQueryKeys {
   getEODConfiguration: string;
   getEODProcesses: string;
   getEfassReport: string;
+  fetchAllLoanProducts: string;
 }
 
 export const queryKeys: IQueryKeys = {
@@ -469,5 +470,7 @@ export const queryKeys: IQueryKeys = {
   getEODProcesslog: 'getEODProcesslog',
   getEODConfiguration: 'getEODConfiguration',
   getEODProcesses: 'getEODProcesses',
-  getEfassReport: 'getEfassReport'
+  getEfassReport: 'getEfassReport',
+  fetchAllLoanProducts: 'fetchAllLoanProducts',
+
 };

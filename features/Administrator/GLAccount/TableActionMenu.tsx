@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Box from '@mui/material/Box';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableSingleAction } from '@/components/Revamp/TableV2';
 
 type Props = {
@@ -24,7 +24,7 @@ export const TableActionMenu = ({
   return (
     <Box>
       <Link
-        href={`/admin/gl-account/create/?glNumber=${sanitize(glNumber)}&isEditing=true&pointing=${pointing}&post=${post}&populate=${populate}&swing=${swing}&typeP=${typeP}&post=${post}`}
+        href={`/admin/gl-account/create/?glNumber=${DOMPurify.sanitize(glNumber)}&isEditing=true&pointing=${pointing}&post=${post}&populate=${populate}&swing=${swing}&typeP=${typeP}&post=${post}`}
       >
         <TableSingleAction actionName="Edit" />
       </Link>

@@ -20,7 +20,7 @@ export async function getStandingInstruction(
 
   // curl https://isw-reportsapi.qa.interswitchng.com/api/ReportServices/SITransactionReport
   try {
-    const urlEndpoint = `/ReportServices/SITransactionReport?branchCode=${params?.branchID}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&startDate=${params?.startDate}&endDate=${params?.endDate}&searchWith=${params?.searchWith}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/api/ReportServices/SITransactionReport?branchCode=${params?.branchID}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&startDate=${params?.startDate}&endDate=${params?.endDate}&searchWith=${params?.searchWith}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<GetAllStandingInstructionsResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,

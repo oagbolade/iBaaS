@@ -120,7 +120,7 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
-                  href={`/customer-service/customer/edit-chequebook/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}&urlState=${urlState}`}
+                  href={`/customer-service/customer/edit-chequebook/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}&urlState=${urlState}`}
                 >
                   <TableMenuButton buttonTitle="Edit Chequebook" />
                 </Link>
@@ -131,7 +131,7 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
-                  href={`/customer-service/customer/range-cheque/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}&urlState=${urlState}`}
+                  href={`/customer-service/customer/range-cheque/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}&urlState=${urlState}`}
                 >
                   <TableMenuButton buttonTitle="Range Cheque" />
                 </Link>
@@ -146,13 +146,13 @@ export const TableActionMenu = ({
           >
             {status === 1 ? (
               <Link
-                href={`/customer-service/customer/close-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}&urlState=${urlState}`}
+                href={`/customer-service/customer/close-account/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}&urlState=${urlState}`}
               >
                 <TableMenuButton buttonTitle="Close Account" />
               </Link>
             ) : (
               <Link
-                href={`/customer-service/customer/reactivate-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}&urlState=${urlState}`}
+                href={`/customer-service/customer/reactivate-account/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}&urlState=${urlState}`}
               >
                 <TableMenuButton buttonTitle="Reactivate Account" />
               </Link>

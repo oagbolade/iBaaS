@@ -39,48 +39,66 @@ export const ProductDetailsForm = ({
   data
 }: Props) => {
   const { isMobile, setWidth } = useCurrentBreakpoint();
-  const [openModel, setOpenModel] = useState(Boolean);
+  // openModel state removed (not used)
   const router = useRouter();
   const [addProductValues, setAddValues] = useState<string>('');
 
-  const {
-    mappedCurrency,
-    mappedFrequency,
-    mappedProductTypeId,
-    mappedProductClassTypeId
-  } = useMapSelectOptions({
-    data
-  });
+  const { mappedProductClassTypeId } = useMapSelectOptions({ data });
+
   const handleChange = (value: string) => {
     localStorage.setItem('addProduct', value);
     setAddValues(value);
   };
 
-  const handleCloseModel = () => {
-    setOpenModel(false);
-  };
-
-  const handleOpen = () => {
-    setOpenModel(true);
-  };
-
-  const productValue = localStorage.getItem('addProduct');
+  // read stored product selection (may be null if not set)
+  const productValue = localStorage.getItem('addProduct') ?? '';
 
   const handleContinue = () => {
-    if (addProductValues === '2' && productValue === '3') {
-      router.push('/setup/product-gl/add-product');
-    } else if (addProductValues === '2' && productValue === '1') {
-      router.push('/setup/product-gl/add-casa-product');
-    } else if (addProductValues === '2' && productValue === '4') {
-      router.push('/setup/product-gl/add-treasury-product');
+    let route: string | null = null;
+
+    if (addProductValues === '1' && productValue) {
+      switch (productValue) {
+        case '1':
+          route = '/setup/product-gl/add-casa-product';
+          break;
+        case '3':
+          route = '/setup/product-gl/add-product';
+          break;
+        case '4':
+          route = '/setup/product-gl/add-treasury-product';
+          break;
+        default:
+      }
+    } else if (addProductValues === '2' && productValue) {
+      switch (productValue) {
+        case '1':
+          route = '/setup/product-gl/add-casa-product';
+          break;
+        case '3':
+          route = '/setup/product-gl/add-product';
+          break;
+        case '4':
+          route = '/setup/product-gl/add-treasury-product';
+          break;
+        default:
+      }
+    } else {
+      // No explicit choice made; if there's a stored productValue, honor it
+      switch (productValue) {
+        case '1':
+          route = '/setup/product-gl/add-casa-product';
+          break;
+        case '3':
+          route = '/setup/product-gl/add-product';
+          break;
+        case '4':
+          route = '/setup/product-gl/add-treasury-product';
+          break;
+        default:
+      }
     }
-    if (addProductValues === '2' && productValue === '3') {
-      router.push('/setup/product-gl/add-product');
-    } else if (addProductValues === '2' && productValue === '1') {
-      router.push('/setup/product-gl/add-casa-product');
-    } else if (addProductValues === '2' && productValue === '4') {
-      router.push('/setup/product-gl/add-treasury-product');
-    }
+
+    if (route) router.push(route);
   };
 
   return (
@@ -102,7 +120,7 @@ export const ProductDetailsForm = ({
           productclass: '',
           addProduct: ''
         }}
-        onSubmit={(values) => {
+        onSubmit={() => {
           // Handle form submission if needed
           handleContinue();
         }}
@@ -124,7 +142,7 @@ export const ProductDetailsForm = ({
                     { label: 'Yes', value: '1' },
                     { label: 'No', value: '2' }
                   ]}
-                  title="Kindly select which product you want to add"
+                  title="Would you like to setup this product from an existing product?"
                   name="addProducts"
                   customStyle={{
                     display: 'flex'
@@ -145,7 +163,7 @@ export const ProductDetailsForm = ({
                   <FormSelectField
                     name="productclass"
                     options={mappedProductClassTypeId}
-                    label="Product Class"
+                    label="Select Product"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}

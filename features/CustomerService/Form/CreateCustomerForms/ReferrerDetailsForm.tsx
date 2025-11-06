@@ -282,6 +282,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
               customStyle={{
                 width: setWidth(isMobile ? '250px' : '100%')
               }}
+              required
             />
           </Grid>
 
@@ -306,6 +307,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
                   introducerType.customer?.length === 0 &&
                   introducerType.staff?.length === 0
                 }
+                required
               />
             </StyledSearchableDropdown>
           </Grid>
@@ -322,6 +324,7 @@ export const ReferrerDetailsForm = ({ officers, groups, branches }: Props) => {
                 dropDownOptions={filteredValues.acctOfficer as OptionsI[]}
                 customStyle={dropDownWithSearch}
                 icon={<SearchIcon />}
+                required
                 iconPosition="end"
                 buttonTitle={(selectedValue.acctOfficer as string) || 'Search'}
                 onChange={handleSearch}

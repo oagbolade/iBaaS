@@ -18,7 +18,9 @@ import { StyledTableCell } from '@/components/Table/style';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
-import { useGetProductTypeByid } from '@/api/setup/useProduct';
+import {
+  useFetchAllLoanProducts
+} from '@/api/setup/useProduct';
 
 interface ActionProps {
   data: IGetDisbursedLoanReport;
@@ -27,11 +29,7 @@ interface ActionProps {
 export const DisbursedLoan = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { branches } = useGetBranches();
-  const { data: rawBankProducts } = useGetProductTypeByid('3');
-  const bankproducts = rawBankProducts?.map((item) => ({
-    productCode: String(item.PCode ?? '').trim(),
-    productName: String(item.PName ?? '').trim()
-  }));
+  const { data: bankproducts } = useFetchAllLoanProducts();
 
   const { dateValue } = React.useContext(DateRangePickerContext);
   const { setExportData, setReportType } = useContext(DownloadReportContext);

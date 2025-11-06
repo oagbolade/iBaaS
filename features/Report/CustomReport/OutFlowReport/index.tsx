@@ -51,24 +51,17 @@ export const InflowOutflowReport = () => {
     pageNumber: page
   });
 
-  // const {
-  //   inflowOutflowList: downloadData,
-  //   isLoading,
-  //   totalInflow,
-  //   totalOutflow,
-  //   totalRecords
-  // } = useGetInflowOutflowReport({
-  //   ...searchParams,
-  //   branchId,
-  //   tellerId,
-  //   pageSize: 10,
-  //   pageNumber: page,
-  //   getAll: true
-  // });
+  const { inflowOutflowList: downloadData } = useGetInflowOutflowReport({
+    ...searchParams,
+    branchId,
+    tellerId,
+    pageSize: 10,
+    pageNumber: page,
+    getAll: true
+  });
 
   React.useEffect(() => {
     if (!inflowOutflowList || inflowOutflowList?.length === 0) {
-      setExportData([]);
       return;
     }
 

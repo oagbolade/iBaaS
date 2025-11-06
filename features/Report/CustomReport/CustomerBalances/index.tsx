@@ -6,7 +6,6 @@ import { COLUMN, keys } from './Column';
 import { TopOverViewSingeCalendarSection } from '@/features/Report/Overview/TopOverViewSingleCalenderSection';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetBranches } from '@/api/general/useBranches';
-import { useGetAllProduct } from '@/api/setup/useProduct';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGetCustomerBalance } from '@/api/reports/useCustomerbalance';
 import { ICustomerBalance } from '@/api/ResponseTypes/reports';
@@ -16,6 +15,7 @@ import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { useGetProductTypeByid } from '@/api/setup/useProduct';
 
 interface CustomerBalanceList {
   customerBalanceList: {
@@ -39,7 +39,21 @@ export const CustomerBalances = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('customer-balances');
   const { branches } = useGetBranches();
-  const { bankproducts } = useGetAllProduct();
+
+  const { data: casaOneBankProducts } = useGetProductTypeByid('1');
+  const { data: casaTwoBankProducts } = useGetProductTypeByid('2');
+  const { data: loanBankProducts } = useGetProductTypeByid('3');
+  const { data: tresuryBankProducts } = useGetProductTypeByid('4');
+
+  const bankproducts = [
+    ...(casaOneBankProducts || []),
+    ...(casaTwoBankProducts || []),
+    ...(loanBankProducts || []),
+    ...(tresuryBankProducts || [])
+  ].map((item) => ({
+    productCode: String(item.PCode ?? '').trim(),
+    productName: String(item.PName ?? '').trim()
+  }));
 
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
@@ -68,12 +82,9 @@ export const CustomerBalances = () => {
 
   const {
     customerBalanceList: downloadData = {
-      pagedCustomerBalances: [],
-      grandTotal: 0,
-      totalAvaiBal: 0,
-      totalBkBal: 0
+      pagedCustomerBalances: '' // set as string to avoid unnecessary rerender
     }
-  }: CustomerBalanceList = useGetCustomerBalance({
+  } = useGetCustomerBalance({
     ...searchParams,
     getAll: true,
     page,
@@ -91,12 +102,13 @@ export const CustomerBalances = () => {
   const { pagedCustomerBalances: getAllDownloadData } = downloadData;
 
   React.useEffect(() => {
-    if (!getAllDownloadData || getAllDownloadData.length === 0) {
+    if (!getAllDownloadData || getAllDownloadData?.length === 0) {
       setExportData([]);
+      return;
     }
 
     if (
-      getAllDownloadData &&
+      Array.isArray(getAllDownloadData) &&
       !isCustomerBalanceDataLoading &&
       pagedCustomerBalances.length > 0
     ) {
@@ -134,7 +146,7 @@ export const CustomerBalances = () => {
         marginTop: '60px'
       }}
     >
-        <TopOverViewSingeCalendarSection />
+      <TopOverViewSingeCalendarSection />
 
       {branches && bankproducts && (
         <FilterSection

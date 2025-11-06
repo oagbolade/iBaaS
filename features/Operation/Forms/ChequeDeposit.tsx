@@ -311,7 +311,7 @@ export const ChequeDeposit = ({
                 </Grid>
               </Grid>
             </Box>
-            <Box mt={4} sx={PostingContainer}>
+            <Box mt={8} sx={PostingContainer}>
               {isMobile ? (
                 <MobilePreviewContent
                   PreviewContent={<PreviewContent />}

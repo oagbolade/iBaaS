@@ -19,7 +19,7 @@ export async function getTermDeporitMaturityReport(
     {} as ITermDepositMaturityReportResponse;
 
   try {
-    const urlEndpoint = '/ReportServices/TDMaturityReport';
+    const urlEndpoint = '/api/ReportServices/TDMaturityReport';
 
     const { data }: AxiosResponse<ITermDepositMaturityReportResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {

@@ -14,7 +14,7 @@ import {
   Typography,
   Stack
 } from '@mui/material';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { tableCard } from './styles';
 import { primaryTitle } from '@/components/Confirmation/styles';
 import colors from '@/assets/colors';
@@ -23,11 +23,7 @@ import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
 import { FormSkeleton } from '@/components/Loaders';
 import { IGetPendingRequest } from '@/api/ResponseTypes/loans';
 
-import {
-  MuiTableContainer,
-  StyledTableRow,
-  renderEmptyTableBody
-} from '@/components/Table/Table';
+import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,7 +45,7 @@ export const PendingTasks = () => {
   const ActionMenu = ({ id }: Props): React.ReactElement => {
     return (
       <Link
-        href={`/requests/view-single-pending-request/?authid=${sanitize(id)}`}
+        href={`/requests/view-single-pending-request/?authid=${DOMPurify.sanitize(id)}`}
       >
         <TableSingleAction actionName="View" />
       </Link>

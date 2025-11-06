@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -123,7 +123,7 @@ export const TableActionMenu = ({
               }}
               aria-disabled={shouldDisable.view}
               tabIndex={shouldDisable.view ? -1 : undefined}
-              href={`/loan/loan-directory/view-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}`}
+              href={`/loan/loan-directory/view-loan/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(status)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}&productCode=${DOMPurify.sanitize(productCode)}`}
             >
               <TableMenuButton buttonTitle="View Loan" />
             </Link>
@@ -141,7 +141,7 @@ export const TableActionMenu = ({
                 }}
                 aria-disabled={shouldDisable.view}
                 tabIndex={shouldDisable.view ? -1 : undefined}
-                href={`/loan/loan-directory/disburse-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}&customerId=${sanitize(customerId)}`}
+                href={`/loan/loan-directory/disburse-loan/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(status)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}&productCode=${DOMPurify.sanitize(productCode)}&customerId=${DOMPurify.sanitize(customerId)}`}
               >
                 <TableMenuButton buttonTitle="Disburse Loan" />
               </Link>
@@ -156,8 +156,7 @@ export const TableActionMenu = ({
                 }}
               >
                 <Link
-            
-                  href={`/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}`}
+                  href={`/loan/loan-directory/terminate-loan/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(status)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}`}
                 >
                   <TableMenuButton buttonTitle="Terminate Loan" />
                 </Link>
@@ -174,7 +173,7 @@ export const TableActionMenu = ({
                   }}
                   aria-disabled={shouldDisable.partialPayOff}
                   tabIndex={shouldDisable.partialPayOff ? -1 : undefined}
-                  href={`/loan/loan-directory/partial-pay/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}`}
+                  href={`/loan/loan-directory/partial-pay/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(status)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}`}
                 >
                   <TableMenuButton buttonTitle="Partial Pay" />
                 </Link>
@@ -191,7 +190,7 @@ export const TableActionMenu = ({
                   }}
                   aria-disabled={shouldDisable.restructLaon}
                   tabIndex={shouldDisable.restructLaon ? -1 : undefined}
-                  href={`/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(status)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode)}&branchCode=${sanitize(branchCode)}&customerID=${sanitize(customerId)}`}
+                  href={`/loan/loan-directory/restructure-loan/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(status)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}&productCode=${DOMPurify.sanitize(productCode)}&branchCode=${DOMPurify.sanitize(branchCode)}&customerID=${DOMPurify.sanitize(customerId)}`}
                 >
                   <TableMenuButton buttonTitle="Restructure Loan" />
                 </Link>

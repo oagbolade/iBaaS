@@ -26,7 +26,7 @@ async function fetchDetailedPortfolioAtRisk(
   toastActions: IToastActions
 ): Promise<GetDetailedPortfolioReport | null> {
   try {
-    const urlEndpoint = '/ReportServices/PortfolioatRiskDetailReport';
+    const urlEndpoint = '/api/ReportServices/PortfolioatRiskDetailReport';
     const { data }: AxiosResponse<GetDetailedPortfolioReport> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

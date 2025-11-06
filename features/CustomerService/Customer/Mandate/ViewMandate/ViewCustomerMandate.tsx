@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Box } from '@mui/material';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import {
   managerPreview,
   previewContainer,
@@ -47,7 +47,7 @@ export const ViewCustomerMandate = () => {
   const actionButtons: any = [
     <Box sx={{ width: '100%' }} ml={{ mobile: 2, desktop: 5 }}>
       <Link
-        href={`/customer-service/customer/mandate/add-mandate?accountNumber=${sanitize(accountNumber as string)}&bvn=${sanitize(accDetailsResults?.bvn as string)}&customerId=${sanitize(customerId as string)}`}
+        href={`/customer-service/customer/mandate/add-mandate?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&bvn=${DOMPurify.sanitize(accDetailsResults?.bvn as string)}&customerId=${DOMPurify.sanitize(customerId as string)}`}
       >
         <PrimaryIconButton
           buttonTitle="Add Mandate"

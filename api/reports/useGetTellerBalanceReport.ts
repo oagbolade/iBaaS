@@ -30,17 +30,17 @@ async function getTellerBalanceReport(
   toastActions: IToastActions
 ): Promise<IGetTellerBalanceReportResponseType | null> {
   try {
-    const urlEndpoint = '/ReportServices/TellerBalanceReport';
+    const urlEndpoint = '/api/ReportServices/TellerBalanceReport';
     const { data }: AxiosResponse<IGetTellerBalanceReportResponseType> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
-          branchCode: params?.branchID?.toString(),
-          customerId: params?.customerID?.toString() || '',
+          branchCode: params?.branchCode?.toString(),
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1,
-          startDate: params.startDate,
-          endDate: params.endDate,
-          getAll: params.getAll || false
+          startDate: '', // date make the api return [] data contact backend
+          endDate: '', // date make the api return [] data contact backend
+          getAll: params.getAll || false,
+          searchWith: params.searchWith || ''
         },
         headers: {
           'Content-Type': 'application/json',
@@ -72,17 +72,20 @@ export function useGetTellerBalanceReport(
   } = useQuery({
     queryKey: [
       queryKeys.getTellerBalanceReport,
-      params?.branchID?.toString() || '',
-      params?.customerID?.toString() || '',
+      params?.branchCode?.toString() || '',
       params?.pageNumber || 1,
       params?.pageSize || 10,
-      params?.startDate?.toString || '',
-      params?.endDate || ''
+      params?.startDate || '',
+      params?.endDate || '',
+      params?.search,
+      params?.searchWith
     ],
     queryFn: () => getTellerBalanceReport(params, toastActions),
     enabled: Boolean(
-      (params?.branchID?.toString() || '').length > 0 ||
-        params.customerID?.toString()
+      (params?.branchCode?.toString() || '').length > 0 ||
+        params.startDate?.toString() ||
+        params.endDate?.toString() ||
+        params.searchWith?.toString()
     )
   });
 

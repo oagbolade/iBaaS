@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import Link from 'next/link';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { COLUMNS } from './COLUMNS';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { TableSingleAction } from '@/components/Table';
@@ -30,7 +30,7 @@ const ActionMenuProps = ({
 }) => {
   return (
     <Link
-      href={`/customer-service/customer/lien/release-lien/?accountNumber=${sanitize(accountNumber)}&holdNumber=${sanitize(holdNumber)}`}
+      href={`/customer-service/customer/lien/release-lien/?accountNumber=${DOMPurify.sanitize(accountNumber)}&holdNumber=${DOMPurify.sanitize(holdNumber)}`}
     >
       <TableSingleAction actionName="Release Lien" />
     </Link>
@@ -49,7 +49,7 @@ export const LienContainer = () => {
   const actionButtons: any = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <Link
-        href={`/customer-service/customer/lien/add-lien?accountNumber=${sanitize(accountNumber)}&customerId=1`}
+        href={`/customer-service/customer/lien/add-lien?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=1`}
       >
         <PrimaryIconButton
           buttonTitle="Add Lien"

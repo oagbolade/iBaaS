@@ -55,7 +55,7 @@ export const TransactionClearing = () => {
 
   React.useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
-      setExportData([]);
+      /* empty */
     }
 
     if (downloadData?.length > 0) {
@@ -115,6 +115,7 @@ export const TransactionClearing = () => {
             tableConfig={{
               hasActions: false
             }}
+            setPage={setPage}
           >
             {searchActive ? (
               transactionsinClearingList?.map(

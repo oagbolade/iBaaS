@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Box } from '@mui/material';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import {
   accountTitle,
   accountNumber as accountNumberStyles,
@@ -52,7 +52,7 @@ export const ViewDirectorDetails = () => {
   const actionButtons: any = [
     <Box sx={{ width: '100%' }} ml={{ mobile: 2, desktop: 5 }}>
       <Link
-        href={`/customer-service/director/create-mandate?customerId=${sanitize(customerId)}&directorId=${sanitize(directorId)}&directorName=${sanitize(directorDetails?.fullName)}`}
+        href={`/customer-service/director/create-mandate?customerId=${DOMPurify.sanitize(customerId)}&directorId=${DOMPurify.sanitize(directorId)}&directorName=${DOMPurify.sanitize(directorDetails?.fullName)}`}
       >
         <PrimaryIconButton
           buttonTitle="Add Mandate"

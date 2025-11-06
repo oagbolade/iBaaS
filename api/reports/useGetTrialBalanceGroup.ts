@@ -16,7 +16,7 @@ export async function getTrialBalanceGroup(
   params: ISearchParams | null
 ): Promise<TrailBalanceGroupResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/TrialBalanceByDateByGroup';
+    const urlEndpoint = '/api/ReportServices/TrialBalanceByDateByGroup';
     const { data }: AxiosResponse<TrailBalanceGroupResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

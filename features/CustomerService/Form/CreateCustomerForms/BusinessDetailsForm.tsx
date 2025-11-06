@@ -76,16 +76,21 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
     });
 
   const { setFieldValue } = useFormikContext();
-  const [usePersonalDetails, setUsePersonalDetails] =
-    React.useState<string | null>(null);
+  const [usePersonalDetails, setUsePersonalDetails] = React.useState<
+    string | null
+  >(null);
 
-  const handleUsePersonalDetails = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUsePersonalDetails = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { value } = event.target;
     setUsePersonalDetails(value);
 
     if (value === 'yes') {
       try {
-        const savedDetails = JSON.parse(localStorage.getItem('personalDetails') || '{}');
+        const savedDetails = JSON.parse(
+          localStorage.getItem('personalDetails') || '{}'
+        );
         const { country, state, town, address, phone } = savedDetails;
 
         if (!country || !state || !town) return;
@@ -93,12 +98,16 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
         const updatedDetails = { country, state, town };
         setLocationDetails(updatedDetails);
 
-        ['bizCtry', 'bizState', 'bizTowncode', 'bizAddress', 'bizPhone3'].forEach(
-          (field, index) => {
-            const fieldValues = [country, state, town, address, phone][index];
-            setFieldValue(field, fieldValues);
-          }
-        );
+        [
+          'bizCtry',
+          'bizState',
+          'bizTowncode',
+          'bizAddress',
+          'bizPhone3'
+        ].forEach((field, index) => {
+          const fieldValues = [country, state, town, address, phone][index];
+          setFieldValue(field, fieldValues);
+        });
 
         localStorage.removeItem('personalDetails');
       } catch (error) {
@@ -125,7 +134,9 @@ export const BusinessDetailsForm = ({ countries, states, towns }: Props) => {
           {/* Radio button group */}
           <Grid item={isTablet} mobile={12} mb={2}>
             <FormControl component="fieldset">
-              <FormLabel component="legend">Copy Address From Personal Details?</FormLabel>
+              <FormLabel component="legend">
+                Copy address from personal details?
+              </FormLabel>
               <RadioGroup
                 row
                 value={usePersonalDetails || ''}

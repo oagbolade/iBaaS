@@ -17,7 +17,7 @@ export async function getTrialBalance(
 ) {
   let result: TrailBalanceResponse = {} as TrailBalanceResponse;
   try {
-    const urlEndpoint = '/ReportServices/TrialBalanceByDate';
+    const urlEndpoint = '/api/ReportServices/TrialBalanceByDate';
     const { data }: AxiosResponse<TrailBalanceResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

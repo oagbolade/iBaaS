@@ -38,6 +38,7 @@ import { REPORT_BASE_URL } from '@/axiosInstance/constants';
 async function createRunEOD(toastActions: IToastActions): Promise<EODResponse> {
   try {
     const urlEndpoint = '/EODProcess/Run';
+
     const { data }: AxiosResponse<EODResponse> = await EndOfDayAxiosInstance({
       url: urlEndpoint,
       method: 'POST',
@@ -47,16 +48,17 @@ async function createRunEOD(toastActions: IToastActions): Promise<EODResponse> {
       }
     });
 
+    // Success toast (will be overridden in onSuccess if needed)
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
+
     return data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
-    throw errorResponse;
+    throw errorResponse; // let react-query handle it
   }
 }
-
 async function createSaveEODConfiguration(
   toastActions: IToastActions,
   body: CreateEODConfigureFormValues
@@ -358,26 +360,25 @@ export function useCreateRunEOD() {
   const router = useRouter();
   const toastActions = useContext(ToastMessageContext);
   const queryClient = useQueryClient();
+
   const { mutate, isPending, isError, error, data } = useMutation({
     mutationFn: () => createRunEOD(toastActions),
-    onSuccess: () => {
-      const keysToInvalidate = [[queryKeys.getEODResult]];
-      keysToInvalidate.forEach((key) =>
-        queryClient.invalidateQueries({ queryKey: key })
-      );
+    onSuccess: (response) => {
+      queryClient.setQueryData([queryKeys.getEODResult], response);
       handleRedirect(router, '/operation/createEndofday/');
     }
   });
-
   return {
     mutate,
     isPending,
     isError,
     error,
-    data
+    task: data?.data,
+    data, // full EODResponse
+    eodMetrics: data?.eodMetrics, // derived
+    eobException: data?.eobException // derived
   };
 }
-
 export function useCreateEODConfiguration() {
   const router = useRouter();
   const toastActions = useContext(ToastMessageContext);

@@ -55,6 +55,11 @@ export const sideBarMenu: SidebarMenuItem[] = [
         name: 'Vault Management',
         link: '/operation/management/',
         hideSubMenuItem: false
+      },
+      {
+        name: 'Treasury Operations',
+        link: '/operation/treasury/',
+        hideSubMenuItem: false
       }
     ]
   },

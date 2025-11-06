@@ -21,7 +21,7 @@ export async function getEfassReport(
   body: IEfassReport
 ): Promise<EfassReportResponse | null> {
   try {
-    const urlEndpoint = '/EfassReport';
+    const urlEndpoint = '/api/EfassReport';
     const { data }: AxiosResponse<EfassReportResponse> =
       await reportsAxiosInstance.post(urlEndpoint, {
         body: { ...body },

@@ -40,9 +40,9 @@ interface ErrorResponseData {
 
 axiosRetry(axiosInstance, {
   retries: 2,
-  retryDelay: axiosRetry.exponentialDelay, 
+  retryDelay: axiosRetry.exponentialDelay,
   retryCondition: (error: any) =>
-    axiosRetry.isNetworkOrIdempotentRequestError(error),
+    axiosRetry.isNetworkOrIdempotentRequestError(error)
 });
 
 export function useAuth(): UseAuth {
@@ -76,9 +76,8 @@ export function useAuth(): UseAuth {
       });
 
       // Debug log. Do not remove ⚠️
-      console.log('Login response data:', data.menuItems); 
       setMenuItemsToLocalStorage(JSON.stringify(data.menuItems));
-      
+
       if (data.responseCode === statusCodes.UNAUTHORIZED) {
         setLoading(false);
         const message = data.responseDescription || 'Unauthorized';
@@ -149,17 +148,16 @@ export function useAuth(): UseAuth {
     password: string,
     onFirstTimeUser?: () => void
   ): Promise<void> {
+    // eslint-disable-next-line no-useless-catch
     try {
-      await 
-       authServerCall(
-      '/login/login',
-      companyCode,
-      username,
-      password,
-      onFirstTimeUser
-    );
+      await authServerCall(
+        '/login/login',
+        companyCode,
+        username,
+        password,
+        onFirstTimeUser
+      );
     } catch (error) {
-      console.error("Login failed after retries:", error);
       throw error;
     }
   }
@@ -180,7 +178,6 @@ export function useAuth(): UseAuth {
         clearStoredUser();
         toast('Logout successful, redirecting please wait...', 'success');
         window.location.href = '/login';
-        return;
       }, 1500);
     }
 

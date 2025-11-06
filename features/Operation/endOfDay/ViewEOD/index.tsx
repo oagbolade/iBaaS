@@ -1,9 +1,9 @@
 'use client';
 import { Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { processNumber, totalProcesTitle, totalTitle } from '../../Forms/style';
 import { COLUMNS } from './COLUMNS';
-import { MuiTableContainer, TableSingleAction } from '@/components/Table';
+import { MuiTableContainer } from '@/components/Table';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { ISearchParams } from '@/app/api/search/route';
 import {
@@ -27,110 +27,136 @@ type Props = {
 
 export const EndOfDayProcessTable = ({ EODid }: Props) => {
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
-  const { data, eodMetrics, eobException } = useGetEODProcesses();
+  const [page, setPage] = useState(1);
+  const [metrics, setMetrics] = useState<{
+    totalCompletedPercetage: number;
+    totalUncompletedPercetage: number;
+  } | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
+  const { data, eodMetrics, eobException } = useGetEODProcesses();
   const { data: process, isLoading } = useGetEODProcesslog(searchParams, EODid);
   const { data: downloadData } = useGetEODProcesslog(
     { ...searchParams, getAll: true },
     EODid
   );
 
-  const { setReportType, setExportData } = React.useContext(
-    DownloadReportContext
-  );
+  const { setReportType, setExportData } = useContext(DownloadReportContext);
 
-  const totalPercentageUncompleted =
-    data?.find((item) => item.totalUncompletedPercentage) || 0;
+  // Only run on client
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsClient(true);
+      const EodDataRaw = localStorage.getItem('EOD_METRICS');
+      if (EodDataRaw) {
+        try {
+          const parsed = JSON.parse(EodDataRaw);
+          setMetrics(parsed);
+        } catch (err) {
+          throw new Error('Failed to parse EOD metrics from localStorage');
+        }
+      }
+    }
+  }, []);
 
-  const totalPercentageCompleted =
-    data?.find((item) => item.totalPercentageCompleted) || 0;
-
-  React.useEffect(() => {
-    if (!downloadData || downloadData?.length === 0) {
+  // Update export context
+  useEffect(() => {
+    if (downloadData && downloadData.length > 0) {
+      setReportType('EOD');
+      setExportData(downloadData);
+    } else {
       setExportData([]);
     }
+  }, [downloadData, setReportType, setExportData]);
 
-    if ((process ?? []).length > 0) {
-      setReportType('EOD');
-      setExportData(downloadData as []);
+  const handleExportData = () => {
+    if (process) {
+      setExportData(process);
     }
-  }, [downloadData]);
-
-  const handExportData = () => {
-    setExportData(process as []);
   };
+
   const actionButtons = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }} key="export">
       <ActionButtonWithPopper
         searchGroupVariant="ExportReport"
         customStyle={{ ...exportData }}
         icon={<ExportIcon />}
         iconPosition="start"
         buttonTitle="Export Data"
-        handleSelectedValue={handExportData}
+        handleSelectedValue={handleExportData}
       />
     </Box>
   ];
+
+  const totalCompleted = metrics?.totalCompletedPercetage?.toFixed(2) ?? '0';
+  const totalUncompleted =
+    metrics?.totalUncompletedPercetage?.toFixed(2) ?? '0';
+
   return (
     <Box>
       <TopActionsArea actionButtons={actionButtons} />
-      <Box sx={{ padding: '25px', marginTop: '10px' }}>
-        <Box sx={processNumber}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Box>
-              <PageTitle
-                title="total processes Passed"
-                styles={{ ...totalProcesTitle }}
-              />
-              <PageTitle
-                title={totalPercentageCompleted?.toString()}
-                styles={{ ...totalTitle }}
-              />
-            </Box>
-            <Box sx={{ marginLeft: '640px' }}>
-              <PageTitle
-                title="total processes failed"
-                styles={{ ...totalProcesTitle }}
-              />
-              <PageTitle
-                title={totalPercentageUncompleted?.toString()}
-                styles={{ ...totalTitle }}
-              />
+
+      {/* Show skeleton until client-side data is ready */}
+      {!isClient || isLoading ? (
+        <Box sx={{ padding: '25px' }}>
+          <FormSkeleton noOfLoaders={3} />
+        </Box>
+      ) : (
+        <>
+          {/* Summary */}
+          <Box sx={{ padding: '25px', marginTop: '10px' }}>
+            <Box sx={processNumber}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box>
+                  <PageTitle
+                    title="Total Processes Passed"
+                    styles={totalProcesTitle}
+                  />
+                  <PageTitle title={`${totalCompleted}%`} styles={totalTitle} />
+                </Box>
+                <Box sx={{ marginLeft: '640px' }}>
+                  <PageTitle
+                    title="Total Processes Failed"
+                    styles={totalProcesTitle}
+                  />
+                  <PageTitle
+                    title={`${totalUncompleted}%`}
+                    styles={totalTitle}
+                  />
+                </Box>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Box>
-      <Box sx={{ padding: '25px', width: '100%' }}>
-        {isLoading ? (
-          <FormSkeleton noOfLoaders={3} />
-        ) : (
-          <MuiTableContainer columns={COLUMNS} data={process} setPage={setPage}>
-            {process?.map((dataItem: SearchProcessEODLogsResponse) => {
-              return (
+
+          {/* Table */}
+          <Box sx={{ padding: '25px', width: '100%' }}>
+            <MuiTableContainer
+              columns={COLUMNS}
+              data={process}
+              setPage={setPage}
+            >
+              {process?.map((dataItem: SearchProcessEODLogsResponse) => (
                 <StyledTableRow key={dataItem.taskid}>
                   <StyledTableCell component="th" scope="row">
                     {dataItem.taskname}
                   </StyledTableCell>
                   <StyledTableCell align="right">
                     <Status
-                      label={
-                        Number(dataItem.taskStatus) === 1 ? 'Fail' : 'Pass'
-                      }
+                      label={String(dataItem?.status) === '0' ? 'Pass' : 'Fail'}
                       status={
-                        Number(dataItem.taskStatus) === 1 ? 'Fail' : 'Pass'
+                        String(dataItem?.status) === '0' ? 'success' : 'warning'
                       }
                     />
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    {dataItem.retMsg}
+                    {dataItem.retMsg || '-'}
                   </StyledTableCell>
                 </StyledTableRow>
-              );
-            })}
-          </MuiTableContainer>
-        )}
-      </Box>
+              ))}
+            </MuiTableContainer>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

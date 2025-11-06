@@ -17,7 +17,6 @@ export async function getCustomerBalance(
 ) {
   let result: CustomerBalanceResponse = {} as CustomerBalanceResponse;
   try {
-  
     const queryParams = {
       BranchCode: params?.branchID || '',
       pCode: params?.pCode || '',
@@ -28,7 +27,7 @@ export async function getCustomerBalance(
       enddate: params?.endDate || '',
       searchWith: params?.searchWith || ''
     };
-    const urlEndpoint = `/ReportServices/Customerbalances?${new URLSearchParams(queryParams)}`;
+    const urlEndpoint = `/api/ReportServices/Customerbalances?${new URLSearchParams(queryParams)}`;
 
     const { data }: AxiosResponse<CustomerBalanceResponse> =
       await reportsAxiosInstance({

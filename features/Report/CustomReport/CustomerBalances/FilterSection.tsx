@@ -5,9 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { inputFields } from '../style';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import colors from '@/assets/colors';
-import {
-  ActionButton
-} from '@/components/Revamp/Buttons';
+import { ActionButton } from '@/components/Revamp/Buttons';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
@@ -15,7 +13,6 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { customerBalanceSchema } from '@/schemas/reports';
 import { IBankProducts } from '@/api/ResponseTypes/customer-service';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
-import { useGetProductType } from '@/api/general/useProductType';
 
 type Props = {
   branches?: IBranches[];
@@ -27,21 +24,10 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
   const { searchParams } =
     usePersistedSearch<ISearchParams>('customer-balances');
   const { setWidth } = useCurrentBreakpoint();
-  const { mappedBranches } = useMapSelectOptions({
+  const { mappedBranches, mappedBankproducts } = useMapSelectOptions({
     branches,
     bankproducts
   });
-
-  const { productTypes } = useGetProductType();
-
-  const mappedProductTypes = useMemo(
-    () =>
-      (productTypes || []).map((product) => ({
-        name: product.producttypedesc,
-        value: product.producttypeid?.toString() ?? ''
-      })),
-    [productTypes]
-  );
 
   const initialValues = useMemo(
     () => ({
@@ -115,7 +101,7 @@ export const FilterSection = ({ branches, bankproducts, onSearch }: Props) => {
                       ...inputFields
                     }}
                     name="pCode"
-                    options={mappedProductTypes}
+                    options={mappedBankproducts}
                     label="Product Type"
                   />{' '}
                 </Grid>

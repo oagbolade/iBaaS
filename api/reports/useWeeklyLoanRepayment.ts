@@ -10,7 +10,6 @@ import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
 import { LoanWeeklyRepaymentResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
-
 import { REPORT_BASE_URL } from '@/axiosInstance/constants';
 
 export async function geWeeklyLoanRepayment(
@@ -31,7 +30,7 @@ export async function geWeeklyLoanRepayment(
       searchWith: params?.searchWith || ''
     }).toString();
 
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/LoanWeeklyRepaymentReport?${queryParams}`;
+    const urlEndpoint = `/api/ReportServices/LoanWeeklyRepaymentReport?${queryParams}`;
     const { data }: AxiosResponse<LoanWeeklyRepaymentResponse> =
       await axiosInstance({
         url: urlEndpoint,
@@ -69,8 +68,11 @@ export function useGetWeeklyLoanRepayment(params: ISearchParams | null) {
       params?.startDate,
       params?.endDate,
       params?.prodCode,
-      params?.pageNumber,
       params?.groupId,
+      params?.getAll,
+      params?.pageNumber,
+      params?.pageSize,
+      params?.page
     ],
     queryFn: () => geWeeklyLoanRepayment(toastActions, params || {}),
     enabled: Boolean(
@@ -79,9 +81,7 @@ export function useGetWeeklyLoanRepayment(params: ISearchParams | null) {
         (params?.searchWith || '').length > 0 ||
         (params?.endDate || '').length > 0 ||
         (params?.prodCode || '').length > 0 ||
-        (params?.pageNumber || '').length > 0 ||
         (params?.groupId || '').length > 0
-
     )
   });
   return { ...data, isError, isLoading };

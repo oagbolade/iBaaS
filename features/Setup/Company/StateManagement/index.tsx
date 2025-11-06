@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { FilterSection } from './FilterSection';
 import { COLUMNS } from './COLUMNS';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
@@ -33,13 +33,13 @@ export const StateManagement = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('company-states');
   const {
     totalPages,
     totalElements,
     data: statementData,
-    isLoading,
+    isLoading
   } = useFilterStateSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
@@ -47,13 +47,13 @@ export const StateManagement = () => {
   };
 
   const ActionMenu = ({
-    stateCode,
+    stateCode
   }: {
     stateCode: string;
   }): React.ReactElement => {
     return (
       <Link
-        href={`/setup/company/state-management/create?isEditing=true&id=${sanitize(stateCode)}`}
+        href={`/setup/company/state-management/create?isEditing=true&id=${DOMPurify.sanitize(stateCode)}`}
       >
         <TableSingleAction actionName="Edit" />
       </Link>
@@ -78,7 +78,7 @@ export const StateManagement = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
           {isGlobalLoading || isLoading ? (
@@ -91,7 +91,7 @@ export const StateManagement = () => {
                 mainTitle: 'State',
                 secondaryTitle:
                   'See a directory of all state management in this system.',
-                hideFilterSection: true,
+                hideFilterSection: true
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}

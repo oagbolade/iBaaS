@@ -24,29 +24,28 @@ export const BalanceSheet = () => {
     searchWith: '',
     branchID: ''
   });
-  
+
   const { dateValue } = React.useContext(DateRangePickerContext);
 
-const startFrom = dateValue?.[0]
-  ? dateValue[0].format('YYYY-MM-DD')
-  : '2025-10-02';
-  
+  const startFrom = dateValue?.[0]
+    ? dateValue[0].format('YYYY-MM-DD')
+    : '2025-10-02';
+
   const { data: balanceSheetData, isLoading } = useGetAllBalanceSheet({
     pageSize,
     page,
     getAll: false,
     searchWith: filters.searchWith,
     branchID: filters.branchID,
-    startFrom 
+    startFrom
   });
 
- const handleSearch = (values: { searchWith: any; branchID: any; }) => {
-  setFilters({
-    searchWith: values.searchWith || '',
-    branchID: values.branchID || ''
-  });
-};
-
+  const handleSearch = (values: { searchWith: any; branchID: any }) => {
+    setFilters({
+      searchWith: values.searchWith || '',
+      branchID: values.branchID || ''
+    });
+  };
 
   const grandTotal = React.useMemo(() => {
     if (!balanceSheetData) return 0;
@@ -58,9 +57,11 @@ const startFrom = dateValue?.[0]
 
   return (
     <Box sx={{ width: '100%', marginTop: '70px' }}>
-       <TopOverViewSingeCalendarSection />
+      <TopOverViewSingeCalendarSection />
       <Box>
-        {branches && <FilterSection branches={branches} onSearch={handleSearch} />}
+        {branches && (
+          <FilterSection branches={branches} onSearch={handleSearch} />
+        )}
       </Box>
 
       <Box sx={{ padding: '25px', width: '100%' }}>

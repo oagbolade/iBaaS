@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -68,7 +68,7 @@ export const TableActionMenu = ({
             }}
           >
             <Link
-              href={`/admin/account-officers/view?officerCode=${sanitize(officercode)}`}
+              href={`/admin/account-officers/view?officerCode=${DOMPurify.sanitize(officercode)}`}
             >
               <TableMenuButton buttonTitle="View" />
             </Link>
@@ -80,7 +80,7 @@ export const TableActionMenu = ({
               }}
             >
               <Link
-                href={`/admin/account-officers/create/?officercode=${sanitize(officercode.trim())}&isEditing=true`}
+                href={`/admin/account-officers/create/?officercode=${DOMPurify.sanitize(officercode.trim())}&isEditing=true`}
               >
                 <TableMenuButton buttonTitle="Edit" />
               </Link>

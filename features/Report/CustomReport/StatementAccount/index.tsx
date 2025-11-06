@@ -47,8 +47,9 @@ export const StatementAccount = () => {
   );
 
   const { dateValue } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType, setReportQueryParams } =
-    React.useContext(DownloadReportContext);
+  const { setExportData, setReportType } = React.useContext(
+    DownloadReportContext
+  );
 
   const {
     searchParams,
@@ -58,12 +59,8 @@ export const StatementAccount = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('statement-of-account');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [productCode, setProductCode] = useState('');
 
-  const { accDetailsResults, isLoading: loadingDetails } = useGetAccountDetails(
-    accountNumber ? (encryptData(accountNumber) as string) : ''
-  );
+  const [productCode, setProductCode] = useState('');
 
   const { rptStatementList, isLoading: loadingStatements } =
     useGetStatementOfAccount(searchParams);
@@ -74,11 +71,11 @@ export const StatementAccount = () => {
   });
 
   useEffect(() => {
-    if (searchActive && accDetailsResults) {
+    if (searchActive && rptStatementList) {
       setHeight('auto');
       setIsOpen(true);
     }
-  }, [searchActive, accDetailsResults]);
+  }, [searchActive, rptStatementList]);
 
   useEffect(() => {
     if (!downloadData || downloadData?.pagedRecords.length === 0) {
@@ -94,10 +91,6 @@ export const StatementAccount = () => {
     }
   }, [downloadData]);
 
-  const handleChange = () => {
-    setExpanded(!expanded);
-  };
-
   const handleClick = () => {
     setIsOpen(!isOpen);
     setHeight(isOpen ? 0 : 'auto');
@@ -106,7 +99,7 @@ export const StatementAccount = () => {
   const handleSearch = async (params: ISearchParams) => {
     if (!params.accountNumber) return;
     setSearchActive(true);
-    setAccountNumber(params.accountNumber);
+    // setAccountNumber(params.accountNumber);
     setProductCode(params.accttype || '');
 
     const queryParams: ISearchParams = {
@@ -139,14 +132,14 @@ export const StatementAccount = () => {
       {searchActive && (
         <div>
           {(() => {
-            if (loadingDetails) {
+            if (loadingStatements) {
               return (
                 <div className="mx-5">
                   <FormSkeleton noOfLoaders={3} />
                 </div>
               );
             }
-            if (accDetailsResults) {
+            if (rptStatementList) {
               return (
                 <Accordion
                   sx={{ width: { mobile: '100%', desktop: '100%' } }}
@@ -177,7 +170,7 @@ export const StatementAccount = () => {
                           <SubTitle title="Account Name" />
                           <Details
                             className=" overflow-hidden text-ellipsis block w-64"
-                            title={accDetailsResults.accounttitle || 'N/A'}
+                            title={rptStatementList?.fullname || 'N/A'}
                           />
                         </Grid>
 
@@ -189,7 +182,7 @@ export const StatementAccount = () => {
                         >
                           <SubTitle title="Account Number" />
                           <Details
-                            title={accDetailsResults.accountnumber || 'N/A'}
+                            title={rptStatementList?.accountnumber || 'N/A'}
                           />
                         </Grid>
 
@@ -200,7 +193,13 @@ export const StatementAccount = () => {
                           justifyContent="center"
                         >
                           <SubTitle title="Opening Balance" />
-                          <Details title="N/A" />
+                          <Details
+                            title={
+                              rptStatementList?.openBalance
+                                ? `NGN ${formatCurrency(rptStatementList?.openBalance)}`
+                                : '0.0'
+                            }
+                          />
                         </Grid>
 
                         <Grid
@@ -210,7 +209,13 @@ export const StatementAccount = () => {
                           justifyContent="center"
                         >
                           <SubTitle title="Closing Balance" />
-                          <Details title="N/A" />
+                          <Details
+                            title={
+                              rptStatementList?.closeBalance
+                                ? `NGN ${formatCurrency(rptStatementList?.closeBalance)}`
+                                : '0.0'
+                            }
+                          />
                         </Grid>
 
                         {isOpen && (
@@ -223,7 +228,11 @@ export const StatementAccount = () => {
                             >
                               <SubTitle title="Uncleared Balance" />
                               <Details
-                                title={accDetailsResults.holdBal || 'N/A'}
+                                title={
+                                  rptStatementList?.unclearedBal
+                                    ? `NGN ${formatCurrency(rptStatementList?.unclearedBal)}`
+                                    : '0.0'
+                                }
                               />
                             </Grid>
 
@@ -234,7 +243,13 @@ export const StatementAccount = () => {
                               justifyContent="center"
                             >
                               <SubTitle title="Total COT" />
-                              <Details title="N/A" />
+                              <Details
+                                title={
+                                  rptStatementList?.cot
+                                    ? `NGN ${formatCurrency(rptStatementList?.cot)}`
+                                    : '0.0'
+                                }
+                              />
                             </Grid>
 
                             <Grid
@@ -244,7 +259,13 @@ export const StatementAccount = () => {
                               justifyContent="center"
                             >
                               <SubTitle title="Total VAT" />
-                              <Details title="N/A" />
+                              <Details
+                                title={
+                                  rptStatementList?.vat
+                                    ? `NGN ${formatCurrency(rptStatementList?.vat)}`
+                                    : '0.0'
+                                }
+                              />
                             </Grid>
 
                             <Grid
@@ -255,7 +276,11 @@ export const StatementAccount = () => {
                             >
                               <SubTitle title="DR Rate" />
                               <Details
-                                title={accDetailsResults.dintrate || 'N/A'}
+                                title={
+                                  rptStatementList?.drLimit
+                                    ? `NGN ${formatCurrency(rptStatementList?.drLimit)}`
+                                    : '0.0'
+                                }
                               />
                             </Grid>
 
@@ -267,7 +292,11 @@ export const StatementAccount = () => {
                             >
                               <SubTitle title="CR Rate" />
                               <Details
-                                title={accDetailsResults.cintrate || 'N/A'}
+                                title={
+                                  rptStatementList?.crLimit
+                                    ? `NGN ${formatCurrency(rptStatementList?.crLimit)}`
+                                    : '0.0'
+                                }
                               />
                             </Grid>
                           </>
@@ -304,7 +333,7 @@ export const StatementAccount = () => {
             }
             return (
               <div className="mx-5">
-                {renderEmptyTableBody(accDetailsResults)}
+                {renderEmptyTableBody(rptStatementList)}
               </div>
             );
           })()}

@@ -2,7 +2,7 @@
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { FilterSection } from './FilterSection';
 import { COLUMNS } from './COLUMNS';
 import { PrimaryIconButton } from '@/components/Buttons';
@@ -35,14 +35,14 @@ export const actionButtons: any = [
 export const DormancyCriteriaTable = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const { status } = useGetStatus();
-    const {
-      searchParams,
-      setSearchParams,
-      searchActive,
-      setSearchActive,
-      page,
-      setPage
-    } = usePersistedSearch<ISearchParams>('dormancy-criteria');
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('dormancy-criteria');
   const {
     totalPages,
     totalElements,
@@ -62,7 +62,7 @@ export const DormancyCriteriaTable = () => {
   }): React.ReactElement => {
     return (
       <Link
-        href={`/setup/operations/add-dormancy?isEditing=true&id=${sanitize(productCode)}`}
+        href={`/setup/operations/add-dormancy?isEditing=true&id=${DOMPurify.sanitize(productCode)}`}
       >
         <TableSingleAction actionName="Edit" />
       </Link>
@@ -78,7 +78,7 @@ export const DormancyCriteriaTable = () => {
         )}
       </Box>
       <Box sx={{ padding: '25px', width: '100%' }}>
-        { isGlobalLoading || isLoading ? (
+        {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <MuiTableContainer

@@ -30,7 +30,7 @@ async function fetchLoanOverdueReport(
   toastActions: IToastActions
 ): Promise<ILoanOverdueReportResponse | null> {
   try {
-    const urlEndpoint = 'ReportServices/LoanOverDueReport';
+    const urlEndpoint = '/api/ReportServices/LoanOverDueReport';
     const { data }: AxiosResponse<APIResponse> = await reportsAxiosInstance.get(
       urlEndpoint,
       {

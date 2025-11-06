@@ -17,7 +17,7 @@ export async function getAllAuditTrailReports(
 ) {
   let result: AuditTrailsResponse = {} as AuditTrailsResponse;
   try {
-    const urlEndpoint = `/ReportServices/AUDITTRAILREPORT?userId=${params?.userID}&startdate=${params?.startDate}&Enddate=${params?.endDate}`;
+    const urlEndpoint = `/api/ReportServices/AUDITTRAILREPORT?userId=${params?.userID}&startdate=${params?.startDate}&Enddate=${params?.endDate}`;
     const { data }: AxiosResponse<AuditTrailsResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,

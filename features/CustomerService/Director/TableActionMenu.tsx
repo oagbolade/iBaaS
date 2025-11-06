@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -67,7 +67,7 @@ export const TableActionMenu = ({
             }}
           >
             <Link
-              href={`/customer-service/director/view-director/?directorId=${sanitize(directorId)}&customerId=${sanitize(customerId)}`}
+              href={`/customer-service/director/view-director/?directorId=${DOMPurify.sanitize(directorId)}&customerId=${DOMPurify.sanitize(customerId)}`}
             >
               <TableMenuButton buttonTitle="View Details" />
             </Link>
@@ -78,7 +78,7 @@ export const TableActionMenu = ({
             }}
           >
             <Link
-              href={`/customer-service/director/create-mandate/?directorId=${sanitize(directorId)}&customerId=${sanitize(customerId)}&directorName=${sanitize(directorName)}`}
+              href={`/customer-service/director/create-mandate/?directorId=${DOMPurify.sanitize(directorId)}&customerId=${DOMPurify.sanitize(customerId)}&directorName=${DOMPurify.sanitize(directorName)}`}
             >
               <TableMenuButton buttonTitle="Create Mandate" />
             </Link>

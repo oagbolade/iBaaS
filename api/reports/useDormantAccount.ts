@@ -18,7 +18,7 @@ async function fetchAllDormantAccount(
   let result: GetAllDormantAccountResponse = {} as GetAllDormantAccountResponse;
 
   try {
-    const urlEndpoint = `/ReportServices/DormantAccounts?pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&branchCode=${params?.branchID}&startDate=${params?.startDate}&endDate=${params?.endDate}&searchWith=${params?.searchWith || ''}`;
+    const urlEndpoint = `/api/ReportServices/DormantAccounts?pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&branchCode=${params?.branchID}&startDate=${params?.startDate}&endDate=${params?.endDate}&searchWith=${params?.searchWith || ''}`;
     const { data }: AxiosResponse<GetAllDormantAccountResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,

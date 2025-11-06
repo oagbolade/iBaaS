@@ -28,7 +28,7 @@ export async function getOverdraftReport(
       searchWith: params?.searchWith || ''
     };
 
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/OverDraftReport?${new URLSearchParams(queryParams)}`;
+    const urlEndpoint = `/api/ReportServices/OverDraftReport?${new URLSearchParams(queryParams)}`;
     const { data }: AxiosResponse<IOverdraftReportResponse> =
       await axiosInstance({
         url: urlEndpoint,

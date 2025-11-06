@@ -16,7 +16,7 @@ export async function getProfitAndLossGroup(
   params: ISearchParams | null
 ): Promise<ProfitAndLossResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/ProfitOrLoss';
+    const urlEndpoint = '/api/ReportServices/ProfitOrLoss';
     const { data }: AxiosResponse<ProfitAndLossResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

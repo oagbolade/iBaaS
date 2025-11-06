@@ -16,7 +16,7 @@ spec:
         - name: nextjs-container
           image: nextjs-app:dev
           imagePullPolicy: Never
-          command: ["npm", "run", "dev"]
+          command: ['npm', 'run', 'dev']
           ports:
             - containerPort: 4000
           envFrom:
@@ -25,16 +25,29 @@ spec:
           env:
             - name: NODE_ENV
               value: development
+
+          # ---- Volume mounts ----
           volumeMounts:
+            # Mount your project source
             - name: src-code
               mountPath: /app
-              # Ensure your node_modules from container are not overridden by empty local folder
-              # Optional improvement: exclude node_modules (if present locally)
+              subPath: .
+
+            # Keep node_modules inside container (avoid empty override)
+            - name: node-modules
+              mountPath: /app/node_modules
+
+      # ---- Volumes ----
       volumes:
+        # Local source code mount
         - name: src-code
           hostPath:
-            path: /Users/oladayo/projects/firmly/frontend  # ⬅️ change this to your local path
+            path: /Users/oladayo.agbolade/Desktop/ibaas # ⬅️ CHANGE THIS
             type: Directory
+
+        # Internal node_modules folder — not mounted from host
+        - name: node-modules
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -44,7 +57,7 @@ spec:
   selector:
     app: nextjs-dev
   ports:
-    - name: http
+    - name: web
       protocol: TCP
       port: 4000
       targetPort: 4000

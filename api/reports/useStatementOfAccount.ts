@@ -17,7 +17,7 @@ export async function getStatementOfAccount(
 ) {
   let result: StatementOfAccountResponse = {} as StatementOfAccountResponse;
   try {
-    const urlEndpoint = `ReportServices/Statements?accountnumber=${params?.accountNumber}&startdate=${params?.startDate}&enddate=${params?.endDate}&searchid=${getStoredUser()?.profiles?.userid}&Reversal=${1}&accttype=${params?.productCode}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/api/ReportServices/Statements?accountnumber=${params?.accountNumber}&startdate=${params?.startDate}&enddate=${params?.endDate}&searchid=${getStoredUser()?.profiles?.userid}&Reversal=${1}&accttype=${params?.productCode}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<StatementOfAccountResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,

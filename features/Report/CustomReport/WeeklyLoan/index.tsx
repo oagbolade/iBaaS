@@ -78,7 +78,8 @@ export const WeeklyLoan = () => {
 
   const { loanWeeklyRepaymentList, totalRecords, isLoading } =
     useGetWeeklyLoanRepayment({
-      ...searchParams
+      ...searchParams,
+      pageNumber: String(page)
     });
 
   const { loanWeeklyRepaymentList: downloadData } = useGetWeeklyLoanRepayment({
@@ -139,8 +140,9 @@ export const WeeklyLoan = () => {
             }}
             setPage={setPage}
             page={page}
-            totalPages={totalRecords}
             ActionMenuProps={ActionMenu}
+            totalPages={Math.ceil(totalRecords / 10)}
+            totalElements={totalRecords}
           >
             {searchActive ? (
               loanWeeklyRepaymentList?.map((dataItem: any) => {

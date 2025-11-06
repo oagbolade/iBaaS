@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -67,7 +67,7 @@ export const TableActionMenu = ({
             }}
           >
             <Link
-              href={`/setup/product-gl/add-product?isEditing=true&productcode=${sanitize(productCode as string)}`}
+              href={`/setup/product-gl/add-product?isEditing=true&productcode=${DOMPurify.sanitize(productCode as string)}`}
             >
               <TableMenuButton buttonTitle="Edit Loan Product" />
             </Link>
@@ -78,7 +78,7 @@ export const TableActionMenu = ({
             }}
           >
             <Link
-              href={`/setup/product-gl/view-product-details/?productCode=${sanitize(productCode as string)}`}
+              href={`/setup/product-gl/view-product-details/?productCode=${DOMPurify.sanitize(productCode as string)}`}
             >
               <TableMenuButton buttonTitle=" View Product Details" />
             </Link>

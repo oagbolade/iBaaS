@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import {
   IPriviledgeList,
   SearchResultsGenericResponse
@@ -43,7 +43,7 @@ export async function filterUserByRoleSearch(
   let result: SearchResultsGenericResponse = {} as SearchResultsGenericResponse;
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/admin/search/userbyrole?size=10&page=${sanitize(String(params?.page ?? 1))}`;
+    const urlEndpoint = `${SEARCH_BASE_URL}/admin/search/userbyrole?size=10&page=${DOMPurify.sanitize(String(params?.page ?? 1))}`;
 
     const { data }: AxiosResponse<SearchRoleResponse> = await axiosInstance({
       url: urlEndpoint,
@@ -90,7 +90,7 @@ export async function filterRoleSearch(
   let result: SearchResultsGenericResponse = {} as SearchResultsGenericResponse;
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/admin/search/role?size=10&page=${sanitize(String(params?.page ?? 1))}`;
+    const urlEndpoint = `${SEARCH_BASE_URL}/admin/search/role?size=10&page=${DOMPurify.sanitize(String(params?.page ?? 1))}`;
 
     const { data }: AxiosResponse<SearchRoleResponse> = await axiosInstance({
       url: urlEndpoint,
@@ -136,7 +136,7 @@ async function deleteRole(
   };
 
   try {
-    const urlEndpoint = `/Admin/Product/DeleteRoleByRoleid?roleid=${sanitize(roleid ?? '')}`;
+    const urlEndpoint = `/Admin/Product/DeleteRoleByRoleid?roleid=${DOMPurify.sanitize(roleid ?? '')}`;
 
     const { data }: AxiosResponse<APIResponse> = await axiosInstance({
       url: urlEndpoint,
@@ -223,7 +223,7 @@ async function getRoleByID(
   };
 
   try {
-    const urlEndpoint = `/Admin/Product/GetRoleByRoleid?roleid=${sanitize(roleid ?? '')}`;
+    const urlEndpoint = `/Admin/Product/GetRoleByRoleid?roleid=${DOMPurify.sanitize(roleid ?? '')}`;
 
     const { data }: AxiosResponse<GetAllRolesResponse> = await axiosInstance({
       url: urlEndpoint,
@@ -257,7 +257,7 @@ async function getAssignedDataCaptureByRoleID(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetAssignedDataCaptureByRole?roleid=${sanitize(roleid ?? '')}`;
+    const urlEndpoint = `/General/Product/GetAssignedDataCaptureByRole?roleid=${DOMPurify.sanitize(roleid ?? '')}`;
 
     const { data }: AxiosResponse<GetAllRolesResponse> = await axiosInstance({
       url: urlEndpoint,
@@ -291,7 +291,7 @@ async function getAssignedAuthPriviledgesByRoleID(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetAssignedAuthPriv?roleid=${sanitize(roleid ?? '')}`;
+    const urlEndpoint = `/General/Product/GetAssignedAuthPriv?roleid=${DOMPurify.sanitize(roleid ?? '')}`;
 
     const { data }: AxiosResponse<GetAllRolesResponse> = await axiosInstance({
       url: urlEndpoint,
@@ -396,7 +396,7 @@ async function createRole(
   try {
     const urlEndpoint = `/Admin/Product/${
       isUpdating
-        ? `UpdateRoles?role_id=${sanitize(roleid ?? '')}`
+        ? `UpdateRoles?role_id=${DOMPurify.sanitize(roleid ?? '')}`
         : 'CreateRoles'
     }`;
     const { data }: AxiosResponse<CreateRoleResponse> = await axiosInstance({

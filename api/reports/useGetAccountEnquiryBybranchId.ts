@@ -28,7 +28,7 @@ async function fetchAccountEnquiry(
   toastActions: IToastActions
 ): Promise<IAccountEnquiryResponse | null> {
   try {
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/CustomerAccountEnquery`;
+    const urlEndpoint = '/api/ReportServices/CustomerAccountEnquery';
     const { data }: AxiosResponse<IAccountEnquiryResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,

@@ -1,19 +1,13 @@
 import React from 'react';
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import { exportData, dateFilter, inputFields } from '../style';
+import { inputFields } from '../style';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import colors from '@/assets/colors';
 import {
-  ActionButtonWithPopper,
   ActionButton,
-  BackButton
 } from '@/components/Revamp/Buttons';
-import { ExportIcon } from '@/assets/svg';
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
@@ -27,15 +21,16 @@ type Props = {
 };
 export const FilterSection = ({ branches, onSearch }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('chart-account');
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
+
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
     searchWith: searchParams?.searchWith ?? ''
   };
+  
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       branchID:
@@ -47,6 +42,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
     };
     onSearch?.(params);
   };
+
   return (
     <Box marginTop={3}>
       <Formik

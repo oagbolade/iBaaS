@@ -1176,7 +1176,7 @@ export async function generateProductCode(
 }
 
 export function useGenerateProductCode(productClass: string) {
-  // const toastActions = useContext(ToastMessageContext);
+ 
   const fallback = { productCode: '' } as IProductCode;
   const {
     data = fallback,
@@ -1189,4 +1189,55 @@ export function useGenerateProductCode(productClass: string) {
   });
 
   return { data, isError, isLoading };
+}
+
+async function fetchAllLoanProducts(
+  toastActions: IToastActions
+): Promise<UseGetProductTypeResponse> {
+  let result: UseGetProductTypeResponse = {
+    responseCode: '',
+    responseDescription: '',
+    data: [] as IProdCodeType[]
+  };
+
+  try {
+    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetLoanProducts`;
+
+    const { data }: AxiosResponse<UseGetProductTypeResponse> =
+      await axiosInstance({
+        url: urlEndpoint,
+        method: 'GET',
+        headers: {
+          'Tenant-ID': getStoredUser()?.companyCode || '',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getStoredUser()?.token}`
+        }
+      });
+
+    const { message, title, severity } = globalErrorHandler(data);
+    toast(message, title, severity, toastActions);
+
+    result = data;
+  } catch (errorResponse) {
+    const { message, title, severity } = globalErrorHandler({}, errorResponse);
+    toast(message, title, severity, toastActions);
+  }
+
+  return result;
+}
+
+export function useFetchAllLoanProducts(): UseGetProductTypeResponse {
+  const toastActions = useContext(ToastMessageContext);
+  const fallback = [] as UseGetProductTypeResponse;
+
+  const {
+    data = fallback,
+    isError,
+    isLoading
+  } = useQuery({
+    queryKey: [queryKeys.fetchAllLoanProducts],
+    queryFn: () => fetchAllLoanProducts(toastActions)
+  });
+
+  return { ...data, isError, isLoading };
 }

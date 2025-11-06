@@ -30,11 +30,11 @@ const actionButtons: any = [
         customStyle={{
           ...submitButton,
           width: { mobile: '119px', desktop: '218px' },
-          height: { mobile: '30px', desktop: '40px' },
+          height: { mobile: '30px', desktop: '40px' }
         }}
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 export const Branch = () => {
@@ -47,20 +47,20 @@ export const Branch = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('company-branches');
   const {
     totalPages,
     totalElements,
     data: branchData,
-    isLoading,
+    isLoading
   } = useFilterBranchSearch({ ...searchParams, page });
   const handleSearch = async (params: any) => {
     setSearchParams(params);
     setSearchActive(true);
   };
   const ActionMenu = ({
-    branchCode,
+    branchCode
   }: {
     branchCode: string;
   }): React.ReactElement => {
@@ -87,10 +87,10 @@ export const Branch = () => {
           sx={{
             position: { mobile: 'relative' },
             bottom: '25px',
-            width: '100%',
+            width: '100%'
           }}
         >
-          { isGlobalLoading || isLoading ? (
+          {isGlobalLoading || isLoading ? (
             <FormSkeleton noOfLoaders={3} />
           ) : (
             <MuiTableContainer
@@ -100,7 +100,7 @@ export const Branch = () => {
                 mainTitle: 'Manage Branch',
                 secondaryTitle:
                   'See a directory of all branches in this system.',
-                hideFilterSection: true,
+                hideFilterSection: true
               }}
               ActionMenuProps={ActionMenu}
               totalPages={totalPages}

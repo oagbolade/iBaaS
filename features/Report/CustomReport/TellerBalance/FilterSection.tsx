@@ -27,18 +27,19 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
   });
 
   const initialValues = {
-    branchID: searchParams?.branchID ?? '',
-    customerID: searchParams?.customerID ?? '',
+    branchCode: searchParams?.branchCode ?? '',
     searchWith: searchParams?.searchWith ?? '',
-    reportDate: searchParams?.reportDate ?? ''
+    startOfDate: searchParams?.startDate ?? '',
+    endOfDate: searchParams?.endDate ?? ''
   };
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     const params: ISearchParams = {
-      branchID: values.branchID.toString().length > 0 ? values.branchID : null,
-      customerID: values.customerID.length > 0 ? values.customerID : null,
+      branchCode:
+        values.branchCode.toString().length > 0 ? values.branchCode : null,
       searchWith: values.searchWith ? values.searchWith : null,
-      reportDate: dateValue[0]?.format('YYYY-MM-DD') || ''
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
     };
     await onSearch?.(params);
     setSubmitting(false);
@@ -62,7 +63,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
               <Grid item mobile={12} tablet={4} justifyContent="center">
                 <FormSelectField
                   customStyle={{ width: setWidth(), ...inputFields }}
-                  name="branchID"
+                  name="branchCode"
                   options={mappedBranches}
                   label="Branch Name"
                 />
@@ -77,10 +78,10 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                 <FormTextInput
                   customStyle={{ width: setWidth(), ...inputFields }}
                   icon={<SearchIcon />}
-                  name="search"
+                  name="searchWith"
                   placeholder="Search a customer by Till Name or Till Number"
                   label="Till Name/Number"
-                />
+                />{' '}
               </Grid>
               <Grid
                 item

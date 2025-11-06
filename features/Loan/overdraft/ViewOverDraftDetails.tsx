@@ -4,7 +4,7 @@ import Link from 'next/link';
 import moment from 'moment';
 import { Box, Typography, Button } from '@mui/material';
 import { useSearchParams } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { detailColumn } from './COLUMN';
 import { TableActionMenu } from './TableActionMenu';
 import colors from '@/assets/colors';
@@ -88,7 +88,7 @@ const ViewOverDraftDetails = () => {
           }}
           aria-disabled={shouldDisableOverdraft}
           tabIndex={shouldDisableOverdraft ? -1 : undefined}
-          href={`/loan/overdrafts/set-overdraft?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(
+          href={`/loan/overdrafts/set-overdraft?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(
             customerId
           )}&actionType=set`}
         >

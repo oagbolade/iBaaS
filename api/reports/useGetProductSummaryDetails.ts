@@ -24,7 +24,7 @@ async function getProductSummaryDetails(
   toastActions: IToastActions
 ): Promise<GetProductSummaryDetailsReport | null> {
   try {
-    const urlEndpoint = '/ReportServices/ProductSummaryDetails';
+    const urlEndpoint = '/api/ReportServices/ProductSummaryDetails';
     const { data }: AxiosResponse<GetProductSummaryDetailsReport> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

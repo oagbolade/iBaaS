@@ -25,7 +25,7 @@ async function fetchInflowOutflowReport(
   toastActions: IToastActions
 ): Promise<InflowOutflowReportResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/InflowOutflowReport';
+    const urlEndpoint = '/api/ReportServices/InflowOutflowReport';
     const { data }: AxiosResponse<InflowOutflowReportResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

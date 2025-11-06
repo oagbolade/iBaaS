@@ -28,7 +28,7 @@ export async function getPostingJournal(
       endDate: params?.endDate || '',
       searchWith: params?.searchWith || ''
     };
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/PostingJournal?${new URLSearchParams(queryParams)}`;
+    const urlEndpoint = `/api/ReportServices/PostingJournal?${new URLSearchParams(queryParams)}`;
     const { data }: AxiosResponse<IPostingJournalResponse> =
       await axiosInstance({
         url: urlEndpoint,

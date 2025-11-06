@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios, { AxiosRequestConfig, AxiosHeaders } from 'axios';
 import {
   AuthFaBaseUrl,
@@ -57,7 +56,8 @@ export const EndOfDayAxiosInstance = axios.create({
 });
 
 export const reportsAxiosInstance = axios.create({
-  baseURL: REPORT_BASE_URL
+  baseURL: REPORT_BASE_URL,
+  ...tenantID
 });
 
 // Any status code that lie within the range of 2xx causes this function to trigger

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -113,7 +113,7 @@ export const CustomerAccountTableActionMenu = ({
               }}
               aria-disabled={shouldDisableEditAccount}
               tabIndex={shouldDisableEditAccount ? -1 : undefined}
-              href={`/customer-service/customer/create-account?isEditing=true&accountNumber=${sanitize(accountNumber)}&branchCode=${sanitize(branchCode)}`}
+              href={`/customer-service/customer/create-account?isEditing=true&accountNumber=${DOMPurify.sanitize(accountNumber)}&branchCode=${DOMPurify.sanitize(branchCode)}`}
             >
               <TableMenuButton
                 disabled={shouldDisableEditAccount}
@@ -132,7 +132,7 @@ export const CustomerAccountTableActionMenu = ({
               }}
               aria-disabled={shouldDisableManageMandate}
               tabIndex={shouldDisableManageMandate ? -1 : undefined}
-              href={`/customer-service/customer/mandate/view-mandate/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
+              href={`/customer-service/customer/mandate/view-mandate/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}`}
             >
               <TableMenuButton
                 disabled={shouldDisableManageMandate}
@@ -151,7 +151,7 @@ export const CustomerAccountTableActionMenu = ({
               }}
               aria-disabled={shouldDisableManageLien}
               tabIndex={shouldDisableManageLien ? -1 : undefined}
-              href={`/customer-service/customer/lien/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
+              href={`/customer-service/customer/lien/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}`}
             >
               <TableMenuButton
                 disabled={shouldDisableManageLien}
@@ -172,7 +172,7 @@ export const CustomerAccountTableActionMenu = ({
                   }}
                   aria-disabled={shouldDisableChequeBookEdit}
                   tabIndex={shouldDisableChequeBookEdit ? -1 : undefined}
-                  href={`/customer-service/customer/edit-chequebook/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
+                  href={`/customer-service/customer/edit-chequebook/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}`}
                 >
                   <TableMenuButton
                     disabled={shouldDisableChequeBookEdit}
@@ -191,7 +191,7 @@ export const CustomerAccountTableActionMenu = ({
                   }}
                   aria-disabled={shouldDisableRangeCheque}
                   tabIndex={shouldDisableRangeCheque ? -1 : undefined}
-                  href={`/customer-service/customer/range-cheque/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
+                  href={`/customer-service/customer/range-cheque/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}`}
                 >
                   <TableMenuButton
                     disabled={shouldDisableRangeCheque}
@@ -212,7 +212,7 @@ export const CustomerAccountTableActionMenu = ({
               }}
               aria-disabled={shouldDisableMoveCASAAccount}
               tabIndex={shouldDisableMoveCASAAccount ? -1 : undefined}
-              href={`/customer-service/customer/casa-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
+              href={`/customer-service/customer/casa-account/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}`}
             >
               <TableMenuButton
                 disabled={shouldDisableMoveCASAAccount}
@@ -234,7 +234,7 @@ export const CustomerAccountTableActionMenu = ({
                 }}
                 aria-disabled={shouldDisableAccountReactivation}
                 tabIndex={shouldDisableAccountReactivation ? -1 : undefined}
-                href={`/customer-service/customer/reactivate-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
+                href={`/customer-service/customer/reactivate-account/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}`}
               >
                 <TableMenuButton
                   disabled={shouldDisableAccountReactivation}
@@ -254,7 +254,7 @@ export const CustomerAccountTableActionMenu = ({
               }}
               aria-disabled={shouldDisableCloseAccount}
               tabIndex={shouldDisableCloseAccount ? -1 : undefined}
-              href={`/customer-service/customer/close-account/?accountNumber=${sanitize(accountNumber)}&customerId=${sanitize(customerId)}`}
+              href={`/customer-service/customer/close-account/?accountNumber=${DOMPurify.sanitize(accountNumber)}&customerId=${DOMPurify.sanitize(customerId)}`}
             >
               <TableMenuButton
                 disabled={shouldDisableCloseAccount}

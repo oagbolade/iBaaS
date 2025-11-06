@@ -97,7 +97,7 @@ const ViewAuditDetails: React.FC<{
                   fontWeight: 400,
                   lineHeight: '20px',
                   textTransform: 'uppercase',
-                  fontFeatureSettings: "'liga' off, 'clig' off",
+                  fontFeatureSettings: '\'liga\' off, \'clig\' off',
                   marginBottom: '4px'
                 }}
               >
@@ -106,7 +106,7 @@ const ViewAuditDetails: React.FC<{
               <h2
                 style={{
                   color: `${colors.neutral1000}`,
-                  fontFeatureSettings: "'liga' off, 'clig' off",
+                  fontFeatureSettings: '\'liga\' off, \'clig\' off',
                   fontSize: '16px',
                   fontStyle: 'normal',
                   fontWeight: 600,
@@ -125,7 +125,7 @@ const ViewAuditDetails: React.FC<{
 
 export const AuditTrail = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const [search, setSearch] = useState<boolean>(false);
+  const [search, setSearch] = useState<boolean>(true);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const [openModel, setopenModel] = useState(false);
@@ -175,12 +175,15 @@ export const AuditTrail = () => {
   const { auditTrailList: getAllAuditTrailsData, isLoading } =
     useGetAllAuditTrailReports({
       ...searchParams,
-      page
+      pageNumber: String(page),
+      pageSize: 10,
+      getAll: false
+
     });
 
   const { auditTrailList: downloadData } = useGetAllAuditTrailReports({
     ...searchParams,
-    page,
+      pageNumber: String(page),
     getAll: true
   });
 
@@ -188,7 +191,7 @@ export const AuditTrail = () => {
     if (downloadData?.length > 0) {
       setExportData(downloadData);
     }
-  }, [downloadData]);
+  }, [downloadData, setExportData]);
 
   return (
     <Box

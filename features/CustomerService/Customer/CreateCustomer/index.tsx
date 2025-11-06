@@ -81,7 +81,6 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
   ) => {
     React.useEffect(() => {
       const atLeastOneFieldHasBeenVisited = Object.keys(touched).length > 0;
-
       if (atLeastOneFieldHasBeenVisited) {
         handleCompletedFields(values);
       }
@@ -92,10 +91,7 @@ const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
     CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
   >();
 
-  useUpdateCompletion<
-    CreateIndividualCustomerFormValues | CreateCorporateCustomerFormValues
-  >(touched, values);
-
+  useUpdateCompletion(touched, values);
   return null;
 };
 
@@ -114,9 +110,25 @@ export const CreateCustomerContainer = () => {
     setAccountOfficerValue,
     setIntroducerIdValue
   } = React.useContext(CustomerCreationContext);
+
+  const [introducerNumber, setIntroducerNumber] = React.useState<string | null>(
+    null
+  );
+  const [isClient, setIsClient] = React.useState(false);
+
+  // Only run on client
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsClient(true);
+      const stored = localStorage.getItem('introducerType');
+      setIntroducerNumber(stored);
+    }
+  }, []);
+
   React.useEffect(() => {
     setCustomerType(getCustomerType);
   }, [getCustomerType, setCustomerType]);
+
   const { countries, isLoading: areContriesLoading } = useGetAllCountries();
   const { towns, isLoading: areTownsLoading } = useGetAllTown();
   const { states, isLoading: areStatesLoading } = useGetAllStates();
@@ -159,7 +171,7 @@ export const CreateCustomerContainer = () => {
   }, [customerResult, setAccountOfficerValue, setIntroducerIdValue]);
 
   const actionButtons: any = [
-    <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
+    <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }} key="submit">
       <PrimaryIconButton
         onClick={triggerSubmission}
         isLoading={isLoading}
@@ -182,8 +194,8 @@ export const CreateCustomerContainer = () => {
     setCompleted,
     validationKeysMapper
   );
-  const introducerNumber = localStorage.getItem('introducerType');
-  // eslint-disable-next-line no-nested-ternary
+
+  // Determine introType value safely
   const val =
     // eslint-disable-next-line no-nested-ternary
     introducerNumber === 'staff'
@@ -191,6 +203,7 @@ export const CreateCustomerContainer = () => {
       : introducerNumber === 'customer'
         ? 2
         : null;
+
   const onSubmit = async (values: any) => {
     const emailalert = (
       document.querySelector('#test-email') as HTMLInputElement
@@ -243,28 +256,22 @@ export const CreateCustomerContainer = () => {
     }
 
     if (!isEditing) {
-      // Reset completion progress when creating a new customer
       setCompleted(progressCompletionInitialValues);
     }
   }, [customerResult, isEditing]);
 
   React.useEffect(() => {
     const submit = document.getElementById('submitButton');
-
-    if (isSubmitting) {
-      submit?.click();
+    if (isSubmitting && submit) {
+      submit.click();
     }
-
-    return () => {
-      setIsSubmitting(false);
-    };
+    return () => setIsSubmitting(false);
   }, [isSubmitting]);
 
   React.useEffect(() => {
     if (customerResult?.customerType === individual) {
       setCustomerType('individual');
     }
-
     if (customerResult?.customerType === corporate) {
       setCustomerType('corporate');
     }
@@ -291,33 +298,21 @@ export const CreateCustomerContainer = () => {
         });
 
   const sex = customerResult?.sex === 'Male' ? '1' : '0';
-
   const today = dayjs().format('YYYY-MM-DD');
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        marginTop: '50px'
-      }}
-    >
+    <Box sx={{ width: '100%', marginTop: '50px' }}>
       <TopActionsArea actionButtons={actionButtons} />
-      <Box
-        sx={{
-          paddingX: '25px',
-          width: '100%'
-        }}
-      >
+      <Box sx={{ paddingX: '25px', width: '100%' }}>
         <PageTitle
           title={`${isEditing ? 'Edit Customer' : 'Create Customer'}`}
           styles={BatchTitle}
         />
 
         <Formik
-          onSubmit={(values) => onSubmit(values)}
+          onSubmit={onSubmit}
           enableReinitialize
           initialValues={
-            // Hardcoded relationtype as string and menu id as number, we need to get more context as to what it is
             isEditing
               ? {
                   acctOfficer: customerResult?.acctOfficer,
@@ -388,7 +383,7 @@ export const CreateCustomerContainer = () => {
                   signacct: customerResult?.signacct,
                   smsalert: customerResult?.smsalert,
                   ssn: customerResult?.ssn ?? '',
-                  staffOrDirector: 0, // hardcoded as 0 for now
+                  staffOrDirector: 0,
                   statecode: customerResult?.statecode,
                   surName: customerResult?.surName,
                   taxIDNo: customerResult?.taxIDNo,

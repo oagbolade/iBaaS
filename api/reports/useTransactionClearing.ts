@@ -1,19 +1,15 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
 import { IToastActions } from '@/constants/types';
 import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
-import {
-  GetAllTransactionClearingReportResponse,
-  TrailBalanceResponse
-} from '@/api/ResponseTypes/reports';
+import { GetAllTransactionClearingReportResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
-import { getCurrentIsoDate } from '@/utils/getCurrentDate';
 
 export async function geTransactionClearing(
   toastActions: IToastActions,
@@ -22,7 +18,7 @@ export async function geTransactionClearing(
   let result: GetAllTransactionClearingReportResponse =
     {} as GetAllTransactionClearingReportResponse;
   try {
-    const urlEndpoint = `/ReportServices/TransactionsinClearingReport?pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
+    const urlEndpoint = `/api/ReportServices/TransactionsinClearingReport?pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
     const { data }: AxiosResponse<GetAllTransactionClearingReportResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
@@ -31,8 +27,8 @@ export async function geTransactionClearing(
           endDate: params?.endDate,
           pageSize: Number(params?.pageSize) || 20,
           pageNumber: Number(params?.pageNumber) || 1,
-          branchCode: params?.branchID,
-          searchWith: params?.customerID
+          branchCode: params?.branchCode,
+          searchWith: params?.searchWith
         },
         headers: {
           'Content-Type': 'application/json',
@@ -62,15 +58,15 @@ export function useGetTransactionClearing(params: ISearchParams | null) {
       params?.status?.toString(),
       params?.startDate,
       params?.endDate,
-      params?.customerID,
-      params?.branchID
+      params?.branchCode,
+      params?.searchWith
     ],
     queryFn: () => geTransactionClearing(toastActions, params || {}),
     enabled: Boolean(
       (params?.startDate?.toString() || '').length > 0 ||
         (params?.status || '').length > 0 ||
-        (params?.branchID || '').length > 0 ||
-        (params?.endDate || '').length > 0
+        (params?.branchCode || '').length > 0 ||
+        (params?.searchWith || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

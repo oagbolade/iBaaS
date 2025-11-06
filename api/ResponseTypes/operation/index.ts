@@ -53,7 +53,18 @@ export interface EODResponse {
     runDate: string;
   }>;
   eodMetrics?: IEodMetrics;
-  EobException?: IError[];
+  eobException?: Array<{
+    id: number;
+    lastRunDate: string;
+    startTime: string;
+    endTime: string;
+    totalUncompletedPercetage: string;
+    totalCompletedPercetage: string;
+    userId: string;
+    fullName: string;
+    status: number;
+    createdOn: string;
+  }>;
 }
 
 export interface CreateEODConfigureFormValues {

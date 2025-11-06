@@ -2,6 +2,7 @@
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { format } from 'date-fns';
 import { COLUMNS } from './COLUMNS';
 import { FilterSection } from './FilterSection';
 import { EndOfDayForm } from './EndOfDayForm';
@@ -64,7 +65,23 @@ export const EndOfDaySetupTable = () => {
     ...searchParams,
     page
   });
+  const formatDateOnly = (dateStr: string | null | undefined) => {
+    if (!dateStr) return 'N/A';
+    try {
+      return format(new Date(dateStr), 'yyyy-MM-dd');
+    } catch {
+      return dateStr;
+    }
+  };
 
+  const formatTimeOnly = (dateStr: string | null | undefined) => {
+    if (!dateStr) return 'N/A';
+    try {
+      return format(new Date(dateStr), 'HH:mm:ss');
+    } catch {
+      return dateStr;
+    }
+  };
   const actionButtons = [
     <Box sx={{ display: 'flex' }} ml={{ mobile: 2, desktop: 0 }}>
       <PrimaryIconButton
@@ -114,16 +131,16 @@ export const EndOfDaySetupTable = () => {
                 return (
                   <StyledTableRow key={dataItem.id}>
                     <StyledTableCell component="th" scope="row">
-                      {dataItem.fullName}
+                      {dataItem.fullName || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.startTime}
+                      {formatDateOnly(dataItem.lastRunDate) || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.endTime}
+                      {formatTimeOnly(dataItem.startTime) || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem.lastRunDate}
+                      {formatTimeOnly(dataItem.endTime) || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       <Status

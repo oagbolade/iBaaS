@@ -2,7 +2,7 @@
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { FilterSection } from './FilterSection';
 import { NodeColumns } from './Node_COLUMNS';
 import { classColumns } from './Class_COLUMNS';
@@ -12,7 +12,7 @@ import { ActionButton } from '@/components/Revamp/Buttons';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import {
   submitButton,
-  cancelButton,
+  cancelButton
 } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
 import { MuiTableContainer } from '@/components/Table';
 import { tabStyle } from '@/features/Setup/ProductAndGL/style';
@@ -26,7 +26,7 @@ import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import {
   SearchGLClassResponse,
-  SearchGLNodeResponse,
+  SearchGLNodeResponse
 } from '@/api/ResponseTypes/setup';
 import { useFilterGLClassSearch } from '@/api/setup/useGeneralClass';
 import { Status } from '@/components/Labels';
@@ -48,7 +48,7 @@ export const actionButtons: any = [
         buttonTitle="Add GL Class"
       />
     </Link>
-  </Box>,
+  </Box>
 ];
 
 type ClassProps = {
@@ -71,24 +71,24 @@ const GLNodeTable = ({
   search,
   searchParams,
   page,
-  setPage,
+  setPage
 }: NodeProps) => {
   const {
     totalPages,
     totalElements,
     data: glNodeData,
-    isLoading,
+    isLoading
   } = useFilterGLNodeSearch({ ...searchParams, page });
   const ActionMenu = ({
     glNodeCode,
-    prodCode,
+    prodCode
   }: {
     glNodeCode: string;
     prodCode: string;
   }): React.ReactElement => {
     return (
       <Link
-        href={`/setup/product-gl/add-gl-node?isEditing=true&id=${sanitize(glNodeCode)}&node=${sanitize(prodCode)}`}
+        href={`/setup/product-gl/add-gl-node?isEditing=true&id=${DOMPurify.sanitize(glNodeCode)}&node=${DOMPurify.sanitize(prodCode)}`}
       >
         <TableSingleAction actionName="Edit" />
       </Link>
@@ -107,7 +107,7 @@ const GLNodeTable = ({
             hideFilterSection: true,
             mainTitle: 'GL Node',
             secondaryTitle:
-              'See a directory of all GL Node setup in this system.',
+              'See a directory of all GL Node setup in this system.'
           }}
           ActionMenuProps={ActionMenu}
           totalPages={totalPages}
@@ -173,17 +173,17 @@ const GLClassTable = ({
   searchParams,
   search,
   page,
-  setPage,
+  setPage
 }: ClassProps) => {
   const {
     totalPages,
     totalElements,
     data: glClassData,
-    isLoading,
+    isLoading
   } = useFilterGLClassSearch({ ...searchParams, page });
 
   const ActionMenu = ({
-    glClassCode,
+    glClassCode
   }: {
     glClassCode: string;
   }): React.ReactElement => {
@@ -209,7 +209,7 @@ const GLClassTable = ({
             mainTitle: 'GL Class',
             secondaryTitle:
               'See a directory of all GL Class setup in this system.',
-            hideFilterSection: true,
+            hideFilterSection: true
           }}
           ActionMenuProps={ActionMenu}
           totalPages={totalPages}
@@ -274,7 +274,7 @@ const PreviewTable = () => {
     searchActive,
     setSearchActive,
     page,
-    setPage,
+    setPage
   } = usePersistedSearch<ISearchParams>('general-ledgers-class');
   const {
     searchParams: searchParamsNode,
@@ -282,7 +282,7 @@ const PreviewTable = () => {
     searchActive: searchActiveNode,
     setSearchActive: setSearchActiveNode,
     page: pageNode,
-    setPage: setPageNode,
+    setPage: setPageNode
   } = usePersistedSearch<ISearchParams>('general-ledgers-node');
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -310,7 +310,7 @@ const PreviewTable = () => {
       search={searchActive}
       page={page}
       setPage={setPage}
-    />,
+    />
   ];
   return (
     <div>

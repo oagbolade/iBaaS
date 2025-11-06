@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation';
@@ -44,10 +44,27 @@ export const RunEndOfDayForm = ({ handleClose, closeModalQuickly }: Props) => {
   const handleChange = (value: string) => {
     setAddValues(value);
   };
-  const { mutate, isPending } = useCreateRunEOD();
+  const { mutate, isPending, task, eodMetrics, eobException } =
+    useCreateRunEOD();
+  useEffect(() => {
+    if (task || eodMetrics || eobException) {
+      try {
+        // Save full objects (not just stringified primitives)
+        localStorage.setItem('EOD_TASKS', JSON.stringify(task || []));
+        localStorage.setItem('EOD_METRICS', JSON.stringify(eodMetrics || null));
+        localStorage.setItem(
+          'EOD_EXCEPTIONS',
+          JSON.stringify(eobException || [])
+        );
+      } catch (err) {
+        throw new Error('Failed to save data to localStorage');
+      }
+    }
+  }, [task, eodMetrics, eobException]);
   const handleContinue = () => {
     mutate();
   };
+
   return (
     <Box sx={AccountPasswordContainer}>
       <Box sx={AccountPasswordTitleContainer}>

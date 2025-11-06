@@ -28,7 +28,7 @@ export async function getMaturityLoan(
       enddate: params?.endDate || '',
       searchWith: params?.searchWith || ''
     };
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/LoanMaturityReport?${new URLSearchParams(queryParams)}`;
+    const urlEndpoint = `/api/ReportServices/LoanMaturityReport?${new URLSearchParams(queryParams)}`;
     const { data }: AxiosResponse<ILoanMaturityResponse> = await axiosInstance({
       url: urlEndpoint,
       method: 'GET',
@@ -49,7 +49,7 @@ export async function getMaturityLoan(
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
     toast(message, title, severity, toastActions);
   }
-  
+
   if (
     result?.loanMaturityList === null ||
     result?.loanMaturityList === undefined

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TableMenuButton } from '@/components/Buttons';
 import { CustomerServiceContext } from '@/features/CustomerService/CustomerServiceContext';
 import { StyledMenu } from '@/components/Table';
@@ -64,7 +64,7 @@ export const TreasuryTableActionMenu = ({
             }}
           >
             <Link
-              href={`/setup/product-gl/add-treasury-product?isEditing=true&productcode=${sanitize(productCode as string)}`}
+              href={`/setup/product-gl/add-treasury-product?isEditing=true&productcode=${DOMPurify.sanitize(productCode as string)}`}
             >
               <TableMenuButton buttonTitle="Edit Treasury Product" />
             </Link>
@@ -75,7 +75,7 @@ export const TreasuryTableActionMenu = ({
             }}
           >
             <Link
-              href={`/setup/product-gl/view-product-details/?productCode=${sanitize(productCode as string)}`}
+              href={`/setup/product-gl/view-product-details/?productCode=${DOMPurify.sanitize(productCode as string)}`}
             >
               <TableMenuButton buttonTitle=" View Treasury Product Details" />
             </Link>

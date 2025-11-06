@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Box } from '@mui/material';
-import { sanitize } from 'dompurify';
+import DOMPurify from 'dompurify';
 import { TopActionsArea, LoanDetails } from '@/components/Revamp/Shared';
 import {
   ActionButtonWithPopper,
@@ -56,15 +56,15 @@ export const ViewLoan = () => {
   const runningActions = [
     {
       label: 'Loan Restructure',
-      href: `/loan/loan-directory/restructure-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode || loanAccDetails?.productCode || '')}`
+      href: `/loan/loan-directory/restructure-loan/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(action)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}&productCode=${DOMPurify.sanitize(productCode || loanAccDetails?.productCode || '')}`
     },
     {
       label: 'Partial Pay',
-      href: `/loan/loan-directory/partial-pay/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`
+      href: `/loan/loan-directory/partial-pay/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(action)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}`
     },
     {
       label: 'Terminate Loan',
-      href: `/loan/loan-directory/terminate-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}`
+      href: `/loan/loan-directory/terminate-loan/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(action)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}`
     }
   ];
 
@@ -98,7 +98,7 @@ export const ViewLoan = () => {
       return [
         <Link
           key="disburse-action"
-          href={`/loan/loan-directory/disburse-loan/?accountNumber=${sanitize(accountNumber as string)}&action=${sanitize(action)}&settlementAccount=${sanitize(settlementAccount)}&productCode=${sanitize(productCode || '')}&customerId=${sanitize(accDetailsResults?.customerid || '')}`}
+          href={`/loan/loan-directory/disburse-loan/?accountNumber=${DOMPurify.sanitize(accountNumber as string)}&action=${DOMPurify.sanitize(action)}&settlementAccount=${DOMPurify.sanitize(settlementAccount)}&productCode=${DOMPurify.sanitize(productCode || '')}&customerId=${DOMPurify.sanitize(accDetailsResults?.customerid || '')}`}
         >
           <ActionButton
             customStyle={{ ...cancelButton }}

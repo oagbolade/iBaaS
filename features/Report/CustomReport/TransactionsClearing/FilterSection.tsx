@@ -28,7 +28,6 @@ export const FilterSection = ({ onSearch, branches, status }: Props) => {
     status
   });
   const { setWidth } = useCurrentBreakpoint();
-
   const initialValues = React.useMemo(
     () => ({
       branchCode: searchParams?.branchCode ?? '',

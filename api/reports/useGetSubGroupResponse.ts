@@ -20,7 +20,7 @@ async function fetchGlMainGroupReport(
   toastActions: IToastActions
 ): Promise<IGlMainGroupResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/GLMainGroupReport';
+    const urlEndpoint = '/api/ReportServices/GLMainGroupReport';
     const { data }: AxiosResponse<IGlMainGroupResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {

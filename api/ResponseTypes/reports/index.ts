@@ -52,22 +52,22 @@ export interface StatementRecord {
 export interface IAccountStatementList {
   pagedRecords: StatementRecord[];
   accountnumber: string;
-  cot: number;
+  cot: string;
   fullname: string;
-  principal: number;
-  accruedInt: number;
+  principal: string;
+  accruedInt: string;
   startdate: string;
   matdate: string;
-  tenor: number;
-  vat: number;
-  drLimit: number;
-  bkBalance: number | null;
-  openBalance: number | null;
-  unclearedBal: number;
+  tenor: string;
+  vat: string;
+  drLimit: string;
+  bkBalance: string | null;
+  openBalance: string | null;
+  unclearedBal: string;
   address: string;
   branchName: string;
-  crLimit: number;
-  closeBalance: number | null;
+  crLimit: string;
+  closeBalance: string | null;
   refNo: string;
 }
 export interface StatementOfAccountResponse extends IFetchingState {
