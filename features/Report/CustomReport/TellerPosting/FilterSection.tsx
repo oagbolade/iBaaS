@@ -79,7 +79,9 @@ export const FilterSection = ({ onSearch }: Props) => {
               CustomDateRangePicker={
                 <DateCalendar
                   value={endDate}
-                  onChange={(date) => setDateValue([dateValue[0], date])}
+                  onChange={(date) =>
+                    setDateValue([dateValue[0], date], { allowSingle: true })
+                  }
                 />
               }
               customStyle={{ ...dateFilter }}
