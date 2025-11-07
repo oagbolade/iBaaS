@@ -1,1 +1,1 @@
-export const COLUMN = ['GL Account Number', 'Account Name'];
+export const COLUMN = ['GL Account Number', 'GL Account Name'];
