@@ -23,7 +23,7 @@ export const TopOverViewSingeCalendarSection = () => {
         value={dateValue[0]}
         onChange={(newValue) => {
           if (newValue && !newValue.isSame(dateValue[0], 'day')) {
-            setDateValue([newValue, dateValue[1]]);
+            setDateValue([newValue, dateValue[1]], { allowSingle: true });
           }
         }}
       />

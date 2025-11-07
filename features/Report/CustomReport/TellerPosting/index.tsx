@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import { FilterSection } from './FilterSection';
@@ -18,6 +18,10 @@ import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { getStoredUser } from '@/utils/user-storage';
+import { useGetSystemDate } from '@/api/general/useSystemDate';
+import DateRangePickerContextProvider from '@/context/DateRangePickerContext';
+
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -34,6 +38,7 @@ const TellerPostingActions = ({ data }: ActionProps) => {
 };
 
 export const TellerPosting = () => {
+  const { sysmodel } = useGetSystemDate();
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
@@ -44,10 +49,27 @@ export const TellerPosting = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('teller-posting');
 
-  const { setExportData, setReportType } =
-    useContext(DownloadReportContext);
+  const { setExportData, setReportType } = useContext(DownloadReportContext);
 
   const { search } = searchParams || {};
+
+ 
+  const userId = getStoredUser()?.profiles?.userid;
+useEffect(() => {
+  if (userId && !searchActive && sysmodel?.systemDate) {
+    const systemDate = sysmodel.systemDate.split("T")[0];
+
+    setSearchParams({
+      search: userId,
+      reportDate: systemDate,
+      endDate: systemDate,
+      pageNumber: "1",
+    });
+
+    setSearchActive(true);
+    setPage(1);
+  }
+}, [userId, searchActive, sysmodel?.systemDate]);
 
   const {
     tellerPostByDateList = [],
@@ -57,7 +79,7 @@ export const TellerPosting = () => {
     ...searchParams,
     search: search ?? undefined,
     pageNumber: page,
-    pageSize: 10,
+    pageSize: 10
   });
 
   const {
@@ -71,7 +93,7 @@ export const TellerPosting = () => {
     getAll: true
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
       setExportData([]);
     }
@@ -98,7 +120,6 @@ export const TellerPosting = () => {
         'To Vault': item?.toVault || ''
       }));
 
-      // Ensure no blank row or misplaced headers
       setExportData(formattedExportData);
       setReportType('TellerPostingSummary');
     }
@@ -127,7 +148,7 @@ export const TellerPosting = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <FilterSection onSearch={handleSearch} />
+        <FilterSection onSearch={handleSearch} />
       <Box sx={{ width: '100%', padding: '25px' }}>
         <MuiTableContainer
           tableConfig={{ hasActions: false }}
@@ -146,31 +167,29 @@ export const TellerPosting = () => {
           ActionMenuProps={ActionMenu}
         >
           {tellerPostByDateList?.length > 0 ? (
-            tellerPostByDateList?.map(
-              (reportDetails: ITellerPostingReport, index) => {
-                return (
-                  <StyledTableRow key={index}>
-                    <StyledTableCell component="th" scope="row">
-                      {reportDetails?.accountNumber}
-                    </StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      {reportDetails?.accounttitle}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {reportDetails?.narration}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {reportDetails?.valuedate?.trim()}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {reportDetails?.refNo}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      <TellerPostingActions data={reportDetails} />
-                    </StyledTableCell>
-                  </StyledTableRow>
-                );
-              }
+            tellerPostByDateList.map(
+              (reportDetails: ITellerPostingReport, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell component="th" scope="row">
+                    {reportDetails?.accountNumber}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                    {reportDetails?.accounttitle}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {reportDetails?.narration}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {reportDetails?.valuedate?.trim()}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {reportDetails?.refNo}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <TellerPostingActions data={reportDetails} />
+                  </StyledTableCell>
+                </StyledTableRow>
+              )
             )
           ) : (
             <StyledTableRow>
