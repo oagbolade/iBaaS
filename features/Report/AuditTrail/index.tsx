@@ -97,7 +97,7 @@ const ViewAuditDetails: React.FC<{
                   fontWeight: 400,
                   lineHeight: '20px',
                   textTransform: 'uppercase',
-                  fontFeatureSettings: '\'liga\' off, \'clig\' off',
+                  fontFeatureSettings: "'liga' off, 'clig' off",
                   marginBottom: '4px'
                 }}
               >
@@ -106,7 +106,7 @@ const ViewAuditDetails: React.FC<{
               <h2
                 style={{
                   color: `${colors.neutral1000}`,
-                  fontFeatureSettings: '\'liga\' off, \'clig\' off',
+                  fontFeatureSettings: "'liga' off, 'clig' off",
                   fontSize: '16px',
                   fontStyle: 'normal',
                   fontWeight: 600,
@@ -125,12 +125,11 @@ const ViewAuditDetails: React.FC<{
 
 export const AuditTrail = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const [search, setSearch] = useState<boolean>(true);
+  const [search, setSearch] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
   const [openModel, setopenModel] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<IAuditTrail | null>(null);
-
   const { setReportType, setExportData } = React.useContext(
     DownloadReportContext
   );
@@ -168,22 +167,36 @@ export const AuditTrail = () => {
 
   const handleSearch = async (params: ISearchParams | null) => {
     setSearch(true);
-    setSearchParams(params);
+    setSearchParams({
+      ...params,
+      pageNumber: String(page),
+      pageSize: 10,
+      getAll: false
+    });
     setReportType('AuditTrail');
   };
 
-  const { auditTrailList: getAllAuditTrailsData, isLoading } =
-    useGetAllAuditTrailReports({
+  React.useEffect(() => {
+    setSearch(true);
+    setSearchParams({
       ...searchParams,
       pageNumber: String(page),
       pageSize: 10,
       getAll: false
+    });
 
+    handleSearch(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { auditTrailList: getAllAuditTrailsData, isLoading } =
+    useGetAllAuditTrailReports({
+      ...searchParams
     });
 
   const { auditTrailList: downloadData } = useGetAllAuditTrailReports({
     ...searchParams,
-      pageNumber: String(page),
+    pageNumber: String(page),
     getAll: true
   });
 
@@ -211,7 +224,7 @@ export const AuditTrail = () => {
             tableConfig={{
               hasActions: true
             }}
-            data={getAllAuditTrailsData}
+            data={getAllAuditTrailsData || []}
             setPage={setPage}
             page={page}
           >

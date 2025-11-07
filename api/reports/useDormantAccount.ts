@@ -63,10 +63,8 @@ export function useGetAllDormantAccount(
     queryFn: () => fetchAllDormantAccount(toastActions, params || {}),
     enabled: Boolean(
       params?.pageSize ||
-        (params?.branchID || '').length > 0 ||
-        params?.searchWith ||
-        params?.startDate ||
-        params?.endDate
+      (params?.branchID || '').length > 0 ||
+      (params?.searchWith || '').length > 0
     )
   });
 
