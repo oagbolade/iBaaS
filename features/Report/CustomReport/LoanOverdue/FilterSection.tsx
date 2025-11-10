@@ -107,30 +107,33 @@ export const FilterSection = ({ branches, onSearch, bankproducts }: Props) => {
                     icon={<ExportIcon />}
                     iconPosition="start"
                     buttonTitle="Export Data"
+                    
                   />
                 </Box>
 
                 <Box>
-                  <ActionButtonWithPopper
-                    searchGroupVariant="DateRangePicker"
-                    CustomDateRangePicker={
-                      <DateCalendar
-                        value={endDate}
-                        onChange={(date) => setDateValue([dateValue[0], date])}
-                      />
-                    }
-                    customStyle={{ ...dateFilter }}
-                    icon={
-                      <CalendarTodayOutlinedIcon
-                        sx={{
-                          color: `${colors.Heading}`
-                        }}
-                      />
-                    }
-                    iconPosition="end"
-                    buttonTitle={endDate?.format('YYYY-MM-DD')}
-                  />
-                </Box>
+             <ActionButtonWithPopper
+                           searchGroupVariant="DateRangePicker"
+                           CustomDateRangePicker={
+                             <DateCalendar
+                               value={endDate}
+                               onChange={(date) =>
+                                 setDateValue([dateValue[0], date], { allowSingle: true })
+                               }
+                             />
+                           }
+                           customStyle={{ ...dateFilter }}
+                           icon={
+                             <CalendarTodayOutlinedIcon
+                               sx={{
+                                 color: `${colors.Heading}`
+                               }}
+                             />
+                           }
+                           iconPosition="end"
+                           buttonTitle={endDate?.format('YYYY-MM-DD')}
+                         />               
+                         </Box>
               </Stack>
             </Stack>
 

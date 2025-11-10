@@ -20,7 +20,6 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { getStoredUser } from '@/utils/user-storage';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
-import DateRangePickerContextProvider from '@/context/DateRangePickerContext';
 
 
 interface ActionProps {
@@ -93,37 +92,47 @@ useEffect(() => {
     getAll: true
   });
 
-  useEffect(() => {
-    if (!downloadData || downloadData.length === 0) {
-      setExportData([]);
-    }
+useEffect(() => {
+  if (!downloadData || downloadData.length === 0) {
+    // Only clear if it's not already empty to avoid redundant re-renders
+    setExportData((prev) => (prev.length > 0 ? [] : prev));
+    return;
+  }
 
-    if (downloadData?.length > 0) {
-      const formattedExportData = downloadData.map((item) => ({
-        'Account Number': item?.accountNumber || '',
-        'Account title': item?.accounttitle || '',
-        Narration: item?.narration || '',
-        'Value Date': item?.valuedate?.trim() || '',
-        Reference: item?.refNo || '',
-        'Transaction Amount': item?.tranAmount || '',
-        'Posting Mode': item?.postingMode || '',
-        'Credit Account': item?.creditAcct || '',
-        'Transaction Date': item?.tranDate || '',
-        'User ID': item?.userid || '',
-        'Debit Account': item?.debitacct || '',
-        'Post Sequence': item?.postseq || '',
-        'Previous Balance': item?.prevbal || '',
-        Deposit: item?.deposit || '',
-        'From Vault': item?.fromVault || '',
-        'Current Balance': item?.curbal || '',
-        Withdrawal: item?.withdrawal || '',
-        'To Vault': item?.toVault || ''
-      }));
+  // Format export data only if downloadData changed in content
+  const formattedExportData = downloadData.map((item) => ({
+    'Account Number': item?.accountNumber || '',
+    'Account title': item?.accounttitle || '',
+    Narration: item?.narration || '',
+    'Value Date': item?.valuedate?.trim() || '',
+    Reference: item?.refNo || '',
+    'Transaction Amount': item?.tranAmount || '',
+    'Posting Mode': item?.postingMode || '',
+    'Credit Account': item?.creditAcct || '',
+    'Transaction Date': item?.tranDate || '',
+    'User ID': item?.userid || '',
+    'Debit Account': item?.debitacct || '',
+    'Post Sequence': item?.postseq || '',
+    'Previous Balance': item?.prevbal || '',
+    Deposit: item?.deposit || '',
+    'From Vault': item?.fromVault || '',
+    'Current Balance': item?.curbal || '',
+    Withdrawal: item?.withdrawal || '',
+    'To Vault': item?.toVault || ''
+  }));
 
-      setExportData(formattedExportData);
-      setReportType('TellerPostingSummary');
+  // Convert to JSON string to compare easily
+  const formattedString = JSON.stringify(formattedExportData);
+
+  setExportData((prev) => {
+    if (JSON.stringify(prev) !== formattedString) {
+      return formattedExportData;
     }
-  }, [downloadData]);
+    return prev;
+  });
+
+  setReportType('TellerPostingSummary');
+}, [downloadData, setExportData, setReportType]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
