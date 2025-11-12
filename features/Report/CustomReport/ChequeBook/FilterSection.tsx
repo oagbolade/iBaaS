@@ -1,26 +1,18 @@
-import React, { useMemo } from 'react';
-import { Box, Grid, Stack } from '@mui/material';
+import React from 'react';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import { exportData, dateFilter, inputFields } from '../style';
+import { inputFields } from '../style';
 import { FormTextInput, FormSelectField } from '@/components/FormikFields';
 import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton,
-  BackButton
-} from '@/components/Revamp/Buttons';
-import { ExportIcon } from '@/assets/svg';
+import { ActionButton } from '@/components/Revamp/Buttons';
 
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches, IStatus } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { chequebookSchema } from '@/schemas/reports';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+// import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 type Props = {
@@ -32,20 +24,11 @@ type Props = {
 export const FilterSection = ({ branches, onSearch, status }: Props) => {
   const { searchParams } =
     usePersistedSearch<ISearchParams>('checkbook-status');
-  const { dateValue } = React.useContext(DateRangePickerContext);
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedStatus } = useMapSelectOptions({
     branches,
     status
   });
-
-  const formattedDateRange = useMemo(() => {
-    const startMonthAndDay = `${dateValue?.[0]?.format('MMM') ?? ''} ${dateValue?.[0]?.format('DD') ?? ''}`;
-    const endMonthAndDay = `${dateValue?.[1]?.format('MMM') ?? ''} ${dateValue?.[1]?.format('DD') ?? ''}`;
-
-    return `${startMonthAndDay} - ${endMonthAndDay}`;
-  }, [dateValue]);
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
@@ -73,53 +56,6 @@ export const FilterSection = ({ branches, onSearch, status }: Props) => {
         validationSchema={chequebookSchema}
       >
         <Form>
-          {/* <Stack
-            sx={{
-              borderBottom: '1px solid #E8E8E8',
-              marginTop: '10px',
-              paddingX: '24px'
-            }}
-            direction={setDirection()}
-            justifyContent="space-between"
-          >
-            <Box>
-              <Box mt={2.3}>
-                <BackButton />
-              </Box>
-            </Box>
-            <Stack
-              mt={1}
-              direction={setDirection()}
-              spacing={2}
-              justifyContent="space-between"
-            >
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="ExportReport"
-                  customStyle={{ ...exportData }}
-                  icon={<ExportIcon />}
-                  iconPosition="start"
-                  buttonTitle="Export Data"
-                />
-              </Box>
-              <Box>
-                <ActionButtonWithPopper
-                  searchGroupVariant="DateRangePicker"
-                  customStyle={{ ...dateFilter }}
-                  icon={
-                    <CalendarTodayOutlinedIcon
-                      sx={{
-                        color: `${colors.Heading}`
-                      }}
-                    />
-                  }
-                  iconPosition="end"
-                  // buttonTitle="Aug 22 - Sep 23"
-                  buttonTitle={formattedDateRange}
-                />
-              </Box>
-            </Stack>
-          </Stack> */}
 
           <Box
             sx={{

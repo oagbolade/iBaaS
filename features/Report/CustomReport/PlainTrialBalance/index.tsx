@@ -63,7 +63,7 @@ export const PlainTrialBalance = () => {
     bkBalance = 0
   } = plainTrialBalanceList || {};
 
-  const mappedResult = getAllPlainTrialBalanceData.map((item) => ({
+  const mappedResult = getAllPlainTrialBalanceData?.map((item) => ({
     glNumber: item.glNumber,
     oldGLno: item.oldGLno,
     acctName: item.acctName,

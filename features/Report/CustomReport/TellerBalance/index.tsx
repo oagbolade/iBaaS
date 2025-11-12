@@ -48,35 +48,36 @@ export const TellerBalance = () => {
       getAll: false
     });
 
-  const { tellerBalanceList: downloadData = [] } = useGetTellerBalanceReport({
+  const { tellerBalanceList: downloadData = ''} = useGetTellerBalanceReport({
     ...searchParams,
     page,
     getAll: true
   });
 
-  const formattedExportData = React.useMemo(
-    () =>
-      downloadData.map((item) => ({
-        'Till Number': item.tillNumber || '',
-        'Till Name': item.tillName || '',
-        'Staff Name': item.staffName || '',
-        'Branch Code': item.branchcode || '',
-        'User ID': item.userid || '',
-        'Till Balance': item.bkBalance || ''
-      })),
-    [downloadData]
-  );
-
   React.useEffect(() => {
+
+     if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
+    }
+    const formattedExportData = downloadData.map((item) => ({
+      'Till Number': item.tillNumber || '',
+      'Till Name': item.tillName || '',
+      'Staff Name': item.staffName || '',
+      'Branch Code': item.branchcode || '',
+      'User ID': item.userid || '',
+      'Till Balance': item.bkBalance || ''
+    }));
+
     setExportData(formattedExportData);
-  }, [formattedExportData, setExportData]);
+  }, [downloadData, setExportData]);
 
   React.useEffect(() => {
     setReportType('TellerBalance');
   }, [setReportType]);
 
   const rowsPerPage = 10;
-  const totalElements = downloadData.length;
+  const totalElements = tellerBalanceList.length;
   const totalPages = Math.ceil(totalElements / rowsPerPage);
 
   return (

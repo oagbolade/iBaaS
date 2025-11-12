@@ -20,8 +20,6 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { getStoredUser } from '@/utils/user-storage';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
-import DateRangePickerContextProvider from '@/context/DateRangePickerContext';
-
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -53,23 +51,22 @@ export const TellerPosting = () => {
 
   const { search } = searchParams || {};
 
- 
   const userId = getStoredUser()?.profiles?.userid;
-useEffect(() => {
-  if (userId && !searchActive && sysmodel?.systemDate) {
-    const systemDate = sysmodel.systemDate.split("T")[0];
+  useEffect(() => {
+    if (userId && !searchActive && sysmodel?.systemDate) {
+      const systemDate = sysmodel.systemDate.split('T')[0];
 
-    setSearchParams({
-      search: userId,
-      reportDate: systemDate,
-      endDate: systemDate,
-      pageNumber: "1",
-    });
+      setSearchParams({
+        search: userId,
+        reportDate: systemDate,
+        endDate: systemDate,
+        pageNumber: '1',
+      });
 
-    setSearchActive(true);
-    setPage(1);
-  }
-}, [userId, searchActive, sysmodel?.systemDate]);
+      setSearchActive(true);
+      setPage(1);
+    }
+  }, [userId, searchActive, sysmodel?.systemDate]);
 
   const {
     tellerPostByDateList = [],
@@ -83,8 +80,7 @@ useEffect(() => {
   });
 
   const {
-    tellerPostByDateList: downloadData = [],
-    totalRecords: downloadTotalRecords
+    tellerPostByDateList: downloadData
   } = useGetTellerPosting({
     ...searchParams,
     search: search ?? undefined,
@@ -98,7 +94,7 @@ useEffect(() => {
       setExportData([]);
     }
 
-    if (downloadData?.length > 0) {
+    if (downloadData && downloadData?.length > 0) {
       const formattedExportData = downloadData.map((item) => ({
         'Account Number': item?.accountNumber || '',
         'Account title': item?.accounttitle || '',
@@ -148,7 +144,7 @@ useEffect(() => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-        <FilterSection onSearch={handleSearch} />
+      <FilterSection onSearch={handleSearch} />
       <Box sx={{ width: '100%', padding: '25px' }}>
         <MuiTableContainer
           tableConfig={{ hasActions: false }}

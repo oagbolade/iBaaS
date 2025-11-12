@@ -19,9 +19,10 @@ import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
 import { ITrialBalanceGroup } from '@/api/ResponseTypes/reports';
 import { useGetGLType } from '@/api/admin/useCreateGLAccount';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+
+import { TopOverViewSingeCalendarSection } from '@/features/Report/Overview/TopOverViewSingleCalenderSection';
 
 export const TrialBalance = () => {
   const { isLoading } = useGlobalLoadingState();
@@ -30,14 +31,8 @@ export const TrialBalance = () => {
   const { setExportData, setReportType } = useContext(DownloadReportContext);
   const { dateValue } = useContext(DateRangePickerContext);
 
-  const {
-    searchParams,
-    setSearchParams,
-    searchActive,
-    setSearchActive,
-    page,
-    setPage
-  } = usePersistedSearch<ISearchParams>('trial-balance');
+  const { searchParams, setSearchParams, setSearchActive, page } =
+    usePersistedSearch<ISearchParams>('trial-balance');
 
   const { trialBydateList = [], isLoading: isLoadingTrialBydategroupList } =
     useGetTrialBalanceGroup({
@@ -63,7 +58,7 @@ export const TrialBalance = () => {
 
   useEffect(() => {
     if (!downloadData || downloadData.length === 0) {
-      setExportData([]);
+      // setExportData([]);
     }
 
     if (trialBydateList.length > 0) {
@@ -91,60 +86,58 @@ export const TrialBalance = () => {
         width: '100%'
       }}
     >
-      <TopOverViewSection useBackButton />
-      {branches && glType && (
-        <FilterSection
-          branches={branches}
-          glType={glType}
-          onSearch={handleSearch}
-        />
-      )}
+      <TopOverViewSingeCalendarSection />
+
+      <Box sx={{ paddingX: '24px', marginTop: '40px' }}>
+        {branches && glType && (
+          <FilterSection
+            branches={branches}
+            glType={glType}
+            onSearch={handleSearch}
+          />
+        )}
+      </Box>
 
       <Box>
         {isLoading || isLoadingTrialBydategroupList ? (
-          <FormSkeleton noOfLoaders={3} />
+         <Box sx={{ paddingX: '24px' }}>
+             <FormSkeleton noOfLoaders={3} />
+          </Box>
         ) : (
           <Box>
-            <Box>
-              {trialBydateList.length > 0 ? (
-                <Box>
-                  {trialBydateList.map((item, index) => (
-                    <Box key={index}>
-                      <ShortCards
-                        title={item?.gl_classname}
-                        numberOfAccounts={`Balance ₦ ${item.balance.toLocaleString()}`}
-                        link={`/report/custom-report/trial-balance/main-cash?name=${item?.gl_classname}&classCode=${item?.gl_classcode}&reportType=${searchParams?.reportType}&glNodeCode=${item?.gl_nodecode}&glTypeCode=${item?.prodtypecode}&branchID=${searchParams?.branchID}&customerID=${searchParams?.customerID}`}
-                      />
-                    </Box>
-                  ))}
-
-                  <Box>
-                    <Box sx={totalContainer}>
-                      <PageTitle
-                        title="Total Asset"
-                        styles={{ ...totalTitle }}
-                      />
-                      <Box sx={{ paddingLeft: '74%' }}>
-                        <PageTitle
-                          title={`₦ ${calculateTotalBalance(trialBydateList).toLocaleString()}`}
-                          styles={{ ...totalTitle }}
-                        />
-                      </Box>
-                    </Box>
+            {trialBydateList.length > 0 ? (
+              <Box sx={{ paddingX: '40px' }}>
+                {trialBydateList.map((item, index) => (
+                  <Box key={index}>
+                    <ShortCards
+                      title={item?.gl_classname}
+                      numberOfAccounts={`₦ ${item.balance.toLocaleString()}`}
+                      link={`/report/custom-report/trial-balance/main-cash?name=${item?.gl_classname}&classCode=${item?.gl_classcode}&reportType=${searchParams?.reportType}&glNodeCode=${item?.gl_nodecode}&glTypeCode=${item?.prodtypecode}&branchID=${searchParams?.branchID}&customerID=${searchParams?.customerID}`}
+                    />
                   </Box>
-                </Box>
-              ) : (
-                <Box sx={centraliseNoDataAvailable}>
-                  <Box mb={3} sx={{ width: '200px', height: '200px' }}>
-                    <NoDataAvailable
-                      message="No reports found. Try searching with different parameters."
-                      width={200}
-                      height={200}
+                ))}
+
+                <Box sx={totalContainer}>
+                  <PageTitle title="Total Asset" styles={{ ...totalTitle }} />
+                  <Box>
+                    <PageTitle
+                      title={`₦ ${calculateTotalBalance(trialBydateList).toLocaleString()}`}
+                      styles={{ ...totalTitle }}
                     />
                   </Box>
                 </Box>
-              )}
-            </Box>
+              </Box>
+            ) : (
+              <Box sx={centraliseNoDataAvailable}>
+                <Box mb={3} sx={{ width: '200px', height: '200px' }}>
+                  <NoDataAvailable
+                    message="No reports found. Try searching with different parameters."
+                    width={200}
+                    height={200}
+                  />
+                </Box>
+              </Box>
+            )}
           </Box>
         )}
       </Box>

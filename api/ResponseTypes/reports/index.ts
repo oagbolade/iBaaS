@@ -15,7 +15,7 @@ export interface IChequeBookList {
   createdate: string;
   range: string;
   narration: string;
-  status: number;
+  status: string;
 }
 
 export interface StatementRecord {
@@ -156,7 +156,7 @@ export interface IAuditTrail {
   procedurename: string;
 }
 
-export interface AuditTrailsResponse extends IFetchingState {
+export interface AuditTrailsResponse extends IFetchingState, IReportsResponse {
   responseCode: string;
   responseDescription: string;
   auditTrailList: IAuditTrail[];

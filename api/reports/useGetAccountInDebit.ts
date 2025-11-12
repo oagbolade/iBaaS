@@ -71,10 +71,18 @@ export function useGetAccountInDebit(
       params?.customerID || '',
       params?.pageSize || 1,
       params?.pageNumber || 1,
-      params?.getAll
+      params?.getAll,
+      params?.startDate || '',
+      params?.endDate || '',
+      params?.searchWith || ''
     ],
     queryFn: () => fetchAccountInDebit(params, toastActions),
-    enabled: Boolean((params?.branchID || '').length > 0)
+      enabled: Boolean(
+      (params?.branchID || '').length > 0 ||
+        params?.searchWith ||
+        params?.startDate ||
+        params?.endDate
+    )
   });
 
   return { ...data, isError, isLoading };

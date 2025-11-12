@@ -18,6 +18,9 @@ import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import colors from '@/assets/colors';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 
 const ViewAuditDetails: React.FC<{
   data: IAuditTrail;
@@ -125,12 +128,18 @@ const ViewAuditDetails: React.FC<{
 
 export const AuditTrail = () => {
   const { isLoading: isGlobalLoading } = useGlobalLoadingState();
-  const [search, setSearch] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
-  const [page, setPage] = React.useState(1);
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('audit-trail');
   const [openModel, setopenModel] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<IAuditTrail | null>(null);
-  const { setReportType, setExportData } = React.useContext(
+  const { dateValue } = React.useContext(DateRangePickerContext);
+  const { setExportData, setReportType } = React.useContext(
     DownloadReportContext
   );
   const handleClose = () => {
@@ -165,46 +174,44 @@ export const AuditTrail = () => {
     );
   };
 
-  const handleSearch = async (params: ISearchParams | null) => {
-    setSearch(true);
-    setSearchParams({
-      ...params,
-      pageNumber: String(page),
-      pageSize: 10,
-      getAll: false
-    });
-    setReportType('AuditTrail');
-  };
-
-  React.useEffect(() => {
-    setSearch(true);
-    setSearchParams({
-      ...searchParams,
-      pageNumber: String(page),
-      pageSize: 10,
-      getAll: false
-    });
-
-    handleSearch(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const { auditTrailList: getAllAuditTrailsData, isLoading } =
-    useGetAllAuditTrailReports({
-      ...searchParams
-    });
+  const {
+    auditTrailList: getAllAuditTrailsData,
+    isLoading,
+    totalRecords
+  } = useGetAllAuditTrailReports({
+    ...searchParams,
+    getAll: false,
+    pageNumber: String(page),
+    pageSize: 10
+  });
 
   const { auditTrailList: downloadData } = useGetAllAuditTrailReports({
     ...searchParams,
-    pageNumber: String(page),
     getAll: true
   });
 
   React.useEffect(() => {
-    if (downloadData?.length > 0) {
-      setExportData(downloadData);
+    if (!downloadData || downloadData.length === 0) {
+      setExportData([]);
+      return;
     }
-  }, [downloadData, setExportData]);
+    setExportData(downloadData);
+  }, [downloadData]);
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearchActive(true);
+    setSearchParams({
+      ...params,
+      pageNumber: String(page),
+      pageSize: 10,
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+    });
+    setReportType('AuditTrail');
+  };
+
+  const rowsPerPage = 10;
+  const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   return (
     <Box
@@ -213,10 +220,14 @@ export const AuditTrail = () => {
         marginTop: '60px'
       }}
     >
+      <TopOverViewSection useBackButton />
+
       <FilterSection onSearch={handleSearch} />
 
       {isGlobalLoading || isLoading ? (
-        <FormSkeleton noOfLoaders={3} />
+        <Box sx={{ paddingX: '24px' }}>
+          <FormSkeleton noOfLoaders={3} />
+        </Box>
       ) : (
         <Box sx={{ paddingX: '24px' }}>
           <MuiTableContainer
@@ -227,11 +238,13 @@ export const AuditTrail = () => {
             data={getAllAuditTrailsData || []}
             setPage={setPage}
             page={page}
+            totalPages={totalPages}
+            totalElements={totalRecords}
           >
-            {search ? (
+            {searchActive ? (
               getAllAuditTrailsData?.map((dataItem: IAuditTrail) => {
                 return (
-                  <StyledTableRow key={dataItem.userId}>
+                  <StyledTableRow key={dataItem.id}>
                     <StyledTableCell component="th" scope="row">
                       {dataItem.menuname}
                     </StyledTableCell>

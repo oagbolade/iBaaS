@@ -1,7 +1,7 @@
 'use client';
-import { read } from 'fs';
 import * as React from 'react';
 import { Box } from '@mui/material';
+import moment from 'moment';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './COLUMNS';
 import { MuiTableContainer } from '@/components/Table';
@@ -19,7 +19,6 @@ import { useGetIAReportType } from '@/api/general/useIAReportType';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import moment from 'moment';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 export const IncomeAssuranceReport = () => {
@@ -113,6 +112,9 @@ export const IncomeAssuranceReport = () => {
           <MuiTableContainer
             columns={COLUMN}
             data={data}
+            tableConfig={{
+              hasActions: false
+            }}
             showHeader={{
               mainTitle: ' Income Assurance Report',
               secondaryTitle:
@@ -136,12 +138,12 @@ export const IncomeAssuranceReport = () => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {moment(dataItem?.startdate?.split('T')[0]).format(
-                        'YYYY-MM-DD, hh:mm:ss A'
+                        'YYYY-MM-DD'
                       ) || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {moment(dataItem?.matdate?.split('T')[0]).format(
-                        'YYYY-MM-DD, hh:mm:ss A'
+                        'YYYY-MM-DD'
                       ) || 'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
@@ -152,7 +154,12 @@ export const IncomeAssuranceReport = () => {
                         'N/A'}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      {dataItem?.productName || 'N/A'}
+                      <div
+                        className=" truncate overflow-hidden max-w-xs block"
+                        title={dataItem?.productName || 'N/A'}
+                      >
+                        {dataItem?.productName || 'N/A'}
+                      </div>
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {`NGN ${formatCurrency(dataItem?.accrued_Int || 0)}` ||

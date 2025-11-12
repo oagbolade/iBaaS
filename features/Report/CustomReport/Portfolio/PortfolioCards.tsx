@@ -6,12 +6,12 @@ import {
   PortfolioAccountContainer,
   PortfolioProductTilte,
   PortfolioProduct,
-  PortfolioCardStyle,
-  PortfolioCards,
-  PortfolioContainer,
-  PortfolioHeaderStyle,
-  PortfolioTableCards,
-  PortfolioTableText,
+  // PortfolioCardStyle,
+  // PortfolioCards,
+  // PortfolioContainer,
+  // PortfolioHeaderStyle,
+  // PortfolioTableCards,
+  // PortfolioTableText,
   PortfolioTitle,
   PortfolioTitleHeader
 } from './style';
@@ -36,71 +36,70 @@ export const PortfolioCard = ({
   };
 
   return (
-    <Box sx={PortfolioContainer}>
-      <Box sx={PortfolioCards}>
-        <Box sx={PortfolioTableCards}>
-          <Box sx={PortfolioCardStyle}>
-            <Box sx={PortfolioHeaderStyle}>
-              <Box sx={PortfolioTableText}>
-                <Box sx={PortfolioTitleHeader}>
-                  <PageTitle
-                    title={PortfolioOption.productName}
-                    styles={{ ...PortfolioTitle }}
-                  />
-                </Box>
-                <Box sx={PortfolioAccountContainer}>
-                  <PageTitle
-                    title="Product Code"
-                    styles={{ ...PortfolioProduct }}
-                  />
-                  <PageTitle
-                    title={PortfolioOption.productCode}
-                    styles={{ ...PortfolioProductTilte }}
-                  />
-                </Box>
-                <Box sx={PortfolioAccountContainer}>
-                  <PageTitle
-                    title="Number of Accounts"
-                    styles={{ ...PortfolioProduct }}
-                  />
-                  <PageTitle
-                    title={String(PortfolioOption.number_of_Accounts)}
-                    styles={{ ...PortfolioProductTilte }}
-                  />
-                </Box>
-                <Box sx={PortfolioAccountContainer}>
-                  <PageTitle
-                    title="Principal at Risk"
-                    styles={{ ...PortfolioProduct }}
-                  />
-                  <PageTitle
-                    title={String(PortfolioOption.number_of_Accounts)}
-                    styles={{ ...PortfolioProductTilte }}
-                  />
-                </Box>
-                <Box sx={PortfolioAccountContainer}>
-                  <PageTitle
-                    title="Loan Balance"
-                    styles={{ ...PortfolioProduct }}
-                  />
-                  <PageTitle
-                    title={String(
-                      `NGN ${
-                        formatCurrency(PortfolioOption?.currentbalance || 0) ||
-                        'N/A'
-                      }`
-                    )}
-                    styles={{ ...PortfolioProductTilte }}
-                  />
-                </Box>
-              </Box>
-            </Box>
-            <Link onClick={setContextData} href={link}>
-              <TableSingleAction actionName="View" />
-            </Link>
-          </Box>
+    <div className="grid grid-cols-6 gap-4 mb-4 py-4 px-5 border shadow items-center w-full">
+      <div className="col-span-1">
+        <Box sx={PortfolioTitleHeader}>
+          <PageTitle
+            title={PortfolioOption.productName}
+            styles={{ ...PortfolioTitle }}
+          />
         </Box>
-      </Box>
-    </Box>
+      </div>
+      <div className="col-span-1">
+        <Box sx={PortfolioAccountContainer}>
+          <PageTitle title="Product Code" styles={{ ...PortfolioProduct }} />
+          <PageTitle
+            title={PortfolioOption.productCode}
+            styles={{ ...PortfolioProductTilte }}
+          />
+        </Box>
+      </div>
+      <div className="col-span-1">
+        <Box sx={PortfolioAccountContainer}>
+          <PageTitle
+            title="Number of Accounts"
+            styles={{ ...PortfolioProduct }}
+          />
+          <PageTitle
+            title={String(PortfolioOption.number_of_Accounts)}
+            styles={{ ...PortfolioProductTilte }}
+          />
+        </Box>
+      </div>
+      <div className="col-span-1">
+        <Box sx={PortfolioAccountContainer}>
+          <PageTitle
+            title="Principal at Risk"
+            styles={{ ...PortfolioProduct }}
+          />
+          <PageTitle
+            title={String(
+              `NGN ${
+                formatCurrency(PortfolioOption?.principal_At_Risk || 0) || 'N/A'
+              }`
+            )}
+            styles={{ ...PortfolioProductTilte }}
+          />
+        </Box>
+      </div>
+      <div className="col-span-1">
+        <Box sx={PortfolioAccountContainer}>
+          <PageTitle title="Loan Balance" styles={{ ...PortfolioProduct }} />
+          <PageTitle
+            title={String(
+              `NGN ${
+                formatCurrency(PortfolioOption?.currentbalance || 0) || 'N/A'
+              }`
+            )}
+            styles={{ ...PortfolioProductTilte }}
+          />
+        </Box>
+      </div>
+      <div className="col-span-1">
+        <Link onClick={setContextData} href={link}>
+          <TableSingleAction actionName="View" />
+        </Link>
+      </div>
+    </div>
   );
 };

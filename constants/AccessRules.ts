@@ -93,7 +93,7 @@ export const AccessRules: { [key: string]: string[] } = {
   ],
   'End of Day': ['End of Day'],
   'Vault Management': ['VAULT MANAGEMENT'],
-  'TREASURY OPERATIONS': ['TREASURY OPERATIONS'],
+  'Treasury Operations': ['Treasury Operations'],
   // Loans
   'Loan Directory': [
     'LOAN UNDERWRITING',

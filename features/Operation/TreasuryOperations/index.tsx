@@ -25,48 +25,48 @@ export const TreasuryContainer = () => {
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
               title="Create Deposit Account"
-              link="/operation/deposit"
+              link="/operation/depositAccount"
               description="Process Internal cheques to be credited into a customer account"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/withdrawal"
+              link="/operation/depositRedemption"
               title="Deposit Redemption"
               description="Process Internal cheques to be withdrawn from customer account for payout"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/cashJournal"
+              link="/operation/tdCancellation"
               title="TD Cancellation"
               description="Manage reversal of returned cheques"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/posting"
+              link="/operation/tdRollover"
               title="TD Rollover"
               description="Process cheque presented from another bank for payment"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/bulkUpload"
+              link="/operation/tdPayout"
               title="TD Payout"
               description="Process cheque presented to another bank to request value of payment"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/concession"
+              link="/operation/tdPartialPayoff"
               title="TD Partial Payoff"
               description="Process cheque presented to another bank to request value of payment"
             />
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/concession"
+              link="/operation/principalDeposit"
               title="Principal Deposit"
               description="Process cheque presented from another bank for payment"
             />
@@ -80,7 +80,7 @@ export const TreasuryContainer = () => {
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/concession"
+              link="/operation/bookTakings"
               title="Book Takings"
               description="Process cheque presented to another bank to request value of payment"
             />
@@ -108,7 +108,7 @@ export const TreasuryContainer = () => {
           </Box>
           <Box mb={{ mobile: 2, desktop: 0 }}>
             <CustomCardsReports
-              link="/operation/concession"
+              link="/operation/bookPlacements"
               title="Book Placements"
               description="Process cheque presented from another bank for payment"
             />

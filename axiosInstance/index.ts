@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosHeaders } from 'axios';
 import {
-  AuthFaBaseUrl,
   baseUrl,
   nipBaseUrl,
   REPORT_BASE_URL,
-  endOfdayUrl,
-  imageUploadBaseUrl
+  imageUploadBaseUrl,
+  Auth2FABaseUrl,
+  END_OF_DAY_BASE_URL
 } from './constants';
 import { UserLoginResponse } from '@/api/ResponseTypes/login';
 import { getStoredUser, USER_LOCALSTORAGE_KEY } from '@/utils/user-storage';
@@ -43,8 +43,8 @@ export const nipAxiosInstance = axios.create({
   baseURL: nipBaseUrl
 });
 
-export const AuthFaAxiosInstance = axios.create({
-  baseURL: AuthFaBaseUrl
+export const Auth2FaAxiosInstance = axios.create({
+  baseURL: Auth2FABaseUrl
 });
 
 export const ImageUploadAxiosInstance = axios.create({
@@ -52,7 +52,7 @@ export const ImageUploadAxiosInstance = axios.create({
 });
 
 export const EndOfDayAxiosInstance = axios.create({
-  baseURL: endOfdayUrl
+  baseURL: END_OF_DAY_BASE_URL
 });
 
 export const reportsAxiosInstance = axios.create({

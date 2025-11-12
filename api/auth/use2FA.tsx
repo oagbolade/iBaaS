@@ -5,7 +5,7 @@ import {
   UseGetAllAuth2fa,
   UseGetAllAuth2faCheck
 } from '../ResponseTypes/admin';
-import { AuthFaAxiosInstance } from '@/axiosInstance';
+import { Auth2FaAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { Aut2FaChcheckValue, Aut2FaValue } from '@/schemas/schema-values/auth';
 import { globalErrorHandler, SUCCESS_CODES } from '@/utils/globalErrorHandler';
@@ -20,7 +20,7 @@ const auth2fa = async (
   try {
     const urlEndpoint = '/Subscription/ValidateToken';
     const response: AxiosResponse<UseGetAllAuth2fa> =
-      await AuthFaAxiosInstance.post(urlEndpoint, body, {
+      await Auth2FaAxiosInstance.post(urlEndpoint, body, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -43,7 +43,7 @@ const auth2faCheck = async (
 ): Promise<UseGetAllAuth2faCheck> => {
   const urlEndpoint = '/Subscription/CheckFor2FA';
   const response: AxiosResponse<UseGetAllAuth2faCheck> =
-    await AuthFaAxiosInstance.post(urlEndpoint, body, {
+    await Auth2FaAxiosInstance.post(urlEndpoint, body, {
       headers: {
         'Content-Type': 'application/json'
       }
