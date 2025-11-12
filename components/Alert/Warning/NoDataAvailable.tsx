@@ -1,7 +1,6 @@
+'use client';
 import React from 'react';
 import { Typography, Box } from '@mui/material';
-import Lottie from 'lottie-react';
-import emptyBox from '@/assets/lottie/empty_box.json';
 import colors from '@/assets/colors';
 
 type Props = {
@@ -20,12 +19,6 @@ export const NoDataAvailable = ({ message, height, width }: Props) => {
         margin: '0px auto'
       }}
     >
-      <Lottie
-        height={height || 200}
-        width={width || 200}
-        animationData={emptyBox}
-        loop
-      />
       <Typography
         sx={{
           textAlign: 'center',

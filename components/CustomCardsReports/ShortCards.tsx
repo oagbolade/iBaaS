@@ -1,17 +1,7 @@
 'use client';
-import { Box } from '@mui/material';
 import React from 'react';
 import Link from 'next/link';
-import {
-  shortCardStyle,
-  shortCard,
-  shortcards,
-  shortscard,
-  shortCardtitle,
-  shortCardText,
-  shortTitle,
-  shortCardTitle
-} from './style';
+import { shortTitle, shortCardTitle } from './style';
 import { PageTitle } from '@/components/Typography';
 import { TableSingleAction } from '@/components/Table';
 
@@ -23,33 +13,23 @@ type Props = {
 
 export const ShortCards = ({ title, numberOfAccounts, link = '' }: Props) => {
   return (
-    <Box sx={shortCard}>
-      <Box sx={shortcards}>
-        <Box sx={shortscard}>
-          <Box sx={shortCardStyle}>
-            <Box sx={shortCardtitle}>
-              <Box sx={shortCardText}>
-                <Box>
-                  <PageTitle
-                    title={title.toUpperCase()}
-                    styles={{ ...shortTitle }}
-                  />
-                </Box>
-                <PageTitle
-                  title={numberOfAccounts}
-                  styles={{ ...shortCardTitle }}
-                />
-              </Box>
-              <Link
-                href={link}
-                style={{ marginLeft: '470px', marginTop: '9px' }}
-              >
-                <TableSingleAction actionName="View" />
-              </Link>{' '}
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+    <div className="flex items-center justify-between w-full px-4 border py-5 rounded-lg shadow  mb-5 px-10">
+      <div>
+        <PageTitle title={title.toUpperCase()} styles={{ ...shortTitle }} />
+      </div>
+
+      <div className="flex items-center">
+        <div className="mr-24">
+          <PageTitle title="Balance" styles={{ ...shortCardTitle }} />
+
+          <PageTitle title={numberOfAccounts} styles={{ ...shortCardTitle }} />
+        </div>
+        <div>
+          <Link href={link} style={{ marginTop: '9px' }}>
+            <TableSingleAction actionName="View" />
+          </Link>{' '}
+        </div>
+      </div>
+    </div>
   );
 };

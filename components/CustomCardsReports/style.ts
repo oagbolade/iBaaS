@@ -83,7 +83,7 @@ export const shortCardsContainer = {
 
 export const shortCard = {
   display: 'flex',
-  width: { mobile: '100%', desktop: '1165px' },
+  width: { mobile: '100%', desktop: '100%' },
   padding: '10px 24px',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -101,7 +101,7 @@ export const shortcards = {
   gap: '15px',
   alignSelf: 'stretch',
   borderRadius: '0px',
-  width: { mobile: '100%', desktop: '1117px' },
+  width: { mobile: '100%', desktop: '100%' },
   height: '356px'
 };
 
@@ -116,7 +116,7 @@ export const shortscard = {
   borderRadius: '8px',
   border: `1px solid ${colors.neutral300}`,
   background: `${colors.white}`,
-  width: { mobile: '764px', desktop: '1223px' },
+  width: { mobile: '764px', desktop: '100%' },
   height: '71px'
 };
 
@@ -127,7 +127,6 @@ export const shortCardStyle = {
   gap: '0px',
   alignSelf: 'stretch',
   borderRadius: '6px',
-  width: { mobile: '100%', desktop: '1117px' },
   height: '71px'
 };
 
@@ -138,7 +137,6 @@ export const shortCardtitle = {
   gap: '10px',
   flex: '1 0 0',
   borderRadius: '5px',
-  width: { mobile: '100%', desktop: '1012px' },
   height: '32px'
 };
 
@@ -168,19 +166,18 @@ export const shortCardTitle = {
   fontStyle: 'normal',
   fontWeight: 400,
   lineHeight: '24px' /* 150% */,
-  marginLeft: '140%',
+  marginLeft: '10%',
   width: '70px'
 };
 
 export const totalContainer = {
   display: 'flex',
-  width: '1117px',
+  justifyContent: 'space-between',
+  width: '100%',
   height: '58px',
   flexShrink: '0',
   borderRadius: '0px',
   backgroundColor: `${colors.primaryBlue500}`,
-  marginLeft: '50px',
-  marginTop: '25px',
   padding: '15px'
 };
 

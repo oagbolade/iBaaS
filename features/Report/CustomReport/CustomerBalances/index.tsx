@@ -39,7 +39,6 @@ export const CustomerBalances = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('customer-balances');
   const { branches } = useGetBranches();
-
   const { data: casaOneBankProducts } = useGetProductTypeByid('1');
   const { data: casaTwoBankProducts } = useGetProductTypeByid('2');
   const { data: loanBankProducts } = useGetProductTypeByid('3');
@@ -63,7 +62,6 @@ export const CustomerBalances = () => {
 
   const startDate = searchParams?.startDate || '';
   const endDate = searchParams?.endDate || '';
-
   const {
     customerBalanceList = {
       pagedCustomerBalances: [],

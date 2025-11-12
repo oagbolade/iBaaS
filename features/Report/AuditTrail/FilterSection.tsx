@@ -1,38 +1,26 @@
 import React from 'react';
-import { Box, Stack, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
 import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import { exportData, dateFilter } from './styles';
 import colors from '@/assets/colors';
-import { ExportIcon } from '@/assets/svg';
-import {
-  ActionButtonWithPopper,
-  ActionButton
-} from '@/components/Revamp/Buttons';
+import { ActionButton } from '@/components/Revamp/Buttons';
 
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { ISearchParams } from '@/app/api/search/route';
 import { useCurrentBreakpoint } from '@/utils';
 import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { FormTextInput } from '@/components/FormikFields';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   onSearch?: Function;
 };
 
 export const FilterSection = ({ onSearch }: Props) => {
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
-  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const onSubmit = async (values: any) => {
     const params: ISearchParams = {
       searchWith: values.searchWith ? values.searchWith : null,
-      userID: values.userID ? values.userID : null,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
+      userID: values.userID ? values.userID : null
     };
     onSearch?.(params);
   };
@@ -43,58 +31,6 @@ export const FilterSection = ({ onSearch }: Props) => {
       onSubmit={(values) => onSubmit(values)}
     >
       <Form>
-        <Stack
-          sx={{
-            position: 'sticky',
-            top: '60px',
-            zIndex: 3,
-            backgroundColor: `${colors.white}`,
-            borderLeft: `1px solid ${colors.loanTitleColor}`,
-            borderBottom: `1px solid ${colors.loanTitleColor}`,
-            paddingLeft: '10px',
-            paddingRight: '10px'
-          }}
-          direction={setDirection()}
-          justifyContent="end"
-        >
-          <Stack
-            mt={1}
-            direction={setDirection()}
-            spacing={2}
-            justifyContent="space-between"
-          >
-            <Box>
-              <ActionButtonWithPopper
-                searchGroupVariant="ExportReport"
-                customStyle={{ ...exportData }}
-                icon={<ExportIcon />}
-                iconPosition="start"
-                buttonTitle="Export Data"
-              />
-            </Box>
-            <Box>
-              <ActionButtonWithPopper
-                searchGroupVariant="DateRangePicker"
-                customStyle={{ ...dateFilter }}
-                name="startDate"
-                icon={
-                  <CalendarTodayOutlinedIcon
-                    sx={{
-                      color: `${colors.Heading}`
-                    }}
-                  />
-                }
-                iconPosition="end"
-                buttonTitle={
-                  dateValue?.[0] && dateValue?.[1]
-                    ? `${dateValue[0].format('MMM DD, YYYY')} - ${dateValue[1].format('MMM DD, YYYY')}`
-                    : 'Select Date Range'
-                }
-              />
-            </Box>
-          </Stack>
-        </Stack>
-
         <Box
           sx={{
             paddingX: '24px',

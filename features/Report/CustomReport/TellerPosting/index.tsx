@@ -20,7 +20,10 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { getStoredUser } from '@/utils/user-storage';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 685f2e7c5d61c6810429463769e4c6a0233359f5
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -52,23 +55,22 @@ export const TellerPosting = () => {
 
   const { search } = searchParams || {};
 
- 
   const userId = getStoredUser()?.profiles?.userid;
-useEffect(() => {
-  if (userId && !searchActive && sysmodel?.systemDate) {
-    const systemDate = sysmodel.systemDate.split("T")[0];
+  useEffect(() => {
+    if (userId && !searchActive && sysmodel?.systemDate) {
+      const systemDate = sysmodel.systemDate.split('T')[0];
 
-    setSearchParams({
-      search: userId,
-      reportDate: systemDate,
-      endDate: systemDate,
-      pageNumber: "1",
-    });
+      setSearchParams({
+        search: userId,
+        reportDate: systemDate,
+        endDate: systemDate,
+        pageNumber: '1',
+      });
 
-    setSearchActive(true);
-    setPage(1);
-  }
-}, [userId, searchActive, sysmodel?.systemDate]);
+      setSearchActive(true);
+      setPage(1);
+    }
+  }, [userId, searchActive, sysmodel?.systemDate]);
 
   const {
     tellerPostByDateList = [],
@@ -82,8 +84,7 @@ useEffect(() => {
   });
 
   const {
-    tellerPostByDateList: downloadData = [],
-    totalRecords: downloadTotalRecords
+    tellerPostByDateList: downloadData
   } = useGetTellerPosting({
     ...searchParams,
     search: search ?? undefined,
@@ -99,6 +100,7 @@ useEffect(() => {
     return;
   }
 
+<<<<<<< HEAD
   // Format export data only if downloadData changed in content
   const formattedExportData = downloadData.map((item) => ({
     'Account Number': item?.accountNumber || '',
@@ -120,6 +122,29 @@ useEffect(() => {
     Withdrawal: item?.withdrawal || '',
     'To Vault': item?.toVault || ''
   }));
+=======
+    if (downloadData && downloadData?.length > 0) {
+      const formattedExportData = downloadData.map((item) => ({
+        'Account Number': item?.accountNumber || '',
+        'Account title': item?.accounttitle || '',
+        Narration: item?.narration || '',
+        'Value Date': item?.valuedate?.trim() || '',
+        Reference: item?.refNo || '',
+        'Transaction Amount': item?.tranAmount || '',
+        'Posting Mode': item?.postingMode || '',
+        'Credit Account': item?.creditAcct || '',
+        'Transaction Date': item?.tranDate || '',
+        'User ID': item?.userid || '',
+        'Debit Account': item?.debitacct || '',
+        'Post Sequence': item?.postseq || '',
+        'Previous Balance': item?.prevbal || '',
+        Deposit: item?.deposit || '',
+        'From Vault': item?.fromVault || '',
+        'Current Balance': item?.curbal || '',
+        Withdrawal: item?.withdrawal || '',
+        'To Vault': item?.toVault || ''
+      }));
+>>>>>>> 685f2e7c5d61c6810429463769e4c6a0233359f5
 
   // Convert to JSON string to compare easily
   const formattedString = JSON.stringify(formattedExportData);
@@ -157,7 +182,7 @@ useEffect(() => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-        <FilterSection onSearch={handleSearch} />
+      <FilterSection onSearch={handleSearch} />
       <Box sx={{ width: '100%', padding: '25px' }}>
         <MuiTableContainer
           tableConfig={{ hasActions: false }}

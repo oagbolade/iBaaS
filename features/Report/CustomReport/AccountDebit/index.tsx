@@ -80,74 +80,70 @@ export const AccountDebit = () => {
     }
   }, [downloadData]);
 
-  if (isLoadingAccountInDebit || isLoadingBranches) {
-    return (
-      <Box m={16}>
-        <FormSkeleton noOfLoaders={5} />
-      </Box>
-    );
-  }
-
   return (
-    <Box sx={{ marginTop: '50px', width: '100%' }}>
+    <Box sx={{ marginTop: '60px', width: '100%' }}>
       <TopOverViewSection useBackButton />
       {branches && (
         <FilterSection branches={branches} onSearch={handleSearch} />
       )}
       <Box sx={{ padding: '25px', width: '100%' }}>
-        <MuiTableContainer
-          columns={accountDebitInReportColumns}
-          data={accountsinDebitList}
-          page={Number(page)}
-          setPage={setPage}
-          totalPages={totalPages}
-          totalElements={totalRecords}
-          showHeader={{
-            mainTitle: 'Account in Debit',
-            secondaryTitle:
-              'See a directory of all Account in Debit Report in this system.',
-            hideFilterSection: true
-          }}
-        >
-          {searchActive ? (
-            accountsinDebitList?.map(
-              (accountData: IAccountInDebitResponse, index) => {
-                return (
-                  <StyledTableRow key={index}>
-                    <StyledTableCell component="th" scope="row">
-                      {accountData?.accountnumber || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      {accountData?.accounttitle || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {accountData?.customerid || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {`NGN ${formatCurrency(accountData?.bookBalance || 0) || 'N/A'}`}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {accountData?.officerName || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {accountData?.productName || 'N/A'}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                );
-              }
-            )
-          ) : (
-            <StyledTableRow>
-              <StyledTableCell
-                colSpan={accountDebitInReportColumns.length + 1}
-                component="th"
-                scope="row"
-              >
-                {renderEmptyTableBody()}
-              </StyledTableCell>
-            </StyledTableRow>
-          )}
-        </MuiTableContainer>
+        {isLoadingAccountInDebit || isLoadingBranches ? (
+          <FormSkeleton noOfLoaders={3} />
+        ) : (
+          <MuiTableContainer
+            columns={accountDebitInReportColumns}
+            data={accountsinDebitList}
+            page={Number(page)}
+            setPage={setPage}
+            totalPages={totalPages}
+            totalElements={totalRecords}
+            showHeader={{
+              mainTitle: 'Account in Debit',
+              secondaryTitle:
+                'See a directory of all Account in Debit Report in this system.',
+              hideFilterSection: true
+            }}
+          >
+            {searchActive ? (
+              accountsinDebitList?.map(
+                (accountData: IAccountInDebitResponse, index) => {
+                  return (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell component="th" scope="row">
+                        {accountData?.accountnumber || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {accountData?.accounttitle || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {accountData?.customerid || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {`NGN ${formatCurrency(accountData?.bookBalance || 0) || 'N/A'}`}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {accountData?.officerName || 'N/A'}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {accountData?.productName || 'N/A'}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                }
+              )
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell
+                  colSpan={accountDebitInReportColumns.length + 1}
+                  component="th"
+                  scope="row"
+                >
+                  {renderEmptyTableBody()}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
+        )}
       </Box>
     </Box>
   );

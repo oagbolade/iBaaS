@@ -86,7 +86,7 @@ export const FilterSection = ({ branches, onSearch }: Props) => {
                     }}
                     icon={<SearchIcon />}
                     name="searchWith"
-                    placeholder="Search by Product Name or code"
+                    placeholder="Search by GL Account"
                     label="Search"
                   />{' '}
                 </Grid>

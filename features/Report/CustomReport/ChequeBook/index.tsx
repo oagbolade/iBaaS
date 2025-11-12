@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
+import moment from 'moment';
 import { FilterSection } from './FilterSection';
 import { COLUMN } from './Column';
 import {
@@ -8,7 +9,6 @@ import {
   StyledTableRow,
   renderEmptyTableBody
 } from '@/components/Table/Table';
-import moment from 'moment';
 import { StyledTableCell } from '@/components/Table/style';
 import { useGetCheckbookStatus } from '@/api/reports/useChequebook';
 import { ISearchParams } from '@/app/api/search/route';
@@ -21,12 +21,14 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
+import { Status } from '@/components/Labels';
 
 export const ChequeBookStatus = () => {
   const { isLoading } = useGlobalLoadingState();
   const { dateValue } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType, setReportQueryParams } =
-    React.useContext(DownloadReportContext);
+  const { setExportData, setReportType } = React.useContext(
+    DownloadReportContext
+  );
 
   const {
     searchParams,
@@ -67,7 +69,6 @@ export const ChequeBookStatus = () => {
   });
 
   const rowsPerPage = 10;
-  // Set export data when getAllChequeBookStatusData is retrieved
   React.useEffect(() => {
     if (!downloadData || downloadData?.length === 0) {
       return setExportData([]);
@@ -101,7 +102,7 @@ export const ChequeBookStatus = () => {
             <MuiTableContainer
               columns={COLUMN}
               tableConfig={{
-                hasActions: true
+                hasActions: false
               }}
               showHeader={{
                 hideFilterSection: true,
@@ -139,11 +140,31 @@ export const ChequeBookStatus = () => {
                       </StyledTableCell>
 
                       <StyledTableCell component="th" scope="row">
-                        {dataItem?.narration || 'N/A'}
+                        <span
+                          className=" truncate overflow-hidden max-w-xs block"
+                          title={dataItem?.narration || 'N/A'}
+                        >
+                          {dataItem?.narration || 'N/A'}
+                        </span>
                       </StyledTableCell>
 
                       <StyledTableCell component="th" scope="row">
-                        {dataItem?.status || 'N/A'}
+                        {(() => {
+                          switch (dataItem?.status) {
+                            case 'Active':
+                              return <Status label="Active" status="success" />;
+                            case 'Used':
+                              return <Status label="Used" status="pending" />;
+                            case 'Closed':
+                              return <Status label="closed" status="pending" />;
+                            case 'Hotlisted':
+                              return (
+                                <Status label="Hotlisted" status="danger" />
+                              );
+                            default:
+                              return null;
+                          }
+                        })()}
                       </StyledTableCell>
                     </StyledTableRow>
                   );

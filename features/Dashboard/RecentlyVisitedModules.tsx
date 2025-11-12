@@ -25,6 +25,7 @@ export const RecentlyVisitedModules = () => {
 
       {recentlyVisited.slice(0, 6).map((module: IRecentlyVisited) => (
         <Stack
+          key={module.moduleLink}
           direction="row"
           justifyContent="space-between"
           sx={{

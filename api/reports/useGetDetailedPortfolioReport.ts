@@ -15,7 +15,7 @@ export interface IDetailedPortfolioAtRiskParams {
   pageNumber?: number;
   productCode?: string;
   branchCode?: string;
-  search?: string;
+  searchWith?: string;
   startDate?: string | null;
   endDate?: string | null;
   getAll?: boolean | null;
@@ -34,7 +34,7 @@ async function fetchDetailedPortfolioAtRisk(
           branchcode: params.branchCode,
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1,
-          searchWith: params.search?.trim(),
+          searchWith: params.searchWith,
           startDate: params.startDate,
           endDate: params.endDate,
           getAll: params.getAll || false
@@ -73,13 +73,17 @@ export function useGetDetailedPortfolioReport(
       params?.productCode || '',
       params?.pageNumber || '',
       params?.pageSize || '',
-      params?.search,
+      params?.searchWith || '',
       params?.startDate || '',
       params?.endDate || '',
       params?.getAll || false
     ],
     queryFn: () => fetchDetailedPortfolioAtRisk(params, toastActions),
-    enabled: Boolean(params?.branchCode)
+    enabled: Boolean(
+      (params?.branchCode || '').length > 0 ||
+        (params?.productCode || '').length > 0 ||
+        (params?.searchWith || '').length > 0
+    )
   });
 
   return { ...data, isError, isLoading };

@@ -21,10 +21,10 @@ const END_OF_DAY_BASE_URL = `${
     : process.env.NEXT_PUBLIC_END_OF_DAY_BASE_URL
 }/api`;
 
-const AuthFaBaseUrl = `${
+const Auth2FaBaseUrl = `${
   typeof window !== 'undefined' && env !== 'development'
     ? 'https://ibaas-2fa-generator-service.k9.isw.la'
-    : process.env.NEXT_PUBLIC_AUTH_FA_BASE_URL
+    : process.env.NEXT_PUBLIC_AUTH_2FA_BASE_URL
 }/api`;
 
 const baseUrl = `${
@@ -57,7 +57,7 @@ export {
   END_OF_DAY_BASE_URL,
   baseUrl,
   nipBaseUrl,
-  AuthFaBaseUrl,
+  Auth2FaBaseUrl,
   endOfdayUrl,
   imageUploadBaseUrl
 };

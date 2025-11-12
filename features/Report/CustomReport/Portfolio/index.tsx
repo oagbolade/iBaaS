@@ -3,20 +3,34 @@ import React, { useContext, useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { centraliseNoDataAvailable } from '../style';
+import { FilterSection } from './FilterSection';
 import { PortfolioCard } from './PortfolioCards';
+import { useGetBranches } from '@/api/general/useBranches';
+import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { ISearchParams } from '@/app/api/search/route';
 import { TextInput } from '@/components/FormikFields';
-import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { useGetAllPortfolioAtRisk } from '@/api/reports/useGetAllPortfolioAtRisk';
 import { FormSkeleton } from '@/components/Loaders';
 import { IPortfolioAtRiskProduct } from '@/api/ResponseTypes/reports';
 import { ReportModuleContext } from '@/context/ReportModuleContext';
 import { NoDataAvailable } from '@/components/Alert/Warning/NoDataAvailable';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { TopOverViewSingeCalendarSection } from '@/features/Report/Overview/TopOverViewSingleCalenderSection';
 
 export const PortfolioAtRisk = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const { branches } = useGetBranches();
+
+  const {
+    searchParams,
+    setSearchParams,
+    searchActive,
+    setSearchActive,
+    page,
+    setPage
+  } = usePersistedSearch<ISearchParams>('plain-trial-balance');
 
   const { setDetailedPortfolioAtRiskReportData } =
     useContext(ReportModuleContext);
@@ -49,13 +63,13 @@ export const PortfolioAtRisk = () => {
 
   React.useEffect(() => {
     if (!downloadData || downloadData?.length === 0) {
-      setExportData([]);
+      // setExportData([]);
       return;
     }
 
     setExportData(downloadData as []);
     setReportType('PortfolioAtRiskProductList');
-  }, [downloadData, filteredDownloadData]);
+  }, [downloadData, filteredDownloadData, setExportData, setReportType]);
 
   if (isLoading) {
     return (
@@ -65,18 +79,26 @@ export const PortfolioAtRisk = () => {
     );
   }
 
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearchActive(true);
+    setSearchParams(params);
+  };
   return (
-    <Box sx={{ width: '100%', marginTop: '50px' }}>
-      <TopOverViewSection useBackButton />
+    <Box sx={{ width: '100%', marginTop: '60px' }}>
+      <TopOverViewSingeCalendarSection />
+
       <Box
         sx={{
           marginTop: '30px',
-          marginBottom: '30px',
-          marginLeft: '20px',
-          width: '100%'
+          paddingX: '24px'
         }}
       >
-        <Grid container>
+        <Grid>
+          {/* This is commented to be discuss with the backend later */}
+          {/* {branches && (
+            <FilterSection branches={branches} onSearch={handleSearch} />
+          )} */}
+
           <TextInput
             customStyle={{ width: '100%' }}
             label="Product Name/Code"
@@ -90,33 +112,31 @@ export const PortfolioAtRisk = () => {
           />
         </Grid>
 
-        <Grid container>
-          <Box sx={{ marginTop: '10px' }}>
-            {filteredPortfolioAtRiskList.length > 0 ? (
-              filteredPortfolioAtRiskList.map(
-                (product: IPortfolioAtRiskProduct, index) => (
-                  <Box sx={{ width: '100%' }} key={index}>
-                    <PortfolioCard
-                      PortfolioOption={product}
-                      link="/report/custom-report/portfolio-risk/individual-loan"
-                      contextSetter={setDetailedPortfolioAtRiskReportData}
-                    />
-                  </Box>
-                )
-              )
-            ) : (
-              <Box sx={centraliseNoDataAvailable}>
-                <Box mb={3} sx={{ width: '200px', height: '200px' }}>
-                  <NoDataAvailable
-                    message="No reports found"
-                    width={200}
-                    height={200}
+        <Box sx={{ marginTop: '10px' }}>
+          {filteredPortfolioAtRiskList.length > 0 ? (
+            filteredPortfolioAtRiskList.map(
+              (product: IPortfolioAtRiskProduct, index) => (
+                <Box sx={{ width: '100%' }} key={index}>
+                  <PortfolioCard
+                    PortfolioOption={product}
+                    link={`/report/custom-report/portfolio-risk/individual-loan?productCode=${product.productCode}&productName=${product.productName}&branchCode=${product.branch}`}
+                    contextSetter={setDetailedPortfolioAtRiskReportData}
                   />
                 </Box>
+              )
+            )
+          ) : (
+            <Box sx={centraliseNoDataAvailable}>
+              <Box mb={3} sx={{ width: '200px', height: '200px' }}>
+                <NoDataAvailable
+                  message="No reports found"
+                  width={200}
+                  height={200}
+                />
               </Box>
-            )}
-          </Box>
-        </Grid>
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );

@@ -17,7 +17,7 @@ data:
   NEXT_PUBLIC_SEARCH_BASE_URL: 'https://ibaas-search-api.k9.isw.la'
   NEXT_PUBLIC_REPORT_BASE_URL: 'https://ibaas-revamp-reports.k9.isw.la'
   NEXT_PUBLIC_END_OF_DAY_BASE_URL: 'http://ibaas-endofbusinessprocess.k9.isw.la'
-  NEXT_PUBLIC_AUTH_FA_BASE_URL: 'https://ibaas-2fa-generator-service.k9.isw.la'
+  NEXT_PUBLIC_AUTH_2FA_BASE_URL: 'https://ibaas-2fa-generator-service.k9.isw.la'
   NEXT_PUBLIC_BASE_URL: 'https://ibaas-api.k9.isw.la'
   NEXT_PUBLIC_ENDOFDAY_URL: 'https://ibaas-endofbusinessprocess.k9.isw.la'
   NEXT_PUBLIC_NIP_BASE_URL: 'https://nip-core-banking-interface.k9.isw.la'

@@ -1,9 +1,10 @@
 'use client';
-import React, { useState } from 'react';
-import { Formik, Form } from 'formik'; // Import Formik and Form
+import React, { useState, useEffect } from 'react';
+import { Formik, Form } from 'formik';
 import { Box, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation';
+import type { SelectChangeEvent } from '@mui/material/Select';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
 import { PrimaryIconButton } from '@/components/Buttons/PrimaryIconButton';
@@ -39,66 +40,62 @@ export const ProductDetailsForm = ({
   data
 }: Props) => {
   const { isMobile, setWidth } = useCurrentBreakpoint();
-  // openModel state removed (not used)
   const router = useRouter();
+
   const [addProductValues, setAddValues] = useState<string>('');
+  const [productValue, setProductValue] = useState<string>('');
+  const [productNumber, setProductNumber] = useState<string>('');
+
+  const [isClient, setIsClient] = useState(false);
 
   const { mappedProductClassTypeId } = useMapSelectOptions({ data });
 
-  const handleChange = (value: string) => {
-    localStorage.setItem('addProduct', value);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsClient(true);
+      const stored = localStorage.getItem('addProduct');
+      if (stored) setProductValue(stored);
+    }
+  }, []);
+
+  const handleRadioChange = (value: string) => {
+    setProductValue('');
     setAddValues(value);
   };
 
-  // read stored product selection (may be null if not set)
-  const productValue = localStorage.getItem('addProduct') ?? '';
-
+  const handleProductChange = (event: SelectChangeEvent<string>) => {
+    const val = event.target.value;
+    localStorage.setItem('addProduct', val);
+    setProductValue(val);
+    setProductNumber(val);
+  };
   const handleContinue = () => {
-    let route: string | null = null;
+    let targetId: string;
 
-    if (addProductValues === '1' && productValue) {
-      switch (productValue) {
-        case '1':
-          route = '/setup/product-gl/add-casa-product';
-          break;
-        case '3':
-          route = '/setup/product-gl/add-product';
-          break;
-        case '4':
-          route = '/setup/product-gl/add-treasury-product';
-          break;
-        default:
-      }
-    } else if (addProductValues === '2' && productValue) {
-      switch (productValue) {
-        case '1':
-          route = '/setup/product-gl/add-casa-product';
-          break;
-        case '3':
-          route = '/setup/product-gl/add-product';
-          break;
-        case '4':
-          route = '/setup/product-gl/add-treasury-product';
-          break;
-        default:
-      }
+    if (addProductValues === '2') {
+      if (!productValue && !productNumber) return;
+      targetId = productValue;
     } else {
-      // No explicit choice made; if there's a stored productValue, honor it
-      switch (productValue) {
-        case '1':
-          route = '/setup/product-gl/add-casa-product';
-          break;
-        case '3':
-          route = '/setup/product-gl/add-product';
-          break;
-        case '4':
-          route = '/setup/product-gl/add-treasury-product';
-          break;
-        default:
-      }
+      // "No" → create fresh → default to general product
+      targetId = '3';
     }
+    const routes: Record<string, string> = {
+      '1': '/setup/product-gl/add-casa-product',
+      '3': '/setup/product-gl/add-product',
+      '4': '/setup/product-gl/add-treasury-product'
+    };
 
-    if (route) router.push(route);
+    if (addProductValues === '2' && productNumber) {
+      router.push('/setup/product-gl/add-product');
+    } else if (addProductValues === '2' && (productNumber as string)) {
+      router.push('/setup/product-gl/add-casa-product');
+    } else if ((addProductValues === '2' && productNumber) || '') {
+      router.push('/setup/product-gl/add-treasury-product');
+    }
+    const route = routes[targetId];
+    if (route) {
+      router.push(route);
+    }
   };
 
   return (
@@ -114,52 +111,33 @@ export const ProductDetailsForm = ({
         </Box>
       </Box>
 
-      {/* Wrap the form content in Formik */}
       <Formik
         initialValues={{
-          productclass: '',
-          addProduct: ''
+          productclass: productValue,
+          addProducts: addProductValues
         }}
-        onSubmit={() => {
-          // Handle form submission if needed
-          handleContinue();
-        }}
+        enableReinitialize
+        onSubmit={handleContinue}
       >
-        {() => (
+        {({ setFieldValue }) => (
           <Form>
             <Box sx={AccountPasswordBodyContainer}>
-              <Box
-                sx={{
-                  width: '100%',
-                  maxWidth: '400px',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}
-              >
+              <Box sx={{ width: '100%', maxWidth: '400px' }}>
                 <RadioButtons2
-                  className="permissionOptions"
+                  title="Would you like to setup this product from an existing product?"
+                  name="addProducts"
                   options={[
                     { label: 'Yes', value: '1' },
                     { label: 'No', value: '2' }
                   ]}
-                  title="Would you like to setup this product from an existing product?"
-                  name="addProducts"
-                  customStyle={{
-                    display: 'flex'
-                  }}
-                  value={addProductValues.toString()}
-                  handleCheck={(value: string) => handleChange(value)}
+                  value={addProductValues} // ← Controlled
+                  handleCheck={handleRadioChange}
+                  customStyle={{ display: 'flex', gap: 4 }}
                 />
               </Box>
-              {addProductValues === '1' && (
-                <Box
-                  sx={{
-                    width: '100%',
-                    maxWidth: '400px',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                >
+
+              {addProductValues === '1' && isClient && (
+                <Box sx={{ mt: 2, width: '100%', maxWidth: '400px' }}>
                   <FormSelectField
                     name="productclass"
                     options={mappedProductClassTypeId}
@@ -168,6 +146,13 @@ export const ProductDetailsForm = ({
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
                     required
+                    value={productNumber}
+                    onChange={(e) => {
+                      const event = e as SelectChangeEvent<string>;
+                      const val = event.target.value;
+                      setFieldValue('productclass', val);
+                      handleProductChange(event);
+                    }}
                   />
                 </Box>
               )}
@@ -183,24 +168,28 @@ export const ProductDetailsForm = ({
                       customStyle={{
                         ...TypographyButton,
                         width: `${isMobile ? '80px' : '131px'}`,
-                        height: '40px',
-                        padding: { mobile: '0 50px' }
+                        height: '40px'
                       }}
                     />
                   </Box>
+
                   <Box sx={{ ...ConfirmButton, background: 'none' }}>
                     <PrimaryIconButton
                       buttonTitle="Continue"
+                      type="submit"
                       customStyle={{
                         ...TypographyConfirm,
-                        backgroundColor: `${colors.activeBlue400}`,
+                        backgroundColor: colors.activeBlue400,
                         width: `${isMobile ? '80px' : '131px'}`,
                         height: '40px',
                         borderRadius: '6px',
                         padding: { mobile: '8px 50px', desktop: '16px 78px' },
                         marginRight: { mobile: '70px', desktop: 0 }
                       }}
-                      onClick={handleContinue}
+                      disabled={
+                        !addProductValues ||
+                        (addProductValues === '1' && !productValue)
+                      }
                     />
                   </Box>
                 </Box>

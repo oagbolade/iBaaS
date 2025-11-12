@@ -78,7 +78,9 @@ export const PortfolioTitle = {
   fontStyle: 'normal',
   fontWeight: 700,
   lineHeight: '32px' /* 160% */,
-  width: '40px'
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis'
 };
 
 export const PortfolioAccountContainer = {

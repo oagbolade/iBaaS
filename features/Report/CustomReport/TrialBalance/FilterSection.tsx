@@ -1,29 +1,19 @@
 import React from 'react';
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Formik, Form } from 'formik';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import dayjs, { Dayjs } from 'dayjs';
-import { DateCalendar } from '@mui/x-date-pickers';
-import { exportData, dateFilter, inputFields } from '../style';
+import { inputFields } from '../style';
 import { FormSelectField, FormikRadioButton } from '@/components/FormikFields';
 import colors from '@/assets/colors';
-import {
-  ActionButtonWithPopper,
-  ActionButton,
-  BackButton
-} from '@/components/Revamp/Buttons';
-import { ExportIcon } from '@/assets/svg';
+import { ActionButton } from '@/components/Revamp/Buttons';
 
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
 import { useCurrentBreakpoint } from '@/utils';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { ISearchParams } from '@/app/api/search/route';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { trialBalanceGroupSchema } from '@/schemas/reports';
 import { IGLType } from '@/api/ResponseTypes/admin';
-import useFormattedDates from '@/utils/hooks/useFormattedDates';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 type Props = {
   branches?: IBranches[];
@@ -33,15 +23,13 @@ type Props = {
 
 export const FilterSection = ({ branches, onSearch, glType }: Props) => {
   const { searchParams } = usePersistedSearch<ISearchParams>('trial-balance');
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
   const { mappedBranches, mappedGLType } = useMapSelectOptions({
     branches,
     glType
   });
 
-  const { currentDate } = useFormattedDates();
-  const [reportDate, setReportDate] = React.useState<Dayjs>(dayjs(currentDate));
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
   const initialValues = {
     branchID: searchParams?.branchID ?? '',
@@ -61,7 +49,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
         values.reportType?.toString().trim().length > 0
           ? values.reportType
           : null,
-      reportDate: reportDate.format('YYYY-MM-DD')
+      reportDate: dateValue[0]?.format('YYYY-MM-DD') || ''
     };
     onSearch?.(params);
   };
@@ -69,7 +57,7 @@ export const FilterSection = ({ branches, onSearch, glType }: Props) => {
   return (
     <Box marginTop={10}>
       <Formik
-        initialValues={initialValues}
+        initialValues={initialValues }
         enableReinitialize
         onSubmit={(values) => onSubmit(values)}
         validationSchema={trialBalanceGroupSchema}

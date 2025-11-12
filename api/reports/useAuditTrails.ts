@@ -17,7 +17,7 @@ export async function getAllAuditTrailReports(
 ) {
   let result: AuditTrailsResponse = {} as AuditTrailsResponse;
   try {
-    const urlEndpoint = `/api/ReportServices/AUDITTRAILREPORT?userId=${params?.userID}&startdate=${params?.startDate}&Enddate=${params?.endDate}`;
+    const urlEndpoint = `/api/ReportServices/AUDITTRAILREPORT?userId=${params?.userID || null}&startdate=${params?.startDate}&Enddate=${params?.endDate}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize}&getAll=${params?.getAll}`;
     const { data }: AxiosResponse<AuditTrailsResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,
@@ -56,11 +56,15 @@ export function useGetAllAuditTrailReports(params: ISearchParams | null) {
       params?.startDate || '',
       params?.endDate || '',
       params?.userID || '',
-      params?.page || 1
+      params?.page,
+      params?.pageSize,
+      params?.pageNumber
     ],
     queryFn: () => getAllAuditTrailReports(toastActions, params || {}),
     enabled: Boolean(
-      (params?.startDate || '').length > 0 || (params?.endDate || '').length > 0
+      (params?.startDate || '').length > 0 ||
+        (params?.endDate || '').length > 0 ||
+        (params?.pageNumber || '').length > 0
     )
   });
 

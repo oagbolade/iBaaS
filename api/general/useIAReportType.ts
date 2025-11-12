@@ -32,7 +32,7 @@ async function getIAReportType(
   };
 
   try {
-    const urlEndpoint = '/ReportServices/IAReportType';
+    const urlEndpoint = '/api/ReportServices/IAReportType';
 
     const { data }: AxiosResponse<UseIAReportType> = await reportsAxiosInstance(
       {

@@ -11,15 +11,12 @@ import { queryKeys } from '@/react-query/constants';
 import { PlainTrialBalanceResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
 
-import { REPORT_BASE_URL } from '@/axiosInstance/constants';
-
 export async function getPlainTrialBalance(
   toastActions: IToastActions,
   params: ISearchParams | null
 ) {
   let result: PlainTrialBalanceResponse = {} as PlainTrialBalanceResponse;
   try {
-    // report url
     const urlEndpoint = `/api/ReportServices/PLAINTRIALBALANCE?reportdate=${params?.reportDate}&reporttype=${params?.reportType}&branchcode=${params?.branchID}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize || '10'}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith || ''}`;
 
     const { data }: AxiosResponse<PlainTrialBalanceResponse> =

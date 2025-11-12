@@ -124,7 +124,6 @@ export const CreateCustomerContainer = () => {
       setIntroducerNumber(stored);
     }
   }, []);
-
   React.useEffect(() => {
     setCustomerType(getCustomerType);
   }, [getCustomerType, setCustomerType]);
@@ -203,7 +202,6 @@ export const CreateCustomerContainer = () => {
       : introducerNumber === 'customer'
         ? 2
         : null;
-
   const onSubmit = async (values: any) => {
     const emailalert = (
       document.querySelector('#test-email') as HTMLInputElement
