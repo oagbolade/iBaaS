@@ -20,10 +20,6 @@ import { ISearchParams } from '@/app/api/search/route';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { getStoredUser } from '@/utils/user-storage';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
-<<<<<<< HEAD
-
-=======
->>>>>>> 685f2e7c5d61c6810429463769e4c6a0233359f5
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -100,7 +96,6 @@ useEffect(() => {
     return;
   }
 
-<<<<<<< HEAD
   // Format export data only if downloadData changed in content
   const formattedExportData = downloadData.map((item) => ({
     'Account Number': item?.accountNumber || '',
@@ -122,29 +117,6 @@ useEffect(() => {
     Withdrawal: item?.withdrawal || '',
     'To Vault': item?.toVault || ''
   }));
-=======
-    if (downloadData && downloadData?.length > 0) {
-      const formattedExportData = downloadData.map((item) => ({
-        'Account Number': item?.accountNumber || '',
-        'Account title': item?.accounttitle || '',
-        Narration: item?.narration || '',
-        'Value Date': item?.valuedate?.trim() || '',
-        Reference: item?.refNo || '',
-        'Transaction Amount': item?.tranAmount || '',
-        'Posting Mode': item?.postingMode || '',
-        'Credit Account': item?.creditAcct || '',
-        'Transaction Date': item?.tranDate || '',
-        'User ID': item?.userid || '',
-        'Debit Account': item?.debitacct || '',
-        'Post Sequence': item?.postseq || '',
-        'Previous Balance': item?.prevbal || '',
-        Deposit: item?.deposit || '',
-        'From Vault': item?.fromVault || '',
-        'Current Balance': item?.curbal || '',
-        Withdrawal: item?.withdrawal || '',
-        'To Vault': item?.toVault || ''
-      }));
->>>>>>> 685f2e7c5d61c6810429463769e4c6a0233359f5
 
   // Convert to JSON string to compare easily
   const formattedString = JSON.stringify(formattedExportData);
