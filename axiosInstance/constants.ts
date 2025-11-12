@@ -17,7 +17,7 @@ const END_OF_DAY_BASE_URL = `${typeof window !== 'undefined' && env !== 'develop
 
 const Auth2FABaseUrl = `${typeof window !== 'undefined' && env !== 'development'
     ? ''
-    : process.env.NEXT_PUBLIC_AUTH_FA_BASE_URL
+    : process.env.NEXT_PUBLIC_AUTH_2FA_BASE_URL
   }/api`;
 
 const baseUrl =
