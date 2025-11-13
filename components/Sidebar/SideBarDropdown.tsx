@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Link from 'next/link';
 import { comingSoon, sideBarItem } from './styles';
 import styles from './App.module.css';
 import { ChevronDown } from '@/assets/svg';
@@ -15,7 +16,6 @@ import SideBarPrimaryButton from '@/components/Buttons/SideBarPrimaryButton';
 import colors from '@/assets/colors';
 import { renderAsActive } from '@/utils/renderActiveSideMenu';
 import { shouldDisableMenuItem } from '@/utils/checkUserRoleAccess';
-import Link from 'next/link';
 
 interface SubMenuItems {
   name: string;
