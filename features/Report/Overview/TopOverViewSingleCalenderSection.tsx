@@ -32,7 +32,6 @@ export const TopOverViewSingeCalendarSection = () => {
   );
 
   const formattedEndDate = React.useMemo(
-    // show the single selected date (dateValue[0]) so UI updates immediately when user picks a date
     () => dateValue[0]?.format('YYYY-MM-DD') ?? '',
     [dateValue[0]]
   );

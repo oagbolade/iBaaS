@@ -119,7 +119,7 @@ export const StatementAccount = () => {
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
 
-      <div className="mx-5 mt-8">
+    <div className="mx-5 mt-8">
         {branches && products && (
           <FilterSection
             branches={branches}
