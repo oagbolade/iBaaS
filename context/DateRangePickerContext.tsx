@@ -41,18 +41,6 @@ export default function DateRangePickerContextProvider({ children }: any) {
   const setDateValue = useCallback(
     (newValue: DateRange<Dayjs>, opts?: { allowSingle?: boolean }) => {
       const [start, end] = newValue;
-      const [currStart, currEnd] = dateValue;
-
-      // If incoming range equals current range (day precision), do nothing.
-      const sameStart =
-        (start === undefined && currStart === undefined) ||
-        (start && currStart && start.isSame(currStart, 'day'));
-      const sameEnd =
-        (end === undefined && currEnd === undefined) ||
-        (end && currEnd && end.isSame(currEnd, 'day'));
-      if (sameStart && sameEnd) return;
-
-      // if allowSingle is not set, enforce end > start
       if (!opts?.allowSingle) {
         if (start && end && !end.isAfter(start, 'day')) {
           toast(
@@ -64,10 +52,9 @@ export default function DateRangePickerContextProvider({ children }: any) {
           return;
         }
       }
-
       setValue(newValue);
     },
-    [toastActions, dateValue]
+    [toastActions]
   );
 
   useEffect(() => {
