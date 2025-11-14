@@ -18,7 +18,7 @@ declare global {
       NEXT_PUBLIC_SEARCH_BASE_URL: string;
       NEXT_PUBLIC_REPORT_BASE_URL: string;
       NEXT_PUBLIC_END_OF_DAY_BASE_URL: string;
-      NEXT_PUBLIC_AUTH_FA_BASE_URL: string;
+      NEXT_PUBLIC_AUTH_2FA_BASE_URL: string;
       NEXT_PUBLIC_BASE_URL: string;
       NEXT_PUBLIC_ENDOFDAY_URL: string;
       NEXT_PUBLIC_NIP_BASE_URL: string;
