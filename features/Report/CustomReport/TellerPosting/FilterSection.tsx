@@ -6,7 +6,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { buttonBackgroundColor } from '../AccountDebit/style';
 import { dateFilter } from '../../AuditTrail/styles';
-import { TextInput } from '@/components/FormikFields';
+import { IBranches } from '@/api/ResponseTypes/general';
+import {
+  FormSelectField, FormSelectInput,
+  FormTextInput,
+  TextInput
+} from '@/components/FormikFields';
 import {
   ActionButton,
   ActionButtonWithPopper,
@@ -20,17 +25,24 @@ import { exportData } from '@/components/ViewReport/style';
 import { ExportIcon } from '@/assets/svg';
 import colors from '@/assets/colors';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-
+import { useCurrentBreakpoint } from '@/utils';
+import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 type Props = {
   onSearch: (params: ITellerPostingParams | null) => void;
+  branches?: IBranches[];
 };
 
-export const FilterSection = ({ onSearch }: Props) => {
+export const FilterSection = ({ branches, onSearch }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const { setDirection } = useSetDirection();
+  const { setWidth } = useCurrentBreakpoint();
 
   const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
   const endDate = dateValue[1];
+
+  const { mappedBranches } = useMapSelectOptions({
+    branches
+  });
 
   const handleSearchClick = () => {
     const searchParams = {
@@ -99,31 +111,45 @@ export const FilterSection = ({ onSearch }: Props) => {
         </Stack>
       </Stack>
 
-      <Box sx={{ height: '120px' }}>
-        <Grid
-          container
-          sx={{ padding: '15px 30px', display: 'flex', gap: '35px' }}
-          spacing={2}
-        >
+      <Box sx={{ height: '120px',padding:'24px' }}>
+        <Grid container spacing={2}>
           <Grid
-            mb={{ tablet: 10 }}
+            mb={{ tablet: 3 }}
             item
             mobile={12}
-            tablet={10}
+            tablet={5}
+            justifyContent="center"
+          >
+            <FormSelectInput
+              customStyle={{
+                width: setWidth(),
+                fontSize: '14px',
+                ...inputFields
+              }}
+              name="branchID"
+              options={mappedBranches}
+              label="Branch ID"
+            />{' '}
+          </Grid>
+          <Grid
+            mb={{ tablet: 3 }}
+            item
+            mobile={12}
+            tablet={6}
             justifyContent="center"
           >
             <TextInput
               customStyle={{
-                width: '100%',
+                width: setWidth(),
+                fontSize: '14px',
                 ...inputFields
               }}
               icon={<SearchIcon />}
               name="search"
-              value={searchTerm}
-              placeholder="Search a Teller or User ID"
               label="Teller/User ID"
+              placeholder="Search a Teller or User ID"
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setSearchTerm(e.target.value)
+                  setSearchTerm(e.target.value)
               }
             />{' '}
           </Grid>
