@@ -80,7 +80,7 @@ async function fetchGlSubGroupReport(
   toastActions: IToastActions
 ): Promise<IGlSubGroupResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/GlSubGroupReport';
+    const urlEndpoint = '/api/ReportServices/GlSubGroupReport';
     const { data }: AxiosResponse<IGlSubGroupResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
@@ -137,7 +137,7 @@ async function fetchGlNodeClassReport(
   toastActions: IToastActions
 ): Promise<GLAccountsByClassCodeResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/GLAccountsByClassCode';
+    const urlEndpoint = '/api/ReportServices/GLAccountsByClassCode';
     const { data }: AxiosResponse<GLAccountsByClassCodeResponse> =
       await reportsAxiosInstance.get(urlEndpoint, {
         params: {
