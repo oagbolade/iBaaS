@@ -99,7 +99,7 @@ export const ViewStyle = {
   gap: '4px',
   flex: '1 0 0',
   borderRadius: '6px',
-  width: '323px',
+  width: '100%',
   height: '44px'
 };
 
@@ -116,8 +116,12 @@ export const ViewTitle = {
   color: `${colors.neutral900}`,
   fontSize: '16px',
   fontStyle: 'normal',
-  fontWeight: 600,
-  lineHeight: '24px' /* 150% */
+  fontWeight: 600, 
+  lineHeight: '24px' /* 150% */,
+  width: '450px',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis'
 };
 
 export const ViewAccountStyle = {

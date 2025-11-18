@@ -73,7 +73,9 @@ export function useGetTrialBalance(params: ISearchParams | null) {
       (params?.branchID || '').length > 0 ||
         (params?.reportType || '').length > 0 ||
         (params?.reportDate || '').length > 0
-    )
+    ),
+    staleTime: 0, 
+    gcTime: 0
   });
   return { ...data, isError, isLoading };
 }

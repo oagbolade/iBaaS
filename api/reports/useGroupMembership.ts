@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -10,7 +10,6 @@ import { ISearchParams } from '@/app/api/search/route';
 import { queryKeys } from '@/react-query/constants';
 import { GroupMembershipResponse } from '@/api/ResponseTypes/reports';
 import { toast } from '@/utils/toast';
-import { REPORT_BASE_URL } from '@/axiosInstance/constants';
 
 export async function getGroupMembership(
   toastActions: IToastActions,
@@ -27,10 +26,10 @@ export async function getGroupMembership(
       getAll: String(params?.getAll || 'false'),
       searchWith: params?.searchWith || ''
     };
-    const urlEndpoint = `${REPORT_BASE_URL}/ReportServices/GetGroupMembership?${new URLSearchParams(queryParams)}`;
+    const urlEndpoint = `/api/ReportServices/GetGroupMembership?${new URLSearchParams(queryParams)}`;
 
     const { data }: AxiosResponse<GroupMembershipResponse> =
-      await axiosInstance({
+      await reportsAxiosInstance({
         url: urlEndpoint,
         method: 'GET',
         headers: {
