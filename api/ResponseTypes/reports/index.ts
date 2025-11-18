@@ -507,7 +507,7 @@ export interface IIncomeAssurance {
   intrate: number;
   loanamount: number;
   accrued_Int: number;
-  branchCode: string;
+  branchcode: string;
   branchName: string;
   productCode: string;
   productcode: string;

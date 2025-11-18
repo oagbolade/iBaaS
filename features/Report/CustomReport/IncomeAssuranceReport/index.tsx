@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Box } from '@mui/material';
 import moment from 'moment';
 import { FilterSection } from './FilterSection';
-import { COLUMN } from './COLUMNS';
+import { COLUMN, COLUMN_PAYMENT } from './COLUMNS';
 import { MuiTableContainer } from '@/components/Table';
 import { useGetIncomeAssuranceReport } from '@/api/reports/useIncomeAssuranceReport';
 import { ISearchParams } from '@/app/api/search/route';
@@ -42,6 +42,10 @@ export const IncomeAssuranceReport = () => {
     setPage
   } = usePersistedSearch<ISearchParams>('income-assurance');
 
+  const reportType = Number(searchParams?.reportType);
+
+const isAllProductReport = reportType === 1;
+
   const {
     data = [],
     isLoading,
@@ -59,29 +63,41 @@ export const IncomeAssuranceReport = () => {
     pageSize: '10'
   });
 
-  React.useEffect(() => {
-    if (!downloadData || downloadData?.length === 0) {
-      setExportData([]);
-      return;
+ React.useEffect(() => {
+  if (!downloadData || downloadData?.length === 0) {
+    setExportData([]);
+    return;
+  }
+
+  const formattedExportData = downloadData.map((item) => {
+    if (isAllProductReport) {
+      return {
+        'Product Code': item?.productcode || 'N/A',
+        'Branch Code': item?.branchcode || 'N/A',
+        'Accrued Interest': item?.accrued_Int?.toLocaleString() || 0,
+        'Branch Name': item?.branchName || 'N/A',
+        'Product Name': item?.productName || 'N/A'
+      };
     }
 
-    const formattedExportData = downloadData?.map((item) => ({
+    // FULL REPORT EXPORT
+    return {
       'Acc No': item?.accountnumber || 'N/A',
       'Account Name': item?.fullname || 'N/A',
       'Start Date': item?.startdate?.split('T')[0] || 'N/A',
       'Maturity Date': item?.matdate?.split('T')[0] || 'N/A',
-      'Intrest Rate': item?.intrate || 'N/A',
+      'Interest Rate': item?.intrate || 'N/A',
       'Loan Amount': item?.loanamount?.toLocaleString() || 0,
-      'product Name': item?.productName || 'N/A',
-      'Accured Intrest': item?.accrued_Int?.toLocaleString() || 0,
+      'Product Name': item?.productName || 'N/A',
+      'Accrued Interest': item?.accrued_Int?.toLocaleString() || 0,
       Branch: item?.branchName || 'N/A',
-      'Product Code': item?.productCode || 'N/A'
-    }));
+      'Product Code': item?.productCode || item?.productcode || 'N/A'
+    };
+  });
 
-    // Ensure no blank row or misplaced headers
-    setExportData(formattedExportData);
-    setReportType('IncomeAssuranceReport');
-  }, [downloadData]);
+  setExportData(formattedExportData);
+  setReportType('IncomeAssuranceReport');
+}, [downloadData, isAllProductReport]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
@@ -109,83 +125,71 @@ export const IncomeAssuranceReport = () => {
         {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
-          <MuiTableContainer
-            columns={COLUMN}
-            data={data}
-            tableConfig={{
-              hasActions: false
-            }}
-            showHeader={{
-              mainTitle: ' Income Assurance Report',
-              secondaryTitle:
-                'See a directory of Income Assurance Report in this system.',
-              hideFilterSection: true
-            }}
-            setPage={setPage}
-            page={page}
-            totalPages={totalPages}
-            totalElements={totalRecords}
-          >
-            {searchActive ? (
-              data?.map((dataItem: IIncomeAssurance, i) => {
-                return (
-                  <StyledTableRow key={i}>
-                    <StyledTableCell component="th" scope="row">
-                      {dataItem?.accountnumber || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem?.fullname || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {moment(dataItem?.startdate?.split('T')[0]).format(
-                        'YYYY-MM-DD'
-                      ) || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {moment(dataItem?.matdate?.split('T')[0]).format(
-                        'YYYY-MM-DD'
-                      ) || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem?.intrate || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {`NGN ${formatCurrency(dataItem?.loanamount || 0)}` ||
-                        'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      <div
-                        className=" truncate overflow-hidden max-w-xs block"
-                        title={dataItem?.productName || 'N/A'}
-                      >
-                        {dataItem?.productName || 'N/A'}
-                      </div>
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {`NGN ${formatCurrency(dataItem?.accrued_Int || 0)}` ||
-                        'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem?.branchName || 'N/A'}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {dataItem?.productCode || dataItem?.productcode || 'N/A'}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                );
-              })
-            ) : (
-              <StyledTableRow>
-                <StyledTableCell
-                  colSpan={COLUMN.length + 1}
-                  component="th"
-                  scope="row"
-                >
-                  {renderEmptyTableBody(data)}
-                </StyledTableCell>
-              </StyledTableRow>
-            )}
-          </MuiTableContainer>
+         <MuiTableContainer
+  columns={isAllProductReport ? COLUMN_PAYMENT : COLUMN}
+  data={data}
+  tableConfig={{ hasActions: false }}
+  showHeader={{
+    mainTitle: 'Income Assurance Report',
+    secondaryTitle:
+      'See a directory of Income Assurance Report in this system.',
+    hideFilterSection: true
+  }}
+  setPage={setPage}
+  page={page}
+  totalPages={totalPages}
+  totalElements={totalRecords}
+>
+  {searchActive ? (
+    data?.map((row: IIncomeAssurance, i) => (
+      <StyledTableRow key={i}>
+        
+        {isAllProductReport ? (
+          <>
+            <StyledTableCell>{row.productcode || 'N/A'}</StyledTableCell>
+            <StyledTableCell>{row.branchcode || 'N/A'}</StyledTableCell>
+            <StyledTableCell>
+              {`NGN ${formatCurrency(row.accrued_Int || 0)}`}
+            </StyledTableCell>
+            <StyledTableCell>{row.branchName || 'N/A'}</StyledTableCell>
+            <StyledTableCell>{row.productName || 'N/A'}</StyledTableCell>
+          </>
+        ) : (
+          <>
+            <StyledTableCell>{row.accountnumber || 'N/A'}</StyledTableCell>
+            <StyledTableCell>{row.fullname || 'N/A'}</StyledTableCell>
+            <StyledTableCell>
+              {moment(row.startdate?.split('T')[0]).format('YYYY-MM-DD')}
+            </StyledTableCell>
+            <StyledTableCell>
+              {moment(row.matdate?.split('T')[0]).format('YYYY-MM-DD')}
+            </StyledTableCell>
+            <StyledTableCell>{row.intrate || 'N/A'}</StyledTableCell>
+            <StyledTableCell>
+              {`NGN ${formatCurrency(row.loanamount || 0)}`}
+            </StyledTableCell>
+            <StyledTableCell>{row.productName || 'N/A'}</StyledTableCell>
+            <StyledTableCell>
+              {`NGN ${formatCurrency(row.accrued_Int || 0)}`}
+            </StyledTableCell>
+            <StyledTableCell>{row.branchName || 'N/A'}</StyledTableCell>
+            <StyledTableCell>
+              {row.productCode || row.productcode || 'N/A'}
+            </StyledTableCell>
+          </>
+        )}
+
+      </StyledTableRow>
+    ))
+  ) : (
+    <StyledTableRow>
+      <StyledTableCell colSpan={COLUMN.length + 1}>
+        {renderEmptyTableBody(data)}
+      </StyledTableCell>
+    </StyledTableRow>
+  )}
+</MuiTableContainer>
+
         )}
       </Box>
     </Box>
