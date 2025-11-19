@@ -72,7 +72,8 @@ export function useGetGroupMembership(params: ISearchParams | null) {
       params?.officerCode || '',
       params?.getAll || false,
       params?.pageSize || 10,
-      params?.page || 1
+      params?.page || 1,
+      params?.pageNumber || 1
     ],
     queryFn: () => getGroupMembership(toastActions, params || {}),
     enabled: Boolean(

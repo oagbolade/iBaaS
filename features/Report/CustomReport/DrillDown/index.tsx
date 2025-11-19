@@ -113,6 +113,7 @@ export const DrillDown = () => {
             }}
             setPage={setPage}
             totalPages={Math.ceil(totalRecords / 10)}
+            totalElements={totalRecords}
             page={page}
             ActionMenuProps={(dataItem: any) => (
               <ActionMenu detail={JSON.stringify(dataItem)} />
