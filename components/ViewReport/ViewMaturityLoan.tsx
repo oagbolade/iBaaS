@@ -32,8 +32,8 @@ export const ViewMaturityLoan: React.FC<{ detail: ILoanMaturityReport }> = ({ de
                 <Box
                     sx={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        rowGap: '40px',
+                        gridTemplateColumns: 'repeat(3, 2fr)',
+                        rowGap: '80px',
                         width: '100%'
                     }}
                 >

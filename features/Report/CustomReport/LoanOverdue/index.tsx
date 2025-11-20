@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
+import moment from 'moment';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { useGetBranches } from '@/api/general/useBranches';
@@ -20,7 +21,6 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import moment from 'moment';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 
 interface Props {
@@ -53,7 +53,7 @@ export const LoanOverdue = () => {
     pageNumber: page
   });
 
-  const { loanOverDueList: downloadData = [] } = useGetLoanOverdueReport({
+  const { loanOverDueList: downloadData } = useGetLoanOverdueReport({
     ...searchParams,
     pageSize: 10,
     pageNumber: page,

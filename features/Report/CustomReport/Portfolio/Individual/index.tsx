@@ -51,6 +51,8 @@ export const IndividualLoan = () => {
     branchCode: branchCode ?? null,
     searchWith: searchWith ?? '',
     productCode: productCode || '',
+    startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+    endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
     pageNumber: page,
     pageSize: 10
   });
@@ -61,6 +63,8 @@ export const IndividualLoan = () => {
       branchCode: branchCode ?? null,
       searchWith: searchWith ?? '',
       productCode: productCode || '',
+      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue[1]?.format('YYYY-MM-DD') || '',
       pageNumber: page,
       pageSize: 10,
       getAll: true

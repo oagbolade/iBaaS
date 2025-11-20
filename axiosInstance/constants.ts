@@ -10,15 +10,17 @@ const REPORT_BASE_URL =
     ? ''
     : `${process.env.NEXT_PUBLIC_REPORTS_BASE_URL}`;
 
-const END_OF_DAY_BASE_URL = `${typeof window !== 'undefined' && env !== 'development'
+const END_OF_DAY_BASE_URL = `${
+  typeof window !== 'undefined' && env !== 'development'
     ? ''
     : process.env.NEXT_PUBLIC_END_OF_DAY_BASE_URL
-  }`;
+}/api`;
 
-const Auth2FABaseUrl = `${typeof window !== 'undefined' && env !== 'development'
+const Auth2FABaseUrl = `${
+  typeof window !== 'undefined' && env !== 'development'
     ? ''
     : process.env.NEXT_PUBLIC_AUTH_2FA_BASE_URL
-  }/api`;
+}/api`;
 
 const baseUrl =
   typeof window !== 'undefined' && env !== 'development'
@@ -30,10 +32,11 @@ const nipBaseUrl =
     ? '/api/v1'
     : `${process.env.NEXT_PUBLIC_NIP_BASE_URL}/api/v1`;
 
-const imageUploadBaseUrl = `${typeof window !== 'undefined' && env !== 'development'
+const imageUploadBaseUrl = `${
+  typeof window !== 'undefined' && env !== 'development'
     ? ''
     : process.env.NEXT_PUBLIC_IMAGE_UPLOAD_BASE_URL
-  }/api`;
+}/api`;
 
 export {
   env,

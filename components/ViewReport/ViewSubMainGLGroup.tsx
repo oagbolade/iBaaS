@@ -39,7 +39,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
   const [page, setPage] = useState(1);
   const [search] = useState<boolean>(true);
   const [searchParams] = useState<ISearchParams | null>(null);
-  const { glSubGroupRptList, isLoading } = useGetGlSubGroupReport({
+  const { glSubGroupRptList, isLoading, totalRecords } = useGetGlSubGroupReport({
     ...searchParams,
     nodeCode: detail.gL_NodeCode,
     pageSize: '10'
@@ -57,7 +57,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
   );
 
   React.useEffect(() => {
-    if (!downloadData || downloadData?.pagedSubGroupReports.length === 0) {
+    if (!downloadData || downloadData?.pagedSubGroupReports?.length === 0) {
       setExportData([]);
       return;
     }
@@ -192,7 +192,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
           <TableV2
             isSearched={search}
             columns={drillSubDownReportGlColumns}
-            data={glSubGroupRptList?.pagedSubGroupReports || []}
+            data={glSubGroupRptList as unknown as []}
             keys={drilSubMainKey as []}
             hideFilterSection
             tableConfig={{
@@ -205,6 +205,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
               ]
             }}
             setPage={setPage}
+            totalElements={totalRecords}
             page={page}
             ActionMenuProps={(dataItem: any) => (
               <ActionMenu detail={JSON.stringify(dataItem)} />

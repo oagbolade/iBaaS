@@ -54,6 +54,8 @@ export function useGetIncomeAssuranceReport(params: ISearchParams | null) {
       params?.startDate || '',
       params?.search || '',
       params?.getAll || false,
+      params?.pageSize,
+      params?.pageNumber,
       params?.reportType || '',
       params?.endDate || '',
       params?.page

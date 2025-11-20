@@ -2,7 +2,7 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary, {
-  AccordionSummaryProps,
+  AccordionSummaryProps
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -15,7 +15,6 @@ import { TextInput } from '@/components/FormikFields';
 import { AssetsTable, IData } from '@/components/Table/AssetsTable';
 import { useGetAllBalanceSheetByItemId } from '@/api/reports/useGetBalanceSheet';
 import { FormSkeleton } from '@/components/Loaders';
-import { ActionButton } from '@/components/Revamp/Buttons';
 import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { renderEmptyTableBody } from '@/components/Table/Table';
 import { IBalanceSheetByItemIdList } from '@/api/ResponseTypes/reports';
@@ -29,7 +28,7 @@ const Accordion = styled((props: AccordionProps) => {
     borderRadius: '12px',
     border: `1px solid ${colors.neutral300}`,
     boxShadow: 'none',
-    marginBottom: '20px',
+    marginBottom: '20px'
   };
 });
 
@@ -43,14 +42,14 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       height: '40px',
-      padding: '20px 24px 5px 16px',
-    },
+      padding: '20px 24px 5px 16px'
+    }
   };
 });
 
 const AccordionDetails = styled(MuiAccordionDetails)(() => {
   return {
-    padding: '20px 24px 30px 16px',
+    padding: '20px 24px 30px 16px'
   };
 });
 
@@ -62,7 +61,7 @@ const Title = ({ title }: { title: string }) => {
         fontSize: '12px',
         fontWeight: 400,
         lineHeight: '16px',
-        textAlign: 'right',
+        textAlign: 'right'
       }}
     >
       {title}
@@ -78,7 +77,7 @@ const Value = ({ title }: { title: any }) => {
         fontSize: '16px',
         fontWeight: 600,
         lineHeight: '24px',
-        textAlign: 'right',
+        textAlign: 'right'
       }}
     >
       {title}
@@ -88,7 +87,7 @@ const Value = ({ title }: { title: any }) => {
 
 export const GrandTotal = ({
   title,
-  amount,
+  amount
 }: {
   title: string;
   amount: string;
@@ -101,7 +100,7 @@ export const GrandTotal = ({
         justifyContent: 'space-between',
         backgroundColor: `${colors.primaryBlue500}`,
         color: `${colors.white}`,
-        padding: '20px 10px',
+        padding: '20px 10px'
       }}
     >
       <Typography
@@ -114,7 +113,7 @@ export const GrandTotal = ({
           fontSize: '20px',
           fontWeight: 600,
           lineHeight: '24px',
-          paddingRight: '6rem',
+          paddingRight: '6rem'
         }}
       >
         {amount}
@@ -138,7 +137,7 @@ export const ShortCardWithAccordion = ({
   itemcode,
   title,
   assetCount,
-  assetValue,
+  assetValue
 }: Props) => {
   const expandRef = React.useRef(null);
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -159,26 +158,26 @@ export const ShortCardWithAccordion = ({
     page: 1,
     pageSize: 10,
     getAll: false,
-    searchWith: activeSearchTerm,
+    searchWith: activeSearchTerm
   });
 
-const tableData = React.useMemo(() => {
-  if (expanded && detailData?.length) {
-    // Filter alphabetically based on current searchTerm
-    const filteredData = detailData.filter((item) =>
-      item.itemDesc?.toLowerCase().startsWith(searchTerm.toLowerCase())
-    );
+  const tableData = React.useMemo(() => {
+    if (expanded && detailData?.length) {
+      // Filter alphabetically based on current searchTerm
+      const filteredData = detailData.filter((item) =>
+        item.itemDesc?.toLowerCase().startsWith(searchTerm.toLowerCase())
+      );
 
-    return filteredData.map((item) => ({
-      assets: item.itemDesc || '',
-      amount: `${formatCurrency(item.sumbalance)}`,
-      itemid: item.itemid,
-      groupname: item.itemDesc,
-      balance: item.sumbalance,
-    })) as IData[];
-  }
-  return defaultData;
-}, [detailData, defaultData, expanded, searchTerm]);
+      return filteredData.map((item) => ({
+        assets: item.itemDesc || '',
+        amount: `${formatCurrency(item.sumbalance)}`,
+        itemid: item.itemid,
+        groupname: item.itemDesc,
+        balance: item.sumbalance
+      })) as IData[];
+    }
+    return defaultData;
+  }, [detailData, defaultData, expanded, searchTerm]);
 
   const total = React.useMemo(() => {
     if (!detailData) return 0;
@@ -206,7 +205,7 @@ const tableData = React.useMemo(() => {
                   color: colors.neutral1000,
                   fontSize: '20px',
                   fontWeight: 700,
-                  lineHeight: '32px',
+                  lineHeight: '32px'
                 }}
               >
                 {title}
@@ -238,7 +237,7 @@ const tableData = React.useMemo(() => {
                 sx={{
                   marginBottom: expanded ? '35px' : 0,
                   transform: expanded ? 'rotate(180deg)' : 'none',
-                  display: 'inline-block',
+                  display: 'inline-block'
                 }}
                 mt={1.2}
               >
@@ -256,12 +255,11 @@ const tableData = React.useMemo(() => {
               gap: '12px',
               marginTop: '20px',
               marginBottom: '30px',
-               width: '336px' 
+              width: '336px'
             }}
           >
-            <Box sx={{ flexGrow: 1}}>
+            <Box sx={{ flexGrow: 1 }}>
               <TextInput
-                
                 name="Search"
                 placeholder="Search"
                 icon={<SearchIcon />}
@@ -295,7 +293,7 @@ const tableData = React.useMemo(() => {
                 <AssetsTable
                   tableConfig={{
                     paintedColumns: ['Assets', 'Amount'],
-                    totalRow: ['Total', `${formatCurrency(total)}`],
+                    totalRow: ['Total', `${formatCurrency(total)}`]
                   }}
                   columns={column}
                   data={tableData || []}
@@ -307,7 +305,7 @@ const tableData = React.useMemo(() => {
             return (
               <>
                 {renderEmptyTableBody(
-                  detailData as IBalanceSheetByItemIdList[],
+                  detailData as IBalanceSheetByItemIdList[]
                 )}
               </>
             );

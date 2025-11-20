@@ -21,9 +21,11 @@ import { formatCurrency } from '@/utils/hooks/useCurrencyFormat';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import useFormattedDates from '@/utils/hooks/useFormattedDates';
 
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { TopOverViewSingeCalendarSection } from '@/features/Report/Overview/TopOverViewSingleCalenderSection';
 
 export const MainCash = () => {
+  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const [searchParams, setSearchParams] = useState<ISearchParams | null>(null);
   const [page, setPage] = React.useState(1);
 
@@ -132,7 +134,7 @@ export const MainCash = () => {
         />
       )}
       <Box sx={{ paddingX: '24px' }}>
-        {isTrialBalanceDataLoading ? (
+        {isTrialBalanceDataLoading || isGlobalLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
           <Box sx={{ width: '100%' }}>

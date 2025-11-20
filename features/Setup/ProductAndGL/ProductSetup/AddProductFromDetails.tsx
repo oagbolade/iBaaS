@@ -72,7 +72,7 @@ export const ProductDetailsForm = ({
   const handleContinue = () => {
     let targetId: string;
 
-    if (addProductValues === '2') {
+    if (addProductValues === '1') {
       if (!productValue && !productNumber) return;
       targetId = productValue;
     } else {
@@ -85,11 +85,11 @@ export const ProductDetailsForm = ({
       '4': '/setup/product-gl/add-treasury-product'
     };
 
-    if (addProductValues === '2' && productNumber) {
+    if (addProductValues === '1' && productNumber) {
       router.push('/setup/product-gl/add-product');
-    } else if (addProductValues === '2' && (productNumber as string)) {
+    } else if (addProductValues === '1' && (productNumber as string)) {
       router.push('/setup/product-gl/add-casa-product');
-    } else if ((addProductValues === '2' && productNumber) || '') {
+    } else if ((addProductValues === '1' && productNumber) || '') {
       router.push('/setup/product-gl/add-treasury-product');
     }
     const route = routes[targetId];
