@@ -1,34 +1,31 @@
-/** ============================
- **  JEST MOCKS (must come first)
- ** ============================ */
 
-jest.mock('../api/general/useBranches', () => ({
+jest.mock('../../../api/general/useBranches', () => ({
   useGetBranches: jest.fn()
 }));
 
-jest.mock('../api/setup/useProduct', () => ({
+jest.mock('../../../api/setup/useProduct', () => ({
   useGetProductClass: jest.fn()
 }));
 
-jest.mock('../api/reports/useStatementOfAccount', () => ({
+jest.mock('../../../api/reports/useStatementOfAccount', () => ({
   useGetStatementOfAccount: jest.fn()
 }));
 
-jest.mock('../utils/hooks/usePersistedSearch', () => ({
+jest.mock('../../../utils/hooks/usePersistedSearch', () => ({
   usePersistedSearch: jest.fn()
 }));
 
-jest.mock('../utils/hooks/useGlobalLoadingState', () => ({
+jest.mock('../../../utils/hooks/useGlobalLoadingState', () => ({
   useGlobalLoadingState: jest.fn()
 }));
 
-// Prevent Next.js router crash
+
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ back: jest.fn() })
 }));
 
-// Mock FormSkeleton to add data-testid for test
-jest.mock('../components/Loaders', () => ({
+
+jest.mock('../../../components/Loaders', () => ({
   FormSkeleton: () => <div data-testid="loading-skeleton" />
 }));
 
@@ -38,15 +35,15 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-const { useGetBranches } = require('../api/general/useBranches');
-const { useGetProductClass } = require('../api/setup/useProduct');
-const { useGetStatementOfAccount } = require('../api/reports/useStatementOfAccount');
-const { usePersistedSearch } = require('../utils/hooks/usePersistedSearch');
-const { useGlobalLoadingState } = require('../utils/hooks/useGlobalLoadingState');
+const { useGetBranches } = require('../../../api/general/useBranches');
+const { useGetProductClass } = require('../../../api/setup/useProduct');
+const { useGetStatementOfAccount } = require('../../../api/reports/useStatementOfAccount');
+const { usePersistedSearch } = require('../../../utils/hooks/usePersistedSearch');
+const { useGlobalLoadingState } = require('../../../utils/hooks/useGlobalLoadingState');
 
-import { DateRangePickerContext } from '../context/DateRangePickerContext';
-import { DownloadReportContext } from '../context/DownloadReportContext';
-const { StatementAccount } = require('../features/Report/CustomReport/StatementAccount');
+import { DateRangePickerContext } from '../../../context/DateRangePickerContext';
+import { DownloadReportContext } from '../../../context/DownloadReportContext';
+const { StatementAccount } = require('../../../features/Report/CustomReport/StatementAccount');
 
 beforeAll(() => {
   jest.spyOn(console, 'warn').mockImplementation(() => {});
@@ -110,7 +107,7 @@ describe('StatementAccount Component', () => {
   });
 
 
-  it('renders statement data when search is active', async () => {
+  it('renders statement of account data when search is active', async () => {
     (usePersistedSearch as jest.Mock).mockReturnValue({
       searchParams: { accountNumber: '123456' },
       setSearchParams: jest.fn(),
