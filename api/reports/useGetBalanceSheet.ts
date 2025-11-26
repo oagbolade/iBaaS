@@ -55,13 +55,16 @@ export function useGetAllBalanceSheet(
   } = useQuery({
     queryKey: [
       queryKeys.balanceSheet,
+      params?.branchID || '',
+      params?.branchCode,
+      params?.startFrom || '',
       params?.getAll || false,
       params?.pageSize || 10,
       params?.page || 1,
       params?.searchWith || ''
     ],
     queryFn: () => fetchAllBalanceSheet(toastActions, params || {}),
-    enabled: String(params?.branchID).length >= 0
+    enabled: Boolean((params?.branchID || '').length > 0 || params?.startFrom)
   });
 
   return { ...data, isError, isLoading };

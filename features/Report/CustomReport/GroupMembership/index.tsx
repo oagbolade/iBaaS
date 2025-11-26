@@ -59,11 +59,13 @@ export const GroupMembership = () => {
   const { groupMembershipList, isLoading, totalRecords } =
     useGetGroupMembership({
       ...searchParams,
+      pageNumber: String(page),
       page
     });
 
   const { groupMembershipList: downloadData } = useGetGroupMembership({
     ...searchParams,
+    pageNumber: String(page),
     page,
     getAll: true
   });

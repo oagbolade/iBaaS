@@ -17,7 +17,7 @@ export async function getAllAuditTrailReports(
 ) {
   let result: AuditTrailsResponse = {} as AuditTrailsResponse;
   try {
-    const urlEndpoint = `/api/ReportServices/AUDITTRAILREPORT?userId=${params?.userID || null}&startdate=${params?.startDate}&Enddate=${params?.endDate}&pageNumber=${params?.pageNumber}&pageSize=${params?.pageSize}&getAll=${params?.getAll}`;
+    const urlEndpoint = `/api/ReportServices/AUDITTRAILREPORT?userId=${params?.userID || null}&startdate=${params?.startDate}&Enddate=${params?.endDate}&pageNumber=${params?.pageNumber || 1}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll}`;
     const { data }: AxiosResponse<AuditTrailsResponse> =
       await reportsAxiosInstance({
         url: urlEndpoint,
@@ -35,7 +35,7 @@ export async function getAllAuditTrailReports(
     result = data;
   } catch (errorResponse) {
     const { message, title, severity } = globalErrorHandler({}, errorResponse);
-    toast(message, title, severity, toastActions);
+    // toast(message, title, severity, toastActions); // Commented out to 404 avoid duplicate toasts
   }
 
   if (result?.auditTrailList === null || result?.auditTrailList === undefined) {
@@ -56,6 +56,11 @@ export function useGetAllAuditTrailReports(params: ISearchParams | null) {
       params?.startDate || '',
       params?.endDate || '',
       params?.userID || '',
+      params?.getAll,
+      params?.pageNumber,
+      params?.pageSize,
+      params?.startDate,
+      params?.endDate,
       params?.page,
       params?.pageSize,
       params?.pageNumber

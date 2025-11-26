@@ -135,7 +135,7 @@ export const StatementAccount = () => {
             if (loadingStatements) {
               return (
                 <div className="mx-5">
-                  <FormSkeleton noOfLoaders={3} />
+                  <FormSkeleton  noOfLoaders={3} />
                 </div>
               );
             }

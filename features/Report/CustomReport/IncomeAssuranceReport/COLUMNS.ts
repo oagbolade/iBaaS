@@ -10,3 +10,11 @@ export const COLUMN = [
   'Branch',
   'Product Code'
 ];
+
+export const COLUMN_PAYMENT = [
+  'Product Code',
+  'Branch Code',
+  'Accrued Int',
+  'Branch Name',
+  'Product Name'
+];

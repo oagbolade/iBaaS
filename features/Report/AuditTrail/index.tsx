@@ -17,10 +17,10 @@ import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { ModalContainerV2 } from '@/components/Revamp/Modal';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import colors from '@/assets/colors';
-import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { TopOverViewSection } from '@/features/Report/Overview/TopOverViewSection';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
 
 const ViewAuditDetails: React.FC<{
   data: IAuditTrail;
@@ -127,7 +127,12 @@ const ViewAuditDetails: React.FC<{
 };
 
 export const AuditTrail = () => {
-  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
+  const { isLoading } = useGlobalLoadingState();
+  const { dateValue } = React.useContext(DateRangePickerContext);
+  const { setExportData, setReportType } = React.useContext(
+    DownloadReportContext
+  );
+
   const {
     searchParams,
     setSearchParams,
@@ -136,12 +141,23 @@ export const AuditTrail = () => {
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('audit-trail');
+
   const [openModel, setopenModel] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<IAuditTrail | null>(null);
-  const { dateValue } = React.useContext(DateRangePickerContext);
-  const { setExportData, setReportType } = React.useContext(
-    DownloadReportContext
-  );
+
+  const handleSearch = async (params: ISearchParams | null) => {
+    setSearchActive(true);
+    setSearchParams({
+      ...params,
+      pageNumber: String(page),
+      pageSize: 10,
+      startDate: dateValue?.[0]?.format('YYYY-MM-DD') || '',
+      endDate: dateValue?.[1]?.format('YYYY-MM-DD') || '',
+      searchWith: params?.searchWith
+    });
+    setReportType('AuditTrail');
+  };
+
   const handleClose = () => {
     setopenModel(false);
     setSelectedAudit(null);
@@ -176,39 +192,29 @@ export const AuditTrail = () => {
 
   const {
     auditTrailList: getAllAuditTrailsData,
-    isLoading,
+    isLoading: isAuditTrailsDataLoading,
     totalRecords
   } = useGetAllAuditTrailReports({
     ...searchParams,
-    getAll: false,
     pageNumber: String(page),
-    pageSize: 10
+    pageSize: 10,
+    getAll: false
   });
 
   const { auditTrailList: downloadData } = useGetAllAuditTrailReports({
     ...searchParams,
+    pageSize: 10,
+    pageNumber: '1',
     getAll: true
   });
 
   React.useEffect(() => {
-    if (!downloadData || downloadData.length === 0) {
+    if (!downloadData) {
       setExportData([]);
       return;
     }
     setExportData(downloadData);
-  }, [downloadData]);
-
-  const handleSearch = async (params: ISearchParams | null) => {
-    setSearchActive(true);
-    setSearchParams({
-      ...params,
-      pageNumber: String(page),
-      pageSize: 10,
-      startDate: dateValue[0]?.format('YYYY-MM-DD') || '',
-      endDate: dateValue[1]?.format('YYYY-MM-DD') || ''
-    });
-    setReportType('AuditTrail');
-  };
+  }, [downloadData, setExportData]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
@@ -224,7 +230,7 @@ export const AuditTrail = () => {
 
       <FilterSection onSearch={handleSearch} />
 
-      {isGlobalLoading || isLoading ? (
+      {isAuditTrailsDataLoading ? (
         <Box sx={{ paddingX: '24px' }}>
           <FormSkeleton noOfLoaders={3} />
         </Box>
@@ -235,7 +241,7 @@ export const AuditTrail = () => {
             tableConfig={{
               hasActions: true
             }}
-            data={getAllAuditTrailsData || []}
+            data={getAllAuditTrailsData}
             setPage={setPage}
             page={page}
             totalPages={totalPages}
