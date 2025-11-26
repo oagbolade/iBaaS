@@ -106,40 +106,7 @@ describe('StatementAccount Component', () => {
     });
   });
 
-
-  it('renders statement of account data when search is active', async () => {
-    (usePersistedSearch as jest.Mock).mockReturnValue({
-      searchParams: { accountNumber: '123456' },
-      setSearchParams: jest.fn(),
-      searchActive: true,
-      setSearchActive: jest.fn(),
-      page: 1,
-      setPage: jest.fn()
-    });
-
-    (useGetStatementOfAccount as jest.Mock).mockReturnValue({
-      rptStatementList: mockStatementData,
-      isLoading: false,
-      totalRecords: 1
-    });
-
-    renderWithQuery(
-      <DownloadReportContext.Provider value={mockDownloadCtx as any}>
-        <DateRangePickerContext.Provider value={mockDateRangeContext as any}>
-          <StatementAccount />
-        </DateRangePickerContext.Provider>
-      </DownloadReportContext.Provider>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('123456')).toBeInTheDocument();
-      expect(screen.getByText('Test transaction')).toBeInTheDocument();
-    });
-  });
-
-
-  it('shows skeleton loader while loading', async () => {
+   it('shows  skeleton loader while loading', async () => {
     (usePersistedSearch as jest.Mock).mockReturnValue({
       searchParams: { accountNumber: '123456' },
       setSearchParams: jest.fn(),
@@ -170,4 +137,35 @@ describe('StatementAccount Component', () => {
       expect(skeletons.length).toBeGreaterThan(0);
     });
   });
+
+  it('renders statement of account data when search is active', async () => {
+    (usePersistedSearch as jest.Mock).mockReturnValue({
+      searchParams: { accountNumber: '123456' },
+      setSearchParams: jest.fn(),
+      searchActive: true,
+      setSearchActive: jest.fn(),
+      page: 1,
+      setPage: jest.fn()
+    });
+
+    (useGetStatementOfAccount as jest.Mock).mockReturnValue({
+      rptStatementList: mockStatementData,
+      isLoading: false,
+      totalRecords: 1
+    });
+
+    renderWithQuery(
+      <DownloadReportContext.Provider value={mockDownloadCtx as any}>
+        <DateRangePickerContext.Provider value={mockDateRangeContext as any}>
+          <StatementAccount />
+        </DateRangePickerContext.Provider>
+      </DownloadReportContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('123456')).toBeInTheDocument();
+      expect(screen.getByText('Test transaction')).toBeInTheDocument();
+    });
+  }); 
 });

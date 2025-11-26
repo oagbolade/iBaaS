@@ -72,36 +72,7 @@ describe('PlainTrialBalance Component', () => {
     (useGlobalLoadingState as jest.Mock).mockReturnValue({ isLoading: false });
   });
 
-  it('renders table data when search is active and API returns results', async () => {
-    (usePersistedSearch as jest.Mock).mockReturnValue({
-      searchParams: {},
-      setSearchParams: jest.fn(),
-      searchActive: true,
-      setSearchActive: jest.fn(),
-      page: 1,
-      setPage: jest.fn()
-    });
-
-    (useGetPlainTrialBalance as jest.Mock).mockReturnValue(pagedResponse);
-
-    const mockDownloadCtx = {
-      setExportData: jest.fn(),
-      setReportType: jest.fn()
-    };
-
-    renderWithQuery(
-      <DownloadReportContext.Provider value={mockDownloadCtx as any}>
-        <PlainTrialBalance />
-      </DownloadReportContext.Provider>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText(/Cash/i)).toBeInTheDocument();
-      expect(screen.getByTestId('search-flag')).toBeInTheDocument();
-    });
-  });
-
-  it('shows skeleton loader while loading', async () => {
+    it('shows skeleton loader while loading', async () => {
     (usePersistedSearch as jest.Mock).mockReturnValue({
       searchParams: {},
       setSearchParams: jest.fn(),
@@ -132,6 +103,35 @@ describe('PlainTrialBalance Component', () => {
 
     await waitFor(() => {
       expect(screen.getAllByTestId('loading-skeleton').length).toBeGreaterThan(0);
+    });
+  });
+
+  it('renders table data when search is active and API returns results', async () => {
+    (usePersistedSearch as jest.Mock).mockReturnValue({
+      searchParams: {},
+      setSearchParams: jest.fn(),
+      searchActive: true,
+      setSearchActive: jest.fn(),
+      page: 1,
+      setPage: jest.fn()
+    });
+
+    (useGetPlainTrialBalance as jest.Mock).mockReturnValue(pagedResponse);
+
+    const mockDownloadCtx = {
+      setExportData: jest.fn(),
+      setReportType: jest.fn()
+    };
+
+    renderWithQuery(
+      <DownloadReportContext.Provider value={mockDownloadCtx as any}>
+        <PlainTrialBalance />
+      </DownloadReportContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Cash/i)).toBeInTheDocument();
+      expect(screen.getByTestId('search-flag')).toBeInTheDocument();
     });
   });
 });
