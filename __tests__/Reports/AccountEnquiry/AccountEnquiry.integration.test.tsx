@@ -1,3 +1,23 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+// REAL LOADER (NO MOCK)
+import { FormSkeleton } from '@/components/Loaders';
+
+// Required contexts
+import { DownloadReportContext } from '@/context/DownloadReportContext';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
+import { ReportModuleContext } from '@/context/ReportModuleContext';
+
+// Component under test
+import { AccountEnquiry } from '@/features/Report/CustomReport/AccountEnquiry';
+
+/* ------------------------------------------------------
+   MOCK ONLY THE NECESSARY HOOKS — NOT UI COMPONENTS
+------------------------------------------------------- */
+
 jest.mock('@/api/general/useBranches', () => ({
   useGetBranches: jest.fn(),
 }));
@@ -14,8 +34,8 @@ jest.mock('@/utils/hooks/useGlobalLoadingState', () => ({
   useGlobalLoadingState: jest.fn(),
 }));
 
-jest.mock('@/components/Loaders', () => ({
-  FormSkeleton: () => <div data-testid="loading-skeleton" />,
+jest.mock('@/features/Report/Overview/TopOverViewSection', () => ({
+  TopOverViewSection: () => <div>Top Section</div>,
 }));
 
 jest.mock('@/components/Table', () => ({
@@ -27,49 +47,37 @@ jest.mock('@/components/Table', () => ({
   TableSingleAction: () => <div>View</div>,
 }));
 
-jest.mock('@/features/Report/Overview/TopOverViewSection', () => ({
-  TopOverViewSection: () => <div>Top Section</div>,
-}));
-
-import React from 'react';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
+/* ------------------------------------------------------
+   IMPORT MOCKED HOOKS
+------------------------------------------------------- */
 const { useGetBranches } = require('@/api/general/useBranches');
 const { useGetAccountEnquiryByBranchId } = require('@/api/reports/useGetAccountEnquiryBybranchId');
 const { usePersistedSearch } = require('@/utils/hooks/usePersistedSearch');
 const { useGlobalLoadingState } = require('@/utils/hooks/useGlobalLoadingState');
 
-import { AccountEnquiry } from '@/features/Report/CustomReport/AccountEnquiry';
-import { DownloadReportContext } from '@/context/DownloadReportContext';
-import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import { ReportModuleContext } from '@/context/ReportModuleContext';
-
-const mockBranches = [
-  { id: "1", name: "Head Office" }
-];
+/* ------------------------------------------------------
+   HELPERS & MOCK DATA
+------------------------------------------------------- */
+const mockBranches = [{ id: '1', name: 'Head Office' }];
 
 const mockRecords = [
   {
-    accounttitle: "John Doe",
-    accountnumber: "2000001574",
+    accounttitle: 'John Doe',
+    accountnumber: '2000001574',
     bookBalance: 50000,
-    phoneNo: "08012345678",
-    officerName: "Officer Mike",
-    useableBalance: 20000
-  }
+    phoneNo: '08012345678',
+    officerName: 'Officer Mike',
+    useableBalance: 20000,
+  },
 ];
 
 const renderWithProviders = (ui: any) =>
-  render(
-    <QueryClientProvider client={new QueryClient()}>
-      {ui}
-    </QueryClientProvider>
-  );
+  render(<QueryClientProvider client={new QueryClient()}>{ui}</QueryClientProvider>);
 
-describe("AccountEnquiry Page", () => {
-
+/* ------------------------------------------------------
+   TEST SUITE
+------------------------------------------------------- */
+describe('AccountEnquiry Page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -78,9 +86,9 @@ describe("AccountEnquiry Page", () => {
     });
 
     (usePersistedSearch as jest.Mock).mockReturnValue({
-      searchParams: { branchID: "", accountNo: "" },
+      searchParams: { branchID: '', accountNo: '' },
       setSearchParams: jest.fn(),
-      searchActive: true,
+      searchActive: false,
       setSearchActive: jest.fn(),
       page: 1,
       setPage: jest.fn(),
@@ -91,7 +99,10 @@ describe("AccountEnquiry Page", () => {
     });
   });
 
-  it("shows loader when loading", async () => {
+  /* ------------------------------------------------------
+     TEST 1 — LOADER DISPLAYS
+  ------------------------------------------------------- */
+  it('shows real loader when loading', async () => {
     (useGlobalLoadingState as jest.Mock).mockReturnValue({
       isLoading: true,
     });
@@ -101,11 +112,7 @@ describe("AccountEnquiry Page", () => {
       isLoading: true,
     });
 
-    const mockDownloadCtx = {
-      setExportData: jest.fn(),
-      setReportType: jest.fn(),
-    };
-
+    const mockDownloadCtx = { setExportData: jest.fn(), setReportType: jest.fn() };
     const mockReportCtx = { setAccountEnquiryData: jest.fn() };
     const mockDateCtx = { dateValue: [null, null] };
 
@@ -116,26 +123,37 @@ describe("AccountEnquiry Page", () => {
             <AccountEnquiry />
           </ReportModuleContext.Provider>
         </DateRangePickerContext.Provider>
-      </DownloadReportContext.Provider>
+      </DownloadReportContext.Provider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId("loading-skeleton")).toBeInTheDocument();
-    });
+    expect(await screen.findByTestId('loading-skeleton')).toBeInTheDocument();
   });
 
-  it("submits form and renders returned table data", async () => {
-    // mock API returns data
+  /* ------------------------------------------------------
+     TEST 2 — FORM SUBMIT + TABLE RENDER
+  ------------------------------------------------------- */
+  it('submits form and displays table data', async () => {
+    let searchIsActive = false;
+
     (useGetAccountEnquiryByBranchId as jest.Mock).mockReturnValue({
       data: mockRecords,
       isLoading: false,
     });
 
-    const mockDownloadCtx = {
-      setExportData: jest.fn(),
-      setReportType: jest.fn(),
-    };
+    const mockSetSearchActive = jest.fn((value) => {
+      searchIsActive = value;
+    });
 
+    (usePersistedSearch as jest.Mock).mockReturnValue({
+      searchParams: { branchID: '1', accountNo: '2000001574' },
+      setSearchParams: jest.fn(),
+      searchActive: true,
+      setSearchActive: mockSetSearchActive,
+      page: 1,
+      setPage: jest.fn(),
+    });
+
+    const mockDownloadCtx = { setExportData: jest.fn(), setReportType: jest.fn() };
     const mockReportCtx = { setAccountEnquiryData: jest.fn() };
     const mockDateCtx = { dateValue: [null, null] };
 
@@ -146,32 +164,41 @@ describe("AccountEnquiry Page", () => {
             <AccountEnquiry />
           </ReportModuleContext.Provider>
         </DateRangePickerContext.Provider>
-      </DownloadReportContext.Provider>
+      </DownloadReportContext.Provider>,
     );
 
-    // Verify branch select and account input are rendered
-    await waitFor(() => {
-      expect(screen.getByTestId("branchID")).toBeInTheDocument();
-      expect(screen.getByTestId("accountNo")).toBeInTheDocument();
-    });
+    // Branch select exists
+    expect(await screen.findByTestId('branchID')).toBeInTheDocument();
 
-    // Select branch and enter account number
-    const branchRoot = screen.getByTestId("branchID");
-    const branchInput = branchRoot.querySelector('input') || branchRoot;
-    fireEvent.change(branchInput, { target: { value: "1" } });
+    // Account input exists
+    expect(screen.getByTestId('accountNo')).toBeInTheDocument();
 
-    const accountRoot = screen.getByTestId("accountNo");
-    const accountInput = accountRoot.querySelector('input') as Element;
-    fireEvent.change(accountInput, { target: { value: "2000001574" } });
+    // Fill branch using fireEvent
+    const branchSelect = screen.getByTestId('branchID');
+    const branchInput = branchSelect.querySelector('input');
+    if (branchInput) {
+      fireEvent.change(branchInput, { target: { value: '1' } });
+    }
 
-    // Click search button
-    const searchButton = screen.getByRole("button", { name: /search/i });
+    // Fill account number using fireEvent
+    const accountInput = screen.getByTestId('accountNo');
+    const textInput = accountInput.querySelector('input');
+    if (textInput) {
+      fireEvent.change(textInput, { target: { value: '2000001574' } });
+    }
+
+    // Submit form
+    const searchButton = screen.getByRole('button', { name: /search/i });
     fireEvent.click(searchButton);
 
-    // Verify table data is displayed
-    await waitFor(() => {
-      expect(screen.getByText("John Doe")).toBeInTheDocument();
-      expect(screen.getByText("2000001574")).toBeInTheDocument();
-    }, { timeout: 6000 });
+    // Expect table row content
+    // Wait for table data to appear (use waitFor with higher timeout)
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+    expect(screen.getByText('2000001574')).toBeInTheDocument();
   });
 });

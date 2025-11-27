@@ -19,6 +19,9 @@ const config = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   },
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1'
+  },
   coveragePathIgnorePatterns: [
     '/react-query/',
     '/public/',
