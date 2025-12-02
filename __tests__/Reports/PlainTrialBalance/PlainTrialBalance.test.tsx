@@ -1,16 +1,21 @@
-jest.mock('../../../api/general/useBranches', () => ({ useGetBranches: jest.fn() }));
-jest.mock('../../../api/reports/usePlainTrialBalance', () => ({ useGetPlainTrialBalance: jest.fn() }));
-jest.mock('../../../utils/hooks/usePersistedSearch', () => ({ usePersistedSearch: jest.fn() }));
-jest.mock('../../../utils/hooks/useGlobalLoadingState', () => ({ useGlobalLoadingState: jest.fn() }));
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+import { useGetBranches } from '../../../api/general/useBranches';
+import { useGetPlainTrialBalance } from '../../../api/reports/usePlainTrialBalance';
+import { usePersistedSearch } from '../../../utils/hooks/usePersistedSearch';
+import { useGlobalLoadingState } from '../../../utils/hooks/useGlobalLoadingState';
 
-jest.mock('../../../components/Loaders', () => ({ 
-  FormSkeleton: () => <div data-testid="loading-skeleton" /> 
-}));
+import { PlainTrialBalance } from '../../../features/Report/CustomReport/PlainTrialBalance';
+import { DownloadReportContext } from '../../../context/DownloadReportContext';
+import { ReportType } from '@/constants/downloadReport';
 
-jest.mock('../../../features/Report/Overview/TopOverViewSingleCalenderSection', () => ({ 
-  TopOverViewSingeCalendarSection: () => <div>TopOverView</div> 
-}));
+jest.mock('../../../api/general/useBranches');
+jest.mock('../../../api/reports/usePlainTrialBalance');
+jest.mock('../../../utils/hooks/usePersistedSearch');
+jest.mock('../../../utils/hooks/useGlobalLoadingState');
+
 
 jest.mock('../../../components/Revamp/TableV2', () => ({
   TableV2: ({ data, showHeader, isSearched }: any) => (
@@ -24,20 +29,12 @@ jest.mock('../../../components/Revamp/TableV2', () => ({
       </div>
       {isSearched && <div data-testid="search-flag">searched</div>}
     </div>
-  )
+  ),
 }));
 
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const { useGetBranches } = require('../../../api/general/useBranches');
-const { useGetPlainTrialBalance } = require('../../../api/reports/usePlainTrialBalance');
-const { usePersistedSearch } = require('../../../utils/hooks/usePersistedSearch');
-const { useGlobalLoadingState } = require('../../../utils/hooks/useGlobalLoadingState');
-
-const { PlainTrialBalance } = require('../../../features/Report/CustomReport/PlainTrialBalance');
-const { DownloadReportContext } = require('../../../context/DownloadReportContext');
+jest.mock('../../../features/Report/Overview/TopOverViewSingleCalenderSection', () => ({
+  TopOverViewSingeCalendarSection: () => <div>TopOverView</div>,
+}));
 
 beforeAll(() => {
   jest.spyOn(console, 'warn').mockImplementation(() => {});
@@ -51,20 +48,25 @@ describe('PlainTrialBalance Component', () => {
 
   const pagedResponse = {
     plainTrialBalanceList: {
-      pagedRecords: [
-        { glNumber: '1000', oldGLno: '1000', acctName: 'Cash', dr: 5000, cr: 0 }
-      ]
+      pagedRecords: [{ glNumber: '1000', oldGLno: '1000', acctName: 'Cash', dr: 5000, cr: 0 }],
     },
     isLoading: false,
-    totalRecords: 1
+    totalRecords: 1,
+  };
+
+  const mockDownloadCtx = {
+    exportData: [],
+    setExportData: jest.fn(),
+    reportType: 'DormantAccount' as ReportType, 
+    setReportType: jest.fn(),
+    reportQueryParams: {},
+    setReportQueryParams: jest.fn(),
+    reportDescription: '',
+    setReportDescription: jest.fn(),
   };
 
   const renderWithQuery = (ui: React.ReactElement) =>
-    render(
-      <QueryClientProvider client={new QueryClient()}>
-        {ui}
-      </QueryClientProvider>
-    );
+    render(<QueryClientProvider client={new QueryClient()}>{ui}</QueryClientProvider>);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -72,14 +74,14 @@ describe('PlainTrialBalance Component', () => {
     (useGlobalLoadingState as jest.Mock).mockReturnValue({ isLoading: false });
   });
 
-    it('shows skeleton loader while loading', async () => {
+  it('shows skeleton loader while loading', async () => {
     (usePersistedSearch as jest.Mock).mockReturnValue({
       searchParams: {},
       setSearchParams: jest.fn(),
       searchActive: true,
       setSearchActive: jest.fn(),
       page: 1,
-      setPage: jest.fn()
+      setPage: jest.fn(),
     });
 
     (useGlobalLoadingState as jest.Mock).mockReturnValue({ isLoading: true });
@@ -87,16 +89,11 @@ describe('PlainTrialBalance Component', () => {
     (useGetPlainTrialBalance as jest.Mock).mockReturnValue({
       plainTrialBalanceList: { pagedRecords: [] },
       isLoading: false,
-      totalRecords: 0
+      totalRecords: 0,
     });
 
-    const mockDownloadCtx = {
-      setExportData: jest.fn(),
-      setReportType: jest.fn()
-    };
-
     renderWithQuery(
-      <DownloadReportContext.Provider value={mockDownloadCtx as any}>
+      <DownloadReportContext.Provider value={mockDownloadCtx}>
         <PlainTrialBalance />
       </DownloadReportContext.Provider>
     );
@@ -113,18 +110,24 @@ describe('PlainTrialBalance Component', () => {
       searchActive: true,
       setSearchActive: jest.fn(),
       page: 1,
-      setPage: jest.fn()
+      setPage: jest.fn(),
     });
 
     (useGetPlainTrialBalance as jest.Mock).mockReturnValue(pagedResponse);
 
     const mockDownloadCtx = {
-      setExportData: jest.fn(),
-      setReportType: jest.fn()
-    };
+   exportData: [],
+   setExportData: jest.fn(),
+   reportType: 'PlainTrialBalance' as ReportType, 
+   setReportType: jest.fn(),
+   reportQueryParams: {},
+   setReportQueryParams: jest.fn(),
+   reportDescription: '',
+   setReportDescription: jest.fn(),
+ };
 
     renderWithQuery(
-      <DownloadReportContext.Provider value={mockDownloadCtx as any}>
+      <DownloadReportContext.Provider value={mockDownloadCtx}>
         <PlainTrialBalance />
       </DownloadReportContext.Provider>
     );
