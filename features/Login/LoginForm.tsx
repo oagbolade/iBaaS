@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -105,6 +105,84 @@ export function LoginForm() {
     }
   };
 
+  useEffect(() => {
+    // Block right-click context menu
+    let blockInspect = false;
+
+    if (typeof window !== 'undefined') {
+      if (process.env.NODE_ENV === 'production') {
+        blockInspect =
+          window.RUNTIME_CONFIG?.NEXT_PUBLIC_BLOCK_INSPECT === 'true';
+      }
+
+      if (process.env.NODE_ENV !== 'production') {
+        blockInspect = process.env.NEXT_PUBLIC_BLOCK_INSPECT === 'true';
+      }
+    }
+    const isBlockInspectionRequired = !blockInspect;
+    console.log('', isBlockInspectionRequired);
+    if (isBlockInspectionRequired) return;
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // Block text selection, copy/paste
+    document.addEventListener('selectstart', (e) => e.preventDefault());
+    document.addEventListener('copy', (e) => e.preventDefault());
+    document.addEventListener('paste', (e) => e.preventDefault());
+    document.addEventListener('cut', (e) => e.preventDefault());
+
+    // Block DevTools shortcuts
+    const blockedKeys = [
+      'F12', // DevTools
+      'KeyI', // Ctrl+Shift+I
+      'KeyJ', // Ctrl+Shift+J (Console)
+      'KeyU' // Ctrl+U (View Source)
+    ];
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check for Ctrl+Shift + blocked key
+      if (e.ctrlKey && e.shiftKey && blockedKeys.includes(e.code)) {
+        e.preventDefault();
+        return false;
+      }
+      // Also block F12 alone
+      if (e.code === 'F12') {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Detect if DevTools is open (hacky but works ~80% of time)
+    let devtoolsOpen = false;
+    const threshold = 160; // Adjust based on your layout
+
+    const checkDevTools = () => {
+      const widthDiff = window.outerWidth - window.innerWidth;
+      const heightDiff = window.outerHeight - window.innerHeight;
+      const newDevtoolsOpen = widthDiff > threshold || heightDiff > threshold;
+
+      if (newDevtoolsOpen && !devtoolsOpen) {
+        // DevTools just opened - redirect or alert
+        alert('DevTools detected!'); // Or window.location.href = '/blocked';
+      }
+      devtoolsOpen = newDevtoolsOpen;
+    };
+
+    // Poll every 500ms
+    const devtoolsChecker = setInterval(checkDevTools, 500);
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('contextmenu', () => {});
+      document.removeEventListener('selectstart', () => {});
+      document.removeEventListener('copy', () => {});
+      document.removeEventListener('paste', () => {});
+      document.removeEventListener('cut', () => {});
+      document.removeEventListener('keydown', handleKeyDown);
+      clearInterval(devtoolsChecker);
+    };
+  }, []);
   const onSubmit = (values: any) => {
     if (!values.companyCode || !values.username || !values.password) return;
 

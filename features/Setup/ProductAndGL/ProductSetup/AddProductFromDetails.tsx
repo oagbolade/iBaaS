@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import { Box, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
@@ -30,6 +30,7 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 
 type Props = {
   handleClose: Function;
+  productNumberFromInitialForm: string;
   closeModalQuickly?: Function;
   data?: IProdType[] | IProdCodeType[] | Array<any>;
 };
@@ -37,7 +38,8 @@ type Props = {
 export const ProductDetailsForm = ({
   handleClose,
   closeModalQuickly,
-  data
+  data,
+  productNumberFromInitialForm
 }: Props) => {
   const { isMobile, setWidth } = useCurrentBreakpoint();
   const router = useRouter();
@@ -46,17 +48,7 @@ export const ProductDetailsForm = ({
   const [productValue, setProductValue] = useState<string>('');
   const [productNumber, setProductNumber] = useState<string>('');
 
-  const [isClient, setIsClient] = useState(false);
-
   const { mappedProductClassTypeId } = useMapSelectOptions({ data });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsClient(true);
-      const stored = localStorage.getItem('addProduct');
-      if (stored) setProductValue(stored);
-    }
-  }, []);
 
   const handleRadioChange = (value: string) => {
     setProductValue('');
@@ -69,6 +61,7 @@ export const ProductDetailsForm = ({
     setProductValue(val);
     setProductNumber(val);
   };
+
   const handleContinue = () => {
     let targetId: string;
 
@@ -79,19 +72,49 @@ export const ProductDetailsForm = ({
       // "No" → create fresh → default to general product
       targetId = '3';
     }
+
     const routes: Record<string, string> = {
       '1': '/setup/product-gl/add-casa-product',
       '3': '/setup/product-gl/add-product',
       '4': '/setup/product-gl/add-treasury-product'
     };
 
-    if (addProductValues === '1' && productNumber) {
-      router.push('/setup/product-gl/add-product');
-    } else if (addProductValues === '1' && (productNumber as string)) {
-      router.push('/setup/product-gl/add-casa-product');
-    } else if ((addProductValues === '1' && productNumber) || '') {
-      router.push('/setup/product-gl/add-treasury-product');
+    const casaProduct = '1';
+    const loanProduct = '3';
+    const treasuryProduct = '4';
+
+    // From exisiting
+    if (addProductValues === '1' && productNumberFromInitialForm === loanProduct) {
+      router.push(routes[loanProduct]);
+      return;
+    } 
+    
+    if (addProductValues === '1' && productNumberFromInitialForm === casaProduct) {
+      router.push(routes[casaProduct]);
+      return;
+    } 
+    
+    if ((addProductValues === '1' && productNumberFromInitialForm === treasuryProduct) || '') {
+      router.push(routes[treasuryProduct]);
+      return;
     }
+
+    // From scratch
+    if (addProductValues === '2' && productNumberFromInitialForm === casaProduct) {
+      router.push(routes[casaProduct]);
+      return;
+    }
+
+    if (addProductValues === '2' && productNumberFromInitialForm === loanProduct) {
+      router.push(routes[loanProduct]);
+      return;
+    }
+
+    if (addProductValues === '2' && productNumberFromInitialForm === treasuryProduct) {
+      router.push(routes[treasuryProduct]);
+      return;
+    }
+
     const route = routes[targetId];
     if (route) {
       router.push(route);
@@ -136,7 +159,7 @@ export const ProductDetailsForm = ({
                 />
               </Box>
 
-              {addProductValues === '1' && isClient && (
+              {addProductValues === '1' && (
                 <Box sx={{ mt: 2, width: '100%', maxWidth: '400px' }}>
                   <FormSelectField
                     name="productclass"

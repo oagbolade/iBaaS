@@ -23,10 +23,25 @@ export const ReportSummary = ({
 }: Props): React.ReactElement => {
   return (
     <Box sx={{ ...reportSummary, ...customStyle }}>
-      <Typography sx={{ ...primaryTitle }}>{title}</Typography>
-      <ChartFilters filter={filter} />
-      {children}
-      <ReportLink link={link} />
+      <div className="flex items-center justify-between mb-2">
+        <Typography sx={{ ...primaryTitle }}>{title}</Typography>
+        <ChartFilters filter={filter} />
+      </div>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: customStyle?.height ?? { xs: '220px', sm: '260px', md: '320px' },
+          minHeight: '160px',
+          overflow: 'hidden'
+        }}
+      >
+        {children}
+      </Box>
+      {/* Commented for future update */}
+      {/* <ReportLink link={link} /> */}
     </Box>
   );
 };

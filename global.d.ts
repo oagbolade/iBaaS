@@ -8,7 +8,7 @@ declare global {
       NEXT_PUBLIC_LOGIN_IV: string;
       NEXT_PUBLIC_NIP_USERNAME: string;
       NEXT_PUBLIC_NIP_PASSWORD: string;
-
+      NEXT_PUBLIC_BLOCK_INSPECT: string;
       // === Environment ===
       NEXT_PUBLIC_ENVIRONMENT: string;
       NEXT_PUBLIC_ENABLE_2FA: string | boolean;

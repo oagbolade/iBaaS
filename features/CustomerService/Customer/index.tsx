@@ -428,7 +428,7 @@ const CreateCustomerModalType = ({
     },
     {
       key: 'dependent',
-      title: 'Dependent Customer',
+      title: 'Create Dependent Detail',
       description: 'Dependent user who is yet of legal age',
       disabled: true
     }

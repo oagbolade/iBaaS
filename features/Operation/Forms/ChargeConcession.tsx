@@ -120,7 +120,7 @@ export const ChargeConcession = ({
               flexWrap: 'wrap'
             }}
           >
-            <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+            <Box sx={BatchContainer} >
               <PageTitle title="Charge Concession" styles={BatchTitle} />
               <Grid container>
                 <Grid
@@ -186,7 +186,7 @@ export const ChargeConcession = ({
                 </Grid>
               </Grid>
             </Box>
-            <Box sx={PostingContainer} ml={{ desktop: 1, mobile: 5 }}>
+            <Box sx={PostingContainer}>
               {isMobile ? (
                 <MobilePreviewContent
                   PreviewContent={

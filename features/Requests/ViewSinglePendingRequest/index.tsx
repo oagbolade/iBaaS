@@ -1,5 +1,4 @@
 'use client';
-
 import { Box } from '@mui/material';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useState } from 'react';
@@ -12,33 +11,18 @@ import {
 } from '../styles';
 import { RejectPendingRequestModal } from '../RejectPendingRequestModal';
 import { RequestDetailsContainer } from '../RequestDetailsContainer/RequestDetailsContainer';
-import { useGetAccountDetails } from '@/api/customer-service/useCustomer';
-import {
-  useGetLoanAccountDetails,
-  useGetLoansProductDetailCode
-} from '@/api/loans/useCreditFacility';
 import { FormSkeleton } from '@/components/Loaders';
-import { LoanDetails } from '@/components/Revamp/Shared';
-import {
-  ICustomerDetails,
-  IProductDetails
-} from '@/schemas/schema-values/loan';
-import { ILoanAccountDetails } from '@/api/ResponseTypes/loans';
-
 import { RequestModuleContext } from '@/context/RequestModuleContext';
 import { BackButton } from '@/components/Revamp/Buttons';
 import {
   Details,
   SubTitle
 } from '@/components/Revamp/Shared/LoanDetails/LoanDetails';
-import { Status } from '@/components/Labels';
 import { formatDateAndTime } from '@/utils/hooks/useDateFormat';
 import { PrimaryIconButton } from '@/components/Buttons';
 import { useApprovePendingRequest } from '@/api/loans/useApprovePendingRequest';
 import { approvePendingRequestFormValues } from '@/schemas/schema-values/requests';
-import { encryptData } from '@/utils/encryptData';
 import { useViewAuthDetailsGeneral } from '@/api/loans/useViewAuthDetailsGeneral';
-import { formatDate } from '@/utils/formatDateAndTime';
 
 export const ViewSinglePendingRequest = () => {
   const searchParams = useSearchParams();
@@ -72,7 +56,7 @@ export const ViewSinglePendingRequest = () => {
   }
 
   return (
-    <Box sx={{ marginTop: 10 }}>
+    <Box sx={{ marginTop: 10, width: '100%' }}>
       <Box sx={pendingRequestBackButtonContainerStyle}>
         <BackButton />
         <Box sx={pendingRequestButtonContainer}>
@@ -89,10 +73,17 @@ export const ViewSinglePendingRequest = () => {
         </Box>
       </Box>
 
-      <Box sx={loanHeading}>
+      <Box
+        sx={{
+          ...loanHeading,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 2
+        }}
+      >
         <Box>
           <SubTitle title="Request" />
-          <Details title={pendingRequestData?.posttype || 'N/A'} />
+          <Details title={pendingRequestData?.authdesc || 'N/A'} />
         </Box>
         <Box>
           <SubTitle title="Requested By" />
@@ -105,16 +96,17 @@ export const ViewSinglePendingRequest = () => {
           />
         </Box>
       </Box>
+
       <Box
         sx={{
-          padding: { mobile: '0 5px', desktop: '0 25px' },
-          width: '100%'
+          width: '100%',
+          marginTop: '10px',
+          padding: '50px'
         }}
       >
-        <Box pl={{ mobile: 2, desktop: 0 }}>
-          <RequestDetailsContainer requestData={authDetailsData} />
-        </Box>
+        <RequestDetailsContainer requestData={authDetailsData} />
       </Box>
+
       <RejectPendingRequestModal
         setIsRejected={setIsRejected}
         isRejected={isRejected}

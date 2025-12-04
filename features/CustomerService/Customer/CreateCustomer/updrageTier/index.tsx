@@ -2,24 +2,20 @@
 import { Box } from '@mui/material';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { DepositAccount } from '../Forms/DepositAccount';
 import { useGetCurrency } from '@/api/general/useCurrency';
+import { AddIcon } from '@/assets/svg';
 import { PrimaryIconButton } from '@/components/Buttons';
-
-import { submitButton } from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
-import { TopActionsArea } from '@/components/Revamp/Shared';
-import { useGetBranches } from '@/api/general/useBranches';
+import { ActionButton } from '@/components/Revamp/Buttons';
+import { ChequeDeposit } from '@/features/Operation/Forms/ChequeDeposit';
 import {
-  useGetAllLoansProduct,
-  useGetAllLoanRepaymentTypes
-} from '@/api/loans/useCreditFacility';
+  submitButton,
+  cancelButton
+} from '@/features/Loan/LoanDirectory/RestructureLoan/styles';
+import { TopActionsArea } from '@/components/Revamp/Shared';
+import { UpgradeTier } from '@/features/CustomerService/Form/CreateCustomerForms/UpgradeTier';
 
-export const DepositAccountContainer = () => {
+export const UpgradeTierContainer = () => {
   const { currencies } = useGetCurrency();
-  const { branches } = useGetBranches();
-  const { repaymentTypes } = useGetAllLoanRepaymentTypes();
-  const { loans } = useGetAllLoansProduct();
-
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmittingForward, setIsSubmittingForward] =
     useState<boolean>(false);
@@ -41,15 +37,22 @@ export const DepositAccountContainer = () => {
   ];
   return (
     <>
-      <TopActionsArea actionButtons={actionButtons} />
+      <Box
+        sx={{
+          marginTop: '60px',
+          position: 'fixed',
+          top: 0,
+          width: 'calc(100vw - 300px)',
+          zIndex: 1
+        }}
+      >
+        <TopActionsArea actionButtons={actionButtons} />
+      </Box>
 
       {currencies !== undefined && (
-        <DepositAccount
-          loans={loans}
-          branches={branches}
+        <UpgradeTier
           currencies={currencies}
           isSubmitting={isSubmitting}
-          repaymentTypes={repaymentTypes}
           setIsSubmitting={setIsSubmitting}
           setIsSubmittingForward={setIsSubmittingForward}
           isSubmittingForward={isSubmittingForward}

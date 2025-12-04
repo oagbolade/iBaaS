@@ -22,7 +22,9 @@ export const AccessRules: { [key: string]: string[] } = {
     'ACCOUNT REACTIVATION',
     'RANGE CHEQUE',
     'CLOSE ACCOUNT',
-    'MOVE CASA ACCOUNT'
+    'MOVE CASA ACCOUNT',
+    'BULK CUSTOMER CREATION'
+
   ],
   'General Ledgers': ['MANAGE GL ACCOUNT'],
   Accounts: [

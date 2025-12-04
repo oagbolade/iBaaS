@@ -55,12 +55,13 @@ export const sideBarMenu: SidebarMenuItem[] = [
         name: 'Vault Management',
         link: '/operation/management/',
         hideSubMenuItem: false
-      },
-      {
-        name: 'Treasury Operations',
-        link: '/operation/treasury/',
-        hideSubMenuItem: false
       }
+      // This is commened out as per request from product team
+      // {
+      //   name: 'Treasury Operations',
+      //   link: '/operation/treasury/',
+      //   hideSubMenuItem: false
+      // }
     ]
   },
   {
@@ -87,6 +88,11 @@ export const sideBarMenu: SidebarMenuItem[] = [
       {
         name: 'Directors',
         link: '/customer-service/director/',
+        hideSubMenuItem: false
+      },
+       {
+        name: 'Bulk Creation',
+        link: '/customer-service/bulk-creation/',
         hideSubMenuItem: false
       }
     ]

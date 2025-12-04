@@ -307,7 +307,8 @@ export const AccountPasswordContainer = {
   gap: '36px',
   padding: '2px',
   overflow: 'scroll',
-  // maxHeight: '45.556px',
+  maxWidth: '486px',
+  maxHeight: '700px',
   scrollbarWidth: 'none',
   scrollbarColor: `${colors.neutral900} ${colors.neutral100}`,
   '&::-webkit-scrollbar': {

@@ -309,8 +309,16 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
         >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2} sx={{ marginTop: '70px', width: '100%' }}>
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            padding: '10px',
+            marginTop: '80px',
+            width: '100%'
+          }}
+        >
+          <Box sx={BatchContainer}>
             <PageTitle title="Cash Journal Posting" styles={BatchTitle} />
             <Grid container>
               <Grid item mobile={12} tablet={12} desktop={6}>
@@ -484,7 +492,7 @@ export const CashJournal = ({ currencies, commBanks }: CashJournalProps) => {
               />
             )}
           </Box>
-        </Grid>
+        </Box>
       </Form>
     </Formik>
   );

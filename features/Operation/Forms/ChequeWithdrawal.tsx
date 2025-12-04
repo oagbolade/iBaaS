@@ -184,135 +184,141 @@ export const ChequeWithdrawal = ({
       validationSchema={chequeWithdraw}
     >
       <Form>
-        <Grid container spacing={2} sx={{ marginTop: '80px', width: '100%' }}>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-              <PageTitle title="Cheque Withdrawal" styles={BatchTitle} />
-              <Grid container>
-                <Grid item={isTablet} mobile={12}>
-                  <RadioButtons2
-                    options={[
-                      { label: 'Bank Cheques', value: '1' },
-                      { label: 'Counter Cheques', value: '2' }
-                    ]}
-                    title="Select In-house Cheque Type"
-                    name="action"
-                    value={selectValue?.toString()}
-                    handleCheck={handleRadioButton}
-                  />
-                </Grid>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                  mb={5}
-                >
-                  <FormTextInput
-                    name="accountNumber1"
-                    placeholder="Enter Account Number"
-                    label="Account Number"
-                    value={accountNumber?.toString()}
-                    onChange={handleAccountNumber}
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            padding: '10px',
+            width: '100%'
+          }}
+        >
+          <Box sx={BatchContainer}>
+            <PageTitle title="Cheque Withdrawal" styles={BatchTitle} />
+            <Grid container>
+              <Grid item={isTablet} mobile={12}>
+                <RadioButtons2
+                  options={[
+                    { label: 'Bank Cheques', value: '1' },
+                    { label: 'Counter Cheques', value: '2' }
+                  ]}
+                  title="Select In-house Cheque Type"
+                  name="action"
+                  value={selectValue?.toString()}
+                  handleCheck={handleRadioButton}
+                />
+              </Grid>
+              <Grid
+                item={isTablet}
+                mobile={12}
+                mr={{ mobile: 35, tablet: 0 }}
+                width={{ mobile: '100%', tablet: 0 }}
+                mb={5}
+              >
+                <FormTextInput
+                  name="accountNumber1"
+                  placeholder="Enter Account Number"
+                  label="Account Number"
+                  value={accountNumber?.toString()}
+                  onChange={handleAccountNumber}
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
 
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="Currency"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  {selectValue === '2' ? (
-                    <FormTextInput
-                      name="cheqNumber"
-                      placeholder="Enter Cheques Number "
-                      label="Cheque Number"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                      value={nextCounterCheqNo?.toString() || '0'}
-                      disabled
-                    />
-                  ) : (
-                    <FormTextInput
-                      name="cheqNumber"
-                      placeholder="Enter Cheque Number"
-                      label="Cheque Number"
-                      customStyle={{
-                        width: setWidth(isMobile ? '250px' : '100%')
-                      }}
-                    />
-                  )}
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <Box>
-                    <DemoContainer components={['DatePicker']}>
-                      <FormikDateTimePicker
-                        label="Value Date"
-                        name="valueDate"
-                        value={systemDate}
-                      />
-                    </DemoContainer>
-                  </Box>
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormAmountInput
-                    name="transAmount"
-                    placeholder="Enter Pay Amount"
-                    label="Pay Amount"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="currencyCode"
+                  options={mappedCurrency}
+                  label="Currency"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                {selectValue === '2' ? (
                   <FormTextInput
-                    name="rate"
-                    placeholder="."
-                    label="Rate"
+                    name="cheqNumber"
+                    placeholder="Enter Cheques Number "
+                    label="Cheque Number"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
+                    value={nextCounterCheqNo?.toString() || '0'}
                     disabled
                   />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
+                ) : (
                   <FormTextInput
-                    name="narration"
-                    placeholder="Enter Narration"
-                    label="Narration"
+                    name="cheqNumber"
+                    placeholder="Enter Cheque Number"
+                    label="Cheque Number"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
                   />
-                </Grid>
+                )}
               </Grid>
-            </Box>
-            <Box mt={8} sx={PostingContainer}>
-              {isMobile ? (
-                <MobilePreviewContent
-                  PreviewContent={<PreviewContent />}
-                  customStyle={{ ...cashContentStyle }}
+              <Grid item={isTablet} mobile={12}>
+                <Box>
+                  <DemoContainer components={['DatePicker']}>
+                    <FormikDateTimePicker
+                      label="Value Date"
+                      name="valueDate"
+                      value={systemDate}
+                    />
+                  </DemoContainer>
+                </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormAmountInput
+                  name="transAmount"
+                  placeholder="Enter Pay Amount"
+                  label="Pay Amount"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
                 />
-              ) : (
-                <PreviewContent />
-              )}
-            </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="rate"
+                  placeholder="."
+                  label="Rate"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="narration"
+                  placeholder="Enter Narration"
+                  label="Narration"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Box>
-        </Grid>
+          <Box sx={PostingContainer}>
+            {isMobile ? (
+              <MobilePreviewContent
+                PreviewContent={<PreviewContent />}
+                customStyle={{ ...cashContentStyle }}
+              />
+            ) : (
+              <PreviewContent />
+            )}
+          </Box>
+        </Box>
+
         <button id="submitButton" type="submit" style={{ display: 'none' }}>
           submit alias
         </button>

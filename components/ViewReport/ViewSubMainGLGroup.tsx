@@ -37,10 +37,12 @@ const ActionMenu = ({ detail }: ActionMenuProps) => {
 export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
   const { setDirection } = useSetDirection();
   const [page, setPage] = useState(1);
+  const [glSubGroupRptListData, setGlSubGroupRptList] = useState([]);
   const [search] = useState<boolean>(true);
   const [searchParams] = useState<ISearchParams | null>(null);
   const { glSubGroupRptList, isLoading, totalRecords } = useGetGlSubGroupReport({
     ...searchParams,
+    pageNumber: String(page),
     nodeCode: detail.gL_NodeCode,
     pageSize: '10'
   });
@@ -48,6 +50,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
   const { glSubGroupRptList: downloadData } = useGetGlSubGroupReport({
     ...searchParams,
     getAll: true,
+    pageNumber: String(page),
     nodeCode: detail.gL_NodeCode,
     pageSize: '10'
   });
@@ -57,7 +60,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
   );
 
   React.useEffect(() => {
-    if (!downloadData || downloadData?.pagedSubGroupReports?.length === 0) {
+    if (!downloadData || downloadData.pagedSubGroupReports?.length === 0) {
       setExportData([]);
       return;
     }
@@ -76,6 +79,24 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
       setExportData(reportData as []);
     }
   }, [downloadData]);
+
+  React.useEffect(() => {
+    if (
+      Array.isArray(glSubGroupRptList?.pagedSubGroupReports) &&
+      glSubGroupRptList.pagedSubGroupReports.length > 0
+    ) {
+      const glSubGroupRptListRecords = glSubGroupRptList?.pagedSubGroupReports.map((item) => ({
+        gL_ClassName: item.gL_ClassName,
+        gL_ClassCode: item.gL_ClassCode,
+        total: formatCurrency(item.total || 0)
+      }));
+
+      setGlSubGroupRptList(glSubGroupRptListRecords as []);
+    }
+  }, [glSubGroupRptList]);
+
+  const rowsPerPage = 10;
+  const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
 
   return (
     <Box marginTop={10}>
@@ -178,7 +199,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
                 color="text.primary"
                 sx={{ fontSize: '16px', fontWeight: 600 }}
               >
-                ₦{formatCurrency(detail?.total || 0)}
+                ₦{detail?.total}
               </Typography>
             </Box>
           </Box>
@@ -192,7 +213,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
           <TableV2
             isSearched={search}
             columns={drillSubDownReportGlColumns}
-            data={glSubGroupRptList as unknown as []}
+            data={glSubGroupRptListData as unknown as []}
             keys={drilSubMainKey as []}
             hideFilterSection
             tableConfig={{
@@ -207,6 +228,7 @@ export const ViewSubGLReport: React.FC<{ detail: any }> = ({ detail }) => {
             setPage={setPage}
             totalElements={totalRecords}
             page={page}
+            totalPages={totalPages}
             ActionMenuProps={(dataItem: any) => (
               <ActionMenu detail={JSON.stringify(dataItem)} />
             )}

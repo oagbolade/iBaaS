@@ -1,5 +1,5 @@
 // Use text input without formik validation, often used for table filters
-import React from 'react';
+import React, { useCallback } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
@@ -36,6 +36,13 @@ export const TextInput = ({
   value,
   autoFocus
 }: Props) => {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChange?.(event);
+    },
+    [onChange]
+  );
+
   return (
     <Stack>
       {label && (
@@ -65,9 +72,7 @@ export const TextInput = ({
           )
         }}
         disabled={disabled}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          onChange?.(event)
-        }
+        onChange={handleChange}
       />
     </Stack>
   );

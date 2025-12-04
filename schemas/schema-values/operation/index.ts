@@ -383,7 +383,7 @@ export const FundTransferInitialValues: FundTransferFormValues = {
   overideid: 'string',
   subbranch: '',
   userID: `${getStoredUser()?.profiles?.userid}`,
-  auth_id: `${getStoredUser()?.profiles?.userid}`,
+  auth_id: '',
   chkNum: ''
 };
 

@@ -8,7 +8,7 @@ export const backButtonContainerStyle = {
 
 export const loanHeading = {
   border: `1px solid ${colors.gray900}`,
-  width: 'fit-content',
+  width: '98%',
   margin: '20px 0',
   marginLeft: '23px',
   display: 'flex',

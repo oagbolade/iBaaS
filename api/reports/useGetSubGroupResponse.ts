@@ -6,7 +6,7 @@ import {
   GLAccountsByClassCodeResponse,
   IGlMainGroupResponse
 } from '../ResponseTypes/reports';
-import { reportsAxiosInstance, axiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -22,12 +22,15 @@ async function fetchGlMainGroupReport(
   try {
     const urlEndpoint = '/api/ReportServices/GLMainGroupReport';
     const { data }: AxiosResponse<IGlMainGroupResponse> =
-      await reportsAxiosInstance.get(urlEndpoint, {
+
+      await reportsAxiosInstance({
+        url: urlEndpoint,
         params: {
           getAll: params.getAll || false,
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1
         },
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -80,24 +83,23 @@ async function fetchGlSubGroupReport(
   toastActions: IToastActions
 ): Promise<IGlSubGroupResponse | null> {
   try {
-    const urlEndpoint = '/ReportServices/GlSubGroupReport';
+    const urlEndpoint = '/api/ReportServices/GlSubGroupReport';
     const { data }: AxiosResponse<IGlSubGroupResponse> =
 
-      await axiosInstance({
+      await reportsAxiosInstance({
         url: urlEndpoint,
-        method: 'GET',
         params: {
           NodeCode: params.nodeCode,
           getAll: params.getAll || false,
           pageSize: params.pageSize || 10,
           pageNumber: params.pageNumber || 1
         },
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
       });
-
     const { message, title, severity } = globalErrorHandler(data);
     toast(message, title, severity, toastActions);
 
@@ -124,7 +126,7 @@ export function useGetGlSubGroupReport(
       queryKeys.glSubGroupReport,
       params?.nodeCode || '',
       params?.getAll || false,
-      params?.pageNumber || 10,
+      params?.pageNumber || 1,
       params?.getAll || 1,
       params?.pageSize || 1
     ],
@@ -140,9 +142,11 @@ async function fetchGlNodeClassReport(
   toastActions: IToastActions
 ): Promise<GLAccountsByClassCodeResponse | null> {
   try {
-    const urlEndpoint = 'api/ReportServices/GLAccountsByClassCode';
+    const urlEndpoint = '/api/ReportServices/GLAccountsByClassCode';
     const { data }: AxiosResponse<GLAccountsByClassCodeResponse> =
-      await reportsAxiosInstance.get(urlEndpoint, {
+
+      await reportsAxiosInstance({
+        url: urlEndpoint,
         params: {
           Gl_ClassCode: params.gl_ClassCode,
           pageSize: params.pageSize || 10,
@@ -151,6 +155,7 @@ async function fetchGlNodeClassReport(
           searchWith: params.searchWith,
           branchCode: params.branchID
         },
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`

@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import Close from '@mui/icons-material/Close';
-import { useRouter } from 'next/navigation';
 import { ProductDetailsForm } from './AddProductFromDetails';
 import { PageTitle } from '@/components/Typography';
 import colors from '@/assets/colors';
@@ -37,7 +36,6 @@ type Props = {
 export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
   const { isMobile } = useCurrentBreakpoint();
   const [openModel, setOpenModel] = useState(false); // Fixed Boolean to false
-  const router = useRouter();
   const [addValues, setAddValues] = useState<string>(''); // Typed as string
   const { data: productTypeId } = useGetProductTypeByid(
     addValues as unknown as string
@@ -48,17 +46,13 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
     setAddValues(value);
   };
 
-  const handleCloseModel = () => {
-    setOpenModel(false);
-  };
-
   const handleContinue = () => {
     setOpenModel(true); // Logic to open the modal
   };
 
   return (
-    <Box sx={AccountPasswordContainer}>
-      <Box sx={AccountPasswordTitleContainer}>
+    <Box sx={{...AccountPasswordContainer, height: '400px', padding: '0px'}}>
+      <Box sx={{ ...AccountPasswordTitleContainer, padding: '12px 24px 12px 24px'}}>
         <Box sx={AccountPasswordTitle}>
           <PageTitle title="Add New Product" styles={{ ...AccountTitle }} />
           <IconButton
@@ -74,7 +68,8 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
             width: '100%',
             maxWidth: '400px',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            padding: '0px'
           }}
         >
           <RadioButtons2
@@ -86,16 +81,16 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
             ]}
             title="Kindly select which product you want to add"
             name="addProduct"
-            customStyle={{ display: 'flex' }}
+            customStyle={{ display: 'flex', fontSize: '15px' }}
             value={addValues.toString()}
             handleCheck={(value: string) => handleChange(value)}
           />
         </Box>
       </Box>
 
-      <Box sx={ButtonContainer}>
-        <Box sx={ButtonColorStyle}>
-          <Box sx={ButtonText}>
+      <Box sx={{...ButtonContainer}}>
+        <Box sx={{ ...ButtonColorStyle, padding: '0px' }}>
+          <Box sx={{ ...ButtonText}}>
             <Box sx={{ ...CancelButton, background: 'none' }}>
               <PrimaryIconButton
                 onClick={() => closeModalQuickly?.() || handleClose(null)}
@@ -103,7 +98,7 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
                 customStyle={{
                   ...TypographyButton,
                   width: `${isMobile ? '80px' : '131px'}`,
-                  height: '40px',
+                  height: '30px',
                   padding: { mobile: '0 50px' }
                 }}
               />
@@ -115,7 +110,7 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
                   ...TypographyConfirm,
                   backgroundColor: `${colors.activeBlue400}`,
                   width: `${isMobile ? '80px' : '131px'}`,
-                  height: '40px',
+                  height: '30px',
                   borderRadius: '6px',
                   padding: { mobile: '8px 50px', desktop: '16px 78px' },
                   marginRight: { mobile: '70px', desktop: 0 }
@@ -131,6 +126,7 @@ export const ProductForm = ({ handleClose, closeModalQuickly }: Props) => {
         <ModalContainerV2
           form={
             <ProductDetailsForm
+              productNumberFromInitialForm={addValues}
               handleClose={handleClose}
               data={productTypeId}
             />

@@ -4,6 +4,7 @@ import { Formik, Form, useFormikContext } from 'formik';
 import { Box } from '@mui/material';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
+import { DependentCustomer } from '../../Form/CreateCustomerForms/DependentCustomerForm';
 import { ShortCardWithAccordion } from './ShortCardWithAccordion';
 import { CorporateCustomerPersonalDetailsForm } from '@/features/CustomerService/Form/CreateCustomerForms/CorporateCustomerPersonalDetailsForm';
 import { useCreateValidationKeysMapper } from '@/utils/hooks/useCreateValidationKeysMapper';
@@ -55,6 +56,7 @@ import { useGetParams } from '@/utils/hooks/useGetParams';
 import { ICustomerResult } from '@/api/ResponseTypes/customer-service';
 import { useHandleCompletedFields } from '@/utils/hooks/useHandleCompletedFields';
 import { encryptData } from '@/utils/encryptData';
+import { useGetChargeConcession } from '@/api/operation/useChargeConcession';
 
 const TrackVisitedFields = ({ isEditing }: { isEditing: string | null }) => {
   const { customerType, setCompleted } = React.useContext(
@@ -137,12 +139,15 @@ export const CreateCustomerContainer = () => {
 
   const individual = '1';
   const corporate = '2';
+  const dependent = '3';
 
   const { groups, isLoading: areGroupsLoading } = useGetAllGroups();
   const { branches, isLoading: arebranchesLoading } = useGetBranches();
   const { idCards, isLoading: areIdsLoading } = useGetAllIdTypes();
   const { officers, isLoading: areOfficersLoading } = useGetAccountOfficers();
   const { sectors, isLoading: aresectorsLoading } = useGetAllSectors();
+  const { charges } = useGetChargeConcession();
+
   const { education, isLoading: areEducationLoading } = useGetAllEducation();
   const { professions, isLoading: areOccupationsLoading } =
     useGetAllOccupation();
@@ -182,6 +187,9 @@ export const CreateCustomerContainer = () => {
   ];
 
   const shouldRemoveCorporateDetails = Boolean(
+    isEditing && customerResult?.customerType === individual
+  );
+  const shouldRemoveDependentsDetails = Boolean(
     isEditing && customerResult?.customerType === individual
   );
   const { validationKeysMapper } = useCreateValidationKeysMapper(
@@ -272,6 +280,9 @@ export const CreateCustomerContainer = () => {
     }
     if (customerResult?.customerType === corporate) {
       setCustomerType('corporate');
+    }
+    if (customerResult?.customerType === dependent) {
+      setCustomerType('dependent');
     }
   }, [customerResult, setCustomerType]);
 
@@ -400,6 +411,21 @@ export const CreateCustomerContainer = () => {
           validationSchema={pickSchema}
         >
           <Form>
+            {/** On hold */}
+            {/* {customerType === 'dependent' && (
+              <div>
+                <DependentCustomer
+                  sectors={sectors}
+                  countries={countries}
+                  states={states}
+                  towns={towns}
+                  professions={professions}
+                  officers={officers}
+                  groups={groups}
+                  branches={branches}
+                />
+              </div>
+            )} */}
             {customerType === 'corporate' ? (
               <div>
                 <CorporateCustomerPersonalDetailsForm
@@ -497,6 +523,7 @@ export const CreateCustomerContainer = () => {
                 )}
               </div>
             )}
+
             <button id="submitButton" type="submit" style={{ display: 'none' }}>
               submit alias
             </button>

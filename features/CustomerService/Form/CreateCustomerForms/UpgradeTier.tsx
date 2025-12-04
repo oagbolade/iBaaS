@@ -7,16 +7,6 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AlertColor } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import dayjs, { Dayjs } from 'dayjs';
-import {
-  BatchContainer,
-  BatchTitle,
-  PostingContainer,
-  totalText,
-  inputText,
-  ChequelContentStyle
-} from './style';
-import { MobilePreviewContent, actionButtons } from './BatchPosting';
-import { PreviewContentOne } from './CashDeposit';
 import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
@@ -38,22 +28,25 @@ import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { ICurrency } from '@/api/ResponseTypes/general';
-import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
 import { SearchIcon } from '@/assets/svg';
-import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
-import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
-import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
 import {
   useCreateChequeDeposit,
   useForwardtoAppOffChequeDep
 } from '@/api/operation/useChequeDeposit';
 import { ChequeDepositInitialValues } from '@/schemas/schema-values/operation';
 import { chequeDeposit } from '@/schemas/operation';
-import { useFinancialLastDate } from '@/utils/financialDates';
 import { encryptData } from '@/utils/encryptData';
-import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import {
+  BatchContainer,
+  BatchTitle,
+  ChequelContentStyle,
+  inputText,
+  PostingContainer
+} from '@/features/Operation/Forms/style';
+import { PreviewContentOne } from '@/features/Operation/posting';
+import { MobilePreviewContent } from '@/features/Operation/Forms/BatchPosting';
 
 type SearchFilters = {
   accountNumber: string | OptionsI[];
@@ -68,7 +61,7 @@ type Props = {
   setIsSubmittingForward?: (submit: boolean) => void;
   isSubmittingForward?: boolean;
 };
-export const ChequeDeposit = ({
+export const UpgradeTier = ({
   setIsSubmitting,
   isSubmitting,
   currencies,
@@ -96,7 +89,7 @@ export const ChequeDeposit = ({
     isLoading: isAccountDestinationLoading
   } = useGetAccountDetails(encryptData(destinationAccountNumber) || '');
 
-  const tabTitle = ['Source Account', 'Destination Account'];
+  const tabTitle = ['Customer  Information', 'Account  Information'];
   const pageMenu = [
     <PreviewContentOne accountDetails={accountSourceData} />,
     <PreviewContentOne accountDetails={accountDestinationData} />
@@ -192,133 +185,80 @@ export const ChequeDeposit = ({
       validationSchema={chequeDeposit}
     >
       <Form>
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            width: '100%',
-            marginTop: '90px'
-          }}
-        >
-          <Box sx={BatchContainer}>
-            <PageTitle title="Cheque Deposit" styles={BatchTitle} />
-            <Grid container>
-              <Grid
-                item={isTablet}
-                mobile={12}
-                mr={{ mobile: 35, tablet: 0 }}
-                width={{ mobile: '100%', tablet: 0 }}
-                mb={5}
-              >
-                <FormTextInput
-                  name="accountNumber1"
-                  placeholder="Enter Account Number"
-                  label="Account Source Number"
-                  value={accountNumber?.toString()}
-                  onChange={handleAccountSource}
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
-              </Grid>
-
-              <Grid
-                item={isTablet}
-                mobile={12}
-                mr={{ mobile: 35, tablet: 0 }}
-                width={{ mobile: '100%', tablet: 0 }}
-                mb={5}
-              >
-                <FormTextInput
-                  name="accountNumber2"
-                  placeholder="Enter Account Destination Number"
-                  label="Account Destination Number"
-                  value={destinationAccountNumber?.toString()}
-                  onChange={handleAccountDesination}
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
-              </Grid>
-
-              <Grid item={isTablet} mobile={12}>
-                <FormSelectInput
-                  name="currencyCode"
-                  options={mappedCurrency}
-                  label="Currency"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                  value={selectedCurrency}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                    setSelectedCurrency(e.target.value)
-                  }
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="cheqNumber"
-                  placeholder="Enter Cheque Number"
-                  label="Cheque Number"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="tellerno"
-                  placeholder="Enter Teller Number"
-                  label="Teller Number"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <Box>
-                  <FormikDateTimePicker
-                    label="Value Date"
-                    name="valueDate"
-                    value={systemDate}
+        <Grid container spacing={2} sx={{ marginTop: '90px', width: '100%' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
+            <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+              <PageTitle title="Upgrade Tier" styles={BatchTitle} />
+              <Grid container>
+                <Grid
+                  item={isTablet}
+                  mobile={12}
+                  mr={{ mobile: 35, tablet: 0 }}
+                  width={{ mobile: '100%', tablet: 0 }}
+                  mb={5}
+                >
+                  <FormTextInput
+                    name="accountNumber1"
+                    placeholder="Enter BVN"
+                    label="BVN"
+                    value={accountNumber?.toString()}
+                    onChange={handleAccountSource}
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
                   />
-                </Box>
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="name"
+                    placeholder="Enter Name"
+                    label="Name"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="cheqNumber"
+                    placeholder="Enter NIN"
+                    label="NIN"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormSelectInput
+                    name="currencyCode"
+                    options={mappedCurrency}
+                    label="Select Utility Bill"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    value={selectedCurrency}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setSelectedCurrency(e.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormSelectInput
+                    name="currencyCode"
+                    options={mappedCurrency}
+                    label="Select Tier"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                    value={selectedCurrency}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setSelectedCurrency(e.target.value)
+                    }
+                  />
+                </Grid>
               </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormAmountInput
-                  name="transAmount"
-                  placeholder="Enter Pay Amount"
-                  label="Pay Amount"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="rate"
-                  placeholder="."
-                  label="Rate"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                  disabled
-                />
-              </Grid>
-              <Grid item={isTablet} mobile={12}>
-                <FormTextInput
-                  name="narration"
-                  placeholder="Enter Narration"
-                  label="Narration"
-                  customStyle={{
-                    width: setWidth(isMobile ? '250px' : '100%')
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-          <Box sx={PostingContainer}>
-            <div className="mt-10">
+            </Box>
+            <Box mt={8} sx={PostingContainer}>
               {isMobile ? (
                 <MobilePreviewContent
                   PreviewContent={<PreviewContent />}
@@ -327,10 +267,9 @@ export const ChequeDeposit = ({
               ) : (
                 <PreviewContent />
               )}
-            </div>
+            </Box>
           </Box>
-        </Box>
-
+        </Grid>
         <button id="submitButton" type="submit" style={{ display: 'none' }}>
           submit alias
         </button>

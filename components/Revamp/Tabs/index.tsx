@@ -94,13 +94,13 @@ export const Tabs = ({ tabTitle, pageMenu, customStyle }: Props) => {
           onChange={handleChange}
         >
           {tabTitle.map((title: string, index: number) => {
-            return <StyledTab label={title} value={index} />;
+            return <StyledTab key={index} label={title} value={index} />;
           })}
         </StyledTabs>
       </Box>
       {pageMenu.map((page, index) => {
         return (
-          <CustomTabPanel value={value} index={index}>
+          <CustomTabPanel key={index} value={value} index={index}>
             {page}
           </CustomTabPanel>
         );

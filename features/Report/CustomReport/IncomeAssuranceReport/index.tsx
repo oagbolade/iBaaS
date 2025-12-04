@@ -44,7 +44,7 @@ export const IncomeAssuranceReport = () => {
 
   const reportType = Number(searchParams?.reportType);
 
-const isAllProductReport = reportType === 1;
+  const isAllProductReport = reportType === 1;
 
   const {
     data = [],
@@ -63,41 +63,41 @@ const isAllProductReport = reportType === 1;
     pageSize: '10'
   });
 
- React.useEffect(() => {
-  if (!downloadData || downloadData?.length === 0) {
-    setExportData([]);
-    return;
-  }
-
-  const formattedExportData = downloadData.map((item) => {
-    if (isAllProductReport) {
-      return {
-        'Product Code': item?.productcode || 'N/A',
-        'Branch Code': item?.branchcode || 'N/A',
-        'Accrued Interest': item?.accrued_Int?.toLocaleString() || 0,
-        'Branch Name': item?.branchName || 'N/A',
-        'Product Name': item?.productName || 'N/A'
-      };
+  React.useEffect(() => {
+    if (!downloadData || downloadData?.length === 0) {
+      setExportData([]);
+      return;
     }
 
-    // FULL REPORT EXPORT
-    return {
-      'Acc No': item?.accountnumber || 'N/A',
-      'Account Name': item?.fullname || 'N/A',
-      'Start Date': item?.startdate?.split('T')[0] || 'N/A',
-      'Maturity Date': item?.matdate?.split('T')[0] || 'N/A',
-      'Interest Rate': item?.intrate || 'N/A',
-      'Loan Amount': item?.loanamount?.toLocaleString() || 0,
-      'Product Name': item?.productName || 'N/A',
-      'Accrued Interest': item?.accrued_Int?.toLocaleString() || 0,
-      Branch: item?.branchName || 'N/A',
-      'Product Code': item?.productCode || item?.productcode || 'N/A'
-    };
-  });
+    const formattedExportData = downloadData.map((item) => {
+      if (isAllProductReport) {
+        return {
+          'Product Code': item?.productcode || 'N/A',
+          'Branch Code': item?.branchcode || 'N/A',
+          'Accrued Interest': item?.accrued_Int?.toLocaleString() || 0,
+          'Branch Name': item?.branchName || 'N/A',
+          'Product Name': item?.productName || 'N/A'
+        };
+      }
 
-  setExportData(formattedExportData);
-  setReportType('IncomeAssuranceReport');
-}, [downloadData, isAllProductReport]);
+      // FULL REPORT EXPORT
+      return {
+        'Acc No': item?.accountnumber || 'N/A',
+        'Account Name': item?.fullname || 'N/A',
+        'Start Date': item?.startdate?.split('T')[0] || 'N/A',
+        'Maturity Date': item?.matdate?.split('T')[0] || 'N/A',
+        'Interest Rate': item?.intrate || 'N/A',
+        'Loan Amount': item?.loanamount?.toLocaleString() || 0,
+        'Product Name': item?.productName || 'N/A',
+        'Accrued Interest': item?.accrued_Int?.toLocaleString() || 0,
+        Branch: item?.branchName || 'N/A',
+        'Product Code': item?.productCode || item?.productcode || 'N/A'
+      };
+    });
+
+    setExportData(formattedExportData);
+    setReportType('IncomeAssuranceReport');
+  }, [downloadData, isAllProductReport]);
 
   const rowsPerPage = 10;
   const totalPages = Math.ceil((totalRecords || 0) / rowsPerPage);
@@ -125,70 +125,70 @@ const isAllProductReport = reportType === 1;
         {isGlobalLoading || isLoading ? (
           <FormSkeleton noOfLoaders={3} />
         ) : (
-         <MuiTableContainer
-  columns={isAllProductReport ? COLUMN_PAYMENT : COLUMN}
-  data={data}
-  tableConfig={{ hasActions: false }}
-  showHeader={{
-    mainTitle: 'Income Assurance Report',
-    secondaryTitle:
-      'See a directory of Income Assurance Report in this system.',
-    hideFilterSection: true
-  }}
-  setPage={setPage}
-  page={page}
-  totalPages={totalPages}
-  totalElements={totalRecords}
->
-  {searchActive ? (
-    data?.map((row: IIncomeAssurance, i) => (
-      <StyledTableRow key={i}>
-        
-        {isAllProductReport ? (
-          <>
-            <StyledTableCell>{row.productcode || 'N/A'}</StyledTableCell>
-            <StyledTableCell>{row.branchcode || 'N/A'}</StyledTableCell>
-            <StyledTableCell>
-              {`NGN ${formatCurrency(row.accrued_Int || 0)}`}
-            </StyledTableCell>
-            <StyledTableCell>{row.branchName || 'N/A'}</StyledTableCell>
-            <StyledTableCell>{row.productName || 'N/A'}</StyledTableCell>
-          </>
-        ) : (
-          <>
-            <StyledTableCell>{row.accountnumber || 'N/A'}</StyledTableCell>
-            <StyledTableCell>{row.fullname || 'N/A'}</StyledTableCell>
-            <StyledTableCell>
-              {moment(row.startdate?.split('T')[0]).format('YYYY-MM-DD')}
-            </StyledTableCell>
-            <StyledTableCell>
-              {moment(row.matdate?.split('T')[0]).format('YYYY-MM-DD')}
-            </StyledTableCell>
-            <StyledTableCell>{row.intrate || 'N/A'}</StyledTableCell>
-            <StyledTableCell>
-              {`NGN ${formatCurrency(row.loanamount || 0)}`}
-            </StyledTableCell>
-            <StyledTableCell>{row.productName || 'N/A'}</StyledTableCell>
-            <StyledTableCell>
-              {`NGN ${formatCurrency(row.accrued_Int || 0)}`}
-            </StyledTableCell>
-            <StyledTableCell>{row.branchName || 'N/A'}</StyledTableCell>
-            <StyledTableCell>
-              {row.productCode || row.productcode || 'N/A'}
-            </StyledTableCell>
-          </>
-        )}
+          <MuiTableContainer
+            columns={isAllProductReport ? COLUMN_PAYMENT : COLUMN}
+            data={data}
+            tableConfig={{ hasActions: false }}
+            showHeader={{
+              mainTitle: 'Income Assurance Report',
+              secondaryTitle:
+                'See a directory of Income Assurance Report in this system.',
+              hideFilterSection: true
+            }}
+            setPage={setPage}
+            page={page}
+            totalPages={totalPages}
+            totalElements={totalRecords}
+          >
+            {searchActive ? (
+              data?.map((row: IIncomeAssurance, i) => (
+                <StyledTableRow key={i}>
 
-      </StyledTableRow>
-    ))
-  ) : (
-    <StyledTableRow>
-      <StyledTableCell colSpan={COLUMN.length + 1}>
-        {renderEmptyTableBody(data)}
-      </StyledTableCell>
-    </StyledTableRow>
-  )}
-</MuiTableContainer>
+                  {isAllProductReport ? (
+                    <>
+                      <StyledTableCell>{row.productcode || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>{row.branchcode || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>
+                        {`NGN ${formatCurrency(row.accrued_Int || 0)}`}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.branchName || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>{row.productName || 'N/A'}</StyledTableCell>
+                    </>
+                  ) : (
+                    <>
+                      <StyledTableCell>{row.accountnumber || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>{row.fullname || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>
+                        {moment(row.startdate?.split('T')[0]).format('YYYY-MM-DD')}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {moment(row.matdate?.split('T')[0]).format('YYYY-MM-DD')}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.intrate || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>
+                        {`NGN ${formatCurrency(row.loanamount || 0)}`}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.productName || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>
+                        {`NGN ${formatCurrency(row.accrued_Int || 0)}`}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.branchName || 'N/A'}</StyledTableCell>
+                      <StyledTableCell>
+                        {row.productCode || row.productcode || 'N/A'}
+                      </StyledTableCell>
+                    </>
+                  )}
+
+                </StyledTableRow>
+              ))
+            ) : (
+              <StyledTableRow>
+                <StyledTableCell colSpan={COLUMN.length + 1}>
+                  {renderEmptyTableBody(data)}
+                </StyledTableCell>
+              </StyledTableRow>
+            )}
+          </MuiTableContainer>
 
         )}
       </Box>

@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, useCallback, useContext, useState } from 'react';
 import { Box } from '@mui/material';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { PendingRequestsColumns } from '../Loan/LoanDirectory/COLUMN';
 import { inputFields } from '../Loan/LoanDirectory/styles';
 import { IGetPendingRequest } from '@/api/ResponseTypes/loans';
@@ -26,8 +26,9 @@ interface RequestProps {
 
 const PendingRequestsActions = ({ requests }: RequestProps) => {
   const { setPendingRequestData } = useContext(RequestModuleContext);
+  const router = useRouter();
 
-  const setRequestData = () => {
+  const handleViewRequest = useCallback(() => {
     setPendingRequestData({
       id: requests.id,
       tablename: requests.tablename,
@@ -39,19 +40,26 @@ const PendingRequestsActions = ({ requests }: RequestProps) => {
       searchfield: requests.searchfield,
       authdate: requests.authdate,
       latestupdate: requests.latestupdate,
-      post_user: requests.post_user,
+      post_user: requests.post_user || '',
       narration: requests.narration
     });
-  };
+    router.push(`/requests/view-single-pending-request/?id=${requests.id}`);
+  }, [requests, setPendingRequestData, router]);
 
   return (
-    /** TODO: Remove hardcoded account number once we are able to view a specific request detail **/
-    <Link
-      onClick={setRequestData}
-      href={`/requests/view-single-pending-request/?id=${requests?.id}`}
+    <button
+      type="button"
+      onClick={handleViewRequest}
+      style={{
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        padding: 0
+      }}
+      aria-label={`View request ${requests.id}`}
     >
       <TableSingleAction actionName="View" />
-    </Link>
+    </button>
   );
 };
 
@@ -59,9 +67,12 @@ export const PendingRequestTable = ({ pendingRequests = [] }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const { isLoading } = useGlobalLoadingState();
 
-  const filterFunction = (request: IGetPendingRequest, term: string) =>
-    request.posttype.toLowerCase().includes(term.toLowerCase()) ||
-    request.post_user?.toLowerCase().includes(term.toLowerCase());
+  const filterFunction = useCallback(
+    (request: IGetPendingRequest, term: string) =>
+      request.posttype.toLowerCase().includes(term.toLowerCase()) ||
+      request.post_user?.toLowerCase().includes(term.toLowerCase()),
+    []
+  );
 
   const { paginatedData, totalElements, totalPages, setPage, page } =
     usePagination<IGetPendingRequest>({
@@ -113,7 +124,7 @@ export const PendingRequestTable = ({ pendingRequests = [] }: Props) => {
             paginatedData.map((request: IGetPendingRequest) => (
               <StyledTableRow key={request.id}>
                 <StyledTableCell component="th" scope="row">
-                  {request.posttype}
+                  {request.authdesc}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {formatDate(request?.createdate)}

@@ -15,6 +15,8 @@ import {
   Stack
 } from '@mui/material';
 import DOMPurify from 'dompurify';
+import { useRouter } from 'next/navigation';
+import { useCallback, useContext } from 'react';
 import { tableCard } from './styles';
 import { primaryTitle } from '@/components/Confirmation/styles';
 import colors from '@/assets/colors';
@@ -22,8 +24,8 @@ import { TableSingleAction } from '@/components/Table';
 import { useGetPendingRequest } from '@/api/loans/useFetchPendingRequest';
 import { FormSkeleton } from '@/components/Loaders';
 import { IGetPendingRequest } from '@/api/ResponseTypes/loans';
-
 import { StyledTableRow, renderEmptyTableBody } from '@/components/Table/Table';
+import { RequestModuleContext } from '@/context/RequestModuleContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -35,22 +37,52 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }
 }));
 
-type Props = {
-  id: string;
+
+interface RequestProps {
+  requests: IGetPendingRequest;
+}
+
+const PendingRequestsActions = ({ requests }: RequestProps) => {
+  const { setPendingRequestData } = useContext(RequestModuleContext);
+  const router = useRouter();
+
+  const handleViewRequest = useCallback(() => {
+    setPendingRequestData({
+      id: requests.id,
+      tablename: requests.tablename,
+      authdesc: requests.authdesc,
+      authid: requests.authid,
+      posttype: requests.posttype,
+      createdate: requests.createdate,
+      authstatus: requests.authstatus,
+      searchfield: requests.searchfield,
+      authdate: requests.authdate,
+      latestupdate: requests.latestupdate,
+      post_user: requests.post_user || '',
+      narration: requests.narration
+    });
+    router.push(`/requests/view-single-pending-request/?id=${requests.id}`);
+  }, [requests, setPendingRequestData, router]);
+
+  return (
+    <button
+      type="button"
+      onClick={handleViewRequest}
+      style={{
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        padding: 0
+      }}
+      aria-label={`View request ${requests.id}`}
+    >
+      <TableSingleAction actionName="View" />
+    </button>
+  );
 };
 export const PendingTasks = () => {
   const { authsdetails, isLoading } = useGetPendingRequest();
   const pendingData = authsdetails?.length || 0;
-
-  const ActionMenu = ({ id }: Props): React.ReactElement => {
-    return (
-      <Link
-        href={`/requests/view-single-pending-request/?authid=${DOMPurify.sanitize(id)}`}
-      >
-        <TableSingleAction actionName="View" />
-      </Link>
-    );
-  };
 
   if (isLoading) {
     return (
@@ -98,7 +130,7 @@ export const PendingTasks = () => {
                 </StyledTableCell>
                 <StyledTableCell>{row?.authid}</StyledTableCell>
                 <StyledTableCell>
-                  <ActionMenu id={row.id.toString()} />
+                  <PendingRequestsActions requests={row} />
                 </StyledTableCell>
               </StyledTableRow>
             ))}

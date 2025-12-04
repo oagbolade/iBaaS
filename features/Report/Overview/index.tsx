@@ -2,7 +2,7 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
 import { Box, Grid } from '@mui/material';
-import { TopOverViewSection } from './TopOverViewSection';
+import { TopOverView } from './TopViewOverview';
 import { ReportSummary } from '@/components/Cards/ReportSummary';
 import {
   bardata,
@@ -10,8 +10,13 @@ import {
   doughnutData,
   doughnutOptions,
   lineOptions,
-  linedata
+  linedata,
+  nosOfAccount,
+  depositVsWithdrawalData,
+  loanRepaymentData,
+  trialAccountData
 } from '@/constants/Reports/graphs';
+import colors from '@/assets/colors';
 
 export const OverView = () => {
   return (
@@ -22,9 +27,152 @@ export const OverView = () => {
         marginTop: '50px'
       }}
     >
-      <TopOverViewSection />
-      <Grid container spacing={2.5}>
+      <TopOverView />
+
+      <Grid mt={1} container spacing={2.5}>
+        <Grid item desktop={6} tablet={6} mobile={12}>
+          <ReportSummary
+            filter={['DATE', 'ALL_BRANCHES']}
+            title="Number of Accounts"
+            link="/report/custom-report/cheque-book"
+          >
+            <Chart
+              width="100%"
+              height="100%"
+              chartType="LineChart"
+              data={nosOfAccount}
+              options={{
+                ...lineOptions,
+                hAxis: { title: 'Month' },
+                vAxis: {
+                  title: 'Account'
+                },
+                curveType: 'function'
+              }}
+            />
+          </ReportSummary>
+        </Grid>
+
+        <Grid item desktop={6} tablet={6} mobile={12}>
+          <ReportSummary
+            filter={['DATE', 'ALL_BRANCHES']}
+            title="Deposits vs Withdrawals"
+            link="/report/custom-report/statement-account"
+          >
+            <Chart
+              width="100%"
+              height="100%"
+              chartType="PieChart"
+              data={depositVsWithdrawalData}
+              options={{
+                ...doughnutOptions,
+                legend: {
+                  position: 'center',
+                  alignment: 'center'
+                }
+              }}
+            />
+          </ReportSummary>
+        </Grid>
+
         <Grid item desktop={6}>
+          <ReportSummary
+            filter={['DATE', 'ALL_BRANCHES']}
+            title="Loan Repayment Due"
+            link="/report/custom-report/cheque-book"
+          >
+            <Chart
+              width="100%"
+              height="100%"
+              chartType="ColumnChart"
+              data={loanRepaymentData}
+              options={{
+                ...lineOptions,
+                hAxis: { title: 'Month' },
+                vAxis: {
+                  title: 'Account'
+                },
+                curveType: 'function',
+                colors: [`${colors.activeGreen400}`]
+              }}
+            />
+          </ReportSummary>
+        </Grid>
+
+        <Grid item desktop={6}>
+          <ReportSummary
+            filter={['DATE', 'ALL_BRANCHES']}
+            title="Trial Balance"
+            link="/report/custom-report/statement-account"
+          >
+            <Chart
+              width="100%"
+              height="100%"
+              chartType="LineChart"
+              data={trialAccountData}
+              options={{
+                ...lineOptions,
+                hAxis: { title: 'Month' },
+                vAxis: {
+                  title: 'Count'
+                },
+                curveType: 'function',
+                legend: { position: 'bottom' },
+                colors: [`${colors.primaryBlue400}`, `${colors.primaryRed400}`]
+              }}
+            />
+          </ReportSummary>
+        </Grid>
+
+        <Grid item desktop={6}>
+          <ReportSummary
+            filter={['DATE', 'ALL_BRANCHES']}
+            title="Trial Balance"
+            link="/report/custom-report/statement-account"
+          >
+            <Chart
+              width="100%"
+              height="100%"
+              chartType="LineChart"
+              data={nosOfAccount}
+              options={{
+                ...lineOptions,
+                hAxis: { title: 'Month' },
+                vAxis: {
+                  title: 'Account'
+                },
+                curveType: 'function'
+              }}
+            />
+          </ReportSummary>
+        </Grid>
+
+        <Grid item desktop={6}>
+          <ReportSummary
+            filter={['DATE', 'ALL_BRANCHES']}
+            title="No. of Dormant Accounts"
+            link=""
+          >
+            <Chart
+              width="100%"
+              height="100%"
+              chartType="ColumnChart"
+              data={nosOfAccount}
+              options={{
+                ...lineOptions,
+                hAxis: { title: 'Month' },
+                vAxis: {
+                  title: 'Number'
+                },
+                curveType: 'function',
+                colors: [`${colors.activeYellow500}`]
+              }}
+            />
+          </ReportSummary>
+        </Grid>
+
+        {/* this is commented out  */}
+        {/* <Grid item desktop={6}>
           <ReportSummary
             filter={['ALL_BRANCHES', 'TRANSACTION_VOLUME', 'AMOUNT']}
             title="Check Book Status"
@@ -199,7 +347,7 @@ export const OverView = () => {
               options={baroptions}
             />
           </ReportSummary>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );

@@ -56,9 +56,9 @@ export function useViewAuthDetailsGeneral(id: number): ViewAuthDetailsGeneral {
     isError,
     isLoading
   } = useQuery({
-    queryKey: [queryKeys.viewAuthDetailsGeneral],
+    queryKey: [queryKeys.viewAuthDetailsGeneral, id],
     queryFn: () => viewAuthDetailsGeneral(toastActions, id),
-    enabled: Boolean(id?.toString().length > 0)
+    enabled: Boolean(id?.toString().length > 0|| Boolean(id !== 0))
   });
 
   return { ...data, isError, isLoading };

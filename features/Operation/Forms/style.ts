@@ -45,20 +45,20 @@ export const documentUpload = {
 
 export const BatchContainer = {
   display: 'flex',
-  width: { tablet: '770px', mobile: '500px' },
-  padding: '32px 32px 16px 32px',
+  width: { tablet: '50%', mobile: '500px' },
+  padding: '32px 32px 32px 32px',
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '32px',
   borderLeft: '1px solid rgba(0, 0, 0, 0.00)',
   background: `${colors.white}`,
   heigh: '80px',
-  marginTop: '17px'
+  marginTop: '30px'
 };
 
 export const PostingContainer = {
   display: 'flex',
-  width: { tablet: '500px', mobile: '300px' },
+  width: { tablet: '50%', mobile: '300px' },
   minHeight: '100vh',
   padding: '32px',
   flexDirection: 'column',
@@ -444,7 +444,7 @@ export const postingDetails = {
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '16px',
-  maxHeight: '700', 
+  maxHeight: '700',
   width: '560px'
 };
 export const saveBatches = {

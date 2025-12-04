@@ -160,128 +160,134 @@ export const ReturnCheque = ({
       validationSchema={returnCheque}
     >
       <Form>
-        <Grid container spacing={2} sx={{ marginTop: '90px', width: '100%' }}>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-              <PageTitle title="Return Cheques Reversal" styles={BatchTitle} />
-              <Grid container>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                  mb={5}
-                >
-                  <FormTextInput
-                    name="accountNumber"
-                    placeholder="Enter Account Number"
-                    label="Account Number"
-                    value={accountNumber?.toString()}
-                    onChange={handleAccountNumber}
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectField
-                    name="clearingBankCode"
-                    options={mappedCommercialBank}
-                    label="Logment Bank"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="chequeNumber"
-                    placeholder="Enter cheque number"
-                    label="Cheque Number"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencycode"
-                    options={mappedCurrency}
-                    label="Currency"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <Box>
-                    <DemoContainer components={['DatePicker']}>
-                      <FormikDateTimePicker
-                        label="Value Date"
-                        name="valueDate"
-                        value={systemDate}
-                      />
-                    </DemoContainer>
-                  </Box>
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <Box>
-                    <DemoContainer components={['DatePicker']}>
-                      <FormikDateTimePicker label="Due Date" name="dueDate" />
-                    </DemoContainer>
-                  </Box>
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormAmountInput
-                    name="payAmount"
-                    placeholder="Enter pay amount"
-                    label="Pay Amount"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="rate"
-                    placeholder="Enter Rate"
-                    label="Rate"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    disabled
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="narration"
-                    placeholder="Enter narration "
-                    label="Narration"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-            <Box sx={PostingContainer}>
-              {isMobile ? (
-                <MobilePreviewContent
-                  PreviewContent={
-                    <PreviewContentOne accountDetails={accountData} />
-                  }
-                  customStyle={{ ...cashContentStyle }}
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: '100%',
+            marginTop: '90px'
+          }}
+        >
+          <Box sx={BatchContainer}>
+            <PageTitle title="Return Cheques Reversal" styles={BatchTitle} />
+            <Grid container>
+              <Grid
+                item={isTablet}
+                mobile={12}
+                mr={{ mobile: 35, tablet: 0 }}
+                width={{ mobile: '100%', tablet: 0 }}
+                mb={5}
+              >
+                <FormTextInput
+                  name="accountNumber"
+                  placeholder="Enter Account Number"
+                  label="Account Number"
+                  value={accountNumber?.toString()}
+                  onChange={handleAccountNumber}
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
                 />
-              ) : (
-                <PreviewContentOne accountDetails={accountData} />
-              )}{' '}
-            </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectField
+                  name="clearingBankCode"
+                  options={mappedCommercialBank}
+                  label="Logment Bank"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="chequeNumber"
+                  placeholder="Enter cheque number"
+                  label="Cheque Number"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="currencycode"
+                  options={mappedCurrency}
+                  label="Currency"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <Box>
+                  <DemoContainer components={['DatePicker']}>
+                    <FormikDateTimePicker
+                      label="Value Date"
+                      name="valueDate"
+                      value={systemDate}
+                    />
+                  </DemoContainer>
+                </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <Box>
+                  <DemoContainer components={['DatePicker']}>
+                    <FormikDateTimePicker label="Due Date" name="dueDate" />
+                  </DemoContainer>
+                </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormAmountInput
+                  name="payAmount"
+                  placeholder="Enter pay amount"
+                  label="Pay Amount"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="rate"
+                  placeholder="Enter Rate"
+                  label="Rate"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="narration"
+                  placeholder="Enter narration "
+                  label="Narration"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Box>
-        </Grid>
+          <Box sx={PostingContainer}>
+            {isMobile ? (
+              <MobilePreviewContent
+                PreviewContent={
+                  <PreviewContentOne accountDetails={accountData} />
+                }
+                customStyle={{ ...cashContentStyle }}
+              />
+            ) : (
+              <PreviewContentOne accountDetails={accountData} />
+            )}{' '}
+          </Box>
+        </Box>
+
         <button id="submitButton" type="submit" style={{ display: 'none' }}>
           submit alias
         </button>

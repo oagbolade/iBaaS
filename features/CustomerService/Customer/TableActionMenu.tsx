@@ -23,9 +23,15 @@ type Props = {
   type: string;
 };
 
-export const TableActionMenu = ({ customerId , type}: Props) => {
-  const shouldDisableEdit = !checkMultipleUserRoleAccess('Customer', 'EDIT CUSTOMER');
-  const shouldDisableView = !checkMultipleUserRoleAccess('Customer', 'CUSTOMER INFO');
+export const TableActionMenu = ({ customerId, type }: Props) => {
+  const shouldDisableEdit = !checkMultipleUserRoleAccess(
+    'Customer',
+    'EDIT CUSTOMER'
+  );
+  const shouldDisableView = !checkMultipleUserRoleAccess(
+    'Customer',
+    'CUSTOMER INFO'
+  );
 
   const router = useRouter();
   const { toggleCustomerServiceModal } = useContext(CustomerServiceContext);
@@ -66,13 +72,16 @@ export const TableActionMenu = ({ customerId , type}: Props) => {
           >
             <Link
               style={{
-                pointerEvents: (shouldDisableEdit) ? 'none' : 'auto',
+                pointerEvents: shouldDisableEdit ? 'none' : 'auto'
               }}
               aria-disabled={shouldDisableEdit}
               tabIndex={shouldDisableEdit ? -1 : undefined}
               href={`/customer-service/customer/create-customer/?isEditing=true&customerId=${customerId}&type=${type}`}
             >
-              <TableMenuButton disabled={shouldDisableEdit} buttonTitle="Edit Customer" />
+              <TableMenuButton
+                disabled={shouldDisableEdit}
+                buttonTitle="Edit Customer"
+              />
             </Link>
           </MenuItem>
           <MenuItem
@@ -82,13 +91,35 @@ export const TableActionMenu = ({ customerId , type}: Props) => {
           >
             <Link
               style={{
-                pointerEvents: (shouldDisableView) ? 'none' : 'auto',
+                pointerEvents: shouldDisableView ? 'none' : 'auto'
               }}
               aria-disabled={shouldDisableView}
               tabIndex={shouldDisableView ? -1 : undefined}
               href={`/customer-service/customer/view-customer-details/?customerId=${customerId}`}
             >
-              <TableMenuButton disabled={shouldDisableView} buttonTitle="View Details" />
+              <TableMenuButton
+                disabled={shouldDisableView}
+                buttonTitle="View Details"
+              />
+            </Link>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              return handleClose(null);
+            }}
+          >
+            <Link
+              style={{
+                pointerEvents: shouldDisableView ? 'none' : 'auto'
+              }}
+              aria-disabled={shouldDisableView}
+              tabIndex={shouldDisableView ? -1 : undefined}
+              href={`/customer-service/customer/create-customer/upgrade-tier?customerId=${customerId}`}
+            >
+              <TableMenuButton
+                disabled={shouldDisableView}
+                buttonTitle="Upgrade Tier"
+              />
             </Link>
           </MenuItem>
         </MenuWrapper>

@@ -28,11 +28,12 @@ export const doughnutOptions = {
   pieStartAngle: 185,
   tooltip: { trigger: 'none' },
   chartArea: { left: 50, top: 30 },
-  height: 330,
+  height: 350,
+  width: 700,
   slices: {
     0: { color: `${colors.activeBlue400}` },
-    1: { color: `${colors.primaryBlue200}` },
-    2: { color: `${colors.primaryRed400}` }
+    1: { color: `${colors.primaryRed400}` },
+    2: { color: `${colors.primaryBlue200}` }
   }
 };
 
@@ -107,23 +108,75 @@ export const linedatav2 = [
   ['Others', 630]
 ];
 
+export const nosOfAccount = [
+  ['Account', 'Nos of Accounts'],
+  ['jan', 5030],
+  ['Feb', 5030],
+  ['Mar', 5030],
+  ['Apr', 5030],
+  ['May', 5030],
+  ['June', 6030],
+  ['July', 7030],
+  ['Aug', 8030],
+  ['Sept', 9230],
+  ['Oct', 10030],
+  ['Nov', 11630],
+  ['Dec', 12630]
+];
+
+export const loanRepaymentData = [
+  ['Account', 'Nos of Accounts'],
+  ['jan', 1000],
+  ['Feb', 1170],
+  ['Mar', 660],
+  ['Apr', 1030],
+  ['May', 1030],
+  ['June', 1030],
+  ['July', 1030],
+  ['Aug', 130],
+  ['Sept', 230],
+  ['Oct', 430],
+  ['Nov', 630],
+  ['Dec', 630]
+];
+
+export const trialAccountData = [
+  ['Account', 'Income', 'Expense'],
+  ['jan', 10000, 400],
+  ['Feb', 10170, 460],
+  ['Mar', 6060, 1120],
+  ['Apr', 10030, 540],
+  ['May', 10030, 540],
+  ['June', 10030, 2000],
+  ['July', 10030, 430],
+  ['Aug', 1300, 300],
+  ['Sept', 2030, 500],
+  ['Oct', 5030, 700],
+  ['Nov', 6030, 800],
+  ['Dec', 6030, 900]
+];
+
 export const lineOptions = {
-  isStacked: true,
-  chartArea: { left: 40, top: 30 },
   legend: 'none',
   fontSize: 12,
   fontName: 'Averta Regular',
   colors: [`${colors.blueLine}`, `${colors.greenLine}`],
-  height: 300,
+  height: 350,
+  width: 800,
   vAxis: {
     minValue: 0,
     gridlines: {
-      color: `${colors.neutral300}`
+      color: `${colors.neutral100}`
     },
     minorGridlines: {
-      // hides the minor grid lines
       minSpacing: 50,
       count: -1
     }
   }
 };
+
+export const depositVsWithdrawalData = [
+  ['Deposit', 'Withdrawal'],
+  ['Deposit', 10],
+  ['Withdrawal', 5]
+];

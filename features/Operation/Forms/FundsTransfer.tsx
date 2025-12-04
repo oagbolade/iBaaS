@@ -112,7 +112,7 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
     currencies,
     commBanks
   });
-
+  const { sysmodel } = useGetSystemDate();
   const beneficiaryAccount = beneficiaryData?.accountnumber?.toString();
   const onSubmit = async (values: any) => {
     const toastMessage = {
@@ -149,7 +149,8 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
       ...values,
       reversal: String(Number(isReversal)),
       transfertype: transferType,
-      currencyCode: selectedCurrency
+      currencyCode: selectedCurrency,
+      auth_id: sysmodel?.approvingOfficer || ''
     };
 
     mutate?.(getAllValues); // Call useFundsTransfer
@@ -172,7 +173,6 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
     setCreditAccount(e.target.value);
   };
 
-  const { sysmodel } = useGetSystemDate();
   const systemDate = dayjs(sysmodel?.systemDate || new Date());
   React.useEffect(() => {
     if (mappedCurrency.length > 0) {
@@ -215,8 +215,16 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
         >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2} sx={{ marginTop: '90px', width: '100%' }}>
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: '100%',
+            marginTop: '70px',
+            paddingTop: '32px'
+          }}
+        >
+          <Box sx={BatchContainer}>
             <PageTitle title="Funds Transfer" styles={BatchTitle} />
             <Grid container>
               <Grid item={isTablet} mobile={12}>
@@ -375,7 +383,7 @@ export const FundsTransfer = ({ currencies, commBanks }: Props) => {
               <PreviewContent />
             )}{' '}
           </Box>
-        </Grid>
+        </Box>
       </Form>
     </Formik>
   );

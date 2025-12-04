@@ -12,7 +12,7 @@ import { getStoredUser, USER_LOCALSTORAGE_KEY } from '@/utils/user-storage';
 import { encryptData } from '@/utils/encryptData';
 import { decryptData } from '@/utils/decryptData';
 
-export const environment = process.env.NODE_ENV || 'production';
+export const environment = process.env.NODE_ENV || 'production' || 'UAT';
 
 export function getJWTHeader(user: UserLoginResponse): Record<string, string> {
   return { Authorization: `Bearer ${user.token}` };

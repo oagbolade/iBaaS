@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { IAccountEnquiryResponse } from '../ResponseTypes/reports';
-import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -10,7 +10,6 @@ import { toast } from '@/utils/toast';
 import { queryKeys } from '@/react-query/constants';
 import { getStoredUser } from '@/utils/user-storage';
 import { ISearchParams } from '@/app/api/search/route';
-import { REPORT_BASE_URL } from '@/axiosInstance/constants';
 
 export interface IEnquiryParams {
   branchCode?: string;

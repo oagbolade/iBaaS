@@ -446,8 +446,16 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
         >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2} sx={{ marginTop: '70px', width: '100%' }}>
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            marginTop: '80px',
+            width: '100%'
+          }}
+        >
+          <Box sx={BatchContainer}>
             <PageTitle title="NIP Transfer" styles={BatchTitle} />
             <Grid container>
               <Grid item={isTablet} mobile={12}>
@@ -612,8 +620,10 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
               </Grid>
             </Grid>
           </Box>
-          <Box mt={8} sx={PostingContainer}>
-            {isMobile ? (
+
+          <Box sx={PostingContainer}>
+            <div className='mt-8'>
+               {isMobile ? (
               <MobilePreviewContent
                 PreviewContent={<PreviewContent />}
                 customStyle={{ ...fundsContentStyle }}
@@ -621,8 +631,9 @@ export const NIPTransfer = ({ currencies, commBanks }: Props) => {
             ) : (
               <PreviewContent />
             )}{' '}
+            </div>
           </Box>
-        </Grid>
+        </Box>
       </Form>
     </Formik>
   );

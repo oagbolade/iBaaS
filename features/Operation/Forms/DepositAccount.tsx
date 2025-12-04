@@ -1,55 +1,40 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Formik, Form } from 'formik';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AlertColor } from '@mui/material';
+import dayjs from 'dayjs';
 import { useQuery } from '@tanstack/react-query';
-import dayjs, { Dayjs } from 'dayjs';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   BatchContainer,
   BatchTitle,
   PostingContainer,
-  totalText,
   inputText,
   ChequelContentStyle
 } from './style';
-import { MobilePreviewContent, actionButtons } from './BatchPosting';
+import { MobilePreviewContent } from './BatchPosting';
 import { PreviewContentOne } from './CashDeposit';
 import { PageTitle } from '@/components/Typography';
 import {
   FormTextInput,
-  FormSelectField,
   FormikDateTimePicker,
   FormSelectInput
 } from '@/components/FormikFields';
-import { useCurrentBreakpoint } from '@/utils';
+import { useCurrentBreakpoint, frequencyOptions } from '@/utils';
 import { Tabs } from '@/components/Revamp/Tabs';
-import DateTimePicker from '@/components/Revamp/FormFields/DateTimePicker';
 import { toast } from '@/utils/toast';
 import { queryKeys } from '@/react-query/constants';
-import { extractIdFromDropdown } from '@/utils/extractIdFromDropdown';
 import {
   searchCustomer,
   useGetAccountDetails
 } from '@/api/customer-service/useCustomer';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
-import { OptionsI } from '@/components/FormikFields/FormSelectField';
 import { ICurrency } from '@/api/ResponseTypes/general';
-import { mapCustomerAccountNumberSearch } from '@/utils/mapCustomerSearch';
-import { SearchIcon } from '@/assets/svg';
-import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
-import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
-import { dropDownWithSearch } from '@/features/CustomerService/Form/style';
-import {
-  useCreateChequeDeposit,
-  useForwardtoAppOffChequeDep
-} from '@/api/operation/useChequeDeposit';
+import { useCreateChequeDeposit } from '@/api/operation/useChequeDeposit';
 import { ChequeDepositInitialValues } from '@/schemas/schema-values/operation';
-import { chequeDeposit } from '@/schemas/operation';
-import { useFinancialLastDate } from '@/utils/financialDates';
 import { encryptData } from '@/utils/encryptData';
 import { FormAmountInput } from '@/components/FormikFields/FormAmountInput';
 import { FormSkeleton } from '@/components/Loaders';
@@ -57,11 +42,9 @@ import { useGetSystemDate } from '@/api/general/useSystemDate';
 import { fundsTransferRadioOptions } from '@/constants/SetupOptions';
 import { RadioButtons } from '@/components/Revamp/Radio/RadioButton';
 
-type SearchFilters = {
-  accountNumber: string | OptionsI[];
-  destinationAccountNumber: string | OptionsI[];
-  [key: string]: any;
-};
+import colors from '@/assets/colors';
+import { StyledSearchableDropdown } from '@/features/CustomerService/Form/CreateAccount';
+import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
 
 type Props = {
   currencies: ICurrency[] | Array<any>;
@@ -69,13 +52,19 @@ type Props = {
   setIsSubmitting?: (submit: boolean) => void;
   setIsSubmittingForward?: (submit: boolean) => void;
   isSubmittingForward?: boolean;
+  loans: any;
+  branches: any;
+  repaymentTypes: any;
 };
 export const DepositAccount = ({
   setIsSubmitting,
   isSubmitting,
   currencies,
   setIsSubmittingForward,
-  isSubmittingForward
+  isSubmittingForward,
+  loans,
+  branches,
+  repaymentTypes
 }: Props) => {
   const toastActions = React.useContext(ToastMessageContext);
   const { isMobile, isTablet, setWidth } = useCurrentBreakpoint();
@@ -83,8 +72,14 @@ export const DepositAccount = ({
     currencies
   });
 
+  const { mappedLoansProduct, mappedBranches, mappedLoanRepayment } =
+    useMapSelectOptions({
+      loans,
+      branches,
+      repaymentTypes
+    });
+
   const [selectedCurrency, setSelectedCurrency] = React.useState('');
-  const [isLoading, setIsLoading] = React.useState(true);
   const { mutate } = useCreateChequeDeposit();
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const [destinationAccountNumber, setDestinationAccountNumber] =
@@ -98,11 +93,17 @@ export const DepositAccount = ({
     isLoading: isAccountDestinationLoading
   } = useGetAccountDetails(encryptData(destinationAccountNumber) || '');
 
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+  const [customerAccount, setCustomerAccount] = useState('');
+  const [filteredValues, setFilteredValues] = useState<[]>([]);
+
   const tabTitle = ['Account  Information', 'Product  Information'];
   const pageMenu = [
     <PreviewContentOne accountDetails={accountSourceData} />,
     <PreviewContentOne accountDetails={accountDestinationData} />
   ];
+
   const PreviewContent: React.FC = () => {
     return (
       <Box sx={{ width: '100%' }}>
@@ -141,6 +142,7 @@ export const DepositAccount = ({
     };
     mutate(getAllValues);
   };
+
   useEffect(() => {
     const submit = document.getElementById('submitButton');
 
@@ -151,36 +153,39 @@ export const DepositAccount = ({
     return () => {
       setIsSubmitting?.(false);
     };
-  }, [isSubmitting]);
+  }, [isSubmitting, setIsSubmitting]);
+
+  const { data, isLoading: isSearchLoading } = useQuery({
+    queryKey: [queryKeys.searchCustomer, searchValue],
+    queryFn: () => searchCustomer(toastActions, searchValue as string),
+    enabled: Boolean(searchValue.length > 0)
+  });
+
   const handleAccountSource = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccountNumber(e.target.value);
   };
+
+  // Handle customer selection
+  const handleSelectedValue = useCallback((value: any) => {
+    setSelectedCustomer(value);
+    setCustomerAccount(value.customer.accountnumber);
+    setSearchValue(value.customer.accounttitle);
+  }, []);
+
+  // Handle search input
+  const handleSearch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchValue(event.target.value);
+    },
+    []
+  );
+
   const handleAccountDesination = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDestinationAccountNumber(e.target.value);
   };
 
   const { sysmodel } = useGetSystemDate();
   const systemDate = dayjs(sysmodel?.systemDate || new Date());
-
-  React.useEffect(() => {
-    if (mappedCurrency.length > 0) {
-      const defaultCurrency =
-        mappedCurrency.find((c) =>
-          ['naira', 'nigeria', 'ngn'].some(
-            (keyword) =>
-              c.name.toLowerCase().includes(keyword) ||
-              c.value.toLowerCase().includes(keyword)
-          )
-        )?.value ||
-        mappedCurrency[0]?.value ||
-        '';
-
-      setSelectedCurrency(defaultCurrency);
-      setIsLoading(false);
-    }
-  }, [mappedCurrency]); // Runs when mappedCurrency changes
-
-  if (isLoading) return <FormSkeleton noOfLoaders={5} />;
 
   return (
     <Formik
@@ -191,347 +196,365 @@ export const DepositAccount = ({
       onSubmit={(values) => {
         onSubmit(values);
       }}
-      validationSchema={chequeDeposit}
+      validationSchema={{}}
     >
       <Form>
-        <Grid container spacing={2} sx={{ marginTop: '90px', width: '100%' }}>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
-            <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-              <PageTitle title="Create Deposit Account" styles={BatchTitle} />
-              <Grid container>
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                  mb={5}
-                >
-                  <FormTextInput
-                    name="accountNumber1"
-                    placeholder="Enter Customer ID"
-                    label="Customer ID"
-                    value={accountNumber?.toString()}
-                    onChange={handleAccountSource}
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: '100%'
+          }}
+        >
+          <Box sx={BatchContainer}>
+            <PageTitle title="Create Deposit Account" styles={BatchTitle} />
+            <Grid container>
+              <Grid
+                item={isTablet}
+                mobile={12}
+                mr={{ mobile: 35, tablet: 0 }}
+                width={{ mobile: '100%', tablet: 0 }}
+                mb={5}
+              >
+                <StyledSearchableDropdown style={{ width: '100%' }}>
+                  <ActionButtonWithPopper
+                    loading={isSearchLoading}
+                    handleSelectedValue={(value: any) =>
+                      handleSelectedValue(value)
+                    }
+                    label="Customer Name"
+                    name="customerId"
+                    searchGroupVariant="LoanCustomerSearch"
+                    loanDropDownOptions={filteredValues || []}
                     customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
+                      width: '100%',
+                      height: '54px',
+                      borderRadius: '4px',
+                      padding: '12px',
+                      border: `1px solid ${colors.neutral200}`,
+                      backgroundColor: `${colors.neutral200}`,
+                      color: `${colors.neutral600}`,
+                      fontSize: '16px',
+                      fontWeight: 400
                     }}
+                    icon={<SearchIcon />}
+                    iconPosition="end"
+                    buttonTitle={
+                      (selectedCustomer?.customer?.accounttitle as string) ||
+                      'Search Customer Name'
+                    }
+                    onChange={handleSearch}
+                    searchValue={searchValue as string}
                   />
-                </Grid>
+                </StyledSearchableDropdown>
+              </Grid>
 
-                <Grid
-                  item={isTablet}
-                  mobile={12}
-                  mr={{ mobile: 35, tablet: 0 }}
-                  width={{ mobile: '100%', tablet: 0 }}
-                  mb={5}
-                >
-                  <FormTextInput
-                    name="accountNumber2"
-                    placeholder="Enter Account Destination Number"
-                    label="Account Destination Number"
-                    value={destinationAccountNumber?.toString()}
-                    onChange={handleAccountDesination}
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="tdProduct"
+                  options={mappedLoansProduct}
+                  label="TD Product"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
 
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="TD Product"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="Branch"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="Settlement Account"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="cheqNumber"
-                    placeholder="Enter Cheque Number"
-                    label="TD Amount"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="tellerno"
-                    placeholder="Enter Teller Number"
-                    label="TD Rate (%)"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="New Term"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="tellerno"
-                    placeholder="Enter Frequency Count"
-                    label="Frequency Count"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="tellerno"
-                    placeholder="Enter Duration (Days)"
-                    label="Duration (Days)"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="Repayment Type"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="Instrument Type"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <Box>
-                    <FormikDateTimePicker
-                      label="Posting Date"
-                      name="valueDate"
-                      value={systemDate}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <Box>
-                    <FormikDateTimePicker
-                      label="Start Date"
-                      name="valueDate"
-                      value={systemDate}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <Box>
-                    <FormikDateTimePicker
-                      label="Maturity Date"
-                      name="valueDate"
-                      value={systemDate}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <Box>
-                    <FormikDateTimePicker
-                      label="First Payment Date"
-                      name="valueDate"
-                      value={systemDate}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="Payment Mode"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormAmountInput
-                    name="transAmount"
-                    placeholder="Enter Transfer Account"
-                    label="Transfer Account"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormAmountInput
-                    name="transAmount"
-                    placeholder="Enter Cheque Number"
-                    label="Cheque Number"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="currencyCode"
-                    options={mappedCurrency}
-                    label="Operating Bank"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    value={selectedCurrency}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      setSelectedCurrency(e.target.value)
-                    }
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="rate"
-                    placeholder="."
-                    label="Total Tax Amount"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                    disabled
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="narration"
-                    placeholder="Enter Total Interest Amount"
-                    label="Total Interest Amount"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="narration"
-                    placeholder="Enter Total Maturity Amount"
-                    label="Total Maturity Amount"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid mt={1} item={isTablet} mobile={12}>
-                  <RadioButtons
-                    options={fundsTransferRadioOptions}
-                    title="Include Tax?"
-                    name="reversal"
-                    value="1"
-                    //   value={isReversal ? '1' : '0'}
-                    //   handleCheck={(value: boolean) => {
-                    //     setIsReversal(value);
-                    //   }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="narration"
-                    placeholder="Enter Penal Rate"
-                    label="Penal Rate"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="narration"
-                    placeholder="Enter Narration"
-                    label="Narration"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
-                </Grid>
-                <Grid item={isTablet} mobile={12}>
-                  <FormTextInput
-                    name="narration"
-                    placeholder="Enter Action at Maturity"
-                    label="Action at Maturity"
-                    customStyle={{
-                      width: setWidth(isMobile ? '250px' : '100%')
-                    }}
-                  />
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="branchCode"
+                  options={mappedBranches}
+                  label="Branch"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="settlementAccount"
+                  placeholder="select settlement account"
+                  options={[]}
+                  label="Settlement Account"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="tdAmount  "
+                  placeholder="Enter"
+                  label="TD Amount"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="tdRate"
+                  placeholder="Enter"
+                  label="TD Rate (%)"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+
+              <Grid item={isTablet} mobile={12} mr={{ mobile: 35, tablet: 0 }}>
+                <Grid p={{ mobile: 2, desktop: 0 }} spacing={4} container>
+                  <Grid item={isTablet} tablet={4} mobile={4}>
+                    <FormSelectInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '350px' : '100%'),
+                        fontSize: '14px'
+                      }}
+                      options={frequencyOptions}
+                      name="newTerm"
+                      label="New Term "
+                    />{' '}
+                  </Grid>
+
+                  <Grid item={isTablet} mobile={4} tablet={4}>
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '350px' : '100%')
+                      }}
+                      name="frequencyCount"
+                      placeholder="Enter"
+                      label="Frequency Count"
+                    />{' '}
+                  </Grid>
+
+                  <Grid item={isTablet} mobile={4} tablet={4}>
+                    <FormTextInput
+                      customStyle={{
+                        width: setWidth(isMobile ? '350px' : '100%')
+                      }}
+                      name="durationDays"
+                      placeholder="Enter"
+                      label="Duration (Days)"
+                    />{' '}
+                  </Grid>
                 </Grid>
               </Grid>
-            </Box>
-            <Box mt={8} sx={PostingContainer}>
-              {isMobile ? (
-                <MobilePreviewContent
-                  PreviewContent={<PreviewContent />}
-                  customStyle={{ ...ChequelContentStyle }}
+
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="repaymentType"
+                  options={mappedLoanRepayment}
+                  label="Repayment Type"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
                 />
-              ) : (
-                <PreviewContent />
-              )}
-            </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="instrumentType"
+                  options={[]}
+                  label="Instrument Type"
+                  placeholder="Enter instrumemtn type"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <Box>
+                  <FormikDateTimePicker
+                    label="Posting Date"
+                    name="valueDate"
+                    value={systemDate}
+                  />
+                </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <Box>
+                  <FormikDateTimePicker
+                    label="Start Date"
+                    name="valueDate"
+                    value={systemDate}
+                  />
+                </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <Box>
+                  <FormikDateTimePicker
+                    label="Maturity Date"
+                    name="valueDate"
+                    value={systemDate}
+                  />
+                </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <Box>
+                  <FormikDateTimePicker
+                    label="First Payment Date"
+                    name="valueDate"
+                    value={systemDate}
+                  />
+                </Box>
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="paymentMode"
+                  options={[]}
+                  label="Payment Mode"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormAmountInput
+                  name="transAmount"
+                  placeholder="Enter Transfer Account"
+                  label="Transfer Account"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormAmountInput
+                  name="transAmount"
+                  placeholder="Enter Cheque Number"
+                  label="Cheque Number"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="currencyCode"
+                  options={mappedCurrency}
+                  label="Operating Bank"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="rate"
+                  placeholder="."
+                  label="Total Tax Amount"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="narration"
+                  placeholder="Enter Total Interest Amount"
+                  label="Total Interest Amount"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="narration"
+                  placeholder="Enter Total Maturity Amount"
+                  label="Total Maturity Amount"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid mt={1} item={isTablet} mobile={12}>
+                <RadioButtons
+                  options={fundsTransferRadioOptions}
+                  title="Include Tax?"
+                  name="reversal"
+                  value="1"
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="narration"
+                  placeholder="Enter Penal Rate"
+                  label="Penal Rate"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormTextInput
+                  name="narration"
+                  placeholder="Enter Narration"
+                  label="Narration"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                />
+              </Grid>
+              <Grid item={isTablet} mobile={12}>
+                <FormSelectInput
+                  name="narration"
+                  options={[]}
+                  label="Action at Maturity "
+                  placeholder="Enter Action at Maturity"
+                  customStyle={{
+                    width: setWidth(isMobile ? '250px' : '100%')
+                  }}
+                  value={selectedCurrency}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedCurrency(e.target.value)
+                  }
+                />
+              </Grid>
+            </Grid>
           </Box>
-        </Grid>
+          <Box mt={3} sx={PostingContainer}>
+            {isMobile ? (
+              <MobilePreviewContent
+                PreviewContent={<PreviewContent />}
+                customStyle={{ ...ChequelContentStyle }}
+              />
+            ) : (
+              <PreviewContent />
+            )}
+          </Box>
+        </Box>
+
         <button id="submitButton" type="submit" style={{ display: 'none' }}>
           submit alias
         </button>

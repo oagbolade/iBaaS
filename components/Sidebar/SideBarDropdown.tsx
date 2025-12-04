@@ -143,7 +143,7 @@ export default function SideBarDropdown({
                       disabled={shouldDisableMenuItem(subMenuItem.name)}
                     >
                       {subMenuItem.name}
-                      <ComingSoon menuName={subMenuItem.name} />
+                      {/* <ComingSoon menuName={subMenuItem.name} /> */}
                     </Button>
                   );
                 })}

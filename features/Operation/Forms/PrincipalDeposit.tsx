@@ -126,7 +126,7 @@ export const PrincipalDeposit = ({
             }}
           >
             <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
-              <PageTitle title="Deposit Redemption" styles={BatchTitle} />
+              <PageTitle title="Principal Deposit" styles={BatchTitle} />
               <Grid container>
                 <Grid
                   item={isTablet}
@@ -168,34 +168,63 @@ export const PrincipalDeposit = ({
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
-                  <FormSelectInput
-                    name="chargetype"
-                    options={mappedChargeConcessionType}
-                    label="Repayment Type"
+                  <FormTextInput
+                    name="tellerno"
+                    placeholder="Enter Additional Amount"
+                    label="Additional Amount"
                     customStyle={{
                       width: setWidth(isMobile ? '250px' : '100%')
                     }}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                      const selectedCharge = charges?.find(
-                        (charge) => charge.chargeCode === e.target.value
-                      );
-                      setChargeConcessions((prev) => ({
-                        ...prev,
-                        chargeAmt: selectedCharge?.chargeAmt || 0,
-                        chargeCode: selectedCharge?.chargeCode || ''
-                      }));
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="tellerno"
+                    placeholder="Enter New Principal"
+                    label="New Principal"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
                     }}
-                    value={chargeConcessions?.chargeCode}
                   />
                 </Grid>
                 <Grid item={isTablet} mobile={12}>
                   <Box>
                     <FormikDateTimePicker
-                      label="Posting Date"
+                      label="Start Date"
                       name="valueDate"
                       value={systemDate}
                     />
                   </Box>
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="tellerno"
+                    placeholder="Enter New Interest"
+                    label="New Interest"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="tellerno"
+                    placeholder="Enter Interest at Maturity"
+                    label="Interest at Maturity"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
+                </Grid>
+                <Grid item={isTablet} mobile={12}>
+                  <FormTextInput
+                    name="tellerno"
+                    placeholder="Enter Source of Funds"
+                    label="Source of Funds"
+                    customStyle={{
+                      width: setWidth(isMobile ? '250px' : '100%')
+                    }}
+                  />
                 </Grid>
               </Grid>
             </Box>

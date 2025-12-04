@@ -275,8 +275,17 @@ export const CashDeposit = ({ currencies }: Props) => {
         >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2} sx={{ marginTop: '70px', width: '100%' }}>
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            padding: '10px',
+            marginTop: '80px',
+            width: '100%'
+          }}
+        >
+          <Box sx={BatchContainer}>
             <PageTitle title="Cash Deposit" styles={BatchTitle} />
             <Grid container>
               <Grid
@@ -384,8 +393,9 @@ export const CashDeposit = ({ currencies }: Props) => {
               </Grid>
             </Grid>
           </Box>
-          <Box sx={PostingContainer}>
-            {isMobile ? (
+          <Box  sx={PostingContainer}>
+           <div className='mt-8'>
+             {isMobile ? (
               <MobilePreviewContent
                 PreviewContent={
                   <PreviewContentOne accountDetails={accountData} />
@@ -395,8 +405,9 @@ export const CashDeposit = ({ currencies }: Props) => {
             ) : (
               <PreviewContentOne accountDetails={accountData} />
             )}
+           </div>
           </Box>
-        </Grid>
+        </Box>
       </Form>
     </Formik>
   );

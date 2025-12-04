@@ -219,7 +219,7 @@ export const CashWithDrawal = ({ currencies }: Props) => {
       <Form>
         <Box
           sx={{
-            marginTop: '60px',
+            marginTop: '70px',
             position: 'fixed',
             top: 0,
             width: 'calc(100vw - 300px)',
@@ -228,8 +228,16 @@ export const CashWithDrawal = ({ currencies }: Props) => {
         >
           <TopActionsArea actionButtons={actionButtons} />
         </Box>
-        <Grid container spacing={2} sx={{ marginTop: '70px', width: '100%' }}>
-          <Box sx={BatchContainer} ml={{ desktop: 1, mobile: 5 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: '100%',
+            marginTop: '70px',
+            paddingTop: '32px'
+          }}
+        >
+          <Box sx={BatchContainer}>
             <PageTitle title="Cash Withdrawal" styles={BatchTitle} />
             <Grid container>
               <Grid
@@ -340,7 +348,7 @@ export const CashWithDrawal = ({ currencies }: Props) => {
               />
             )}
           </Box>
-        </Grid>
+        </Box>
       </Form>
     </Formik>
   );
