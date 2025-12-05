@@ -17,7 +17,7 @@ jest.mock("next/navigation", () => ({
 }));
 
 // --- API MOCKS ---
-jest.mock("@/api/general/useBranches", () => ({
+jest.mock("../../../api/general/useBranches", () => ({
   useGetBranches: jest.fn(),
 }));
 
