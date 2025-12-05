@@ -21,23 +21,23 @@ jest.mock("../../../api/general/useBranches", () => ({
   useGetBranches: jest.fn(),
 }));
 
-jest.mock('../../../../api/reports/useGetInflowOutflowReport', () => ({
+jest.mock('../../../api/reports/useGetInflowOutflowReport', () => ({
   useGetInflowOutflowReport: jest.fn(),
 }));
 
-jest.mock('../../../../utils/hooks/useMapSelectOptions', () => ({
+jest.mock('../../../utils/hooks/useMapSelectOptions', () => ({
   useMapSelectOptions: jest.fn(),
 }));
 
-jest.mock('../../../../utils/hooks/usePersistedSearch', () => ({
+jest.mock('../../../utils/hooks/usePersistedSearch', () => ({
   usePersistedSearch: jest.fn(),
 }));
 
-jest.mock('../../../../utils/hooks/useGlobalLoadingState', () => ({
+jest.mock('../../../utils/hooks/useGlobalLoadingState', () => ({
   useGlobalLoadingState: jest.fn(),
 }));
 
-jest.mock("../../../../utils", () => ({
+jest.mock("../../../utils", () => ({
   useCurrentBreakpoint: jest.fn(() => ({ setWidth: () => "100%" })),
 }));
 
@@ -126,11 +126,11 @@ describe("InflowOutflowReport Component", () => {
     jest.clearAllMocks();
     
     // Get fresh references to mocks before each test
-    useGetBranches = require("../../../../api/general/useBranches").useGetBranches;
-    useGetInflowOutflowReport = require("../../../../api/reports/useGetInflowOutflowReport").useGetInflowOutflowReport;
-    usePersistedSearch = require("../../../../utils/hooks/usePersistedSearch").usePersistedSearch;
-    useGlobalLoadingState = require('../../../../utils/hooks/useGlobalLoadingState').useGlobalLoadingState;
-    useMapSelectOptions = require("../../../../utils/hooks/useMapSelectOptions").useMapSelectOptions;
+    useGetBranches = require("../../../api/general/useBranches").useGetBranches;
+    useGetInflowOutflowReport = require("../../../api/reports/useGetInflowOutflowReport").useGetInflowOutflowReport;
+    usePersistedSearch = require("../../../utils/hooks/usePersistedSearch").usePersistedSearch;
+    useGlobalLoadingState = require('../../../utils/hooks/useGlobalLoadingState').useGlobalLoadingState;
+    useMapSelectOptions = require("../../../utils/hooks/useMapSelectOptions").useMapSelectOptions;
 
     // Setup default mocks
     useGetBranches.mockReturnValue(mockBranches);
