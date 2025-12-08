@@ -155,12 +155,13 @@ async function getProductType(
   };
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductType?id=${id}`;
+    const urlEndpoint = '${SEARCH_BASE_URL}/setup/search/GetProductType';
 
     const { data }: AxiosResponse<UseGetProductTypeResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
+        params: {
+          id: decryptData(id as string)
+        },
         headers: {
           'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
@@ -190,12 +191,13 @@ async function getProductClassByCategory(
   };
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductClassByCategory?id=${id}`;
+    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductClassByCategory`;
 
     const { data }: AxiosResponse<UseGetProductClassByCategoryResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
+        params: {
+          id: decryptData(id as string)
+        },
         headers: {
           'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
@@ -228,9 +230,7 @@ async function getGLWithBranchCode(
     const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetAllGLWithBranchCode`;
 
     const { data }: AxiosResponse<UseGetGLWithBranchCodeResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint,{
         headers: {
           'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
@@ -259,9 +259,7 @@ export async function filterAllProductSearch(
   try {
     const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/products?page=${params?.page}&size=10`;
     const { data }: AxiosResponse<SearchLoanProductResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'POST',
+      await axiosInstance.post(urlEndpoint, {
         data: {
           productClass: params?.productClass?.toString(),
           productName: params?.productName,
@@ -305,9 +303,7 @@ async function getAllProductByCode(
     const urlEndpoint = `/General/Product/GetProductDetailsByPcode?prodcode=${prodcode}`;
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -339,9 +335,7 @@ async function getAllProductDocs(
     const urlEndpoint = '/General/Department/GetAllProductDocs';
 
     const { data }: AxiosResponse<UseGetAllProductDocsResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -373,9 +367,7 @@ async function getInterestRate(
     const urlEndpoint = '/General/Product/GetInterestRate';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -407,9 +399,7 @@ async function getMinMaxCreditInterest(
     const urlEndpoint = '/General/Product/MinMaxCreditInterest';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint,{
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -441,9 +431,7 @@ async function getProductClass(
     const urlEndpoint = '/General/Product/GetAllProductClass';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -475,9 +463,7 @@ async function getLoanClass(
     const urlEndpoint = '/General/Product/LoanClass';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -509,9 +495,7 @@ async function getAllException(
     const urlEndpoint = '/Configuration/Exception/GetAllException';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get( urlEndpoint,{
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -543,9 +527,7 @@ async function getAllProduct(
     const urlEndpoint = '/General/Product/GetAllProduct';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -577,9 +559,7 @@ async function getLoanTerm(
     const urlEndpoint = '/General/Product/PaymentFrequency';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint,{
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -609,12 +589,13 @@ async function getLoanProductByCode(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetLoanProductByPcode?productcode=${productcode}`;
+    const urlEndpoint = '/General/Product/GetLoanProductByPcode';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
+        params:{
+          productcode: productcode,
+        },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -644,12 +625,13 @@ async function getTreasuryProductByCode(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetTermDepByPcode?productcode=${productcode}`;
+    const urlEndpoint = '/General/Product/GetTermDepByPcode';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint,{
+        params:{
+          productcode: productcode
+        },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -679,12 +661,13 @@ async function getLoanProductCode(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetProductByClass?productclass=${productclass}`;
+    const urlEndpoint = '/General/Product/GetProductByClass';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint,{
+        params:{
+           productclass: productclass,
+        },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -714,12 +697,13 @@ async function getDemandDepositByProductCode(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetDemandDepByPcode?productcode=${productcode}`;
+    const urlEndpoint = '/General/Product/GetDemandDepByPcode';
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
+        params:{
+         productcode: productcode 
+        },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
@@ -780,7 +764,7 @@ export function useGetAllProductByCode(
     queryKey: [queryKeys.getAllProductByCode, prodcode],
     queryFn: () =>
       getAllProductByCode(toastActions, decryptData(prodcode as string)),
-    enabled: Boolean((prodcode || '').length > 0)
+      enabled: Boolean((prodcode || '').length > 0)
   });
 
   return { ...data, isError, isLoading };
@@ -1157,11 +1141,12 @@ export async function generateProductCode(
 ): Promise<IProductCode> {
   let result: IProductCode = {} as IProductCode;
   try {
-    const urlEndpoint = `/General/Product/GenerateProductCode?productclass=${decryptData(productClass)}`;
+    const urlEndpoint = '/General/Product/GenerateProductCode';
 
-    const { data }: AxiosResponse<IProductCode> = await axiosInstance({
-      url: urlEndpoint,
-      method: 'GET',
+    const { data }: AxiosResponse<IProductCode> = await axiosInstance.get(urlEndpoint, {
+      params : {
+         productclass: decryptData(productClass), 
+      },
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${getStoredUser()?.token}`
@@ -1204,9 +1189,7 @@ async function fetchAllLoanProducts(
     const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetLoanProducts`;
 
     const { data }: AxiosResponse<UseGetProductTypeResponse> =
-      await axiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await axiosInstance.get(urlEndpoint, {
         headers: {
           'Tenant-ID': getStoredUser()?.companyCode || '',
           'Content-Type': 'application/json',
