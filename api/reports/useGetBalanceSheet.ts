@@ -78,11 +78,17 @@ async function fetchAllBalanceSheetByItemId(
     {} as GetAllBalanceSheetByItemIdResponse;
 
   try {
-    const urlEndpoint = `/api/ReportServices/balanceSheetAndPAndLByItemId?itemcode=${params?.itemcode}&startFrom=2025-05-18&pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith || ''}`;
+    const urlEndpoint = '/api/ReportServices/balanceSheetAndPAndLByItemId';
     const { data }: AxiosResponse<GetAllBalanceSheetByItemIdResponse> =
-      await reportsAxiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+      await reportsAxiosInstance.get(urlEndpoint,{
+        params: {
+          temcode: params?.itemcode,
+          startFrom: '2025-05- 18',
+          pageNumber: params?.page,
+          pageSize: params?.pageSize || 10,
+          getAll: params?.getAll || false,
+          searchWith: params?.searchWith || ''
+        },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
