@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { AxiosResponse } from 'axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import DOMPurify from 'dompurify';
 import {
   IBankProducts,
   ICreditInterests,
@@ -155,7 +156,7 @@ async function getProductType(
   };
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductType?id=${id}`;
+    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductType?id=${DOMPurify.sanitize(id)}`;
 
     const { data }: AxiosResponse<UseGetProductTypeResponse> =
       await axiosInstance({
@@ -190,7 +191,7 @@ async function getProductClassByCategory(
   };
 
   try {
-    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductClassByCategory?id=${id}`;
+    const urlEndpoint = `${SEARCH_BASE_URL}/setup/search/GetProductClassByCategory?id=${DOMPurify.sanitize(id) }`;
 
     const { data }: AxiosResponse<UseGetProductClassByCategoryResponse> =
       await axiosInstance({
@@ -679,7 +680,7 @@ async function getLoanProductCode(
   };
 
   try {
-    const urlEndpoint = `/General/Product/GetProductByClass?productclass=${productclass}`;
+    const urlEndpoint = `/General/Product/GetProductByClass?productclass=${DOMPurify.sanitize(productclass)}`;
 
     const { data }: AxiosResponse<UseGetAllLoanAccountResponse> =
       await axiosInstance({

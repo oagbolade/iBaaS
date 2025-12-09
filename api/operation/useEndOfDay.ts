@@ -8,10 +8,8 @@ import {
   GetAllEODConfigurationResponse,
   GetAllEODDAYResponse,
   GetAllEODProcessesResponse,
-  GetAllEODResponse,
   GetEODDAYResponse,
   GetProcessEODDAYResponse,
-  IEODConfiguration,
   IEODLogs,
   IEodMetrics,
   IEODProcess,
@@ -21,9 +19,7 @@ import {
 } from '../ResponseTypes/operation';
 import { APIResponse } from '../RequestTypes/CommonTypes';
 import {
-  axiosInstance,
   EndOfDayAxiosInstance,
-  reportsAxiosInstance
 } from '@/axiosInstance';
 import { getStoredUser } from '@/utils/user-storage';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -33,7 +29,7 @@ import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { queryKeys } from '@/react-query/constants';
 import { handleRedirect } from '@/utils';
 import { ISearchParams } from '@/app/api/search/route';
-import { REPORT_BASE_URL } from '@/axiosInstance/constants';
+import { decryptData } from '@/utils/decryptData';
 
 async function createRunEOD(toastActions: IToastActions): Promise<EODResponse> {
   try {
@@ -275,7 +271,7 @@ export function useGetEODProcesslog(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getEODProcesslog, params?.getAll || false],
-    queryFn: () => getEODProcesslog(toastActions, params, id)
+    queryFn: () => getEODProcesslog(toastActions, params, decryptData(id as string))
   });
 
   return { ...data, isError, isLoading };

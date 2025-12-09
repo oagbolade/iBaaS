@@ -21,7 +21,6 @@ import {
   SetPartialPayOffValues,
   ILoanSources,
   LoanUnderwriteInitialValues,
-  setDisburseLoanValues,
   disburseLoanvalues
 } from '@/schemas/schema-values/loan';
 import { handleRedirect } from '@/utils';
@@ -806,7 +805,7 @@ export function useGetLoanAccountByLoanAccountNumber(
       getLoanAccountByLoanAccountNumber(
         toastActions,
         decryptData(loanAccount) as string,
-        status
+        decryptData(status) as string
       ),
     enabled: Boolean(loanAccount.toString().length > 0)
   });

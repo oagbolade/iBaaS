@@ -73,7 +73,7 @@ export const TerminateLoan = () => {
   const { loanAccDetails, isLoading: isLoadingLoanData } =
     useGetLoanAccountByLoanAccountNumber(
       encryptData(accountNumber as string) || '',
-      status
+      encryptData(status) as string
     );
 
   const actionButtons: React.ReactNode[] = [

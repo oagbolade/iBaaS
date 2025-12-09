@@ -43,26 +43,26 @@ const FormFields: React.FC<{
   branchCode,
   customerID
 }) => {
-  const { repaymentTypes } = useGetAllLoanRepaymentTypes();
-  const { loansources } = useGetAllLoanSources();
-  const { collaterals } = useGetAllLoanCollaterals();
+    const { repaymentTypes } = useGetAllLoanRepaymentTypes();
+    const { loansources } = useGetAllLoanSources();
+    const { collaterals } = useGetAllLoanCollaterals();
 
-  return (
-    <RestructureLoanForm
-      repaymentTypes={repaymentTypes}
-      collaterals={collaterals}
-      loansources={loansources}
-      isSubmitting={isSubmitting}
-      setIsSubmitting={setIsSubmitting}
-      loanDetails={loanAccDetails}
-      accountNumber={accountNumber}
-      settlementAccount={settlementAccount}
-      productCode={productCode}
-      branchCode={branchCode}
-      customerID={customerID}
-    />
-  );
-};
+    return (
+      <RestructureLoanForm
+        repaymentTypes={repaymentTypes}
+        collaterals={collaterals}
+        loansources={loansources}
+        isSubmitting={isSubmitting}
+        setIsSubmitting={setIsSubmitting}
+        loanDetails={loanAccDetails}
+        accountNumber={accountNumber}
+        settlementAccount={settlementAccount}
+        productCode={productCode}
+        branchCode={branchCode}
+        customerID={customerID}
+      />
+    );
+  };
 
 export const RestructureLoan = () => {
   const router = useRouter();
@@ -81,7 +81,7 @@ export const RestructureLoan = () => {
   const { loanAccDetails, isLoading: loadingData } =
     useGetLoanAccountByLoanAccountNumber(
       encryptData(accountNumber as string) || '',
-      status
+      encryptData(status) as string
     );
 
   const { loanProducts } = useGetLoansProductDetailCode(

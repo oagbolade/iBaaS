@@ -178,8 +178,8 @@ export const CreateAccount = ({
 
   const { productInfos, isLoading: isProductInfoLoading } =
     useGetProductDetailsByPcode(
-      isEditing ? customerIdForEditing : customerId,
-      isEditing ? productCodeForEditing : productcode
+      isEditing ? encryptData(customerIdForEditing) as string : encryptData(customerId) as string,
+      isEditing ? encryptData(productCodeForEditing) as string : encryptData(productcode) as string
     );
 
   const { productInfos: prodData } = useGetAllProductByCode(
@@ -200,16 +200,15 @@ export const CreateAccount = ({
   const { documents: submitted, isLoading: isSubmittedLoading } =
     useGetDocuments(
       typeOne,
-      (extractIdFromDropdown(selectedValue.customerid as string) as string) ||
-        customerIdForEditing,
-      productcode || productCodeForEditing
+      encryptData(extractIdFromDropdown(selectedValue.customerid as string) || customerIdForEditing) as string,
+      encryptData(productcode || productCodeForEditing) as string
     );
+
   const { documents: notSubmitted, isLoading: isNotSubmittedLoading } =
     useGetDocuments(
       typeTwo,
-      (extractIdFromDropdown(selectedValue.customerid as string) as string) ||
-        customerIdForEditing,
-      productcode || productCodeForEditing
+      encryptData(extractIdFromDropdown(selectedValue.customerid as string) || customerIdForEditing) as string,
+      encryptData(productcode || productCodeForEditing) as string
     );
 
   const documents = React.useRef<SubmittedNotSubmittedDocuments>({
@@ -417,25 +416,25 @@ export const CreateAccount = ({
 
   const pickInitialValues = isEditing
     ? {
-        productcode: accDetailsResults?.productcode,
-        acctdesc: accDetailsResults?.accountdesc,
-        cintrate: Number(accDetailsResults?.cintrate),
-        dintrate: Number(accDetailsResults?.dintrate),
-        customerid: accDetailsResults?.customerid,
-        offc: accDetailsResults?.officercode,
-        sweep: 'string', // TODO: Hardcoded until we know what "sweep" is
-        stafid: `${getStoredUser()?.profiles.userid}`,
-        disv: 0,
-        eventlogid: 0,
-        userid: `${getStoredUser()?.profiles.userid}`,
-        authid: `${getStoredUser()?.profiles.userid}`,
-        oldacct: accDetailsResults?.oldacctno
-      }
+      productcode: accDetailsResults?.productcode,
+      acctdesc: accDetailsResults?.accountdesc,
+      cintrate: Number(accDetailsResults?.cintrate),
+      dintrate: Number(accDetailsResults?.dintrate),
+      customerid: accDetailsResults?.customerid,
+      offc: accDetailsResults?.officercode,
+      sweep: 'string', // TODO: Hardcoded until we know what "sweep" is
+      stafid: `${getStoredUser()?.profiles.userid}`,
+      disv: 0,
+      eventlogid: 0,
+      userid: `${getStoredUser()?.profiles.userid}`,
+      authid: `${getStoredUser()?.profiles.userid}`,
+      oldacct: accDetailsResults?.oldacctno
+    }
     : {
-        ...createCustomerAccountInitialValues,
-        cintrate: String(productInfos?.crrate),
-        dintrate: String(productInfos?.drrate)
-      };
+      ...createCustomerAccountInitialValues,
+      cintrate: String(productInfos?.crrate),
+      dintrate: String(productInfos?.drrate)
+    };
 
   return (
     <Formik

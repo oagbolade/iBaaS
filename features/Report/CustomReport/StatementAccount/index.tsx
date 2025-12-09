@@ -17,12 +17,10 @@ import { useGetBranches } from '@/api/general/useBranches';
 import { ISearchParams } from '@/app/api/search/route';
 import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
-import { useGetAccountDetails } from '@/api/customer-service/useCustomer';
 import { MuiTableContainer } from '@/components/Table';
 import { renderEmptyTableBody, StyledTableRow } from '@/components/Table/Table';
 import { StyledTableCell } from '@/components/Table/style';
 import { ChevronDown } from '@/assets/svg';
-import { encryptData } from '@/utils/encryptData';
 import { useGetStatementOfAccount } from '@/api/reports/useStatementOfAccount';
 import { FormSkeleton } from '@/components/Loaders';
 import { useGetProductClass } from '@/api/setup/useProduct';
@@ -119,7 +117,7 @@ export const StatementAccount = () => {
     <Box sx={{ marginTop: '50px', width: '100%' }}>
       <TopOverViewSection useBackButton />
 
-    <div className="mx-5 mt-8">
+      <div className="mx-5 mt-8">
         {branches && products && (
           <FilterSection
             branches={branches}
@@ -135,7 +133,7 @@ export const StatementAccount = () => {
             if (loadingStatements) {
               return (
                 <div className="mx-5">
-                  <FormSkeleton  noOfLoaders={3} />
+                  <FormSkeleton noOfLoaders={3} />
                 </div>
               );
             }

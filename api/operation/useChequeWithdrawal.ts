@@ -88,7 +88,7 @@ export function useGetCounterCheqNo(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getCounterCheqNo, Accountnumber],
-    queryFn: () => getCounterCheqNo(toastActions, Accountnumber),
+    queryFn: () => getCounterCheqNo(toastActions, decryptData(Accountnumber as string)),
     enabled: Boolean((Accountnumber || '').length > 0)
   });
 

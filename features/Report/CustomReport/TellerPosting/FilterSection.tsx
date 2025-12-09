@@ -1,176 +1,119 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Box, Grid, Stack } from '@mui/material';
+import React from 'react';
+import { Box, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import dayjs, { Dayjs } from 'dayjs';
-import { DateCalendar } from '@mui/x-date-pickers';
+import { Form, Formik } from 'formik';
 import { buttonBackgroundColor } from '../AccountDebit/style';
-import { dateFilter } from '../../AuditTrail/styles';
 import { IBranches } from '@/api/ResponseTypes/general';
 import {
-  FormSelectField, FormSelectInput,
+  FormSelectField,
   FormTextInput,
-  TextInput
 } from '@/components/FormikFields';
 import {
   ActionButton,
-  ActionButtonWithPopper,
-  BackButton
 } from '@/components/Revamp/Buttons';
 import { inputFields } from '@/features/Report/CustomReport/style';
 import { ITellerPostingParams } from '@/api/reports/useGetTellerPosting';
-import { useSetDirection } from '@/utils/hooks/useSetDirection';
-import useFormattedDates from '@/utils/hooks/useFormattedDates';
-import { exportData } from '@/components/ViewReport/style';
-import { ExportIcon } from '@/assets/svg';
-import colors from '@/assets/colors';
 import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 import { useCurrentBreakpoint } from '@/utils';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';
+import { searchFieldsSchema } from '@/schemas/common';
+
 type Props = {
   onSearch: (params: ITellerPostingParams | null) => void;
   branches?: IBranches[];
 };
 
 export const FilterSection = ({ branches, onSearch }: Props) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { setDirection } = useSetDirection();
   const { setWidth } = useCurrentBreakpoint();
 
-  const { dateValue, setDateValue } = React.useContext(DateRangePickerContext);
+  const { dateValue } = React.useContext(DateRangePickerContext);
   const endDate = dateValue[1];
 
   const { mappedBranches } = useMapSelectOptions({
     branches
   });
 
-  const handleSearchClick = () => {
-    const searchParams = {
-      search: searchTerm || undefined,
-      reportDate: endDate?.format('YYYY-MM-DD')
+  const initialValues = {
+    branchCode: '',
+    search: '',
+    reportDate: endDate?.format('YYYY-MM-DD')
+  };
+
+  const onSubmit = async (values: any) => {
+    const params = {
+      branchCode: values.branchCode.toString().length > 0 ? values.branchCode : null,
+      search: values.search.trim().length > 0 ? values.search : null
     };
 
-    onSearch(searchParams);
+    onSearch?.(params);
   };
 
   return (
-    <>
-      <Stack
-        sx={{
-          borderBottom: `1px solid ${colors.loanTitleColor}`,
-          marginTop: '10px',
-          paddingX: '24px'
-        }}
-        direction={setDirection()}
-        justifyContent="space-between"
-      >
-        <Box>
-          <Box mt={2.3}>
-            <BackButton />
-          </Box>
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={(values) => onSubmit(values)}
+      validationSchema={searchFieldsSchema}
+    >
+      <Form>
+        <Box sx={{ height: '120px' }}>
+          <Grid container spacing={2}>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={3}
+              justifyContent="center"
+            >
+              <FormSelectField
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                name="branchCode"
+                options={mappedBranches}
+                label="Branch ID"
+              />{' '}
+            </Grid>
+            <Grid
+              mb={{ tablet: 6 }}
+              item
+              mobile={12}
+              tablet={8}
+              justifyContent="center"
+            >
+              <FormTextInput
+                customStyle={{
+                  width: setWidth(),
+                  fontSize: '14px',
+                  ...inputFields
+                }}
+                icon={<SearchIcon />}
+                name="search"
+                label="Teller/User ID"
+                placeholder="Search a Teller or User ID"
+              />{' '}
+            </Grid>
+            <Grid
+              item
+              mobile={12}
+              tablet={1}
+              sx={{ display: 'flex' }}
+              justifyContent="flex-end"
+              mt={{ tablet: 3.2 }}
+              mr={{ mobile: 30, tablet: 0 }}
+              mb={{ mobile: 6, tablet: 0 }}
+            >
+              <ActionButton
+                type="submit"
+                customStyle={buttonBackgroundColor}
+                buttonTitle="Search"
+              />
+            </Grid>
+          </Grid>
         </Box>
-        <Stack
-          mt={1}
-          direction={setDirection()}
-          spacing={2}
-          justifyContent="space-between"
-        >
-          <Box>
-            <ActionButtonWithPopper
-              searchGroupVariant="ExportReport"
-              customStyle={{ ...exportData }}
-              icon={<ExportIcon />}
-              iconPosition="start"
-              buttonTitle="Export Data"
-            />
-          </Box>
-
-          <Box>
-            <ActionButtonWithPopper
-              searchGroupVariant="DateRangePicker"
-              CustomDateRangePicker={
-                <DateCalendar
-                  value={endDate}
-                  onChange={(date) =>
-                    setDateValue([dateValue[0], date], { allowSingle: true })
-                  }
-                />
-              }
-              customStyle={{ ...dateFilter }}
-              icon={
-                <CalendarTodayOutlinedIcon
-                  sx={{
-                    color: `${colors.Heading}`
-                  }}
-                />
-              }
-              iconPosition="end"
-              buttonTitle={endDate?.format('YYYY-MM-DD')}
-            />
-          </Box>
-        </Stack>
-      </Stack>
-
-      <Box sx={{ height: '120px',padding:'24px' }}>
-        <Grid container spacing={2}>
-          <Grid
-            mb={{ tablet: 3 }}
-            item
-            mobile={12}
-            tablet={5}
-            justifyContent="center"
-          >
-            <FormSelectInput
-              customStyle={{
-                width: setWidth(),
-                fontSize: '14px',
-                ...inputFields
-              }}
-              name="branchID"
-              options={mappedBranches}
-              label="Branch ID"
-            />{' '}
-          </Grid>
-          <Grid
-            mb={{ tablet: 3 }}
-            item
-            mobile={12}
-            tablet={6}
-            justifyContent="center"
-          >
-            <TextInput
-              customStyle={{
-                width: setWidth(),
-                fontSize: '14px',
-                ...inputFields
-              }}
-              icon={<SearchIcon />}
-              name="search"
-              label="Teller/User ID"
-              placeholder="Search a Teller or User ID"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setSearchTerm(e.target.value)
-              }
-            />{' '}
-          </Grid>
-          <Grid
-            item
-            mobile={12}
-            tablet={1}
-            sx={{ display: 'flex' }}
-            justifyContent="flex-end"
-            mt={{ tablet: 3.2 }}
-            mr={{ mobile: 30, tablet: 0 }}
-            mb={{ mobile: 6, tablet: 0 }}
-          >
-            <ActionButton
-              onClick={handleSearchClick}
-              customStyle={buttonBackgroundColor}
-              buttonTitle="Search"
-            />
-          </Grid>
-        </Grid>
-      </Box>
-    </>
+      </Form>
+    </Formik>
   );
 };

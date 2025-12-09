@@ -17,16 +17,29 @@ export async function getStatementOfAccount(
 ) {
   let result: StatementOfAccountResponse = {} as StatementOfAccountResponse;
   try {
-    const urlEndpoint = `/api/ReportServices/Statements?accountnumber=${params?.accountNumber}&startdate=${params?.startDate}&enddate=${params?.endDate}&searchid=${getStoredUser()?.profiles?.userid}&Reversal=${1}&accttype=${params?.productCode}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}`;
-    const { data }: AxiosResponse<StatementOfAccountResponse> =
-      await reportsAxiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+    const urlEndpoint = '/api/ReportServices/Statements';
+
+    const { data }: AxiosResponse<StatementOfAccountResponse> = await reportsAxiosInstance.get(
+      urlEndpoint,
+      {
+        params: {
+          startdate: params?.startDate,
+          enddate: params?.endDate,
+          searchid: `${getStoredUser()?.profiles?.userid}`,
+          Reversal: `${1}`,
+          accountNumber: params?.accountNumber,
+          accttype: params?.productCode,
+          pageSize: params?.pageSize || 10,
+          pageNumber: params?.pageNumber || 1,
+          getAll: params?.getAll || false
+        },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
-      });
+      }
+    );
+
     const { message, title, severity } = globalErrorHandler({
       ...data
     });
@@ -56,13 +69,17 @@ export function useGetStatementOfAccount(params: ISearchParams | null) {
       params?.accountNumber || '',
       params?.status?.toString || '',
       params?.branchID?.toString || '',
+      params?.productCode || '',
+      params?.startDate || '',
+      params?.endDate || '',
       params?.page || 1
     ],
     queryFn: () => getStatementOfAccount(toastActions, params || {}),
     enabled: Boolean(
       (params?.accountNumber || '').length > 0 ||
-        (params?.status?.toString || '').length > 0 ||
-        (params?.branchID?.toString || '').length > 0
+      (params?.status?.toString || '').length > 0 ||
+      (params?.productCode?.toString || '').length > 0 ||
+      (params?.branchID?.toString || '').length > 0
     )
   });
   return { ...data, isError, isLoading };

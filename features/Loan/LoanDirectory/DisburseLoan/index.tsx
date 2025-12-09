@@ -66,7 +66,7 @@ export const DisburseLoan: React.FC = () => {
   const { loanAccDetails, isLoading: isLoadingLoanData } =
     useGetLoanAccountByLoanAccountNumber(
       encryptData(accountNumber as string) || '',
-      status
+      encryptData(status) as string
     );
 
   const cancelAction = () => {

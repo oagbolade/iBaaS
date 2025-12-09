@@ -70,7 +70,7 @@ export const PartialPay = () => {
   const { loanAccDetails, isLoading: isLoadingLoanData } =
     useGetLoanAccountByLoanAccountNumber(
       encryptData(accountNumber as string) || '',
-      status
+      encryptData(status) as string
     );
 
   const cancelAction = () => {
@@ -120,7 +120,7 @@ export const PartialPay = () => {
               loanDetails={loanAccDetails}
             />
           </Box>
-        
+
           {isTablet && (
             <Box
               sx={{

@@ -23,7 +23,6 @@ type Props = {
   products: IProducts[] | Array<any>;
 };
 
-
 export const FilterSection = ({
   branches,
   onSearch,

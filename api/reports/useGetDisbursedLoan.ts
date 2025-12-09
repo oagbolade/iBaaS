@@ -2,11 +2,10 @@ import { AxiosResponse } from 'axios';
 import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
-  IDisbursedLoanReportResponse,
-  ILoanOverdueReportResponse
+  IDisbursedLoanReportResponse
 } from '../ResponseTypes/reports';
 import { APIResponse } from '../RequestTypes/CommonTypes';
-import { axiosInstance, reportsAxiosInstance } from '@/axiosInstance';
+import { reportsAxiosInstance } from '@/axiosInstance';
 import { IToastActions } from '@/constants/types';
 import { ToastMessageContext } from '@/context/ToastMessageContext';
 import { globalErrorHandler } from '@/utils/globalErrorHandler';
@@ -87,8 +86,8 @@ export function useGetDisbursedLoanReport(
     queryFn: () => fetchDisbursedLoanReport(params, toastActions),
     enabled: Boolean(
       (params?.branchcode || '').length > 0 ||
-        (params?.productcode || '').length > 0 ||
-        Boolean(params?.search)
+      (params?.productcode || '').length > 0 ||
+      Boolean(params?.search)
     )
   });
 

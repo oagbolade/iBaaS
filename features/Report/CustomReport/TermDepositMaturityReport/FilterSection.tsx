@@ -8,7 +8,6 @@ import { FormTextInput } from '@/components/FormikFields';
 import { FormSelectField } from '@/components/FormikFields/FormSelectField';
 import { searchFieldsSchema } from '@/schemas/common';
 import { inputFields } from '@/features/Loan/LoanDirectory/styles';
-import { searchFilterInitialValues } from '@/schemas/schema-values/common';
 import { ISearchParams } from '@/app/api/search/route';
 import { IBranches } from '@/api/ResponseTypes/general';
 import { useMapSelectOptions } from '@/utils/hooks/useMapSelectOptions';

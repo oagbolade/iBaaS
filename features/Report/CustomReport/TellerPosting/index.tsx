@@ -2,6 +2,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
+import { TopOverViewSingeCalendarSection } from '../../Overview/TopOverViewSingleCalenderSection';
 import { FilterSection } from './FilterSection';
 import { MuiTableContainer, TableSingleAction } from '@/components/Table';
 import { ActionMenu } from '@/features/Report/CustomReport/StandingInstructions';
@@ -17,9 +18,9 @@ import { ITellerPostingReport } from '@/api/ResponseTypes/reports';
 import { FormSkeleton } from '@/components/Loaders';
 import { usePersistedSearch } from '@/utils/hooks/usePersistedSearch';
 import { ISearchParams } from '@/app/api/search/route';
-import { useGlobalLoadingState } from '@/utils/hooks/useGlobalLoadingState';
-import { getStoredUser } from '@/utils/user-storage';
 import { useGetSystemDate } from '@/api/general/useSystemDate';
+import { useGetBranches } from '@/api/general/useBranches';
+import { DateRangePickerContext } from '@/context/DateRangePickerContext';
 
 interface ActionProps {
   data: ITellerPostingReport;
@@ -37,36 +38,18 @@ const TellerPostingActions = ({ data }: ActionProps) => {
 
 export const TellerPosting = () => {
   const { sysmodel } = useGetSystemDate();
-  const { isLoading: isGlobalLoading } = useGlobalLoadingState();
   const {
     searchParams,
     setSearchParams,
-    searchActive,
     setSearchActive,
     page,
     setPage
   } = usePersistedSearch<ISearchParams>('teller-posting');
-
+  const systemDate = sysmodel?.systemDate.split('T')[0];
   const { setExportData, setReportType } = useContext(DownloadReportContext);
+  const { dateValue } = React.useContext(DateRangePickerContext);
 
-  const { search } = searchParams || {};
-
-  const userId = getStoredUser()?.profiles?.userid;
-  useEffect(() => {
-    if (userId && !searchActive && sysmodel?.systemDate) {
-      const systemDate = sysmodel.systemDate.split('T')[0];
-
-      setSearchParams({
-        search: userId,
-        reportDate: systemDate,
-        endDate: systemDate,
-        pageNumber: '1',
-      });
-
-      setSearchActive(true);
-      setPage(1);
-    }
-  }, [userId, searchActive, sysmodel?.systemDate]);
+  const { branches } = useGetBranches();
 
   const {
     tellerPostByDateList = [],
@@ -74,7 +57,8 @@ export const TellerPosting = () => {
     totalRecords
   } = useGetTellerPosting({
     ...searchParams,
-    search: search ?? undefined,
+    branchCode: searchParams?.branchCode || '',
+    search: searchParams?.search ?? undefined,
     pageNumber: page,
     pageSize: 10
   });
@@ -83,7 +67,8 @@ export const TellerPosting = () => {
     tellerPostByDateList: downloadData
   } = useGetTellerPosting({
     ...searchParams,
-    search: search ?? undefined,
+    branchCode: searchParams?.branchCode || '',
+    search: searchParams?.search ?? undefined,
     pageNumber: page,
     pageSize: 10,
     getAll: true
@@ -128,13 +113,14 @@ export const TellerPosting = () => {
     setSearchActive(true);
     setSearchParams({
       ...params,
+      reportDate: dateValue[0]?.format('YYYY-MM-DD') || '',
       pageNumber:
         params?.pageNumber !== undefined ? String(params.pageNumber) : undefined
     });
     setPage(1);
   };
 
-  if (isGlobalLoading || isLoading) {
+  if (isLoading) {
     return (
       <Box m={16}>
         <FormSkeleton noOfLoaders={5} />
@@ -144,8 +130,20 @@ export const TellerPosting = () => {
 
   return (
     <Box sx={{ marginTop: '50px', width: '100%' }}>
-      <FilterSection onSearch={handleSearch} />
-      <Box sx={{ width: '100%', padding: '25px' }}>
+      <TopOverViewSingeCalendarSection />
+      <Box
+        sx={{
+          padding: '25px',
+          width: '100%'
+        }}
+      >
+        <Box sx={{ marginTop: '10px', marginBottom: '30px' }}>
+          <FilterSection
+            branches={branches}
+            onSearch={(params) => handleSearch(params)}
+          />
+        </Box>
+
         <MuiTableContainer
           tableConfig={{ hasActions: false }}
           columns={tellerPostingColumn}

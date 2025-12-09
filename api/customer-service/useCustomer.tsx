@@ -1240,7 +1240,7 @@ export function useGetDocuments(
     isLoading
   } = useQuery({
     queryKey: [queryKeys.getDocuments, customerId, prodcode, type],
-    queryFn: () => getDocuments(toastActions, type, customerId, prodcode),
+    queryFn: () => getDocuments(toastActions, type, decryptData(customerId) as string, decryptData(prodcode) as string),
     enabled: Boolean(
       customerId.toString().length > 0 && prodcode.toString().length > 0
     )
@@ -1277,8 +1277,8 @@ export function useGetProductDetailsByPcode(
     isError,
     isLoading
   } = useQuery({
-    queryKey: [queryKeys.getDocuments, customerId, prodcode],
-    queryFn: () => getProductDetailsByPcode(toastActions, customerId, prodcode),
+    queryKey: [queryKeys.getDocuments, decryptData(customerId), prodcode],
+    queryFn: () => getProductDetailsByPcode(toastActions, decryptData(customerId) as string, decryptData(prodcode) as string),
     enabled: Boolean(
       customerId?.toString().length > 0 && prodcode?.toString().length > 0
     )

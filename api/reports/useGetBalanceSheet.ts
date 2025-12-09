@@ -21,16 +21,29 @@ async function fetchAllBalanceSheet(
   let result: GetAllBalanceSheetResponse = {} as GetAllBalanceSheetResponse;
 
   try {
-    const urlEndpoint = `/api/ReportServices/groupedBalanceSheetAndPAndL?startFrom=${params?.startFrom || ''}&pageNumber=${params?.page}&pageSize=${params?.pageSize || 10}&getAll=${params?.getAll || false}&searchWith=${params?.searchWith || ''}`;
-    const { data }: AxiosResponse<GetAllBalanceSheetResponse> =
-      await reportsAxiosInstance({
-        url: urlEndpoint,
-        method: 'GET',
+    const urlEndpoint = `/api/ReportServices/groupedBalanceSheetAndPAndL?
+    startFrom=${params?.startFrom || ''}
+    &pageNumber=${params?.page}
+    &pageSize=${params?.pageSize || 10}
+    &getAll=${params?.getAll || false}
+    &searchWith=${params?.searchWith || ''}`;
+
+    const { data }: AxiosResponse<GetAllBalanceSheetResponse> = await reportsAxiosInstance.get(
+      urlEndpoint,
+      {
+        params: {
+          startFrom: params?.startFrom,
+          pageNumber: params?.page || 1,
+          pageSize: params?.pageSize || 10,
+          getAll: params?.getAll || false,
+          searchWith: params?.searchWith?.trim()
+        },
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getStoredUser()?.token}`
         }
-      });
+      }
+    );
 
     const { message, title, severity } = globalErrorHandler({ ...data });
     toast(message, title, severity, toastActions);

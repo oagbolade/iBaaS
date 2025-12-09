@@ -7,7 +7,6 @@ import { MuiTableContainer } from '@/components/Table';
 import { TopActionsArea } from '@/components/Revamp/Shared';
 import { ISearchParams } from '@/app/api/search/route';
 import {
-  useGetEODProcesses,
   useGetEODProcesslog
 } from '@/api/operation/useEndOfDay';
 import { FormSkeleton } from '@/components/Loaders';
@@ -20,6 +19,7 @@ import { DownloadReportContext } from '@/context/DownloadReportContext';
 import { ActionButtonWithPopper } from '@/components/Revamp/Buttons';
 import { ExportIcon } from '@/assets/svg';
 import { exportData } from '@/components/ViewReport/style';
+import { encryptData } from '@/utils/encryptData';
 
 type Props = {
   EODid: string | null;
@@ -34,11 +34,10 @@ export const EndOfDayProcessTable = ({ EODid }: Props) => {
   } | null>(null);
   const [isClient, setIsClient] = useState(false);
 
-  const { data, eodMetrics, eobException } = useGetEODProcesses();
-  const { data: process, isLoading } = useGetEODProcesslog(searchParams, EODid);
+  const { data: process, isLoading } = useGetEODProcesslog(searchParams, encryptData(EODid));
   const { data: downloadData } = useGetEODProcesslog(
     { ...searchParams, getAll: true },
-    EODid
+    encryptData(EODid)
   );
 
   const { setReportType, setExportData } = useContext(DownloadReportContext);

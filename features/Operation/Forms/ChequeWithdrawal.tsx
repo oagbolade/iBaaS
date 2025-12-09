@@ -84,8 +84,8 @@ export const ChequeWithdrawal = ({
   const [accountNumber, setAccountNumber] = React.useState<string | null>(null);
   const [selectValue, setSelectValue] = React.useState<any>();
 
-  const { nextCounterCheqNo } = useGetCounterCheqNo(accountNumber);
-  const { accDetailsResults: accountData, isLoading: isAccountDetailsLoading } =
+  const { nextCounterCheqNo } = useGetCounterCheqNo(encryptData(accountNumber));
+  const { accDetailsResults: accountData } =
     useGetAccountDetails(encryptData(accountNumber) || '');
   const handleAccountNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccountNumber(e.target.value);

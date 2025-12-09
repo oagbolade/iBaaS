@@ -14,6 +14,7 @@ export interface ITellerPostingParams {
   pageSize?: number;
   pageNumber?: number;
   search?: string;
+  branchCode: string;
   reportDate?: string | null;
   endDate?: string | null;
   getAll?: boolean | null;
@@ -32,6 +33,7 @@ async function getTellerPosting(
           pageNumber: params.pageNumber || 1,
           userId: params.search?.trim(),
           postByDate: params.reportDate,
+          branchcode: params.branchCode,
           getAll: params.getAll || false
         },
         headers: {
@@ -64,6 +66,7 @@ export function useGetTellerPosting(
   } = useQuery({
     queryKey: [
       queryKeys.detailedpPortfolioAtRisk,
+      params?.branchCode || '',
       params?.pageNumber || '',
       params?.pageSize || '',
       params?.search,
@@ -72,8 +75,8 @@ export function useGetTellerPosting(
       params?.endDate || ''
     ],
     queryFn: () => getTellerPosting(params, toastActions),
-    enabled: Boolean(
-      (params?.search || '').length > 0 || (params?.reportDate || '').length > 0
+    enabled: Boolean((params?.branchCode || '').length > 0 ||
+      (params?.search || '').length > 0
     )
   });
 
