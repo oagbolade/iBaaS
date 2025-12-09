@@ -80,9 +80,9 @@ async function fetchAllBalanceSheetByItemId(
   try {
     const urlEndpoint = '/api/ReportServices/balanceSheetAndPAndLByItemId';
     const { data }: AxiosResponse<GetAllBalanceSheetByItemIdResponse> =
-      await reportsAxiosInstance.get(urlEndpoint,{
+      await reportsAxiosInstance.get(urlEndpoint, {
         params: {
-          temcode: params?.itemcode,
+          itemcode: params?.itemcode,
           startFrom: '2025-05- 18',
           pageNumber: params?.page,
           pageSize: params?.pageSize || 10,
